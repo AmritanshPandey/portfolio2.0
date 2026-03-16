@@ -127,3 +127,13 @@
     @apply font-sans;
   }
 }
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --bg1: #FFFEF9;
+  --bg2: #F8F6ED;
+}
