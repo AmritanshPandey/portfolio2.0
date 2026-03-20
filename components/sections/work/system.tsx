@@ -29,7 +29,6 @@ export default function SystemsSection() {
       label="Systems & Infrastructure"
       description="Enabling consistency, scalability, and better product decisions."
       variant="spacious"
-      divider={false} 
     >
 
       <div className="group">
