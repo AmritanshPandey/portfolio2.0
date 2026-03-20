@@ -38,7 +38,7 @@ export function CTA({
       <Link
         href={href}
         className={clsx(
-          "group/cta inline-flex items-center gap-2 px-6 py-3 rounded-lg",
+          "group/cta inline-flex items-center gap-2 px-6 py-3 rounded-full",
           variant === "primary"
             ? "bg-black text-white hover:bg-neutral-800"
             : "border border-neutral-300 text-neutral-700 hover:bg-neutral-50",

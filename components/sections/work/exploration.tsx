@@ -46,8 +46,8 @@ export default function ExplorationsSection() {
 
   return (
     <SectionSubgroup
-      label="Explorations"
-      description="Side projects and experimental systems exploring product, data, and decision-making"
+      label="Live Projects"
+      description="Exploring product systems and decision-making"
       variant="spacious"
     >
 
