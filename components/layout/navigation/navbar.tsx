@@ -11,18 +11,27 @@ export default function Navbar() {
 
   const navItems = [
     { label: "Work", href: "#work" },
-    { label: "Systems", href: "#systems" },
     { label: "Approach", href: "#approach" },
-    { label: "Thinking", href: "#product-thinking" },
-    { label: "Insights", href: "#articles" },
-    { label: "Explorations", href: "#explorations" },
+    { label: "Exploration", href: "#exploration" },
+    { label: "Impact", href: "#impact" },
     { label: "About", href: "#about" },
   ]
 
-  // ✅ Active section (stable)
+  // ✅ Smooth scroll helper
+  const scrollToSection = (href: string) => {
+    const el = document.querySelector(href)
+    if (!el) return
+
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - 100,
+      behavior: "smooth",
+    })
+  }
+
+  // ✅ Active section detection
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY + 140
+      const scrollY = window.scrollY + window.innerHeight * 0.3
 
       let current = navItems[0].href
 
@@ -30,11 +39,9 @@ export default function Navbar() {
         const el = document.querySelector(item.href)
         if (!el) return
 
-        const rect = el.getBoundingClientRect()
-        const top = rect.top + window.scrollY
-        const height = rect.height
+        const top = el.getBoundingClientRect().top + window.scrollY
 
-        if (scrollY >= top && scrollY < top + height) {
+        if (scrollY >= top) {
           current = item.href
         }
       })
@@ -51,30 +58,30 @@ export default function Navbar() {
   return (
     <>
       {/* DESKTOP NAV */}
-
       <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <nav
           className={clsx(
-            "flex items-center gap-7 px-9 py-4 rounded-full",
+            "flex items-center gap-6 px-8 py-3.5 rounded-full",
             "bg-white border border-neutral-200",
             "shadow-[0_10px_30px_rgba(0,0,0,0.08)]",
             "ring-1 ring-black/[0.02]"
-            
-            
           )}
         >
 
-          {navItems.map((item, i) => {
+          {navItems.map((item) => {
             const isActive = active === item.href
 
             return (
               <a
-                key={i}
+                key={item.href}
                 href={item.href}
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToSection(item.href)
+                }}
                 className={clsx(
                   "relative text-sm font-medium transition-all duration-200",
                   "hover:-translate-y-[1px]",
-
                   isActive
                     ? "text-neutral-900"
                     : "text-neutral-400 hover:text-red-600"
@@ -94,7 +101,7 @@ export default function Navbar() {
           })}
 
           {/* DIVIDER */}
-          <div className="w-px h-5 mx-2 bg-neutral-200" />
+          <div className="w-px h-5 mx-1 bg-neutral-200" />
 
           {/* RESUME */}
           <a
@@ -111,9 +118,7 @@ export default function Navbar() {
         </nav>
       </header>
 
-
       {/* MOBILE BUTTON */}
-
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 z-50 md:hidden p-4 rounded-full bg-white border border-neutral-200 shadow-md"
@@ -121,23 +126,27 @@ export default function Navbar() {
         {open ? <IconX size={22} /> : <IconMenu2 size={22} />}
       </button>
 
-
       {/* MOBILE MENU */}
-
       {open && (
         <div className="fixed bottom-24 right-6 z-40 md:hidden w-64 rounded-2xl border border-neutral-200 bg-white shadow-lg p-6 flex flex-col gap-5">
 
-          {navItems.map((item, i) => {
+          {navItems.map((item) => {
             const isActive = active === item.href
 
             return (
               <a
-                key={i}
+                key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToSection(item.href)
+                  setOpen(false)
+                }}
                 className={clsx(
                   "text-base transition",
-                  isActive ? "text-neutral-900 font-medium" : "text-neutral-500",
+                  isActive
+                    ? "text-neutral-900 font-medium"
+                    : "text-neutral-500",
                   "hover:text-red-600"
                 )}
               >

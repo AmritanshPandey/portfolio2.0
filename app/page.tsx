@@ -23,7 +23,7 @@ export default function Page() {
         eyebrow="Work"
         title="Selected Work & Systems"
         transition="Behind these systems is a structured way of thinking and decision-making."
-        transitionEyebrow="Looking Beyond Products"
+        transitionEyebrow="The Thinking Behind the Work"
       >
         <CaseStudy />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -35,8 +35,8 @@ export default function Page() {
         bg="light"
         eyebrow="Approach"
         title="How I Design & Make Product Decisions"
-        transition="The way I approach design and product decisions is rooted in a structured way of thinking."
-        transitionEyebrow="Designing for Impact"
+        transition="Beyond structured processes, exploration helps test ideas and refine thinking."
+        transitionEyebrow="From Process to Exploration"
       >
         <ProductDesignApproachSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -46,11 +46,11 @@ export default function Page() {
 
       <Section
         id="exploration"
-           bg="subtle"
+        bg="subtle"
         eyebrow="Exploration"
         title="Building, Testing, and Learning Beyond Core Work"
-        transition="The way I approach design and product decisions is rooted in a structured way of thinking."
-        transitionEyebrow="Exploration"
+        transition="These explorations translate into real-world impact across teams and products."
+        transitionEyebrow="From Exploration to Impact"
       >
         <ExplorationsSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -59,11 +59,11 @@ export default function Page() {
 
       <Section
         id="impact"
-           bg="light"
+        bg="light"
         eyebrow="Impact"
         title="Driving Outcomes Beyond Product Design"
-        transition="Applying product thinking across teams, influencing strategy, and contributing beyond core product work."
-        transitionEyebrow="Imoact"
+        transition="Beyond work and impact, here’s more about how I think and what I focus on."
+        transitionEyebrow="About Me"
       >
         <LeadershipSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />

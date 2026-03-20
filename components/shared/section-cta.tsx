@@ -1,12 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  IconArrowUpRight,
-  IconDownload,
-} from "@tabler/icons-react"
+import { IconArrowUpRight, IconDownload } from "@tabler/icons-react"
 import clsx from "clsx"
+import Link from "next/link"
 
 type Variant = "primary" | "secondary" | "tertiary"
 
@@ -16,6 +12,7 @@ type Props = {
   variant?: Variant
   icon?: "arrow" | "download" | "none"
   className?: string
+  asChild?: boolean // 👈 important
 }
 
 export function CTA({
@@ -24,68 +21,43 @@ export function CTA({
   variant = "primary",
   icon = "arrow",
   className,
+  asChild = false,
 }: Props) {
 
   const Icon =
     icon === "arrow"
       ? IconArrowUpRight
       : icon === "download"
-        ? IconDownload
-        : null
+      ? IconDownload
+      : null
 
-  // PRIMARY
-  if (variant === "primary") {
+  // ---------------- PRIMARY / SECONDARY (real links)
+
+  if (variant !== "tertiary" && href && !asChild) {
     return (
-      <Button
-        size="lg"
-        asChild
+      <Link
+        href={href}
         className={clsx(
-          "group/cta gap-2 px-10 py-6 text-base",
-          "bg-black text-white hover:bg-neutral-800",
-          "transition-all duration-200 ease-out",
-          "hover:-translate-y-[2px] active:scale-[0.98]",
+          "group/cta inline-flex items-center gap-2 px-6 py-3 rounded-lg",
+          variant === "primary"
+            ? "bg-black text-white hover:bg-neutral-800"
+            : "border border-neutral-300 text-neutral-700 hover:bg-neutral-50",
+          "transition-all duration-200",
           className
         )}
       >
-        <Link href={href}>
-          {label}
-          {Icon && (
-            <Icon className="transition-transform duration-200 group-hover/cta:translate-x-[3px] group-hover/cta:-translate-y-[3px]" />
-          )}
-        </Link>
-      </Button>
-    )
-  }
-
-  // SECONDARY
-  if (variant === "secondary") {
-    return (
-      <Button
-        size="lg"
-        variant="outline"
-        asChild
-        className={clsx(
-          "group/cta gap-2 px-10 py-6 text-base",
-          "border-neutral-300 text-neutral-700",
-          "hover:border-neutral-400 hover:bg-neutral-50",
-          "transition-all duration-200 ease-out",
-          className
+        {label}
+        {Icon && (
+          <Icon className="transition-transform duration-200 group-hover/cta:translate-x-[3px] group-hover/cta:-translate-y-[3px]" />
         )}
-      >
-        <Link href={href}>
-          {label}
-          {Icon && (
-            <Icon className="transition-transform duration-200 group-hover/cta:translate-x-[3px] group-hover/cta:-translate-y-[3px]" />
-          )}
-        </Link>
-      </Button>
+      </Link>
     )
   }
 
-  // TERTIARY
+  // ---------------- TERTIARY OR CHILD MODE (NO LINK)
+
   return (
-    <Link
-      href={href}
+    <span
       className={clsx(
         "group/cta inline-flex items-center gap-2 text-red-600 font-medium text-sm",
         className
@@ -102,6 +74,6 @@ export function CTA({
           className="transition-transform duration-200 group-hover/cta:translate-x-[3px] group-hover/cta:-translate-y-[3px]"
         />
       )}
-    </Link>
+    </span>
   )
 }

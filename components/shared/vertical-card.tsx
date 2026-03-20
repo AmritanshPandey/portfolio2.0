@@ -87,23 +87,19 @@ export function VerticalCard({
             </h3>
 
             {description && !isCompact && (
-              <p className="text-neutral-500 text-sm leading-[1.6] pb-6 mt-auto">
+              <p className="text-neutral-500 text-sm leading-[1.6] pb-6">
                 {description}
               </p>
             )}
 
           </div>
 
-          {/* CTA */}
-          <div className="
-            mt-auto pt-6
-            border-t border-neutral-100
-            group/cta
-          ">
+          {/* CTA (FIXED) */}
+          <div className="mt-auto pt-6 border-t border-neutral-100">
             <CTA
               variant="tertiary"
               label={ctaLabel}
-              href={href}
+              asChild   
             />
           </div>
 
