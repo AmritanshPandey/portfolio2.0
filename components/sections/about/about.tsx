@@ -1,7 +1,7 @@
 "use client"
 
-import { SectionHeader } from "@/components/shared/section-header"
 import PhotoCarousel from "@/components/shared/photostack/photo-carousel"
+import { SectionHeader } from "@/components/shared/section-header"
 import {
   IconSparkles,
   IconLayoutGrid,
@@ -14,7 +14,7 @@ export default function AboutSection() {
   const focus = [
     {
       icon: IconSparkles,
-      text: "Exploring how AI shapes product behavior",
+      text: "Exploring how AI changes product behavior",
     },
     {
       icon: IconLayoutGrid,
@@ -26,76 +26,58 @@ export default function AboutSection() {
     },
     {
       icon: IconAdjustments,
-      text: "Making decisions under constraints",
+      text: "Making better decisions under constraints",
     },
   ]
 
   return (
-    <section
-      id="about"
-      className="relative bg-[var(--bg2)] overflow-hidden"
-    >
+    <section id="about" className="bg-[var(--bg2)] relative">
 
       {/* subtle background depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.02] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.015] to-transparent pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-6 py-24 md:py-28">
+      <div className="max-w-7xl mx-auto px-6 py-20 md:py-28 relative">
 
-        {/* HEADER */}
-        <SectionHeader
-          eyebrow="About"
-          title="About Me"
-          description="How I think, work, and approach building products."
-        />
+        {/* HEADER (UPDATED) */}
+        <div className="mb-12 md:mb-16 max-w-2xl">
+          <SectionHeader
+            eyebrow="About"
+            title="About me"
+          />
+        </div>
 
         {/* CONTENT */}
-        <div className="
-          mt-16 md:mt-20
-          grid lg:grid-cols-[340px_1fr]
-          gap-12 md:gap-16
-          items-start
-        ">
+        <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-12 md:gap-28 items-start">
 
           {/* LEFT — PHOTO */}
-          <div className="flex justify-center lg:justify-start">
-            <div className="relative rounded-2xl overflow-hidden">
-              <PhotoCarousel />
-            </div>
+          <div className="relative flex justify-center lg:justify-start pt-2 lg:pt-6">
+            <PhotoCarousel />
           </div>
 
           {/* RIGHT — CONTENT */}
-          <div className="space-y-12">
+          <div className="space-y-10">
 
             {/* TEXT */}
-            <div className="
-              space-y-5
-              text-neutral-600
-              text-sm md:text-base
-              leading-[1.7]
-              max-w-[560px]
-            ">
+            <div className="space-y-5 text-neutral-700 text-base md:text-lg leading-relaxed max-w-xl">
 
-              <p className="text-neutral-900 font-medium">
-                I design products by simplifying complexity into systems people can understand and use.
+              <p>
+                I'm a product designer who enjoys breaking down complex problems and turning them into clear, usable systems.
               </p>
 
               <p>
-                My work focuses on real-world behavior — how users think, where friction appears, and how small decisions shape larger outcomes.
+                I care about how things actually work in the real world, how users behave, where friction shows up, and how small design decisions influence larger outcomes.
               </p>
 
-              <p className="text-neutral-500">
-                Outside of work, I spend time traveling, cooking, and cycling — helping me reset and stay curious.
+              <p className="text-neutral-600">
+                Outside of work, I spend time traveling, cooking, and going on long bike rides. These help me reset, stay curious, and bring fresh perspective into my work.
               </p>
 
             </div>
 
-            {/* DIVIDER */}
-            <div className="h-px w-full bg-neutral-200/70" />
-
             {/* FOCUS */}
-            <div className="space-y-6">
+            <div>
 
-              <p className="text-sm md:text-base font-semibold text-neutral-900">
+              <p className="text-base md:text-lg font-semibold mb-6">
                 What I focus on
               </p>
 
@@ -111,23 +93,12 @@ export default function AboutSection() {
                     >
 
                       {/* ICON */}
-                      <div
-                        className="
-                          mt-[2px]
-                          text-neutral-400
-                          transition-colors duration-200
-                          group-hover:text-red-600
-                        "
-                      >
-                        <Icon size={16} />
+                      <div className="mt-[3px] text-neutral-400 group-hover:text-red-600 transition-colors duration-300">
+                        <Icon size={18} />
                       </div>
 
                       {/* TEXT */}
-                      <p className="
-                        text-neutral-700
-                        text-sm md:text-base
-                        leading-[1.6]
-                      ">
+                      <p className="text-neutral-700 leading-[1.6] text-sm md:text-base">
                         {item.text}
                       </p>
 
