@@ -50,7 +50,6 @@ export default function SystemsSection() {
               >
 
                 <HorizontalCard
-                  variant="full"
                   index={index}
                   href={system.href}
                   image={system.image}
