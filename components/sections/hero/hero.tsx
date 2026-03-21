@@ -57,7 +57,8 @@ export default function Hero() {
   const onMouseEnter = () => setHovered(true)
 
   return (
-    <section ref={heroRef} className="relative bg-neutral-950 text-white overflow-hidden">
+  
+    <section ref={heroRef} id="hero" className="relative bg-neutral-950 text-white overflow-hidden">
 
       {/* Subtle grid */}
       <div

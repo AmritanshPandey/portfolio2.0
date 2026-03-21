@@ -15,8 +15,8 @@ export default function Page() {
   return (
     <main>
 
-      <section id="hero" className="min-h-screen">
-        <Hero /></section>
+     
+        <Hero />
 
 
       <Section
