@@ -91,17 +91,52 @@ export default function InsightsSection() {
         <div>
           <Link
             href="/articles"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-red-600 transition-colors duration-200"
+            className="
+      group inline-flex items-center gap-2
+      text-sm font-medium
+      text-neutral-500
+      transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+      hover:text-orange-400
+    "
           >
+            {/* TEXT */}
             <span className="relative">
-              View all writing
-              <span className="absolute left-0 -bottom-0.5 h-[1px] w-0 bg-red-600 transition-all duration-300 group-hover:w-full" />
+
+              <span className="
+        relative z-10
+        transition-colors duration-300
+        group-hover:text-orange-500
+      ">
+                View all writing
+              </span>
+
+              {/* UNDERLINE */}
+              <span
+                className="
+          absolute left-0 -bottom-1
+          h-[1.5px] w-full
+          bg-orange-500/80
+          origin-left scale-x-0
+          transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+          delay-75
+          group-hover:scale-x-100
+        "
+              />
+
             </span>
 
+            {/* ICON */}
             <IconArrowUpRight
               size={16}
-              className="transition-transform duration-200 group-hover:translate-x-[3px] group-hover:-translate-y-[3px]"
+              className="
+              opacity-70
+              transition-all duration-300 ease-out
+              group-hover:opacity-100
+              group-hover:translate-x-[4px]
+              group-hover:-translate-y-[4px]
+              delay-100"
             />
+
           </Link>
         </div>
 

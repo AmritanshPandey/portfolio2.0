@@ -36,7 +36,7 @@ export function SectionTransition({
         <div className="max-w-xl transition-transform duration-300 ease-out group-hover:translate-x-[2px]">
 
           {/* Divider */}
-          <div className="h-px w-16 bg-neutral-300 mb-8 transition-all duration-300 ease-out group-hover:bg-red-500 group-hover:w-20" />
+          <div className="h-px w-16 bg-neutral-300 mb-8 transition-all duration-300 ease-out group-hover:bg-orange-500 group-hover:w-20" />
 
           {/* Eyebrow */}
           {eyebrow && (

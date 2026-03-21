@@ -1,6 +1,7 @@
 import "./globals.css"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
+import { FancyCursor } from "@/components/shared/cursor"
 import { Montserrat } from "next/font/google"
 
 const montserrat = Montserrat({
@@ -15,11 +16,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+       
+        <style>{`
+          *, *::before, *::after { cursor: none !important; }
+          a, button, input, select, textarea, label,
+          [role="button"], [role="link"], [tabindex] {
+            cursor: none !important;
+          }
+        `}</style>
+      </head>
+
       <body className={montserrat.className}>
+
+       
+        <FancyCursor />
 
         <Navbar />
 
-               <main className="pt-8 md:pt-32 lg:pt-32">
+        <main>
           {children}
         </main>
 

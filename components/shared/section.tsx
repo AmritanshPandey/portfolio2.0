@@ -56,7 +56,7 @@ export function Section({
   }
 
   const containerWidth = {
-    default: "max-w-7xl",
+    default: "max-w-6xl",
     narrow: "max-w-4xl",
   }
 

@@ -48,7 +48,7 @@ export function SectionHeader({
 
       {eyebrow && (
         <div className="flex items-center gap-3">
-          <div className="h-px w-6 bg-red-500" />
+          <div className="h-px w-6 bg-orange-500" />
           <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
             {eyebrow}
           </p>

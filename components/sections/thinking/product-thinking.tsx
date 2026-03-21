@@ -45,11 +45,11 @@ export default function ProductThinkingSection() {
         >
           <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-10 items-center bg-neutral-950 text-white rounded-3xl px-6 py-8 md:px-10 md:py-10 relative">
 
-            <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent" />
 
             <div className="relative max-w-[640px]">
 
-              <p className="text-[11px] uppercase tracking-[0.18em] text-white/40 mb-4">
+              <p className="text-[12px] uppercase tracking-[0.18em] text-white/40 mb-4">
                 Core Belief
               </p>
 
@@ -59,7 +59,7 @@ export default function ProductThinkingSection() {
                 <span className="text-white/70">UI</span>.<br />
 
                 They're solved by{" "}
-                <span className="text-red-500 font-semibold">
+                <span className="text-orange-400 font-semibold">
                   better decisions
                 </span>.
 

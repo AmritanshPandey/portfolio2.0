@@ -25,15 +25,15 @@ export function ProcessStep({
 
   const styles = {
     dark: {
-      border: "border-white/10 group-hover/step:border-red-500",
-      number: "text-white/30 group-hover/step:text-red-500",
-      title: "text-white group-hover/step:text-red-500",
+      border: "border-white/10 group-hover/step:border-orange-500",
+      number: "text-white/30 group-hover/step:text-orange-500",
+      title: "text-white group-hover/step:text-orange-500",
       desc: "text-white/60 group-hover/step:text-white/80",
     },
     light: {
-      border: "border-neutral-200 group-hover/step:border-red-500",
-      number: "text-neutral-400 group-hover/step:text-red-500",
-      title: "text-neutral-900 group-hover/step:text-red-600",
+      border: "border-neutral-200 group-hover/step:border-orange-500",
+      number: "text-neutral-400 group-hover/step:text-orange-500",
+      title: "text-neutral-900 group-hover/step:text-orange-500",
       desc: "text-neutral-600 group-hover/step:text-neutral-800",
     },
   }
@@ -52,7 +52,7 @@ export function ProcessStep({
             "transition-all duration-300 ease-[0.22,1,0.36,1]",
             "hover:translate-x-[6px] hover:scale-[1.01]",
             "will-change-transform",
-            active ? "border-red-500" : current.border
+            active ? "border-orange-500" : current.border
           )}
         >
 
@@ -60,7 +60,7 @@ export function ProcessStep({
           <span
             className={clsx(
               "text-sm md:text-base font-semibold transition-colors duration-300",
-              active ? "text-red-500" : current.number
+              active ? "text-orange-500" : current.number
             )}
           >
             {number}
@@ -73,7 +73,7 @@ export function ProcessStep({
               className={clsx(
                 "text-base md:text-lg font-semibold mb-1 tracking-tight",
                 "transition-colors duration-300",
-                active ? "text-red-500" : current.title
+                active ? "text-orange-500" : current.title
               )}
             >
               {title}
@@ -105,10 +105,10 @@ export function ProcessStep({
         "transition-all duration-300 ease-[0.22,1,0.36,1]",
         "hover:-translate-y-[4px]",
         active
-          ? "border-red-500"
+          ? "border-orange-500"
           : theme === "light"
-            ? "border-neutral-300 group-hover/step:border-red-500"
-            : "border-white/10 group-hover/step:border-red-500"
+            ? "border-neutral-300 group-hover/step:border-orange-500"
+            : "border-white/10 group-hover/step:border-orange-500"
       )}
     >
 
@@ -118,10 +118,10 @@ export function ProcessStep({
           "text-xs font-semibold tracking-[0.16em] mb-2",
           "transition-colors duration-300",
           active
-            ? "text-red-500"
+            ? "text-orange-500"
             : theme === "light"
-              ? "text-neutral-400 group-hover/step:text-red-500"
-              : "text-white/30 group-hover/step:text-red-500"
+              ? "text-neutral-400 group-hover/step:text-orange-500"
+              : "text-white/30 group-hover/step:text-orange-500"
         )}
       >
         {number}
@@ -133,10 +133,10 @@ export function ProcessStep({
           "text-lg md:text-xl font-semibold mb-2 tracking-tight",
           "transition-colors duration-300",
           active
-            ? "text-red-600"
+            ? "text-orange-500"
             : theme === "light"
-              ? "text-neutral-900 group-hover/step:text-red-600"
-              : "text-white group-hover/step:text-red-500"
+              ? "text-neutral-900 group-hover/step:text-orange-500"
+              : "text-white group-hover/step:text-orange-500"
         )}
       >
         {title}

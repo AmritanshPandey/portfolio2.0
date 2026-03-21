@@ -1,131 +1,217 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import Image from "next/image"
 import { CTA } from "@/components/shared/section-cta"
+import { TypingWord } from "@/components/shared/typing-effect"
 
 export default function Hero() {
+  const heroRef   = useRef(null)
+  const cardRef   = useRef<HTMLDivElement>(null)
+  const glowRef   = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const [hovered, setHovered] = useState(false)
 
-  const heroRef = useRef(null)
-
+  // ── GSAP entrance ───────────────────────────────────────────────
   useEffect(() => {
-
     const ctx = gsap.context(() => {
-
+      gsap.from(".hero-badge", {
+        y: 16, opacity: 0, duration: 0.6, ease: "power3.out",
+      })
       gsap.from(".hero-line", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out"
+        y: 40, opacity: 0, duration: 0.9, stagger: 0.1, delay: 0.15, ease: "power3.out",
       })
-
+      gsap.from(".hero-sub", {
+        y: 20, opacity: 0, duration: 0.7, delay: 0.55, ease: "power3.out",
+      })
       gsap.from(".hero-image", {
-        y: 20,
-        opacity: 0,
-        duration: 0.9,
-        delay: 0.2,
-        ease: "power3.out"
+        y: 40, opacity: 0, duration: 1.1, delay: 0.1, ease: "power3.out",
       })
-
     }, heroRef)
-
     return () => ctx.revert()
-
   }, [])
 
+  // ── 3D tilt on photo card ────────────────────────────────────────
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current
+    if (!card) return
+    const { left, top, width, height } = card.getBoundingClientRect()
+    const x = (e.clientX - left) / width  - 0.5   // -0.5 → 0.5
+    const y = (e.clientY - top)  / height - 0.5
+
+    setTilt({ x: y * -12, y: x * 12 })
+
+    // Move glow to follow cursor
+    if (glowRef.current) {
+      glowRef.current.style.left = `${(e.clientX - left)}px`
+      glowRef.current.style.top  = `${(e.clientY - top)}px`
+    }
+  }
+
+  const onMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
+    setHovered(false)
+  }
+
+  const onMouseEnter = () => setHovered(true)
+
   return (
+    <section ref={heroRef} className="relative bg-neutral-950 text-white overflow-hidden">
 
-    <section ref={heroRef} className="bg-[var(--bg1)]">
+      {/* Subtle grid */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.5) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.5) 80px)",
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto px-6 pt-10 md:pt-14 pb-20 grid lg:grid-cols-[1.8fr_1fr] gap-10 lg:gap-12 items-start">
+      {/* Ambient radial bloom */}
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(ellipse_60%_70%_at_80%_30%,rgba(255,255,255,0.035)_0%,transparent_70%)]" />
 
-        {/* LEFT */}
+      <div className="
+        relative max-w-6xl mx-auto px-6
+        pt-12 md:pt-32 lg:pt-40 pb-24
+        grid lg:grid-cols-[1.6fr_1fr]
+        gap-8 lg:gap-12 items-center
+      ">
 
-        <div className="space-y-4 max-w-2xl">
+        {/* ── LEFT ─────────────────────────────── */}
+        <div className="flex flex-col gap-5 max-w-2xl">
 
-          <p className="hero-line text-xs tracking-[0.2em] font-semibold uppercase text-neutral-400">
-            Product Designer
-          </p>
-
-          <h1 className="hero-line text-[36px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.15] tracking-tight">
-
-            Designing Scalable  
-            <br />
-
-            <span className="text-red-600">
-              Product Systems
-            </span>
-
-            <br />
-
-            for Complex Fintech Platforms
-
-          </h1>
-
-          <p className="hero-line text-base md:text-lg text-neutral-600 max-w-md leading-[1.6]">
-            I design product systems that simplify complexity, scale across markets,
-            and enable better decision-making in financial products.
-          </p>
-
-          <div className="hero-line text-sm text-neutral-500 flex gap-3 pt-1">
-            <span>Mastercard</span>
-            <span>•</span>
-            <span>Advisor</span>
-            <span>•</span>
-            <span>Mentor</span>
+          {/* BADGE */}
+          <div className="hero-badge self-start inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 text-xs text-white/50 tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Product Designer · Mastercard
           </div>
 
+          {/* HEADING */}
+          <h1 className="font-medium tracking-tight leading-[1.08]">
+            <span className="hero-line block text-[clamp(36px,5.5vw,64px)] text-white">
+              Designing fintech
+            </span>
+            <span className="hero-line block text-[clamp(36px,5.5vw,64px)] text-white/35 min-h-[1.2em]">
+              <TypingWord />
+            </span>
+            <span className="hero-line block text-[clamp(36px,5.5vw,64px)] text-white">
+              that scale globally.
+            </span>
+          </h1>
 
-          {/* CTA */}
+          {/* DESCRIPTION */}
+          <p className="hero-sub text-base md:text-lg text-white/50 leading-relaxed max-w-[440px]">
+            At Mastercard, from design systems to{" "}
+            <span className="text-white/90 font-medium">
+              interactive demos for billion-dollar bank deals.
+            </span>
+          </p>
 
-          <div className="hero-line flex flex-col sm:flex-row gap-3 pt-4">
-
-            <CTA
-              variant="primary"
-              label="View Work"
-              href="#work"
-            />
-
-            <CTA
-              variant="secondary"
-              label="Resume"
-              href="/resume.pdf"
-              icon="download"
-            />
-
+          {/* CTA ROW */}
+          <div className="hero-sub flex flex-wrap items-center gap-3">
+            <CTA variant="primary"   label="View work"        href="#work"       tone="light" />
+            <CTA variant="secondary" label="Download resume"  href="/resume.pdf" icon="download" tone="light" />
           </div>
 
         </div>
 
+        {/* ── RIGHT ────────────────────────────── */}
+        <div className="hero-image flex justify-center lg:justify-end">
+          <div className="relative w-full max-w-[340px]">
 
-        {/* RIGHT */}
+            {/* Tilt wrapper — no overflow, no border-radius here to avoid GPU clipping bug */}
+            <div
+              ref={cardRef}
+              onMouseMove={onMouseMove}
+              onMouseLeave={onMouseLeave}
+              onMouseEnter={onMouseEnter}
+              style={{
+                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${hovered ? 1.015 : 1})`,
+                transition: hovered
+                  ? "transform 0.15s ease-out"
+                  : "transform 0.7s cubic-bezier(0.22,1,0.36,1)",
+                willChange: "transform",
+                borderRadius: "1rem",
+                // Border here — outside the mask, always visible
+                boxShadow: `0 0 0 1px rgba(255,255,255,${hovered ? "0.2" : "0.12"}), 0 24px 48px rgba(0,0,0,0.5)`,
+              }}
+              className="cursor-pointer"
+            >
+              <div
+                className="relative bg-neutral-900"
+                style={{
+                  borderRadius: "1rem",
+                  WebkitMaskImage: "radial-gradient(white, white)",
+                  maskImage: "radial-gradient(white, white)",
+                }}
+              >
 
-        <div className="hero-image flex justify-center lg:justify-end w-full">
+                {/* Cursor glow */}
+                <div
+                  ref={glowRef}
+                  className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full"
+                  style={{
+                    background: "radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%)",
+                    opacity: hovered ? 1 : 0,
+                    transition: "opacity 300ms ease",
+                  }}
+                />
 
-          <div className="relative w-full max-w-[380px]">
+                <div className="relative aspect-[2/3]">
+                  <Image
+                    src="/assets/images/pic.jpg"
+                    alt="Amritansh Pandey"
+                    fill
+                    priority
+                    className="object-cover object-top"
+                    style={{
+                      filter: hovered ? "brightness(1.06)" : "brightness(1)",
+                      transition: "filter 300ms ease",
+                    }}
+                  />
+                </div>
 
-            {/* subtle glow */}
-            <div className="absolute -inset-3 bg-neutral-200 rounded-2xl blur-lg opacity-30"></div>
+                {/* Gradient overlay */}
+                <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-neutral-950 via-neutral-950/95 to-transparent" />
 
-            <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border border-neutral-200">
+                {/* Name + tags */}
+                <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-4">
+                  <div className="flex gap-1.5 flex-wrap mb-3">
+                    {["Mastercard", "Advisor", "Mentor"].map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/[0.12] border border-white/20 text-white backdrop-blur-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-white/60 mb-0.5 tracking-wide">Product Designer</p>
+                  <p className="text-sm font-semibold text-white">Amritansh Pandey</p>
+                </div>
 
-              <Image
-                src="/assets/images/pic.jpg"
-                alt="Amritansh Pandey"
-                fill
-                priority
-                className="object-cover object-[60%_35%]"
-              />
+              </div>
+            </div>
 
+            {/* Floating chips — bottom-right corner, overlapping card edge */}
+            <div className="absolute -right-4 top-[30%] hidden lg:flex flex-col gap-0.5 bg-neutral-900/95 backdrop-blur-md border border-white/[0.12] rounded-xl px-3.5 py-2.5 min-w-[110px] z-10 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+              <span className="text-[10px] uppercase tracking-wide text-white/35">Experience</span>
+              <span className="text-sm font-semibold text-white">7+ years</span>
+            </div>
+
+            <div className="absolute -right-4 top-[30%] mt-[64px] hidden lg:flex flex-col gap-0.5 bg-neutral-900/95 backdrop-blur-md border border-white/[0.12] rounded-xl px-3.5 py-2.5 min-w-[110px] z-10 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+              <span className="text-[10px] uppercase tracking-wide text-white/35">Based in</span>
+              <span className="text-sm font-semibold text-white">Gurgaon, IN</span>
             </div>
 
           </div>
-
         </div>
 
       </div>
+
+      {/* Bottom border fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
     </section>
   )

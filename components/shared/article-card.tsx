@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { CTA } from "@/components/shared/section-cta"
+import { IconArrowUpRight } from "@tabler/icons-react"
 
 type Props = {
   index: number
@@ -10,65 +10,45 @@ type Props = {
   href: string
 }
 
-export function ArticleCard({
-  index,
-  title,
-  description,
-  href,
-}: Props) {
-
+export function ArticleCard({ index, title, description, href }: Props) {
   return (
     <Link
       href={href}
-      className="
-        group/card flex flex-col h-full
-        p-6 rounded-2xl border border-neutral-200
-        bg-white/40 backdrop-blur-sm
-        transition-all duration-200 ease-out
-        hover:border-neutral-300
-        hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)]
-        hover:-translate-y-[2px]
-      "
+      className="group/card flex flex-col h-full p-6 rounded-2xl border border-neutral-200 bg-white transition-all duration-300 ease-out hover:border-neutral-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.07)] hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2"
     >
 
-      {/* NUMBER */}
-      <span className="
-        text-xs font-medium text-neutral-400 mb-4
-        transition-colors duration-200
-        group-hover/card:text-red-600
-      ">
-        {String(index).padStart(2, "0")}
-      </span>
+      {/* TOP ROW — index + arrow */}
+      <div className="flex items-center justify-between mb-5">
+        <span className="text-[10px] font-medium tracking-[0.18em] uppercase text-neutral-300 transition-colors duration-200 group-hover/card:text-neutral-400">
+          {String(index).padStart(2, "0")}
+        </span>
+        <span className="w-9 h-9 rounded-full border border-neutral-200 flex items-center justify-center transition-all duration-200 group-hover/card:bg-neutral-900 group-hover/card:border-neutral-900">
+          <IconArrowUpRight
+            size={16}
+            stroke={2}
+            className="text-neutral-400 transition-colors duration-200 group-hover/card:text-white"
+          />
+        </span>
+      </div>
 
       {/* TITLE */}
-      <h3 className="
-        text-lg md:text-xl font-semibold
-        leading-snug tracking-tight
-        mb-2
-        transition-colors duration-200
-        group-hover/card:text-red-600
-        line-clamp-2
-      ">
+      <h3 className="text-base md:text-lg font-medium leading-snug tracking-tight text-neutral-900 mb-2.5 line-clamp-2 transition-colors duration-200 group-hover/card:text-neutral-600">
         {title}
       </h3>
 
       {/* DESCRIPTION */}
-      <p className="
-        text-neutral-600 text-sm
-        leading-[1.6]
-        mb-5
-        line-clamp-3
-      ">
+      <p className="text-neutral-400 text-sm leading-relaxed line-clamp-3 flex-1">
         {description}
       </p>
 
-      {/* CTA */}
-      <div className="mt-auto group/cta">
-        <CTA
-          href={href}
-          label="Read Article"
-          variant="tertiary"
-        />
+      {/* BOTTOM — read time indicator */}
+      <div className="mt-5 pt-4 border-t border-neutral-100 flex items-center justify-between">
+        <span className="text-xs font-medium text-neutral-900 group-hover/card:underline underline-offset-4 decoration-neutral-300">
+          Read article
+        </span>
+        <span className="text-[10px] text-neutral-300 tracking-wide">
+          Article
+        </span>
       </div>
 
     </Link>

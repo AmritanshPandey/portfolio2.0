@@ -55,7 +55,7 @@ export default function AdvisorySection() {
     },
     {
       name: "Kritika Kant",
-      company: "Senior UX Designer • Mastercard",
+      company: "Sr. UX Designer • Mastercard",
       link: "https://www.linkedin.com/in/kritika-kant-ui-ux/",
     },
   ]
@@ -106,18 +106,18 @@ export default function AdvisorySection() {
                     text-neutral-700
                     transition-all duration-200
                     hover:translate-x-[3px]
-                    hover:text-red-600
+                    hover:text-orange-400
                   "
                 >
                   <span>{item.name}</span>
 
-                  <IconArrowRight size={14} className="opacity-40" />
+                  <IconArrowRight size={16} className="opacity-40" />
 
-                  <span className="text-neutral-500 group-hover:text-red-600 transition">
+                  <span className="text-neutral-500 group-hover:text-orange-500 transition">
                     {item.company}
                   </span>
 
-                  <IconLink size={14} className="opacity-40 group-hover:opacity-100 transition" />
+                  <IconLink size={16} className="opacity-40 group-hover:opacity-100 transition" />
                 </a>
               </li>
             ))}
@@ -142,7 +142,7 @@ export default function AdvisorySection() {
         </div>
 
       </div>
-            <div className="h-px w-full pb-8" />
+      <div className="h-px w-full pb-8" />
 
     </SectionSubgroup>
   )

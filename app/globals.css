@@ -128,7 +128,6 @@
   }
 }
 
-
 html {
   scroll-behavior: smooth;
 }
@@ -136,4 +135,32 @@ html {
 :root {
   --bg1: #FFFEF9;
   --bg2: #F8F6ED;
+}
+
+/*
+  Hide OS cursor — explicit selectors beat Chrome's UA stylesheet
+  which ignores * { cursor: none } on <a> and <button> in some cases
+*/
+html,
+html body,
+html *,
+html *::before,
+html *::after {
+  cursor: none !important;
+}
+
+/* Explicit overrides for elements Chrome UA stylesheet protects */
+a,
+a *,
+button,
+button *,
+input,
+select,
+textarea,
+label,
+[role="button"],
+[role="link"],
+[tabindex],
+summary {
+  cursor: none !important;
 }

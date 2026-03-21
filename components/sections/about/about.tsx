@@ -36,7 +36,7 @@ export default function AboutSection() {
       {/* subtle background depth */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.015] to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 py-20 md:py-28 relative">
+      <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative">
 
         {/* HEADER (UPDATED) */}
         <div className="mb-12 md:mb-16 max-w-2xl">
@@ -93,7 +93,7 @@ export default function AboutSection() {
                     >
 
                       {/* ICON */}
-                      <div className="mt-[3px] text-neutral-400 group-hover:text-red-600 transition-colors duration-300">
+                      <div className="mt-[3px] text-neutral-400 group-hover:text-orange-500 transition-colors duration-300">
                         <Icon size={18} />
                       </div>
 
