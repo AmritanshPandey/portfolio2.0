@@ -71,7 +71,7 @@ export default function AdvisorySection() {
 
         {/* ADVISORY */}
         <div className="space-y-5">
-          <p className="text-sm font-medium text-neutral-500 uppercase tracking-[0.16em]">
+        <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
             Advisory
           </p>
 
@@ -85,7 +85,7 @@ export default function AdvisorySection() {
         {/* MENTORSHIP */}
         <div className="space-y-5 pt-6 border-t border-neutral-200">
 
-          <p className="text-sm font-medium text-neutral-500 uppercase tracking-[0.16em]">
+         <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
             Mentorship
           </p>
 
@@ -129,7 +129,7 @@ export default function AdvisorySection() {
         {/* TEACHING */}
         <div className="space-y-5 pt-6 border-t border-neutral-200">
 
-          <p className="text-sm font-medium text-neutral-500 uppercase tracking-[0.16em]">
+        <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
             Teaching
           </p>
 

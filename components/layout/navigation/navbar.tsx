@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
@@ -68,19 +68,41 @@ export default function Navbar() {
   const pageTitle = slugToTitle(pathname.split("/").pop() || "")
   const backHref = BACK_CONFIG[context]
 
-  // ─── Active Section Detection ───────
+  const hasMounted = useRef(false)
+
+  // ─── FIXED: Stable Active Detection ───────
   useEffect(() => {
     if (!isHome) return
 
+    // Always start with hero
+    setActive("hero")
+
     const observer = new IntersectionObserver(
       (entries) => {
+        // Skip first noisy paint
+        if (!hasMounted.current) {
+          hasMounted.current = true
+          return
+        }
+
+        let maxRatio = 0
+        let current = "hero"
+
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id)
+          if (entry.intersectionRatio > maxRatio) {
+            maxRatio = entry.intersectionRatio
+            current = entry.target.id
           }
         })
+
+        if (maxRatio > 0.35) {
+          setActive(current)
+        }
       },
-      { rootMargin: "-40% 0px -55% 0px" }
+      {
+        rootMargin: "-35% 0px -45% 0px", // center-weighted viewport
+        threshold: [0.25, 0.5, 0.75],
+      }
     )
 
     NAV_LINKS.forEach(({ href }) => {
@@ -91,19 +113,29 @@ export default function Navbar() {
     return () => observer.disconnect()
   }, [isHome])
 
+  // ─── FIX: Hard override for top scroll ───
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY < 150) {
+        setActive("hero")
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
     <>
       {/* ─── DESKTOP NAV ───────────────── */}
       <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <nav className={clsx("relative flex items-center gap-1 px-3 py-2 rounded-full", GLASS)}>
-
-          {/* subtle glass edge */}
+          
           <span className="pointer-events-none absolute inset-0 rounded-full border border-white/5" />
 
           {/* HOME NAV */}
           {isHome ? (
             <ul className="flex items-center gap-1">
-
               {NAV_LINKS.map(({ label, href, icon }) => {
                 const isActive = active === href.replace("#", "")
 
@@ -127,12 +159,9 @@ export default function Navbar() {
                   </li>
                 )
               })}
-
             </ul>
           ) : (
-            /* INTERNAL NAV */
             <div className="flex items-center gap-2 px-2">
-
               <Link
                 href={backHref}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-white/50 hover:text-white transition"
@@ -146,14 +175,13 @@ export default function Navbar() {
               <span className="text-sm text-white/70 font-medium">
                 {pageTitle}
               </span>
-
             </div>
           )}
 
-          {/* DIVIDER */}
+          {/* Divider */}
           <div className="w-px h-4 bg-white/10 mx-1" />
 
-          {/* RESUME */}
+          {/* Resume */}
           <Link
             href="/resume.pdf"
             target="_blank"
@@ -162,7 +190,6 @@ export default function Navbar() {
             Resume
             <IconDownload size={14} />
           </Link>
-
         </nav>
       </header>
 
@@ -189,9 +216,7 @@ export default function Navbar() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-
         <div className="p-4 flex flex-col gap-1">
-
           {NAV_LINKS.map(({ label, href, icon }) => {
             const isActive = active === href.replace("#", "")
 
@@ -224,9 +249,7 @@ export default function Navbar() {
             Resume
             <IconDownload size={14} />
           </Link>
-
         </div>
-
       </div>
     </>
   )

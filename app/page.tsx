@@ -15,7 +15,9 @@ export default function Page() {
   return (
     <main>
 
-      <Hero />
+      <section id="hero" className="min-h-screen">
+        <Hero /></section>
+
 
       <Section
         id="work"
