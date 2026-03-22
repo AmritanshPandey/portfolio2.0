@@ -24,11 +24,12 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
       {/* LOGO */}
       <div className="
-  w-16 h-16 rounded-lg
-  overflow-hidden                    
-  flex items-center justify-center
-  transition-transform duration-300 group-hover:scale-105
-">
+        w-16 h-16 rounded-lg overflow-hidden
+        flex items-center justify-center
+        bg-muted border border-border
+        transition-all duration-300
+        group-hover:scale-105
+      ">
         <img
           src={logo}
           alt={title}
@@ -44,9 +45,9 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
           <p className="
             text-base md:text-lg font-semibold
-            text-neutral-900
+            text-foreground
             transition-colors duration-200
-            group-hover:text-orange-500
+            group-hover:text-primary
           ">
             {title}
           </p>
@@ -55,9 +56,9 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
             size={18}
             className="
               shrink-0 mt-[4px]
-              text-neutral-400
+              text-muted-foreground
               transition-all duration-200
-              group-hover:text-orange-500
+              group-hover:text-primary
               group-hover:translate-x-[2px]
               group-hover:-translate-y-[2px]
             "
@@ -67,7 +68,7 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
         {/* DESCRIPTION */}
         <p className="
-          text-neutral-600 text-sm
+          text-muted-foreground text-sm
           mt-2 max-w-xl leading-[1.6]
         ">
           {desc}

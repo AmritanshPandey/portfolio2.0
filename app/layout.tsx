@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
 import { Montserrat } from "next/font/google"
+import { ThemeProvider } from "next-themes"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -15,9 +16,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-       
         <style>{`
           *, *::before, *::after { cursor: none !important; }
           a, button, input, select, textarea, label,
@@ -28,17 +28,20 @@ export default function RootLayout({
       </head>
 
       <body className={montserrat.className}>
+        
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          
+          <FancyCursor />
 
-       
-        <FancyCursor />
+          <Navbar />
 
-        <Navbar />
+          <main>
+            {children}
+          </main>
 
-        <main>
-          {children}
-        </main>
+          <Footer />
 
-        <Footer />
+        </ThemeProvider>
 
       </body>
     </html>

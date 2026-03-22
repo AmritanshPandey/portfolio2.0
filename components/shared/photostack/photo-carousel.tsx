@@ -22,14 +22,29 @@ export default function PhotoCarousel() {
 
       <div className="relative group">
 
-        {/* base glow */}
-        <div className="absolute -inset-10 bg-gradient-to-tr from-red-100/25 via-neutral-200/20 to-transparent blur-3xl rounded-3xl transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]" />
+        {/* Ambient glow (theme-aware, subtle) */}
+        <div className="
+          absolute -inset-12 rounded-3xl
+          opacity-40 blur-3xl
+          transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+          group-hover:scale-[1.03]
+          
+          bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.08),transparent_70%)]
+          dark:bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.06),transparent_70%)]
+        " />
 
-        {/* subtle radial highlight (adds depth) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.6),transparent_60%)] rounded-3xl pointer-events-none opacity-70" />
+        {/* Soft edge highlight */}
+        <div className="
+          absolute inset-0 rounded-3xl pointer-events-none
+          ring-1 ring-inset ring-border/50
+        " />
 
-        {/* carousel */}
-        <div className="relative transition-all duration-500 ease-out group-hover:-translate-y-[2px]">
+        {/* Carousel */}
+        <div className="
+          relative
+          transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+          group-hover:-translate-y-[2px]
+        ">
           <PhotoStackCarousel
             ref={carouselRef}
             photos={photos}

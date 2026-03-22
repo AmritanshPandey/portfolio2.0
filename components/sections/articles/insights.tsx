@@ -12,13 +12,13 @@ export default function InsightsSection() {
     {
       title: "Designing Incentive Systems",
       description:
-        "Most products fail because incentives are misaligned, not because UX is broken.",
+        "Most products fail due to misaligned incentives, not poor UX.",
       href: "/articles/incentive-systems",
     },
     {
       title: "The Cost of Over-Engineering UX",
       description:
-        "Complexity doesn't make products powerful, it makes them harder to use.",
+        "Complexity doesn't make products powerful — it makes them harder to use.",
       href: "/articles/overengineering-ux",
     },
     {
@@ -30,15 +30,15 @@ export default function InsightsSection() {
     {
       title: "Designing Under Uncertainty",
       description:
-        "Strong teams move forward without perfect data and learn faster because of it.",
+        "Strong teams move forward without perfect data and learn faster.",
       href: "/articles/designing-under-uncertainty",
     },
   ]
 
   return (
     <SectionSubgroup
-      label="Notes & Insights"
-      description="Writing on product, systems, and decision-making"
+      label="Insights"
+      description="Writing on product, systems, and decision-making."
       variant="spacious"
     >
 
@@ -52,16 +52,13 @@ export default function InsightsSection() {
           variants={{
             hidden: {},
             visible: {
-              transition: {
-                staggerChildren: 0.08,
-              },
+              transition: { staggerChildren: 0.08 },
             },
           }}
           className="grid md:grid-cols-2 gap-6 md:gap-8"
         >
 
           {articles.map((article, index) => (
-
             <motion.div
               key={index}
               variants={{
@@ -73,16 +70,13 @@ export default function InsightsSection() {
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
-
               <ArticleCard
                 index={index + 1}
                 title={article.title}
                 description={article.description}
                 href={article.href}
               />
-
             </motion.div>
-
           ))}
 
         </motion.div>
@@ -92,35 +86,33 @@ export default function InsightsSection() {
           <Link
             href="/articles"
             className="
-      group inline-flex items-center gap-2
-      text-sm font-medium
-      text-neutral-500
-      transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-      hover:text-orange-400
-    "
+              group inline-flex items-center gap-2
+              text-sm font-medium
+              text-muted-foreground
+              transition-all duration-300
+              hover:text-foreground
+            "
           >
             {/* TEXT */}
             <span className="relative">
 
               <span className="
-        relative z-10
-        transition-colors duration-300
-        group-hover:text-orange-500
-      ">
+                relative z-10
+                transition-colors duration-300
+              ">
                 View all writing
               </span>
 
               {/* UNDERLINE */}
               <span
                 className="
-          absolute left-0 -bottom-1
-          h-[1.5px] w-full
-          bg-orange-500/80
-          origin-left scale-x-0
-          transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
-          delay-75
-          group-hover:scale-x-100
-        "
+                  absolute left-0 -bottom-1
+                  h-[1px] w-full
+                  bg-foreground/60
+                  origin-left scale-x-0
+                  transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+                  group-hover:scale-x-100
+                "
               />
 
             </span>
@@ -129,19 +121,21 @@ export default function InsightsSection() {
             <IconArrowUpRight
               size={16}
               className="
-              opacity-70
-              transition-all duration-300 ease-out
-              group-hover:opacity-100
-              group-hover:translate-x-[4px]
-              group-hover:-translate-y-[4px]
-              delay-100"
+                opacity-60
+                transition-all duration-300
+                group-hover:opacity-100
+                group-hover:translate-x-[3px]
+                group-hover:-translate-y-[3px]
+              "
             />
-
           </Link>
         </div>
 
       </div>
-      <div className="h-px w-full pb-8" />
+
+      {/* Divider */}
+      <div className="h-px w-full bg-border/60 mt-10 md:mt-12" />
+
     </SectionSubgroup>
   )
 }

@@ -4,79 +4,81 @@ import clsx from "clsx"
 import { SectionHeader } from "./section-header"
 import { SectionTransition } from "./section-transition"
 
-type Bg = "light" | "dark" | "subtle"
-type Density = "default" | "compact"
-type Container = "default" | "narrow"
+type Bg = "default" | "muted" | "dark"
 
-export function Section({
-  id,
-  bg = "light",
-  density = "default",
-  container = "default",
-  divider = false,
-
-  eyebrow,
-  title,
-  description,
-  headerVariant = "default",
-
-  transition,
-  transitionEyebrow,
-  transitionVariant = "default",
-
-  children,
-}: {
-  id: string
+interface SectionProps {
+  id?: string
   bg?: Bg
-  density?: Density
-  container?: Container
-  divider?: boolean
-
+  children: React.ReactNode
   eyebrow?: string
   title?: string
   description?: string
   headerVariant?: "default" | "compact" | "hero"
-
   transition?: string
   transitionEyebrow?: string
   transitionVariant?: "default" | "muted" | "highlight"
+}
 
-  children: React.ReactNode
-}) {
+export function Section({
+  id,
+  bg = "default",
+  children,
+  eyebrow,
+  title,
+  description,
+  headerVariant = "default",
+  transition,
+  transitionEyebrow,
+  transitionVariant = "default",
+}: SectionProps) {
 
+  // 🎯 CLEAN BASE SURFACES (no baked orange)
   const bgStyles = {
-    light: "bg-[var(--bg1)] text-neutral-900",
-    subtle: "bg-[var(--bg2)] text-neutral-900",
-    dark: "bg-neutral-950 text-white",
-  }
+    default: `
+      bg-[oklch(0.985_0_0)] text-foreground
+      dark:bg-[oklch(0.14_0_0)]
+    `,
 
-  const spacing = {
-    default: "py-12 md:py-16",
-    compact: "py-10 md:py-12",
-  }
+    muted: `
+      bg-[oklch(0.965_0.003_85)] text-foreground
+      dark:bg-[oklch(0.16_0.002_260)]
+    `,
 
-  const containerWidth = {
-    default: "max-w-6xl",
-    narrow: "max-w-4xl",
+    dark: `
+      bg-neutral-950 text-white
+    `,
   }
 
   return (
     <section
       id={id}
-      className={clsx("relative", bgStyles[bg])}
+      className={clsx(
+        "relative w-full overflow-hidden transition-colors duration-500",
+        bgStyles[bg]
+      )}
     >
 
-      {divider && (
-        <div className="absolute top-0 left-0 w-full h-px bg-neutral-200/70" />
-      )}
+      {/* ✨ AMBIENT LIGHT (this replaces heavy tinting) */}
+      <div className="pointer-events-none absolute inset-0">
 
-      <div
-        className={clsx(
-          "mx-auto px-5 md:px-6",
-          spacing[density],
-          containerWidth[container]
-        )}
-      >
+        {/* LIGHT MODE */}
+        <div className="
+          absolute inset-0
+          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.05),transparent_60%)]
+          opacity-70
+          dark:hidden
+        " />
+
+        {/* DARK MODE */}
+        <div className="
+          hidden dark:block absolute inset-0
+          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.08),transparent_60%)]
+        " />
+
+      </div>
+
+      {/* CONTENT */}
+      <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-16 md:py-20">
 
         {title && (
           <SectionHeader
@@ -87,7 +89,9 @@ export function Section({
           />
         )}
 
-        <div>{children}</div>
+        <div className="mt-6 md:mt-8">
+          {children}
+        </div>
 
         {transition && (
           <SectionTransition
@@ -98,6 +102,15 @@ export function Section({
         )}
 
       </div>
+
+      {/* 🔥 PREMIUM SEPARATOR (soft, not harsh) */}
+      <div className="
+        absolute bottom-0 left-0 w-full h-px
+        bg-gradient-to-r
+        from-transparent via-foreground/10 to-transparent
+        dark:via-white/10
+      " />
+
     </section>
   )
 }

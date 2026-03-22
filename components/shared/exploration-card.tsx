@@ -28,7 +28,7 @@ export function ExplorationCard({
       className={clsx(
         "group relative isolate rounded-2xl overflow-hidden block",
         "aspect-square md:aspect-auto",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         span
       )}
     >
@@ -38,70 +38,92 @@ export function ExplorationCard({
         alt={title}
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+        className="
+          object-cover object-center
+          transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
+          group-hover:scale-[1.04]
+        "
       />
 
-      {/* PERMANENT GRADIENT — title always legible */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      {/* BASE GRADIENT */}
+      <div className="
+        absolute inset-0
+        bg-gradient-to-t
+        from-black/70 via-black/20 to-transparent
+        dark:via-black/10
+      " />
 
-      {/* HOVER VIGNETTE — deepens on hover for readability */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 ease-out" />
+      {/* HOVER VIGNETTE */}
+      <div className="
+        absolute inset-0
+        bg-black/0
+        group-hover:bg-black/25
+        dark:group-hover:bg-black/35
+        transition-colors duration-400 ease-out
+      " />
 
-      {/* TOP — arrow only, no tags cluttering */}
+      {/* ACTION */}
       <div className="absolute top-4 right-4 z-10">
         <span className="
           w-9 h-9 rounded-full
-          bg-white/10 border border-white/15 backdrop-blur-md
+          bg-background/70 border border-border backdrop-blur-md
           flex items-center justify-center
-          opacity-0 scale-75
+          opacity-0 scale-90
           group-hover:opacity-100 group-hover:scale-100
-          transition-all duration-300 ease-out
+          transition-all duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]
         ">
-          <IconArrowUpRight size={16} stroke={1.75} className="text-white" />
+          <IconArrowUpRight size={16} className="text-foreground" />
         </span>
       </div>
 
-      {/* BOTTOM CONTENT */}
+      {/* CONTENT */}
       <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10">
 
-        {/* TAGS — small, bottom-left, always visible */}
+        {/* TAGS */}
         <div className="flex flex-wrap gap-1.5 mb-3">
           {tags.map((tag, i) => (
             <span
               key={i}
-              className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white/[0.12] border border-white/[0.1] text-white/60 tracking-wide"
+              className="
+                text-[10px] font-medium px-2 py-0.5 rounded-full
+                bg-background/60 border border-border
+                text-foreground/70 backdrop-blur-sm
+              "
             >
               {tag}
             </span>
           ))}
         </div>
 
-        {/* TITLE — always visible, shifts up on hover */}
+        {/* TITLE */}
         <h3 className="
-          text-base md:text-lg font-medium leading-snug tracking-tight text-white
-          translate-y-0 group-hover:-translate-y-1
-          transition-transform duration-300 ease-out
-          mb-0 group-hover:mb-2
+          text-base md:text-lg font-medium leading-snug tracking-tight
+          text-white
         ">
           {title}
         </h3>
 
-        {/* DESCRIPTION — hidden at rest, max-h reveal on hover */}
-        <p className="
-          text-[13px] text-white/55 leading-relaxed max-w-xs
-          max-h-0 overflow-hidden opacity-0
-          group-hover:max-h-[80px] group-hover:opacity-100
-          transition-all duration-400 ease-out
-          line-clamp-2
-        ">
-          {description}
-        </p>
+        {/* DESCRIPTION (STABLE — NO SHIFT) */}
+        <div className="h-[38px] mt-1">
+          <p className="
+            text-[13px] text-white/70 leading-relaxed max-w-xs
+            opacity-60 group-hover:opacity-100
+            transition-opacity duration-300 ease-out
+            line-clamp-2
+          ">
+            {description}
+          </p>
+        </div>
 
       </div>
 
-      {/* INSET BORDER */}
-      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/[0.06] group-hover:ring-white/[0.12] transition-colors duration-300" />
-
+      {/* BORDER */}
+      <div className="
+        absolute inset-0 rounded-2xl
+        ring-1 ring-inset ring-border/40
+        group-hover:ring-border/70
+        transition-colors duration-300
+      " />
     </Link>
   )
 }

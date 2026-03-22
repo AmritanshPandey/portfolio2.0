@@ -5,26 +5,26 @@ import { VerticalCard } from "@/components/shared/vertical-card"
 
 const projects = [
   {
-    category: "Commerce Platform",
+    category: "Commerce Infrastructure",
     title: "Shared Commerce Platform for Multi-Brand D2C",
     description:
-      "Unified three D2C brands on a shared platform while preserving brand identity.",
+      "Unified three D2C brands into a single platform, reducing duplication while preserving brand differentiation at scale.",
     image: "/assets/images/work/commerce-platform.jpg",
     href: "/work/d2c-platform",
   },
   {
-    category: "Enterprise Platform",
+    category: "Enterprise Systems",
     title: "Modular White-Label Platform for Enterprise Sales",
     description:
-      "Built a configurable banking system enabling rapid demo customization for enterprise sales.",
+      "Enabled rapid enterprise demo customization through a modular banking system, accelerating high-stakes RFP cycles.",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
   },
   {
-    category: "Fintech Platform",
+    category: "Fintech Infrastructure",
     title: "Transaction-Driven SME Credit Platform",
     description:
-      "Designed a lending model using transaction data to enable faster SME credit decisions.",
+      "Designed a transaction-based credit model to improve SME loan decision speed and reduce underwriting friction.",
     image: "/assets/images/work/sme-credit-platform.jpg",
     href: "/work/sme-credit",
   },
@@ -35,13 +35,13 @@ export default function WorkSection() {
 
   return (
     <SectionSubgroup
-      label="Case Studies"
-      description="Fintech & commerce products solving real-world problems."
+      label="Selected Work"
+      description="Systems built across fintech and commerce to solve real constraints at scale."
       variant="spacious"
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
 
-        {/* Featured card — full width, horizontal layout on desktop */}
+        {/* Featured */}
         <VerticalCard
           href={featured.href}
           image={featured.image}
@@ -51,8 +51,8 @@ export default function WorkSection() {
           variant="featured"
         />
 
-        {/* Remaining 2 cards — equal 2-col grid */}
-        <div className="grid md:grid-cols-2 gap-5">
+        {/* Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
           {rest.map((project) => (
             <VerticalCard
               key={project.href}

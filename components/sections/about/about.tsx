@@ -14,7 +14,7 @@ export default function AboutSection() {
   const focus = [
     {
       icon: IconSparkles,
-      text: "Exploring how AI changes product behavior",
+      text: "Exploring how AI reshapes product behavior",
     },
     {
       icon: IconLayoutGrid,
@@ -31,44 +31,68 @@ export default function AboutSection() {
   ]
 
   return (
-    <section id="about" className="bg-[var(--bg2)] relative">
+    <section
+      id="about"
+      className="
+        relative
+        bg-[var(--bg2)]
+        text-foreground
+      "
+    >
 
-      {/* subtle background depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/[0.015] to-transparent pointer-events-none" />
+      {/* subtle depth */}
+      <div className="
+        pointer-events-none absolute inset-0
+        bg-gradient-to-b
+        from-transparent via-foreground/[0.02] to-transparent
+        dark:via-white/[0.02]
+      " />
 
-      <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative">
+      <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
 
-        {/* HEADER (UPDATED) */}
+        {/* HEADER */}
         <div className="mb-12 md:mb-16 max-w-2xl">
           <SectionHeader
             eyebrow="About"
-            title="About me"
+            title="Who I am"
+            description="A product designer focused on systems, scale, and decision-making."
           />
         </div>
 
         {/* CONTENT */}
-        <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-12 md:gap-28 items-start">
+        <div className="
+          grid grid-cols-1
+          lg:grid-cols-[380px_1fr]
+          gap-12 md:gap-24
+          items-start
+        ">
 
           {/* LEFT — PHOTO */}
           <div className="relative flex justify-center lg:justify-start pt-2 lg:pt-6">
             <PhotoCarousel />
           </div>
 
-          {/* RIGHT — CONTENT */}
+          {/* RIGHT */}
           <div className="space-y-10">
 
             {/* TEXT */}
-            <div className="space-y-5 text-neutral-700 text-base md:text-lg leading-relaxed max-w-xl">
+            <div className="
+              space-y-5
+              text-base md:text-lg
+              leading-relaxed
+              text-foreground/80
+              max-w-xl
+            ">
 
               <p>
-                I'm a product designer who enjoys breaking down complex problems and turning them into clear, usable systems.
+                I design products by breaking down complex problems into clear, scalable systems.
               </p>
 
               <p>
-                I care about how things actually work in the real world, how users behave, where friction shows up, and how small design decisions influence larger outcomes.
+                My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
               </p>
 
-              <p className="text-neutral-600">
+              <p className="text-foreground/60">
                 Outside of work, I spend time traveling, cooking, and going on long bike rides. These help me reset, stay curious, and bring fresh perspective into my work.
               </p>
 
@@ -77,11 +101,19 @@ export default function AboutSection() {
             {/* FOCUS */}
             <div>
 
-              <p className="text-base md:text-lg font-semibold mb-6">
-                What I focus on
+              <p className="
+                text-base md:text-lg
+                font-semibold
+                mb-6
+                text-foreground
+              ">
+                Focus areas
               </p>
 
-              <div className="grid sm:grid-cols-2 gap-x-10 gap-y-5">
+              <div className="
+                grid sm:grid-cols-2
+                gap-x-10 gap-y-5
+              ">
 
                 {focus.map((item, index) => {
                   const Icon = item.icon
@@ -93,12 +125,21 @@ export default function AboutSection() {
                     >
 
                       {/* ICON */}
-                      <div className="mt-[3px] text-neutral-400 group-hover:text-orange-500 transition-colors duration-300">
+                      <div className="
+                        mt-[3px]
+                        text-muted-foreground
+                        group-hover:text-orange-500
+                        transition-colors duration-300
+                      ">
                         <Icon size={18} />
                       </div>
 
                       {/* TEXT */}
-                      <p className="text-neutral-700 leading-[1.6] text-sm md:text-base">
+                      <p className="
+                        text-sm md:text-base
+                        leading-[1.6]
+                        text-foreground/80
+                      ">
                         {item.text}
                       </p>
 
@@ -115,7 +156,6 @@ export default function AboutSection() {
         </div>
 
       </div>
-
     </section>
   )
 }

@@ -16,50 +16,96 @@ export function SectionTransition({
 }) {
 
   const textStyles = {
-    default: "text-neutral-800 text-lg md:text-xl",
-    muted: "text-neutral-600 text-base md:text-lg",
-    highlight: "text-neutral-900 text-xl md:text-2xl font-medium",
+    default: "text-foreground text-lg md:text-xl",
+    muted: "text-muted-foreground text-base md:text-lg",
+    highlight: "text-foreground text-xl md:text-2xl font-medium",
   }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      viewport={{ once: true }}
-      className="mt-2 md:mt-6"
+      viewport={{ once: true, margin: "-60px" }}
+      className="mt-6 md:mt-10"
     >
 
-      {/* FULL HOVER AREA */}
-      <div className="group inline-block">
+      <div className="max-w-xl space-y-5">
 
-        <div className="max-w-xl transition-transform duration-300 ease-out group-hover:translate-x-[2px]">
+        {/* ✨ DIVIDER */}
+        <div className="relative h-[2px] w-20 overflow-hidden rounded-full">
 
-          {/* Divider */}
-          <div className="h-px w-16 bg-neutral-300 mb-8 transition-all duration-300 ease-out group-hover:bg-orange-500 group-hover:w-20" />
+          {/* base */}
+          <div className="absolute inset-0 bg-border/60" />
 
-          {/* Eyebrow */}
-          {eyebrow && (
-            <p className="text-[12px] tracking-[0.18em] uppercase text-neutral-400 mb-3 transition-colors duration-300 group-hover:text-neutral-600">
-              {eyebrow}
-            </p>
-          )}
+          {/* animated fill */}
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: "70%" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="
+              absolute left-0 top-0 h-full
+              bg-gradient-to-r from-orange-500 to-orange-400
+            "
+          />
 
-          {/* Text */}
-          <p
-            className={clsx(
-              "leading-[1.6] tracking-tight transition-colors duration-300 ease-out",
-              textStyles[variant],
-              "group-hover:text-neutral-900"
-            )}
-          >
-            {text}
-          </p>
+          {/* shimmer pass (very subtle) */}
+          <motion.div
+            initial={{ x: "-100%" }}
+            whileInView={{ x: "120%" }}
+            transition={{ duration: 1.4, delay: 0.4, ease: "easeInOut" }}
+            className="
+              absolute top-0 h-full w-10
+              bg-gradient-to-r from-transparent via-white/40 to-transparent
+              dark:via-white/20
+            "
+          />
 
         </div>
 
-      </div>
+        {/* EYEBROW */}
+        {eyebrow && (
+          <motion.p
+            initial={{ opacity: 0, y: 6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.05 }}
+            className="
+              text-[11px] tracking-[0.2em] uppercase
+              text-muted-foreground
+            "
+          >
+            {eyebrow}
+          </motion.p>
+        )}
 
+        {/* TEXT */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className={clsx(
+            "leading-[1.65] tracking-tight",
+            textStyles[variant]
+          )}
+        >
+          {/* ✨ word-level micro animation */}
+          {text.split(" ").map((word, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.35,
+                delay: 0.15 + i * 0.015, // stagger per word
+              }}
+              className="inline-block mr-[0.3em]"
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.p>
+
+      </div>
     </motion.div>
   )
 }

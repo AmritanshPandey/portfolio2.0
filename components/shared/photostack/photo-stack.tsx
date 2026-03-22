@@ -24,9 +24,9 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
     const [index, setIndex] = useState(0)
     const containerRef = useRef<HTMLDivElement>(null)
 
-    // magnetic state
     const [offset, setOffset] = useState({ x: 0, y: 0 })
 
+    // ─── Auto rotate ─────────────────
     useEffect(() => {
       if (!photos.length) return
 
@@ -37,6 +37,7 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
       return () => clearInterval(interval)
     }, [photos.length])
 
+    // ─── Controls ────────────────────
     useImperativeHandle(ref, () => ({
       next: () => setIndex((prev) => (prev + 1) % photos.length),
       prev: () =>
@@ -45,7 +46,7 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
         ),
     }))
 
-    // magnetic hover
+    // ─── Magnetic (smoothed) ─────────
     const handleMove = (e: React.MouseEvent) => {
       const rect = containerRef.current?.getBoundingClientRect()
       if (!rect) return
@@ -54,8 +55,8 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
       const y = (e.clientY - rect.top) / rect.height - 0.5
 
       setOffset({
-        x: x * 10, // strength
-        y: y * 10,
+        x: x * 8,
+        y: y * 8,
       })
     }
 
@@ -78,9 +79,9 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
 
           const transforms = [
             "translate-x-0 translate-y-0 rotate-0 scale-100 z-30",
-            "translate-x-3 translate-y-1 rotate-[3deg] scale-[0.97] z-20",
-            "translate-x-6 translate-y-2 rotate-[6deg] scale-[0.94] z-10",
-            "translate-x-9 translate-y-3 rotate-[8deg] scale-[0.92] z-0 opacity-40",
+            "translate-x-3 translate-y-1 rotate-[2deg] scale-[0.97] z-20",
+            "translate-x-6 translate-y-2 rotate-[4deg] scale-[0.95] z-10",
+            "translate-x-8 translate-y-3 rotate-[6deg] scale-[0.93] z-0 opacity-40",
           ]
 
           const isActive = position === 0
@@ -94,17 +95,16 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
                 ${position < transforms.length ? transforms[position] : "opacity-0"}
               `}
               style={{
-                transform: `
-                  translate(${offset.x}px, ${offset.y}px)
-                `,
+                transform: `translate(${offset.x}px, ${offset.y}px)`,
               }}
             >
               <div
                 className={`
-                  w-full h-full bg-white p-2.5 md:p-3 rounded-xl
-                  shadow-[0_10px_24px_rgba(0,0,0,0.08)]
+                  w-full h-full rounded-xl p-2.5 md:p-3
+                  bg-card border border-border
                   transition-all duration-500
-                  ${isActive ? "blur-0 scale-100" : "blur-[1.5px] scale-[0.98]"}
+                  shadow-sm dark:shadow-lg
+                  ${isActive ? "blur-0 scale-100" : "blur-[1px] scale-[0.985]"}
                 `}
               >
 

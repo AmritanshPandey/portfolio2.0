@@ -3,7 +3,6 @@
 import clsx from "clsx"
 
 type Variant = "vertical" | "horizontal"
-type Theme = "dark" | "light"
 
 type Props = {
   number: string
@@ -11,7 +10,6 @@ type Props = {
   description: string
   variant?: Variant
   active?: boolean
-  theme?: Theme
 }
 
 export function ProcessStep({
@@ -20,108 +18,103 @@ export function ProcessStep({
   description,
   variant = "vertical",
   active = false,
-  theme = "dark",
 }: Props) {
 
-  const styles = {
-    dark: {
-      border: "border-white/10 group-hover/step:border-orange-500",
-      number: "text-white/30 group-hover/step:text-orange-500",
-      title: "text-white group-hover/step:text-orange-500",
-      desc: "text-white/60 group-hover/step:text-white/80",
-    },
-    light: {
-      border: "border-neutral-200 group-hover/step:border-orange-500",
-      number: "text-neutral-400 group-hover/step:text-orange-500",
-      title: "text-neutral-900 group-hover/step:text-orange-500",
-      desc: "text-neutral-600 group-hover/step:text-neutral-800",
-    },
-  }
-
-  const current = styles[theme]
-
-  // ---------------- VERTICAL ----------------
-
+  // ───────────── VERTICAL ─────────────
   if (variant === "vertical") {
     return (
-      <div className="group/step cursor-default">
+      <div
+        className={clsx(
+          "group/step relative flex gap-4 pl-5 border-l",
+          "border-border",
+          active && "border-orange-500",
+          "transition-all duration-300 md:hover:translate-x-[3px]"
+        )}
+      >
 
-        <div
+        {/* NUMBER */}
+        <span
           className={clsx(
-            "flex gap-4 pl-4 border-l",
-            "transition-all duration-300 ease-[0.22,1,0.36,1]",
-            "hover:translate-x-[6px] hover:scale-[1.01]",
-            "will-change-transform",
-            active ? "border-orange-500" : current.border
+            "text-xs font-semibold tracking-[0.12em] mt-[2px]",
+            "text-muted-foreground",
+            "transition-colors duration-300",
+
+            // 👇 subtle hover + active
+            "group-hover/step:text-orange-500",
+            active && "text-orange-500"
           )}
         >
+          {number}
+        </span>
 
-          {/* NUMBER */}
-          <span
+        {/* CONTENT */}
+        <div className="max-w-md space-y-1">
+
+          <h3
             className={clsx(
-              "text-sm md:text-base font-semibold transition-colors duration-300",
-              active ? "text-orange-500" : current.number
+              "text-base md:text-lg font-medium tracking-tight",
+              "text-foreground",
+              "transition-colors duration-300",
+
+              // 👇 main emphasis
+              "group-hover/step:text-orange-500",
+              active && "text-orange-500"
             )}
           >
-            {number}
-          </span>
+            {title}
+          </h3>
 
-          {/* CONTENT */}
-          <div className="max-w-md">
+          <p
+            className="
+              text-sm md:text-[15px]
+              leading-[1.6]
+              text-muted-foreground
+              transition-colors duration-300
 
-            <h3
-              className={clsx(
-                "text-base md:text-lg font-semibold mb-1 tracking-tight",
-                "transition-colors duration-300",
-                active ? "text-orange-500" : current.title
-              )}
-            >
-              {title}
-            </h3>
-
-            <p
-              className={clsx(
-                "text-[13px] md:text-sm leading-[1.65]",
-                "transition-colors duration-300",
-                current.desc
-              )}
-            >
-              {description}
-            </p>
-
-          </div>
+              /* 👇 very subtle lift */
+              group-hover/step:text-foreground/80
+            "
+          >
+            {description}
+          </p>
 
         </div>
+
+        {/* ACTIVE LINE */}
+        <div
+          className={clsx(
+            "absolute left-[-1px] top-0 h-full w-px transition-all duration-300",
+
+            active
+              ? "bg-orange-500"
+              : "bg-transparent group-hover/step:bg-orange-500/60"
+          )}
+        />
+
       </div>
     )
   }
 
-  // ---------------- HORIZONTAL ----------------
-
+  // ───────────── HORIZONTAL ─────────────
   return (
     <div
       className={clsx(
-        "group/step cursor-default pt-5 border-t",
-        "transition-all duration-300 ease-[0.22,1,0.36,1]",
-        "hover:-translate-y-[4px]",
-        active
-          ? "border-orange-500"
-          : theme === "light"
-            ? "border-neutral-300 group-hover/step:border-orange-500"
-            : "border-white/10 group-hover/step:border-orange-500"
+        "group/step pt-5 border-t",
+        "border-border",
+        active && "border-orange-500",
+        "transition-all duration-300 md:hover:-translate-y-[2px]"
       )}
     >
 
       {/* NUMBER */}
       <p
         className={clsx(
-          "text-xs font-semibold tracking-[0.16em] mb-2",
+          "text-[11px] font-semibold tracking-[0.16em] mb-2",
+          "text-muted-foreground",
           "transition-colors duration-300",
-          active
-            ? "text-orange-500"
-            : theme === "light"
-              ? "text-neutral-400 group-hover/step:text-orange-500"
-              : "text-white/30 group-hover/step:text-orange-500"
+
+          "group-hover/step:text-orange-500",
+          active && "text-orange-500"
         )}
       >
         {number}
@@ -130,13 +123,12 @@ export function ProcessStep({
       {/* TITLE */}
       <h3
         className={clsx(
-          "text-lg md:text-xl font-semibold mb-2 tracking-tight",
+          "text-lg md:text-xl font-medium tracking-tight mb-2",
+          "text-foreground",
           "transition-colors duration-300",
-          active
-            ? "text-orange-500"
-            : theme === "light"
-              ? "text-neutral-900 group-hover/step:text-orange-500"
-              : "text-white group-hover/step:text-orange-500"
+
+          "group-hover/step:text-orange-500",
+          active && "text-orange-500"
         )}
       >
         {title}
@@ -144,13 +136,13 @@ export function ProcessStep({
 
       {/* DESCRIPTION */}
       <p
-        className={clsx(
-          "text-sm md:text-base leading-[1.6] max-w-[320px]",
-          "transition-colors duration-300",
-          theme === "light"
-            ? "text-neutral-600 group-hover/step:text-neutral-800"
-            : "text-white/60 group-hover/step:text-white/80"
-        )}
+        className="
+          text-sm md:text-base leading-[1.6]
+          text-muted-foreground max-w-[320px]
+          transition-colors duration-300
+
+          group-hover/step:text-foreground/80
+        "
       >
         {description}
       </p>

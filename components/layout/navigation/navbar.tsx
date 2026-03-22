@@ -11,6 +11,7 @@ import {
   IconArrowLeft,
   IconHome,
 } from "@tabler/icons-react"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 
 // ─── Navigation Links ─────────────────
 const NAV_LINKS = [
@@ -49,13 +50,44 @@ function slugToTitle(slug: string) {
     .join(" ")
 }
 
-// ─── Premium Dark Glass ──────────────
+// ─── Glass (theme-safe) ──────────────
 const GLASS = `
-  bg-[rgba(18,18,18,0.7)]
-  backdrop-blur-2xl
-  border border-white/10
-  shadow-[0_10px_40px_rgba(0,0,0,0.45)]
+  bg-background/60
+  backdrop-blur-xl
+  border border-border/50
+  shadow-sm dark:shadow-lg
 `
+
+// ─── Nav Item ────────────────────────
+function NavItem({
+  href,
+  label,
+  icon,
+  isActive,
+}: {
+  href: string
+  label: string
+  icon?: boolean
+  isActive: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      className={clsx(
+        "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-all duration-200",
+        isActive
+          ? "bg-muted text-foreground"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+      )}
+    >
+      {icon ? (
+        <IconHome size={16} className={isActive ? "" : "opacity-60"} />
+      ) : (
+        label
+      )}
+    </Link>
+  )
+}
 
 export default function Navbar() {
   const [active, setActive] = useState("hero")
@@ -70,16 +102,14 @@ export default function Navbar() {
 
   const hasMounted = useRef(false)
 
-  // ─── FIXED: Stable Active Detection ───────
+  // ─── Active Section Detection ───────
   useEffect(() => {
     if (!isHome) return
 
-    // Always start with hero
     setActive("hero")
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Skip first noisy paint
         if (!hasMounted.current) {
           hasMounted.current = true
           return
@@ -95,12 +125,10 @@ export default function Navbar() {
           }
         })
 
-        if (maxRatio > 0.35) {
-          setActive(current)
-        }
+        if (maxRatio > 0.35) setActive(current)
       },
       {
-        rootMargin: "-35% 0px -45% 0px", // center-weighted viewport
+        rootMargin: "-35% 0px -45% 0px",
         threshold: [0.25, 0.5, 0.75],
       }
     )
@@ -113,12 +141,10 @@ export default function Navbar() {
     return () => observer.disconnect()
   }, [isHome])
 
-  // ─── FIX: Hard override for top scroll ───
+  // ─── Top override ───
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY < 150) {
-        setActive("hero")
-      }
+      if (window.scrollY < 150) setActive("hero")
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -129,63 +155,51 @@ export default function Navbar() {
     <>
       {/* ─── DESKTOP NAV ───────────────── */}
       <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block">
-        <nav className={clsx("relative flex items-center gap-1 px-3 py-2 rounded-full", GLASS)}>
-          
-          <span className="pointer-events-none absolute inset-0 rounded-full border border-white/5" />
+        <nav className={clsx("relative flex items-center gap-1.5 px-3 py-2 rounded-full", GLASS)}>
 
-          {/* HOME NAV */}
+          <span className="pointer-events-none absolute inset-0 rounded-full border border-border/30" />
+
           {isHome ? (
-            <ul className="flex items-center gap-1">
-              {NAV_LINKS.map(({ label, href, icon }) => {
-                const isActive = active === href.replace("#", "")
-
-                return (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      className={clsx(
-                        "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-all duration-200",
-                        isActive
-                          ? "text-white bg-white/[0.08]"
-                          : "text-white/50 hover:text-white hover:bg-white/[0.05]"
-                      )}
-                    >
-                      {icon ? (
-                        <IconHome size={16} className={isActive ? "" : "opacity-60"} />
-                      ) : (
-                        label
-                      )}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
+            <div className="flex items-center gap-1">
+              {NAV_LINKS.map(({ label, href, icon }) => (
+                <NavItem
+                  key={href}
+                  href={href}
+                  label={label}
+                  icon={icon}
+                  isActive={active === href.replace("#", "")}
+                />
+              ))}
+            </div>
           ) : (
             <div className="flex items-center gap-2 px-2">
               <Link
                 href={backHref}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-white/50 hover:text-white transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition"
               >
                 <IconArrowLeft size={14} />
                 Back
               </Link>
 
-              <span className="text-white/20">/</span>
+              <span className="text-border">/</span>
 
-              <span className="text-sm text-white/70 font-medium">
+              <span className="text-sm text-foreground font-medium">
                 {pageTitle}
               </span>
             </div>
           )}
 
           {/* Divider */}
-          <div className="w-px h-4 bg-white/10 mx-1" />
+          <div className="w-px h-4 bg-border mx-1" />
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
           {/* Resume */}
           <Link
             href="/resume.pdf"
             target="_blank"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-white/80 hover:text-white hover:bg-white/[0.08] transition"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
           >
             Resume
             <IconDownload size={14} />
@@ -198,7 +212,7 @@ export default function Navbar() {
         onClick={() => setOpen(!open)}
         className={clsx(
           "fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center",
-          "text-white/80 hover:text-white transition",
+          "text-muted-foreground hover:text-foreground transition",
           GLASS
         )}
       >
@@ -217,34 +231,30 @@ export default function Navbar() {
         )}
       >
         <div className="p-4 flex flex-col gap-1">
-          {NAV_LINKS.map(({ label, href, icon }) => {
-            const isActive = active === href.replace("#", "")
+          {NAV_LINKS.map(({ label, href, icon }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              className={clsx(
+                "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition",
+                active === href.replace("#", "")
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              )}
+            >
+              {icon && <IconHome size={16} />}
+              {label}
+            </Link>
+          ))}
 
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={clsx(
-                  "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition",
-                  isActive
-                    ? "text-white bg-white/[0.08]"
-                    : "text-white/50 hover:text-white hover:bg-white/[0.05]"
-                )}
-              >
-                {icon && <IconHome size={16} />}
-                {label}
-              </Link>
-            )
-          })}
-
-          <div className="h-px bg-white/10 my-2" />
+          <div className="h-px bg-border my-2" />
 
           <Link
             href="/resume.pdf"
             target="_blank"
             onClick={() => setOpen(false)}
-            className="flex items-center justify-between px-3 py-2 text-sm text-white/70 hover:text-white"
+            className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             Resume
             <IconDownload size={14} />

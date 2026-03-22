@@ -5,10 +5,10 @@ import { HorizontalCard } from "@/components/shared/horizontal-card"
 
 const systems = [
   {
-    category: "Design Infrastructure",
+    category: "Design System",
     title: "Multi-Brand Theming & Token System",
     description:
-      "Token-driven system enabling dynamic theming, white-label customization, and scalable brand layering across shared product foundations.",
+      "Defined a token architecture to support white-label theming, enabling multiple brands to scale on a shared product foundation without duplication.",
     image: "/assets/images/work/design-tokens.jpg",
     href: "/systems/theming-token-system",
   },
@@ -16,7 +16,7 @@ const systems = [
     category: "Product System",
     title: "Fintech & AI Interface System",
     description:
-      "Component system for regulated financial and intelligent products, including risk states, disclosures, and explainable UI patterns.",
+      "Built interface patterns for regulated and AI-driven products, addressing risk states, disclosures, and explainability under real constraints.",
     image: "/assets/images/work/fintech-ai-system.jpg",
     href: "/systems/fintech-ai-interface",
   },
@@ -25,8 +25,8 @@ const systems = [
 export default function SystemsSection() {
   return (
     <SectionSubgroup
-      label="Systems & Infrastructure"
-      description="Enabling consistency, scalability, and better product decisions."
+      label="Systems"
+      description="Foundational systems that enable scale, consistency, and better decision-making."
       variant="spacious"
     >
       <div className="flex flex-col gap-6">

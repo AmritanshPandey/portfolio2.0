@@ -29,23 +29,25 @@ export function SectionSubgroup({
       {(label || description) && (
         <div className="space-y-2">
 
+          {/* LABEL */}
           {label && (
             <p className="
-              text-xl md:text-2xl lg:text-3xl
-              font-semibold
-              text-neutral-900
-              leading-tight
+              text-lg md:text-xl
+              font-medium tracking-tight
+              text-foreground
+              leading-snug
             ">
               {label}
             </p>
           )}
 
+          {/* DESCRIPTION */}
           {description && (
             <p className="
               text-sm md:text-base
-              text-neutral-500
+              text-muted-foreground
               leading-[1.6]
-              max-w-xl
+              max-w-full
             ">
               {description}
             </p>
@@ -55,7 +57,7 @@ export function SectionSubgroup({
       )}
 
       {/* CONTENT */}
-      <div>
+      <div className="space-y-4">
         {children}
       </div>
 

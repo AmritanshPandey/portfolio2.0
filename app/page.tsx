@@ -15,13 +15,13 @@ export default function Page() {
   return (
     <main>
 
-     
-        <Hero />
+      {/* ───────────────── HERO ───────────────── */}
+      <Hero />
 
-
+      {/* ───────────────── WORK ───────────────── */}
       <Section
         id="work"
-        bg="subtle"
+        bg="default"
         eyebrow="Work"
         title="Selected Work & Systems"
         transition="Behind these systems is a structured way of thinking and decision-making."
@@ -32,9 +32,10 @@ export default function Page() {
         <SystemsSection />
       </Section>
 
+      {/* ───────────────── APPROACH ───────────────── */}
       <Section
         id="approach"
-        bg="light"
+        bg="muted"
         eyebrow="Approach"
         title="How I Design & Make Product Decisions"
         transition="Beyond structured processes, exploration helps test ideas and refine thinking."
@@ -45,10 +46,10 @@ export default function Page() {
         <ProductThinkingSection />
       </Section>
 
-
+      {/* ───────────────── EXPLORATION ───────────────── */}
       <Section
         id="exploration"
-        bg="subtle"
+        bg="default"
         eyebrow="Exploration"
         title="Building, Testing, and Learning Beyond Core Work"
         transition="These explorations translate into real-world impact across teams and products."
@@ -59,9 +60,10 @@ export default function Page() {
         <InsightsSection />
       </Section>
 
+      {/* ───────────────── IMPACT (ANCHOR) ───────────────── */}
       <Section
         id="impact"
-        bg="light"
+        bg="muted"   
         eyebrow="Impact"
         title="Driving Outcomes Beyond Product Design"
         transition="Beyond work and impact, here’s more about how I think and what I focus on."
@@ -72,7 +74,11 @@ export default function Page() {
         <AdvisorySection />
       </Section>
 
-      <AboutSection />
+      {/* ───────────────── ABOUT ───────────────── */}
+  
+        <AboutSection />
+   
+
     </main>
   )
 }

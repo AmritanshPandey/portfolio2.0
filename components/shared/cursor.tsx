@@ -11,7 +11,26 @@ export function FancyCursor() {
 
   const [state, setState] = useState<CursorState>("default")
   const [visible, setVisible] = useState(false)
+  const [isDark, setIsDark] = useState(false)
 
+  // ── Detect theme ─────────────────
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"))
+    }
+
+    checkTheme()
+
+    const observer = new MutationObserver(checkTheme)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  // ── Cursor movement ─────────────────
   useEffect(() => {
     const dot = dotRef.current
     if (!dot) return
@@ -38,20 +57,9 @@ export function FancyCursor() {
     const onOver = (e: MouseEvent) => {
       const t = e.target as HTMLElement
 
-      if (t.closest("[data-cursor-card]")) {
-        setState("card")
-        return
-      }
-
-      if (t.closest("a, button")) {
-        setState("hover")
-        return
-      }
-
-      if (t.closest("p, h1, h2, h3")) {
-        setState("text")
-        return
-      }
+      if (t.closest("[data-cursor-card]")) return setState("card")
+      if (t.closest("a, button")) return setState("hover")
+      if (t.closest("p, h1, h2, h3")) return setState("text")
 
       setState("default")
     }
@@ -76,7 +84,7 @@ export function FancyCursor() {
     }
   }, [])
 
-  // 🎯 State animation
+  // ── State animation ─────────────────
   useEffect(() => {
     const dot = dotRef.current
     if (!dot) return
@@ -105,16 +113,19 @@ export function FancyCursor() {
         width: 10,
         height: 10,
         borderRadius: "9999px",
-        background: "white",
-        mixBlendMode: "difference",
+        background: isDark ? "white" : "black",
+        mixBlendMode: isDark ? "difference" : "normal",
         pointerEvents: "none",
         zIndex: 9999,
         transform: "translate(-50%, -50%)",
         opacity: visible ? 1 : 0,
         willChange: "transform, opacity",
+        boxShadow: isDark
+          ? "0 0 12px rgba(255,255,255,0.25)"
+          : "0 0 8px rgba(0,0,0,0.15)",
       }}
     >
-      {/* subtle card label */}
+      {/* CARD LABEL */}
       {state === "card" && (
         <div
           style={{
@@ -130,9 +141,8 @@ export function FancyCursor() {
               fontSize: 9,
               fontWeight: 500,
               letterSpacing: "0.06em",
-              color: "white",
+              color: isDark ? "white" : "black",
               opacity: 0.7,
-              mixBlendMode: "difference",
             }}
           >
             View

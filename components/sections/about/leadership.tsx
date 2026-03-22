@@ -9,30 +9,30 @@ export default function LeadershipSection() {
   const items = [
     {
       number: "01",
-      title: "Enterprise Product Demonstrations",
-      desc: "Led design of interactive demos used in RFPs and client engagements to drive enterprise adoption.",
+      title: "Driving Enterprise Product Narratives",
+      desc: "Shaped interactive product demos used in high-stakes RFPs, helping translate complex systems into compelling client narratives.",
     },
     {
       number: "02",
-      title: "Sales & Product Enablement",
-      desc: "Partnered with product and sales teams to create prototypes and demo environments supporting deal cycles.",
+      title: "Enabling Sales Through Product Thinking",
+      desc: "Partnered with sales and product teams to build prototypes that accelerated deal cycles and improved product understanding.",
     },
     {
       number: "03",
-      title: "UX Research & Market Insights",
-      desc: "Identified usability gaps across banking apps and agent payment flows through cross-team research.",
+      title: "Connecting Research to Product Decisions",
+      desc: "Synthesized research across banking and payment experiences to identify gaps and inform product direction.",
     },
     {
       number: "04",
-      title: "Product Prototyping & Platforms",
-      desc: "Built scalable demo platforms to showcase product capabilities across teams and stakeholders.",
+      title: "Building Scalable Demo Infrastructure",
+      desc: "Developed reusable demo platforms enabling teams to showcase product capabilities consistently across stakeholders.",
     },
   ]
 
   return (
     <SectionSubgroup
       label="Leadership"
-      description="Driving product outcomes across product, sales, and marketing."
+      description="Influencing product direction across product, sales, and stakeholders."
       variant="spacious"
     >
 
@@ -42,7 +42,7 @@ export default function LeadershipSection() {
         items-start
       ">
 
-        {/* LEFT — STEPS */}
+        {/* LEFT */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -50,14 +50,13 @@ export default function LeadershipSection() {
           variants={{
             hidden: {},
             visible: {
-              transition: { staggerChildren: 0.1 },
+              transition: { staggerChildren: 0.08 },
             },
           }}
           className="space-y-6 md:space-y-8"
         >
 
           {items.map((item, index) => (
-
             <motion.div
               key={index}
               variants={{
@@ -69,38 +68,40 @@ export default function LeadershipSection() {
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
-
               <ProcessStep
                 number={item.number}
                 title={item.title}
                 description={item.desc}
                 variant="vertical"
-                theme="light"
+               
               />
-
             </motion.div>
-
           ))}
 
         </motion.div>
 
-        {/* RIGHT — OPTIONAL VISUAL */}
+        {/* RIGHT — VISUAL */}
         <div className="hidden lg:block">
-
           <div className="sticky top-24">
 
             <div className="
               w-full aspect-square
-              rounded-2xl border border-neutral-200
-              bg-white
+              rounded-2xl
+
+              border border-border
+              bg-muted/40
+
               flex items-center justify-center
-              text-xs text-neutral-400
+              text-xs text-muted-foreground
+
+              dark:bg-white/[0.03]
+              dark:border-white/10
+              dark:text-white/30
             ">
-              Illustration
+              Cross-functional influence
             </div>
 
           </div>
-
         </div>
 
       </div>

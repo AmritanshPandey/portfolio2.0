@@ -2,7 +2,6 @@
 
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
 import { AdvisoryItem } from "@/components/shared/advisory-item"
-import { SectionTransition } from "@/components/shared/section-transition"
 import { IconArrowRight, IconLink } from "@tabler/icons-react"
 
 export default function AdvisorySection() {
@@ -10,13 +9,13 @@ export default function AdvisorySection() {
   const advisory = [
     {
       title: "Covera — Product & UX Advisor",
-      desc: "Advised on product strategy, customer experience, and early roadmap decisions.",
+      desc: "Advised on product strategy, customer experience, and early-stage roadmap decisions.",
       logo: "/assets/images/logos/covera.jpeg",
       link: "https://lovecovera.com/",
     },
     {
       title: "Yon Innovations — Design & Tech Advisor",
-      desc: "Supported product direction, technology decisions, and brand positioning from early stages.",
+      desc: "Guided product direction, technology choices, and brand positioning from early stages.",
       logo: "/assets/images/logos/yosn.png",
       link: "https://www.yosn.events/",
     },
@@ -25,13 +24,13 @@ export default function AdvisorySection() {
   const teaching = [
     {
       title: "Masters' Union — MasterCamp (UX Design)",
-      desc: "Mentored students on product thinking, UX fundamentals, and real-world problem solving.",
+      desc: "Mentored students on product thinking and real-world UX problem solving.",
       logo: "/assets/images/logos/mu.jpeg",
       link: "https://mastersunion.org/",
     },
     {
       title: "Designerrs — UI/UX Academy",
-      desc: "Guided designers on UX fundamentals, portfolio development, and practical workflows.",
+      desc: "Guided designers on UX fundamentals, portfolio building, and practical workflows.",
       logo: "/assets/images/logos/da.jpeg",
       link: "https://designerrs.com/",
     },
@@ -62,17 +61,21 @@ export default function AdvisorySection() {
 
   return (
     <SectionSubgroup
-      label="Advisory & Mentorship"
-      description="Supporting startups, mentoring designers, and contributing to the product ecosystem."
+      label="Advisory"
+      description="Trusted by startups and institutions to shape product direction and mentor designers."
       variant="spacious"
     >
 
       <div className="space-y-12 md:space-y-14">
 
-        {/* ADVISORY */}
+        {/* ADVISORY (PRIMARY) */}
         <div className="space-y-5">
-        <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
-            Advisory
+
+          <p className="
+            text-[11px] tracking-[0.18em] uppercase
+            text-muted-foreground
+          ">
+            Product Advisory
           </p>
 
           <div className="space-y-4">
@@ -80,17 +83,28 @@ export default function AdvisorySection() {
               <AdvisoryItem key={i} {...item} />
             ))}
           </div>
+
         </div>
 
         {/* MENTORSHIP */}
-        <div className="space-y-5 pt-6 border-t border-neutral-200">
+        <div className="
+          space-y-5 pt-6
+          border-t border-border
+        ">
 
-         <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
+          <p className="
+            text-[11px] tracking-[0.18em] uppercase
+            text-muted-foreground
+          ">
             Mentorship
           </p>
 
-          <p className="text-neutral-600 text-sm md:text-base max-w-xl leading-[1.6]">
-            Mentored early-career designers on portfolio strategy, product thinking, and interviews.
+          <p className="
+            text-sm md:text-base
+            text-foreground/70
+            max-w-xl leading-[1.6]
+          ">
+            Mentored early-career designers on product thinking, portfolio strategy, and interviews.
           </p>
 
           <ul className="space-y-3 text-sm">
@@ -103,21 +117,35 @@ export default function AdvisorySection() {
                   rel="noopener noreferrer"
                   className="
                     group flex items-center gap-2
-                    text-neutral-700
+                    text-foreground/80
                     transition-all duration-200
                     hover:translate-x-[3px]
-                    hover:text-orange-400
+                    hover:text-orange-500
                   "
                 >
                   <span>{item.name}</span>
 
-                  <IconArrowRight size={16} className="opacity-40" />
+                  <IconArrowRight
+                    size={16}
+                    className="opacity-40"
+                  />
 
-                  <span className="text-neutral-500 group-hover:text-orange-500 transition">
+                  <span className="
+                    text-muted-foreground
+                    group-hover:text-orange-500
+                    transition
+                  ">
                     {item.company}
                   </span>
 
-                  <IconLink size={16} className="opacity-40 group-hover:opacity-100 transition" />
+                  <IconLink
+                    size={15}
+                    className="
+                      opacity-40
+                      group-hover:opacity-100
+                      transition
+                    "
+                  />
                 </a>
               </li>
             ))}
@@ -127,10 +155,16 @@ export default function AdvisorySection() {
         </div>
 
         {/* TEACHING */}
-        <div className="space-y-5 pt-6 border-t border-neutral-200">
+        <div className="
+          space-y-5 pt-6
+          border-t border-border
+        ">
 
-        <p className="text-[12px] tracking-[0.2em] font-medium uppercase text-neutral-600">
-            Teaching
+          <p className="
+            text-[11px] tracking-[0.18em] uppercase
+            text-muted-foreground
+          ">
+            Teaching & Workshops
           </p>
 
           <div className="space-y-4">
@@ -142,7 +176,9 @@ export default function AdvisorySection() {
         </div>
 
       </div>
-      <div className="h-px w-full pb-8" />
+
+      {/* Divider */}
+      <div className="h-px w-full bg-border/60 mt-10 md:mt-12" />
 
     </SectionSubgroup>
   )
