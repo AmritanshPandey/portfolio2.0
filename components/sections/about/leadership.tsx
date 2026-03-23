@@ -5,27 +5,26 @@ import { SectionSubgroup } from "@/components/shared/section-subgroup"
 import { ProcessStep } from "@/components/shared/process-step"
 
 export default function LeadershipSection() {
-
   const items = [
     {
       number: "01",
       title: "Driving Enterprise Product Narratives",
-      desc: "Shaped interactive product demos used in high-stakes RFPs, helping translate complex systems into compelling client narratives.",
+      desc: "Shaped interactive demos for high-stakes RFPs, translating complex systems into clear, decision-driving narratives.",
     },
     {
       number: "02",
       title: "Enabling Sales Through Product Thinking",
-      desc: "Partnered with sales and product teams to build prototypes that accelerated deal cycles and improved product understanding.",
+      desc: "Built prototypes that aligned product capabilities with client needs, accelerating deal cycles and clarity.",
     },
     {
       number: "03",
-      title: "Connecting Research to Product Decisions",
-      desc: "Synthesized research across banking and payment experiences to identify gaps and inform product direction.",
+      title: "Connecting Research to Product Direction",
+      desc: "Synthesized insights across banking flows to identify gaps and influence roadmap decisions.",
     },
     {
       number: "04",
       title: "Building Scalable Demo Infrastructure",
-      desc: "Developed reusable demo platforms enabling teams to showcase product capabilities consistently across stakeholders.",
+      desc: "Created reusable demo systems enabling consistent storytelling across teams and stakeholders.",
     },
   ]
 
@@ -35,12 +34,7 @@ export default function LeadershipSection() {
       description="Influencing product direction across product, sales, and stakeholders."
       variant="spacious"
     >
-
-      <div className="
-        grid lg:grid-cols-[1fr_380px]
-        gap-10 md:gap-12
-        items-start
-      ">
+      <div className="grid lg:grid-cols-[1fr_400px] gap-12 items-start">
 
         {/* LEFT */}
         <motion.div
@@ -49,13 +43,10 @@ export default function LeadershipSection() {
           viewport={{ once: true, margin: "-80px" }}
           variants={{
             hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.08 },
-            },
+            visible: { transition: { staggerChildren: 0.08 } },
           }}
-          className="space-y-6 md:space-y-8"
+          className="space-y-8"
         >
-
           {items.map((item, index) => (
             <motion.div
               key={index}
@@ -64,7 +55,7 @@ export default function LeadershipSection() {
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{
-                duration: 0.4,
+                duration: 0.45,
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
@@ -73,39 +64,76 @@ export default function LeadershipSection() {
                 title={item.title}
                 description={item.desc}
                 variant="vertical"
-               
               />
             </motion.div>
           ))}
-
         </motion.div>
 
-        {/* RIGHT — VISUAL */}
+        {/* RIGHT */}
         <div className="hidden lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-28">
 
             <div className="
-              w-full aspect-square
-              rounded-2xl
-
+              relative rounded-2xl overflow-hidden
               border border-border
-              bg-muted/40
-
-              flex items-center justify-center
-              text-xs text-muted-foreground
-
-              dark:bg-white/[0.03]
-              dark:border-white/10
-              dark:text-white/30
+              bg-background/50 backdrop-blur-xl
+              aspect-square
             ">
-              Cross-functional influence
+
+              {/* grid */}
+              <div className="
+                absolute inset-0 opacity-[0.25]
+                [background-size:24px_24px]
+                [background-image:radial-gradient(currentColor_1px,transparent_1px)]
+                
+                /* ✅ FIX: slightly stronger than muted */
+                text-foreground/40
+
+                pointer-events-none
+              " />
+
+              {/* radial focus */}
+              <div className="
+                absolute inset-0
+                bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.04)_100%)]
+                dark:bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(255,255,255,0.04)_100%)]
+              " />
+
+              {/* label */}
+              <div className="absolute top-4 left-4 z-10">
+                <p className="
+                  text-[10px] uppercase tracking-[0.18em]
+
+                  /* ✅ FIX: clearer label */
+                  text-foreground/60
+                ">
+                  System View
+                </p>
+              </div>
+
+              {/* placeholder */}
+              <div className="
+                absolute inset-0 flex items-center justify-center
+                text-xs
+
+                /* ✅ FIX: readable but still subtle */
+                text-foreground/50
+              ">
+                Illustration / System diagram
+              </div>
+
+              {/* edge highlight */}
+              <div className="
+                absolute inset-0 rounded-2xl
+                ring-1 ring-inset ring-border/40
+              " />
+
             </div>
 
           </div>
         </div>
 
       </div>
-
     </SectionSubgroup>
   )
 }

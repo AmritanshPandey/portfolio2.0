@@ -23,21 +23,16 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
 
     const [index, setIndex] = useState(0)
     const containerRef = useRef<HTMLDivElement>(null)
-
     const [offset, setOffset] = useState({ x: 0, y: 0 })
 
-    // ─── Auto rotate ─────────────────
     useEffect(() => {
       if (!photos.length) return
-
       const interval = setInterval(() => {
         setIndex((prev) => (prev + 1) % photos.length)
       }, 3800)
-
       return () => clearInterval(interval)
     }, [photos.length])
 
-    // ─── Controls ────────────────────
     useImperativeHandle(ref, () => ({
       next: () => setIndex((prev) => (prev + 1) % photos.length),
       prev: () =>
@@ -46,7 +41,6 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
         ),
     }))
 
-    // ─── Magnetic (smoothed) ─────────
     const handleMove = (e: React.MouseEvent) => {
       const rect = containerRef.current?.getBoundingClientRect()
       if (!rect) return
@@ -60,9 +54,7 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
       })
     }
 
-    const resetOffset = () => {
-      setOffset({ x: 0, y: 0 })
-    }
+    const resetOffset = () => setOffset({ x: 0, y: 0 })
 
     if (!photos.length) return null
 
@@ -98,17 +90,60 @@ const PhotoStackCarousel = forwardRef<CarouselRef, Props>(
                 transform: `translate(${offset.x}px, ${offset.y}px)`,
               }}
             >
+
+              {/* CARD */}
               <div
                 className={`
-                  w-full h-full rounded-xl p-2.5 md:p-3
-                  bg-card border border-border
+                  relative w-full h-full rounded-xl p-2.5 md:p-3
+
+                  /* ✨ LIGHTER + GRADIENT DARK MODE */
+                  bg-card
+                  dark:bg-gradient-to-b dark:from-white/[0.05] dark:to-white/[0.015]
+
+                  /* BORDER */
+                  border border-black/[0.06]
+                  dark:border-white/[0.08]
+
+                  ${isActive ? "dark:border-white/[0.14] border-black/[0.08]" : ""}
+
+                  /* INNER EDGE */
+                  before:absolute before:inset-0 before:rounded-xl
+                  before:ring-1 before:ring-inset
+                  before:ring-black/[0.04]
+                  dark:before:ring-white/[0.06]
+
+                  ${isActive ? "dark:before:ring-white/[0.10]" : ""}
+
+                  /* ✨ SOFTER SHADOW SYSTEM */
+                  shadow-[0_6px_20px_rgba(0,0,0,0.04)]
+                  dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]
+
+                  ${isActive
+                    ? "dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)] shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
+                    : ""}
+
+                  /* ✨ CLEAN ORANGE GLOW */
+                  ${isActive ? `
+                    after:absolute after:inset-0 after:rounded-xl after:pointer-events-none
+                    after:bg-[radial-gradient(200px_120px_at_30%_80%,rgba(255,120,40,0.10),transparent_70%)]
+                    dark:after:bg-[radial-gradient(200px_120px_at_30%_80%,rgba(255,140,60,0.14),transparent_70%)]
+                  ` : ""}
+
                   transition-all duration-500
-                  shadow-sm dark:shadow-lg
+
                   ${isActive ? "blur-0 scale-100" : "blur-[1px] scale-[0.985]"}
                 `}
               >
 
+                {/* IMAGE */}
                 <div className="relative w-full h-full overflow-hidden rounded-md">
+
+                  {/* ✨ INNER LIGHT (better dark mode depth) */}
+                  <div className="
+                    absolute inset-0 rounded-md pointer-events-none
+                    ring-1 ring-inset ring-black/[0.03]
+                    dark:ring-white/[0.05]
+                  " />
 
                   <Image
                     src={src}

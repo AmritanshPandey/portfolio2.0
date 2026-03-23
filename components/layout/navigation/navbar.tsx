@@ -1,19 +1,23 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import { useState, useEffect } from "react"
 import clsx from "clsx"
+import Link from "next/link"
+import { motion } from "framer-motion"
 import {
-  IconDownload,
+  IconHome,
   IconMenu2,
   IconX,
-  IconArrowLeft,
-  IconHome,
+  IconDownload,
 } from "@tabler/icons-react"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { scrollToSection } from "@/lib/scroll"
+import { saveScroll } from "@/lib/scroll-manager"
 
-// ─── Navigation Links ─────────────────
+// ─────────────────────────────────────────────
+// NAV LINKS
+// ─────────────────────────────────────────────
 const NAV_LINKS = [
   { label: "Home", href: "#hero", icon: true },
   { label: "Work", href: "#work" },
@@ -23,244 +27,290 @@ const NAV_LINKS = [
   { label: "About", href: "#about" },
 ]
 
-// ─── Back Navigation ─────────────────
-const BACK_CONFIG = {
-  home: "/",
-  work: "/#work",
-  system: "/#work",
-  exploration: "/#exploration",
-  article: "/#exploration",
-  other: "/",
+// ─────────────────────────────────────────────
+// ACTIVE SECTION DETECTION
+// ─────────────────────────────────────────────
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState(ids[0])
+
+  useEffect(() => {
+    const onScroll = () => {
+      const mid = window.scrollY + window.innerHeight * 0.4
+
+      let current = ids[0]
+
+      for (const id of ids) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        if (mid >= el.offsetTop) current = id
+      }
+
+      setActive(current)
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [ids])
+
+  return active
 }
 
-// ─── Helpers ─────────────────────────
-function getContext(pathname: string) {
-  if (pathname === "/") return "home"
-  if (pathname.startsWith("/work/")) return "work"
-  if (pathname.startsWith("/systems/")) return "system"
-  if (pathname.startsWith("/explorations/")) return "exploration"
-  if (pathname.startsWith("/articles/")) return "article"
-  return "other"
-}
-
-function slugToTitle(slug: string) {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-}
-
-// ─── Glass (theme-safe) ──────────────
-const GLASS = `
-  bg-background/60
-  backdrop-blur-xl
-  border border-border/50
-  shadow-sm dark:shadow-lg
-`
-
-// ─── Nav Item ────────────────────────
+// ─────────────────────────────────────────────
+// NAV ITEM
+// ─────────────────────────────────────────────
 function NavItem({
   href,
   label,
   icon,
   isActive,
+  setActiveImmediate,
+  closeMenu,
 }: {
   href: string
   label: string
   icon?: boolean
   isActive: boolean
+  setActiveImmediate: (id: string) => void
+  closeMenu?: () => void
 }) {
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    const id = href.replace("#", "")
+
+    setActiveImmediate(id)
+    saveScroll(pathname)
+
+    if (id === "hero") {
+      if (pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      } else {
+        router.push("/")
+      }
+      closeMenu?.()
+      return
+    }
+
+    if (pathname === "/") {
+      scrollToSection(id)
+      closeMenu?.()
+      return
+    }
+
+    router.push(`/#${id}`)
+    closeMenu?.()
+  }
+
   return (
-    <Link
+    <a
       href={href}
-      className={clsx(
-        "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-all duration-200",
-        isActive
-          ? "bg-muted text-foreground"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-      )}
+      onClick={handleClick}
+      className="
+        relative flex items-center gap-1.5 px-3 py-2 rounded-full
+        text-[14px] font-medium
+      "
     >
-      {icon ? (
-        <IconHome size={16} className={isActive ? "" : "opacity-60"} />
-      ) : (
-        label
+      {/* ACTIVE PILL */}
+      {isActive && (
+        <motion.span
+          layoutId="nav-pill"
+          transition={{
+            type: "spring",
+            stiffness: 420,
+            damping: 32,
+            mass: 0.6,
+          }}
+          className="
+            absolute inset-0 rounded-full
+            backdrop-blur-md
+            bg-foreground/[0.05]
+            dark:bg-white/[0.06]
+            border border-border/60
+
+            before:absolute before:inset-0 before:rounded-full
+            before:bg-gradient-to-b
+            before:from-white/[0.08] before:to-transparent
+            dark:before:from-white/[0.06]
+          "
+        />
       )}
-    </Link>
+
+      <span
+        className={clsx(
+          "relative z-10 flex items-center gap-1.5 transition-colors duration-200",
+          isActive
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        {icon ? (
+          <IconHome size={16} className={isActive ? "" : "opacity-60"} />
+        ) : (
+          label
+        )}
+      </span>
+    </a>
   )
 }
 
+// ─────────────────────────────────────────────
+// NAVBAR
+// ─────────────────────────────────────────────
 export default function Navbar() {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+
+  const detectedActive = useActiveSection([
+    "hero",
+    "work",
+    "approach",
+    "exploration",
+    "impact",
+    "about",
+  ])
+
   const [active, setActive] = useState("hero")
   const [open, setOpen] = useState(false)
 
-  const pathname = usePathname()
-  const context = getContext(pathname)
-  const isHome = context === "home"
-
-  const pageTitle = slugToTitle(pathname.split("/").pop() || "")
-  const backHref = BACK_CONFIG[context]
-
-  const hasMounted = useRef(false)
-
-  // ─── Active Section Detection ───────
   useEffect(() => {
-    if (!isHome) return
+    if (isHome) setActive(detectedActive)
+  }, [detectedActive, isHome])
 
-    setActive("hero")
+  const setActiveImmediate = (id: string) => {
+    setActive(id)
+  }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!hasMounted.current) {
-          hasMounted.current = true
-          return
-        }
-
-        let maxRatio = 0
-        let current = "hero"
-
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio
-            current = entry.target.id
-          }
-        })
-
-        if (maxRatio > 0.35) setActive(current)
-      },
-      {
-        rootMargin: "-35% 0px -45% 0px",
-        threshold: [0.25, 0.5, 0.75],
-      }
-    )
-
-    NAV_LINKS.forEach(({ href }) => {
-      const el = document.querySelector(href)
-      if (el) observer.observe(el)
-    })
-
-    return () => observer.disconnect()
-  }, [isHome])
-
-  // ─── Top override ───
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY < 150) setActive("hero")
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false)
     }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
   }, [])
 
   return (
     <>
-      {/* ─── DESKTOP NAV ───────────────── */}
+      {/* DESKTOP */}
       <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block">
-        <nav className={clsx("relative flex items-center gap-1.5 px-3 py-2 rounded-full", GLASS)}>
+        <nav className="
+          flex items-center gap-1 px-2 py-2 rounded-full
+          bg-background/85 backdrop-blur-2xl
+          border border-border/60
+          shadow-[0_8px_30px_rgba(0,0,0,0.12)]
+        ">
+          <div className="flex items-center gap-2 relative">
+            {NAV_LINKS.map(({ label, href, icon }) => (
+              <NavItem
+                key={href}
+                href={href}
+                label={label}
+                icon={icon}
+                isActive={isHome && active === href.replace("#", "")}
+                setActiveImmediate={setActiveImmediate}
+              />
+            ))}
+          </div>
 
-          <span className="pointer-events-none absolute inset-0 rounded-full border border-border/30" />
+          <div className="w-px h-4 bg-border/60 mx-1" />
 
-          {isHome ? (
-            <div className="flex items-center gap-1">
-              {NAV_LINKS.map(({ label, href, icon }) => (
-                <NavItem
-                  key={href}
-                  href={href}
-                  label={label}
-                  icon={icon}
-                  isActive={active === href.replace("#", "")}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 px-2">
-              <Link
-                href={backHref}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition"
-              >
-                <IconArrowLeft size={14} />
-                Back
-              </Link>
-
-              <span className="text-border">/</span>
-
-              <span className="text-sm text-foreground font-medium">
-                {pageTitle}
-              </span>
-            </div>
-          )}
-
-          {/* Divider */}
-          <div className="w-px h-4 bg-border mx-1" />
-
-          {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Resume */}
           <Link
             href="/resume.pdf"
             target="_blank"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition"
+            className="
+              ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-full
+              text-sm text-muted-foreground hover:text-foreground
+              hover:bg-muted/50 transition-all duration-200
+              active:scale-[0.97]
+            "
           >
             Resume
-            <IconDownload size={14} />
+            <IconDownload size={16} />
           </Link>
         </nav>
       </header>
 
-      {/* ─── MOBILE BUTTON ─────────────── */}
+      {/* MOBILE BUTTON */}
       <button
-        onClick={() => setOpen(!open)}
-        className={clsx(
-          "fixed bottom-6 right-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center",
-          "text-muted-foreground hover:text-foreground transition",
-          GLASS
-        )}
+        onClick={() => setOpen(v => !v)}
+        className="
+          fixed bottom-6 right-6 z-50 md:hidden
+          w-14 h-14 rounded-full
+          flex items-center justify-center
+          bg-background/90 backdrop-blur-xl
+          border border-border/60
+          shadow-[0_10px_30px_rgba(0,0,0,0.2)]
+          transition-all duration-300
+          active:scale-[0.92]
+        "
       >
-        {open ? <IconX size={20} /> : <IconMenu2 size={20} />}
+        {open ? <IconX size={24} /> : <IconMenu2 size={24} />}
       </button>
 
-      {/* ─── MOBILE MENU ─────────────── */}
-      <div
-        className={clsx(
-          "fixed bottom-24 right-6 z-40 md:hidden w-60 rounded-2xl overflow-hidden",
-          GLASS,
-          "transition-all duration-300",
-          open
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-95 pointer-events-none"
-        )}
-      >
-        <div className="p-4 flex flex-col gap-1">
-          {NAV_LINKS.map(({ label, href, icon }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className={clsx(
-                "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition",
-                active === href.replace("#", "")
-                  ? "bg-muted text-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              )}
-            >
-              {icon && <IconHome size={16} />}
-              {label}
-            </Link>
-          ))}
+      {/* MOBILE MENU */}
+      {open && (
+        <div className="
+          fixed bottom-24 right-6 z-50 md:hidden w-64
+          rounded-2xl overflow-hidden
+          bg-background/95 backdrop-blur-2xl
+          border border-border/60
+          shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+        ">
+          <div className="p-3 flex flex-col gap-2">
+            {NAV_LINKS.map(({ label, href, icon }) => (
+              <NavItem
+                key={href}
+                href={href}
+                label={label}
+                icon={icon}
+                isActive={isHome && active === href.replace("#", "")}
+                setActiveImmediate={(id) => {
+                  setActive(id)
+                  setOpen(false)
+                }}
+                closeMenu={() => setOpen(false)}
+              />
+            ))}
 
-          <div className="h-px bg-border my-2" />
+            <div className="h-px bg-border/50 my-2" />
 
-          <Link
-            href="/resume.pdf"
-            target="_blank"
-            onClick={() => setOpen(false)}
-            className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-          >
-            Resume
-            <IconDownload size={14} />
-          </Link>
+            {/* CONTROLS */}
+            <div className="flex items-center gap-2">
+
+              <div className="
+                w-10 h-10 rounded-xl
+                flex items-center justify-center
+                bg-muted/40 border border-border/60
+                active:scale-[0.92] transition
+              ">
+                <ThemeToggle />
+              </div>
+
+              <Link
+                href="/resume.pdf"
+                target="_blank"
+                className="
+                  flex-1 flex items-center justify-center gap-2
+                  h-10 rounded-xl px-4
+                  text-sm text-muted-foreground hover:text-foreground
+                  hover:bg-muted/50 transition
+                  active:scale-[0.96]
+                "
+              >
+                Resume
+                <IconDownload size={16} />
+              </Link>
+
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

@@ -18,14 +18,14 @@ export function SectionHeader({
 }) {
   const variants = {
     default: {
-      container: "max-w-4xl space-y-4",
+      container: "max-w-[700px] space-y-4",
       title: "text-3xl md:text-4xl lg:text-5xl",
       desc: "text-sm md:text-base",
     },
     compact: {
-      container: "mb-5 max-w-xl space-y-3",
-      title: "text-2xl md:text-4xl",
-      desc: "text-sm",
+      container: "max-w-2xl space-y-4",
+      title: "text-3xl md:text-4xl lg:text-5xl",
+      desc: "text-sm md:text-base",
     },
     hero: {
       container: "mb-10 md:mb-12 max-w-3xl space-y-5",

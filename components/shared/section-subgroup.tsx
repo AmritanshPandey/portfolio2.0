@@ -32,7 +32,7 @@ export function SectionSubgroup({
           {/* LABEL */}
           {label && (
             <p className="
-              text-lg md:text-xl
+              text-xl md:text-2xl
               font-medium tracking-tight
               text-foreground
               leading-snug

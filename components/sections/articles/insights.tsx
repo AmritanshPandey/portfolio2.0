@@ -42,9 +42,9 @@ export default function InsightsSection() {
       variant="spacious"
     >
 
-      <div className="space-y-10 md:space-y-12">
+      <div className="space-y-12 md:space-y-14">
 
-        {/* GRID */}
+        {/* ── GRID ───────────────── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -55,14 +55,16 @@ export default function InsightsSection() {
               transition: { staggerChildren: 0.08 },
             },
           }}
-          className="grid md:grid-cols-2 gap-6 md:gap-8"
+          className="
+            grid md:grid-cols-2
+            gap-6 md:gap-8
+          "
         >
-
           {articles.map((article, index) => (
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 16 },
+                hidden: { opacity: 0, y: 18 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{
@@ -78,39 +80,44 @@ export default function InsightsSection() {
               />
             </motion.div>
           ))}
-
         </motion.div>
 
-        {/* VIEW ALL */}
-        <div>
+        {/* ── VIEW ALL (upgraded) ───────────────── */}
+        <div className="flex justify-start">
+
           <Link
             href="/articles"
             className="
-              group inline-flex items-center gap-2
+              group relative inline-flex items-center gap-2
+
               text-sm font-medium
-              text-muted-foreground
+              text-foreground/70
+
               transition-all duration-300
               hover:text-foreground
             "
           >
+
             {/* TEXT */}
             <span className="relative">
 
-              <span className="
-                relative z-10
-                transition-colors duration-300
-              ">
+              <span className="relative z-10">
                 View all writing
               </span>
 
-              {/* UNDERLINE */}
+              {/* ✨ underline (cleaner + softer) */}
               <span
                 className="
-                  absolute left-0 -bottom-1
+                  absolute left-0 -bottom-[2px]
                   h-[1px] w-full
-                  bg-foreground/60
+
+                  bg-gradient-to-r
+                  from-foreground/60
+                  to-foreground/10
+
                   origin-left scale-x-0
                   transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+
                   group-hover:scale-x-100
                 "
               />
@@ -121,20 +128,29 @@ export default function InsightsSection() {
             <IconArrowUpRight
               size={16}
               className="
-                opacity-60
+                opacity-50
+
                 transition-all duration-300
+
                 group-hover:opacity-100
                 group-hover:translate-x-[3px]
                 group-hover:-translate-y-[3px]
               "
             />
+
           </Link>
+
         </div>
 
       </div>
 
-      {/* Divider */}
-      <div className="h-px w-full bg-border/60 mt-10 md:mt-12" />
+      {/* ── DIVIDER (softer) ───────────────── */}
+      <div className="
+        h-px w-full mt-12 md:mt-14
+
+        bg-gradient-to-r
+        from-transparent via-border/70 to-transparent
+      " />
 
     </SectionSubgroup>
   )

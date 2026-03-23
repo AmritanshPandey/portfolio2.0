@@ -7,11 +7,9 @@
 
 /* ─────────────────────────────────────
    DESIGN SYSTEM TOKENS
-   (Semantic + Surface + Elevation)
 ───────────────────────────────────── */
 
 @theme inline {
-  /* semantic */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -37,7 +35,6 @@
   --color-input: var(--surface-2);
   --color-ring: var(--ring);
 
-  /* radius */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -49,37 +46,30 @@
 ───────────────────────────────────── */
 
 :root {
-  /* base */
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.18 0 0);
 
   --text-secondary: oklch(0.4 0 0);
   --text-muted: oklch(0.55 0 0);
 
-  /* surfaces */
   --surface-1: oklch(1 0 0);
   --surface-2: oklch(0.98 0 0);
   --surface-3: oklch(0.96 0 0);
 
-  /* borders */
   --border: oklch(0.9 0 0);
   --border-strong: oklch(0.85 0 0);
 
-  /* shadows */
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
   --shadow-sm: 0 4px 10px rgba(0,0,0,0.06);
   --shadow-md: 0 12px 30px rgba(0,0,0,0.08);
   --shadow-lg: 0 30px 60px rgba(0,0,0,0.12);
 
-  /* glass */
   --glass-bg: rgba(255,255,255,0.65);
   --glass-border: rgba(0,0,0,0.08);
 
-  /* accent */
   --accent-strong: oklch(0.68 0.22 45);
   --accent-soft: oklch(0.92 0.05 45);
 
-  /* misc */
   --primary: oklch(0.25 0 0);
   --primary-foreground: oklch(0.98 0 0);
   --ring: oklch(0.7 0 0);
@@ -98,37 +88,31 @@
   --text-secondary: oklch(0.7 0 0);
   --text-muted: oklch(0.6 0 0);
 
-  /* surfaces */
   --surface-1: oklch(0.18 0 0);
   --surface-2: oklch(0.14 0 0);
   --surface-3: oklch(0.22 0 0);
 
-  /* borders */
   --border: oklch(1 0 0 / 10%);
   --border-strong: oklch(1 0 0 / 16%);
 
-  /* shadows */
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.3);
   --shadow-sm: 0 6px 14px rgba(0,0,0,0.35);
   --shadow-md: 0 20px 40px rgba(0,0,0,0.45);
   --shadow-lg: 0 40px 80px rgba(0,0,0,0.6);
 
-  /* glass */
   --glass-bg: rgba(18,18,18,0.7);
   --glass-border: rgba(255,255,255,0.08);
 
-  /* accent */
   --accent-strong: oklch(0.72 0.2 45);
   --accent-soft: oklch(0.3 0.05 45);
 
-  /* misc */
   --primary: oklch(0.9 0 0);
   --primary-foreground: oklch(0.2 0 0);
   --ring: oklch(0.55 0 0);
 }
 
 /* ─────────────────────────────────────
-   BASE STYLES
+   BASE
 ───────────────────────────────────── */
 
 @layer base {
@@ -147,7 +131,7 @@
 }
 
 /* ─────────────────────────────────────
-   UTILITIES (SYSTEM SHORTCUTS)
+   UTILITIES
 ───────────────────────────────────── */
 
 @layer utilities {
@@ -187,52 +171,51 @@
   .accent {
     color: var(--accent-strong);
   }
-
 }
 
 /* ─────────────────────────────────────
-   CUSTOM CURSOR (unchanged)
+   CUSTOM CURSOR (FIXED)
 ───────────────────────────────────── */
 
-html,
-html body,
-html *,
-html *::before,
-html *::after {
-  cursor: none !important;
+@media (pointer: fine) {
+
+  html, body {
+    cursor: none;
+  }
+
+  * {
+    cursor: inherit;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
 }
 
-a,
-button,
-input,
-select,
-textarea,
-label,
-[role="button"],
-[tabindex] {
-  cursor: none !important;
-}
+/* ─────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────── */
 
 @keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes sheen {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+html {
+  scroll-behavior: auto; /* prevent conflict */
 }

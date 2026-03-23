@@ -2,8 +2,10 @@ import "./globals.css"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
+import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
+import clsx from "clsx"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -16,33 +18,40 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <style>{`
-          *, *::before, *::after { cursor: none !important; }
-          a, button, input, select, textarea, label,
-          [role="button"], [role="link"], [tabindex] {
-            cursor: none !important;
-          }
-        `}</style>
-      </head>
-
-      <body className={montserrat.className}>
-        
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="scroll-smooth"
+    >
+      <body
+        className={clsx(
+          montserrat.className,
+          "bg-background text-foreground"
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* Cursor */}
           <FancyCursor />
 
+          {/* Scroll restore */}
+          <ScrollToHash />
+
+          {/* Navbar */}
           <Navbar />
 
-          <main>
+          {/* Content */}
+          <main className="relative">
             {children}
           </main>
 
+          {/* Footer */}
           <Footer />
-
         </ThemeProvider>
-
       </body>
     </html>
   )

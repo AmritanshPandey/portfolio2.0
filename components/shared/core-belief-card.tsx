@@ -33,7 +33,7 @@ export function CoreBeliefCard({
       )}
     >
 
-      {/* ✨ SOFT EDGE GLOW (REPLACES HARSH BORDER) */}
+      {/* existing visuals untouched */}
       <div className="
         pointer-events-none absolute inset-y-0 left-0 w-24
         bg-gradient-to-r
@@ -44,7 +44,6 @@ export function CoreBeliefCard({
         opacity-60
       " />
 
-      {/* ✨ PRIMARY LIGHT */}
       <div className="
         pointer-events-none absolute -top-32 -right-32 w-[420px] h-[420px]
         bg-[radial-gradient(circle,rgba(249,115,22,0.10),transparent_70%)]
@@ -52,7 +51,6 @@ export function CoreBeliefCard({
         blur-3xl
       " />
 
-      {/* ✨ ANIMATED SHEEN */}
       <div className="
         pointer-events-none absolute inset-0
         bg-[linear-gradient(110deg,transparent,rgba(249,115,22,0.06),transparent)]
@@ -62,14 +60,12 @@ export function CoreBeliefCard({
         opacity-60
       " />
 
-      {/* subtle glass layer */}
       <div className="
         pointer-events-none absolute inset-0 rounded-3xl
         bg-gradient-to-b from-white/[0.04] to-transparent
         dark:from-white/[0.03]
       " />
 
-      {/* top highlight */}
       <div className="
         absolute inset-x-0 top-0 h-px
         bg-gradient-to-r from-transparent via-foreground/10 to-transparent
@@ -79,19 +75,26 @@ export function CoreBeliefCard({
       {/* CONTENT */}
       <div className="relative max-w-3xl">
 
+        {/* ✅ FIX 1: eyebrow contrast */}
         {eyebrow && (
           <p className="
             text-[12px] uppercase tracking-[0.18em]
-            text-muted-foreground mb-4 font-medium
+            text-foreground/60 
+            mb-4 font-medium
           ">
             {eyebrow}
           </p>
         )}
 
+        {/* ✅ FIX 2: main text readability */}
         <div className="
           text-xl md:text-2xl lg:text-[28px]
           font-medium leading-[1.4]
           text-foreground
+
+          /* improves readability over gradients */
+        
+          dark:[text-shadow:none]
         ">
           {children}
         </div>

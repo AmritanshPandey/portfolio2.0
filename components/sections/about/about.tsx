@@ -8,6 +8,7 @@ import {
   IconShieldCheck,
   IconAdjustments,
 } from "@tabler/icons-react"
+import { motion } from "framer-motion"
 
 export default function AboutSection() {
 
@@ -33,25 +34,20 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="
-        relative
-        bg-[var(--bg2)]
-        text-foreground
-      "
+      className="relative bg-[var(--bg2)] text-foreground overflow-hidden"
     >
 
-      {/* subtle depth */}
+      {/* ambient glow */}
       <div className="
         pointer-events-none absolute inset-0
-        bg-gradient-to-b
-        from-transparent via-foreground/[0.02] to-transparent
-        dark:via-white/[0.02]
+        bg-[radial-gradient(600px_300px_at_0%_0%,rgba(249,115,22,0.05),transparent_70%)]
+        dark:bg-[radial-gradient(600px_300px_at_0%_0%,rgba(249,115,22,0.08),transparent_70%)]
       " />
 
       <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
 
         {/* HEADER */}
-        <div className="mb-12 md:mb-16 max-w-2xl">
+        <div className="mb-14 md:mb-20 max-w-2xl">
           <SectionHeader
             eyebrow="About"
             title="Who I am"
@@ -63,24 +59,29 @@ export default function AboutSection() {
         <div className="
           grid grid-cols-1
           lg:grid-cols-[380px_1fr]
-          gap-12 md:gap-24
+          gap-14 md:gap-24
           items-start
         ">
 
           {/* LEFT — PHOTO */}
-          <div className="relative flex justify-center lg:justify-start pt-2 lg:pt-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative flex justify-center lg:justify-start pt-2 lg:pt-6"
+          >
             <PhotoCarousel />
-          </div>
+          </motion.div>
 
           {/* RIGHT */}
-          <div className="space-y-10">
+          <div className="space-y-12">
 
             {/* TEXT */}
             <div className="
-              space-y-5
+              space-y-6
               text-base md:text-lg
               leading-relaxed
-              text-foreground/80
+              text-foreground
               max-w-xl
             ">
 
@@ -92,8 +93,9 @@ export default function AboutSection() {
                 My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
               </p>
 
-              <p className="text-foreground/60">
-                Outside of work, I spend time traveling, cooking, and going on long bike rides. These help me reset, stay curious, and bring fresh perspective into my work.
+              {/* ✅ FIX: better muted contrast */}
+              <p className="text-foreground/70">
+                Outside of work, I spend time traveling, cooking, and going on long bike rides — these help me reset and bring fresh perspective into my work.
               </p>
 
             </div>
@@ -112,38 +114,73 @@ export default function AboutSection() {
 
               <div className="
                 grid sm:grid-cols-2
-                gap-x-10 gap-y-5
+                gap-x-10 gap-y-6
               ">
 
                 {focus.map((item, index) => {
                   const Icon = item.icon
 
                   return (
-                    <div
+                    <motion.div
                       key={index}
-                      className="flex items-start gap-3 group"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: index * 0.05,
+                      }}
+                      className="
+                        group relative flex items-start gap-3
+                        transition-all duration-300
+                        md:hover:translate-x-[4px]
+                      "
                     >
+
+                      {/* hover bg */}
+                      <div className="
+                        absolute -inset-2 rounded-lg
+                        opacity-0 group-hover:opacity-100
+                        transition-opacity duration-300
+
+                        bg-gradient-to-r 
+                        from-orange-500/[0.08] 
+                        to-transparent
+                        dark:from-orange-400/[0.12]
+                      " />
 
                       {/* ICON */}
                       <div className="
-                        mt-[3px]
-                        text-muted-foreground
-                        group-hover:text-orange-500
-                        transition-colors duration-300
+                        relative mt-[3px]
+
+                        /* ✅ FIX: stronger base */
+                        text-foreground/60
+
+                        transition-all duration-300
+
+                        /* ✅ FIX: proper accent */
+                        group-hover:text-orange-600
+                        dark:group-hover:text-orange-400
+
+                        group-hover:-translate-y-[1px]
+
+                        /* ✨ subtle glow = perceived brightness */
+                        group-hover:drop-shadow-[0_0_6px_rgba(255,120,40,0.35)]
                       ">
                         <Icon size={18} />
                       </div>
 
                       {/* TEXT */}
                       <p className="
-                        text-sm md:text-base
+                        relative text-sm md:text-base
                         leading-[1.6]
-                        text-foreground/80
+
+                        /* ✅ FIX: readable default */
+                        text-foreground/85
                       ">
                         {item.text}
                       </p>
 
-                    </div>
+                    </motion.div>
                   )
                 })}
 
@@ -156,6 +193,7 @@ export default function AboutSection() {
         </div>
 
       </div>
+
     </section>
   )
 }

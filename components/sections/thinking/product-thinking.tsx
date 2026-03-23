@@ -35,44 +35,47 @@ export default function ProductThinkingSection() {
       variant="spacious"
     >
 
-      <div className="space-y-12 md:space-y-14 pb-4 md:pb-8">
+      <div className="space-y-14 md:space-y-16 pb-6 md:pb-10">
 
-        {/* ✅ CORE BELIEF (shared system) */}
+        {/* ───────── CORE BELIEF ───────── */}
         <CoreBeliefCard>
           <>
             Most product problems aren't solved by{" "}
-            <span className="text-muted-foreground">
+            <span className="text-foreground/50">
               interfaces
             </span>.
             <br />
             They're solved by{" "}
-            <span className="text-orange-500 font-semibold tracking-tight">
+            <span className="
+              font-semibold tracking-tight
+              text-orange-600 dark:text-orange-400
+            ">
               better decisions
             </span>.
           </>
         </CoreBeliefCard>
 
-        {/* ✅ PRINCIPLES */}
+        {/* ───────── PRINCIPLES ───────── */}
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
+          viewport={{ once: true, margin: "-80px" }}
           variants={{
             visible: {
-              transition: { staggerChildren: 0.08 },
+              transition: { staggerChildren: 0.1 },
             },
           }}
-          className="grid md:grid-cols-3 gap-8 md:gap-10"
+          className="grid md:grid-cols-3 gap-10 md:gap-12"
         >
           {principles.map((item, i) => (
             <motion.div
               key={i}
               variants={{
-                hidden: { opacity: 0, y: 16 },
+                hidden: { opacity: 0, y: 18 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{
-                duration: 0.4,
+                duration: 0.45,
                 ease: [0.22, 1, 0.36, 1],
               }}
             >

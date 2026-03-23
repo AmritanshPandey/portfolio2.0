@@ -29,27 +29,104 @@ export function VerticalCard({
   showImage = true,
 }: Props) {
 
-  const isCompact  = variant === "compact"
+  const isCompact = variant === "compact"
   const isFeatured = variant === "featured"
+
+  const cursorLabelMap: Record<string, string> = {
+    "View case study": "View",
+    "Explore": "Explore",
+    "Read article": "Read",
+  }
+
+  const cursorLabel = cursorLabelMap[ctaLabel] || "View"
 
   return (
     <Link
       href={href}
-      className="
-        group/card block h-full rounded-2xl
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
-      "
+      data-cursor-card
+      data-cursor-label={cursorLabel}
+      className="group/card block h-full rounded-2xl"
     >
       <div
         className={clsx(
-          "h-full flex bg-card border border-border rounded-2xl overflow-hidden",
+          "relative h-full flex rounded-2xl overflow-hidden",
+
+          /* ✨ SURFACE (lighter dark mode) */
+          "bg-card",
+          "dark:bg-gradient-to-b dark:from-white/[0.04] dark:to-white/[0.01]",
+
+          "border border-border",
+
+          isFeatured && [
+            "border-border/80",
+            "shadow-[0_10px_40px_rgba(0,0,0,0.06)]",
+            "dark:shadow-[0_20px_60px_rgba(0,0,0,0.45)]",
+          ],
+
+          /* TOP EDGE */
+          "before:absolute before:inset-x-0 before:top-0 before:h-px",
+          "before:bg-gradient-to-r before:from-transparent before:via-foreground/10 before:to-transparent",
+          "dark:before:via-white/20",
+
+          /* INTERACTION */
           "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "hover:-translate-y-[2px] hover:border-border/80",
-          "hover:shadow-md dark:hover:shadow-lg",
+          "hover:-translate-y-[2px] hover:translate-x-[1px]",
+          "hover:border-border/80",
+          "hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)]",
+          "dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.4)]",
+
           isFeatured ? "flex-col md:flex-row" : "flex-col",
-          isCompact  && "flex-col p-5"
+          isCompact && "p-5"
         )}
       >
+
+        {/* ✨ CLEAN ORANGE GLOW */}
+        <div
+          className={clsx(
+            "pointer-events-none absolute inset-0 rounded-2xl overflow-hidden",
+            "transition-opacity duration-500",
+
+            isFeatured
+              ? `
+                opacity-100
+                bg-[radial-gradient(420px_220px_at_0%_100%,rgba(255,90,0,0.10),transparent_60%)]
+                dark:bg-[radial-gradient(420px_220px_at_0%_100%,rgba(255,140,60,0.14),transparent_60%)]
+              `
+              : `
+                opacity-0 group-hover/card:opacity-100
+                bg-[radial-gradient(300px_160px_at_0%_100%,rgba(255,90,0,0.08),transparent_60%)]
+                dark:bg-[radial-gradient(300px_160px_at_0%_100%,rgba(255,140,60,0.12),transparent_60%)]
+              `
+          )}
+        />
+
+        {/* ✨ INNER LIGHT */}
+        <div
+          className={clsx(
+            "pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-400",
+
+            isFeatured
+              ? `
+                opacity-60
+                bg-[radial-gradient(240px_140px_at_100%_0%,rgba(255,255,255,0.06),transparent_70%)]
+                dark:bg-[radial-gradient(240px_140px_at_100%_0%,rgba(255,255,255,0.10),transparent_70%)]
+              `
+              : `
+                opacity-0 group-hover/card:opacity-100
+                bg-[radial-gradient(200px_120px_at_10%_100%,rgba(255,255,255,0.05),transparent_70%)]
+                dark:bg-[radial-gradient(200px_120px_at_10%_100%,rgba(255,255,255,0.07),transparent_70%)]
+              `
+          )}
+        />
+
+        {/* FEATURED WASH (cleaner) */}
+        {isFeatured && (
+          <div className="
+            pointer-events-none absolute inset-0
+            bg-gradient-to-br from-orange-600/[0.04] to-transparent
+            dark:from-orange-400/[0.06]
+          " />
+        )}
 
         {/* IMAGE */}
         {showImage && image && !isCompact && (
@@ -57,7 +134,7 @@ export function VerticalCard({
             className={clsx(
               "relative overflow-hidden bg-muted shrink-0",
               isFeatured
-                ? "w-full aspect-video md:w-[45%] md:aspect-auto md:min-h-[260px] md:max-h-[320px]"
+                ? "w-full aspect-video md:w-[45%] md:min-h-[260px]"
                 : "w-full aspect-[16/7]"
             )}
           >
@@ -72,12 +149,14 @@ export function VerticalCard({
               "
             />
 
-            {/* Overlay */}
+            {/* overlay (balanced) */}
             <div className="
               absolute inset-0
-              bg-black/10 dark:bg-black/20
+              bg-gradient-to-t
+              from-black/20 via-black/5 to-transparent
+              dark:from-black/35
+              opacity-80 group-hover/card:opacity-60
               transition-opacity duration-300
-              group-hover/card:opacity-0
             " />
           </div>
         )}
@@ -85,35 +164,36 @@ export function VerticalCard({
         {/* CONTENT */}
         <div
           className={clsx(
-            "flex flex-col flex-1",
+            "relative flex flex-col flex-1",
+            "transition-transform duration-300",
+            "group-hover/card:translate-y-[-1px] group-hover/card:translate-x-[1px]",
             isCompact ? "gap-3" : "p-6 gap-4"
           )}
         >
 
-          {category && (
-            <p className="
-              text-[10px] font-medium uppercase tracking-[0.18em]
-              text-muted-foreground
-            ">
-              {category}
-            </p>
-          )}
+          <div className="flex flex-col gap-2">
 
-          <h3
-            className={clsx(
-              "font-medium tracking-tight leading-[1.3]",
-              "text-foreground transition-colors duration-200",
-              "group-hover/card:text-muted-foreground",
-              isFeatured ? "text-xl md:text-2xl" :
-              isCompact  ? "text-base"            : "text-lg md:text-xl"
+            {category && (
+              <p className="
+                text-[10px] font-medium uppercase tracking-[0.18em]
+                text-foreground/50
+              ">
+                {category}
+              </p>
             )}
-          >
-            {title}
-          </h3>
+
+            <h3 className="
+              text-lg md:text-xl font-medium tracking-tight leading-[1.25]
+              text-foreground
+            ">
+              {title}
+            </h3>
+
+          </div>
 
           {description && !isCompact && (
             <p className="
-              text-muted-foreground text-sm leading-relaxed
+              text-foreground/70 text-sm leading-relaxed
             ">
               {description}
             </p>
@@ -121,37 +201,54 @@ export function VerticalCard({
 
           {/* CTA */}
           <div className="
-            mt-auto pt-5 border-t border-border
+            mt-auto pt-5 border-t border-border/60
             flex items-center justify-between
           ">
+
             <span className="
-              text-sm font-medium text-foreground
-              group-hover/card:underline underline-offset-4
+              text-sm font-medium text-foreground/80
+              transition-all duration-200
+
+              group-hover/card:text-orange-600
+              dark:group-hover/card:text-orange-400
+
+              group-hover/card:translate-x-[2px]
             ">
               {ctaLabel}
             </span>
 
             <span className="
-              w-9 h-9 rounded-full
+              w-10 h-10 rounded-full flex items-center justify-center
               border border-border
-              flex items-center justify-center
-              transition-all duration-200
-              group-hover/card:bg-foreground
-              group-hover/card:border-foreground
+
+              transition-all duration-300
+
+              group-hover/card:border-orange-600/40
+              dark:group-hover/card:border-orange-400/40
+
+              group-hover/card:bg-orange-600/10
+              dark:group-hover/card:bg-orange-400/10
             ">
               <IconArrowUpRight
                 size={16}
                 stroke={2}
                 className="
-                  text-muted-foreground
-                  transition-colors duration-200
-                  group-hover/card:text-background
+                  text-foreground/60
+                  transition-all duration-300
+
+                  group-hover/card:text-orange-600
+                  dark:group-hover/card:text-orange-400
+
+                  group-hover/card:-translate-y-[2px]
+                  group-hover/card:translate-x-[2px]
                 "
               />
             </span>
+
           </div>
 
         </div>
+
       </div>
     </Link>
   )

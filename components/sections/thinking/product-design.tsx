@@ -39,7 +39,23 @@ export default function ProductDesignApproachSection() {
       variant="spacious"
     >
 
-      <ProcessStepsCard steps={steps} />
+      {/* ✨ WRAPPER FOR BETTER COLOR BALANCE */}
+      <div className="
+        relative
+
+        /* subtle lift from background */
+        bg-transparent
+
+        /* improves separation in light mode */
+        before:absolute before:inset-0 before:rounded-3xl
+        before:bg-gradient-to-b before:from-transparent before:to-black/[0.02]
+        dark:before:to-white/[0.02]
+        before:pointer-events-none
+      ">
+
+        <ProcessStepsCard steps={steps} />
+
+      </div>
 
     </SectionSubgroup>
   )
