@@ -4,6 +4,9 @@ import { IconArrowUpRight, IconDownload } from "@tabler/icons-react"
 import clsx from "clsx"
 import Link from "next/link"
 import { useRef } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import { scrollToSection } from "@/lib/scroll"
+import { saveScroll } from "@/lib/scroll-manager"
 
 type Variant = "primary" | "secondary" | "tertiary"
 
@@ -23,52 +26,75 @@ export function CTA({
   className,
 }: Props) {
 
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const containerRef = useRef<HTMLAnchorElement>(null)
+  const innerRef = useRef<HTMLSpanElement>(null)
+
   const Icon =
     icon === "arrow"    ? IconArrowUpRight :
     icon === "download" ? IconDownload     : null
 
-  const ref = useRef<HTMLAnchorElement>(null)
+  // ───── NAVIGATION HANDLER ─────
+  const handleClick = (e: React.MouseEvent) => {
+    if (!href) return
 
-  // ───── MAGNETIC (stable + no layout shift) ─────
+    // internal section
+    if (href.startsWith("#")) {
+      e.preventDefault()
+
+      const id = href.replace("#", "")
+
+      saveScroll(pathname)
+
+      if (pathname === "/") {
+        scrollToSection(id)
+      } else {
+        router.push(`/#${id}`)
+      }
+    }
+  }
+
+  // ───── MAGNETIC (INNER ONLY) ─────
   const handleMove = (e: React.MouseEvent) => {
-    if (variant !== "primary" || !ref.current) return
+    if (variant !== "primary" || !containerRef.current || !innerRef.current) return
 
-    const rect = ref.current.getBoundingClientRect()
+    const rect = containerRef.current.getBoundingClientRect()
 
     const x = e.clientX - (rect.left + rect.width / 2)
     const y = e.clientY - (rect.top + rect.height / 2)
 
     const strength = 0.22
-    const max = 12
+    const max = 10
 
     const moveX = Math.max(Math.min(x * strength, max), -max)
     const moveY = Math.max(Math.min(y * strength, max), -max)
 
-    ref.current.style.transform = `translate(${moveX}px, ${moveY}px)`
+    innerRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`
   }
 
   const handleLeave = () => {
-    if (!ref.current) return
+    if (!innerRef.current) return
 
-    ref.current.style.transform = "translate(0px, 0px)"
-    ref.current.style.transition = "transform 0.4s cubic-bezier(0.22,1,0.36,1)"
+    innerRef.current.style.transform = "translate(0px, 0px)"
+    innerRef.current.style.transition =
+      "transform 0.45s cubic-bezier(0.22,1,0.36,1)"
   }
 
   // ───────── PRIMARY + SECONDARY ─────────
   if (variant !== "tertiary" && href) {
     return (
       <Link
-        ref={ref}
+        ref={containerRef}
         href={href}
+        onClick={handleClick}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         className={clsx(
-          "group/cta relative flex items-center justify-center gap-2",
+          "group/cta relative flex items-center justify-center",
           "w-full px-5 py-2.5 rounded-full text-sm font-medium",
           "overflow-hidden",
-
-          // ✨ stable motion
-          "transition-[background,box-shadow,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           "active:scale-[0.97]",
 
           // PRIMARY
@@ -100,21 +126,26 @@ export function CTA({
           dark:via-white/[0.12]
         " />
 
-        <span className="relative">{label}</span>
+        {/* INNER (magnetic layer) */}
+        <span
+          ref={innerRef}
+          className="relative flex items-center gap-2 transition-transform duration-200"
+        >
+          {label}
 
-        {Icon && (
-          <Icon
-            size={15}
-            stroke={2}
-            className="
-              relative shrink-0 opacity-70
-              transition-all duration-200
-              group-hover/cta:opacity-100
-              group-hover/cta:translate-x-[2px]
-              group-hover/cta:-translate-y-[2px]
-            "
-          />
-        )}
+          {Icon && (
+            <Icon
+              size={15}
+              stroke={2}
+              className="
+                opacity-80
+                transition-all duration-200
+                group-hover/cta:translate-x-[2px]
+                group-hover/cta:-translate-y-[2px]
+              "
+            />
+          )}
+        </span>
       </Link>
     )
   }
@@ -122,6 +153,7 @@ export function CTA({
   // ───────── TERTIARY ─────────
   return (
     <span
+      onClick={handleClick}
       className={clsx(
         "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
         "text-foreground/80",
@@ -143,11 +175,9 @@ export function CTA({
           size={14}
           stroke={2}
           className="
-            opacity-40 shrink-0
+            opacity-50
             transition-all duration-200
             group-hover/cta:opacity-100
-            group-hover/cta:text-orange-600
-            dark:group-hover/cta:text-orange-400
             group-hover/cta:translate-x-[2px]
             group-hover/cta:-translate-y-[2px]
           "
