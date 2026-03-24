@@ -10,26 +10,28 @@ export function FancyCursor() {
   const textRef = useRef<HTMLSpanElement>(null)
 
   const stateRef = useRef<CursorState>("default")
-  const hoverTimeoutRef = useRef<number | null>(null)
   const prevStateRef = useRef<CursorState>("default")
+  const hoverTimeoutRef = useRef<number | null>(null)
+  const directionRef = useRef(0)
 
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("Explore")
   const [isDark, setIsDark] = useState(false)
   const [isTouching, setIsTouching] = useState(false)
 
-  // ── Sync state
+  // ── Sync state safely
   useEffect(() => {
     prevStateRef.current = stateRef.current
     stateRef.current = state
   }, [state])
 
-  // ── Theme
+  // ── Theme detection
   useEffect(() => {
     const check = () =>
       setIsDark(document.documentElement.classList.contains("dark"))
 
     check()
+
     const obs = new MutationObserver(check)
     obs.observe(document.documentElement, { attributes: true })
 
@@ -73,8 +75,12 @@ export function FancyCursor() {
     }
 
     const onMove = (e: MouseEvent) => {
+      const dx = e.clientX - mouse.x
+      directionRef.current = dx
+
       mouse.x = e.clientX
       mouse.y = e.clientY
+
       gsap.set(cursor, { opacity: 1 })
     }
 
@@ -84,6 +90,7 @@ export function FancyCursor() {
 
       const card = t.closest("[data-cursor-card]") as HTMLElement | null
 
+      // ── Intent detection
       if (card) {
         const raw = card.getAttribute("data-cursor-label") || "Explore"
 
@@ -142,7 +149,7 @@ export function FancyCursor() {
     }
   }, [isTouching])
 
-  // ── Morph (with reverse collapse)
+  // ── Morph system (with bias + reverse collapse)
   useEffect(() => {
     const cursor = cursorRef.current
     const textEl = textRef.current
@@ -153,16 +160,20 @@ export function FancyCursor() {
 
     const prev = prevStateRef.current
 
-    // ── ENTER CARD (stretch)
+    // ── ENTER CARD
     if (state === "card") {
       requestAnimationFrame(() => {
         const textWidth = textEl?.offsetWidth || 40
         const targetWidth = Math.max(textWidth + 28, 64)
 
+        const dir = directionRef.current
+        const bias = Math.max(-1, Math.min(1, dir / 40))
+
         gsap.set(cursor, {
           width: 10,
           height: 10,
           borderRadius: 999,
+          xPercent: bias * 20,
         })
 
         gsap.to(cursor, {
@@ -190,8 +201,8 @@ export function FancyCursor() {
       return
     }
 
-    // ── EXIT CARD (collapse)
-    if (prev === "card" && state !== "card") {
+    // ── EXIT CARD (reverse collapse)
+    if (prev === "card" && stateRef.current !== "card") {
       if (textEl) {
         gsap.to(textEl, {
           opacity: 0,
@@ -204,6 +215,7 @@ export function FancyCursor() {
         width: 10,
         height: 10,
         borderRadius: 999,
+        xPercent: 0,
         duration: 0.28,
         ease: "power3.inOut",
       })

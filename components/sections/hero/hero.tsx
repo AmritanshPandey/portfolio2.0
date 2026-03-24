@@ -128,7 +128,7 @@ export default function Hero() {
               "
             />
 
-            <p className="relative hero-sub text-base md:text-lg text-muted-foreground leading-relaxed">
+            <p className="relative hero-sub text-base md:text-lg text-muted-foreground leading-[1.7]">
               At Mastercard, from design systems to{" "}
               <span className="text-foreground font-medium">
                 interactive demos for billion-dollar bank deals

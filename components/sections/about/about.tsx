@@ -1,5 +1,6 @@
 "use client"
 
+import { FocusList } from "@/components/shared/focus-list"
 import PhotoCarousel from "@/components/shared/photostack/photo-carousel"
 import { SectionHeader } from "@/components/shared/section-header"
 import {
@@ -11,7 +12,6 @@ import {
 import { motion } from "framer-motion"
 
 export default function AboutSection() {
-
   const focus = [
     {
       icon: IconSparkles,
@@ -32,22 +32,92 @@ export default function AboutSection() {
   ]
 
   return (
-    <section
-      id="about"
-      className="relative bg-[var(--bg2)] text-foreground overflow-hidden"
-    >
+    <section className="relative overflow-hidden bg-white dark:bg-black text-foreground">
 
-      {/* ambient glow */}
-      <div className="
-        pointer-events-none absolute inset-0
-        bg-[radial-gradient(600px_300px_at_0%_0%,rgba(249,115,22,0.05),transparent_70%)]
-        dark:bg-[radial-gradient(600px_300px_at_0%_0%,rgba(249,115,22,0.08),transparent_70%)]
-      " />
+      {/* ── GRID SYSTEM */}
+      <div className="pointer-events-none absolute inset-0 z-[0] overflow-hidden">
 
-      <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+        {/* GRID (LIGHT) */}
+        <div
+          className="
+            absolute inset-0
+            will-change-transform
+            animate-[gridDrift_40s_linear_infinite]
+            dark:hidden
+          "
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px)
+            `,
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        {/* GRID (DARK) */}
+        <div
+          className="
+            absolute inset-0 hidden dark:block
+            will-change-transform
+            animate-[gridDrift_40s_linear_infinite]
+          "
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,0.10) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.10) 1px, transparent 1px)
+            `,
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        {/* ✨ NOISE (VERY SUBTLE) */}
+        <div
+          className="
+            absolute inset-0
+            opacity-[0.02] dark:opacity-[0.04]
+            mix-blend-soft-light
+          "
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(0,0,0,0.4) 1px, transparent 1px)",
+            backgroundSize: "3px 3px",
+          }}
+        />
+
+        {/* ✨ GLOW (BOTTOM RIGHT — REFINED) */}
+        <div
+          className="
+            absolute inset-0
+            bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.04),transparent_70%)]
+            dark:bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.06),transparent_70%)]
+          "
+        />
+
+        {/* ✨ EDGE FADE (SOFT + BALANCED) */}
+        <div
+          className="
+            absolute inset-0
+            bg-gradient-to-b
+            from-white/60 via-transparent to-white/60
+            dark:from-black/60 dark:via-transparent dark:to-black/60
+          "
+        />
+
+        <div
+          className="
+            absolute inset-0
+            bg-gradient-to-r
+            from-white/60 via-transparent to-white/60
+            dark:from-black/60 dark:via-transparent dark:to-black/60
+          "
+        />
+      </div>
+
+      {/* ── CONTENT */}
+      <div className="relative z-[1] max-w-6xl mx-auto px-6 py-16 md:py-20">
 
         {/* HEADER */}
-        <div className="mb-14 md:mb-20 max-w-2xl">
+        <div className="max-w-2xl mb-12 md:mb-16">
           <SectionHeader
             eyebrow="About"
             title="Who I am"
@@ -55,136 +125,70 @@ export default function AboutSection() {
           />
         </div>
 
-        {/* CONTENT */}
+        {/* LAYOUT */}
         <div className="
           grid grid-cols-1
-          lg:grid-cols-[380px_1fr]
-          gap-14 md:gap-24
-          items-start
+          lg:grid-cols-[420px_1fr]
+          gap-16 md:gap-28
+          items-center
         ">
 
-          {/* LEFT — PHOTO */}
+          {/* LEFT */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative flex justify-center lg:justify-start pt-2 lg:pt-6"
           >
             <PhotoCarousel />
           </motion.div>
 
           {/* RIGHT */}
-          <div className="space-y-12">
+          <div className="relative">
 
-            {/* TEXT */}
+            {/* ✨ READABILITY LAYER */}
             <div className="
-              space-y-6
-              text-base md:text-lg
-              leading-relaxed
-              text-foreground
-              max-w-xl
-            ">
+              absolute -inset-6 -z-10 rounded-xl
+              bg-white/70 dark:bg-black/60
+              backdrop-blur-md
+              border border-black/[0.04] dark:border-white/[0.06]
+            " />
 
-              <p>
-                I design products by breaking down complex problems into clear, scalable systems.
-              </p>
+            <div className="space-y-8">
 
-              <p>
-                My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
-              </p>
+              {/* TEXT */}
+              <div className=" space-y-6 max-w-full">
 
-              {/* ✅ FIX: better muted contrast */}
-              <p className="text-foreground/70">
-                Outside of work, I spend time traveling, cooking, and going on long bike rides — these help me reset and bring fresh perspective into my work.
-              </p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="text-[18px] leading-[1.75] tracking-[-0.01em]"
+                >
+                  I design products by breaking down complex problems into clear, scalable systems.
+                </motion.p>
 
-            </div>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.05 }}
+                  className="text-[18px] leading-[1.75] text-foreground/85"
+                >
+                  My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
+                </motion.p>
 
-            {/* FOCUS */}
-            <div>
-
-              <p className="
-                text-base md:text-lg
-                font-semibold
-                mb-6
-                text-foreground
-              ">
-                Focus areas
-              </p>
-
-              <div className="
-                grid sm:grid-cols-2
-                gap-x-10 gap-y-6
-              ">
-
-                {focus.map((item, index) => {
-                  const Icon = item.icon
-
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        delay: index * 0.05,
-                      }}
-                      className="
-                        group relative flex items-start gap-3
-                        transition-all duration-300
-                        md:hover:translate-x-[4px]
-                      "
-                    >
-
-                      {/* hover bg */}
-                      <div className="
-                        absolute -inset-2 rounded-lg
-                        opacity-0 group-hover:opacity-100
-                        transition-opacity duration-300
-
-                        bg-gradient-to-r 
-                        from-orange-500/[0.08] 
-                        to-transparent
-                        dark:from-orange-400/[0.12]
-                      " />
-
-                      {/* ICON */}
-                      <div className="
-                        relative mt-[3px]
-
-                        /* ✅ FIX: stronger base */
-                        text-foreground/60
-
-                        transition-all duration-300
-
-                        /* ✅ FIX: proper accent */
-                        group-hover:text-orange-600
-                        dark:group-hover:text-orange-400
-
-                        group-hover:-translate-y-[1px]
-
-                        /* ✨ subtle glow = perceived brightness */
-                        group-hover:drop-shadow-[0_0_6px_rgba(255,120,40,0.35)]
-                      ">
-                        <Icon size={18} />
-                      </div>
-
-                      {/* TEXT */}
-                      <p className="
-                        relative text-sm md:text-base
-                        leading-[1.6]
-
-                        /* ✅ FIX: readable default */
-                        text-foreground/85
-                      ">
-                        {item.text}
-                      </p>
-
-                    </motion.div>
-                  )
-                })}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="text-[18px] text-foreground/55 leading-[1.7]"
+                >
+                  Outside of work, I spend time traveling, cooking, and going on long bike rides.
+                </motion.p>
 
               </div>
+
+              {/* FOCUS */}
+              <FocusList focus={focus} title="Focus areas" />
 
             </div>
 
@@ -193,7 +197,6 @@ export default function AboutSection() {
         </div>
 
       </div>
-
     </section>
   )
 }

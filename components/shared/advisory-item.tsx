@@ -18,22 +18,23 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
       className="
         group relative flex items-start gap-4
 
-        py-3
+        py-4
 
         transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-        hover:translate-x-[4px]
       "
     >
 
       {/* LOGO */}
       <div className="
-        w-14 h-14 rounded-xl overflow-hidden
+        w-12 h-12 rounded-lg overflow-hidden
 
         flex items-center justify-center
-        bg-muted/50 border border-border
+
+        bg-muted/30
+        border border-black/[0.05] dark:border-white/[0.06]
 
         transition-all duration-300
-        group-hover:scale-[1.04]
+        group-hover:scale-[1.02]
       ">
         <img
           src={logo}
@@ -43,35 +44,34 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
       </div>
 
       {/* CONTENT */}
-      <div className="flex-1 space-y-1.5">
+      <div className="flex flex-col gap-1.5">
 
         {/* TITLE + ICON */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-2">
 
           <p className="
-            text-base md:text-lg font-medium
+            text-[15px] md:text-[16px]
+            font-medium tracking-[-0.01em]
+
             text-foreground
 
             transition-colors duration-200
-            group-hover:text-orange-600
-            dark:group-hover:text-orange-400
+            group-hover:text-foreground
           ">
             {title}
           </p>
 
-          {/* ICON */}
           <IconLink
-            size={18}
+            size={16}
+            stroke={2}
             className="
-              shrink-0 mt-[3px]
+              text-foreground/25
 
-              text-foreground/30
               transition-all duration-300
 
-              group-hover:text-orange-600
-              dark:group-hover:text-orange-400
-              group-hover:translate-x-[2px]
-              group-hover:-translate-y-[2px]
+              group-hover:text-foreground/60
+              group-hover:translate-x-[1px]
+              group-hover:-translate-y-[1px]
             "
           />
 
@@ -79,26 +79,20 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
         {/* DESCRIPTION */}
         <p className="
-          text-sm md:text-[15px]
-          text-foreground/60
-          leading-[1.6]
-          max-w-xl
+          text-[14px]
+          text-foreground/55
+          leading-[1.65]
+          max-w-[520px]
 
           transition-colors duration-200
-          group-hover:text-foreground/75
+          group-hover:text-foreground/70
         ">
           {desc}
         </p>
 
       </div>
 
-      {/* ✨ SUBTLE TOP EDGE (premium detail) */}
-      <div className="
-        pointer-events-none absolute inset-x-0 top-0 h-px
-        bg-gradient-to-r from-transparent via-foreground/10 to-transparent
-        opacity-0 group-hover:opacity-100
-        transition-opacity duration-300
-      " />
+
 
     </a>
   )

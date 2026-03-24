@@ -1,10 +1,10 @@
 "use client"
 
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
-import { IconBrandLinkedin, IconLink } from "@tabler/icons-react"
+import { AdvisoryItem } from "@/components/shared/advisory-item"
+import { IconBrandLinkedin } from "@tabler/icons-react"
 
 export default function AdvisorySection() {
-
   const advisory = [
     {
       title: "Covera — Product & UX Advisor",
@@ -64,7 +64,6 @@ export default function AdvisorySection() {
       description="Trusted by startups and institutions to shape product direction and mentor designers."
       variant="spacious"
     >
-
       <div className="space-y-14">
 
         {/* ───────── PRODUCT ADVISORY ───────── */}
@@ -74,80 +73,9 @@ export default function AdvisorySection() {
             Product Advisory
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             {advisory.map((item, i) => (
-              <a
-                key={i}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  group flex items-start justify-between gap-4
-
-                  py-4
-
-                  border-b border-border/60
-                  last:border-none
-
-                  transition-all duration-300
-                "
-              >
-
-                {/* LEFT */}
-                <div className="flex items-start gap-4">
-
-                  {/* LOGO */}
-                  <div className="
-                    w-12 h-12 rounded-xl overflow-hidden
-                    border border-border
-                    bg-muted/40
-                    flex items-center justify-center
-                    transition-transform duration-300
-                    group-hover:scale-[1.04]
-                  ">
-                    <img
-                      src={item.logo}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* TEXT */}
-                  <div className="space-y-1">
-
-                    <p className="text-base md:text-lg font-medium text-foreground">
-                      {item.title}
-                    </p>
-
-                    <p className="
-                      text-sm md:text-[15px]
-                      text-foreground/60
-                      leading-[1.6]
-                      max-w-xl
-                      group-hover:text-foreground/75
-                      transition-colors duration-200
-                    ">
-                      {item.desc}
-                    </p>
-
-                  </div>
-
-                </div>
-
-                {/* ICON */}
-                <IconLink
-                  size={18}
-                  className="
-                    mt-1
-                    text-foreground/30
-                    transition-all duration-300
-                    group-hover:text-orange-600
-                    dark:group-hover:text-orange-400
-                    group-hover:translate-x-[3px]
-                  "
-                />
-
-              </a>
+              <AdvisoryItem key={i} {...item} />
             ))}
           </div>
 
@@ -173,51 +101,46 @@ export default function AdvisorySection() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="
-      group flex items-start gap-3
-
-      py-2
-
-      transition-all duration-300
-      hover:translate-x-[4px]
-    "
+                    group flex items-start gap-3 py-2
+                    transition-all duration-300
+                    hover:translate-x-[4px]
+                  "
                 >
 
                   {/* DOT */}
                   <div className="
-      mt-[6px] w-1.5 h-1.5 rounded-full
-      bg-foreground/30
-      transition-all duration-300
+                    mt-[6px] w-1.5 h-1.5 rounded-full
+                    bg-foreground/30
+                    transition-all duration-300
 
-      group-hover:bg-orange-600
-      dark:group-hover:bg-orange-400
-      group-hover:scale-125
-    " />
+                    group-hover:bg-orange-600
+                    dark:group-hover:bg-orange-400
+                    group-hover:scale-125
+                  " />
 
-                  {/* CONTENT */}
+                  {/* TEXT */}
                   <div className="flex flex-col leading-tight">
 
                     <span className="text-sm font-medium text-foreground">
                       {item.name}
                     </span>
 
-                    {/* ROLE + LINKEDIN */}
                     <div className="
-        flex items-center gap-2
-        text-sm text-foreground/60
-        transition-colors duration-200
-        group-hover:text-foreground/80
-      ">
+                      flex items-center gap-2
+                      text-sm text-foreground/60
+                      transition-colors duration-200
+                      group-hover:text-foreground/80
+                    ">
                       <span>{item.company}</span>
 
                       <IconBrandLinkedin
                         size={16}
                         className="
-            opacity-40
-            transition-all duration-300
-
-            group-hover:opacity-100
-            group-hover:text-[#0A66C2]
-          "
+                          opacity-40
+                          transition-all duration-300
+                          group-hover:opacity-100
+                          group-hover:text-[#0A66C2]
+                        "
                       />
                     </div>
 
@@ -238,76 +161,9 @@ export default function AdvisorySection() {
             Teaching & Workshops
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-2">
             {teaching.map((item, i) => (
-              <a
-                key={i}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  group flex items-start justify-between gap-4
-
-                  py-4
-
-                  border-b border-border/60
-                  last:border-none
-
-                  transition-all duration-300
-                "
-              >
-
-                <div className="flex items-start gap-4">
-
-                  <div className="
-                    w-12 h-12 rounded-xl overflow-hidden
-                    border border-border
-                    bg-muted/40
-                    flex items-center justify-center
-                    transition-transform duration-300
-                    group-hover:scale-[1.04]
-                  ">
-                    <img
-                      src={item.logo}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-
-                    <p className="text-base md:text-lg font-medium text-foreground">
-                      {item.title}
-                    </p>
-
-                    <p className="
-                      text-sm md:text-[15px]
-                      text-foreground/60
-                      leading-[1.6]
-                      max-w-xl
-                      group-hover:text-foreground/75
-                      transition-colors duration-200
-                    ">
-                      {item.desc}
-                    </p>
-
-                  </div>
-
-                </div>
-
-                <IconLink
-                  size={18}
-                  className="
-                    mt-1
-                    text-foreground/30
-                    transition-all duration-300
-                    group-hover:text-orange-600
-                    dark:group-hover:text-orange-400
-                    group-hover:translate-x-[3px]
-                  "
-                />
-
-              </a>
+              <AdvisoryItem key={i} {...item} />
             ))}
           </div>
 
@@ -316,7 +172,6 @@ export default function AdvisorySection() {
       </div>
 
       <div className="h-px w-full bg-border/60 mt-12" />
-
     </SectionSubgroup>
   )
 }

@@ -66,7 +66,7 @@ export default function Page() {
         bg="muted"   
         eyebrow="Impact"
         title="Driving Outcomes Beyond Product Design"
-        transition="Beyond work and impact, here’s more about how I think and what I focus on."
+        transition="Beyond work and impact, here's more about how I think and what I focus on."
         transitionEyebrow="About Me"
       >
         <LeadershipSection />
