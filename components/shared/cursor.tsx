@@ -19,13 +19,9 @@ export function FancyCursor() {
   const [isDark, setIsDark] = useState(false)
   const [isTouching, setIsTouching] = useState(false)
 
-  // ── Sync state safely
-  useEffect(() => {
-    prevStateRef.current = stateRef.current
-    stateRef.current = state
-  }, [state])
-
-  // ── Theme detection
+  // ─────────────────────────────────────────────
+  // Theme detection
+  // ─────────────────────────────────────────────
   useEffect(() => {
     const check = () =>
       setIsDark(document.documentElement.classList.contains("dark"))
@@ -38,7 +34,9 @@ export function FancyCursor() {
     return () => obs.disconnect()
   }, [])
 
-  // ── Input detection
+  // ─────────────────────────────────────────────
+  // Input detection
+  // ─────────────────────────────────────────────
   useEffect(() => {
     const onTouch = () => setIsTouching(true)
     const onMouse = () => setIsTouching(false)
@@ -52,20 +50,20 @@ export function FancyCursor() {
     }
   }, [])
 
-  // ── Cursor engine
+  // ─────────────────────────────────────────────
+  // Cursor engine (movement + intent)
+  // ─────────────────────────────────────────────
   useEffect(() => {
     if (isTouching) return
 
     const cursor = cursorRef.current
     if (!cursor) return
 
-    cursor.style.contain = "layout style size"
-
     let mouse = { x: 0, y: 0 }
     let pos = { x: 0, y: 0 }
     let rafId: number
 
-    gsap.set(cursor, { x: -200, y: -200, opacity: 1 })
+    gsap.set(cursor, { x: -200, y: -200, opacity: 0 })
 
     const clearIntent = () => {
       if (hoverTimeoutRef.current) {
@@ -81,7 +79,7 @@ export function FancyCursor() {
       mouse.x = e.clientX
       mouse.y = e.clientY
 
-      gsap.set(cursor, { opacity: 1 })
+      gsap.to(cursor, { opacity: 1, duration: 0.2 })
     }
 
     const onOver = (e: PointerEvent) => {
@@ -90,7 +88,7 @@ export function FancyCursor() {
 
       const card = t.closest("[data-cursor-card]") as HTMLElement | null
 
-      // ── Intent detection
+      // ── CARD INTENT
       if (card) {
         const raw = card.getAttribute("data-cursor-label") || "Explore"
 
@@ -99,18 +97,20 @@ export function FancyCursor() {
             setLabel(raw)
             setState("card")
           }
-        }, 120)
+        }, 100)
 
         return
       }
 
+      // ── LINK / BUTTON
       if (t.closest("a, button")) {
-        setState("hover")
+        if (stateRef.current !== "hover") setState("hover")
         return
       }
 
-      if (t.closest("p, h1, h2, h3")) {
-        setState("text")
+      // ── TEXT
+      if (t.closest("p, h1, h2, h3, span")) {
+        if (stateRef.current !== "text") setState("text")
         return
       }
 
@@ -119,12 +119,14 @@ export function FancyCursor() {
 
     const onLeave = () => {
       clearIntent()
+      setState("default")
       gsap.to(cursor, { opacity: 0, duration: 0.2 })
     }
 
     const render = () => {
-      pos.x += (mouse.x - pos.x) * 0.18
-      pos.y += (mouse.y - pos.y) * 0.18
+      // smoother, more premium motion
+      pos.x += (mouse.x - pos.x) * 0.16
+      pos.y += (mouse.y - pos.y) * 0.16
 
       gsap.set(cursor, {
         x: pos.x,
@@ -149,7 +151,17 @@ export function FancyCursor() {
     }
   }, [isTouching])
 
-  // ── Morph system (with bias + reverse collapse)
+  // ─────────────────────────────────────────────
+  // State sync
+  // ─────────────────────────────────────────────
+  useEffect(() => {
+    prevStateRef.current = stateRef.current
+    stateRef.current = state
+  }, [state])
+
+  // ─────────────────────────────────────────────
+  // Morph system (clean + reset-safe)
+  // ─────────────────────────────────────────────
   useEffect(() => {
     const cursor = cursorRef.current
     const textEl = textRef.current
@@ -160,7 +172,7 @@ export function FancyCursor() {
 
     const prev = prevStateRef.current
 
-    // ── ENTER CARD
+    // ── CARD MODE
     if (state === "card") {
       requestAnimationFrame(() => {
         const textWidth = textEl?.offsetWidth || 40
@@ -170,16 +182,17 @@ export function FancyCursor() {
         const bias = Math.max(-1, Math.min(1, dir / 40))
 
         gsap.set(cursor, {
-          width: 10,
-          height: 10,
+          width: 12,
+          height: 12,
           borderRadius: 999,
+          border: "none",
           xPercent: bias * 20,
         })
 
         gsap.to(cursor, {
           width: targetWidth,
           height: 34,
-          duration: 0.32,
+          duration: 0.28,
           ease: "power3.out",
         })
 
@@ -190,9 +203,8 @@ export function FancyCursor() {
             {
               opacity: 1,
               y: 0,
-              delay: 0.08,
               duration: 0.2,
-              ease: "power2.out",
+              delay: 0.08,
             }
           )
         }
@@ -201,14 +213,10 @@ export function FancyCursor() {
       return
     }
 
-    // ── EXIT CARD (reverse collapse)
-    if (prev === "card" && stateRef.current !== "card") {
+    // ── EXIT CARD
+    if (prev === "card" && state !== "card") {
       if (textEl) {
-        gsap.to(textEl, {
-          opacity: 0,
-          y: 4,
-          duration: 0.15,
-        })
+        gsap.to(textEl, { opacity: 0, y: 4, duration: 0.15 })
       }
 
       gsap.to(cursor, {
@@ -216,27 +224,43 @@ export function FancyCursor() {
         height: 10,
         borderRadius: 999,
         xPercent: 0,
-        duration: 0.28,
+        duration: 0.25,
         ease: "power3.inOut",
       })
 
       return
     }
 
-    // ── OTHER STATES
+    // ── ALL STATES FULLY DEFINED (IMPORTANT FIX)
     const variants = {
-      default: { width: 10, height: 10, borderRadius: 999 },
+      default: {
+        width: 10,
+        height: 10,
+        borderRadius: 999,
+        background: isDark
+          ? "rgba(255,255,255,0.9)"
+          : "rgba(0,0,0,0.9)",
+        border: "none",
+      },
+
       hover: {
-        width: 24,
-        height: 24,
+        width: 22,
+        height: 22,
         borderRadius: 999,
         background: "transparent",
-        border: "1px solid currentColor",
+        border: isDark
+          ? "1px solid rgba(255,255,255,0.9)"
+          : "1px solid rgba(0,0,0,0.9)",
       },
+
       text: {
         width: 2,
-        height: 22,
+        height: 20,
         borderRadius: 2,
+        background: isDark
+          ? "rgba(255,255,255,0.9)"
+          : "rgba(0,0,0,0.9)",
+        border: "none",
       },
     }
 
@@ -245,7 +269,7 @@ export function FancyCursor() {
       duration: 0.22,
       ease: "power3.out",
     })
-  }, [state, label])
+  }, [state, label, isDark])
 
   if (isTouching) return null
 
@@ -257,23 +281,25 @@ export function FancyCursor() {
         top: 0,
         left: 0,
         transform: "translate(-50%, -50%)",
+        pointerEvents: "none",
+        zIndex: 99999,
+
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        pointerEvents: "none",
-        zIndex: 99999,
+
         willChange: "transform, width, height",
+
+        backdropFilter: state === "card" ? "blur(14px)" : "none",
 
         background:
           state === "card"
             ? isDark
-              ? "rgba(0,0,0,0.75)"
-              : "rgba(255,255,255,0.92)"
+              ? "rgba(20,20,20,0.75)"
+              : "rgba(255,255,255,0.75)"
             : isDark
-            ? "rgba(255,255,255,0.95)"
-            : "rgba(0,0,0,0.9)",
-
-        backdropFilter: state === "card" ? "blur(10px)" : "none",
+              ? "rgba(255,255,255,0.9)"
+              : "rgba(0,0,0,0.9)",
 
         color: isDark ? "white" : "black",
 
