@@ -41,53 +41,53 @@ export default function InsightsSection() {
       description="Writing on product, systems, and decision-making."
       variant="spacious"
     >
+      <section data-cursor-zone="thinking">
+        <div className="space-y-12 md:space-y-14">
 
-      <div className="space-y-12 md:space-y-14">
-
-        {/* ── GRID ───────────────── */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.08 },
-            },
-          }}
-          className="
+          {/* ── GRID ───────────────── */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: 0.08 },
+              },
+            }}
+            className="
             grid md:grid-cols-2
             gap-6 md:gap-8
           "
-        >
-          {articles.map((article, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 18 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{
-                duration: 0.45,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <ArticleCard
-                index={index + 1}
-                title={article.title}
-                description={article.description}
-                href={article.href}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+          >
+            {articles.map((article, index) => (
+              <motion.div
+                key={index}
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{
+                  duration: 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <ArticleCard
+                  index={index + 1}
+                  title={article.title}
+                  description={article.description}
+                  href={article.href}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
 
-        {/* ── VIEW ALL (upgraded) ───────────────── */}
-        <div className="flex justify-start">
+          {/* ── VIEW ALL (upgraded) ───────────────── */}
+          <div className="flex justify-start">
 
-          <Link
-            href="/articles"
-            className="
+            <Link
+              href="/articles"
+              className="
               group relative inline-flex items-center gap-2
 
               text-sm font-medium
@@ -96,18 +96,18 @@ export default function InsightsSection() {
               transition-all duration-300
               hover:text-foreground
             "
-          >
+            >
 
-            {/* TEXT */}
-            <span className="relative">
+              {/* TEXT */}
+              <span className="relative">
 
-              <span className="relative z-10">
-                View all writing
-              </span>
+                <span className="relative z-10">
+                  View all writing
+                </span>
 
-              {/* ✨ underline (cleaner + softer) */}
-              <span
-                className="
+                {/* ✨ underline (cleaner + softer) */}
+                <span
+                  className="
                   absolute left-0 -bottom-[2px]
                   h-[1px] w-full
 
@@ -120,14 +120,14 @@ export default function InsightsSection() {
 
                   group-hover:scale-x-100
                 "
-              />
+                />
 
-            </span>
+              </span>
 
-            {/* ICON */}
-            <IconArrowUpRight
-              size={16}
-              className="
+              {/* ICON */}
+              <IconArrowUpRight
+                size={16}
+                className="
                 opacity-50
 
                 transition-all duration-300
@@ -136,22 +136,22 @@ export default function InsightsSection() {
                 group-hover:translate-x-[3px]
                 group-hover:-translate-y-[3px]
               "
-            />
+              />
 
-          </Link>
+            </Link>
+
+          </div>
 
         </div>
 
-      </div>
-
-      {/* ── DIVIDER (softer) ───────────────── */}
-      <div className="
+        {/* ── DIVIDER (softer) ───────────────── */}
+        <div className="
         h-px w-full mt-12 md:mt-14
 
         bg-gradient-to-r
         from-transparent via-border/70 to-transparent
       " />
-
+      </section>
     </SectionSubgroup>
   )
 }

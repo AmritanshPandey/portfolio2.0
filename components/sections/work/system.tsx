@@ -29,6 +29,7 @@ export default function SystemsSection() {
       description="Foundational systems that enable scale, consistency, and better decision-making."
       variant="spacious"
     >
+      <section data-cursor-zone="systems">
       <div className="flex flex-col gap-6">
         {systems.map((system, index) => (
           <HorizontalCard
@@ -43,6 +44,7 @@ export default function SystemsSection() {
           />
         ))}
       </div>
+      </section>
     </SectionSubgroup>
   )
 }

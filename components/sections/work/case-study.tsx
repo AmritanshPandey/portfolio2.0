@@ -39,33 +39,35 @@ export default function WorkSection() {
       description="Systems built across fintech and commerce to solve real constraints at scale."
       variant="spacious"
     >
-      <div className="flex flex-col gap-6">
+      <section data-cursor-zone="work">
+        <div className="flex flex-col gap-6">
 
-        {/* Featured */}
-        <VerticalCard
-          href={featured.href}
-          image={featured.image}
-          title={featured.title}
-          description={featured.description}
-          category={featured.category}
-          variant="featured"
-        />
+          {/* Featured */}
+          <VerticalCard
+            href={featured.href}
+            image={featured.image}
+            title={featured.title}
+            description={featured.description}
+            category={featured.category}
+            variant="featured"
+          />
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {rest.map((project) => (
-            <VerticalCard
-              key={project.href}
-              href={project.href}
-              image={project.image}
-              title={project.title}
-              description={project.description}
-              category={project.category}
-            />
-          ))}
+          {/* Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {rest.map((project) => (
+              <VerticalCard
+                key={project.href}
+                href={project.href}
+                image={project.image}
+                title={project.title}
+                description={project.description}
+                category={project.category}
+              />
+            ))}
+          </div>
+
         </div>
-
-      </div>
+      </section>
     </SectionSubgroup>
   )
 }

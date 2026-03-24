@@ -25,7 +25,6 @@ export function CTA({
   icon = "arrow",
   className,
 }: Props) {
-
   const router = useRouter()
   const pathname = usePathname()
 
@@ -33,19 +32,18 @@ export function CTA({
   const innerRef = useRef<HTMLSpanElement>(null)
 
   const Icon =
-    icon === "arrow"    ? IconArrowUpRight :
-    icon === "download" ? IconDownload     : null
+    icon === "arrow" ? IconArrowUpRight :
+    icon === "download" ? IconDownload :
+    null
 
-  // ───── NAVIGATION HANDLER ─────
+  // ───── NAVIGATION ─────
   const handleClick = (e: React.MouseEvent) => {
     if (!href) return
 
-    // internal section
     if (href.startsWith("#")) {
       e.preventDefault()
 
       const id = href.replace("#", "")
-
       saveScroll(pathname)
 
       if (pathname === "/") {
@@ -56,7 +54,7 @@ export function CTA({
     }
   }
 
-  // ───── MAGNETIC (INNER ONLY) ─────
+  // ───── MAGNETIC (FIXED) ─────
   const handleMove = (e: React.MouseEvent) => {
     if (variant !== "primary" || !containerRef.current || !innerRef.current) return
 
@@ -65,21 +63,22 @@ export function CTA({
     const x = e.clientX - (rect.left + rect.width / 2)
     const y = e.clientY - (rect.top + rect.height / 2)
 
-    const strength = 0.22
+    const strength = 0.2
     const max = 10
 
     const moveX = Math.max(Math.min(x * strength, max), -max)
     const moveY = Math.max(Math.min(y * strength, max), -max)
 
+    innerRef.current.style.transition = "none" // ✅ prevent jitter
     innerRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`
   }
 
   const handleLeave = () => {
     if (!innerRef.current) return
 
-    innerRef.current.style.transform = "translate(0px, 0px)"
     innerRef.current.style.transition =
       "transform 0.45s cubic-bezier(0.22,1,0.36,1)"
+    innerRef.current.style.transform = "translate(0px, 0px)"
   }
 
   // ───────── PRIMARY + SECONDARY ─────────
@@ -93,9 +92,10 @@ export function CTA({
         onMouseLeave={handleLeave}
         className={clsx(
           "group/cta relative flex items-center justify-center",
-          "w-full px-5 py-2.5 rounded-full text-sm font-medium",
+          "w-full px-5 py-3 rounded-full text-[15px] font-medium",
           "overflow-hidden",
           "active:scale-[0.97]",
+          "transition-colors duration-300",
 
           // PRIMARY
           variant === "primary" && [
@@ -105,31 +105,29 @@ export function CTA({
             "hover:shadow-[0_12px_30px_rgba(255,90,0,0.28)]",
           ],
 
-          // SECONDARY
+          // SECONDARY (lighter)
           variant === "secondary" && [
-            "border border-border text-foreground/80 bg-background/60 backdrop-blur",
-            "hover:border-orange-500/40",
+            "border border-border text-foreground/70 bg-background/60 backdrop-blur",
             "hover:text-foreground",
+            "hover:border-orange-500/30",
             "hover:bg-muted/40",
           ],
 
           className
         )}
       >
-
         {/* shimmer */}
         <span className="
           pointer-events-none absolute inset-0 -translate-x-full
           transition-transform duration-500 ease-out
           group-hover/cta:translate-x-full
           bg-gradient-to-r from-transparent via-white/[0.08] to-transparent
-          dark:via-white/[0.12]
         " />
 
-        {/* INNER (magnetic layer) */}
+        {/* INNER */}
         <span
           ref={innerRef}
-          className="relative flex items-center gap-2 transition-transform duration-200"
+          className="relative flex items-center gap-2 will-change-transform"
         >
           {label}
 
@@ -153,10 +151,12 @@ export function CTA({
   // ───────── TERTIARY ─────────
   return (
     <span
+      role="button"
+      tabIndex={0}
       onClick={handleClick}
       className={clsx(
         "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
-        "text-foreground/80",
+        "text-foreground/70 hover:text-foreground",
         className
       )}
     >

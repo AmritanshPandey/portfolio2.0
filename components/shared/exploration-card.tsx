@@ -26,6 +26,9 @@ export function ExplorationCard({
   return (
     <Link
       href={href}
+      data-cursor-card
+      data-cursor-label="Explore"
+      data-cursor-cta
       className={clsx(
         "group relative isolate rounded-2xl overflow-hidden block",
         "aspect-square md:aspect-auto",

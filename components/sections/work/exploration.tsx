@@ -50,34 +50,35 @@ export default function ExplorationsSection() {
       description="Experiments to understand systems, behavior, and decision-making."
       variant="spacious"
     >
+      <section data-cursor-zone="exploration">
 
-      <div className="space-y-10 md:space-y-12">
+        <div className="space-y-10 md:space-y-12">
 
-        {/* GRID */}
-        <div className="
+          {/* GRID */}
+          <div className="
           grid grid-cols-1 md:grid-cols-5
           gap-5 md:gap-6
           md:auto-rows-[280px]
         ">
 
-          {explorations.map((item, index) => (
+            {explorations.map((item, index) => (
 
-            <ExplorationCard
-              key={index}
-              title={item.title}
-              description={item.description}
-              image={item.image}
-              href={item.href}
-              tags={item.tags}
-              span={item.span}
-            />
+              <ExplorationCard
+                key={index}
+                title={item.title}
+                description={item.description}
+                image={item.image}
+                href={item.href}
+                tags={item.tags}
+                span={item.span}
+              />
 
-          ))}
+            ))}
+
+          </div>
 
         </div>
-
-      </div>
-
+      </section>
     </SectionSubgroup>
   )
 }

@@ -7,157 +7,235 @@ type CursorState = "default" | "hover" | "card" | "text"
 
 export function FancyCursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLSpanElement>(null)
+
   const stateRef = useRef<CursorState>("default")
+  const hoverTimeoutRef = useRef<number | null>(null)
+  const prevStateRef = useRef<CursorState>("default")
 
   const [state, setState] = useState<CursorState>("default")
-  const [visible, setVisible] = useState(false)
-  const [isDark, setIsDark] = useState(false)
   const [label, setLabel] = useState("Explore")
+  const [isDark, setIsDark] = useState(false)
+  const [isTouching, setIsTouching] = useState(false)
 
-  // ── Sync state to ref (fix jitter) ─────────────────
+  // ── Sync state
   useEffect(() => {
+    prevStateRef.current = stateRef.current
     stateRef.current = state
   }, [state])
 
-  // ── Theme detection ─────────────────
+  // ── Theme
   useEffect(() => {
-    const checkTheme = () => {
+    const check = () =>
       setIsDark(document.documentElement.classList.contains("dark"))
-    }
 
-    checkTheme()
+    check()
+    const obs = new MutationObserver(check)
+    obs.observe(document.documentElement, { attributes: true })
 
-    const observer = new MutationObserver(checkTheme)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    })
-
-    return () => observer.disconnect()
+    return () => obs.disconnect()
   }, [])
 
-  // ── Movement (GSAP + stable offset) ─────────────────
+  // ── Input detection
   useEffect(() => {
+    const onTouch = () => setIsTouching(true)
+    const onMouse = () => setIsTouching(false)
+
+    window.addEventListener("touchstart", onTouch, { passive: true })
+    window.addEventListener("mousemove", onMouse, { passive: true })
+
+    return () => {
+      window.removeEventListener("touchstart", onTouch)
+      window.removeEventListener("mousemove", onMouse)
+    }
+  }, [])
+
+  // ── Cursor engine
+  useEffect(() => {
+    if (isTouching) return
+
     const cursor = cursorRef.current
     if (!cursor) return
 
-    const xTo = gsap.quickTo(cursor, "x", {
-      duration: 0.22,
-      ease: "power3.out",
-    })
+    cursor.style.contain = "layout style size"
 
-    const yTo = gsap.quickTo(cursor, "y", {
-      duration: 0.28, // slightly heavier feel
-      ease: "power3.out",
-    })
+    let mouse = { x: 0, y: 0 }
+    let pos = { x: 0, y: 0 }
+    let rafId: number
 
-    gsap.set(cursor, { x: -200, y: -200 })
+    gsap.set(cursor, { x: -200, y: -200, opacity: 1 })
+
+    const clearIntent = () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+        hoverTimeoutRef.current = null
+      }
+    }
 
     const onMove = (e: MouseEvent) => {
-      const currentState = stateRef.current
-
-      const offsetY = currentState === "card" ? 30 : 16
-      const offsetX = currentState === "card" ? 6 : 0
-
-      xTo(e.clientX + offsetX)
-      yTo(e.clientY - offsetY)
-
-      setVisible(true)
+      mouse.x = e.clientX
+      mouse.y = e.clientY
+      gsap.set(cursor, { opacity: 1 })
     }
 
     const onOver = (e: PointerEvent) => {
-      let el = e.target as HTMLElement | null
+      const t = e.target as HTMLElement
+      clearIntent()
 
-      // 🔍 walk up DOM for cursor card
-      while (el && el !== document.body) {
-        if (el.hasAttribute("data-cursor-card")) {
-          const raw = el.getAttribute("data-cursor-label") || "Explore"
+      const card = t.closest("[data-cursor-card]") as HTMLElement | null
 
-          const normalized =
-            raw.toLowerCase().includes("read")
-              ? "Read"
-              : raw.toLowerCase().includes("open")
-              ? "Open"
-              : "Explore"
+      if (card) {
+        const raw = card.getAttribute("data-cursor-label") || "Explore"
 
+        hoverTimeoutRef.current = window.setTimeout(() => {
           if (stateRef.current !== "card") {
-            setLabel(normalized)
+            setLabel(raw)
             setState("card")
           }
+        }, 120)
 
-          return
-        }
-        el = el.parentElement
+        return
       }
 
-      const t = e.target as HTMLElement
-
       if (t.closest("a, button")) {
-        if (stateRef.current !== "hover") setState("hover")
+        setState("hover")
         return
       }
 
       if (t.closest("p, h1, h2, h3")) {
-        if (stateRef.current !== "text") setState("text")
+        setState("text")
         return
       }
 
-      if (stateRef.current !== "default") setState("default")
+      setState("default")
     }
 
-    const onLeave = () => setVisible(false)
+    const onLeave = () => {
+      clearIntent()
+      gsap.to(cursor, { opacity: 0, duration: 0.2 })
+    }
+
+    const render = () => {
+      pos.x += (mouse.x - pos.x) * 0.18
+      pos.y += (mouse.y - pos.y) * 0.18
+
+      gsap.set(cursor, {
+        x: pos.x,
+        y: pos.y,
+      })
+
+      rafId = requestAnimationFrame(render)
+    }
+
+    rafId = requestAnimationFrame(render)
 
     document.addEventListener("mousemove", onMove, { passive: true })
     document.addEventListener("pointerover", onOver, { passive: true })
     document.addEventListener("mouseleave", onLeave)
 
     return () => {
-      gsap.killTweensOf(cursor)
+      cancelAnimationFrame(rafId)
+      clearIntent()
       document.removeEventListener("mousemove", onMove)
       document.removeEventListener("pointerover", onOver)
       document.removeEventListener("mouseleave", onLeave)
     }
-  }, [])
+  }, [isTouching])
 
-  // ── Morph (shape transitions) ─────────────────
+  // ── Morph (with reverse collapse)
   useEffect(() => {
     const cursor = cursorRef.current
+    const textEl = textRef.current
     if (!cursor) return
 
-    const variants = {
-      default: {
+    gsap.killTweensOf(cursor)
+    if (textEl) gsap.killTweensOf(textEl)
+
+    const prev = prevStateRef.current
+
+    // ── ENTER CARD (stretch)
+    if (state === "card") {
+      requestAnimationFrame(() => {
+        const textWidth = textEl?.offsetWidth || 40
+        const targetWidth = Math.max(textWidth + 28, 64)
+
+        gsap.set(cursor, {
+          width: 10,
+          height: 10,
+          borderRadius: 999,
+        })
+
+        gsap.to(cursor, {
+          width: targetWidth,
+          height: 34,
+          duration: 0.32,
+          ease: "power3.out",
+        })
+
+        if (textEl) {
+          gsap.fromTo(
+            textEl,
+            { opacity: 0, y: 4 },
+            {
+              opacity: 1,
+              y: 0,
+              delay: 0.08,
+              duration: 0.2,
+              ease: "power2.out",
+            }
+          )
+        }
+      })
+
+      return
+    }
+
+    // ── EXIT CARD (collapse)
+    if (prev === "card" && state !== "card") {
+      if (textEl) {
+        gsap.to(textEl, {
+          opacity: 0,
+          y: 4,
+          duration: 0.15,
+        })
+      }
+
+      gsap.to(cursor, {
         width: 10,
         height: 10,
         borderRadius: 999,
-        padding: 0,
-      },
+        duration: 0.28,
+        ease: "power3.inOut",
+      })
+
+      return
+    }
+
+    // ── OTHER STATES
+    const variants = {
+      default: { width: 10, height: 10, borderRadius: 999 },
       hover: {
-        width: 16,
-        height: 16,
+        width: 24,
+        height: 24,
         borderRadius: 999,
-        padding: 0,
-      },
-      card: {
-        width: "auto",
-        height: 30,
-        borderRadius: 999,
-        paddingLeft: 12,
-        paddingRight: 12,
+        background: "transparent",
+        border: "1px solid currentColor",
       },
       text: {
         width: 2,
-        height: 20,
+        height: 22,
         borderRadius: 2,
-        padding: 0,
       },
     }
 
     gsap.to(cursor, {
       ...variants[state],
-      duration: 0.25,
+      duration: 0.22,
       ease: "power3.out",
     })
-  }, [state])
+  }, [state, label])
+
+  if (isTouching) return null
 
   return (
     <div
@@ -167,16 +245,13 @@ export function FancyCursor() {
         top: 0,
         left: 0,
         transform: "translate(-50%, -50%)",
-
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-
         pointerEvents: "none",
         zIndex: 99999,
-        opacity: visible ? 1 : 0,
+        willChange: "transform, width, height",
 
-        // ✨ Contrast system (fixed visibility)
         background:
           state === "card"
             ? isDark
@@ -188,39 +263,19 @@ export function FancyCursor() {
 
         backdropFilter: state === "card" ? "blur(10px)" : "none",
 
-        border:
-          state === "card"
-            ? isDark
-              ? "1px solid rgba(255,255,255,0.12)"
-              : "1px solid rgba(0,0,0,0.08)"
-            : "none",
-
         color: isDark ? "white" : "black",
-
-        boxShadow:
-          state === "card"
-            ? isDark
-              ? "0 8px 24px rgba(0,0,0,0.6)"
-              : "0 6px 16px rgba(0,0,0,0.12)"
-            : "none",
 
         fontSize: 11,
         fontWeight: 500,
         letterSpacing: "0.04em",
-
-        maxWidth: 90,
-        paddingInline: state === "card" ? 10 : 0,
-
-        transition:
-          "background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease",
       }}
     >
       {state === "card" && (
         <span
+          ref={textRef}
           style={{
             whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+            opacity: 0,
           }}
         >
           {label}

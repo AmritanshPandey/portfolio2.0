@@ -15,6 +15,10 @@ export function ArticleCard({ index, title, description, href }: Props) {
     <Link
       href={href}
       className="group block h-full rounded-2xl"
+       data-cursor-card
+      data-cursor-label="Read"
+      data-cursor-cta
+       
     >
       <div
         className="
