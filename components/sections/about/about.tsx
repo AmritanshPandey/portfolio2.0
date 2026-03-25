@@ -1,7 +1,7 @@
 "use client"
 
 import { FocusList } from "@/components/shared/focus-list"
-import PhotoCarousel from "@/components/shared/photostack/photo-carousel"
+import PhotoCarousel from "@/components/shared/photo-carousel"
 import { SectionHeader } from "@/components/shared/section-header"
 import {
   IconSparkles,
@@ -9,108 +9,82 @@ import {
   IconShieldCheck,
   IconAdjustments,
 } from "@tabler/icons-react"
-import { motion } from "framer-motion"
+import clsx from "clsx"
+import { usePerformanceMode } from "@/hooks/use-performance-mode"
 
 export default function AboutSection() {
+  const { isHigh } = usePerformanceMode()
+
   const focus = [
-    {
-      icon: IconSparkles,
-      text: "Exploring how AI reshapes product behavior",
-    },
-    {
-      icon: IconLayoutGrid,
-      text: "Designing systems that scale across products",
-    },
-    {
-      icon: IconShieldCheck,
-      text: "Building trust in high-stakes environments",
-    },
-    {
-      icon: IconAdjustments,
-      text: "Making better decisions under constraints",
-    },
+    { icon: IconSparkles, text: "Exploring how AI reshapes product behavior" },
+    { icon: IconLayoutGrid, text: "Designing systems that scale across products" },
+    { icon: IconShieldCheck, text: "Building trust in high-stakes environments" },
+    { icon: IconAdjustments, text: "Making better decisions under constraints" },
   ]
 
   return (
-    <section className="relative overflow-hidden bg-white dark:bg-black text-foreground">
+    <section
+      id="about"
+      className="relative overflow-hidden bg-white dark:bg-black text-foreground"
+    >
 
-      {/* ── GRID SYSTEM */}
+      {/* ── BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-[0] overflow-hidden">
 
-        {/* GRID (LIGHT) */}
+        {/* GRID (FIXED) */}
         <div
-          className="
-            absolute inset-0
-            will-change-transform
-            animate-[gridDrift_40s_linear_infinite]
-            dark:hidden
-          "
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: "32px 32px",
-          }}
+          className={clsx(
+            "absolute inset-0 [background-size:32px_32px]",
+
+            isHigh
+              ? "bg-[linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.10)_1px,transparent_1px)]"
+              : "bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]",
+
+            isHigh && "animate-[gridDrift_40s_linear_infinite]"
+          )}
         />
 
-        {/* GRID (DARK) */}
-        <div
-          className="
-            absolute inset-0 hidden dark:block
-            will-change-transform
-            animate-[gridDrift_40s_linear_infinite]
-          "
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255,255,255,0.10) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255,255,255,0.10) 1px, transparent 1px)
-            `,
-            backgroundSize: "32px 32px",
-          }}
-        />
+        {/* NOISE */}
+        {isHigh && (
+          <div
+            className="
+              absolute inset-0
+              opacity-[0.015] dark:opacity-[0.025]
+              mix-blend-soft-light
+            "
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(0,0,0,0.4) 1px, transparent 1px)",
+              backgroundSize: "3px 3px",
+            }}
+          />
+        )}
 
-        {/* ✨ NOISE (VERY SUBTLE) */}
-        <div
-          className="
-            absolute inset-0
-            opacity-[0.02] dark:opacity-[0.04]
-            mix-blend-soft-light
-          "
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(0,0,0,0.4) 1px, transparent 1px)",
-            backgroundSize: "3px 3px",
-          }}
-        />
+        {/* GLOW */}
+        {isHigh && (
+          <div
+            className="
+              absolute inset-0
+              bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.05),transparent_65%)]
+              dark:bg-[radial-gradient(420px_220px_at_85%_80%,rgba(255,120,40,0.18),transparent_70%)]
+            "
+          />
+        )}
 
-        {/* ✨ GLOW (BOTTOM RIGHT — REFINED) */}
-        <div
-          className="
-            absolute inset-0
-            bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.04),transparent_70%)]
-            dark:bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.06),transparent_70%)]
-          "
-        />
+        {/* EDGE FADE */}
+        <div className="
+          absolute inset-0
+          bg-gradient-to-b
+          from-white/80 via-transparent to-white/80
+          dark:from-black/80 dark:via-transparent dark:to-black/80
+        " />
 
-        {/* ✨ EDGE FADE (SOFT + BALANCED) */}
-        <div
-          className="
-            absolute inset-0
-            bg-gradient-to-b
-            from-white/60 via-transparent to-white/60
-            dark:from-black/60 dark:via-transparent dark:to-black/60
-          "
-        />
-
-        <div
-          className="
-            absolute inset-0
-            bg-gradient-to-r
-            from-white/60 via-transparent to-white/60
-            dark:from-black/60 dark:via-transparent dark:to-black/60
-          "
-        />
+        <div className="
+          absolute inset-0
+          bg-gradient-to-r
+          from-white/70 via-transparent to-white/70
+          dark:from-black/70 dark:via-transparent dark:to-black/70
+        " />
       </div>
 
       {/* ── CONTENT */}
@@ -134,56 +108,39 @@ export default function AboutSection() {
         ">
 
           {/* LEFT */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div className={clsx(!isHigh && "transform-none")}>
             <PhotoCarousel />
-          </motion.div>
+          </div>
 
           {/* RIGHT */}
           <div className="relative">
 
-            {/* ✨ READABILITY LAYER */}
-            <div className="
-              absolute -inset-6 -z-10 rounded-xl
-              bg-white/70 dark:bg-black/60
-              backdrop-blur-md
-              border border-black/[0.04] dark:border-white/[0.06]
-            " />
+            {/* READABILITY LAYER */}
+            <div
+              className={clsx(
+                "absolute -inset-6 -z-10 rounded-xl border",
+                isHigh
+                  ? "bg-white/70 dark:bg-black/60 backdrop-blur-md border-black/[0.04] dark:border-white/[0.06]"
+                  : "bg-white/85 dark:bg-black/80 border-black/[0.04] dark:border-white/[0.06]"
+              )}
+            />
 
             <div className="space-y-8">
 
               {/* TEXT */}
-              <div className=" space-y-6 max-w-full">
+              <div className="space-y-6 max-w-full">
 
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="text-[18px] leading-[1.75] tracking-[-0.01em]"
-                >
+                <p className="animate-fade-up text-[18px] leading-[1.75] tracking-[-0.01em]">
                   I design products by breaking down complex problems into clear, scalable systems.
-                </motion.p>
+                </p>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.05 }}
-                  className="text-[18px] leading-[1.75] text-foreground/85"
-                >
+                <p className="animate-fade-up text-[18px] leading-[1.75] text-foreground/85">
                   My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
-                </motion.p>
+                </p>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="text-[18px] text-foreground/55 leading-[1.7]"
-                >
+                <p className="animate-fade-up text-[18px] text-foreground/55 leading-[1.7]">
                   Outside of work, I spend time traveling, cooking, and going on long bike rides.
-                </motion.p>
+                </p>
 
               </div>
 

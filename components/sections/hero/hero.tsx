@@ -3,30 +3,30 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import gsap from "gsap"
 import Image from "next/image"
+import clsx from "clsx"
 import { CTA } from "@/components/shared/section-cta"
 import { TypingWord } from "@/components/shared/typing-effect"
 import { Pill } from "@/components/shared/pill"
-
-type Vec2 = { x: number; y: number }
+import { usePerformanceMode } from "@/hooks/use-performance-mode"
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
 
-  const [tilt, setTilt] = useState<Vec2>({ x: 0, y: 0 })
-  const [hovered, setHovered] = useState(false)
+  const { isHigh } = usePerformanceMode()
+
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
 
-  // ── Entrance ─────────────────
+  // ── GSAP ENTRY
   useEffect(() => {
     if (!mounted) return
 
     const ctx = gsap.context(() => {
       gsap.from(".hero-badge", { y: 12, opacity: 0, duration: 0.5 })
       gsap.from(".hero-line", {
-        y: 32,
+        y: 28,
         opacity: 0,
         stagger: 0.08,
         duration: 0.8,
@@ -40,23 +40,42 @@ export default function Hero() {
     return () => ctx.revert()
   }, [mounted])
 
-  // ── Tilt (reduced + premium) ─────────────────
+  // ── TILT (DOM based)
   const handleMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect()
-    if (!rect) return
+    if (!isHigh) return
 
-    const x = (e.clientX - rect.left) / rect.width - 0.5
-    const y = (e.clientY - rect.top) / rect.height - 0.5
+    const el = cardRef.current
+    if (!el) return
 
-    setTilt({
-      x: y * -6,
-      y: x * 6,
-    })
-  }, [])
+    const rect = el.getBoundingClientRect()
+
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+
+    const tiltX = (y - 0.5) * -8
+    const tiltY = (x - 0.5) * 8
+
+    el.style.transform = `
+      perspective(1200px)
+      rotateX(${tiltX * 0.6}deg)
+      rotateY(${tiltY * 0.6}deg)
+      scale(1.02)
+    `
+
+    el.style.setProperty("--x", `${x * 100}%`)
+    el.style.setProperty("--y", `${y * 100}%`)
+  }, [isHigh])
 
   const handleLeave = () => {
-    setTilt({ x: 0, y: 0 })
-    setHovered(false)
+    const el = cardRef.current
+    if (!el) return
+
+    el.style.transform = `
+      perspective(1200px)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1)
+    `
   }
 
   return (
@@ -65,49 +84,69 @@ export default function Hero() {
       className="relative overflow-hidden bg-background text-foreground"
     >
 
-      {/* ── DOT GRID ───────────────── */}
+      {/* ── DOT GRID */}
       <div
-        className="
-          pointer-events-none absolute inset-0
-          [background-size:22px_22px]
-          [background-image:radial-gradient(rgba(0,0,0,0.12)_1px,transparent_1px)]
-          dark:[background-image:radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)]
-        "
-        style={{
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, black 55%, black 100%)",
-        }}
+        className={clsx(
+          "pointer-events-none absolute inset-0 [background-size:22px_22px]",
+          isHigh
+            ? "[background-image:radial-gradient(rgba(0,0,0,0.12)_1px,transparent_1px)] dark:[background-image:radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)]"
+            : "[background-image:radial-gradient(rgba(0,0,0,0.08)_1px,transparent_1px)] dark:[background-image:radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)]"
+        )}
       />
 
-      {/* ── AMBIENT ───────────────── */}
-      <div
-        className="
+      {/* ── AMBIENT GLOW */}
+      {isHigh && (
+        <div className="
           pointer-events-none absolute inset-0
-          bg-[radial-gradient(800px_400px_at_20%_10%,rgba(232,98,26,0.04),transparent_60%)]
-          dark:bg-[radial-gradient(800px_400px_at_20%_10%,rgba(232,98,26,0.06),transparent_60%)]
-        "
-      />
+          bg-[radial-gradient(500px_250px_at_25%_20%,rgba(255,120,40,0.08),transparent_60%)]
+          dark:bg-[radial-gradient(420px_220px_at_25%_20%,rgba(255,120,40,0.22),transparent_65%)]
+        " />
+      )}
 
-      {/* ── CONTENT ───────────────── */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-24 lg:py-28 grid lg:grid-cols-[1.5fr_1fr] gap-12 items-center">
+      {/* ── EDGE FADE */}
+      <div className="
+        pointer-events-none absolute inset-0
+        bg-gradient-to-b
+        from-white/80 via-transparent to-white/80
+        dark:from-black/80 dark:via-transparent dark:to-black/80
+      " />
+
+      <div className="
+        pointer-events-none absolute inset-0
+        bg-gradient-to-r
+        from-white/70 via-transparent to-white/70
+        dark:from-black/70 dark:via-transparent dark:to-black/70
+      " />
+
+      {/* ── CONTENT */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-24 lg:py-28 grid lg:grid-cols-[1.5fr_1fr] gap-16 items-center">
 
         {/* LEFT */}
         <div className="flex flex-col gap-6 max-w-2xl">
 
-          {/* BADGE */}
           <div className="hero-badge flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-xs text-muted-foreground w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            Product Designer · Mastercard
+            Senior Product Designer • Mastercard
           </div>
 
-          {/* HEADING */}
-          <h1 className="font-medium tracking-tight leading-[1.05]">
+          <h1 className="font-medium tracking-tight leading-[1.05] text-center lg:text-left">
+
             <span className="hero-line block text-[clamp(36px,5vw,62px)]">
               Designing fintech
             </span>
 
-            <span className="hero-line block text-[clamp(36px,5vw,62px)] text-muted-foreground min-h-[1.4em]">
-              <TypingWord />
+            {/* stable typing */}
+            <span className="
+              hero-line relative block
+              text-[clamp(36px,5vw,62px)]
+              text-muted-foreground
+              h-[1.2em]
+              flex items-center justify-center lg:justify-start
+            ">
+              <span className="opacity-0">experiences</span>
+              <span className="absolute inset-0 flex items-center justify-center lg:justify-start">
+                <TypingWord />
+              </span>
             </span>
 
             <span className="hero-line block text-[clamp(36px,5vw,62px)]">
@@ -115,88 +154,61 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* SUBTEXT */}
-          <div className="relative max-w-[560px]">
-
-            <div
-              className="
-                pointer-events-none absolute -inset-2 rounded-xl
-                opacity-60
-                bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.35),transparent_70%)]
-                dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35),transparent_70%)]
-                backdrop-blur-[1.5px]
-              "
-            />
-
             <p className="relative hero-sub text-base md:text-lg text-muted-foreground leading-[1.7]">
-              At Mastercard, from design systems to{" "}
-              <span className="text-foreground font-medium">
-                interactive demos for billion-dollar bank deals
-              </span>.
-            </p>
-          </div>
+            At Mastercard{"'"}s Creative Studio, {" "}
+            <span className="text-foreground font-medium">
+              designing systems, demos, and platforms that power
+              global banking partnerships.
+            </span>
+          </p>
 
-          {/* CTA */}
-          <div className="
-            hero-cta
-            flex flex-col gap-3
-            w-full max-w-[420px]
-            md:grid md:grid-cols-[60%_40%]
-          ">
+          <div className="hero-cta flex flex-col gap-3 w-full max-w-[420px] md:grid md:grid-cols-[60%_40%]">
             <CTA label="View work" href="#work" className="w-full justify-center" />
             <CTA label="Resume" href="/resume.pdf" variant="secondary" className="w-full justify-center" />
           </div>
-
         </div>
 
         {/* RIGHT */}
         <div className="hero-image flex justify-center lg:justify-end">
           <div className="relative w-full max-w-[320px]">
 
-            {/* CARD */}
             <div
               ref={cardRef}
               onMouseMove={handleMove}
-              onMouseEnter={() => setHovered(true)}
               onMouseLeave={handleLeave}
-              className="relative rounded-2xl will-change-transform"
-              style={{
-                transform: `
-                  perspective(1000px)
-                  rotateX(${tilt.x * 0.45}deg)
-                  rotateY(${tilt.y * 0.45}deg)
-                  scale(${hovered ? 1.015 : 1})
-                `,
-                transition: hovered
-                  ? "transform 0.18s ease-out"
-                  : "transform 0.6s cubic-bezier(0.22,1,0.36,1)",
-              }}
+              className="relative group"
             >
+              <div
+                className={clsx(
+                  "relative rounded-2xl overflow-hidden border border-border/60",
 
-              <div className="
-                relative rounded-2xl overflow-hidden
-                bg-card border border-border/60
-                shadow-[0_8px_24px_rgba(0,0,0,0.08)]
-                dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)]
-              ">
+                  isHigh
+                    ? "bg-background/60 backdrop-blur-xl"
+                    : "bg-background/80",
 
-                <div className="relative aspect-[2/3]">
+                  "shadow-[0_10px_30px_rgba(0,0,0,0.1)]",
+                  "dark:shadow-[0_30px_80px_rgba(0,0,0,0.6)]",
+
+                  "[transform:translateZ(0)] [backface-visibility:hidden] [contain:paint]"
+                )}
+              >
+
+                <div className="relative aspect-[2/3] overflow-hidden">
                   <Image
                     src="/assets/images/pic.jpg"
                     alt="Amritansh Pandey"
                     fill
-                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 320px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 </div>
 
-                <div className="
-                  absolute bottom-0 left-0 right-0 h-2/5
-                  bg-gradient-to-t from-black/70 via-black/40 to-transparent
-                " />
+                <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
 
                 <div className="absolute bottom-0 p-4 space-y-3">
                   <div className="flex gap-1.5 flex-wrap">
-                    {["Systems", "Advisor", "Mentor"].map(tag => (
+                    {["Fintech", "Advisor", "Mentor"].map(tag => (
                       <Pill key={tag}>{tag}</Pill>
                     ))}
                   </div>
@@ -206,59 +218,22 @@ export default function Hero() {
                   </p>
                 </div>
 
-                {/* subtle top edge */}
-                <div className="
-                  pointer-events-none absolute inset-x-0 top-0 h-px
-                  bg-gradient-to-r from-transparent via-white/20 to-transparent
-                " />
-              </div>
-            </div>
+                {/* light reflection */}
+                {isHigh && (
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `
+                        radial-gradient(
+                          280px circle at var(--x, 50%) var(--y, 50%),
+                          rgba(255,255,255,0.18),
+                          transparent 60%
+                        )
+                      `,
+                    }}
+                  />
+                )}
 
-            {/* FLOATING INFO */}
-            <div className="
-  hidden lg:flex flex-col gap-3
-  absolute right-[-18px] top-1/2 -translate-y-1/2
-">
-              {/* EXPERIENCE */}
-              <div className="
-    rounded-xl px-3 py-2 min-w-[120px]
-
-    bg-background/70 backdrop-blur-xl
-    border border-border/50
-
-    shadow-[0_6px_18px_rgba(0,0,0,0.08)]
-    dark:shadow-[0_12px_30px_rgba(0,0,0,0.45)]
-
-    transition-all duration-300
-    hover:-translate-x-[1px]
-  ">
-                <span className="text-[9px] uppercase tracking-wider text-foreground/50">
-                  Experience
-                </span>
-                <span className="block text-sm font-semibold">
-                  7+ years
-                </span>
-              </div>
-
-              {/* LOCATION */}
-              <div className="
-    rounded-xl px-3 py-2 min-w-[120px]
-
-    bg-background/70 backdrop-blur-xl
-    border border-border/50
-
-    shadow-[0_6px_18px_rgba(0,0,0,0.08)]
-    dark:shadow-[0_12px_30px_rgba(0,0,0,0.45)]
-
-    transition-all duration-300
-    hover:-translate-x-[1px]
-  ">
-                <span className="text-[9px] uppercase tracking-wider text-foreground/50">
-                  Based in
-                </span>
-                <span className="block text-sm font-semibold">
-                  Gurgaon, IN
-                </span>
               </div>
             </div>
 
@@ -266,11 +241,6 @@ export default function Hero() {
         </div>
 
       </div>
-
-      {/* SEPARATOR */}
-      <div className="absolute bottom-0 left-0 w-full h-[120px] bg-gradient-to-b from-transparent to-background" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-border/60" />
-
     </section>
   )
 }

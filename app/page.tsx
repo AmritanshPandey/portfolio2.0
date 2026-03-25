@@ -23,7 +23,7 @@ export default function Page() {
         id="work"
         bg="default"
         eyebrow="Work"
-        title="Selected Work & Systems"
+        title="Selected Work"
         transition="Behind these systems is a structured way of thinking and decision-making."
         transitionEyebrow="The Thinking Behind the Work"
       >

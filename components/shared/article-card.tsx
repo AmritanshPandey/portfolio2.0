@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { IconArrowUpRight } from "@tabler/icons-react"
+import clsx from "clsx"
 
 type Props = {
   index: number
@@ -15,45 +16,51 @@ export function ArticleCard({ index, title, description, href }: Props) {
     <Link
       href={href}
       className="group block h-full rounded-2xl"
-       data-cursor-card
+      data-cursor-card
       data-cursor-label="Read"
       data-cursor-cta
-       
     >
       <div
-        className="
-          relative flex flex-col h-full p-6 rounded-2xl overflow-hidden
-          bg-card border border-border
+        className={clsx(
+          "relative flex flex-col h-full p-6 rounded-2xl overflow-hidden",
+          "bg-card border border-border",
 
-          before:absolute before:inset-x-0 before:top-0 before:h-px
-          before:bg-gradient-to-r before:from-transparent before:via-foreground/10 before:to-transparent
-          dark:before:via-white/20
+          // ✨ top edge
+          "before:absolute before:inset-x-0 before:top-0 before:h-px",
+          "before:bg-gradient-to-r before:from-transparent before:via-foreground/10 before:to-transparent",
+          "dark:before:via-white/20",
 
-          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-          hover:-translate-y-[2px] hover:-translate-x-[1px]
-          hover:border-border/80
-          hover:shadow-[0_10px_28px_rgba(0,0,0,0.06)]
-          dark:hover:shadow-[0_18px_50px_rgba(0,0,0,0.5)]
-        "
+          // 🔥 Safari-safe transform (no layout shift)
+          "transition-transform duration-300 ease-out",
+          "[transform:translateZ(0)]",
+
+          "hover:[transform:translate3d(-1px,-2px,0)]",
+          "hover:border-border/80",
+
+          // lighter shadow (avoid heavy repaint)
+          "hover:shadow-md dark:hover:shadow-xl"
+        )}
       >
 
-        {/* subtle ambient */}
-     <div className="
-  pointer-events-none absolute inset-0
-  rounded-2xl overflow-hidden
-
-  opacity-0 group-hover:opacity-100
-  transition-opacity duration-400
-
-  bg-[radial-gradient(240px_120px_at_0%_100%,rgba(255,90,0,0.08),transparent_60%)]
-  dark:bg-[radial-gradient(240px_120px_at_0%_100%,rgba(255,140,60,0.12),transparent_60%)]
-" />
-
+        {/* subtle ambient (lighter + safe) */}
         <div className="
-          relative flex flex-col flex-1
-          transition-transform duration-300
-          group-hover:translate-y-[-1px] group-hover:-translate-x-[1px]
-        ">
+          pointer-events-none absolute inset-0 rounded-2xl
+          opacity-0 group-hover:opacity-100
+          transition-opacity duration-300
+
+          bg-[radial-gradient(200px_100px_at_0%_100%,rgba(255,90,0,0.06),transparent_60%)]
+          dark:bg-[radial-gradient(200px_100px_at_0%_100%,rgba(255,140,60,0.08),transparent_60%)]
+        " />
+
+        <div
+          className="
+            relative flex flex-col flex-1
+
+            // 🔥 remove layout shift
+            transition-transform duration-300
+            group-hover:[transform:translate3d(-1px,-1px,0)]
+          "
+        >
 
           {/* TOP */}
           <div className="flex items-center justify-between mb-5">
@@ -74,7 +81,7 @@ export function ArticleCard({ index, title, description, href }: Props) {
               border border-border
               flex items-center justify-center
 
-              transition-all duration-300
+              transition-colors duration-300
               group-hover:border-orange-600/50
               dark:group-hover:border-orange-400/50
 
@@ -86,13 +93,12 @@ export function ArticleCard({ index, title, description, href }: Props) {
                 stroke={2}
                 className="
                   text-foreground/60
-                  transition-all duration-300
+                  transition-transform duration-300
 
                   group-hover:text-orange-600
                   dark:group-hover:text-orange-400
 
-                  group-hover:-translate-y-[2px]
-                  group-hover:translate-x-[2px]
+                  group-hover:[transform:translate3d(2px,-2px,0)]
                 "
               />
             </span>
@@ -123,12 +129,12 @@ export function ArticleCard({ index, title, description, href }: Props) {
 
             <span className="
               text-xs font-medium text-foreground/80
-              transition-all duration-200
+              transition-transform duration-200
 
               group-hover:text-orange-600
               dark:group-hover:text-orange-400
 
-              group-hover:translate-x-[2px]
+              group-hover:[transform:translate3d(2px,0,0)]
             ">
               Read article
             </span>

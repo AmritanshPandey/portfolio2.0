@@ -15,9 +15,9 @@ import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { scrollToSection } from "@/lib/scroll"
 import { saveScroll } from "@/lib/scroll-manager"
 
-// ─────────────────────────────────────────────
+// ─────────────────────────
 // NAV LINKS
-// ─────────────────────────────────────────────
+// ─────────────────────────
 const NAV_LINKS = [
   { label: "Home", href: "#hero", icon: true },
   { label: "Work", href: "#work" },
@@ -27,16 +27,17 @@ const NAV_LINKS = [
   { label: "About", href: "#about" },
 ]
 
-// ─────────────────────────────────────────────
-// ACTIVE SECTION DETECTION
-// ─────────────────────────────────────────────
+// ─────────────────────────
+// ACTIVE SECTION (smooth + perf)
+// ─────────────────────────
 function useActiveSection(ids: string[]) {
   const [active, setActive] = useState(ids[0])
 
   useEffect(() => {
-    const onScroll = () => {
-      const mid = window.scrollY + window.innerHeight * 0.4
+    let ticking = false
 
+    const update = () => {
+      const mid = window.scrollY + window.innerHeight * 0.45
       let current = ids[0]
 
       for (const id of ids) {
@@ -46,10 +47,18 @@ function useActiveSection(ids: string[]) {
       }
 
       setActive(current)
+      ticking = false
+    }
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update)
+        ticking = true
+      }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true })
-    onScroll()
+    update()
 
     return () => window.removeEventListener("scroll", onScroll)
   }, [ids])
@@ -57,9 +66,9 @@ function useActiveSection(ids: string[]) {
   return active
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────
 // NAV ITEM
-// ─────────────────────────────────────────────
+// ─────────────────────────
 function NavItem({
   href,
   label,
@@ -77,11 +86,10 @@ function NavItem({
 }) {
   const router = useRouter()
   const pathname = usePathname()
+  const id = href.replace("#", "")
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-
-    const id = href.replace("#", "")
 
     setActiveImmediate(id)
     saveScroll(pathname)
@@ -107,8 +115,7 @@ function NavItem({
   }
 
   return (
-    <a
-      href={href}
+    <button
       onClick={handleClick}
       className="
         relative flex items-center gap-1.5 px-3 py-2 rounded-full
@@ -119,23 +126,11 @@ function NavItem({
       {isActive && (
         <motion.span
           layoutId="nav-pill"
-          transition={{
-            type: "spring",
-            stiffness: 420,
-            damping: 32,
-            mass: 0.6,
-          }}
+          transition={{ type: "spring", stiffness: 420, damping: 32 }}
           className="
             absolute inset-0 rounded-full
-            backdrop-blur-md
-            bg-foreground/[0.05]
-            dark:bg-white/[0.06]
-            border border-border/60
-
-            before:absolute before:inset-0 before:rounded-full
-            before:bg-gradient-to-b
-            before:from-white/[0.08] before:to-transparent
-            dark:before:from-white/[0.06]
+            bg-black/[0.04] dark:bg-white/[0.08]
+            border border-black/[0.06] dark:border-white/[0.08]
           "
         />
       )}
@@ -148,19 +143,15 @@ function NavItem({
             : "text-muted-foreground hover:text-foreground"
         )}
       >
-        {icon ? (
-          <IconHome size={16} className={isActive ? "" : "opacity-60"} />
-        ) : (
-          label
-        )}
+        {icon ? <IconHome size={16} className="opacity-70" /> : label}
       </span>
-    </a>
+    </button>
   )
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────
 // NAVBAR
-// ─────────────────────────────────────────────
+// ─────────────────────────
 export default function Navbar() {
   const pathname = usePathname()
   const isHome = pathname === "/"
@@ -181,10 +172,6 @@ export default function Navbar() {
     if (isHome) setActive(detectedActive)
   }, [detectedActive, isHome])
 
-  const setActiveImmediate = (id: string) => {
-    setActive(id)
-  }
-
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 768) setOpen(false)
@@ -198,12 +185,24 @@ export default function Navbar() {
       {/* DESKTOP */}
       <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <nav className="
-          flex items-center gap-1 px-2 py-2 rounded-full
-          bg-background/85 backdrop-blur-2xl
-          border border-border/60
-          shadow-[0_8px_30px_rgba(0,0,0,0.12)]
+          relative flex items-center gap-1 px-2 py-2 rounded-full
+
+          bg-white dark:bg-neutral-900
+          border border-black/[0.06] dark:border-white/[0.08]
+
+          shadow-[0_6px_18px_rgba(0,0,0,0.08)]
+
+          [transform:translateZ(0)]
         ">
-          <div className="flex items-center gap-2 relative">
+
+          {/* subtle top highlight */}
+          <div className="
+            pointer-events-none absolute inset-x-0 top-0 h-px
+            bg-gradient-to-r from-transparent via-black/10 to-transparent
+            dark:via-white/20
+          " />
+
+          <div className="flex items-center gap-1 relative">
             {NAV_LINKS.map(({ label, href, icon }) => (
               <NavItem
                 key={href}
@@ -211,7 +210,7 @@ export default function Navbar() {
                 label={label}
                 icon={icon}
                 isActive={isHome && active === href.replace("#", "")}
-                setActiveImmediate={setActiveImmediate}
+                setActiveImmediate={setActive}
               />
             ))}
           </div>
@@ -226,8 +225,7 @@ export default function Navbar() {
             className="
               ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-full
               text-sm text-muted-foreground hover:text-foreground
-              hover:bg-muted/50 transition-all duration-200
-              active:scale-[0.97]
+              hover:bg-muted/40 transition
             "
           >
             Resume
@@ -243,11 +241,14 @@ export default function Navbar() {
           fixed bottom-6 right-6 z-50 md:hidden
           w-14 h-14 rounded-full
           flex items-center justify-center
-          bg-background/90 backdrop-blur-xl
-          border border-border/60
+
+          bg-white dark:bg-neutral-900
+          border border-black/[0.06] dark:border-white/[0.08]
+
           shadow-[0_10px_30px_rgba(0,0,0,0.2)]
-          transition-all duration-300
+
           active:scale-[0.92]
+          transition
         "
       >
         {open ? <IconX size={24} /> : <IconMenu2 size={24} />}
@@ -258,8 +259,10 @@ export default function Navbar() {
         <div className="
           fixed bottom-24 right-6 z-50 md:hidden w-64
           rounded-2xl overflow-hidden
-          bg-background/95 backdrop-blur-2xl
-          border border-border/60
+
+          bg-white dark:bg-neutral-900
+          border border-black/[0.06] dark:border-white/[0.08]
+
           shadow-[0_20px_60px_rgba(0,0,0,0.25)]
         ">
           <div className="p-3 flex flex-col gap-2">
@@ -280,15 +283,8 @@ export default function Navbar() {
 
             <div className="h-px bg-border/50 my-2" />
 
-            {/* CONTROLS */}
             <div className="flex items-center gap-2">
-
-              <div className="
-                w-10 h-10 rounded-xl
-                flex items-center justify-center
-                bg-muted/40 border border-border/60
-                active:scale-[0.92] transition
-              ">
+              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-muted/40 border border-border/60">
                 <ThemeToggle />
               </div>
 
@@ -299,14 +295,12 @@ export default function Navbar() {
                   flex-1 flex items-center justify-center gap-2
                   h-10 rounded-xl px-4
                   text-sm text-muted-foreground hover:text-foreground
-                  hover:bg-muted/50 transition
-                  active:scale-[0.96]
+                  hover:bg-muted/40 transition
                 "
               >
                 Resume
                 <IconDownload size={16} />
               </Link>
-
             </div>
           </div>
         </div>

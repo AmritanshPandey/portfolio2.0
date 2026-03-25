@@ -13,25 +13,39 @@ export function FancyDivider({
   label?: string
   className?: string
 }) {
+  const isGradient = variant === "gradient"
+  const isLabel = variant === "label" && label
+
   return (
-    <div className={clsx("w-full flex items-center", className)}>
+    <div
+      className={clsx(
+        "w-full flex items-center",
+        "[transform:translateZ(0)]", // 🔥 Safari stability
+        className
+      )}
+    >
 
       {/* LEFT */}
       <div
         className={clsx(
           "flex-1 h-px",
-          variant === "gradient"
-            ? "bg-gradient-to-r from-transparent via-border to-border"
-            : "bg-border"
+
+          isGradient
+            ? "bg-gradient-to-r from-transparent via-border/80 to-border"
+            : "bg-border/80"
         )}
       />
 
       {/* LABEL */}
-      {variant === "label" && label && (
-        <span className="
-          px-4 text-[11px] uppercase tracking-[0.18em]
-          text-muted-foreground font-medium
-        ">
+      {isLabel && (
+        <span
+          className="
+            px-4 text-[11px] uppercase tracking-[0.18em]
+            text-muted-foreground font-medium
+
+            whitespace-nowrap
+          "
+        >
           {label}
         </span>
       )}
@@ -40,9 +54,10 @@ export function FancyDivider({
       <div
         className={clsx(
           "flex-1 h-px",
-          variant === "gradient"
-            ? "bg-gradient-to-l from-transparent via-border to-border"
-            : "bg-border"
+
+          isGradient
+            ? "bg-gradient-to-l from-transparent via-border/80 to-border"
+            : "bg-border/80"
         )}
       />
 

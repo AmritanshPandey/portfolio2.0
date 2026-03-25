@@ -1,6 +1,7 @@
 "use client"
 
 import { IconLink } from "@tabler/icons-react"
+import clsx from "clsx"
 
 type Props = {
   title: string
@@ -15,31 +16,35 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className="
-        group relative flex items-start gap-4
+      className={clsx(
+        "group relative flex items-start gap-4 py-4",
 
-        py-4
+        // 🔥 smoother + Safari-safe
+        "transition-transform duration-300 ease-out",
+        "[transform:translateZ(0)]",
 
-        transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-      "
+        "hover:[transform:translate3d(0,-1px,0)]"
+      )}
     >
 
       {/* LOGO */}
-      <div className="
-        w-12 h-12 rounded-lg overflow-hidden
+      <div className={clsx(
+        "w-12 h-12 rounded-lg overflow-hidden",
+        "flex items-center justify-center",
 
-        flex items-center justify-center
+        "bg-muted/30 border border-black/[0.05] dark:border-white/[0.06]",
 
-        bg-muted/30
-        border border-black/[0.05] dark:border-white/[0.06]
+        // 🔥 smoother scaling
+        "transition-transform duration-300",
+        "group-hover:scale-[1.03]",
 
-        transition-all duration-300
-        group-hover:scale-[1.02]
-      ">
+        "[transform:translateZ(0)]"
+      )}>
         <img
           src={logo}
           alt={title}
           className="w-full h-full object-contain"
+          loading="lazy"
         />
       </div>
 
@@ -49,50 +54,46 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
         {/* TITLE + ICON */}
         <div className="flex items-center gap-2">
 
-          <p className="
-            text-[15px] md:text-[16px]
-            font-medium tracking-[-0.01em]
+          <p className={clsx(
+            "text-[15px] md:text-[16px]",
+            "font-medium tracking-[-0.01em]",
+            "text-foreground",
 
-            text-foreground
-
-            transition-colors duration-200
-            group-hover:text-foreground
-          ">
+            "transition-colors duration-200"
+          )}>
             {title}
           </p>
 
           <IconLink
             size={16}
             stroke={2}
-            className="
-              text-foreground/25
+            className={clsx(
+              "text-foreground/25",
 
-              transition-all duration-300
+              // 🔥 smoother motion
+              "transition-all duration-300 ease-out",
 
-              group-hover:text-foreground/60
-              group-hover:translate-x-[1px]
-              group-hover:-translate-y-[1px]
-            "
+              "group-hover:text-foreground/60",
+              "group-hover:[transform:translate3d(1px,-1px,0)]"
+            )}
           />
 
         </div>
 
         {/* DESCRIPTION */}
-        <p className="
-          text-[14px]
-          text-foreground/55
-          leading-[1.65]
-          max-w-[520px]
+        <p className={clsx(
+          "text-[14px]",
+          "text-foreground/55",
+          "leading-[1.65]",
+          "max-w-[520px]",
 
-          transition-colors duration-200
-          group-hover:text-foreground/70
-        ">
+          "transition-colors duration-200",
+          "group-hover:text-foreground/70"
+        )}>
           {desc}
         </p>
 
       </div>
-
-
 
     </a>
   )

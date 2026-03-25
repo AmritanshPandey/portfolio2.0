@@ -16,11 +16,11 @@ export function CoreBeliefCard({
 }: Props) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }} // reduced motion
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
+      viewport={{ once: true }}
       transition={{
-        duration: 0.5,
+        duration: 0.4,
         ease: [0.22, 1, 0.36, 1],
       }}
       className={clsx(
@@ -29,43 +29,51 @@ export function CoreBeliefCard({
         "bg-gradient-to-br from-background to-muted/20",
         "dark:from-neutral-950 dark:to-white/[0.03]",
         "overflow-hidden",
+
+        // 🔥 GPU isolation
+        "[transform:translateZ(0)]",
+        "[backface-visibility:hidden]",
+
         className
       )}
     >
 
-      {/* existing visuals untouched */}
+      {/* LEFT AMBIENT (lighter blur) */}
       <div className="
-        pointer-events-none absolute inset-y-0 left-0 w-24
+        pointer-events-none absolute inset-y-0 left-0 w-20
         bg-gradient-to-r
-        from-orange-500/[0.12]
-        via-orange-500/[0.05]
+        from-orange-500/[0.10]
+        via-orange-500/[0.04]
         to-transparent
-        blur-xl
+        blur-lg
         opacity-60
       " />
 
+      {/* RADIAL GLOW (lighter + smaller) */}
       <div className="
-        pointer-events-none absolute -top-32 -right-32 w-[420px] h-[420px]
-        bg-[radial-gradient(circle,rgba(249,115,22,0.10),transparent_70%)]
-        dark:bg-[radial-gradient(circle,rgba(251,146,60,0.14),transparent_70%)]
-        blur-3xl
+        pointer-events-none absolute -top-24 -right-24 w-[280px] h-[280px]
+        bg-[radial-gradient(circle,rgba(249,115,22,0.08),transparent_70%)]
+        dark:bg-[radial-gradient(circle,rgba(251,146,60,0.10),transparent_70%)]
+        blur-2xl
       " />
 
+      {/* ✨ REMOVE heavy animated sheen (Safari killer) */}
+      {/* replaced with subtle static gradient */}
       <div className="
         pointer-events-none absolute inset-0
-        bg-[linear-gradient(110deg,transparent,rgba(249,115,22,0.06),transparent)]
-        dark:bg-[linear-gradient(110deg,transparent,rgba(251,146,60,0.10),transparent)]
-        bg-[length:220%_220%]
-        animate-[sheen_14s_ease-in-out_infinite]
-        opacity-60
+        opacity-40
+        bg-[linear-gradient(110deg,transparent,rgba(249,115,22,0.05),transparent)]
+        dark:bg-[linear-gradient(110deg,transparent,rgba(251,146,60,0.08),transparent)]
       " />
 
+      {/* TOP SOFT LIGHT */}
       <div className="
         pointer-events-none absolute inset-0 rounded-3xl
-        bg-gradient-to-b from-white/[0.04] to-transparent
-        dark:from-white/[0.03]
+        bg-gradient-to-b from-white/[0.03] to-transparent
+        dark:from-white/[0.02]
       " />
 
+      {/* EDGE */}
       <div className="
         absolute inset-x-0 top-0 h-px
         bg-gradient-to-r from-transparent via-foreground/10 to-transparent
@@ -75,26 +83,22 @@ export function CoreBeliefCard({
       {/* CONTENT */}
       <div className="relative max-w-3xl">
 
-        {/* ✅ FIX 1: eyebrow contrast */}
+        {/* EYEBROW */}
         {eyebrow && (
           <p className="
             text-[12px] uppercase tracking-[0.18em]
-            text-foreground/60 
+            text-foreground/60
             mb-4 font-medium
           ">
             {eyebrow}
           </p>
         )}
 
-        {/* ✅ FIX 2: main text readability */}
+        {/* TEXT */}
         <div className="
           text-xl md:text-2xl lg:text-[28px]
           font-medium leading-[1.4]
           text-foreground
-
-          /* improves readability over gradients */
-        
-          dark:[text-shadow:none]
         ">
           {children}
         </div>

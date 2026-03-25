@@ -40,10 +40,10 @@ export default function LeadershipSection() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true }}
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.08 } },
+            visible: { transition: { staggerChildren: 0.06 } }, // reduced
           }}
           className="space-y-8"
         >
@@ -51,11 +51,11 @@ export default function LeadershipSection() {
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 16 },
+                hidden: { opacity: 0, y: 12 }, // reduced motion
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{
-                duration: 0.45,
+                duration: 0.35, // faster = less jank
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
@@ -71,58 +71,55 @@ export default function LeadershipSection() {
 
         {/* RIGHT */}
         <div className="hidden lg:block">
-          <div className="sticky top-28">
+          <div className="sticky top-24">
 
             <div className="
               relative rounded-2xl overflow-hidden
               border border-border
-              bg-background/50 backdrop-blur-xl
+
+              /* 🔥 replace heavy blur */
+              bg-background/80
+
               aspect-square
+
+              /* GPU safety */
+              [transform:translateZ(0)]
+              [backface-visibility:hidden]
             ">
 
-              {/* grid */}
+              {/* GRID (lighter) */}
               <div className="
-                absolute inset-0 opacity-[0.25]
+                absolute inset-0 opacity-[0.18]
                 [background-size:24px_24px]
                 [background-image:radial-gradient(currentColor_1px,transparent_1px)]
-                
-                /* ✅ FIX: slightly stronger than muted */
                 text-foreground/40
-
                 pointer-events-none
               " />
 
-              {/* radial focus */}
+              {/* RADIAL (lighter + cheaper) */}
               <div className="
                 absolute inset-0
-                bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.04)_100%)]
-                dark:bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(255,255,255,0.04)_100%)]
+                opacity-60
+                bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.03))]
+                dark:bg-[radial-gradient(circle_at_center,transparent_45%,rgba(255,255,255,0.05))]
               " />
 
-              {/* label */}
+              {/* LABEL */}
               <div className="absolute top-4 left-4 z-10">
-                <p className="
-                  text-[10px] uppercase tracking-[0.18em]
-
-                  /* ✅ FIX: clearer label */
-                  text-foreground/60
-                ">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-foreground/60">
                   System View
                 </p>
               </div>
 
-              {/* placeholder */}
+              {/* PLACEHOLDER */}
               <div className="
                 absolute inset-0 flex items-center justify-center
-                text-xs
-
-                /* ✅ FIX: readable but still subtle */
-                text-foreground/50
+                text-xs text-foreground/50
               ">
                 Illustration / System diagram
               </div>
 
-              {/* edge highlight */}
+              {/* EDGE */}
               <div className="
                 absolute inset-0 rounded-2xl
                 ring-1 ring-inset ring-border/40

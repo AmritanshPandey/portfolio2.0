@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react"
 
 const WORDS = ["systems", "platforms", "experiences", "products"]
 
-const TYPING_MIN    = 100
-const TYPING_MAX    = 150
-const DELETING_MIN  = 60
-const DELETING_MAX  = 90
-const PAUSE_AFTER   = 1600
-const PAUSE_BEFORE  = 250
+const TYPING_MIN = 100
+const TYPING_MAX = 150
+const DELETING_MIN = 60
+const DELETING_MAX = 90
+const PAUSE_AFTER = 1600
+const PAUSE_BEFORE = 250
 
 export function TypingWord() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -63,30 +63,25 @@ export function TypingWord() {
   }, [displayed, phase, wordIndex])
 
   return (
-    <span className="inline-flex items-baseline gap-[3px]">
+    <span className="inline-flex items-center gap-[3px]">
 
-      {/* TEXT */}
       <span className="
-        text-orange-500
-        dark:text-orange-400
-        dark:drop-shadow-[0_0_6px_rgba(249,115,22,0.25)]
-      ">
+      text-orange-500
+      dark:text-orange-400
+      whitespace-nowrap
+    ">
         {displayed}
       </span>
 
-      {/* CURSOR */}
       <span
         className="
-          inline-block h-[0.85em] w-[1.5px] rounded-full
-          bg-orange-500/80
-          dark:bg-orange-400/80
-          transition-opacity duration-300
-        "
+        inline-block h-[0.9em] w-[1.5px] rounded-full
+        bg-orange-500/80 dark:bg-orange-400/80
+      "
         style={{
-          opacity: phase === "pausing" ? 0.35 : 1,
+          opacity: phase === "pausing" ? 0.3 : 1,
         }}
       />
-
     </span>
   )
 }

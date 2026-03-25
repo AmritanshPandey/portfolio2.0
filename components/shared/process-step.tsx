@@ -20,63 +20,87 @@ export function ProcessStep({
   active = false,
 }: Props) {
 
-  // ───────────── VERTICAL ─────────────
-  if (variant === "vertical") {
-    return (
+  const isVertical = variant === "vertical"
+
+  return (
+    <div
+      className={clsx(
+        "group/step relative antialiased",
+
+        isVertical
+          ? "flex gap-4 pl-6 border-l"
+          : "pt-6 border-t",
+
+        "border-border",
+        active && "border-border-strong",
+
+        // 🔥 smoother + Safari-safe transform
+        "transition-transform duration-300 ease-out",
+        "[transform:translateZ(0)]",
+
+        isVertical
+          ? "md:hover:[transform:translate3d(2px,0,0)]"
+          : "md:hover:[transform:translate3d(0,-2px,0)]"
+      )}
+    >
+
+      {/* ── ACCENT LINE */}
       <div
         className={clsx(
-          "group/step relative flex gap-4 pl-6",
+          "absolute bg-orange-500",
 
-          // base line
-          "border-l border-border",
+          isVertical
+            ? "left-[-1px] top-0 w-[2px] h-full"
+            : "top-[-1px] left-0 h-[2px] w-full",
 
-          // ✨ active = stronger system signal
-          active && "border-border-strong",
+          // 🔥 prevent flicker
+          "[transform:translateZ(0)]",
+          "transition-opacity duration-300",
 
-          "transition-all duration-300 md:hover:translate-x-[2px]"
+          active
+            ? "opacity-100"
+            : "opacity-0 md:group-hover/step:opacity-40"
         )}
-      >
+      />
 
-        {/* ACTIVE ACCENT LINE */}
-        <div
-          className={clsx(
-            "absolute left-[-1px] top-0 h-full w-[2px] transition-all duration-300",
-
-            active
-              ? "bg-orange-500"
-              : "bg-transparent group-hover/step:bg-orange-500/40"
-          )}
-        />
+      {/* ── CONTENT */}
+      <div className={clsx(isVertical ? "flex gap-4" : "")}>
 
         {/* NUMBER */}
         <span
           className={clsx(
-            "text-[11px] font-medium tracking-[0.14em] mt-[3px]",
+            "text-[11px] font-medium tracking-[0.14em]",
 
-            // 👇 hierarchy fix
+            isVertical ? "mt-[3px]" : "mb-2 block",
+
             active
               ? "text-foreground"
               : "text-muted-foreground",
 
-            "transition-colors duration-300"
+            "transition-colors duration-200"
           )}
         >
           {number}
         </span>
 
-        {/* CONTENT */}
-        <div className="max-w-md space-y-1.5">
+        {/* TEXT */}
+        <div
+          className={clsx(
+            "space-y-1.5",
+            isVertical ? "max-w-md" : "max-w-[320px]"
+          )}
+        >
 
           {/* TITLE */}
           <h3
             className={clsx(
-              "text-base md:text-lg font-medium tracking-tight leading-[1.3]",
-              "transition-colors duration-300",
+              "font-medium tracking-tight leading-[1.3]",
 
-              // 👇 active is primary, hover is secondary
-              active
-                ? "text-foreground"
-                : "text-foreground group-hover/step:text-foreground"
+              isVertical
+                ? "text-base md:text-lg"
+                : "text-lg md:text-xl",
+
+              "text-foreground"
             )}
           >
             {title}
@@ -85,12 +109,17 @@ export function ProcessStep({
           {/* DESCRIPTION */}
           <p
             className={clsx(
-              "text-sm md:text-[15px] leading-[1.6]",
-              "transition-colors duration-300",
+              "leading-[1.6]",
+
+              isVertical
+                ? "text-sm md:text-[15px]"
+                : "text-sm md:text-base",
 
               active
                 ? "text-muted-foreground"
-                : "text-muted-foreground/80 group-hover/step:text-muted-foreground"
+                : "text-muted-foreground/80",
+
+              "transition-colors duration-200"
             )}
           >
             {description}
@@ -98,58 +127,6 @@ export function ProcessStep({
 
         </div>
       </div>
-    )
-  }
-
-  // ───────────── HORIZONTAL ─────────────
-  return (
-    <div
-      className={clsx(
-        "group/step pt-5 border-t border-border",
-        active && "border-border-strong",
-        "transition-all duration-300 md:hover:-translate-y-[2px]"
-      )}
-    >
-
-      {/* NUMBER */}
-      <p
-        className={clsx(
-          "text-[11px] font-medium tracking-[0.16em] mb-2",
-          active
-            ? "text-foreground"
-            : "text-muted-foreground",
-          "transition-colors duration-300"
-        )}
-      >
-        {number}
-      </p>
-
-      {/* TITLE */}
-      <h3
-        className={clsx(
-          "text-lg md:text-xl font-medium tracking-tight mb-2 leading-[1.3]",
-          active
-            ? "text-foreground"
-            : "text-foreground group-hover/step:text-foreground",
-          "transition-colors duration-300"
-        )}
-      >
-        {title}
-      </h3>
-
-      {/* DESCRIPTION */}
-      <p
-        className={clsx(
-          "text-sm md:text-base leading-[1.6] max-w-[320px]",
-          active
-            ? "text-muted-foreground"
-            : "text-muted-foreground/80 group-hover/step:text-muted-foreground",
-          "transition-colors duration-300"
-        )}
-      >
-        {description}
-      </p>
-
     </div>
   )
 }

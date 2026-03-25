@@ -2,118 +2,72 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Enable class-based dark mode */
+/* ─────────────────────────
+   DARK MODE
+───────────────────────── */
+
 @custom-variant dark (&:is(.dark *));
 
-/* ─────────────────────────────────────
-   DESIGN SYSTEM TOKENS
-───────────────────────────────────── */
+/* ─────────────────────────
+   DESIGN TOKENS
+───────────────────────── */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
   --color-card: var(--surface-1);
-  --color-card-foreground: var(--foreground);
-
-  --color-popover: var(--surface-1);
-  --color-popover-foreground: var(--foreground);
-
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-
-  --color-secondary: var(--surface-2);
-  --color-secondary-foreground: var(--foreground);
-
   --color-muted: var(--surface-2);
-  --color-muted-foreground: var(--text-muted);
-
-  --color-accent: var(--accent-soft);
-  --color-accent-foreground: var(--foreground);
 
   --color-border: var(--border);
-  --color-input: var(--surface-2);
   --color-ring: var(--ring);
 
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
 }
 
-/* ─────────────────────────────────────
-   LIGHT MODE
-───────────────────────────────────── */
+/* ─────────────────────────
+   LIGHT
+───────────────────────── */
 
 :root {
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.18 0 0);
 
-  --text-secondary: oklch(0.4 0 0);
   --text-muted: oklch(0.55 0 0);
 
   --surface-1: oklch(1 0 0);
   --surface-2: oklch(0.98 0 0);
-  --surface-3: oklch(0.96 0 0);
 
   --border: oklch(0.9 0 0);
-  --border-strong: oklch(0.85 0 0);
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.12);
-
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-border: rgba(0, 0, 0, 0.08);
-
-  --accent-strong: oklch(0.68 0.22 45);
-  --accent-soft: oklch(0.92 0.05 45);
-
-  --primary: oklch(0.25 0 0);
-  --primary-foreground: oklch(0.98 0 0);
-  --ring: oklch(0.7 0 0);
 
   --radius: 0.75rem;
 }
 
-/* ─────────────────────────────────────
-   DARK MODE
-───────────────────────────────────── */
+/* ─────────────────────────
+   DARK
+───────────────────────── */
 
 .dark {
   --background: oklch(0.14 0 0);
   --foreground: oklch(0.96 0 0);
 
-  --text-secondary: oklch(0.7 0 0);
   --text-muted: oklch(0.6 0 0);
 
   --surface-1: oklch(0.18 0 0);
   --surface-2: oklch(0.14 0 0);
-  --surface-3: oklch(0.22 0 0);
 
   --border: oklch(1 0 0 / 10%);
-  --border-strong: oklch(1 0 0 / 16%);
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 40px 80px rgba(0, 0, 0, 0.6);
-
-  --glass-bg: rgba(18, 18, 18, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-
-  --accent-strong: oklch(0.72 0.2 45);
-  --accent-soft: oklch(0.3 0.05 45);
-
-  --primary: oklch(0.9 0 0);
-  --primary-foreground: oklch(0.2 0 0);
-  --ring: oklch(0.55 0 0);
 }
 
-/* ─────────────────────────────────────
+/* ─────────────────────────
    BASE
-───────────────────────────────────── */
+───────────────────────── */
 
 @layer base {
   * {
@@ -121,8 +75,7 @@
   }
 
   html {
-    @apply font-sans;
-    scroll-behavior: smooth;
+    font-family: system-ui, sans-serif;
   }
 
   body {
@@ -130,9 +83,9 @@
   }
 }
 
-/* ─────────────────────────────────────
+/* ─────────────────────────
    UTILITIES
-───────────────────────────────────── */
+───────────────────────── */
 
 @layer utilities {
 
@@ -148,210 +101,52 @@
     box-shadow: var(--shadow-md);
   }
 
-  .surface-strong {
-    background: var(--surface-1);
-    border: 1px solid var(--border-strong);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-  }
-
-  .text-secondary {
-    color: var(--text-secondary);
-  }
-
   .text-muted {
     color: var(--text-muted);
   }
-
-  .accent {
-    color: var(--accent-strong);
-  }
 }
 
-/* ─────────────────────────────────────
-   CUSTOM CURSOR (CHROME ONLY)
-───────────────────────────────────── */
+/* ─────────────────────────
+   MINIMAL CURSOR LABEL
+───────────────────────── */
 
-@media (hover: hover) and (pointer: fine) {
-
-  html.custom-cursor,
-  html.custom-cursor body,
-  html.custom-cursor * {
-    cursor: none !important;
-  }
-}
-
-/* ─────────────────────────────────────
-   CURSOR UI
-───────────────────────────────────── */
-
-.cursor {
+.cursor-label-ui {
   position: fixed;
-  top: 0;
-  left: 0;
-
-  transform: translate(-50%, -50%);
+  z-index: 9999;
   pointer-events: none;
-  z-index: 99999;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  opacity: 0;
 
-  /* 🔥 FIX: visible in all themes */
-  color: white;
-
-  /* 🔥 premium contrast */
-  mix-blend-mode: difference;
-
-  opacity: 1;
-}
-
-/* ── DOT */
-.cursor-default {
-  width: 10px;
-  height: 10px;
-}
-
-.cursor-core {
-  width: 100%;
-  height: 100%;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-/* ── HOVER (ring) */
-.cursor-hover {
-  width: 22px;
-  height: 22px;
-}
-
-.cursor-hover .cursor-core {
-  background: transparent;
-  border: 1px solid currentColor;
-}
-
-/* ── TEXT */
-.cursor-text {
-  width: 2px;
-  height: 20px;
-}
-
-.cursor-card {
-  height: 34px;
-  padding: 0 14px;
+  padding: 4px 10px;
   border-radius: 999px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* glass base */
-  background: var(--glass-bg);
-  backdrop-filter: blur(18px) saturate(140%);
-
-  /* 🔥 FIX: stronger edge for light mode */
-  border: 1px solid color-mix(in oklch, var(--foreground) 15%, transparent);
-
-  /* 🔥 subtle shadow for separation */
-  box-shadow:
-    0 4px 12px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.4);
-
-  mix-blend-mode: normal;
-}
-
-/* hide dot inside pill */
-.cursor-card .cursor-core {
-  display: none;
-}
-
-/* label */
-.cursor-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
+
+  background: black;
+  color: white;
 }
 
-.cursor-label {
+.dark .cursor-label-ui {
+  background: white;
   color: black;
 }
 
-.dark .cursor-label {
-  color: white;
-}
-
-/* ─────────────────────────────────────
-   FORCE HIDE OS CURSOR (CHROME SAFE)
-───────────────────────────────────── */
-
-html.custom-cursor {
-  cursor: none !important;
-}
-
-html.custom-cursor body,
-html.custom-cursor * {
-  cursor: none !important;
-}
-
-/* prevent text caret flicker */
-html.custom-cursor input,
-html.custom-cursor textarea,
-html.custom-cursor [contenteditable="true"] {
-  caret-color: transparent;
-}
-
-
-/* ─────────────────────────────────────
+/* ─────────────────────────
    ANIMATIONS
-───────────────────────────────────── */
+───────────────────────── */
 
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes sheen {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-html {
-  scroll-behavior: auto;
-  /* prevent conflict */
-}
-
-
-@keyframes gridDrift {
-  0% {
-    transform: translate3d(0px, 0px, 0);
-  }
-
-  100% {
-    transform: translate3d(0.5px, 0.5px, 0);
-  }
+.animate-fade-up {
+  animation: fadeUp 0.5s ease forwards;
 }
