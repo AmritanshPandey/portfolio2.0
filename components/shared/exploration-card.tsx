@@ -122,11 +122,6 @@ export function ExplorationCard({
           {tags.map((tag, i) => (
             <Pill
               key={i}
-              size="sm"
-              className="
-                bg-white/10 text-white border-white/20
-                backdrop-blur-md
-              "
             >
               {tag}
             </Pill>

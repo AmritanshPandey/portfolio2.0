@@ -125,7 +125,7 @@ export default function Hero() {
         <div className="flex flex-col gap-6 max-w-2xl">
 
           <div className="hero-badge flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-xs text-muted-foreground w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400  animate-pulse" />
             Senior Product Designer • Mastercard
           </div>
 
@@ -213,7 +213,7 @@ export default function Hero() {
                     ))}
                   </div>
 
-                  <p className="text-sm font-semibold text-white">
+                  <p className="text-base font-semibold text-white">
                     Amritansh Pandey
                   </p>
                 </div>
