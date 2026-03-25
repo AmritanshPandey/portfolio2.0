@@ -162,7 +162,7 @@ export default function Hero() {
 ">
 
         {/* ── LEFT ─────────────────────────────────────── */}
-       <div className="
+        <div className="
   flex flex-col gap-6
 
   w-full
@@ -176,7 +176,7 @@ export default function Hero() {
             hero-badge w-fit
             flex items-center gap-2 px-3 py-1.5 rounded-full
             border border-border/60 bg-muted/40
-            text-[11px] text-muted-foreground
+            text-[12px] text-muted-foreground
           ">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             Senior Product Designer • Mastercard
@@ -188,30 +188,35 @@ export default function Hero() {
               Designing fintech
             </span>
             <div className="py-2">
-    <span className="hero-line block text-[clamp(36px,5vw,60px)] text-orange-500/90">
-              <TypingWord />
-            </span>
+              <span className="hero-line block text-[clamp(36px,5vw,60px)] text-orange-500/90">
+                <TypingWord />
+              </span>
             </div>
-        
+
             <span className="hero-line block text-[clamp(36px,5vw,60px)]">
               that scale globally.
             </span>
           </h1>
 
           {/* Sub */}
-          <p className="hero-sub text-[15px] leading-[1.65] text-muted-foreground w-full max-w-[520px] lg:max-w-[360px]">
-            At Mastercard{"'"}s Creative Studio,{" "}
-            <span className="text-foreground font-medium">
-              designing systems, demos, and platforms that power global banking partnerships.
-            </span>
-          </p>
-
+          <div className="
+  bg-gradient-to-r
+  from-background/90 via-background/70 to-background/90
+  
+  ">
+            <p className="hero-sub text-[16px] leading-[1.65] text-muted-foreground w-full max-w-[420px] lg:max-w-[520px]">
+              At Mastercard{"'"}s Creative Studio,{" "}
+              <span className="text-foreground font-medium">
+                designing systems, demos, and platforms that power global banking partnerships.
+              </span>
+            </p>
+          </div>
           {/* CTAs */}
-        <div className="
+          <div className="
   hero-cta
   flex flex-col gap-2.5   /* 👈 better rhythm */
 
-w-full max-w-[420px] lg:max-w-[320px]
+w-full max-w-[420px] lg:max-w-[520px]
 
   md:grid md:grid-cols-2
 ">
@@ -231,7 +236,7 @@ w-full max-w-[420px] lg:max-w-[320px]
         </div>
 
         {/* RIGHT */}
-<div className="
+        <div className="
   hero-image
   flex justify-center lg:justify-end
 
