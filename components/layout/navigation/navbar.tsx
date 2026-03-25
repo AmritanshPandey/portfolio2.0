@@ -284,7 +284,7 @@ export default function Navbar() {
             <div className="h-px bg-border/50 my-2" />
 
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-muted/40 border border-border/60">
+              <div className="flex items-center justify-center rounded-xl bg-muted/40 border border-border/60">
                 <ThemeToggle />
               </div>
 
