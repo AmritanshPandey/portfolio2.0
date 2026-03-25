@@ -9,108 +9,103 @@ export function FancyCursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLSpanElement>(null)
 
-  const stateRef = useRef<CursorState>("default")
-  const prevStateRef = useRef<CursorState>("default")
-  const hoverTimeoutRef = useRef<number | null>(null)
-  const directionRef = useRef(0)
-
+  const [enabled, setEnabled] = useState(false)
   const [state, setState] = useState<CursorState>("default")
   const [label, setLabel] = useState("Explore")
-  const [isDark, setIsDark] = useState(false)
-  const [isTouching, setIsTouching] = useState(false)
 
-  // ─────────────────────────────────────────────
-  // Theme detection
-  // ─────────────────────────────────────────────
+  const mouse = useRef({ x: 0, y: 0 })
+  const pos = useRef({ x: 0, y: 0 })
+  const direction = useRef(0)
+  const raf = useRef<number | null>(null)
+
+  // ─────────────────────────
+  // ENABLE ONLY ON CHROME
+  // ─────────────────────────
+useEffect(() => {
+  const ua = navigator.userAgent
+
+  const isChrome =
+    ua.includes("Chrome") &&
+    !ua.includes("Edg") &&
+    !ua.includes("OPR") &&
+    !ua.includes("Samsung")
+
+  setEnabled(isChrome)
+
+  if (isChrome) {
+    document.documentElement.classList.add("custom-cursor")
+  } else {
+    document.documentElement.classList.remove("custom-cursor")
+  }
+}, [])
+
+  // ─────────────────────────
+  // MOVEMENT ENGINE
+  // ─────────────────────────
   useEffect(() => {
-    const check = () =>
-      setIsDark(document.documentElement.classList.contains("dark"))
-
-    check()
-
-    const obs = new MutationObserver(check)
-    obs.observe(document.documentElement, { attributes: true })
-
-    return () => obs.disconnect()
-  }, [])
-
-  // ─────────────────────────────────────────────
-  // Input detection
-  // ─────────────────────────────────────────────
-  useEffect(() => {
-    const onTouch = () => setIsTouching(true)
-    const onMouse = () => setIsTouching(false)
-
-    window.addEventListener("touchstart", onTouch, { passive: true })
-    window.addEventListener("mousemove", onMouse, { passive: true })
-
-    return () => {
-      window.removeEventListener("touchstart", onTouch)
-      window.removeEventListener("mousemove", onMouse)
-    }
-  }, [])
-
-  // ─────────────────────────────────────────────
-  // Cursor engine (movement + intent)
-  // ─────────────────────────────────────────────
-  useEffect(() => {
-    if (isTouching) return
+    if (!enabled) return
 
     const cursor = cursorRef.current
     if (!cursor) return
 
-    let mouse = { x: 0, y: 0 }
-    let pos = { x: 0, y: 0 }
-    let rafId: number
-
     gsap.set(cursor, { x: -200, y: -200, opacity: 0 })
 
-    const clearIntent = () => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current)
-        hoverTimeoutRef.current = null
-      }
-    }
-
     const onMove = (e: MouseEvent) => {
-      const dx = e.clientX - mouse.x
-      directionRef.current = dx
+      const dx = e.clientX - mouse.current.x
+      direction.current = dx
 
-      mouse.x = e.clientX
-      mouse.y = e.clientY
+      mouse.current.x = e.clientX
+      mouse.current.y = e.clientY
 
       gsap.to(cursor, { opacity: 1, duration: 0.2 })
     }
 
+    const loop = () => {
+      pos.current.x += (mouse.current.x - pos.current.x) * 0.18
+      pos.current.y += (mouse.current.y - pos.current.y) * 0.18
+
+      gsap.set(cursor, {
+        x: pos.current.x,
+        y: pos.current.y,
+      })
+
+      raf.current = requestAnimationFrame(loop)
+    }
+
+    loop()
+
+    document.addEventListener("mousemove", onMove)
+
+    return () => {
+      document.removeEventListener("mousemove", onMove)
+      if (raf.current) cancelAnimationFrame(raf.current)
+    }
+  }, [enabled])
+
+  // ─────────────────────────
+  // INTERACTIONS
+  // ─────────────────────────
+  useEffect(() => {
+    if (!enabled) return
+
     const onOver = (e: PointerEvent) => {
       const t = e.target as HTMLElement
-      clearIntent()
 
-      const card = t.closest("[data-cursor-card]") as HTMLElement | null
+      const card = t.closest("[data-cursor-card]")
 
-      // ── CARD INTENT
       if (card) {
-        const raw = card.getAttribute("data-cursor-label") || "Explore"
-
-        hoverTimeoutRef.current = window.setTimeout(() => {
-          if (stateRef.current !== "card") {
-            setLabel(raw)
-            setState("card")
-          }
-        }, 100)
-
+        setLabel(card.getAttribute("data-cursor-label") || "Explore")
+        setState("card")
         return
       }
 
-      // ── LINK / BUTTON
       if (t.closest("a, button")) {
-        if (stateRef.current !== "hover") setState("hover")
+        setState("hover")
         return
       }
 
-      // ── TEXT
       if (t.closest("p, h1, h2, h3, span")) {
-        if (stateRef.current !== "text") setState("text")
+        setState("text")
         return
       }
 
@@ -118,152 +113,75 @@ export function FancyCursor() {
     }
 
     const onLeave = () => {
-      clearIntent()
       setState("default")
-      gsap.to(cursor, { opacity: 0, duration: 0.2 })
     }
 
-    const render = () => {
-      // smoother, more premium motion
-      pos.x += (mouse.x - pos.x) * 0.16
-      pos.y += (mouse.y - pos.y) * 0.16
-
-      gsap.set(cursor, {
-        x: pos.x,
-        y: pos.y,
-      })
-
-      rafId = requestAnimationFrame(render)
-    }
-
-    rafId = requestAnimationFrame(render)
-
-    document.addEventListener("mousemove", onMove, { passive: true })
-    document.addEventListener("pointerover", onOver, { passive: true })
+    document.addEventListener("pointerover", onOver)
     document.addEventListener("mouseleave", onLeave)
 
     return () => {
-      cancelAnimationFrame(rafId)
-      clearIntent()
-      document.removeEventListener("mousemove", onMove)
       document.removeEventListener("pointerover", onOver)
       document.removeEventListener("mouseleave", onLeave)
     }
-  }, [isTouching])
+  }, [enabled])
 
-  // ─────────────────────────────────────────────
-  // State sync
-  // ─────────────────────────────────────────────
+  // ─────────────────────────
+  // MORPH SYSTEM
+  // ─────────────────────────
   useEffect(() => {
-    prevStateRef.current = stateRef.current
-    stateRef.current = state
-  }, [state])
+    if (!enabled) return
 
-  // ─────────────────────────────────────────────
-  // Morph system (clean + reset-safe)
-  // ─────────────────────────────────────────────
-  useEffect(() => {
     const cursor = cursorRef.current
     const textEl = textRef.current
     if (!cursor) return
 
     gsap.killTweensOf(cursor)
-    if (textEl) gsap.killTweensOf(textEl)
 
-    const prev = prevStateRef.current
-
-    // ── CARD MODE
     if (state === "card") {
-      requestAnimationFrame(() => {
-        const textWidth = textEl?.offsetWidth || 40
-        const targetWidth = Math.max(textWidth + 28, 64)
+      const textWidth = textEl?.offsetWidth || 40
+      const width = Math.max(textWidth + 28, 64)
 
-        const dir = directionRef.current
-        const bias = Math.max(-1, Math.min(1, dir / 40))
-
-        gsap.set(cursor, {
-          width: 12,
-          height: 12,
-          borderRadius: 999,
-          border: "none",
-          xPercent: bias * 20,
-        })
-
-        gsap.to(cursor, {
-          width: targetWidth,
-          height: 34,
-          duration: 0.28,
-          ease: "power3.out",
-        })
-
-        if (textEl) {
-          gsap.fromTo(
-            textEl,
-            { opacity: 0, y: 4 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.2,
-              delay: 0.08,
-            }
-          )
-        }
+      gsap.set(cursor, {
+        width: 12,
+        height: 12,
+        borderRadius: 999,
       })
+
+      gsap.to(cursor, {
+        width,
+        height: 34,
+        duration: 0.28,
+        ease: "power3.out",
+      })
+
+      if (textEl) {
+        gsap.fromTo(
+          textEl,
+          { opacity: 0, y: 4 },
+          { opacity: 1, y: 0, duration: 0.2 }
+        )
+      }
 
       return
     }
 
-    // ── EXIT CARD
-const CARD: CursorState = "card"
-
-if (prev === CARD && stateRef.current !== CARD) {
-  if (textEl) {
-    gsap.to(textEl, { opacity: 0, y: 4, duration: 0.15 })
-  }
-
-  gsap.to(cursor, {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-    xPercent: 0,
-    scale: 1,
-    duration: 0.25,
-    ease: "power3.inOut",
-  })
-
-  return
-}
-
-    // ── ALL STATES FULLY DEFINED (IMPORTANT FIX)
     const variants = {
       default: {
         width: 10,
         height: 10,
         borderRadius: 999,
-        background: isDark
-          ? "rgba(255,255,255,0.9)"
-          : "rgba(0,0,0,0.9)",
-        border: "none",
       },
-
       hover: {
         width: 22,
         height: 22,
         borderRadius: 999,
         background: "transparent",
-        border: isDark
-          ? "1px solid rgba(255,255,255,0.9)"
-          : "1px solid rgba(0,0,0,0.9)",
+        border: "1px solid currentColor",
       },
-
       text: {
         width: 2,
         height: 20,
         borderRadius: 2,
-        background: isDark
-          ? "rgba(255,255,255,0.9)"
-          : "rgba(0,0,0,0.9)",
-        border: "none",
       },
     }
 
@@ -272,53 +190,16 @@ if (prev === CARD && stateRef.current !== CARD) {
       duration: 0.22,
       ease: "power3.out",
     })
-  }, [state, label, isDark])
+  }, [state, enabled])
 
-  if (isTouching) return null
+  if (!enabled) return null
 
   return (
-    <div
-      ref={cursorRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        transform: "translate(-50%, -50%)",
-        pointerEvents: "none",
-        zIndex: 99999,
+    <div ref={cursorRef} className={`cursor cursor-${state}`}>
+      <div className="cursor-core" />
 
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        willChange: "transform, width, height",
-
-        backdropFilter: state === "card" ? "blur(14px)" : "none",
-
-        background:
-          state === "card"
-            ? isDark
-              ? "rgba(20,20,20,0.75)"
-              : "rgba(255,255,255,0.75)"
-            : isDark
-              ? "rgba(255,255,255,0.9)"
-              : "rgba(0,0,0,0.9)",
-
-        color: isDark ? "white" : "black",
-
-        fontSize: 11,
-        fontWeight: 500,
-        letterSpacing: "0.04em",
-      }}
-    >
       {state === "card" && (
-        <span
-          ref={textRef}
-          style={{
-            whiteSpace: "nowrap",
-            opacity: 0,
-          }}
-        >
+        <span ref={textRef} className="cursor-label">
           {label}
         </span>
       )}
