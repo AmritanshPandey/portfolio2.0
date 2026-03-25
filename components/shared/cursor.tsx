@@ -214,22 +214,25 @@ export function FancyCursor() {
     }
 
     // ── EXIT CARD
-    if (prev === "card" && state !== "card") {
-      if (textEl) {
-        gsap.to(textEl, { opacity: 0, y: 4, duration: 0.15 })
-      }
+const CARD: CursorState = "card"
 
-      gsap.to(cursor, {
-        width: 10,
-        height: 10,
-        borderRadius: 999,
-        xPercent: 0,
-        duration: 0.25,
-        ease: "power3.inOut",
-      })
+if (prev === CARD && stateRef.current !== CARD) {
+  if (textEl) {
+    gsap.to(textEl, { opacity: 0, y: 4, duration: 0.15 })
+  }
 
-      return
-    }
+  gsap.to(cursor, {
+    width: 10,
+    height: 10,
+    borderRadius: 999,
+    xPercent: 0,
+    scale: 1,
+    duration: 0.25,
+    ease: "power3.inOut",
+  })
+
+  return
+}
 
     // ── ALL STATES FULLY DEFINED (IMPORTANT FIX)
     const variants = {
