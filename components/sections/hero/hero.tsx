@@ -163,12 +163,15 @@ export default function Hero() {
 
         {/* ── LEFT ─────────────────────────────────────── */}
         <div className="
-  flex flex-col gap-6
+  flex flex-col gap-5 md:gap-6 lg:gap-7
 
   w-full
   max-w-[620px]
+  md:max-w-[680px]
+  lg:max-w-[620px]
 
-  lg:items-start
+  items-start
+  text-left
 ">
 
           {/* Badge */}
