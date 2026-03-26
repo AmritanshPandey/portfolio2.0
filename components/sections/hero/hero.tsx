@@ -201,15 +201,35 @@ export default function Hero() {
           {/* Sub */}
           <div className="
   bg-gradient-to-r
-  from-background/90 via-background/70 to-background/90
+  from-background/90 via-background/70 to-background/90 mb-[24px]
   
   ">
-            <p className="hero-sub text-[16px] leading-[1.65] text-muted-foreground w-full max-w-[420px] lg:max-w-[520px]">
-              At Mastercard{"'"}s Creative Studio,{" "}
-              <span className="text-foreground font-medium">
-                designing systems, demos, and platforms that power global banking partnerships.
-              </span>
-            </p>
+      <p className="
+  hero-sub
+  text-[15px] md:text-[16px]
+  leading-[1.7]
+  text-muted-foreground
+
+  w-full max-w-[420px] lg:max-w-[520px]
+
+  px-4 py-3
+  rounded-xl
+
+  bg-background/60
+  backdrop-blur-md
+
+  border border-border/50
+
+  shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]
+">
+  <span className="text-foreground font-medium">
+    At Mastercard's Creative Studio,
+  </span>{" "}
+  designing systems and platforms that power global banking partnerships
+  <span className="text-foreground font-medium">
+    {" "}from early demos to production-ready experiences.
+  </span>
+</p>
           </div>
           {/* CTAs */}
           <div className="

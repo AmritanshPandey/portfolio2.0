@@ -33,8 +33,8 @@ export function CTA({
 
   const Icon =
     icon === "arrow" ? IconArrowUpRight :
-    icon === "download" ? IconDownload :
-    null
+      icon === "download" ? IconDownload :
+        null
 
   // ───── NAVIGATION ─────
   const handleClick = (e: React.MouseEvent) => {
@@ -54,7 +54,7 @@ export function CTA({
     }
   }
 
-  // ───── MAGNETIC (FIXED) ─────
+  // ───── MAGNETIC (smooth + safari safe) ─────
   const handleMove = (e: React.MouseEvent) => {
     if (variant !== "primary" || !containerRef.current || !innerRef.current) return
 
@@ -63,22 +63,21 @@ export function CTA({
     const x = e.clientX - (rect.left + rect.width / 2)
     const y = e.clientY - (rect.top + rect.height / 2)
 
-    const strength = 0.2
+    const strength = 0.18
     const max = 10
 
     const moveX = Math.max(Math.min(x * strength, max), -max)
     const moveY = Math.max(Math.min(y * strength, max), -max)
 
-    innerRef.current.style.transition = "none" // ✅ prevent jitter
-    innerRef.current.style.transform = `translate(${moveX}px, ${moveY}px)`
+    innerRef.current.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`
   }
 
   const handleLeave = () => {
     if (!innerRef.current) return
 
     innerRef.current.style.transition =
-      "transform 0.45s cubic-bezier(0.22,1,0.36,1)"
-    innerRef.current.style.transform = "translate(0px, 0px)"
+      "transform 0.35s cubic-bezier(0.22,1,0.36,1)"
+    innerRef.current.style.transform = "translate3d(0,0,0)"
   }
 
   // ───────── PRIMARY + SECONDARY ─────────
@@ -93,35 +92,58 @@ export function CTA({
         className={clsx(
           "group/cta relative flex items-center justify-center",
           "w-full px-5 py-3 rounded-full text-[15px] font-medium",
-          "overflow-hidden",
+          "overflow-hidden will-change-transform",
           "active:scale-[0.97]",
-          "transition-colors duration-300",
+          "transition-all duration-300",
 
           // PRIMARY
           variant === "primary" && [
+            // base
             "bg-orange-600 text-white",
-            "shadow-[0_6px_18px_rgba(255,90,0,0.18)]",
+
+            // subtle depth (important)
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_18px_rgba(255,90,0,0.18)]",
+
+            // hover
             "hover:bg-orange-500",
-            "hover:shadow-[0_12px_30px_rgba(255,90,0,0.28)]",
+            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_26px_rgba(255,90,0,0.28)]",
+
+            // active
+            "active:scale-[0.97]",
           ],
 
-          // SECONDARY (lighter)
+          // SECONDARY
           variant === "secondary" && [
-            "border border-border text-foreground/70 bg-background/60 backdrop-blur",
+            "border border-border/60",
+            "bg-background/50 backdrop-blur-md",
+            "text-foreground/70",
+
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
+
             "hover:text-foreground",
-            "hover:border-orange-500/30",
-            "hover:bg-muted/40",
+            "hover:border-orange-500/40",
+            "hover:bg-background/70",
+            "hover:shadow-[0_6px_18px_rgba(255,90,0,0.12)]",
+
+            "hover:-translate-y-[1px]",
+
+            "dark:bg-white/[0.04]",
+            "dark:border-white/[0.08]",
+            "dark:hover:bg-white/[0.06]",
           ],
+
+          // FOCUS
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40",
 
           className
         )}
       >
-        {/* shimmer */}
+        {/* shimmer (subtle) */}
         <span className="
           pointer-events-none absolute inset-0 -translate-x-full
           transition-transform duration-500 ease-out
           group-hover/cta:translate-x-full
-          bg-gradient-to-r from-transparent via-white/[0.08] to-transparent
+          bg-gradient-to-r from-transparent via-white/[0.05] to-transparent
         " />
 
         {/* INNER */}
@@ -138,8 +160,8 @@ export function CTA({
               className="
                 opacity-80
                 transition-all duration-200
-                group-hover/cta:translate-x-[2px]
-                group-hover/cta:-translate-y-[2px]
+                group-hover/cta:translate-x-[1.5px]
+                group-hover/cta:-translate-y-[1.5px]
               "
             />
           )}
@@ -156,7 +178,7 @@ export function CTA({
       onClick={handleClick}
       className={clsx(
         "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
-        "text-foreground/70 hover:text-foreground",
+        "text-foreground/70 hover:text-foreground transition",
         className
       )}
     >
@@ -178,8 +200,8 @@ export function CTA({
             opacity-50
             transition-all duration-200
             group-hover/cta:opacity-100
-            group-hover/cta:translate-x-[2px]
-            group-hover/cta:-translate-y-[2px]
+            group-hover/cta:translate-x-[1.5px]
+            group-hover/cta:-translate-y-[1.5px]
           "
         />
       )}

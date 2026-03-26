@@ -183,7 +183,7 @@ export default function Navbar() {
   return (
     <>
       {/* DESKTOP */}
-      <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+      <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         <nav className="
           relative flex items-center gap-1 px-2 py-2 rounded-full
 
