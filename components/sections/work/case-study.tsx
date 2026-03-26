@@ -5,29 +5,29 @@ import { VerticalCard } from "@/components/shared/vertical-card"
 
 const projects = [
   {
-    category: "Commerce Infrastructure",
-    title: "Shared Commerce Platform for Multi-Brand D2C",
+    category: "AI Commerce",
+    title: "Agent-Driven Commerce Platform",
     description:
-      "Unified three D2C brands into a single platform, reducing duplication while preserving brand differentiation at scale.",
-    image: "/assets/images/work/commerce-platform.jpg",
-    href: "/work/d2c-platform",
+      "Conceptualized an agent-driven commerce system to explore adaptive decision-making across pricing, discovery, and fulfillment, driven by real-time signals and user behavior.",
+    image: "/assets/images/work/agent-commerce.jpg",
+    href: "/work/agent-commerce",
   },
   {
     category: "Enterprise Systems",
-    title: "Modular White-Label Platform for Enterprise Sales",
+    title: "Modular White-Label Platform for Enterprise RFPs",
     description:
-      "Enabled rapid enterprise demo customization through a modular banking system, accelerating high-stakes RFP cycles.",
+      "Designed a configurable platform inspired by enterprise RFP workflows, enabling rapid demo customization and scalable configurations in high-stakes sales environments.",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
   },
   {
-    category: "Fintech Infrastructure",
-    title: "Transaction-Driven SME Credit Platform",
+    category: "Commerce Infrastructure",
+    title: "Shared Commerce Platform for Multi-Brand D2C",
     description:
-      "Designed a transaction-based credit model to improve SME loan decision speed and reduce underwriting friction.",
-    image: "/assets/images/work/sme-credit-platform.jpg",
-    href: "/work/sme-credit",
-  },
+      "Modeled a shared commerce system based on multi-brand D2C operations, reducing duplication while preserving brand differentiation at scale.",
+    image: "/assets/images/work/commerce-platform.jpg",
+    href: "/work/d2c-platform",
+  }
 ]
 
 export default function WorkSection() {
@@ -35,8 +35,8 @@ export default function WorkSection() {
 
   return (
     <SectionSubgroup
-      label="Selected Work"
-      description="Systems built across fintech and commerce to solve real constraints at scale."
+      label="Case Studies"
+      description="Product explorations addressing complex business and user constraints across fintech and commerce."
       variant="spacious"
     >
       <section data-cursor-zone="work">

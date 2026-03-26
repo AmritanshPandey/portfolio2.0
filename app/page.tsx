@@ -22,9 +22,9 @@ export default function Page() {
       <Section
         id="work"
         bg="default"
-        eyebrow="Work"
+        eyebrow="FEATURED WORK"
         title="Selected Work"
-        transition="Behind these systems is a structured way of thinking and decision-making."
+        transition="How I approach systems, structure decisions, and design for scale under real-world constraints."
         transitionEyebrow="The Thinking Behind the Work"
       >
         <CaseStudy />

@@ -26,7 +26,7 @@ export default function SystemsSection() {
   return (
     <SectionSubgroup
       label="Systems"
-      description="Foundational systems that enable scale, consistency, and better decision-making."
+      description="Scalable foundations that bring consistency, flexibility, and better decision-making to product ecosystems."
       variant="spacious"
     >
       <section data-cursor-zone="systems">

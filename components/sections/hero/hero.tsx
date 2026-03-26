@@ -188,7 +188,7 @@ export default function Hero() {
               Designing fintech
             </span>
             <div className="py-2">
-              <span className="hero-line block text-[clamp(36px,5vw,60px)] text-orange-500/90">
+              <span className="hero-line block text-[clamp(36px,5vw,60px)] inline-block min-w-[10ch]">
                 <TypingWord />
               </span>
             </div>
@@ -204,7 +204,7 @@ export default function Hero() {
   from-background/90 via-background/70 to-background/90 mb-[24px]
   
   ">
-      <p className="
+            <p className="
   hero-sub
   text-[15px] md:text-[16px]
   leading-[1.7]
@@ -215,30 +215,31 @@ export default function Hero() {
   px-4 py-3
   rounded-xl
 
-  bg-background/60
+  bg-background/40
   backdrop-blur-md
+  
 
-  border border-border/50
+  border border-border/30
 
   shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]
 ">
-  <span className="text-foreground font-medium">
-    At Mastercard's Creative Studio,
-  </span>{" "}
-  designing systems and platforms that power global banking partnerships
-  <span className="text-foreground font-medium">
-    {" "}from early demos to production-ready experiences.
-  </span>
-</p>
+              <span className="text-foreground font-medium">
+                At Mastercard's Creative Studio,
+              </span>{" "}
+              designing systems and platforms that power global banking partnerships
+              <span className="text-foreground font-medium">
+                {" "}from early demos to production-ready experiences.
+              </span>
+            </p>
           </div>
           {/* CTAs */}
           <div className="
   hero-cta
-  flex flex-col gap-2.5   /* 👈 better rhythm */
-
+  flex flex-col gap-6 
 w-full max-w-[420px] lg:max-w-[520px]
 
   md:grid md:grid-cols-2
+
 ">
             <CTA
               label="View work"

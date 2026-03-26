@@ -55,7 +55,7 @@ export function TypingWord() {
       {/* TEXT */}
       <span
         className="
-          text-orange-500/85 dark:text-orange-400/90
+          text-orange-600/90 dark:text-orange-400/90
           font-medium
           whitespace-nowrap
         "
