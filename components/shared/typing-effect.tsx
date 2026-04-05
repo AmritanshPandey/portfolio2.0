@@ -7,7 +7,6 @@ const WORDS = ["systems", "platforms", "experiences", "products"]
 const TYPING_SPEED = 120
 const DELETING_SPEED = 70
 const PAUSE_AFTER = 1400
-const PAUSE_BEFORE = 200
 
 export function TypingWord() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -18,6 +17,7 @@ export function TypingWord() {
 
   useEffect(() => {
     const word = WORDS[wordIndex]
+    const hasCompletedWord = !isDeleting && displayed === word
 
     let delay = isDeleting ? DELETING_SPEED : TYPING_SPEED
 
@@ -26,14 +26,12 @@ export function TypingWord() {
     }
 
     timeoutRef.current = setTimeout(() => {
-      if (!isDeleting) {
-        const next = word.slice(0, displayed.length + 1)
-        setDisplayed(next)
+      if (hasCompletedWord) {
+        setIsDeleting(true)
+        return
+      }
 
-        if (next === word) {
-          setTimeout(() => setIsDeleting(true), PAUSE_AFTER)
-        }
-      } else {
+      if (isDeleting) {
         const next = word.slice(0, displayed.length - 1)
         setDisplayed(next)
 
@@ -41,8 +39,12 @@ export function TypingWord() {
           setIsDeleting(false)
           setWordIndex((prev) => (prev + 1) % WORDS.length)
         }
+
+        return
       }
-    }, delay)
+
+      setDisplayed(word.slice(0, displayed.length + 1))
+    }, hasCompletedWord ? PAUSE_AFTER : delay)
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)

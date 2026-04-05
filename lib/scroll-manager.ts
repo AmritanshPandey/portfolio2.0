@@ -1,4 +1,4 @@
-let positions: Record<string, number> = {}
+const positions: Record<string, number> = {}
 
 export function saveScroll(path: string) {
   positions[path] = window.scrollY

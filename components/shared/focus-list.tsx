@@ -1,10 +1,16 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, type ComponentType } from "react"
 import { motion } from "framer-motion"
 
+type FocusIcon = ComponentType<{
+    size?: number
+    stroke?: number
+    className?: string
+}>
+
 type FocusItem = {
-    icon: any
+    icon: FocusIcon
     text: string
 }
 
@@ -26,7 +32,6 @@ export function FocusList({
         const container = containerRef.current
         if (!container) return
 
-        const rect = container.getBoundingClientRect()
         const cx = e.clientX
         const cy = e.clientY
 

@@ -1,15 +1,18 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { IconSun, IconMoon } from "@tabler/icons-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
-  useEffect(() => setMounted(true), [])
   if (!mounted) return (
     // Skeleton — same size, prevents layout shift
     <div className="w-9 h-9 rounded-full bg-white/5 animate-pulse" />

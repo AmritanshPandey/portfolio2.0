@@ -1,4 +1,5 @@
 import "./globals.css"
+import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
@@ -17,6 +18,15 @@ const caveat = Caveat({
   weight: ["400", "500"],
   variable: "--font-caveat",
 })
+
+export const metadata: Metadata = {
+  title: {
+    default: "Amritansh Pandey | Product Design Portfolio",
+    template: "%s | Amritansh Pandey",
+  },
+  description:
+    "Portfolio of Amritansh Pandey, a senior product designer focused on fintech systems, product strategy, and scalable digital experiences.",
+}
 
 export default function RootLayout({
   children,
@@ -43,9 +53,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* Cursor (safe) */}
-          {typeof window !== "undefined" && <FancyCursor />}
-
           {/* Scroll restore */}
           <ScrollToHash />
 

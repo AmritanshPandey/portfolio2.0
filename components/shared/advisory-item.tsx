@@ -2,6 +2,7 @@
 
 import { IconLink } from "@tabler/icons-react"
 import clsx from "clsx"
+import Image from "next/image"
 
 type Props = {
   title: string
@@ -40,11 +41,13 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
         "[transform:translateZ(0)]"
       )}>
-        <img
+        <Image
           src={logo}
           alt={title}
+          width={48}
+          height={48}
+          sizes="48px"
           className="w-full h-full object-contain"
-          loading="lazy"
         />
       </div>
 

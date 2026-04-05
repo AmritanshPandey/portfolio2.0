@@ -40,12 +40,12 @@ export default function ProductThinkingSection() {
         {/* ───────── CORE BELIEF ───────── */}
         <CoreBeliefCard>
           <>
-            Most product problems aren't solved by{" "}
+            Most product problems aren&apos;t solved by{" "}
             <span className="text-foreground/50">
               interfaces
             </span>.
             <br />
-            They're solved by{" "}
+            They&apos;re solved by{" "}
             <span className="
               font-semibold tracking-tight
               text-orange-600 dark:text-orange-400

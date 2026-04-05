@@ -46,7 +46,8 @@ function useActiveSection(ids: string[]) {
         if (mid >= el.offsetTop) current = id
       }
 
-      setActive(current)
+      setActive((previous) => (previous === current ? previous : current))
+
       ticking = false
     }
 
@@ -63,7 +64,7 @@ function useActiveSection(ids: string[]) {
     return () => window.removeEventListener("scroll", onScroll)
   }, [ids])
 
-  return active
+  return [active, setActive] as const
 }
 
 // ─────────────────────────
@@ -156,7 +157,16 @@ export default function Navbar() {
   const pathname = usePathname()
   const isHome = pathname === "/"
 
-  const detectedActive = useActiveSection([
+  // ── Detect active section from route on non-home pages ──
+  const routeSection = (() => {
+    if (pathname.startsWith("/work"))         return "work"
+    if (pathname.startsWith("/explorations")) return "exploration"
+    if (pathname.startsWith("/systems"))      return "approach"
+    if (pathname.startsWith("/articles"))     return "exploration"
+    return null
+  })()
+
+  const [active, setActive] = useActiveSection([
     "hero",
     "work",
     "approach",
@@ -165,12 +175,7 @@ export default function Navbar() {
     "about",
   ])
 
-  const [active, setActive] = useState("hero")
   const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (isHome) setActive(detectedActive)
-  }, [detectedActive, isHome])
 
   useEffect(() => {
     const onResize = () => {
@@ -209,7 +214,10 @@ export default function Navbar() {
                 href={href}
                 label={label}
                 icon={icon}
-                isActive={isHome && active === href.replace("#", "")}
+                isActive={
+                  (isHome && active === href.replace("#", "")) ||
+                  (!isHome && routeSection === href.replace("#", ""))
+                }
                 setActiveImmediate={setActive}
               />
             ))}
@@ -272,7 +280,10 @@ export default function Navbar() {
                 href={href}
                 label={label}
                 icon={icon}
-                isActive={isHome && active === href.replace("#", "")}
+                isActive={
+                  (isHome && active === href.replace("#", "")) ||
+                  (!isHome && routeSection === href.replace("#", ""))
+                }
                 setActiveImmediate={(id) => {
                   setActive(id)
                   setOpen(false)

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useCallback, useSyncExternalStore } from "react"
 import gsap from "gsap"
 import Image from "next/image"
 import { CTA } from "@/components/shared/section-cta"
@@ -14,9 +14,11 @@ export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
 
   const { isHigh } = usePerformanceMode()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   // ── ENTRY ──────────────────────────────────────────────────
   useEffect(() => {
@@ -213,7 +215,7 @@ export default function Hero() {
   leading-[1.7]
   text-muted-foreground
 
-  w-full max-w-[420px] lg:max-w-[520px]
+  w-full max-w-[420px] lg:max-w-[480px]
 
   px-4 py-3
   rounded-xl
@@ -227,7 +229,7 @@ export default function Hero() {
   shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]
 ">
               <span className="text-foreground font-medium">
-                At Mastercard's Creative Studio,
+                At Mastercard&apos;s Creative Studio,
               </span>{" "}
               designing systems and platforms that power global banking partnerships
               <span className="text-foreground font-medium">

@@ -1,0 +1,182 @@
+{
+  "slug": "d2c-platform",
+  "hero": {
+    "title": "Scaling First-Party Commerce Across D2C Brands",
+    "subtitle": "Built a shared commerce platform that launched three brand storefronts in 8 weeks, reduced marketplace dependency, and established the first cross-brand design system for the Honasa Consumer portfolio.",
+    "meta": {
+      "role": "UX Designer & Developer",
+      "duration": "2 Months",
+      "platform": "Mobile + Web",
+      "team": "2 designers, 4 engineers"
+    }
+  },
+  "context": {
+    "points": [
+      "Honasa Consumer operated 3 D2C brands—Mamaearth, The Derma Co., and Aqualogica—each generating most revenue through third-party marketplaces with little owned-channel presence.",
+      "Margin pressure from marketplace commissions and limited customer data ownership were creating compounding business risk as the brand portfolio grew.",
+      "No existing UX process, design system, or shared component library existed across the brand portfolio. Each team operated independently.",
+      "A hard 8-week deadline tied to a seasonal sale window meant there was no room for process setup followed by design—both had to happen in parallel."
+    ]
+  },
+  "problem": {
+    "statement": "How might we build a scalable, first-party commerce experience across three distinct brands—without duplicating engineering or design effort—that could ship in 8 weeks and be owned by a lean team?"
+  },
+  "constraints": {
+    "points": [
+      "No prior UX process or pattern library to build on",
+      "Three brands with distinct visual identities and customer expectations",
+      "Hard 8-week launch deadline tied to a seasonal sale window",
+      "Small design team (2 people) supporting 4 engineers in parallel",
+      "Speed vs. long-term system quality tradeoff at every decision point"
+    ]
+  },
+  "role": {
+    "ownership": [
+      "End-to-end UX design for all three brand storefronts across PDP, cart, checkout, and post-purchase",
+      "Defining the shared component architecture and brand token layer",
+      "Collaborating with engineering lead on component boundaries and API contracts",
+      "Establishing the design-to-dev handoff process from scratch under time pressure"
+    ],
+    "collaboration": [
+      "Product Manager — feature prioritization and scope management under deadline",
+      "Engineering Lead — component feasibility, shared backend boundaries",
+      "Brand Teams — non-negotiable visual identity constraints per brand",
+      "QA — acceptance criteria for UX edge cases and responsive behavior"
+    ]
+  },
+  "approach": {
+    "inputs": [
+      "Marketplace analytics to identify high-drop-off purchase stages across existing channels",
+      "Competitor D2C audits across beauty and personal care verticals to understand table-stakes patterns",
+      "User interviews with existing Mamaearth customers about friction in purchase flows",
+      "Brand team sessions to surface visual identity constraints and non-negotiable design elements"
+    ],
+    "insights": [
+      "68% of drop-offs happened at the Product Detail Page and cart stages—not checkout as originally assumed",
+      "Users trusted Mamaearth's ingredient transparency deeply; they expected the same signal from sibling brands",
+      "All three brands shared identical commerce logic; they diverged only in visual language and tone",
+      "Engineering had standardized on a single backend. The duplication was entirely in the frontend—and the design layer"
+    ],
+    "implications": [
+      "Design energy should focus on PDP and cart—not checkout optimization, which was already well-understood",
+      "Ingredient and trust signals needed to be first-class components, not brand-specific afterthoughts",
+      "A single component library with brand-level theming was achievable and preferable to three separate codebases",
+      "Keeping component logic separate from brand presentation would be the key architectural decision"
+    ]
+  },
+  "decisions": [
+    {
+      "title": "Shared Commerce Backbone with Brand Token Overrides",
+      "problem": "Building separate commerce experiences per brand would mean 3x the design and dev effort. Any future improvement would need to be replicated three times, creating compounding maintenance cost.",
+      "decision": "Designed a single component library where all commerce logic—PDP, cart, checkout, post-purchase—lives in shared components. Brand identity is applied through a token layer covering colors, typography, and imagery only.",
+      "tradeoff": "Reduced flexibility in early stages. Brand teams couldn't request bespoke layouts. This created friction initially but was essential for long-term maintainability and speed.",
+      "impact": "All three storefronts shipped in 8 weeks with one designer and two engineers per brand sprint. Changes to core flows now propagate to all brands simultaneously."
+    },
+    {
+      "title": "MVP Scoping: Revenue-Critical Flows Only",
+      "problem": "Stakeholders wanted wishlists, product recommendations, loyalty programs, and bundle offers in v1. Delivering all of this would push the launch past the sale window.",
+      "decision": "Mapped every requested feature against its estimated revenue contribution. Kept only PDP, cart, checkout, and order confirmation. Documented the rationale for every deferral explicitly.",
+      "tradeoff": "Delayed personalization and discovery features by one quarter, which frustrated some stakeholders initially. But core flows shipped on time with high quality and no post-launch critical bugs.",
+      "impact": "On-time launch across all three brands. The deferred feature list became the v2 roadmap, which was funded directly off the back of v1 results."
+    },
+    {
+      "title": "Trust Signals as System-Level Components",
+      "problem": "Research showed ingredient transparency was a primary purchase driver for Mamaearth customers. Other brands hadn't thought about this systematically, risking inconsistent trust signals across the portfolio.",
+      "decision": "Built ingredient highlights, trust badges, and certification displays as reusable PDP components available to all brands—not hardcoded per brand as one-offs.",
+      "tradeoff": "Required more upfront component design time and engineering spec work. But avoided brand-specific components that would be impossible to audit or improve across the portfolio.",
+      "impact": "All three brands adopted trust components in v1. Mamaearth saw measurable improvement in PDP-to-cart conversion. Other brands adopted the pattern in subsequent releases independently."
+    }
+  ],
+  "system": {
+    "shared": [
+      "Product Detail Page (PDP) layout, interaction patterns, and sticky CTA behavior",
+      "Cart state management, line-item components, and quantity controls",
+      "Checkout flow: address entry, payment selection, order confirmation",
+      "Trust and ingredient badge components",
+      "Responsive layout grid and spacing token scale",
+      "Navigation shell, search patterns, and filter components"
+    ],
+    "brandSpecific": [
+      "Color tokens: primary, accent, surface, and background per brand",
+      "Typography: font families, scale, and weight assignments",
+      "Hero imagery and campaign overlay visual language",
+      "Product card art direction and photography style",
+      "Brand-specific promotional banner layouts"
+    ]
+  },
+  "solution": {
+    "flows": [
+      "Discovery",
+      "Product Detail",
+      "Cart",
+      "Checkout",
+      "Post-Purchase"
+    ],
+    "highlights": [
+      "Single-page checkout reduced form steps from 6 to 3 across all brands, with address autocomplete reducing input friction",
+      "Ingredient transparency panel surfaced as a persistent, keyboard-accessible side-drawer on the PDP—not a modal",
+      "Cart design unified product thumbnails, quantity controls, and cross-sell slots into a single cohesive component that could be themed per brand",
+      "Post-purchase state included order tracking entry point and a contextual cross-sell recommendation—not just a confirmation message"
+    ]
+  },
+  "impact": {
+    "points": [
+      "Launched all three brand storefronts within the 8-week window, meeting the seasonal sale deadline",
+      "Enabled owned-channel commerce at scale, reducing dependency on third-party marketplace commission structures",
+      "Established the first cross-brand design system in the Honasa Consumer portfolio—a foundation that persisted through two more brand additions",
+      "New brand (Aqualogica Glow) was onboarded onto the system in 3 weeks—down from 8 weeks for the initial three",
+      "Two additional designers onboarded in Q2 with no ramp-up from scratch; the system documentation became onboarding material"
+    ]
+  },
+  "tradeoffs": [
+    "Personalization and recommendation features were deferred to v2. The right call given the deadline, but it meant a less differentiated initial experience than the brand teams had envisioned.",
+    "The brand token system was designed quickly under deadline pressure and required significant refactoring 3 months later as more brands were added. Investing more time in token architecture upfront would have paid back quickly.",
+    "User research was compressed to 5 days of interviews. More discovery time would have surfaced mobile-specific interaction patterns that had to be addressed in a post-launch patch.",
+    "Engineering handoff relied heavily on verbal communication and annotated Figma frames—no Storybook or component documentation. Setting this up earlier would have reduced back-and-forth significantly."
+  ],
+  "evolution": {
+    "timeline": [
+      {
+        "week": "Week 1–2",
+        "label": "Discovery",
+        "detail": "Stakeholder interviews, competitor audits, analytics review, and constraint mapping across all three brands."
+      },
+      {
+        "week": "Week 3–4",
+        "label": "System Architecture",
+        "detail": "Defined shared component boundaries, brand token structure, and MVP feature scope through a prioritization matrix."
+      },
+      {
+        "week": "Week 5–6",
+        "label": "Design & Prototype",
+        "detail": "Designed all core flows across three brands simultaneously using the shared system. Internal reviews with brand teams and engineering."
+      },
+      {
+        "week": "Week 7",
+        "label": "Engineering Handoff",
+        "detail": "Component-by-component spec delivery with edge case documentation, responsive specs, and interaction notes."
+      },
+      {
+        "week": "Week 8",
+        "label": "Launch",
+        "detail": "Staged release across Mamaearth, The Derma Co., and Aqualogica storefronts. Real-time monitoring and rapid iteration."
+      },
+      {
+        "week": "Post-Launch",
+        "label": "System Iteration",
+        "detail": "Token architecture refactor, Storybook setup, and v2 roadmap scoped from live user behavior data and brand team feedback."
+      }
+    ]
+  },
+  "takeaway": "Scalable product systems aren't built by adding features—they're built by ruthlessly separating what varies from what doesn't, and making that separation explicit at the very start.",
+  "visuals": {
+    "architecture": "/images/honasa/architecture.png",
+    "flow": "/images/honasa/flow.png",
+    "beforeAfter": "/images/honasa/before-after.png",
+    "components": [
+      "/images/honasa/component-pdp.png",
+      "/images/honasa/component-cart.png"
+    ],
+    "system": "/images/honasa/system.png"
+  }
+}

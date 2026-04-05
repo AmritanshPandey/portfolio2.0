@@ -1,0 +1,94 @@
+{
+  "slug": "honasa-commerce",
+  "title": "Scaling First-Party Commerce Across D2C Brands",
+  "subtitle": "Built a reusable commerce platform enabling multi-brand scale and owned-channel growth",
+
+  "meta": {
+    "role": "UX Designer & Developer",
+    "duration": "2 Months",
+    "platform": "Mobile + Web"
+  },
+
+  "context": {
+    "points": [
+      "Heavy dependency on marketplaces",
+      "Need to improve margins via owned channels",
+      "No existing UX foundation",
+      "Multiple brands with shared commerce needs"
+    ]
+  },
+
+  "problem": {
+    "statement": "How might we create a scalable commerce experience across brands while maintaining identity and speed of execution?"
+  },
+
+  "constraints": [
+    "No prior UX process",
+    "Three brands with distinct identities",
+    "High growth pressure",
+    "Speed vs system tradeoffs"
+  ],
+
+  "decisions": [
+    {
+      "title": "Standardized Commerce Backbone",
+      "problem": "Multiple brands would lead to duplicated effort",
+      "decision": "Created a shared commerce system with brand-level overrides",
+      "tradeoff": "Reduced flexibility in early stages for long-term scalability"
+    },
+    {
+      "title": "MVP Over Feature Bloat",
+      "problem": "Time constraints and high pressure to launch",
+      "decision": "Focused only on revenue-critical flows",
+      "tradeoff": "Delayed personalization and advanced features"
+    }
+  ],
+
+  "architecture": {
+    "layers": [
+      {
+        "name": "Commerce Platform",
+        "children": [
+          {
+            "name": "Shared Commerce Engine"
+          },
+          {
+            "name": "Brand Layer",
+            "children": [
+              { "name": "Mamaearth" },
+              { "name": "The Derma Co." },
+              { "name": "Aqualogica" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "flow": {
+    "steps": [
+      "Discovery",
+      "Product Detail",
+      "Cart",
+      "Checkout",
+      "Post-Purchase"
+    ]
+  },
+
+  "impact": {
+    "points": [
+      "Enabled owned-channel growth",
+      "Reduced marketplace dependency",
+      "Scaled across multiple brands",
+      "Established UX foundation for team expansion"
+    ]
+  },
+
+  "tradeoffs": [
+    "Limited early personalization",
+    "Focused on scalability over customization",
+    "Some brand-specific nuances deferred"
+  ],
+
+  "takeaway": "I build scalable product systems by balancing speed, constraints, and long-term growth."
+}

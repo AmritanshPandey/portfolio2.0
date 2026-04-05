@@ -1,24 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
+
+type PerformanceMode = "high" | "balanced" | "low"
+
+function getPerformanceMode(): PerformanceMode {
+  if (typeof navigator === "undefined") {
+    return "high"
+  }
+
+  const ua = navigator.userAgent
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua)
+  const isLowCPU = navigator.hardwareConcurrency <= 4
+
+  if (isSafari && isLowCPU) {
+    return "low"
+  }
+
+  if (isSafari || isLowCPU) {
+    return "balanced"
+  }
+
+  return "high"
+}
 
 export function usePerformanceMode() {
-  const [mode, setMode] = useState<"high" | "balanced" | "low">("high")
-
-  useEffect(() => {
-    const ua = navigator.userAgent
-
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua)
-    const isLowCPU = navigator.hardwareConcurrency <= 4
-
-    if (isSafari || isLowCPU) {
-      setMode("balanced")
-    }
-
-    if (isSafari && isLowCPU) {
-      setMode("low")
-    }
-  }, [])
+  const mode = useSyncExternalStore(
+    () => () => {},
+    getPerformanceMode,
+    () => "high"
+  )
 
   return {
     isHigh: mode === "high",

@@ -3,23 +3,23 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
+const PHOTOS = [
+  "/assets/images/1.png",
+  "/assets/images/2.png",
+  "/assets/images/3.png",
+  "/assets/images/4.png",
+  "/assets/images/5.png",
+]
+
+const CAPTIONS = ["Moments", "Travel", "Life", "Stories", "Memories"]
+
 export default function PhotoCarousel() {
-  const photos = [
-    "/assets/images/1.png",
-    "/assets/images/2.png",
-    "/assets/images/3.png",
-    "/assets/images/4.png",
-    "/assets/images/5.png",
-  ]
-
-  const captions = ["Moments", "Travel", "Life", "Stories", "Memories"]
-
   const [index, setIndex] = useState(0)
 
   // Auto rotate
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % photos.length)
+      setIndex((prev) => (prev + 1) % PHOTOS.length)
     }, 3000)
 
     return () => clearInterval(interval)
@@ -29,8 +29,8 @@ export default function PhotoCarousel() {
     <div className="flex justify-center py-12">
       <div className="relative w-[260px] md:w-[300px] aspect-[4/5]">
 
-        {photos.map((src, i) => {
-          const position = (i - index + photos.length) % photos.length
+        {PHOTOS.map((src, i) => {
+          const position = (i - index + PHOTOS.length) % PHOTOS.length
           const isActive = position === 0
 
           // simple stacking (no TS issues)
@@ -84,7 +84,7 @@ export default function PhotoCarousel() {
                       className="text-xl text-black/70 italic pt-8"
                       style={{ transform: "rotate(-1deg)" }}
                     >
-                      {isActive ? captions[i] : ""}
+                      {isActive ? CAPTIONS[i] : ""}
                     </span>
                   </div>
 
