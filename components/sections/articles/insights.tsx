@@ -14,24 +14,28 @@ export default function InsightsSection() {
       description:
         "Most products fail due to misaligned incentives, not poor UX.",
       href: "/articles/incentive-systems",
+      image: "/article.png",
     },
     {
       title: "The Cost of Over-Engineering UX",
       description:
         "Complexity doesn't make products powerful — it makes them harder to use.",
       href: "/articles/overengineering-ux",
+      image: "/article.png",
     },
     {
       title: "Risk as a Design Constraint",
       description:
         "In fintech, every product decision is also a risk decision.",
       href: "/articles/risk-as-design-constraint",
+      image: "/article.png",
     },
     {
       title: "Designing Under Uncertainty",
       description:
         "Strong teams move forward without perfect data and learn faster.",
       href: "/articles/designing-under-uncertainty",
+      image: "/article.png",
     },
   ]
 
@@ -77,6 +81,7 @@ export default function InsightsSection() {
                   title={article.title}
                   description={article.description}
                   href={article.href}
+                  image={article.image}
                 />
               </motion.div>
             ))}

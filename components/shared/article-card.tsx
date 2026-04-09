@@ -1,153 +1,117 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { IconArrowUpRight } from "@tabler/icons-react"
-import clsx from "clsx"
 
 type Props = {
   index: number
   title: string
   description: string
   href: string
+  image: string
 }
 
-export function ArticleCard({ index, title, description, href }: Props) {
+export function ArticleCard({ title, description, href, image }: Props) {
   return (
     <Link
       href={href}
-      className="group block h-full rounded-2xl"
+      className="group block"
       data-cursor-card
       data-cursor-label="Read"
       data-cursor-cta
     >
       <div
-        className={clsx(
-          "relative flex flex-col h-full p-6 rounded-2xl overflow-hidden",
-          "bg-card border border-border",
+        className="
+          flex items-start gap-5 p-5 rounded-2xl
 
-          // ✨ top edge
-          "before:absolute before:inset-x-0 before:top-0 before:h-px",
-          "before:bg-gradient-to-r before:from-transparent before:via-foreground/10 before:to-transparent",
-          "dark:before:via-white/20",
+          bg-transparent border border-transparent
 
-          // 🔥 Safari-safe transform (no layout shift)
-          "transition-transform duration-300 ease-out",
-          "[transform:translateZ(0)]",
+          transition-all duration-300 ease-out
+          hover:bg-foreground/[0.04] dark:hover:bg-white/[0.03]
 
-          "hover:[transform:translate3d(-1px,-2px,0)]",
-          "hover:border-border/80",
-
-          // lighter shadow (avoid heavy repaint)
-          "hover:shadow-md dark:hover:shadow-xl"
-        )}
+          hover:[transform:translate3d(0,-1.5px,0)]
+        "
       >
 
-        {/* subtle ambient (lighter + safe) */}
+        {/* IMAGE (1:1 aspect ratio) */}
         <div className="
-          pointer-events-none absolute inset-0 rounded-2xl
-          opacity-0 group-hover:opacity-100
+          w-20 md:w-24 aspect-square
+          rounded-xl overflow-hidden
+          bg-muted flex-shrink-0
+        ">
+          <Image
+            src={image}
+            alt={title}
+            width={96}
+            height={96}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* CONTENT */}
+        <div className="
+          flex flex-col flex-1 min-w-0
+
           transition-opacity duration-300
+          group-hover:opacity-95
+        ">
 
-          bg-[radial-gradient(200px_100px_at_0%_100%,rgba(255,90,0,0.06),transparent_60%)]
-          dark:bg-[radial-gradient(200px_100px_at_0%_100%,rgba(255,140,60,0.08),transparent_60%)]
-        " />
-
-        <div
-          className="
-            relative flex flex-col flex-1
-
-            // 🔥 remove layout shift
-            transition-transform duration-300
-            group-hover:[transform:translate3d(-1px,-1px,0)]
-          "
-        >
-
-          {/* TOP */}
-          <div className="flex items-center justify-between mb-5">
-
-            {/* index */}
-            <span className="
-              text-[10px] font-semibold tracking-[0.18em] uppercase
-              text-foreground/60
-              transition-colors duration-200
-              group-hover:text-orange-600 dark:group-hover:text-orange-400
-            ">
-              {String(index).padStart(2, "0")}
-            </span>
-
-            {/* icon */}
-            <span className="
-              w-9 h-9 rounded-full
-              border border-border
-              flex items-center justify-center
-
-              transition-colors duration-300
-              group-hover:border-orange-600/50
-              dark:group-hover:border-orange-400/50
-
-              group-hover:bg-orange-600/10
-              dark:group-hover:bg-orange-400/10
-            ">
-              <IconArrowUpRight
-                size={16}
-                stroke={2}
-                className="
-                  text-foreground/60
-                  transition-transform duration-300
-
-                  group-hover:text-orange-600
-                  dark:group-hover:text-orange-400
-
-                  group-hover:[transform:translate3d(2px,-2px,0)]
-                "
-              />
-            </span>
-
-          </div>
+          {/* META */}
+          <span className="
+            text-[10px] font-semibold tracking-[0.18em] uppercase
+            text-foreground/50 mb-1
+          ">
+            META
+          </span>
 
           {/* TITLE */}
           <h3 className="
-            text-base md:text-lg font-medium leading-[1.3] tracking-tight
-            text-foreground mb-2.5 line-clamp-2
+            text-sm md:text-base font-medium leading-[1.35]
+            text-foreground mb-2 line-clamp-2
+
+            transition-colors duration-200
+            group-hover:text-orange-600 dark:group-hover:text-orange-400
           ">
             {title}
           </h3>
 
           {/* DESCRIPTION */}
           <p className="
-            text-foreground/70 text-sm leading-relaxed
-            line-clamp-3 flex-1
+            text-xs md:text-sm text-foreground/60
+            leading-relaxed line-clamp-2
           ">
             {description}
           </p>
 
-          {/* BOTTOM */}
-          <div className="
-            mt-5 pt-4 border-t border-border/60
-            flex items-center justify-between
+          {/* DATE */}
+          <span className="
+            text-[11px] text-foreground/40 mt-3
           ">
+            April 8, 2026
+          </span>
+        </div>
 
-            <span className="
-              text-xs font-medium text-foreground/80
-              transition-transform duration-200
+        {/* ICON */}
+        <div className="
+          mt-1 opacity-0
+          transition-all duration-300
+
+          group-hover:opacity-100
+          group-hover:[transform:translate3d(2px,-2px,0)]
+        ">
+          <IconArrowUpRight
+            size={16}
+            className="
+              text-foreground/40
+              transition-colors duration-200
 
               group-hover:text-orange-600
               dark:group-hover:text-orange-400
-
-              group-hover:[transform:translate3d(2px,0,0)]
-            ">
-              Read article
-            </span>
-
-            <span className="
-              text-[10px] text-foreground/50 tracking-wide
-            ">
-              Article
-            </span>
-
-          </div>
-
+            "
+          />
         </div>
+
       </div>
     </Link>
   )
