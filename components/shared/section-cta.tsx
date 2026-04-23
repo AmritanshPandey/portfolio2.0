@@ -28,8 +28,7 @@ export function CTA({
   const router = useRouter()
   const pathname = usePathname()
 
-  const containerRef = useRef<HTMLAnchorElement>(null)
-  const innerRef = useRef<HTMLSpanElement>(null)
+  // Removed refs for magnetic hover effect
 
   const Icon =
     icon === "arrow" ? IconArrowUpRight :
@@ -54,61 +53,27 @@ export function CTA({
     }
   }
 
-  // ───── MAGNETIC (smooth + safari safe) ─────
-  const handleMove = (e: React.MouseEvent) => {
-    if (variant !== "primary" || !containerRef.current || !innerRef.current) return
 
-    const rect = containerRef.current.getBoundingClientRect()
-
-    const x = e.clientX - (rect.left + rect.width / 2)
-    const y = e.clientY - (rect.top + rect.height / 2)
-
-    const strength = 0.18
-    const max = 10
-
-    const moveX = Math.max(Math.min(x * strength, max), -max)
-    const moveY = Math.max(Math.min(y * strength, max), -max)
-
-    innerRef.current.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`
-  }
-
-  const handleLeave = () => {
-    if (!innerRef.current) return
-
-    innerRef.current.style.transition =
-      "transform 0.35s cubic-bezier(0.22,1,0.36,1)"
-    innerRef.current.style.transform = "translate3d(0,0,0)"
-  }
 
   // ───────── PRIMARY + SECONDARY ─────────
   if (variant !== "tertiary" && href) {
     return (
       <Link
-        ref={containerRef}
         href={href}
         onClick={handleClick}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
         className={clsx(
           "group/cta relative flex items-center justify-center",
           "w-full px-5 py-3 rounded-full text-[15px] font-medium",
-          "overflow-hidden will-change-transform",
+          "overflow-hidden",
           "active:scale-[0.97]",
           "transition-all duration-300",
 
           // PRIMARY
           variant === "primary" && [
-            // base
             "bg-orange-600 text-white",
-
-            // subtle depth (important)
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_18px_rgba(255,90,0,0.18)]",
-
-            // hover
             "hover:bg-orange-500",
             "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_26px_rgba(255,90,0,0.28)]",
-
-            // active
             "active:scale-[0.97]",
           ],
 
@@ -117,16 +82,12 @@ export function CTA({
             "border border-border/60",
             "bg-background/50 backdrop-blur-md",
             "text-foreground/70",
-
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
-
             "hover:text-foreground",
             "hover:border-orange-500/40",
             "hover:bg-background/70",
             "hover:shadow-[0_6px_18px_rgba(255,90,0,0.12)]",
-
             "hover:-translate-y-[1px]",
-
             "dark:bg-white/[0.04]",
             "dark:border-white/[0.08]",
             "dark:hover:bg-white/[0.06]",
@@ -148,8 +109,7 @@ export function CTA({
 
         {/* INNER */}
         <span
-          ref={innerRef}
-          className="relative flex items-center gap-2 will-change-transform"
+          className="relative flex items-center gap-2 transition-all duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]"
         >
           {label}
 

@@ -25,62 +25,7 @@ export function FocusList({
     title = "Focus areas",
     variant = "default",
 }: Props) {
-    const containerRef = useRef<HTMLDivElement>(null)
 
-    // ── Magnetic proximity
-    const handleMove = (e: React.MouseEvent) => {
-        const container = containerRef.current
-        if (!container) return
-
-        const cx = e.clientX
-        const cy = e.clientY
-
-        const items = container.querySelectorAll("[data-item]")
-
-        items.forEach((el) => {
-            const node = el as HTMLElement
-            const r = node.getBoundingClientRect()
-
-            const x = r.left + r.width / 2
-            const y = r.top + r.height / 2
-
-            const dx = cx - x
-            const dy = cy - y
-            const dist = Math.sqrt(dx * dx + dy * dy)
-
-            const maxDist = 140
-
-            if (dist < maxDist) {
-                const power = 1 - dist / maxDist
-
-                const moveX = dx * 0.05 * power
-                const moveY = dy * 0.05 * power
-                const scale = 1 + power * 0.035
-
-                node.style.transform = `
-          translate(${moveX}px, ${moveY}px)
-          scale(${scale})
-        `
-                node.style.opacity = `${0.7 + power * 0.3}`
-            } else {
-                node.style.transform = "translate(0px,0px) scale(1)"
-                node.style.opacity = "0.75"
-            }
-        })
-    }
-
-    const handleLeave = () => {
-        const container = containerRef.current
-        if (!container) return
-
-        const items = container.querySelectorAll("[data-item]")
-
-        items.forEach((el) => {
-            const node = el as HTMLElement
-            node.style.transform = "translate(0px,0px) scale(1)"
-            node.style.opacity = "0.75"
-        })
-    }
 
     return (
         <div>
@@ -99,15 +44,12 @@ export function FocusList({
             </p>
 
             {/* ── LIST */}
-            <div
-                ref={containerRef}
-                onMouseMove={handleMove}
-                onMouseLeave={handleLeave}
-                className={`
-          grid
-          ${variant === "compact" ? "gap-y-6" : "sm:grid-cols-2 gap-x-14 gap-y-9"}
-        `}
-            >
+                        <div
+                                className={`
+                    grid
+                    ${variant === "compact" ? "gap-y-6" : "sm:grid-cols-2 gap-x-14 gap-y-9"}
+                `}
+                        >
                 {focus.map((item, index) => {
                     const Icon = item.icon
 

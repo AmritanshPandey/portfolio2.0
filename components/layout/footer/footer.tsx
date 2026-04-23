@@ -142,15 +142,11 @@ function RotatingStatus() {
 
 // ── Platform card ────────────────────────────────────────────
 function PlatformCard({ label, handle, href, icon: Icon, description, accent, accentRgb }: typeof PLATFORMS[0]) {
-  const [hovered, setHovered] = useState(false)
-
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       className="group relative flex flex-col justify-between p-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 overflow-hidden"
     >
       {/* Hover accent glow — adapts to theme */}
@@ -165,23 +161,25 @@ function PlatformCard({ label, handle, href, icon: Icon, description, accent, ac
       <div className="relative flex items-start justify-between mb-5">
         {/* Icon box */}
         <div
-className="w-9 h-9 rounded-xl flex items-center justify-center border border-white/[0.10] bg-white/[0.04] transition-all duration-300"
-          style={hovered ? { boxShadow: `0 0 0 1px rgba(${accentRgb},0.25)` } : {}}
+          className="w-9 h-9 rounded-xl flex items-center justify-center border border-white/[0.10] bg-white/[0.04] transition-all duration-300 group-hover:shadow-[0_0_0_1px_rgba(var(--accent-rgb),0.25)]"
+          style={{
+            // Use CSS variable for accentRgb to allow group-hover shadow
+            ...(accent !== "currentColor" ? { ['--accent-rgb' as any]: accentRgb } : {}),
+          }}
         >
           <Icon size={16} stroke={1.75} style={{ color: accent === "currentColor" ? undefined : accent }} />
         </div>
 
         {/* Arrow */}
-        <motion.div
-          animate={{ x: hovered ? 1.5 : 0, y: hovered ? -1.5 : 0 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
+        <span
+          className="transition-transform duration-200 group-hover:translate-x-[1.5px] group-hover:-translate-y-[1.5px]"
         >
           <IconArrowUpRight
             size={14}
             stroke={2}
             className="text-neutral-700 group-hover:text-neutral-300 transition-colors duration-200"
           />
-        </motion.div>
+        </span>
       </div>
 
       {/* Bottom */}
@@ -193,14 +191,12 @@ className="w-9 h-9 rounded-xl flex items-center justify-center border border-whi
           {description}
         </p>
         {/* Handle fades in on hover */}
-        <motion.p
-          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 4 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
-          className="text-[10px] mt-1.5 font-mono"
+        <span
+          className="text-[10px] mt-1.5 font-mono opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200"
           style={{ color: accent === "currentColor" ? undefined : accent }}
         >
           {handle}
-        </motion.p>
+        </span>
       </div>
     </a>
   )
