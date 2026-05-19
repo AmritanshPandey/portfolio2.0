@@ -109,7 +109,19 @@
 }
 
 /* ─────────────────────────
-   MINIMAL CURSOR LABEL
+   HIDE NATIVE CURSOR
+   Only on real pointer devices (mouse / trackpad).
+   Touch / stylus devices keep their default cursors.
+───────────────────────── */
+
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ─────────────────────────
+   CURSOR LABEL
 ───────────────────────── */
 
 .cursor-label-ui {
