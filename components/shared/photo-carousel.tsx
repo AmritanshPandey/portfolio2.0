@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 
-const PHOTOS = [
+const DEFAULT_PHOTOS = [
   "/assets/images/1.png",
   "/assets/images/2.png",
   "/assets/images/3.png",
@@ -11,29 +11,41 @@ const PHOTOS = [
   "/assets/images/5.png",
 ]
 
-const CAPTIONS = ["Moments", "Travel", "Life", "Stories", "Memories"]
+const DEFAULT_CAPTIONS = ["Moments", "Travel", "Life", "Stories", "Memories"]
 
-export default function PhotoCarousel() {
+type Props = {
+  photos?: string[]
+  captions?: string[]
+  interval?: number
+  /** Alt text prefix; each photo gets "{altPrefix} {n}" */
+  altPrefix?: string
+}
+
+export default function PhotoCarousel({
+  photos = DEFAULT_PHOTOS,
+  captions = DEFAULT_CAPTIONS,
+  interval = 3000,
+  altPrefix = "Photo",
+}: Props) {
   const [index, setIndex] = useState(0)
+  const count = photos.length
 
-  // Auto rotate
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % PHOTOS.length)
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % count)
+    }, interval)
+    return () => clearInterval(id)
+  }, [count, interval])
 
   return (
     <div className="flex justify-center py-12">
       <div className="relative w-[260px] md:w-[300px] aspect-[4/5]">
 
-        {PHOTOS.map((src, i) => {
-          const position = (i - index + PHOTOS.length) % PHOTOS.length
+        {photos.map((src, i) => {
+          const position = (i - index + count) % count
           const isActive = position === 0
+          const activeCaption = captions[index % captions.length]
 
-          // simple stacking (no TS issues)
           let transform = ""
           let zIndex = 0
           let opacity = 1
@@ -56,11 +68,7 @@ export default function PhotoCarousel() {
             <div
               key={i}
               className="absolute inset-0 transition-all duration-500 ease-out"
-              style={{
-                transform,
-                zIndex,
-                opacity,
-              }}
+              style={{ transform, zIndex, opacity }}
             >
               <div className="w-full h-full transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.02]">
 
@@ -71,7 +79,7 @@ export default function PhotoCarousel() {
                     <div className="relative w-full aspect-square overflow-hidden rounded-sm">
                       <Image
                         src={src}
-                        alt=""
+                        alt={`${altPrefix} ${i + 1}`}
                         fill
                         className="object-cover"
                       />
@@ -79,13 +87,15 @@ export default function PhotoCarousel() {
                   </div>
 
                   {/* CAPTION */}
-                 <div className="h-[36px] flex items-center justify-center pb-[2px]">
-                    <span
-                      className="text-xl text-black/70 italic pt-8"
-                      style={{ transform: "rotate(-1deg)" }}
-                    >
-                      {isActive ? CAPTIONS[i] : ""}
-                    </span>
+                  <div className="h-[52px] flex items-center justify-center">
+                    {isActive && (
+                      <span
+                        className="text-xl text-black/70 italic"
+                        style={{ transform: "rotate(-1deg)", display: "inline-block" }}
+                      >
+                        {activeCaption}
+                      </span>
+                    )}
                   </div>
 
                 </div>

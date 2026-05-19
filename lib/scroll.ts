@@ -6,7 +6,7 @@ export function scrollToSection(id: string) {
 
   const y =
     el.getBoundingClientRect().top +
-    window.pageYOffset +
+    window.scrollY +
     yOffset
 
   window.scrollTo({

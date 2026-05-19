@@ -4,18 +4,27 @@ import { motion } from "framer-motion"
 import clsx from "clsx"
 
 type Variant = "default" | "compact" | "hero"
+type HeadingLevel = "h1" | "h2" | "h3"
+
+interface SectionHeaderProps {
+  eyebrow?: string
+  title: string
+  description?: string
+  variant?: Variant
+  /** Semantic heading element — defaults to h2. Use h1 only for the page hero. */
+  as?: HeadingLevel
+  /** Index of the word to accent with orange. Defaults to last word (-1). */
+  accentIndex?: number
+}
 
 export function SectionHeader({
   eyebrow,
   title,
   description,
   variant = "default",
-}: {
-  eyebrow?: string
-  title: string
-  description?: string
-  variant?: Variant
-}) {
+  as: Tag = "h2",
+  accentIndex = -1,
+}: SectionHeaderProps) {
   const variants = {
     default: {
       container: "max-w-[700px] space-y-4",
@@ -36,11 +45,12 @@ export function SectionHeader({
 
   const styles = variants[variant]
   const words = title.split(" ")
+  const resolvedAccent = accentIndex < 0 ? words.length + accentIndex : accentIndex
 
   return (
     <div className={clsx(styles.container)}>
 
-      {/* EYEBROW — tighter + aligned */}
+      {/* EYEBROW */}
       {eyebrow && (
         <motion.div
           initial={{ opacity: 0, y: 6 }}
@@ -49,7 +59,6 @@ export function SectionHeader({
           transition={{ duration: 0.35 }}
           className="flex items-center gap-3"
         >
-          {/* subtle line (no float, no distraction) */}
           <div className="w-6 h-[1.5px] bg-orange-500/70 rounded-full" />
 
           <p className="
@@ -62,43 +71,38 @@ export function SectionHeader({
       )}
 
       {/* TITLE */}
-      <h1
+      <Tag
         className={clsx(
           "font-semibold tracking-tight leading-[1.08]",
           "text-neutral-900 dark:text-white",
           styles.title
         )}
       >
-        {words.map((word, i) => {
-          const isAccent = i === words.length - 1
-
-          return (
-            <motion.span
-              key={i}
-              className="inline-block mr-[0.35em]"
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.4,
-                delay: i * 0.03,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+        {words.map((word, i) => (
+          <motion.span
+            key={i}
+            className="inline-block mr-[0.35em]"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.4,
+              delay: i * 0.03,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <span
+              className={clsx(
+                i === resolvedAccent
+                  ? "shimmer-accent"
+                  : "text-inherit"
+              )}
             >
-              {/* subtle accent — always visible */}
-              <span
-                className={clsx(
-                  isAccent
-                    ? "text-orange-500 dark:text-orange-400"
-                    : "text-inherit"
-                )}
-              >
-                {word}
-              </span>
-            </motion.span>
-          )
-        })}
-      </h1>
+              {word}
+            </span>
+          </motion.span>
+        ))}
+      </Tag>
 
       {/* DESCRIPTION */}
       {description && (
@@ -106,10 +110,7 @@ export function SectionHeader({
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{
-            duration: 0.4,
-            delay: 0.12,
-          }}
+          transition={{ duration: 0.4, delay: 0.12 }}
           className={clsx(
             "text-muted-foreground leading-[1.6] max-w-xl",
             styles.desc

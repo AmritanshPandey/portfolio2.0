@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback, useSyncExternalStore } from "react"
+import { useScroll, useTransform, motion } from "framer-motion"
 import gsap from "gsap"
 import Image from "next/image"
 import { CTA } from "@/components/shared/section-cta"
@@ -20,7 +21,16 @@ export default function Hero() {
     () => false
   )
 
-  // ── ENTRY ──────────────────────────────────────────────────
+  // ── PARALLAX ───────────────────────────────────────────
+  const { scrollY } = useScroll()
+  // Dot grid drifts down slightly as user scrolls (slow parallax)
+  const dotGridY  = useTransform(scrollY, [0, 600], [0, 55])
+  // Hero image card rises slightly faster
+  const cardY     = useTransform(scrollY, [0, 600], [0, -28])
+  // Orange bloom shifts
+  const bloomY    = useTransform(scrollY, [0, 600], [0, 30])
+
+  // ── ENTRY ──────────────────────────────────────────────
   useEffect(() => {
     if (!mounted) return
     const ctx = gsap.context(() => {
@@ -33,29 +43,22 @@ export default function Hero() {
     return () => ctx.revert()
   }, [mounted])
 
-  // ── TILT — Safari-safe (scale3d, willChange, no state) ────
+  // ── TILT — Safari-safe (scale3d, no state) ────────────
   const handleMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isHigh) return
-
     const el = cardRef.current
     if (!el) return
-
     const rect = el.getBoundingClientRect()
-
     const x = (e.clientX - rect.left) / rect.width
     const y = (e.clientY - rect.top) / rect.height
-
-    // ✅ ADD HERE
     el.style.setProperty("--x", `${x * 100}%`)
     el.style.setProperty("--y", `${y * 100}%`)
-
-    // existing transform
     el.style.transform = `
-    perspective(1000px)
-    rotateX(${(y - 0.5) * -4}deg)
-    rotateY(${(x - 0.5) * 4}deg)
-    scale3d(1.015,1.015,1.015)
-  `
+      perspective(1000px)
+      rotateX(${(y - 0.5) * -4}deg)
+      rotateY(${(x - 0.5) * 4}deg)
+      scale3d(1.015,1.015,1.015)
+    `
   }, [isHigh])
 
   const handleLeave = useCallback(() => {
@@ -72,109 +75,76 @@ export default function Hero() {
     >
 
       {/* ══════════════════════════════════════════════════
-          BACKGROUND LAYERS  (bottom → top)
-
-          1. Dot grid           always visible, no blend mode
-          2. Grid edge vignette fades dots at edges
-          3. Orange bloom       warm ambient, top-left
-          4. Edge fades         blends into surrounding sections
+          BACKGROUND LAYERS
       ══════════════════════════════════════════════════ */}
 
-      {/* 1a. DOT GRID — light mode
-              rgba(0,0,0,0.22) gives clearly visible dark dots
-              on the light background. No mix-blend needed.
-              24px grid = premium density, not too busy.        */}
-      <div
+      {/* 1a. DOT GRID — light mode (parallax) */}
+      <motion.div
         className="pointer-events-none absolute inset-0 dark:hidden"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.22) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
+          y: dotGridY,
         }}
       />
 
-      {/* 1b. DOT GRID — dark mode
-              rgba(255,255,255,0.10) = subtle but readable dots.
-              Separate element avoids Tailwind dark: + inline
-              style conflicts that trip Safari up.               */}
-      <div
+      {/* 1b. DOT GRID — dark mode (parallax) */}
+      <motion.div
         className="pointer-events-none absolute inset-0 hidden dark:block"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
+          y: dotGridY,
         }}
       />
 
-      {/* 2. GRID EDGE VIGNETTE
-              Fades the dot grid at all four edges so it doesn't
-              compete with content or bleed into other sections.
-              radial-gradient is Safari GPU-composited — safe.   */}
+      {/* 2. GRID EDGE VIGNETTE */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 35%, hsl(var(--background)) 100%)",
+          background: "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 35%, var(--background) 100%)",
         }}
       />
 
-      {/* 3. ORANGE BLOOM — top-left warm atmosphere
-              blur-3xl is GPU-composited on Safari.
-              Only renders on high-perf devices.                 */}
+      {/* 3. ORANGE BLOOM — top-left (parallax) */}
       {isHigh && (
-        <div
+        <motion.div
           className="pointer-events-none absolute -top-40 -left-40 w-[580px] h-[580px] rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(232,98,26,0.09) 0%, transparent 70%)" }}
+          style={{
+            background: "radial-gradient(circle, rgba(232,98,26,0.09) 0%, transparent 70%)",
+            y: bloomY,
+          }}
         />
       )}
 
-      {/* 4a. TOP EDGE FADE */}
-      <div
-        className="pointer-events-none absolute top-0 left-0 right-0 h-20"
-        style={{ background: "linear-gradient(to bottom, hsl(var(--background)), transparent)" }}
-      />
-
-      {/* 4b. BOTTOM EDGE FADE */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-20"
-        style={{ background: "linear-gradient(to top, hsl(var(--background)), transparent)" }}
-      />
-
-      {/* 4c. LEFT EDGE FADE */}
-      <div
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-20"
-        style={{ background: "linear-gradient(to right, hsl(var(--background)), transparent)" }}
-      />
-
-      {/* 4d. RIGHT EDGE FADE */}
-      <div
-        className="pointer-events-none absolute top-0 bottom-0 right-0 w-20"
-        style={{ background: "linear-gradient(to left, hsl(var(--background)), transparent)" }}
-      />
+      {/* 4. EDGE FADES */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-20"
+        style={{ background: "linear-gradient(to bottom, var(--background), transparent)" }} />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20"
+        style={{ background: "linear-gradient(to top, var(--background), transparent)" }} />
+      <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-20"
+        style={{ background: "linear-gradient(to right, var(--background), transparent)" }} />
+      <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-20"
+        style={{ background: "linear-gradient(to left, var(--background), transparent)" }} />
 
       {/* ══════════════════════════════════════════════════
           CONTENT
       ══════════════════════════════════════════════════ */}
       <div className="
-  relative z-10 max-w-6xl mx-auto
-  px-5 sm:px-6
-  py-16 md:py-24 lg:py-28
-
-  grid lg:grid-cols-[1.5fr_1fr]
-
-  gap-12 md:gap-14  
-  items-center
-">
+        relative z-10 max-w-6xl mx-auto
+        px-5 sm:px-6
+        py-16 md:py-24 lg:py-28
+        grid lg:grid-cols-[1.5fr_1fr]
+        gap-12 md:gap-14
+        items-center
+      ">
 
         {/* ── LEFT ─────────────────────────────────────── */}
         <div className="
-  flex flex-col gap-5 md:gap-6 lg:gap-7
-
-  w-full
-  max-w-[620px]
-  md:max-w-[680px]
-  lg:max-w-[620px]
-
-  items-start
-  text-left
-">
+          flex flex-col gap-5 md:gap-6 lg:gap-7
+          w-full max-w-[620px] md:max-w-[680px] lg:max-w-[620px]
+          items-start text-left
+        ">
 
           {/* Badge */}
           <div className="
@@ -197,37 +167,22 @@ export default function Hero() {
                 <TypingWord />
               </span>
             </div>
-
             <span className="hero-line block text-[clamp(36px,5vw,60px)]">
               that scale globally.
             </span>
           </h1>
 
           {/* Sub */}
-          <div className="
-  bg-gradient-to-r
-  from-background/90 via-background/70 to-background/90 mb-[24px]
-  
-  ">
+          <div className="bg-gradient-to-r from-background/90 via-background/70 to-background/90 mb-[24px]">
             <p className="
-  hero-sub
-  text-[15px] md:text-[16px]
-  leading-[1.7]
-  text-muted-foreground
-
-  w-full max-w-[420px] lg:max-w-[480px]
-
-  px-4 py-3
-  rounded-xl
-
-  bg-background/40
-  backdrop-blur-md
-  
-
-  border border-border/30
-
-  shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]
-">
+              hero-sub
+              text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground
+              w-full max-w-[420px] lg:max-w-[480px]
+              px-4 py-3 rounded-xl
+              bg-background/40 backdrop-blur-md
+              border border-border/30
+              shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]
+            ">
               <span className="text-foreground font-medium">
                 At Mastercard&apos;s Creative Studio,
               </span>{" "}
@@ -237,15 +192,13 @@ export default function Hero() {
               </span>
             </p>
           </div>
+
           {/* CTAs */}
           <div className="
-  hero-cta
-  flex flex-col gap-6 
-w-full max-w-[420px] lg:max-w-[520px]
-
-  md:grid md:grid-cols-2
-
-">
+            hero-cta flex flex-col gap-6
+            w-full max-w-[420px] lg:max-w-[520px]
+            md:grid md:grid-cols-2
+          ">
             <CTA
               label="View work"
               href="#work"
@@ -261,13 +214,11 @@ w-full max-w-[420px] lg:max-w-[520px]
 
         </div>
 
-        {/* RIGHT */}
-        <div className="
-  hero-image
-  flex justify-center lg:justify-end
-
-  mt-6 md:mt-0   /* 👈 FIX */
-">
+        {/* ── RIGHT (parallax on card) ─────────────────── */}
+        <motion.div
+          className="hero-image flex justify-center lg:justify-end mt-6 md:mt-0"
+          style={{ y: cardY }}
+        >
           <div className="relative w-full max-w-[320px]">
 
             <div
@@ -279,14 +230,11 @@ w-full max-w-[420px] lg:max-w-[520px]
               <div
                 className={clsx(
                   "relative rounded-2xl overflow-hidden border border-border/60",
-
                   isHigh
                     ? "bg-background/60 backdrop-blur-xl"
                     : "bg-background/80",
-
                   "shadow-[0_10px_30px_rgba(0,0,0,0.1)]",
                   "dark:shadow-[0_30px_80px_rgba(0,0,0,0.6)]",
-
                   "[transform:translateZ(0)] [backface-visibility:hidden] [contain:paint]"
                 )}
               >
@@ -310,7 +258,6 @@ w-full max-w-[420px] lg:max-w-[520px]
                       <Pill key={tag}>{tag}</Pill>
                     ))}
                   </div>
-
                   <p className="text-base font-semibold text-white">
                     Amritansh Pandey
                   </p>
@@ -321,13 +268,11 @@ w-full max-w-[420px] lg:max-w-[520px]
                   <div
                     className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
-                      background: `
-                        radial-gradient(
-                          280px circle at var(--x, 50%) var(--y, 50%),
-                          rgba(255,255,255,0.18),
-                          transparent 60%
-                        )
-                      `,
+                      background: `radial-gradient(
+                        280px circle at var(--x, 50%) var(--y, 50%),
+                        rgba(255,255,255,0.18),
+                        transparent 60%
+                      )`,
                     }}
                   />
                 )}
@@ -336,7 +281,7 @@ w-full max-w-[420px] lg:max-w-[520px]
             </div>
 
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

@@ -2,13 +2,26 @@
 
 import { useEffect, useRef, useState } from "react"
 
-const WORDS = ["systems", "platforms", "experiences", "products"]
+const DEFAULT_WORDS = ["systems", "platforms", "experiences", "products"]
+const DEFAULT_TYPING_SPEED = 120
+const DEFAULT_DELETING_SPEED = 70
+const DEFAULT_PAUSE_AFTER = 1400
 
-const TYPING_SPEED = 120
-const DELETING_SPEED = 70
-const PAUSE_AFTER = 1400
+interface TypingWordProps {
+  words?: string[]
+  typingSpeed?: number
+  deletingSpeed?: number
+  pauseAfter?: number
+  className?: string
+}
 
-export function TypingWord() {
+export function TypingWord({
+  words = DEFAULT_WORDS,
+  typingSpeed = DEFAULT_TYPING_SPEED,
+  deletingSpeed = DEFAULT_DELETING_SPEED,
+  pauseAfter = DEFAULT_PAUSE_AFTER,
+  className,
+}: TypingWordProps) {
   const [wordIndex, setWordIndex] = useState(0)
   const [displayed, setDisplayed] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
@@ -16,13 +29,13 @@ export function TypingWord() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const word = WORDS[wordIndex]
+    const word = words[wordIndex % words.length]
     const hasCompletedWord = !isDeleting && displayed === word
 
-    let delay = isDeleting ? DELETING_SPEED : TYPING_SPEED
+    let delay = isDeleting ? deletingSpeed : typingSpeed
 
     if (!isDeleting) {
-      delay = TYPING_SPEED - Math.min(displayed.length * 4, 40)
+      delay = typingSpeed - Math.min(displayed.length * 4, 40)
     }
 
     timeoutRef.current = setTimeout(() => {
@@ -37,32 +50,31 @@ export function TypingWord() {
 
         if (next === "") {
           setIsDeleting(false)
-          setWordIndex((prev) => (prev + 1) % WORDS.length)
+          setWordIndex((prev) => (prev + 1) % words.length)
         }
 
         return
       }
 
       setDisplayed(word.slice(0, displayed.length + 1))
-    }, hasCompletedWord ? PAUSE_AFTER : delay)
+    }, hasCompletedWord ? pauseAfter : delay)
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [displayed, isDeleting, wordIndex])
+  }, [displayed, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseAfter])
 
   return (
     <span className="inline-flex items-baseline leading-[1.05]">
 
       {/* TEXT */}
       <span
-        className="
-          text-orange-600/90 dark:text-orange-400/90
-          font-medium
-          whitespace-nowrap
-        "
+        className={
+          className ??
+          "text-orange-600/90 dark:text-orange-400/90 font-medium whitespace-nowrap"
+        }
       >
-        {displayed || "\u00A0"} {/* prevents collapse */}
+        {displayed || " "}
       </span>
 
       {/* CURSOR */}

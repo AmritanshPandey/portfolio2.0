@@ -22,6 +22,7 @@ export function CaseStudyRenderer({ data }: Props) {
 
       {/* ── 1. HERO ──────────────────────────────── */}
       <CsHero
+        eyebrow={data.hero.eyebrow}
         title={data.hero.title}
         subtitle={data.hero.subtitle}
         meta={data.hero.meta}

@@ -5,21 +5,28 @@ import Image from "next/image"
 import { IconArrowUpRight } from "@tabler/icons-react"
 
 type Props = {
-  index: number
   title: string
   description: string
   href: string
   image: string
+  date?: string
+  category?: string
 }
 
-export function ArticleCard({ title, description, href, image }: Props) {
+export function ArticleCard({
+  title,
+  description,
+  href,
+  image,
+  date,
+  category = "Article",
+}: Props) {
   return (
     <Link
       href={href}
       className="group block"
       data-cursor-card
       data-cursor-label="Read"
-      data-cursor-cta
     >
       <div
         className="
@@ -57,12 +64,12 @@ export function ArticleCard({ title, description, href, image }: Props) {
           group-hover:opacity-95
         ">
 
-          {/* META */}
+          {/* CATEGORY */}
           <span className="
             text-[10px] font-semibold tracking-[0.18em] uppercase
             text-foreground/50 mb-1
           ">
-            META
+            {category}
           </span>
 
           {/* TITLE */}
@@ -85,11 +92,13 @@ export function ArticleCard({ title, description, href, image }: Props) {
           </p>
 
           {/* DATE */}
-          <span className="
-            text-[11px] text-foreground/40 mt-3
-          ">
-            April 8, 2026
-          </span>
+          {date && (
+            <span className="
+              text-[11px] text-foreground/40 mt-3
+            ">
+              {date}
+            </span>
+          )}
         </div>
 
         {/* ICON */}

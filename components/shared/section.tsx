@@ -89,7 +89,7 @@ export function Section({
           />
         )}
 
-        <div className="mt-6 md:mt-8">
+        <div className={title ? "mt-6 md:mt-8" : undefined}>
           {children}
         </div>
 

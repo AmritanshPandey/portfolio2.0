@@ -6,19 +6,31 @@ import { IconArrowLeft } from "@tabler/icons-react"
 import type { CaseStudyMeta } from "@/lib/types/case-study"
 
 interface Props {
+  eyebrow?: string
   title: string
   subtitle: string
   meta: CaseStudyMeta
 }
 
+/** Maps camelCase JSON keys to display labels. Any unlisted key is title-cased automatically. */
 const META_LABELS: Record<string, string> = {
   role: "Role",
   duration: "Duration",
   platform: "Platform",
   team: "Team",
+  brandsUnified: "Brands Unified",
+  organisation: "Organisation",
+  organization: "Organization",
+  scope: "Scope",
+  industry: "Industry",
+  year: "Year",
 }
 
-export function CsHero({ title, subtitle, meta }: Props) {
+function toLabel(key: string): string {
+  return META_LABELS[key] ?? key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())
+}
+
+export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
   const metaEntries = Object.entries(meta).filter(([, v]) => Boolean(v))
 
   return (
@@ -57,6 +69,21 @@ export function CsHero({ title, subtitle, meta }: Props) {
             Back to Work
           </Link>
         </motion.div>
+
+        {/* Eyebrow */}
+        {eyebrow && (
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="
+              mb-5 text-[11px] font-semibold tracking-[0.2em] uppercase
+              text-muted-foreground
+            "
+          >
+            {eyebrow}
+          </motion.p>
+        )}
 
         {/* Title */}
         <motion.h1
@@ -103,7 +130,7 @@ export function CsHero({ title, subtitle, meta }: Props) {
                   text-[10px] font-semibold uppercase tracking-[0.18em]
                   text-muted-foreground
                 ">
-                  {META_LABELS[key] ?? key}
+                  {toLabel(key)}
                 </p>
                 <p className="text-sm font-medium text-foreground">{value}</p>
               </div>

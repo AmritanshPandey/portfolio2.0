@@ -1,9 +1,5 @@
-export interface CaseStudyMeta {
-  role?: string
-  duration?: string
-  platform?: string
-  team?: string
-}
+/** Flexible meta — any key is a valid label. Add as many fields as the case study needs. */
+export type CaseStudyMeta = Record<string, string>
 
 export interface CaseStudyDecision {
   title: string
@@ -22,6 +18,7 @@ export interface TimelineItem {
 export interface CaseStudy {
   slug: string
   hero: {
+    eyebrow?: string
     title: string
     subtitle: string
     meta: CaseStudyMeta

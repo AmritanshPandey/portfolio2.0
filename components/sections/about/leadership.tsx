@@ -3,31 +3,9 @@
 import { motion } from "framer-motion"
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
 import { ProcessStep } from "@/components/shared/process-step"
+import { leadershipItems } from "@/lib/data"
 
 export default function LeadershipSection() {
-  const items = [
-    {
-      number: "01",
-      title: "Driving Enterprise Product Narratives",
-      desc: "Shaped interactive demos for high-stakes RFPs, translating complex systems into clear, decision-driving narratives.",
-    },
-    {
-      number: "02",
-      title: "Enabling Sales Through Product Thinking",
-      desc: "Built prototypes that aligned product capabilities with client needs, accelerating deal cycles and clarity.",
-    },
-    {
-      number: "03",
-      title: "Connecting Research to Product Direction",
-      desc: "Synthesized insights across banking flows to identify gaps and influence roadmap decisions.",
-    },
-    {
-      number: "04",
-      title: "Building Scalable Demo Infrastructure",
-      desc: "Created reusable demo systems enabling consistent storytelling across teams and stakeholders.",
-    },
-  ]
-
   return (
     <SectionSubgroup
       label="Leadership"
@@ -43,19 +21,19 @@ export default function LeadershipSection() {
           viewport={{ once: true }}
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.06 } }, // reduced
+            visible: { transition: { staggerChildren: 0.06 } },
           }}
           className="space-y-8"
         >
-          {items.map((item, index) => (
+          {leadershipItems.map((item, index) => (
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 12 }, // reduced motion
+                hidden: { opacity: 0, y: 12 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{
-                duration: 0.35, // faster = less jank
+                duration: 0.35,
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
@@ -76,18 +54,13 @@ export default function LeadershipSection() {
             <div className="
               relative rounded-2xl overflow-hidden
               border border-border
-
-              /* 🔥 replace heavy blur */
               bg-background/80
-
               aspect-square
-
-              /* GPU safety */
               [transform:translateZ(0)]
               [backface-visibility:hidden]
             ">
 
-              {/* GRID (lighter) */}
+              {/* GRID */}
               <div className="
                 absolute inset-0 opacity-[0.18]
                 [background-size:24px_24px]
@@ -96,10 +69,9 @@ export default function LeadershipSection() {
                 pointer-events-none
               " />
 
-              {/* RADIAL (lighter + cheaper) */}
+              {/* RADIAL */}
               <div className="
-                absolute inset-0
-                opacity-60
+                absolute inset-0 opacity-60
                 bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.03))]
                 dark:bg-[radial-gradient(circle_at_center,transparent_45%,rgba(255,255,255,0.05))]
               " />

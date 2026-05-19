@@ -12,7 +12,6 @@ type Props = {
   image: string
   href: string
   tags: string[]
-  span?: string
 }
 
 export function ExplorationCard({
@@ -21,7 +20,6 @@ export function ExplorationCard({
   image,
   href,
   tags,
-  span,
 }: Props) {
   return (
     <Link
@@ -31,9 +29,8 @@ export function ExplorationCard({
       data-cursor-cta
       className={clsx(
         "group relative isolate rounded-2xl overflow-hidden block",
-        "aspect-square md:aspect-auto",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        span
+        "w-full h-full",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       )}
     >
 
@@ -76,7 +73,7 @@ export function ExplorationCard({
       <div className="
         absolute inset-0 pointer-events-none
         opacity-0 group-hover:opacity-100
-        transition-opacity duration-400
+        transition-opacity duration-[400ms]
 
         bg-[radial-gradient(180px_100px_at_10%_100%,rgba(255,255,255,0.06),transparent_70%)]
       " />
@@ -86,7 +83,7 @@ export function ExplorationCard({
         absolute inset-0
         bg-black/0
         group-hover:bg-black/15
-        transition-colors duration-400
+        transition-colors duration-[400ms]
       " />
 
       {/* CTA ICON */}

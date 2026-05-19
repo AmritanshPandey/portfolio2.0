@@ -103,7 +103,7 @@ export function VerticalCard({
         {/* ✨ INNER LIGHT */}
         <div
           className={clsx(
-            "pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-400",
+            "pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-[400ms]",
 
             isFeatured
               ? `

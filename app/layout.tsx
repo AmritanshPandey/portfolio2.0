@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
+import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
@@ -37,7 +38,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={clsx("scroll-smooth", caveat.variable)}
+      className={clsx(caveat.variable)}
     >
       <body
         className={clsx(
@@ -53,6 +54,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Lenis smooth scroll */}
+          <SmoothScroll />
+
           {/* Scroll restore */}
           <ScrollToHash />
 

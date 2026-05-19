@@ -1,13 +1,14 @@
 {
   "slug": "d2c-platform",
   "hero": {
-    "title": "Scaling First-Party Commerce Across D2C Brands",
-    "subtitle": "Built a shared commerce platform that launched three brand storefronts in 8 weeks, reduced marketplace dependency, and established the first cross-brand design system for the Honasa Consumer portfolio.",
+    "eyebrow": "FIRST IN-HOUSE UX DESIGNER · 0→1 COMMERCE FOUNDATIONS · MULTI-BRAND SCALE",
+    "title": "Designing Scalable Commerce Systems for a Multi-Brand D2C Ecosystem",
+    "subtitle": "Built and scaled first-party commerce experiences across Mamaearth, The Derma Co., and Aqualogica by establishing reusable UX foundations, shared commerce patterns, and scalable product systems under rapid growth constraints.",
     "meta": {
-      "role": "UX Designer & Developer",
-      "duration": "2 Months",
-      "platform": "Mobile + Web",
-      "team": "2 designers, 4 engineers"
+      "brandsUnified": "Mamaearth, The Derma Co, Aqualogica",
+      "platform": "Web + Mobile",
+      "organisation": "Honasa Consumer Limited",
+      "scope": "Multi-Brand Commerce"
     }
   },
   "context": {

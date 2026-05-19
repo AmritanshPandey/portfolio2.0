@@ -136,9 +136,16 @@ export function CTA({
       role="button"
       tabIndex={0}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          handleClick(e as unknown as React.MouseEvent)
+        }
+      }}
       className={clsx(
         "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
         "text-foreground/70 hover:text-foreground transition",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 rounded",
         className
       )}
     >

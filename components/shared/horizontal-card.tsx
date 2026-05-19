@@ -53,8 +53,6 @@ export function HorizontalCard({
         <div
           className="
             relative rounded-2xl border border-border overflow-hidden
-
-            /* ✨ LIGHTER SURFACE */
             bg-card
             dark:bg-gradient-to-b dark:from-white/[0.04] dark:to-white/[0.01]
 
@@ -76,7 +74,7 @@ export function HorizontalCard({
           <div className="
             pointer-events-none absolute inset-0 rounded-2xl
             opacity-0 group-hover/card:opacity-100
-            transition-opacity duration-400
+            transition-opacity duration-[400ms]
 
             bg-[radial-gradient(300px_160px_at_100%_0%,rgba(255,90,0,0.08),transparent_60%)]
             dark:bg-[radial-gradient(300px_160px_at_100%_0%,rgba(255,140,60,0.12),transparent_60%)]
@@ -86,7 +84,7 @@ export function HorizontalCard({
           <div className="
             pointer-events-none absolute inset-0 rounded-2xl
             opacity-0 group-hover/card:opacity-100
-            transition-opacity duration-400
+            transition-opacity duration-[400ms]
 
             bg-[radial-gradient(200px_120px_at_90%_0%,rgba(255,255,255,0.05),transparent_70%)]
             dark:bg-[radial-gradient(200px_120px_at_90%_0%,rgba(255,255,255,0.07),transparent_70%)]
