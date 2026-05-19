@@ -21,8 +21,7 @@ import { saveScroll } from "@/lib/scroll-manager"
 const NAV_LINKS = [
   { label: "Home", href: "#hero", icon: true },
   { label: "Work", href: "#work" },
-  { label: "Approach", href: "#approach" },
-  { label: "Exploration", href: "#exploration" },
+  { label: "Projects", href: "#exploration" },
   { label: "Impact", href: "#impact" },
   { label: "About", href: "#about" },
 ]
@@ -161,7 +160,7 @@ export default function Navbar() {
   const routeSection = (() => {
     if (pathname.startsWith("/work"))         return "work"
     if (pathname.startsWith("/explorations")) return "exploration"
-    if (pathname.startsWith("/systems"))      return "approach"
+    if (pathname.startsWith("/systems"))      return "work"
     if (pathname.startsWith("/articles"))     return "exploration"
     return null
   })()
@@ -169,7 +168,6 @@ export default function Navbar() {
   const [active, setActive] = useActiveSection([
     "hero",
     "work",
-    "approach",
     "exploration",
     "impact",
     "about",

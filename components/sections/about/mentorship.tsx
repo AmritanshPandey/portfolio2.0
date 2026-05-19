@@ -32,9 +32,23 @@ export default function AdvisorySection() {
             Mentorship
           </p>
 
-          <p className="text-sm md:text-base text-foreground/75 max-w-xl leading-[1.6]">
-            Mentored early-career designers on product thinking, portfolio strategy, and interviews.
-          </p>
+          {/* STAT CALLOUT */}
+          <div className="
+            inline-flex items-baseline gap-2
+            px-4 py-2.5 rounded-xl
+            bg-orange-500/[0.08] dark:bg-orange-400/[0.10]
+            border border-orange-500/20 dark:border-orange-400/20
+          ">
+            <span className="text-2xl font-semibold text-orange-600 dark:text-orange-400 leading-none">
+              4
+            </span>
+            <span className="text-sm text-foreground/70 leading-snug">
+              mentees now at{" "}
+              <span className="font-medium text-foreground">Microsoft, Zomato, Aleph Alpha,</span>
+              {" "}and{" "}
+              <span className="font-medium text-foreground">Mastercard</span>
+            </span>
+          </div>
 
           <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-4">
             {menteeItems.map((item, i) => (

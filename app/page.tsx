@@ -50,9 +50,9 @@ export default function Page() {
       <Section
         id="exploration"
         bg="default"
-        eyebrow="Exploration"
-        title="Building, Testing, and Learning Beyond Core Work"
-        transition="These explorations translate into real-world impact across teams and products."
+        eyebrow="Side Projects"
+        title="Building and Testing Ideas Outside of Work"
+        transition="Personal projects that feed directly into how I think about systems and product decisions."
         transitionEyebrow="From Exploration to Impact"
       >
         <ExplorationsSection />

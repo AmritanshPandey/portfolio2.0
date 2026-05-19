@@ -147,14 +147,22 @@ export default function Hero() {
         ">
 
           {/* Badge */}
-          <div className="
-            hero-badge w-fit
-            flex items-center gap-2 px-3 py-1.5 rounded-full
-            border border-border/60 bg-muted/40
-            text-[12px] text-muted-foreground
-          ">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Senior Product Designer • Mastercard
+          <div className="hero-badge flex flex-wrap gap-2">
+            <div className="
+              flex items-center gap-2 px-3 py-1.5 rounded-full
+              border border-border/60 bg-muted/40
+              text-[12px] text-muted-foreground
+            ">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Senior Product Designer • Mastercard
+            </div>
+            <div className="
+              flex items-center gap-2 px-3 py-1.5 rounded-full
+              border border-border/60 bg-muted/40
+              text-[12px] text-muted-foreground
+            ">
+              8+ years in product design
+            </div>
           </div>
 
           {/* Headline */}

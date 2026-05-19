@@ -4,6 +4,8 @@ export interface WorkItem {
   description: string
   image: string
   href: string
+  /** Short outcome / impact line shown on the card (e.g. "Used by 12 banking partners") */
+  metric?: string
   /** The item with featured: true renders as the wide "featured" VerticalCard variant. Exactly one item should be featured. */
   featured: boolean
 }
@@ -34,6 +36,8 @@ export interface ArticleItem {
   image: string
   date?: string
   category?: string
+  /** CSS gradient string used as the article cover — overrides image */
+  accent?: string
   /** true = show in the homepage Insights section (capped at 4) */
   featured: boolean
 }

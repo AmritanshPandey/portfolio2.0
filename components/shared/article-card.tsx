@@ -11,6 +11,8 @@ type Props = {
   image: string
   date?: string
   category?: string
+  /** CSS gradient — renders instead of the image when provided */
+  accent?: string
 }
 
 export function ArticleCard({
@@ -20,6 +22,7 @@ export function ArticleCard({
   image,
   date,
   category = "Article",
+  accent,
 }: Props) {
   return (
     <Link
@@ -41,19 +44,27 @@ export function ArticleCard({
         "
       >
 
-        {/* IMAGE (1:1 aspect ratio) */}
+        {/* COVER — gradient when accent provided, image fallback */}
         <div className="
           w-20 md:w-24 aspect-square
           rounded-xl overflow-hidden
           bg-muted flex-shrink-0
+          relative
         ">
-          <Image
-            src={image}
-            alt={title}
-            width={96}
-            height={96}
-            className="w-full h-full object-cover"
-          />
+          {accent ? (
+            <div
+              className="w-full h-full"
+              style={{ background: accent }}
+            />
+          ) : (
+            <Image
+              src={image}
+              alt={title}
+              width={96}
+              height={96}
+              className="w-full h-full object-cover"
+            />
+          )}
         </div>
 
         {/* CONTENT */}

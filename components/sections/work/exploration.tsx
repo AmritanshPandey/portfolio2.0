@@ -9,8 +9,8 @@ import { explorationItems } from "@/lib/data"
 export default function ExplorationsSection() {
   return (
     <SectionSubgroup
-      label="Explorations"
-      description="Experiments to understand systems, behavior, and decision-making."
+      label="Side Projects"
+      description="Personal experiments built outside of work to test ideas around systems, behavior, and decision-making."
       variant="spacious"
     >
       <section data-cursor-zone="exploration">

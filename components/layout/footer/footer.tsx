@@ -245,12 +245,6 @@ export default function Footer() {
           {/* Contact */}
           <div className="flex flex-col gap-2 text-sm md:items-end">
             <CopyEmail />
-            <a
-              href="tel:+918130513047"
-              className="hover:text-white transition-colors duration-200"
-            >
-              +91 8130513047
-            </a>
             <span className="text-neutral-700 text-xs">Gurgaon, India</span>
           </div>
 

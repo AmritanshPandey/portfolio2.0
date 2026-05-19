@@ -18,6 +18,7 @@ export default function Page() {
             image={article.image}
             date={article.date}
             category={article.category}
+            accent={article.accent}
           />
         ))}
       </div>

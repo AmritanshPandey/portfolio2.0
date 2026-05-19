@@ -16,6 +16,7 @@ type Props = {
   ctaLabel?: string
   variant?: Variant
   showImage?: boolean
+  metric?: string
 }
 
 export function VerticalCard({
@@ -27,6 +28,7 @@ export function VerticalCard({
   ctaLabel = "View case study",
   variant = "default",
   showImage = true,
+  metric,
 }: Props) {
 
   const isCompact = variant === "compact"
@@ -196,6 +198,17 @@ export function VerticalCard({
               text-foreground/70 text-sm leading-relaxed
             ">
               {description}
+            </p>
+          )}
+
+          {/* METRIC */}
+          {metric && !isCompact && (
+            <p className="
+              text-[11px] font-medium tracking-wide
+              text-orange-600/80 dark:text-orange-400/70
+              border-l-2 border-orange-500/40 pl-2.5
+            ">
+              {metric}
             </p>
           )}
 

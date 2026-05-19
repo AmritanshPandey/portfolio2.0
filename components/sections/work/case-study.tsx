@@ -37,6 +37,7 @@ export default function WorkSection() {
               title={featured.title}
               description={featured.description}
               category={featured.category}
+              metric={featured.metric}
               variant="featured"
             />
           </motion.div>
@@ -58,6 +59,7 @@ export default function WorkSection() {
                   title={project.title}
                   description={project.description}
                   category={project.category}
+                  metric={project.metric}
                 />
               </motion.div>
             ))}

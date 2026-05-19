@@ -52,6 +52,7 @@ export default function InsightsSection() {
                   image={article.image}
                   date={article.date}
                   category={article.category}
+                  accent={article.accent}
                 />
               </motion.div>
             ))}
