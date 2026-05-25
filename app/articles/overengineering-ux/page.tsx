@@ -1,14 +1,5 @@
-import ContentPage from "@/components/layout/content-page"
+import { ArticleLayout } from "@/components/layout/article-layout"
 
 export default function Page() {
-  return (
-    <ContentPage
-      title="The Hidden Cost of Over-Engineering UX"
-      description="Why excessive sophistication increases cognitive load."
-    >
-      <p>
-        Simplicity often delivers stronger product clarity and usability.
-      </p>
-    </ContentPage>
-  )
+  return <ArticleLayout slug="overengineering-ux" />
 }

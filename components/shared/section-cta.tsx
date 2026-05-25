@@ -3,10 +3,10 @@
 import { IconArrowUpRight, IconDownload } from "@tabler/icons-react"
 import clsx from "clsx"
 import Link from "next/link"
-import { useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { scrollToSection } from "@/lib/scroll"
 import { saveScroll } from "@/lib/scroll-manager"
+import { useMagnetic } from "@/hooks/use-magnetic"
 
 type Variant = "primary" | "secondary" | "tertiary"
 
@@ -25,10 +25,9 @@ export function CTA({
   icon = "arrow",
   className,
 }: Props) {
-  const router = useRouter()
-  const pathname = usePathname()
-
-  // Removed refs for magnetic hover effect
+  const router    = useRouter()
+  const pathname  = usePathname()
+  const magnetRef = useMagnetic<HTMLAnchorElement>(0.32, 85)
 
   const Icon =
     icon === "arrow" ? IconArrowUpRight :
@@ -59,6 +58,7 @@ export function CTA({
   if (variant !== "tertiary" && href) {
     return (
       <Link
+        ref={magnetRef}
         href={href}
         onClick={handleClick}
         className={clsx(
@@ -99,33 +99,31 @@ export function CTA({
           className
         )}
       >
-        {/* shimmer (subtle) */}
-        <span className="
-          pointer-events-none absolute inset-0 -translate-x-full
-          transition-transform duration-500 ease-out
-          group-hover/cta:translate-x-full
-          bg-gradient-to-r from-transparent via-white/[0.05] to-transparent
-        " />
+          {/* shimmer (subtle) */}
+          <span className="
+            pointer-events-none absolute inset-0 -translate-x-full
+            transition-transform duration-500 ease-out
+            group-hover/cta:translate-x-full
+            bg-gradient-to-r from-transparent via-white/[0.05] to-transparent
+          " />
 
-        {/* INNER */}
-        <span
-          className="relative flex items-center gap-2 transition-all duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]"
-        >
-          {label}
+          {/* INNER */}
+          <span className="relative flex items-center gap-2 transition-all duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]">
+            {label}
 
-          {Icon && (
-            <Icon
-              size={15}
-              stroke={2}
-              className="
-                opacity-80
-                transition-all duration-200
-                group-hover/cta:translate-x-[1.5px]
-                group-hover/cta:-translate-y-[1.5px]
-              "
-            />
-          )}
-        </span>
+            {Icon && (
+              <Icon
+                size={15}
+                stroke={2}
+                className="
+                  opacity-80
+                  transition-all duration-200
+                  group-hover/cta:translate-x-[1.5px]
+                  group-hover/cta:-translate-y-[1.5px]
+                "
+              />
+            )}
+          </span>
       </Link>
     )
   }

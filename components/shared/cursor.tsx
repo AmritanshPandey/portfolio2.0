@@ -2,231 +2,242 @@
 
 import { useEffect, useRef, useCallback } from "react"
 
-// ─── types ───────────────────────────────────────────────────
-type State = "default" | "link" | "card"
+const RING_SIZE = 36
+const DOT_SIZE  = 5
 
-// ─── ring config per state ───────────────────────────────────
-const RING = {
-  default: { scale: 1,    border: "rgba(150,150,150,0.30)", bg: "transparent" },
-  link:    { scale: 1.38, border: "rgba(150,150,150,0.55)", bg: "transparent" },
-  card:    { scale: 2.6,  border: "rgba(234,88,12,0.55)",   bg: "rgba(234,88,12,0.05)" },
+type CursorState = "default" | "link" | "card"
+
+const RING_SCALE: Record<CursorState, number> = {
+  default: 1,
+  link:    1.5,
+  card:    1,   // ring hidden in card state
 }
 
-const RING_SIZE   = 38   // px — base diameter
-const DOT_SIZE    = 5    // px
-const LERP        = 0.10 // ring lag factor
-const SCALE_LERP  = 0.09 // scale smoothing
+const LERP     = 0.20
+const SCALE_LR = 0.16
 
 export function FancyCursor() {
   const dotRef   = useRef<HTMLDivElement>(null)
   const ringRef  = useRef<HTMLDivElement>(null)
-  const labelRef = useRef<HTMLDivElement>(null)
-  const rafRef   = useRef<number>(0)
+  // Pill refs
+  const pillRef      = useRef<HTMLDivElement>(null)  // position anchor
+  const pillCardRef  = useRef<HTMLDivElement>(null)  // visible pill shell
+  const labelSpanRef = useRef<HTMLSpanElement>(null) // text inside pill
 
-  // Live cursor position (updated every mousemove, no lag)
-  const mx = useRef(-400)
-  const my = useRef(-400)
+  const rafRef = useRef(0)
 
-  // Lerped ring position
-  const rx = useRef(-400)
-  const ry = useRef(-400)
+  const mx = useRef(-400);  const my = useRef(-400)
+  const rx = useRef(-400);  const ry = useRef(-400)
+  const currentScale = useRef(RING_SCALE.default)
+  const targetScale  = useRef(RING_SCALE.default)
+  const activeState  = useRef<CursorState>("default")
 
-  // Scale animation
-  const targetScale  = useRef(1)
-  const currentScale = useRef(1)
-
-  // Track whether we're mid-click (so mouseup can restore)
-  const clickBase = useRef(1)
-  const isDown    = useRef(false)
-
-  // ── RAF loop ─────────────────────────────────────────────
   const tick = useCallback(() => {
     rx.current += (mx.current - rx.current) * LERP
     ry.current += (my.current - ry.current) * LERP
-    currentScale.current += (targetScale.current - currentScale.current) * SCALE_LERP
 
-    const ring = ringRef.current
+    currentScale.current += (targetScale.current - currentScale.current) * SCALE_LR
+
+    const ring  = ringRef.current
+    const dot   = dotRef.current
+    const pill  = pillRef.current
+    const half  = RING_SIZE / 2
+
     if (ring) {
-      ring.style.transform =
-        `translate3d(${rx.current - RING_SIZE / 2}px, ${ry.current - RING_SIZE / 2}px, 0)` +
-        ` scale(${currentScale.current})`
+      ring.style.transform = `translate3d(${rx.current - half}px,${ry.current - half}px,0) scale(${currentScale.current})`
+    }
+    if (dot) {
+      dot.style.transform = `translate3d(${mx.current - DOT_SIZE / 2}px,${my.current - DOT_SIZE / 2}px,0)`
+    }
+    if (pill) {
+      // Pill centered on lerped position
+      pill.style.transform = `translate3d(${rx.current}px,${ry.current}px,0)`
     }
 
     rafRef.current = requestAnimationFrame(tick)
   }, [])
 
-  // ── helpers ───────────────────────────────────────────────
-  const setState = useCallback((state: State) => {
-    const ring  = ringRef.current
-    const dot   = dotRef.current
-    const label = labelRef.current
-    if (!ring || !dot || !label) return
+  const applyState = useCallback((state: CursorState, label?: string) => {
+    const ring     = ringRef.current
+    const dot      = dotRef.current
+    const pillCard = pillCardRef.current
+    const labelEl  = labelSpanRef.current
+    if (!ring || !dot || !pillCard || !labelEl) return
 
-    const cfg = RING[state]
-    clickBase.current  = cfg.scale
-    targetScale.current = isDown.current ? cfg.scale * 0.78 : cfg.scale
+    activeState.current = state
+    targetScale.current = RING_SCALE[state]
 
-    ring.style.borderColor = cfg.border
-    ring.style.background  = cfg.bg
-
-    // Dot: hide during card hover (ring is big enough to take over)
-    dot.style.opacity  = state === "card" ? "0" : "1"
-    label.style.opacity = state === "card" ? "1" : "0"
+    if (state === "card") {
+      // Hide ring + dot, show pill
+      ring.style.opacity   = "0"
+      dot.style.opacity    = "0"
+      pillCard.style.opacity   = "1"
+      pillCard.style.transform = "translateX(-50%) translateY(-50%) scale(1)"
+      if (label) labelEl.textContent = label
+    } else if (state === "link") {
+      ring.style.opacity   = "1"
+      dot.style.opacity    = "1"
+      ring.style.borderColor = "rgba(180,180,180,0.55)"
+      ring.style.background  = "transparent"
+      pillCard.style.opacity   = "0"
+      pillCard.style.transform = "translateX(-50%) translateY(-50%) scale(0.7)"
+    } else {
+      ring.style.opacity   = "1"
+      dot.style.opacity    = "1"
+      ring.style.borderColor = "rgba(130,130,130,0.35)"
+      ring.style.background  = "transparent"
+      pillCard.style.opacity   = "0"
+      pillCard.style.transform = "translateX(-50%) translateY(-50%) scale(0.7)"
+    }
   }, [])
 
-  // ── effects ───────────────────────────────────────────────
   useEffect(() => {
-    // No custom cursor on touch / coarse-pointer devices
     if (!window.matchMedia("(pointer: fine)").matches) return
 
-    const dot   = dotRef.current
-    const ring  = ringRef.current
-    const label = labelRef.current
-    if (!dot || !ring || !label) return
+    const dot      = dotRef.current
+    const ring     = ringRef.current
+    const pillCard = pillCardRef.current
+    if (!dot || !ring || !pillCard) return
 
-    // Start hidden; reveal on first move
     let visible = false
-    dot.style.opacity  = "0"
-    ring.style.opacity = "0"
+    dot.style.opacity    = "0"
+    ring.style.opacity   = "0"
+    pillCard.style.opacity = "0"
 
-    // ── mousemove ──────────────────────────────────────────
     const onMove = (e: MouseEvent) => {
       mx.current = e.clientX
       my.current = e.clientY
-
-      // Dot is instant — no lag
-      dot.style.transform =
-        `translate3d(${e.clientX - DOT_SIZE / 2}px, ${e.clientY - DOT_SIZE / 2}px, 0)`
-
-      // Label floats just below-right of hot-spot
-      label.style.transform =
-        `translate3d(${e.clientX + 14}px, ${e.clientY + 14}px, 0)`
-
       if (!visible) {
-        dot.style.opacity  = "1"
-        ring.style.opacity = "1"
+        if (activeState.current !== "card") {
+          dot.style.opacity  = "1"
+          ring.style.opacity = "1"
+        }
         visible = true
       }
     }
 
-    // ── pointerover — state machine ────────────────────────
     const onOver = (e: PointerEvent) => {
       const el   = e.target as HTMLElement
       const card = el.closest("[data-cursor-card]")
-      const link = el.closest("a, button, [role='button'], input, textarea, select, label")
-
+      const link = el.closest("a,button,[role='button'],input,textarea,select,label")
       if (card) {
-        label.textContent = card.getAttribute("data-cursor-label") || "View"
-        setState("card")
+        const label = card.getAttribute("data-cursor-label") || "View"
+        applyState("card", label)
       } else if (link) {
-        setState("link")
+        applyState("link")
       } else {
-        setState("default")
+        applyState("default")
       }
     }
 
-    // ── click feedback ─────────────────────────────────────
-    const onDown = () => {
-      isDown.current = true
-      targetScale.current = clickBase.current * 0.78
-    }
-
-    const onUp = () => {
-      isDown.current = false
-      targetScale.current = clickBase.current
-    }
-
-    // ── hide when cursor leaves window ─────────────────────
     const onLeave = () => {
-      dot.style.opacity  = "0"
-      ring.style.opacity = "0"
+      dot.style.opacity    = "0"
+      ring.style.opacity   = "0"
+      pillCard.style.opacity = "0"
       visible = false
     }
     const onEnter = () => {
       if (!visible) {
-        dot.style.opacity  = "1"
-        ring.style.opacity = "1"
+        if (activeState.current !== "card") {
+          dot.style.opacity  = "1"
+          ring.style.opacity = "1"
+        }
         visible = true
       }
     }
 
-    // Start the rAF loop
     rafRef.current = requestAnimationFrame(tick)
-
-    window.addEventListener("mousemove",  onMove,  { passive: true })
+    window.addEventListener("mousemove",     onMove,  { passive: true })
     document.addEventListener("pointerover", onOver)
-    document.addEventListener("mousedown",   onDown)
-    document.addEventListener("mouseup",     onUp)
     document.addEventListener("mouseleave",  onLeave)
     document.addEventListener("mouseenter",  onEnter)
 
     return () => {
       cancelAnimationFrame(rafRef.current)
-      window.removeEventListener("mousemove",    onMove)
+      window.removeEventListener("mousemove",     onMove)
       document.removeEventListener("pointerover", onOver)
-      document.removeEventListener("mousedown",   onDown)
-      document.removeEventListener("mouseup",     onUp)
       document.removeEventListener("mouseleave",  onLeave)
       document.removeEventListener("mouseenter",  onEnter)
     }
-  }, [tick, setState])
+  }, [tick, applyState])
 
   return (
     <>
-      {/*
-        DOT — 5 px, white, mix-blend-difference
-        Always renders as the visual inverse of the background, so it's
-        visible everywhere: white on dark, black on light, teal on orange.
-        Follows cursor with ZERO lag.
-      */}
+      {/* Dot — zero lag */}
       <div
         ref={dotRef}
         className="pointer-events-none fixed top-0 left-0 z-[1001]"
         style={{
-          width:         DOT_SIZE,
-          height:        DOT_SIZE,
-          borderRadius:  "50%",
-          background:    "white",
-          mixBlendMode:  "difference",
-          willChange:    "transform",
-          transform:     "translate3d(-400px, -400px, 0)",
-          transition:    "opacity 0.25s ease",
+          width:        DOT_SIZE,
+          height:       DOT_SIZE,
+          borderRadius: "50%",
+          background:   "white",
+          mixBlendMode: "difference",
+          willChange:   "transform",
+          transform:    "translate3d(-400px,-400px,0)",
+          transition:   "opacity 0.12s ease",
         }}
       />
 
-      {/*
-        RING — 38 px base, springs toward cursor with lerp.
-        Scale, border-color, and fill transition smoothly between states.
-      */}
+      {/* Ring — lerped */}
       <div
         ref={ringRef}
         className="pointer-events-none fixed top-0 left-0 z-[1000]"
         style={{
-          width:         RING_SIZE,
-          height:        RING_SIZE,
-          borderRadius:  "50%",
-          border:        `1.5px solid ${RING.default.border}`,
-          willChange:    "transform",
-          transform:     "translate3d(-400px, -400px, 0)",
-          transition:    "border-color 0.25s ease, background 0.25s ease, opacity 0.3s ease",
+          width:        RING_SIZE,
+          height:       RING_SIZE,
+          borderRadius: "50%",
+          border:       "1.5px solid rgba(130,130,130,0.35)",
+          willChange:   "transform",
+          transform:    "translate3d(-400px,-400px,0) scale(1)",
+          transition:   "border-color 0.15s ease, background 0.15s ease, opacity 0.12s ease",
         }}
       />
 
-      {/*
-        LABEL — floats near cursor during card hover.
-        Uses cursor-label-ui class for dark/light colour switching.
-      */}
+      {/* Pill position anchor — follows lerped ring position */}
       <div
-        ref={labelRef}
-        className="cursor-label-ui"
-        style={{
-          top:        0,
-          left:       0,
-          willChange: "transform",
-          transform:  "translate3d(-400px, -400px, 0)",
-          transition: "opacity 0.15s ease",
-        }}
-      />
+        ref={pillRef}
+        className="pointer-events-none fixed top-0 left-0 z-[1002]"
+        style={{ willChange: "transform", transform: "translate3d(-400px,-400px,0)" }}
+      >
+        {/* Pill — shown only in card state */}
+        <div
+          ref={pillCardRef}
+          style={{
+            position:       "absolute",
+            top:            0,
+            left:           0,
+            opacity:        0,
+            transform:      "translateX(-50%) translateY(-50%) scale(0.85)",
+            transition:     "opacity 0.18s ease, transform 0.18s ease",
+            borderRadius:   999,
+            minWidth:       72,
+            height:         30,
+            display:        "flex",
+            alignItems:     "center",
+            justifyContent: "center",
+            background:     "#ea580c",
+            boxShadow:      "0 2px 10px rgba(234,88,12,0.35)",
+          }}
+        >
+          <span
+            ref={labelSpanRef}
+            style={{
+              color:         "white",
+              fontSize:      10.5,
+              fontWeight:    600,
+              letterSpacing: "0.10em",
+              textTransform: "uppercase",
+              paddingLeft:   13,
+              paddingRight:  13,
+              whiteSpace:    "nowrap",
+              userSelect:    "none",
+            }}
+          >
+            View
+          </span>
+        </div>
+      </div>
     </>
   )
 }

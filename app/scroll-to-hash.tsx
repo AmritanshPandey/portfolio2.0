@@ -77,8 +77,14 @@ export function ScrollToHash() {
     // ── Initial delay (handles hydration + motion)
     const t = setTimeout(tryScroll, 80)
 
-    // ── Keep syncing on scroll
-    const onScroll = () => updateCursorZone()
+    // ── Keep syncing on scroll — throttled with rAF so getBoundingClientRect
+    //    only runs once per frame instead of on every scroll microtask.
+    let rafPending = false
+    const onScroll = () => {
+      if (rafPending) return
+      rafPending = true
+      requestAnimationFrame(() => { updateCursorZone(); rafPending = false })
+    }
 
     window.addEventListener("scroll", onScroll, { passive: true })
 
