@@ -1,11 +1,22 @@
-import { type ComponentType } from "react"
 import clsx from "clsx"
 
-type FocusIcon = ComponentType<{ size?: number; stroke?: number; className?: string }>
-type FocusItem = { icon: FocusIcon; text: string }
-type Props = { focus: FocusItem[]; title?: string; variant?: "default" | "compact" }
+import { AppIcon, type IconComponent, type IconSize } from "@/components/ui/icon"
 
-export function FocusList({ focus, title = "Focus areas", variant = "default" }: Props) {
+type FocusIcon = IconComponent
+type FocusItem = { icon: FocusIcon; text: string }
+type Props = {
+  focus: FocusItem[]
+  title?: string
+  variant?: "default" | "compact"
+  iconSize?: IconSize
+}
+
+export function FocusList({
+  focus,
+  title = "Focus areas",
+  variant = "default",
+  iconSize = "xl",
+}: Props) {
   const isCompact = variant === "compact"
 
   return (
@@ -21,8 +32,9 @@ export function FocusList({ focus, title = "Focus areas", variant = "default" }:
           return (
             <div key={index} className="group relative flex items-start gap-3">
               <div className="absolute -inset-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-orange-500/[0.04] dark:bg-orange-400/[0.06]" />
-              <Icon
-                size={isCompact ? 18 : 20}
+              <AppIcon
+                icon={Icon}
+                size={iconSize}
                 stroke={2}
                 className="relative text-foreground/35 transition-colors duration-150 group-hover:text-orange-500"
               />

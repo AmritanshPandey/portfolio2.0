@@ -3,6 +3,61 @@ import type { ArticleItem } from "@/lib/types/content"
 // featured: true → shown in the homepage Insights section (first 4 shown)
 export const articleItems: ArticleItem[] = [
   {
+    title:       "The Silent Guardian — What Agentic Commerce Taught Me About Trust as Architecture",
+    description: "When AI pays for you, where does Mastercard go? The wrong answer is everywhere. The right answer changed the company's direction.",
+    href:        "/articles/silent-guardian-agentic-trust",
+    image:       "/article.png",
+    accent:      "linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #134e4a 100%)",
+    featured:    true,
+    readTime:    "6 min read",
+    date:        "Jun 2026",
+    category:    "AI Commerce",
+    tags:        ["Agentic Commerce", "Trust Design", "Mastercard", "AI Payments"],
+    intro: "Agentic commerce is payments without a payment screen. AI agents transact on your behalf — you don't tap, you don't confirm, you don't see a logo. Which means the entire trust architecture of the payment experience has to be rebuilt from scratch. This is what I learned designing it.",
+    sections: [
+      {
+        heading: "The problem nobody had named yet",
+        body: "Traditional payments have trust built into the UI. You see the checkout form. You tap. The Mastercard logo appears. You feel safe. The brand is the trust signal.\n\nAgentic commerce removes every one of those signals. The AI browses on your behalf, selects the best option, initiates the transaction — and the user might not even know it happened until it's done. The logo has nowhere to go. The checkout screen doesn't exist.\n\nMastercard processes the payment in the background, invisible and unacknowledged. In a world where there's no checkout screen, how does a payment network maintain trust, visibility, and relevance?",
+      },
+      {
+        body: "The instinct is to put the logo everywhere. If users can't see you at checkout, make them see you before checkout. After checkout. During. Everywhere. Maximum presence as a compensation for lost real estate.",
+        type: "quote",
+      },
+      {
+        heading: "The wrong answer",
+        body: "Brand's instinct was maximum visibility. The Mastercard logo throughout the agentic flow — every stage, every state. More presence equals more trust.\n\nThis is wrong for agentic commerce. Agentic commerce is defined by fluidity. The AI is supposed to be acting seamlessly on your behalf. Constant brand interruptions break that fluidity. A logo at every stage is noise, not signal. It undermines the very thing that makes agentic commerce valuable.\n\nThe question isn't 'how visible should Mastercard be?' It's 'at which exact moments does Mastercard's presence actually reduce user anxiety?'",
+      },
+      {
+        heading: "The silent guardian",
+        body: "The answer I pushed for — and eventually got alignment on — was the silent guardian framework.\n\nMastercard is present throughout the agentic payment journey, processing and routing and protecting. But it's only visible at three moments: payment confirmation, identity verification, and transaction completion. Not a logo — a trust signal. Subtle. Unmistakable when it appears.\n\nThe rest of the time: invisible. The AI acts fluidly. Mastercard is there, working in the background, but not interrupting the experience the user delegated to the AI.\n\nThe visual metaphor that made this land in stakeholder conversations: a bodyguard you don't notice until you need them.",
+      },
+      {
+        body: "In ambient computing, trust is earned by appearing at the right moment — not by being everywhere. Presence everywhere is wallpaper. Presence at the right moment is a signal.",
+        type: "callout",
+      },
+      {
+        heading: "Why this is a product decision, not a design preference",
+        body: "I want to be precise about this: pushing back on Brand wasn't a design choice. It was a product argument.\n\nThe question isn't aesthetic — it's functional. What does Mastercard's presence do at each stage of the agentic flow? At browsing and selection stages, brand presence does nothing useful and potentially interrupts the AI's agency. At confirmation, verification, and completion — the moments of financial commitment and risk — brand presence reduces anxiety and builds confidence.\n\nDesign follows that logic. The framework wasn't 'make it look nicer' — it was 'match the trust signal to the moment of user need.'\n\nThe SVP of Multi-Sensory, the Brand team, and all stakeholders aligned. Silent guardian is now the adopted direction for Mastercard's role in agentic commerce.",
+      },
+      {
+        heading: "The multi-sensory dimension",
+        body: "Agentic commerce creates another problem the silent guardian framework helped expose: in third-party environments, Mastercard has no persistent visual presence at all.\n\nWhen the screen belongs to ChatGPT or Claude, you can't put a persistent Mastercard logo anywhere. The UI belongs to another platform. So the three guardian moments have to work through channels other than just visual: sound and haptics become primary brand channels.\n\nThis moved multi-sensory design from a nice-to-have to a core brand strategy. The trust signal at payment confirmation isn't just a visual appearance — it's a sound, a haptic pattern, a moment that engages multiple senses simultaneously.\n\nThis is why we partnered with Haptic Labs for research. You can't test whether a haptic pattern builds trust by simulating it in Figma.",
+      },
+      {
+        heading: "What this taught me about trust",
+        body: "Trust is not a visual problem. It's an architectural one.\n\nThe question isn't where to put the logo. It's what should happen — and what should be felt — at the exact moment a user needs to know they're safe. Those are different design questions with different answers, and they require different tools to answer them.\n\nIn ambient computing, where AI acts on your behalf and you're not watching every step, trust becomes something the system has to earn at specific moments rather than display continuously. The design challenge is identifying those moments and making them matter.\n\nAgentic commerce is still being figured out. Nobody has done this before. Which is why it's the most interesting design problem I've worked on — and why the answer is still evolving.",
+      },
+    ],
+    takeaways: [
+      "Brand presence in agentic flows must be architected around user anxiety, not visibility goals",
+      "The silent guardian framework: invisible by default, present only at the three moments that matter",
+      "In third-party environments, sound and haptics become the primary brand channels — not visual elements",
+      "Pushing back on brand decisions requires product arguments, not design preferences",
+      "Trust in ambient computing is earned at specific moments — not displayed continuously",
+    ],
+  },
+
+  {
     title:       "Designing Incentive Systems",
     description: "Most products fail due to misaligned incentives, not poor UX.",
     href:        "/articles/incentive-systems",

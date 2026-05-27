@@ -22,11 +22,11 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Amritansh Pandey | Product Design Portfolio",
+    default: "Amritansh Pandey | Senior Product Designer | Mastercard",
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Portfolio of Amritansh Pandey, a senior product designer focused on fintech systems, product strategy, and scalable digital experiences.",
+    "Amritansh Pandey — Senior Product Designer at Mastercard. 8 years building fintech systems end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
 }
 
 export default function RootLayout({

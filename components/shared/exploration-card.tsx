@@ -4,7 +4,8 @@ import Image from "next/image"
 import Link from "next/link"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
-import { Pill } from "@/components/shared/pill"
+
+type Status = "Concept" | "In Development" | "Live"
 
 type Props = {
   title: string
@@ -12,6 +13,13 @@ type Props = {
   image: string
   href: string
   tags: string[]
+  status?: Status
+}
+
+const statusConfig: Record<Status, { dot: string; label: string }> = {
+  "Concept":        { dot: "bg-amber-400",  label: "Concept" },
+  "In Development": { dot: "bg-sky-400 animate-pulse",    label: "In Development" },
+  "Live":           { dot: "bg-emerald-400 animate-pulse", label: "Live" },
 }
 
 export function ExplorationCard({
@@ -20,7 +28,10 @@ export function ExplorationCard({
   image,
   href,
   tags,
+  status,
 }: Props) {
+  const sc = status ? statusConfig[status] : null
+
   return (
     <Link
       href={href}
@@ -46,116 +57,125 @@ export function ExplorationCard({
         "
       />
 
-      {/* ✨ TOP BALANCE (fix washed look) */}
+      {/* TOP SHADOW — anchors top badges */}
       <div className="
         absolute inset-0
         bg-gradient-to-b
-        from-black/30 via-transparent to-transparent
+        from-black/40 via-transparent to-transparent
       " />
 
-      {/* BASE GRADIENT (stronger anchor) */}
+      {/* BASE GRADIENT — content anchor at bottom */}
       <div className="
         absolute inset-0
         bg-gradient-to-t
-        from-black/75 via-black/25 to-transparent
+        from-black/80 via-black/30 to-transparent
       " />
 
-      {/* ✨ CLEAN ORANGE GLOW (fixed color) */}
+      {/* HOVER AMBIENT GLOW */}
       <div className="
         absolute inset-0 pointer-events-none
         opacity-0 group-hover:opacity-100
         transition-opacity duration-500
-
-        bg-[radial-gradient(240px_140px_at_0%_100%,rgba(255,90,0,0.12),transparent_60%)]
+        bg-[radial-gradient(260px_150px_at_0%_100%,rgba(255,90,0,0.10),transparent_60%)]
       " />
 
-      {/* ✨ INNER LIGHT */}
-      <div className="
-        absolute inset-0 pointer-events-none
-        opacity-0 group-hover:opacity-100
-        transition-opacity duration-[400ms]
-
-        bg-[radial-gradient(180px_100px_at_10%_100%,rgba(255,255,255,0.06),transparent_70%)]
-      " />
-
-      {/* HOVER VIGNETTE (reduced heaviness) */}
+      {/* HOVER VIGNETTE */}
       <div className="
         absolute inset-0
-        bg-black/0
-        group-hover:bg-black/15
-        transition-colors duration-[400ms]
+        bg-black/0 group-hover:bg-black/10
+        transition-colors duration-500
       " />
 
-      {/* CTA ICON */}
-      <div className="absolute top-4 right-4 z-10">
-        <span className="
-          w-9 h-9 rounded-full
-          bg-background/70 border border-border backdrop-blur-md
-          flex items-center justify-center
-
-          opacity-0 scale-95
-          group-hover:opacity-100 group-hover:scale-100
-
-          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-        ">
-          <IconArrowUpRight
-            size={16}
-            stroke={2}
-            className="
-              text-foreground
-              transition-transform duration-300
-              group-hover:-translate-y-[1.5px]
-              group-hover:translate-x-[1.5px]
-            "
-          />
-        </span>
-      </div>
-
-      {/* CONTENT */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10">
-
-        {/* TAGS */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          {tags.map((tag, i) => (
-            <Pill
-              key={i}
-            >
-              {tag}
-            </Pill>
-          ))}
-        </div>
-
-        {/* TITLE */}
-        <h3 className="
-          text-base md:text-lg font-medium leading-snug tracking-tight
-          text-white
-        ">
-          {title}
-        </h3>
-
-        {/* DESCRIPTION */}
-        <div className="mt-1">
-          <p className="
-  text-[14px] text-white/75 leading-relaxed max-w-[400px]
-
-  line-clamp-2 md:line-clamp-3
-
-  transition-all duration-300
-  group-hover:text-white
-">
-            {description}
-          </p>
-        </div>
-
-      </div>
-
-      {/* BORDER (cleaner) */}
+      {/* HOVER BORDER HIGHLIGHT */}
       <div className="
         absolute inset-0 rounded-2xl
         ring-1 ring-inset ring-white/10
         group-hover:ring-white/20
         transition-colors duration-300
       " />
+
+      {/* ── TOP ROW: status badge + CTA icon ── */}
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-start justify-between">
+
+        {/* STATUS BADGE */}
+        {sc && (
+          <span className="
+            flex items-center gap-1.5
+            px-2.5 py-1 rounded-full
+            bg-black/40 backdrop-blur-md
+            border border-white/[0.12]
+            text-[11px] font-medium text-white/80 leading-none
+          ">
+            <span className={clsx("w-[6px] h-[6px] rounded-full flex-shrink-0", sc.dot)} />
+            {sc.label}
+          </span>
+        )}
+
+        {/* CTA ICON */}
+        <span className="
+          ml-auto
+          w-9 h-9 rounded-full
+          bg-black/40 border border-white/[0.12] backdrop-blur-md
+          flex items-center justify-center
+          opacity-0 scale-90
+          group-hover:opacity-100 group-hover:scale-100
+          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+        ">
+          <IconArrowUpRight
+            size={16}
+            stroke={1.75}
+            className="
+              text-white
+              transition-transform duration-300
+              group-hover:-translate-y-[1.5px] group-hover:translate-x-[1.5px]
+            "
+          />
+        </span>
+      </div>
+
+      {/* ── BOTTOM CONTENT ── */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10">
+
+        {/* TITLE */}
+        <h3 className="
+          text-base md:text-[17px] font-semibold leading-snug tracking-[-0.01em]
+          text-white
+          mb-2
+        ">
+          {title}
+        </h3>
+
+        {/* DESCRIPTION — hidden by default, revealed on hover */}
+        <div className="
+          overflow-hidden
+          max-h-0 opacity-0
+          group-hover:max-h-[96px] group-hover:opacity-100
+          transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+          mb-0 group-hover:mb-3
+        ">
+          <p className="text-[13px] text-white/70 leading-relaxed line-clamp-3">
+            {description}
+          </p>
+        </div>
+
+        {/* TAGS — always-dark glass pills, correct over any background */}
+        <div className="flex flex-wrap gap-1.5">
+          {tags.map((tag, i) => (
+            <span
+              key={i}
+              className="
+                px-2.5 py-0.5 rounded-full
+                bg-white/[0.10] border border-white/[0.12]
+                text-[11px] font-medium text-white/75 leading-relaxed
+                backdrop-blur-sm
+              "
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+      </div>
 
     </Link>
   )

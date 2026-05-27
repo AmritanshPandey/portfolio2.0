@@ -37,9 +37,9 @@ export default function Page() {
         id="approach"
         bg="muted"
         eyebrow="Approach"
-        title="How I Design & Make Product Decisions"
-        transition="Beyond structured processes, exploration helps test ideas and refine thinking."
-        transitionEyebrow="From Process to Exploration"
+        title="How I Think"
+        transition="Thinking feeds into side projects — where ideas get tested outside of client constraints."
+        transitionEyebrow="From Thinking to Exploration"
       >
         <ProductDesignApproachSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />

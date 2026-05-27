@@ -24,6 +24,8 @@ export interface ExplorationItem {
   tags: string[]
   /** Tailwind col-span class for the 5-column mosaic grid. Rows must sum to 5 (e.g. "md:col-span-3" + "md:col-span-2"). */
   span: string
+  /** Optional project status shown as a badge. */
+  status?: "Concept" | "In Development" | "Live"
 }
 
 export interface SystemStat {

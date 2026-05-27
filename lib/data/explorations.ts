@@ -10,15 +10,17 @@ export const explorationItems: ExplorationItem[] = [
     href: "/explorations/sneakers-commerce",
     tags: ["Commerce", "Behavior", "Systems"],
     span: "md:col-span-3",
+    status: "Concept",
   },
   {
-    title: "Weather-Aware Skincare System",
+    title: "Smart Journal",
     description:
-      "Models how environmental signals like UV and AQI can dynamically influence personal routines.",
-    image: "/assets/images/work/skincare-planner.jpg",
-    href: "/explorations/weather-skincare",
-    tags: ["Context", "Personalization", "Data"],
+      "A private reflection system where AI runs entirely on-device using Gemma. Every journaling app sends your thoughts to a server. This one doesn't — and the entire product architecture follows from that single decision.",
+    image: "/assets/images/work/execution-system.jpg",
+    href: "/explorations/smart-journal",
+    tags: ["Flutter", "On-device AI", "Privacy"],
     span: "md:col-span-2",
+    status: "In Development",
   },
   {
     title: "AI Decision Engine",
@@ -28,6 +30,7 @@ export const explorationItems: ExplorationItem[] = [
     href: "/explorations/ai-decision-engine",
     tags: ["AI", "Decision Systems", "Framework"],
     span: "md:col-span-2",
+    status: "Concept",
   },
   {
     title: "Personal Execution System",
@@ -37,5 +40,6 @@ export const explorationItems: ExplorationItem[] = [
     href: "/explorations/personal-execution-system",
     tags: ["Execution", "Systems", "Planning"],
     span: "md:col-span-3",
+    status: "In Development",
   },
 ]

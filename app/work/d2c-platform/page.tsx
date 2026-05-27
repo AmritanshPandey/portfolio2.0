@@ -1,8 +1,6 @@
 "use client"
 
-import Link from "next/link"
 import { motion } from "framer-motion"
-import { IconArrowLeft } from "@tabler/icons-react"
 import {
   CsSection,
   CsDecision,
@@ -13,6 +11,7 @@ import {
   CsArchStack,
   CsMetricBars,
   CsTimeline,
+  CsNextStudies,
 } from "@/components/case-study"
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
@@ -56,18 +55,6 @@ function Hero() {
       </div>
 
       <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
-
-        {/* Back */}
-        <motion.div
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Link href="/#work" className="inline-flex items-center gap-2 mb-12 text-sm text-neutral-500 hover:text-neutral-300 transition-colors">
-            <IconArrowLeft size={15} strokeWidth={2} />
-            Back to Work
-          </Link>
-        </motion.div>
 
         {/* Breadcrumb */}
         <motion.div
@@ -654,6 +641,8 @@ export default function Page() {
           </p>
         </blockquote>
       </CsSection>
+
+      <CsNextStudies currentHref="/work/d2c-platform" />
 
     </div>
   )

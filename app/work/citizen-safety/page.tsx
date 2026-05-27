@@ -1,9 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { motion } from "framer-motion"
 import {
-  IconArrowLeft,
   IconUsers,
   IconClock,
   IconPackages,
@@ -13,7 +11,7 @@ import {
   IconBulb,
   IconPresentation,
 } from "@tabler/icons-react"
-import { CsSection, CsDecision, CsAreaChart, CsDualLineChart } from "@/components/case-study"
+import { CsSection, CsDecision, CsAreaChart, CsDualLineChart, CsNextStudies } from "@/components/case-study"
 
 // ─── fade-in wrapper ────────────────────────────────────────────────────────
 
@@ -151,21 +149,6 @@ function Hero() {
       <div className="relative max-w-[1100px] mx-auto px-6 pt-28 pb-0 md:pt-36">
 
         {/* Back link */}
-        <motion.div
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12"
-        >
-          <Link
-            href="/#work"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <IconArrowLeft size={15} strokeWidth={2} />
-            Back to Work
-          </Link>
-        </motion.div>
-
         {/* Split layout */}
         <div className="grid lg:grid-cols-[1fr_440px] gap-16 xl:gap-20 items-start pb-0">
 
@@ -991,6 +974,8 @@ export default function Page() {
           <ReflectionCards />
         </div>
       </CsSection>
+
+      <CsNextStudies currentHref="/work/citizen-safety" />
 
     </div>
   )

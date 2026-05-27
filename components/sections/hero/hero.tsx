@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useRef, useCallback } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { TypingWord } from "@/components/shared/typing-effect"
+
 import { Pill } from "@/components/shared/pill"
 
 export default function Hero() {
@@ -90,7 +91,7 @@ export default function Hero() {
               Senior Product Designer • Mastercard
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-[12px] text-muted-foreground">
-              8+ years in product design
+              8 years in product
             </div>
           </div>
 

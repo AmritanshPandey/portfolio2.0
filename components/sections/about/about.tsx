@@ -16,8 +16,8 @@ export default function AboutSection() {
   const { isHigh } = usePerformanceMode()
 
   const focus = [
-    { icon: IconSparkles, text: "Exploring how AI reshapes product behavior" },
-    { icon: IconLayoutGrid, text: "Designing systems that scale across products" },
+    { icon: IconSparkles,    text: "Exploring how AI reshapes product behavior" },
+    { icon: IconLayoutGrid,  text: "Designing systems that scale across products" },
     { icon: IconShieldCheck, text: "Building trust in high-stakes environments" },
     { icon: IconAdjustments, text: "Making better decisions under constraints" },
   ]
@@ -31,126 +31,70 @@ export default function AboutSection() {
       {/* ── BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-[0] overflow-hidden">
 
-        {/* GRID (FIXED) */}
+        {/* GRID */}
         <div
           className={clsx(
             "absolute inset-0 [background-size:32px_32px]",
-
             isHigh
               ? "bg-[linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.10)_1px,transparent_1px)]"
               : "bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)]",
-
             isHigh && "animate-[gridDrift_40s_linear_infinite]"
           )}
         />
 
-        {/* NOISE */}
-        {isHigh && (
-          <div
-            className="
-              absolute inset-0
-              opacity-[0.015] dark:opacity-[0.025]
-              mix-blend-soft-light
-            "
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(0,0,0,0.4) 1px, transparent 1px)",
-              backgroundSize: "3px 3px",
-            }}
-          />
-        )}
-
         {/* GLOW */}
         {isHigh && (
-          <div
-            className="
-              absolute inset-0
-              bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.05),transparent_65%)]
-              dark:bg-[radial-gradient(420px_220px_at_85%_80%,rgba(255,120,40,0.18),transparent_70%)]
-            "
-          />
+          <div className="absolute inset-0 bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.05),transparent_65%)] dark:bg-[radial-gradient(420px_220px_at_85%_80%,rgba(255,120,40,0.18),transparent_70%)]" />
         )}
 
-        {/* EDGE FADE */}
-        <div className="
-          absolute inset-0
-          bg-gradient-to-b
-          from-white/80 via-transparent to-white/80
-          dark:from-black/80 dark:via-transparent dark:to-black/80
-        " />
-
-        <div className="
-          absolute inset-0
-          bg-gradient-to-r
-          from-white/70 via-transparent to-white/70
-          dark:from-black/70 dark:via-transparent dark:to-black/70
-        " />
+        {/* EDGE FADES */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-transparent to-white/80 dark:from-black/80 dark:via-transparent dark:to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-transparent to-white/70 dark:from-black/70 dark:via-transparent dark:to-black/70" />
       </div>
 
       {/* ── CONTENT */}
-      <div className="relative z-[1] max-w-6xl mx-auto px-6 py-16 md:py-20">
+      <div className="relative z-[1] max-w-7xl mx-auto px-6 py-16 md:py-20">
 
         {/* HEADER */}
-        <div className="max-w-2xl mb-12 md:mb-16">
+        <div className="max-w-2xl mb-12 md:mb-14">
           <SectionHeader
             eyebrow="About"
             title="Who I am"
-            description="A product designer focused on systems, scale, and decision-making."
+            description="A product designer who operates at the intersection of strategy, systems, and execution."
           />
         </div>
 
         {/* LAYOUT */}
-        <div className="
-          grid grid-cols-1
-          lg:grid-cols-[420px_1fr]
-          gap-16 md:gap-28
-          items-center
-        ">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.85fr)_minmax(0,1.35fr)] xl:grid-cols-[minmax(360px,0.8fr)_minmax(0,1.4fr)] gap-6 lg:gap-10 items-center">
 
-          {/* LEFT */}
-          <div className={clsx(!isHigh && "transform-none")}>
+          {/* LEFT — carousel */}
+          <div className="flex justify-center lg:justify-start">
             <PhotoCarousel />
           </div>
 
-          {/* RIGHT */}
-          <div className="relative">
+          {/* RIGHT — bio */}
+          <div className="space-y-8 rounded-2xl bg-white/60 dark:bg-black/50 backdrop-blur-sm border border-border/40 p-6 md:p-8">
 
-            {/* READABILITY LAYER */}
-            <div
-              className={clsx(
-                "absolute -inset-6 -z-10 rounded-xl border",
-                isHigh
-                  ? "bg-white/70 dark:bg-black/60 backdrop-blur-md border-black/[0.04] dark:border-white/[0.06]"
-                  : "bg-white/85 dark:bg-black/80 border-black/[0.04] dark:border-white/[0.06]"
-              )}
-            />
-
-            <div className="space-y-8">
-
-              {/* TEXT */}
-              <div className="space-y-6 max-w-full">
-
-                <p className="animate-fade-up text-[18px] leading-[1.75] tracking-[-0.01em]">
-                  I design products by breaking down complex problems into clear, scalable systems.
-                </p>
-
-                <p className="animate-fade-up text-[18px] leading-[1.75] text-foreground/85">
-                  My focus is on how products behave in the real world — how users act, where friction emerges, and how small decisions compound into larger outcomes.
-                </p>
-
-                <p className="animate-fade-up text-[18px] text-foreground/55 leading-[1.7]">
-                  Outside of work, I spend time traveling, cooking, and going on long bike rides.
-                </p>
-
-              </div>
-
-              {/* FOCUS */}
-              <FocusList focus={focus} title="Focus areas" />
-
+            {/* TEXT */}
+            <div className="space-y-5">
+              <p className="text-[17px] leading-[1.8] tracking-[-0.01em]">
+                I&apos;ve spent 8 years at the intersection of product and design — building systems that ship at Mastercard, leading a startup through a COVID pivot, pushing back on VP-level decisions and winning, and coding the React demo that Mastercard&apos;s CPO used at Money20/20.
+              </p>
+              <p className="text-[17px] leading-[1.8] text-foreground/80">
+                I care about the problem more than the deliverable. That tends to show in the work.
+              </p>
+              <p className="text-[16px] text-foreground/50 leading-[1.75]">
+                Outside of work, I spend time traveling, cooking, and going on long bike rides.
+              </p>
             </div>
 
-          </div>
+            {/* DIVIDER */}
+            <div className="border-t border-border/50" />
 
+            {/* FOCUS */}
+            <FocusList focus={focus} title="Focus areas" iconSize="xl" />
+
+          </div>
         </div>
 
       </div>

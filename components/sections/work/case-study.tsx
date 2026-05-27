@@ -3,15 +3,11 @@ import { VerticalCard } from "@/components/shared/vertical-card"
 import { workItems } from "@/lib/data"
 
 export default function WorkSection() {
-  const flagship  = workItems
-    .filter((p) => p.tier === "flagship")
-    .sort((a, b) => a.order - b.order)
-
-  const supporting = workItems
-    .filter((p) => p.tier === "supporting")
-    .sort((a, b) => a.order - b.order)
-
-  const [hero, ...restFlagship] = flagship
+  // Order is controlled by SEQUENCE in lib/data/work.ts.
+  // First 2 render large, remaining render small.
+  const sorted = [...workItems].sort((a, b) => a.order - b.order)
+  const large  = sorted.slice(0, 2)
+  const small  = sorted.slice(2)
 
   return (
     <SectionSubgroup
@@ -20,63 +16,39 @@ export default function WorkSection() {
       variant="spacious"
     >
       <section data-cursor-zone="work">
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-4">
 
-          {/* ── FLAGSHIP ─────────────────────────────────────────────── */}
-          <div className="flex flex-col gap-6">
-
-            {/* First flagship — full-width hero card */}
-            {hero && (
+          {/* ── LARGE CARDS — top 2 ─────────────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {large.map((p) => (
               <VerticalCard
-                href={hero.href}
-                image={hero.image}
-                title={hero.title}
-                description={hero.description}
-                category={hero.category}
-                metric={hero.metric}
-                variant="featured"
+                key={p.href}
+                href={p.href}
+                image={p.image}
+                title={p.title}
+                category={p.category}
+                metric={p.metric}
+                index={p.order}
+                imageHeight="h-56"
               />
-            )}
-
-            {/* Remaining flagships — 2-col grid */}
-            {restFlagship.length > 0 && (
-              <div className="grid md:grid-cols-2 gap-6">
-                {restFlagship.map((p) => (
-                  <VerticalCard
-                    key={p.href}
-                    href={p.href}
-                    image={p.image}
-                    title={p.title}
-                    description={p.description}
-                    category={p.category}
-                    metric={p.metric}
-                  />
-                ))}
-              </div>
-            )}
+            ))}
           </div>
 
-          {/* ── SUPPORTING ───────────────────────────────────────────── */}
-          {supporting.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
-                Supporting Work
-              </p>
-              <div className="grid md:grid-cols-2 gap-6">
-                {supporting.map((p) => (
-                  <VerticalCard
-                    key={p.href}
-                    href={p.href}
-                    image={p.image}
-                    title={p.title}
-                    description={p.description}
-                    category={p.category}
-                    metric={p.metric}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          {/* ── SMALL CARDS — remaining ──────────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {small.map((p) => (
+              <VerticalCard
+                key={p.href}
+                href={p.href}
+                image={p.image}
+                title={p.title}
+                category={p.category}
+                metric={p.metric}
+                index={p.order}
+                imageHeight="h-36"
+              />
+            ))}
+          </div>
 
         </div>
       </section>

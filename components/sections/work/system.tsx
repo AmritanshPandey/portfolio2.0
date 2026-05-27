@@ -1,7 +1,7 @@
 "use client"
 
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
-import { HorizontalCard } from "@/components/shared/horizontal-card"
+import { VerticalCard } from "@/components/shared/vertical-card"
 import { systemItems } from "@/lib/data"
 
 export default function SystemsSection() {
@@ -12,17 +12,18 @@ export default function SystemsSection() {
       variant="spacious"
     >
       <section data-cursor-zone="systems">
-        <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {systemItems.map((system, index) => (
-            <HorizontalCard
+            <VerticalCard
               key={system.href}
-              index={index}
               href={system.href}
               image={system.image}
               title={system.title}
-              description={system.description}
               category={system.category}
               ctaLabel={system.ctaLabel}
+              tags={system.tags}
+              index={index}
+              imageHeight="h-52"
             />
           ))}
         </div>

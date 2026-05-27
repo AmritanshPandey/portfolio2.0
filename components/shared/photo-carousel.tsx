@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Image from "next/image"
+import clsx from "clsx"
 
 const DEFAULT_PHOTOS = [
   "/assets/images/1.png",
@@ -11,100 +12,140 @@ const DEFAULT_PHOTOS = [
   "/assets/images/5.png",
 ]
 
-const DEFAULT_CAPTIONS = ["Moments", "Travel", "Life", "Stories", "Memories"]
+const DEFAULT_CAPTIONS = [
+  "somewhere new",
+  "cooking something",
+  "on the road",
+  "long bike rides",
+  "off the clock",
+]
 
 type Props = {
   photos?: string[]
   captions?: string[]
   interval?: number
-  /** Alt text prefix; each photo gets "{altPrefix} {n}" */
   altPrefix?: string
 }
 
 export default function PhotoCarousel({
   photos = DEFAULT_PHOTOS,
   captions = DEFAULT_CAPTIONS,
-  interval = 3000,
+  interval = 3500,
   altPrefix = "Photo",
 }: Props) {
   const [index, setIndex] = useState(0)
   const count = photos.length
 
+  const advance = useCallback(() => {
+    setIndex((prev) => (prev + 1) % count)
+  }, [count])
+
   useEffect(() => {
-    const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % count)
-    }, interval)
+    const id = setInterval(advance, interval)
     return () => clearInterval(id)
-  }, [count, interval])
+  }, [advance, interval])
 
   return (
-    <div className="flex justify-center py-12">
-      <div className="relative w-[260px] md:w-[300px] aspect-[4/5]">
+    <div className="flex flex-col items-center gap-6 w-full max-w-[360px]">
 
+      {/* ── STACK ── */}
+      <div
+        className="relative w-full aspect-[3/4] cursor-pointer"
+        onClick={advance}
+        title="Click to advance"
+      >
         {photos.map((src, i) => {
-          const position = (i - index + count) % count
-          const isActive = position === 0
-          const activeCaption = captions[index % captions.length]
+          const pos = (i - index + count) % count
 
-          let transform = ""
+          let transform = "rotate(0deg) scale(1) translate(0px, 0px)"
           let zIndex = 0
           let opacity = 1
 
-          if (position === 0) {
-            transform = "rotate(0deg) scale(1)"
+          if (pos === 0) {
+            transform = "rotate(-1deg) scale(1) translate(0px, 0px)"
             zIndex = 30
-          } else if (position === 1) {
-            transform = "rotate(4deg) scale(0.96) translate(16px,8px)"
+          } else if (pos === 1) {
+            transform = "rotate(3deg) scale(0.97) translate(14px, 8px)"
             zIndex = 20
-          } else if (position === 2) {
-            transform = "rotate(8deg) scale(0.92) translate(32px,16px)"
+            opacity = 0.9
+          } else if (pos === 2) {
+            transform = "rotate(6.5deg) scale(0.94) translate(28px, 16px)"
             zIndex = 10
-            opacity = 0.7
+            opacity = 0.55
           } else {
             opacity = 0
+            zIndex = 0
           }
+
+          const isActive = pos === 0
+          const caption = captions[i % captions.length]
 
           return (
             <div
               key={i}
-              className="absolute inset-0 transition-all duration-500 ease-out"
+              className="absolute inset-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{ transform, zIndex, opacity }}
             >
-              <div className="w-full h-full transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.02]">
+              <div className={clsx(
+                "w-full h-full rounded-lg overflow-hidden",
+                "bg-white dark:bg-neutral-900",
+                "border border-black/[0.08] dark:border-white/[0.08]",
+                "shadow-[0_4px_20px_rgba(0,0,0,0.10)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.45)]",
+                "flex flex-col",
+                isActive && "hover:-translate-y-1 transition-transform duration-300"
+              )}>
 
-                <div className="w-full h-full bg-white rounded-md border border-black/10 shadow-lg">
-
-                  {/* IMAGE */}
-                  <div className="p-3 pb-0">
-                    <div className="relative w-full aspect-square overflow-hidden rounded-sm">
-                      <Image
-                        src={src}
-                        alt={`${altPrefix} ${i + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
+                {/* IMAGE — fills most of the card */}
+                <div className="flex-1 overflow-hidden m-2.5 mb-0 rounded-md">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={src}
+                      alt={`${altPrefix} ${i + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-
-                  {/* CAPTION */}
-                  <div className="h-[52px] flex items-center justify-center">
-                    {isActive && (
-                      <span
-                        className="text-xl text-black/70 italic"
-                        style={{ transform: "rotate(-1deg)", display: "inline-block" }}
-                      >
-                        {activeCaption}
-                      </span>
-                    )}
-                  </div>
-
                 </div>
+
+                {/* CAPTION — handwritten style */}
+                <div className="h-[46px] flex items-center justify-center px-3">
+                  {isActive && (
+                    <span
+                      className="text-[19px] text-black/60 dark:text-white/50 select-none"
+                      style={{
+                        fontFamily: "var(--font-caveat)",
+                        transform: "rotate(-1.5deg)",
+                        display: "inline-block",
+                      }}
+                    >
+                      {caption}
+                    </span>
+                  )}
+                </div>
+
               </div>
             </div>
           )
         })}
-
       </div>
+
+      {/* ── DOT INDICATORS ── */}
+      <div className="flex items-center gap-2">
+        {photos.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            aria-label={`Go to photo ${i + 1}`}
+            className={clsx(
+              "rounded-full transition-all duration-300",
+              i === index
+                ? "w-4 h-1.5 bg-foreground/50"
+                : "w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/35"
+            )}
+          />
+        ))}
+      </div>
+
     </div>
   )
 }

@@ -1,62 +1,79 @@
 "use client"
 
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
-import { ProcessStepsCard } from "@/components/shared/process-steps-card"
+import { motion } from "framer-motion"
+
+const QUESTIONS = [
+  {
+    num: "01",
+    q: "What's the forcing function?",
+    body: "What's actually making this problem urgent right now — and does that forcing function last?",
+  },
+  {
+    num: "02",
+    q: "What would have to be true for the opposite approach to be right?",
+    body: "The strongest test of any decision is whether you can honestly argue the other side.",
+  },
+  {
+    num: "03",
+    q: "Who isn't in the room whose constraints will break this later?",
+    body: "Engineering, legal, sales, the user in a low-connectivity environment. Find them before you commit.",
+  },
+]
 
 export default function ProductDesignApproachSection() {
-
-  const steps = [
-    {
-      number: "01",
-      title: "Frame the Problem",
-      description:
-        "Align user needs, business goals, and constraints before exploring solutions.",
-    },
-    {
-      number: "02",
-      title: "Structure the System",
-      description:
-        "Define architecture and flows that scale across use cases and edge conditions.",
-    },
-    {
-      number: "03",
-      title: "Design & Operationalize",
-      description:
-        "Translate concepts into production-ready systems with engineering.",
-    },
-    {
-      number: "04",
-      title: "Learn & Evolve",
-      description:
-        "Refine continuously using feedback, signals, and constraints.",
-    },
-  ]
-
   return (
     <SectionSubgroup
       label="Approach"
-      description="How I move from ambiguity to scalable outcomes."
+      description="How I think before I decide."
       variant="spacious"
     >
+      <div className="flex flex-col gap-0 rounded-2xl border border-border overflow-hidden">
+        {QUESTIONS.map((item, i) => (
+          <motion.div
+            key={item.num}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.45, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className={`
+              group relative px-7 py-7
+              bg-card hover:bg-orange-500/[0.02] dark:hover:bg-orange-500/[0.04]
+              transition-colors duration-200
+              ${i < QUESTIONS.length - 1 ? "border-b border-border" : ""}
+            `}
+          >
+            {/* Number */}
+            <span className="
+              text-[11px] font-mono font-semibold tracking-[0.14em]
+              text-orange-500/70 dark:text-orange-400/60
+              block mb-3
+            ">
+              {item.num}
+            </span>
 
-      {/* ✨ WRAPPER FOR BETTER COLOR BALANCE */}
-      <div className="
-        relative
+            {/* Question */}
+            <p className="
+              text-[17px] md:text-[19px] font-semibold tracking-tight leading-snug
+              text-foreground mb-3
+            ">
+              {item.q}
+            </p>
 
-        /* subtle lift from background */
-        bg-transparent
+            {/* Answer */}
+            <p className="text-[14px] md:text-[15px] leading-relaxed text-muted-foreground max-w-xl">
+              {item.body}
+            </p>
 
-        /* improves separation in light mode */
-        before:absolute before:inset-0 before:rounded-3xl
-        before:bg-gradient-to-b before:from-transparent before:to-black/[0.02]
-        dark:before:to-white/[0.02]
-        before:pointer-events-none
-      ">
-
-        <ProcessStepsCard steps={steps} />
-
+            {/* Hover accent line */}
+            <div className="
+              absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full
+              bg-orange-500/0 group-hover:bg-orange-500/50
+              transition-colors duration-300
+            " />
+          </motion.div>
+        ))}
       </div>
-
     </SectionSubgroup>
   )
 }

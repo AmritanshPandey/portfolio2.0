@@ -20,6 +20,7 @@ export default function ExplorationsSection() {
                 image={item.image}
                 href={item.href}
                 tags={item.tags}
+                status={item.status}
               />
             </div>
           ))}
