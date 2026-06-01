@@ -71,7 +71,7 @@ void main() {
   float shape = 1.0 - smoothstep(radius - 1.0, radius + 1.0, d);
 
   vec3 color = mix(u_baseColor.rgb, u_glowColor, glow);
-  float alpha = clamp(u_baseColor.a + glow * 0.7, 0.0, 1.0) * shape;
+float alpha = clamp(u_baseColor.a + glow * 0.25, 0.0, 1.0) * shape;
 
   gl_FragColor = vec4(color, alpha);
 }
@@ -136,8 +136,12 @@ export function ShaderGrid({
   spacing = 24,
   size = pattern === "lines" ? 0.6 : 2,
   glowRadius = 140,
-  lightColor = pattern === "lines" ? [0, 0, 0, 0.1] : [0, 0, 0, 0.34],
-  darkColor = pattern === "lines" ? [1, 1, 1, 0.12] : [1, 1, 1, 0.45],
+  lightColor = pattern === "lines"
+  ? [0, 0, 0, 0.1]
+  : [0, 0, 0, 0.12],
+  darkColor = pattern === "lines"
+    ? [1, 1, 1, 0.12]
+    : [1, 1, 1, 0.18],
   glowColor = DEFAULT_GLOW,
 }: ShaderGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
