@@ -4,39 +4,48 @@ import { useEffect, useRef, useState } from "react"
 import { usePerformanceMode } from "@/hooks/use-performance-mode"
 
 /**
- * Cursor-reactive background grid rendered with a raw WebGL fragment shader.
+ * Procedural dot field rendered with a raw WebGL fragment shader, driven
+ * entirely in **normalized UV space** (`gl_FragCoord.xy / u_resolution.xy`).
  *
- * Supports two patterns:
- *   - "dots"  — a dot grid; dots near the cursor grow + brighten + tint orange.
- *   - "lines" — a square line grid; lines near the cursor thicken + brighten + tint.
+ * The cursor drags the dots along with its motion, like water: the UV field is
+ * advected by the pointer's (eased) velocity, so dots get pulled in the travel
+ * direction and relax back to rest the moment it stops. Movement is interpolated
+ * (lerped) with a touch of inertia for fluid, polished, restrained motion.
  *
- * Decorative only (pointer-events-none). Progressive enhancement: the matching
- * static CSS grid is always rendered as a fallback and stays visible when WebGL
- * is unavailable, on touch / coarse pointers, or under reduced motion. The canvas
- * only paints (and the fallback is hidden) once WebGL is confirmed active.
+ * Decorative only (pointer-events-none). Progressive enhancement: a matching
+ * static CSS dot grid is rendered as a fallback and stays visible when WebGL is
+ * unavailable or under reduced motion. The canvas only paints (and the fallback
+ * is hidden) once WebGL is confirmed active.
+ *
+ * Input: pointer + touch (mouse, trackpad, iPad / mobile Safari), normalized to
+ * 0→1. Retina-safe — the canvas scales with DPR while the shader math stays
+ * resolution-independent.
  */
 
 type RGBA = readonly [number, number, number, number] // 0..1
 type RGB = readonly [number, number, number] // 0..1
 
 interface ShaderGridProps {
-  pattern?: "dots" | "lines"
-  /** px between dots / grid lines */
+  /** CSS px between dots — drives the grid density (resolution-independent) */
   spacing?: number
-  /** px — dot radius, or line half-width */
-  size?: number
-  /** px influence radius around the cursor */
-  glowRadius?: number
-  /** base color in light mode */
+  /** dot radius as a fraction of the cell (0..0.5) — keep tiny */
+  dotSize?: number
+  /** influence radius around the cursor in normalized UV (aspect-corrected) */
+  radius?: number
+  /** how strongly dots are dragged along the cursor's motion (water gain) */
+  drag?: number
+  /** max drag displacement in normalized UV — keeps it subtle / polished */
+  maxDrag?: number
+  /** base dot color in light mode */
   lightColor?: RGBA
-  /** base color in dark mode */
+  /** base dot color in dark mode */
   darkColor?: RGBA
-  /** tint color near the cursor (default orange-400) */
-  glowColor?: RGB
+  /** soft tint that bleeds in near the cursor */
+  tintColor?: RGB
 }
 
-// Lighter orange (orange-400, #fb923c).
-const DEFAULT_GLOW: RGB = [251 / 255, 146 / 255, 60 / 255]
+// Brand orange (#e8621a) — warm tint that bleeds in near the cursor.
+const DEFAULT_TINT: RGB = [0.91, 0.384, 0.102]
 
 const VERT_SRC = `
 attribute vec2 a_pos;
@@ -45,70 +54,61 @@ void main() {
 }
 `
 
-const FRAG_DOTS = `
+const FRAG_SRC = `
 precision highp float;
 
-uniform vec2  u_mouse;       // canvas px (gl_FragCoord space, y-up)
-uniform float u_spacing;     // px between dots
-uniform float u_size;        // px dot radius at rest
-uniform float u_glowRadius;  // px influence radius
-uniform vec4  u_baseColor;   // base rgba
-uniform vec3  u_glowColor;   // tint near cursor
-uniform float u_intensity;   // 0..1 master ease
+uniform vec2  u_resolution; // device px
+uniform vec2  u_mouse;      // normalized UV (0..1), y-up to match gl_FragCoord
+uniform float u_intensity;  // 0..1 master ease (hover in / out)
+uniform float u_density;    // dots per unit height
+uniform float u_dotSize;    // dot radius in cell fraction
+uniform float u_radius;     // influence radius (aspect-corrected UV)
+uniform vec2  u_velocity;   // cursor drag vector (normalized UV / frame, gained)
+uniform vec4  u_baseColor;  // base dot rgba
+uniform vec3  u_tintColor;  // tint near cursor
 
 void main() {
-  vec2 frag = gl_FragCoord.xy;
+  // ── Normalized UV space ────────────────────────────────────────────────
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
 
-  // Vector from the fragment to its nearest dot centre.
-  vec2 offset = mod(frag, u_spacing) - u_spacing * 0.5;
-  vec2 center = frag - offset;
-  float d = length(offset);
+  // Aspect-correct so cells stay square and the field stays circular.
+  float aspect = u_resolution.x / u_resolution.y;
+  vec2 auv    = vec2(uv.x * aspect, uv.y);
+  vec2 amouse = vec2(u_mouse.x * aspect, u_mouse.y);
 
-  float md = distance(center, u_mouse);
-  float glow = u_intensity * smoothstep(u_glowRadius, 0.0, md);
+  // ── Cursor drag — advect the dots along the pointer's motion, like water ─
+  vec2  vel   = vec2(u_velocity.x * aspect, u_velocity.y);
+  vec2  dir   = auv - amouse;
+  float dist  = length(dir);
+  float force = smoothstep(u_radius, 0.0, dist) * u_intensity;
 
-  float radius = u_size * (1.0 + glow * 1.6);
-  float shape = 1.0 - smoothstep(radius - 1.0, radius + 1.0, d);
+  // Sample the field "upstream" of the motion so dots appear pulled along with
+  // the cursor, then relax back to rest the moment it stops. Purely driven by
+  // velocity — no displacement when the pointer is still, so it stays polished.
+  vec2  warped = auv - vel * force;
 
-  vec3 color = mix(u_baseColor.rgb, u_glowColor, glow);
-  float alpha = clamp(u_baseColor.a + glow * 0.7, 0.0, 1.0) * shape;
+  // ── Procedural dot grid (no textures) ──────────────────────────────────
+  vec2  cell = fract(warped * u_density) - 0.5;
+  float d    = length(cell);
 
-  gl_FragColor = vec4(color, alpha);
-}
-`
+  // Resolution-aware antialiasing: ~1px soft edge regardless of DPR.
+  float aa  = u_density / u_resolution.y;
+  float dot = 1.0 - smoothstep(u_dotSize - aa, u_dotSize + aa, d);
 
-const FRAG_LINES = `
-precision highp float;
+  // ── Color + subtle falloff / vignette for depth ────────────────────────
+  float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
 
-uniform vec2  u_mouse;       // canvas px (gl_FragCoord space, y-up)
-uniform float u_spacing;     // px between grid lines
-uniform float u_size;        // px line half-width (constant)
-uniform float u_glowRadius;  // px influence radius
-uniform vec4  u_baseColor;   // grid line rgba
-uniform vec3  u_glowColor;   // square-glow colour near cursor
-uniform float u_intensity;   // 0..1 master ease
+  // The cursor is a glow pocket. The hue goes (near) fully orange within the
+  // pocket so it reads as orange in BOTH themes — in light mode the base dots
+  // are black, so a weak mix would just look dark, not orange. Subtlety comes
+  // from a small, soft pocket + a gentle brightness lift, not a washed-out hue.
+  float motion = length(vel) * force;
+  float warm   = clamp(force * 1.0 + motion * 6.0, 0.0, 1.0);
 
-void main() {
-  vec2 frag = gl_FragCoord.xy;
-
-  // Distance to the nearest vertical / horizontal grid line.
-  float dx = mod(frag.x, u_spacing);
-  dx = min(dx, u_spacing - dx);
-  float dy = mod(frag.y, u_spacing);
-  dy = min(dy, u_spacing - dy);
-  float lineDist = min(dx, dy);
-
-  // The grid lines stay constant (no reactivity).
-  float lineShape = 1.0 - smoothstep(u_size - 0.75, u_size + 0.75, lineDist);
-
-  // The squares (cell interiors) glow bright near the cursor.
-  float md = distance(frag, u_mouse);
-  float glow = u_intensity * smoothstep(u_glowRadius, 0.0, md);
-  float glowAlpha = glow * 0.55;
-
-  // Orange glow fills the cells; the grid lines sit on top.
-  vec3 color = mix(u_glowColor, u_baseColor.rgb, lineShape);
-  float alpha = max(glowAlpha, u_baseColor.a * lineShape);
+  vec3  color = mix(u_baseColor.rgb, u_tintColor, warm);
+  // Brighten near the cursor; the glow sidesteps most of the vignette so it
+  // stays orange even toward the edges, while the resting grid fades for depth.
+  float alpha = (u_baseColor.a * vignette + force * 0.35 + motion * 3.0) * dot;
 
   gl_FragColor = vec4(color, alpha);
 }
@@ -132,13 +132,14 @@ const cssRgba = (c: RGBA) =>
   )},${c[3]})`
 
 export function ShaderGrid({
-  pattern = "dots",
-  spacing = 24,
-  size = pattern === "lines" ? 0.6 : 2,
-  glowRadius = 140,
-  lightColor = pattern === "lines" ? [0, 0, 0, 0.1] : [0, 0, 0, 0.34],
-  darkColor = pattern === "lines" ? [1, 1, 1, 0.12] : [1, 1, 1, 0.45],
-  glowColor = DEFAULT_GLOW,
+  spacing = 16,
+  dotSize = 0.08,
+  radius = 0.15,
+  drag = 2.0,
+  maxDrag = 0.014,
+  lightColor = [0, 0, 0, 0.42],
+  darkColor = [1, 1, 1, 0.5],
+  tintColor = DEFAULT_TINT,
 }: ShaderGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -148,21 +149,21 @@ export function ShaderGrid({
   const maxDpr = isHigh ? 2 : isBalanced ? 1.5 : 1
 
   // Stable key so the effect only re-runs when the actual config changes.
-  const colorKey = JSON.stringify([lightColor, darkColor, glowColor])
+  const colorKey = JSON.stringify([lightColor, darkColor, tintColor])
 
   useEffect(() => {
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
 
-    // ── Guards: fall back to the static CSS grid ──────────────────────────
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches
-    const finePointer = window.matchMedia("(pointer: fine)").matches
-    if (prefersReducedMotion || !finePointer) return
+    // ── Guard: honour reduced motion (keep the static CSS dot grid) ───────
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
-    const gl = (canvas.getContext("webgl", { alpha: true, premultipliedAlpha: false }) ||
+    const gl = (canvas.getContext("webgl", {
+      alpha: true,
+      premultipliedAlpha: false,
+      antialias: true,
+    }) ||
       canvas.getContext("experimental-webgl", {
         alpha: true,
         premultipliedAlpha: false,
@@ -170,11 +171,7 @@ export function ShaderGrid({
     if (!gl) return
 
     const vert = compile(gl, gl.VERTEX_SHADER, VERT_SRC)
-    const frag = compile(
-      gl,
-      gl.FRAGMENT_SHADER,
-      pattern === "lines" ? FRAG_LINES : FRAG_DOTS
-    )
+    const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG_SRC)
     if (!vert || !frag) return
 
     const program = gl.createProgram()
@@ -200,13 +197,17 @@ export function ShaderGrid({
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
-    const uMouse = gl.getUniformLocation(program, "u_mouse")
-    const uSpacing = gl.getUniformLocation(program, "u_spacing")
-    const uSize = gl.getUniformLocation(program, "u_size")
-    const uGlowRadius = gl.getUniformLocation(program, "u_glowRadius")
-    const uBaseColor = gl.getUniformLocation(program, "u_baseColor")
-    const uGlowColor = gl.getUniformLocation(program, "u_glowColor")
-    const uIntensity = gl.getUniformLocation(program, "u_intensity")
+    const u = {
+      resolution: gl.getUniformLocation(program, "u_resolution"),
+      mouse: gl.getUniformLocation(program, "u_mouse"),
+      intensity: gl.getUniformLocation(program, "u_intensity"),
+      density: gl.getUniformLocation(program, "u_density"),
+      dotSize: gl.getUniformLocation(program, "u_dotSize"),
+      radius: gl.getUniformLocation(program, "u_radius"),
+      velocity: gl.getUniformLocation(program, "u_velocity"),
+      baseColor: gl.getUniformLocation(program, "u_baseColor"),
+      tintColor: gl.getUniformLocation(program, "u_tintColor"),
+    }
 
     setWebglActive(true)
 
@@ -214,15 +215,28 @@ export function ShaderGrid({
     let dpr = Math.min(window.devicePixelRatio || 1, maxDpr)
     let width = 0
     let height = 0
-    // Mouse in canvas px (gl_FragCoord space, y-up). Smoothed toward target.
-    let mx = -1e4
-    let my = -1e4
-    let targetX = -1e4
-    let targetY = -1e4
+    let density = 30
+
+    // Normalized cursor (0..1, y-up). Smoothed toward target via lerp.
+    let mx = 0.5
+    let my = 0.5
+    let targetX = 0.5
+    let targetY = 0.5
+    // Velocity of the smoothed cursor (drag direction), with its own inertia.
+    let prevX = 0.5
+    let prevY = 0.5
+    let velX = 0
+    let velY = 0
     let intensity = 0
     let targetIntensity = 0
     let raf = 0
     let visible = true
+    let lastTime = 0
+
+    // Frame-rate-independent exponential smoothing (rate in 1/sec). Keeps the
+    // motion identical at 60Hz and 120Hz (ProMotion iPad / high-refresh displays).
+    const approach = (cur: number, target: number, rate: number, dt: number) =>
+      cur + (target - cur) * (1 - Math.exp(-rate * dt))
 
     const isDark = () => document.documentElement.classList.contains("dark")
     let base = isDark() ? darkColor : lightColor
@@ -235,29 +249,59 @@ export function ShaderGrid({
       canvas.width = width
       canvas.height = height
       gl.viewport(0, 0, width, height)
+      // Density derived from CSS spacing → consistent dot size on any screen.
+      density = Math.max(4, rect.height / spacing)
     }
     resize()
 
-    const render = () => {
-      mx += (targetX - mx) * 0.15
-      my += (targetY - my) * 0.15
-      intensity += (targetIntensity - intensity) * 0.08
+    const render = (now = performance.now()) => {
+      // Clamp dt so a backgrounded tab (huge gap) can't jolt the field.
+      const dt = lastTime
+        ? Math.min(Math.max((now - lastTime) / 1000, 1 / 240), 1 / 30)
+        : 1 / 60
+      lastTime = now
 
-      gl.uniform2f(uMouse, mx, my)
-      gl.uniform1f(uSpacing, spacing * dpr)
-      gl.uniform1f(uSize, size)
-      gl.uniform1f(uGlowRadius, glowRadius * dpr)
-      gl.uniform4f(uBaseColor, base[0], base[1], base[2], base[3])
-      gl.uniform3f(uGlowColor, glowColor[0], glowColor[1], glowColor[2])
-      gl.uniform1f(uIntensity, intensity)
+      // Smooth interpolation — soft, never snapping (time-based).
+      mx = approach(mx, targetX, 5.0, dt)
+      my = approach(my, targetY, 5.0, dt)
+      intensity = approach(intensity, targetIntensity, 3.7, dt)
+
+      // Watery drag: cursor velocity normalized to a 60fps frame so the drag
+      // amount matches on 60Hz and 120Hz, eased for inertia so the dots keep
+      // trailing briefly after the pointer slows, then settle.
+      const instX = (mx - prevX) / (dt * 60)
+      const instY = (my - prevY) / (dt * 60)
+      prevX = mx
+      prevY = my
+      velX = approach(velX, instX, 12.0, dt)
+      velY = approach(velY, instY, 12.0, dt)
+
+      let dragX = velX * drag
+      let dragY = velY * drag
+      const dmag = Math.hypot(dragX, dragY)
+      if (dmag > maxDrag) {
+        dragX = (dragX / dmag) * maxDrag
+        dragY = (dragY / dmag) * maxDrag
+      }
+
+      gl.uniform2f(u.resolution, width, height)
+      gl.uniform2f(u.mouse, mx, my)
+      gl.uniform1f(u.intensity, intensity)
+      gl.uniform1f(u.density, density)
+      gl.uniform1f(u.dotSize, dotSize)
+      gl.uniform1f(u.radius, radius)
+      gl.uniform2f(u.velocity, dragX, dragY)
+      gl.uniform4f(u.baseColor, base[0], base[1], base[2], base[3])
+      gl.uniform3f(u.tintColor, tintColor[0], tintColor[1], tintColor[2])
 
       gl.clearColor(0, 0, 0, 0)
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
 
+      // Keep animating while the field is settling or the cursor is active.
       const settling =
-        Math.abs(targetX - mx) > 0.5 ||
-        Math.abs(targetY - my) > 0.5 ||
+        Math.abs(targetX - mx) > 0.001 ||
+        Math.abs(targetY - my) > 0.001 ||
         Math.abs(targetIntensity - intensity) > 0.002
       if (visible && (settling || targetIntensity > 0)) {
         raf = requestAnimationFrame(render)
@@ -270,22 +314,31 @@ export function ShaderGrid({
       if (!raf && visible) raf = requestAnimationFrame(render)
     }
 
-    // ── Listeners ─────────────────────────────────────────────────────────
-    const onPointerMove = (e: PointerEvent) => {
+    // ── Input → normalized 0..1 (y flipped to match gl_FragCoord) ─────────
+    const setTarget = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect()
-      targetX = (e.clientX - rect.left) * dpr
-      targetY = (rect.bottom - e.clientY) * dpr // flip y for gl_FragCoord
+      targetX = (clientX - rect.left) / Math.max(1, rect.width)
+      targetY = 1 - (clientY - rect.top) / Math.max(1, rect.height)
       targetIntensity = 1
       kick()
     }
-    const onPointerLeave = () => {
+    const release = () => {
       targetIntensity = 0
       kick()
     }
 
+    const onPointerMove = (e: PointerEvent) => setTarget(e.clientX, e.clientY)
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (t) setTarget(t.clientX, t.clientY)
+    }
+
     window.addEventListener("pointermove", onPointerMove, { passive: true })
-    window.addEventListener("blur", onPointerLeave)
-    document.addEventListener("pointerleave", onPointerLeave)
+    window.addEventListener("touchstart", onTouch, { passive: true })
+    window.addEventListener("touchmove", onTouch, { passive: true })
+    window.addEventListener("touchend", release, { passive: true })
+    window.addEventListener("blur", release)
+    document.addEventListener("pointerleave", release)
 
     const ro = new ResizeObserver(() => {
       resize()
@@ -316,13 +369,17 @@ export function ShaderGrid({
       attributeFilter: ["class"],
     })
 
+    // Paint once so the static grid is present even before any interaction.
     kick()
 
     return () => {
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener("pointermove", onPointerMove)
-      window.removeEventListener("blur", onPointerLeave)
-      document.removeEventListener("pointerleave", onPointerLeave)
+      window.removeEventListener("touchstart", onTouch)
+      window.removeEventListener("touchmove", onTouch)
+      window.removeEventListener("touchend", release)
+      window.removeEventListener("blur", release)
+      document.removeEventListener("pointerleave", release)
       ro.disconnect()
       io.disconnect()
       mo.disconnect()
@@ -330,13 +387,13 @@ export function ShaderGrid({
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxDpr, pattern, spacing, size, glowRadius, colorKey])
+  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, colorKey])
 
-  // Static CSS fallback backgrounds, per pattern + theme.
+  // Static CSS fallback — matches the resting dot field, per theme.
   const fallbackBg = (c: RGBA) =>
-    pattern === "lines"
-      ? `linear-gradient(to right, ${cssRgba(c)} 1px, transparent 1px), linear-gradient(to bottom, ${cssRgba(c)} 1px, transparent 1px)`
-      : `radial-gradient(circle, ${cssRgba(c)} ${size}px, transparent ${size}px)`
+    `radial-gradient(circle, ${cssRgba(c)} ${dotSize * spacing}px, transparent ${
+      dotSize * spacing + 0.5
+    }px)`
 
   return (
     <div ref={wrapRef} className="pointer-events-none absolute inset-0">
