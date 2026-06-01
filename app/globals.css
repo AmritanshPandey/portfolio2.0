@@ -86,6 +86,44 @@
 }
 
 /* ─────────────────────────
+   TYPOGRAPHY CRAFT
+   Premium signals: balanced headings (no orphaned words), a pretty
+   rag on body copy, and one consistent, accessible focus ring.
+───────────────────────── */
+
+@layer base {
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One focus ring for anything that doesn't define its own.
+     Components that opt out via `outline-none` (e.g. CTA) keep theirs. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+}
+
+@layer utilities {
+  /* Premium underline for inline body links — opt in with `link-underline`. */
+  .link-underline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--text-muted);
+    transition: text-decoration-color 150ms ease;
+  }
+  .link-underline:hover {
+    text-decoration-color: var(--foreground);
+  }
+}
+
+/* ─────────────────────────
    UTILITIES
 ───────────────────────── */
 
@@ -208,4 +246,37 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: shimmer-sweep 4s linear infinite;
+}
+
+/* ─────────────────────────
+   REDUCED MOTION
+   Honour the OS-level preference. Decorative motion collapses to a
+   static end-state; all content stays fully visible and legible.
+   (Framer Motion is handled via <MotionConfig reducedMotion="user">,
+   and Lenis smooth-scroll is skipped, in their respective files.)
+───────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Entrance reveals must never leave content hidden */
+  .animate-fade-up,
+  .navbar-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Looping accents settle into a static gradient */
+  .shimmer-accent,
+  .dark .shimmer-accent {
+    animation: none !important;
+  }
 }

@@ -78,10 +78,13 @@ export default function AboutSection() {
             {/* TEXT */}
             <div className="space-y-5">
               <p className="text-[17px] leading-[1.8] tracking-[-0.01em]">
-                I&apos;ve spent 8 years at the intersection of product and design — building systems that ship at Mastercard, leading a startup through a COVID pivot, pushing back on VP-level decisions and winning, and coding the React demo that Mastercard&apos;s CPO used at Money20/20.
+                I&apos;ve spent 7 years at the intersection of product and design — building systems that ship at Mastercard, leading a startup through a COVID pivot, pushing back on VP-level decisions and winning, and coding the React demo that Mastercard&apos;s CPO used at Money20/20.
               </p>
               <p className="text-[17px] leading-[1.8] text-foreground/80">
                 I care about the problem more than the deliverable. That tends to show in the work.
+              </p>
+              <p className="text-[17px] leading-[1.8] text-foreground/80">
+                Currently building toward product leadership — where design depth, business strategy, and systems thinking meet.
               </p>
               <p className="text-[16px] text-foreground/50 leading-[1.75]">
                 Outside of work, I spend time traveling, cooking, and going on long bike rides.

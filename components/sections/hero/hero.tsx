@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useRef, useCallback } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { TypingWord } from "@/components/shared/typing-effect"
+import { ShaderGrid } from "@/components/shared/shader-grid"
 
 import { Pill } from "@/components/shared/pill"
 
@@ -44,40 +45,35 @@ export default function Hero() {
       id="hero"
       className="relative overflow-hidden bg-background text-foreground"
     >
-      {/* Dot grid — light */}
-      <div
-        className="pointer-events-none absolute inset-0 dark:hidden"
-        style={{
-          backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.22) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
-      {/* Dot grid — dark */}
-      <div
-        className="pointer-events-none absolute inset-0 hidden dark:block"
-        style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
-      />
+      {/* Dot grid — cursor-reactive WebGL shader (static CSS fallback inside) */}
+      <ShaderGrid />
 
-      {/* Vignette */}
+      {/* Soft vignette — fades later so the dot grid stays readable in the centre */}
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 35%, var(--background) 100%)" }}
+        style={{ background: "radial-gradient(ellipse 95% 80% at 50% 42%, transparent 55%, color-mix(in oklab, var(--background) 70%, transparent) 80%, var(--background) 100%)" }}
       />
 
-      {/* Orange bloom — static */}
+      {/* Orange bloom — primary, top-left (layered falloff) */}
       <div
-        className="pointer-events-none absolute -top-40 -left-40 w-[580px] h-[580px] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.09) 0%, transparent 70%)" }}
+        className="pointer-events-none absolute -top-48 -left-44 w-[640px] h-[640px] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.14) 0%, rgba(232,98,26,0.05) 45%, transparent 72%)" }}
       />
 
-      {/* Edge fades */}
-      <div className="pointer-events-none absolute top-0 left-0 right-0 h-20" style={{ background: "linear-gradient(to bottom, var(--background), transparent)" }} />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20" style={{ background: "linear-gradient(to top, var(--background), transparent)" }} />
-      <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-20" style={{ background: "linear-gradient(to right, var(--background), transparent)" }} />
-      <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-20" style={{ background: "linear-gradient(to left, var(--background), transparent)" }} />
+      {/* Orange bloom — secondary, bottom-right for depth/balance */}
+      <div
+        className="pointer-events-none absolute -bottom-44 -right-40 w-[520px] h-[520px] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.07) 0%, transparent 70%)" }}
+      />
+
+      {/* Top + bottom depth fades — single smooth gradient, grounds the section */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "linear-gradient(to bottom, var(--background) 0%, transparent 16%, transparent 84%, var(--background) 100%)" }}
+      />
+      {/* Subtle side fades */}
+      <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-24" style={{ background: "linear-gradient(to right, var(--background), transparent)" }} />
+      <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-24" style={{ background: "linear-gradient(to left, var(--background), transparent)" }} />
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 py-16 md:py-24 lg:py-28 grid lg:grid-cols-[1.5fr_1fr] gap-12 md:gap-14 items-center">
@@ -86,30 +82,38 @@ export default function Hero() {
         <div className="flex flex-col gap-5 md:gap-6 lg:gap-7 w-full max-w-[620px] md:max-w-[680px] lg:max-w-[620px] items-start text-left">
 
           <div className="flex flex-wrap gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-[12px] text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Senior Product Designer • Mastercard
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/[0.06] backdrop-blur-md text-[12px] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_4px_14px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_14px_rgba(0,0,0,0.3)]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+              Product Thinker • Mastercard
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-[12px] text-muted-foreground">
-              8 years in product
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/[0.06] backdrop-blur-md text-[12px] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_4px_14px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_14px_rgba(0,0,0,0.3)]">
+              7 years in product
             </div>
           </div>
 
           <h1 className="font-medium tracking-[-0.02em] leading-[1.02] max-w-[620px]">
-            <span className="block text-[clamp(36px,5vw,60px)]">Designing fintech</span>
+            <span className="block text-[clamp(36px,5vw,60px)]">
+              Designing fintech
+            </span>
             <div className="py-2">
               <span className="block text-[clamp(36px,5vw,60px)] inline-block min-w-[10ch]">
                 <TypingWord />
               </span>
             </div>
-            <span className="block text-[clamp(36px,5vw,60px)]">that scale globally.</span>
+            <span className="block text-[clamp(36px,5vw,60px)]">
+              that scale globally.
+            </span>
           </h1>
 
           <div className="mb-[24px]">
             <p className="text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground w-full max-w-[420px] lg:max-w-[480px] px-4 py-3 rounded-xl bg-background/40 backdrop-blur-md border border-border/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-              <span className="text-foreground font-medium">At Mastercard&apos;s Creative Studio,</span>{" "}
+              <span className="text-foreground font-medium">
+                At Mastercard&apos;s Creative Studio,
+              </span>{" "}
               designing systems and platforms that power global banking partnerships
-              <span className="text-foreground font-medium"> from early demos to production-ready experiences.</span>
+              <span className="text-foreground font-medium">
+                {" "}from early demos to production-ready experiences.
+              </span>
             </p>
           </div>
 
@@ -142,7 +146,7 @@ export default function Hero() {
               <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
               <div className="absolute bottom-0 p-4 space-y-3">
                 <div className="flex gap-1.5 flex-wrap">
-                  {["Fintech", "Advisor", "Mentor"].map(tag => <Pill key={tag}>{tag}</Pill>)}
+                  {["Fintech", "Product Strategy", "Systems Builder"].map(tag => <Pill key={tag}>{tag}</Pill>)}
                 </div>
                 <p className="text-base font-semibold text-white">Amritansh Pandey</p>
               </div>

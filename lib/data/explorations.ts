@@ -5,7 +5,7 @@ export const explorationItems: ExplorationItem[] = [
   {
     title: "Sneakers Commerce System",
     description:
-      "Explores scarcity, drop mechanics, and behavioral triggers in hype-driven commerce systems.",
+      "Hypothesis: scarcity mechanics can be systematised without eroding brand trust.",
     image: "/assets/images/work/sneaker-commerce.jpg",
     href: "/explorations/sneakers-commerce",
     tags: ["Commerce", "Behavior", "Systems"],
@@ -15,7 +15,7 @@ export const explorationItems: ExplorationItem[] = [
   {
     title: "Smart Journal",
     description:
-      "A private reflection system where AI runs entirely on-device using Gemma. Every journaling app sends your thoughts to a server. This one doesn't — and the entire product architecture follows from that single decision.",
+      "Hypothesis: privacy-first architecture as a product differentiator — what happens when data never leaves the device.",
     image: "/assets/images/work/execution-system.jpg",
     href: "/explorations/smart-journal",
     tags: ["Flutter", "On-device AI", "Privacy"],
@@ -25,7 +25,7 @@ export const explorationItems: ExplorationItem[] = [
   {
     title: "AI Decision Engine",
     description:
-      "Tests structured decision-making using weighted inputs, trade-offs, and scenario simulation.",
+      "Hypothesis: structured frameworks reduce cognitive load on complex PM trade-off decisions.",
     image: "/assets/images/work/ai-decision-engine.jpg",
     href: "/explorations/ai-decision-engine",
     tags: ["AI", "Decision Systems", "Framework"],
@@ -35,7 +35,7 @@ export const explorationItems: ExplorationItem[] = [
   {
     title: "Personal Execution System",
     description:
-      "Explores how goals can be decomposed into dependency-aware systems for consistent execution.",
+      "Hypothesis: goals fail at decomposition, not intention. Explores dependency-aware task systems.",
     image: "/assets/images/work/execution-system.jpg",
     href: "/explorations/personal-execution-system",
     tags: ["Execution", "Systems", "Planning"],

@@ -1,10 +1,20 @@
+import type { Metadata } from "next"
 import ContentPage from "@/components/layout/content-page"
+
+export const metadata: Metadata = {
+  title: "Smart Journal",
+  description:
+    "Privacy-first by architecture: an AI journaling app where the model runs entirely on-device. What a product becomes when data never leaves the phone.",
+}
 
 export default function Page() {
   return (
     <ContentPage
+      eyebrow="Exploration · Privacy-First"
+      status="In Development"
       title="Smart Journal"
-      description="A private reflection system where AI runs entirely on-device using Gemma."
+      hypothesis="Hypothesis: privacy-first architecture as a product differentiator — what happens when data never leaves the device."
+      description="A private reflection system where AI runs entirely on-device using Gemma. Every journaling app sends your thoughts to a server. This one doesn't — and the entire product architecture follows from that single decision."
     >
       <div className="space-y-8 text-[15px] leading-relaxed text-muted-foreground">
 

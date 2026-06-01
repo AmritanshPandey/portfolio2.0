@@ -326,7 +326,7 @@ export default function Page() {
         <div className="space-y-5">
           <CsDecision
             index={0}
-            title="Modular reusable components, or best-in-class one-off templates?"
+            title="Modular reusable components, or bespoke one-off templates?"
             problem="There was pressure to build 28 beautiful, hand-crafted individual templates. Faster to deliver, great for launch optics. But every future brand update would need to touch every template individually."
             decision="Fought for a component library that teams assemble into any email layout. Started as a Figma library concept — designers create layouts themselves, then hand off for HTML build. Evolved into the no-code builder."
             tradeoff="Required more upfront investment in architecture that wasn&apos;t immediately visible to stakeholders. The compounding benefit only became clear over time, when a brand update touched one component — not 28 templates."

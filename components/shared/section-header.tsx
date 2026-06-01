@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { Fragment } from "react"
 
 type Variant = "default" | "compact" | "hero"
 type HeadingLevel = "h1" | "h2" | "h3"
@@ -41,13 +42,14 @@ export function SectionHeader({
         </div>
       )}
 
-      <Tag className={clsx("font-semibold tracking-tight leading-[1.08] text-neutral-900 dark:text-white", styles.title)}>
+      <Tag className={clsx("font-semibold tracking-tight leading-[1.08] text-balance text-neutral-900 dark:text-white", styles.title)}>
         {words.map((word, i) => (
-          <span key={i} className="inline-block mr-[0.35em]">
-            <span className={i === resolvedAccent ? "shimmer-accent" : "text-inherit"}>
+          <Fragment key={i}>
+            <span className={i === resolvedAccent ? "shimmer-accent" : undefined}>
               {word}
             </span>
-          </span>
+            {i < words.length - 1 ? " " : ""}
+          </Fragment>
         ))}
       </Tag>
 

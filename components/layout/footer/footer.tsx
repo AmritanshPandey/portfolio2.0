@@ -277,7 +277,7 @@ export default function Footer() {
             <span>© {new Date().getFullYear()} Amritansh Pandey</span>
             <span className="w-px h-3 bg-border" />
             <span className="hover:text-foreground transition-colors duration-200 cursor-default">
-              Built with precision ✦
+              Built to think out loud.
             </span>
           </div>
 

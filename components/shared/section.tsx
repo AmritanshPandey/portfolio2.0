@@ -78,7 +78,7 @@ export function Section({
       </div>
 
       {/* CONTENT */}
-      <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-16 md:py-20">
+      <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-20 md:py-28">
 
         {title && (
           <SectionHeader

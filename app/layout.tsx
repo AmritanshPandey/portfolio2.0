@@ -7,6 +7,7 @@ import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
+import { MotionConfig } from "framer-motion"
 import clsx from "clsx"
 
 const montserrat = Montserrat({
@@ -21,12 +22,26 @@ const caveat = Caveat({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://portfolio2-0-beta-one.vercel.app"),
   title: {
-    default: "Amritansh Pandey | Senior Product Designer | Mastercard",
+    default: "Amritansh Pandey | Product Thinker | Mastercard",
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Amritansh Pandey — Senior Product Designer at Mastercard. 8 years building fintech systems end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
+    "Amritansh Pandey — Product Thinker at Mastercard. 7 years building fintech end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
+  openGraph: {
+    type: "website",
+    siteName: "Amritansh Pandey",
+    url: "https://portfolio2-0-beta-one.vercel.app",
+    title: "Amritansh Pandey | Product Thinker | Mastercard",
+    description:
+      "7 years building fintech end to end — from early demo to CPO stage. Agent Pay, PartnerBank, agentic commerce, and the demo the CPO used at Money20/20.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Amritansh Pandey | Product Thinker | Mastercard",
+    description: "7 years building fintech end to end — from early demo to CPO stage.",
+  },
 }
 
 export default function RootLayout({
@@ -54,24 +69,27 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* Lenis smooth scroll */}
-          <SmoothScroll />
+          {/* Honour prefers-reduced-motion across all Framer Motion animations */}
+          <MotionConfig reducedMotion="user">
+            {/* Lenis smooth scroll */}
+            <SmoothScroll />
 
-          {/* Scroll restore */}
-          <ScrollToHash />
+            {/* Scroll restore */}
+            <ScrollToHash />
 
-          <FancyCursor />
+            <FancyCursor />
 
-          {/* Navbar */}
-          <Navbar />
+            {/* Navbar */}
+            <Navbar />
 
-          {/* Content */}
-          <main className="relative [transform:translateZ(0)]">
-            {children}
-          </main>
+            {/* Content */}
+            <main className="relative [transform:translateZ(0)]">
+              {children}
+            </main>
 
-          {/* Footer */}
-          <Footer />
+            {/* Footer */}
+            <Footer />
+          </MotionConfig>
         </ThemeProvider>
       </body>
     </html>

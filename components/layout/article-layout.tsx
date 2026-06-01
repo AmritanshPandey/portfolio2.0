@@ -122,8 +122,8 @@ function PullQuote({ body }: { body: string }) {
   return (
     <blockquote className="my-10 relative pl-6">
       <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-full bg-orange-500" />
-      <p className="text-[1.25rem] md:text-[1.35rem] font-medium leading-[1.6] text-foreground/85 italic">
-        &ldquo;{body}&rdquo;
+      <p className="text-[1.25rem] md:text-[1.35rem] font-medium leading-[1.6] text-foreground/85">
+        {body}
       </p>
     </blockquote>
   )

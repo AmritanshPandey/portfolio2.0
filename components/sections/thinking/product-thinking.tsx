@@ -39,12 +39,12 @@ export default function ProductThinkingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-card p-6 md:p-8 flex flex-col justify-center"
+          className="bg-card border-l-2 border-orange-500/50 p-7 md:p-10 flex flex-col justify-center"
         >
           <p className="text-[11px] text-muted-foreground/60 tracking-wide mb-5">
             Core Belief
           </p>
-          <p className="text-[22px] md:text-[26px] font-semibold leading-[1.3] tracking-[-0.02em] text-foreground">
+          <p className="text-[24px] md:text-[28px] font-semibold leading-[1.35] tracking-[-0.02em] text-foreground">
             Most product problems aren&apos;t solved by{" "}
             <span className="text-foreground/35">interfaces</span>.
             {" "}They&apos;re solved by{" "}

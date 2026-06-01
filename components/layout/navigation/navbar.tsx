@@ -297,7 +297,7 @@ export default function Navbar() {
             <Link
               href="/resume.pdf"
               target="_blank"
-              className="ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition"
+              className="ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/70 text-sm text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/40 transition"
             >
               Resume
               <IconDownload size={16} />

@@ -23,7 +23,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
       "Built the UX research toolkit, multi-sensory trust framework, and the React + Claude AI demo the CPO used at Money20/20. The silent guardian framework — Mastercard invisible by default, visible only at the three moments that matter — is now adopted company-wide.",
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
-    metric: "Silent guardian adopted · CPO demo used at Money20/20 · 6 research flows",
+    metric: "When AI pays autonomously, where does trust live? The framework the CPO took to Money20/20.",
   },
   {
     category: "Design Systems · Mastercard",
@@ -32,7 +32,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
       "Built a configurable white-label design system enabling enterprise sales teams to rapidly tailor product narratives and demos for high-stakes RFPs without engineering dependency.",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
-    metric: "Reduced demo setup from days to hours across sales cycles",
+    metric: "Enterprise demos took days to customise per client. This system made it same-day — across global sales cycles.",
   },
   {
     category: "Commerce Infrastructure · Honasa",
@@ -41,7 +41,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
       "Architected a shared commerce foundation for multi-brand D2C operations — eliminating duplicated systems while preserving distinct brand experiences at scale.",
     image: "/assets/images/work/commerce-platform.jpg",
     href: "/work/d2c-platform",
-    metric: "One platform powering multiple brand storefronts",
+    metric: "One shared commerce backbone powering multiple D2C brands — without eroding brand identity.",
   },
   {
     category: "Design Systems · Mastercard",
@@ -50,7 +50,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
       "Owned the component architecture and design system for Mastercard's global email builder — defining what got built, why, and in what order. 50+ components, 28 templates, zero HTML required.",
     image: "/assets/images/work/design-tokens.jpg",
     href: "/work/email-builder",
-    metric: "50+ components · 28 templates · Mastercard-wide adoption",
+    metric: "Mastercard's brand evolved. Its email system hadn't. Rebuilt so any team could ship on-brand email — no HTML required.",
   },
   {
     category: "0→1 Product · Dror",

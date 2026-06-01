@@ -146,7 +146,7 @@ export function VerticalCard({
           </h3>
 
           {metric && (
-            <p className="text-[11px] font-medium text-orange-600/70 dark:text-orange-400/60 border-l-2 border-orange-500/25 pl-2.5 leading-relaxed line-clamp-2 mt-auto pt-1">
+            <p className="text-[11px] font-medium text-orange-600/70 dark:text-orange-400/60 border-l-2 border-orange-500/25 pl-2.5 leading-relaxed line-clamp-3 mt-auto pt-1">
               {metric}
             </p>
           )}
