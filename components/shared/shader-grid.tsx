@@ -245,7 +245,7 @@ export function ShaderGrid({
 
       gl.uniform2f(uMouse, mx, my)
       gl.uniform1f(uSpacing, spacing * dpr)
-      gl.uniform1f(uSize, size * dpr)
+      gl.uniform1f(uSize, size)
       gl.uniform1f(uGlowRadius, glowRadius * dpr)
       gl.uniform4f(uBaseColor, base[0], base[1], base[2], base[3])
       gl.uniform3f(uGlowColor, glowColor[0], glowColor[1], glowColor[2])
