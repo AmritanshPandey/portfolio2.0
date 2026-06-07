@@ -22,10 +22,8 @@ export default function Page() {
       <Section
         id="work"
         bg="default"
-        eyebrow="FEATURED WORK"
         title="Selected Work"
         transition="How I approach systems, structure decisions, and design for scale under real-world constraints."
-        transitionEyebrow="The Thinking Behind the Work"
       >
         <CaseStudy />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -36,10 +34,8 @@ export default function Page() {
       <Section
         id="approach"
         bg="muted"
-        eyebrow="Approach"
         title="How I Think"
         transition="Thinking feeds into side projects — where ideas get tested outside of client constraints."
-        transitionEyebrow="From Thinking to Exploration"
       >
         <ProductDesignApproachSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -50,10 +46,8 @@ export default function Page() {
       <Section
         id="exploration"
         bg="default"
-        eyebrow="Side Projects"
         title="Building and Testing Ideas Outside of Work"
         transition="Personal projects that feed directly into how I think about systems and product decisions."
-        transitionEyebrow="From Exploration to Impact"
       >
         <ExplorationsSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />
@@ -63,11 +57,9 @@ export default function Page() {
       {/* ───────────────── IMPACT (ANCHOR) ───────────────── */}
       <Section
         id="impact"
-        bg="muted"   
-        eyebrow="Impact"
+        bg="muted"
         title="Driving Outcomes Beyond Product Design"
         transition="Beyond work and impact, here's more about how I think and what I focus on."
-        transitionEyebrow="About Me"
       >
         <LeadershipSection />
         <FancyDivider variant="gradient" className="my-8 md:my-12" />

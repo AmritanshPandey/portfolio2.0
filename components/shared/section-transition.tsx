@@ -3,10 +3,10 @@ import clsx from "clsx"
 type Variant = "default" | "muted" | "highlight"
 
 export function SectionTransition({
-  eyebrow,
   text,
   variant = "default",
 }: {
+  /** Accepted for caller compatibility; no longer rendered (per DESIGN.md). */
   eyebrow?: string
   text: string
   variant?: Variant
@@ -25,12 +25,6 @@ export function SectionTransition({
           <div className="absolute inset-0 bg-border/60" />
           <div className="absolute left-0 top-0 h-full w-[70%] bg-gradient-to-r from-orange-500 to-orange-400" />
         </div>
-
-        {eyebrow && (
-          <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground">
-            {eyebrow}
-          </p>
-        )}
 
         <p className={clsx("leading-[1.65] tracking-tight", textStyles[variant])}>
           {text}

@@ -93,7 +93,7 @@ export default function Hero() {
 
           <h1 className="font-medium tracking-[-0.02em] leading-[1.02] max-w-[620px]">
             <span className="block text-[clamp(36px,5vw,60px)]">
-              Designing fintech
+              Designing <span className="shimmer-accent">fintech</span>
             </span>
             <div className="py-2">
               <span className="block text-[clamp(36px,5vw,60px)] inline-block min-w-[10ch]">
