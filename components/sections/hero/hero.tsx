@@ -54,16 +54,11 @@ export default function Hero() {
         style={{ background: "radial-gradient(ellipse 95% 80% at 50% 42%, transparent 55%, color-mix(in oklab, var(--background) 70%, transparent) 80%, var(--background) 100%)" }}
       />
 
-      {/* Orange bloom — primary, top-left (layered falloff) */}
+      {/* Warm pool — a single, subtle ember light, top-left. The "Warm Studio"
+          North Star: one warm light on the work, not ambient tint everywhere. */}
       <div
         className="pointer-events-none absolute -top-48 -left-44 w-[640px] h-[640px] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.14) 0%, rgba(232,98,26,0.05) 45%, transparent 72%)" }}
-      />
-
-      {/* Orange bloom — secondary, bottom-right for depth/balance */}
-      <div
-        className="pointer-events-none absolute -bottom-44 -right-40 w-[520px] h-[520px] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.07) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(232,98,26,0.08) 0%, rgba(232,98,26,0.03) 45%, transparent 72%)" }}
       />
 
       {/* Top + bottom depth fades — single smooth gradient, grounds the section */}

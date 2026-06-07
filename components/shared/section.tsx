@@ -58,24 +58,8 @@ export function Section({
       )}
     >
 
-      {/* ✨ AMBIENT LIGHT (this replaces heavy tinting) */}
-      <div className="pointer-events-none absolute inset-0">
-
-        {/* LIGHT MODE */}
-        <div className="
-          absolute inset-0
-          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.05),transparent_60%)]
-          opacity-70
-          dark:hidden
-        " />
-
-        {/* DARK MODE */}
-        <div className="
-          hidden dark:block absolute inset-0
-          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.08),transparent_60%)]
-        " />
-
-      </div>
+      {/* Sections are clean neutral surfaces. Ember is reserved for intent
+          (CTAs, active states) per DESIGN.md's One Voice Rule — no ambient tint. */}
 
       {/* CONTENT */}
       <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-20 md:py-28">

@@ -18,9 +18,8 @@ export function CoreBeliefCard({ eyebrow = "Core Belief", children, className }:
         className
       )}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-orange-500/[0.10] via-orange-500/[0.04] to-transparent blur-lg opacity-60" />
-      <div className="pointer-events-none absolute -top-24 -right-24 w-[280px] h-[280px] bg-[radial-gradient(circle,rgba(249,115,22,0.08),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(251,146,60,0.10),transparent_70%)] blur-2xl" />
-      <div className="pointer-events-none absolute inset-0 opacity-40 bg-[linear-gradient(110deg,transparent,rgba(249,115,22,0.05),transparent)] dark:bg-[linear-gradient(110deg,transparent,rgba(251,146,60,0.08),transparent)]" />
+      {/* A single, subtle warm hint — not three stacked ember washes (One Voice Rule) */}
+      <div className="pointer-events-none absolute -top-24 -right-24 w-[280px] h-[280px] bg-[radial-gradient(circle,rgba(249,115,22,0.05),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(251,146,60,0.06),transparent_70%)] blur-2xl" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent dark:via-white/20" />
 
       <div className="relative max-w-3xl">

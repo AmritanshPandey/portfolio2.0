@@ -20,11 +20,8 @@ export function SectionTransition({
   return (
     <div className="mt-6 md:mt-10">
       <div className="max-w-xl space-y-5">
-        {/* Divider */}
-        <div className="relative h-[2px] w-20 rounded-full overflow-hidden">
-          <div className="absolute inset-0 bg-border/60" />
-          <div className="absolute left-0 top-0 h-full w-[70%] bg-gradient-to-r from-orange-500 to-orange-400" />
-        </div>
+        {/* Divider — neutral; ember is reserved for intent, not decoration */}
+        <div className="h-px w-20 rounded-full bg-border" />
 
         <p className={clsx("leading-[1.65] tracking-tight", textStyles[variant])}>
           {text}
