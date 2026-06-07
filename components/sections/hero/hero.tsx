@@ -66,10 +66,6 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{ background: "linear-gradient(to bottom, var(--background) 0%, transparent 16%, transparent 84%, var(--background) 100%)" }}
       />
-      {/* Subtle side fades */}
-      <div className="pointer-events-none absolute top-0 bottom-0 left-0 w-24" style={{ background: "linear-gradient(to right, var(--background), transparent)" }} />
-      <div className="pointer-events-none absolute top-0 bottom-0 right-0 w-24" style={{ background: "linear-gradient(to left, var(--background), transparent)" }} />
-
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 py-16 md:py-24 lg:py-28 grid lg:grid-cols-[1.5fr_1fr] gap-12 md:gap-14 items-center">
 
@@ -77,11 +73,11 @@ export default function Hero() {
         <div className="flex flex-col gap-5 md:gap-6 lg:gap-7 w-full max-w-[620px] md:max-w-[680px] lg:max-w-[620px] items-start text-left">
 
           <div className="flex flex-wrap gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/[0.06] backdrop-blur-md text-[12px] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_4px_14px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_14px_rgba(0,0,0,0.3)]">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-foreground/[0.03] text-[12px] text-muted-foreground">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
               Product Thinker • Mastercard
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 dark:border-white/10 bg-white/10 dark:bg-white/[0.06] backdrop-blur-md text-[12px] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_4px_14px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_4px_14px_rgba(0,0,0,0.3)]">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-foreground/[0.03] text-[12px] text-muted-foreground">
               7 years in product
             </div>
           </div>
@@ -101,7 +97,7 @@ export default function Hero() {
           </h1>
 
           <div className="mb-[24px]">
-            <p className="text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground w-full max-w-[420px] lg:max-w-[480px] px-4 py-3 rounded-xl bg-background/40 backdrop-blur-md border border-border/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+            <p className="text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground w-full max-w-[420px] lg:max-w-[480px]">
               <span className="text-foreground font-medium">
                 At Mastercard&apos;s Creative Studio,
               </span>{" "}
