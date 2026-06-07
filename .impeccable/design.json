@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-07T00:00:00.000Z",
+  "title": "Design System: Amritansh Pandey — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#f97316",
+        "tonalRamp": ["#431407", "#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#f97316", "#fb923c", "#fed7aa"]
+      },
+      "ember-deep": {
+        "role": "primary",
+        "displayName": "Ember Deep",
+        "canonical": "#ea580c",
+        "tonalRamp": ["#431407", "#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#f97316", "#fdba74", "#ffedd5"]
+      },
+      "ember-amber": {
+        "role": "tertiary",
+        "displayName": "Ember Amber",
+        "canonical": "#fbbf24",
+        "tonalRamp": ["#451a03", "#78350f", "#b45309", "#d97706", "#f59e0b", "#fbbf24", "#fde68a", "#fef3c7"]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Studio Black (canvas)",
+        "canonical": "oklch(0.14 0 0)",
+        "tonalRamp": ["#121212", "#1c1c1c", "#2a2a2a", "#3d3d3d", "#5c5c5c", "#8f8f8f", "#cfcfcf", "#fafafa"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Lit Surface",
+        "canonical": "oklch(0.18 0 0)",
+        "tonalRamp": ["#161616", "#1c1c1c", "#242424", "#333333", "#4d4d4d", "#808080", "#c2c2c2", "#f2f2f2"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(0.96 0 0)",
+        "tonalRamp": ["#1c1c1c", "#333333", "#4d4d4d", "#666666", "#8f8f8f", "#b3b3b3", "#e0e0e0", "#f2f2f2"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "oklch(0.60 0 0)",
+        "tonalRamp": ["#262626", "#404040", "#595959", "#737373", "#8f8f8f", "#a6a6a6", "#cccccc", "#ebebeb"]
+      },
+      "focus-ring": {
+        "role": "primary",
+        "displayName": "Warm Focus Ring",
+        "canonical": "oklch(0.70 0.18 50)",
+        "tonalRamp": ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#f97316", "#fb923c", "#fdba74", "#fed7aa"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and page titles; balanced wrap, never orphaned." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles in long articles and case studies." },
+      "title": { "displayName": "Title", "purpose": "Card titles and sub-section heads." },
+      "body": { "displayName": "Body", "purpose": "Reading text, capped 65–75ch with a pretty rag." },
+      "label": { "displayName": "Label", "purpose": "Short uppercase monospace eyebrows, metadata, tags." },
+      "accent-script": { "displayName": "Accent Script", "purpose": "Caveat handwriting; one personal grace note per surface." }
+    },
+    "shadows": [
+      { "name": "soft-low", "value": "0 6px 14px rgba(0,0,0,0.35)", "purpose": "Resting cards/surfaces in dark mode (.surface). Light: 0 4px 10px rgba(0,0,0,0.06)." },
+      { "name": "soft-high", "value": "0 20px 40px rgba(0,0,0,0.45)", "purpose": "Elevated panels/popovers in dark mode (.surface-elevated). Light: 0 12px 30px rgba(0,0,0,0.08)." }
+    ],
+    "motion": [
+      { "name": "ease-confident", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "The system easing: navbar entry, fade-up reveals. Ease-out, no bounce." },
+      { "name": "fade-up", "value": "opacity + translateY(12px) over 0.5s", "purpose": "Default content reveal; gated so content is visible by default." },
+      { "name": "shimmer-sweep", "value": "4s linear infinite background-position", "purpose": "Single-word ember shimmer accent only." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single most important action on a surface. Ember pill with confident hover.",
+      "html": "<button class=\"ds-btn-primary\">View case study<svg viewBox=\"0 0 24 24\" width=\"15\" height=\"15\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M7 17 17 7M9 7h8v8\"/></svg></button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:.4rem;height:2.5rem;padding:0 1.1rem;border:none;border-radius:9999px;background:#f97316;color:#fff;font-family:Montserrat,system-ui,sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;transition:background .2s cubic-bezier(0.22,1,0.36,1),transform .2s}.ds-btn-primary:hover{background:#ea580c}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #fb923c;outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary/tertiary action. Hairline pill, neutral hover fill.",
+      "html": "<button class=\"ds-btn-ghost\">Read more</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;height:2.5rem;padding:0 1.1rem;border:1px solid rgba(255,255,255,.18);border-radius:9999px;background:transparent;color:#f2f2f2;font-family:Montserrat,system-ui,sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;transition:background .2s,border-color .2s}.ds-btn-ghost:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.32)}.ds-btn-ghost:focus-visible{outline:2px solid #fb923c;outline-offset:3px}"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat at rest, neutral fill on hover. Hairline border, one step off the canvas.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-eyebrow\">Case Study</span><h3 class=\"ds-card-title\">Agentic commerce trust layer</h3><p class=\"ds-card-body\">Designing how a payment network stays present when there is no checkout screen.</p></article>",
+      "css": ".ds-card{display:block;max-width:340px;padding:1.75rem;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:#1c1c1c;transition:background-color .2s ease,transform .2s ease}.ds-card:hover{background:#242424;transform:translateY(-2px)}.ds-card-eyebrow{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#f97316}.ds-card-title{margin:.6rem 0 .5rem;font-family:Montserrat,system-ui,sans-serif;font-size:1.25rem;font-weight:600;line-height:1.2;color:#f2f2f2}.ds-card-body{margin:0;font-family:Montserrat,system-ui,sans-serif;font-size:.9rem;line-height:1.7;color:#999}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Canvas-colored field inside a surface; ember focus.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Work email</span><input class=\"ds-input\" value=\"hello@studio.com\" /></label>",
+      "css": ".ds-field{display:block;max-width:300px}.ds-field-label{display:block;margin-bottom:.4rem;font-family:Montserrat,system-ui,sans-serif;font-size:.75rem;font-weight:500;color:#f2f2f2}.ds-input{width:100%;padding:.5rem .75rem;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:#121212;color:#f2f2f2;font-family:Montserrat,system-ui,sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}.ds-input:focus{border-color:#f97316;box-shadow:0 0 0 2px rgba(249,115,22,.25)}"
+    },
+    {
+      "name": "Floating Nav Pill",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Pill nav; current item full ink + weight, rest muted.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link ds-cur\">Work</a><a class=\"ds-nav-link\">Articles</a><a class=\"ds-nav-link\">About</a></nav>",
+      "css": ".ds-nav{display:inline-flex;gap:.25rem;padding:.35rem;border:1px solid rgba(255,255,255,.10);border-radius:9999px;background:#1c1c1c}.ds-nav-link{padding:.4rem .9rem;border-radius:9999px;font-family:Montserrat,system-ui,sans-serif;font-size:.85rem;font-weight:500;color:#999;cursor:pointer;transition:color .2s,background .2s}.ds-nav-link:hover{color:#f2f2f2}.ds-nav-link.ds-cur{color:#f2f2f2;background:rgba(255,255,255,.06)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Studio",
+    "overview": "A senior practitioner's workspace after hours: the room is dark, the focus is total, and one warm light pools on the work. The system defaults to a near-black canvas so the content reads as the lit subject. A single ember accent carries every moment of intent; everything else is a disciplined neutral ramp. Warmth comes from the accent, the generous type, and the tactile interaction, not from a warm-tinted background. Motion is restrained and intentional, and every animation has a reduced-motion fallback.",
+    "keyCharacteristics": [
+      "Dark-default canvas with a fully supported light mode, both from one OKLCH neutral ramp.",
+      "One accent only: ember orange, on ≤10% of any screen.",
+      "Montserrat throughout; hierarchy from weight and scale; monospace only for small labels.",
+      "Confident, tactile interaction: magnetic CTA, custom cursor, soft lift on hover.",
+      "Motion is intentional and accessible with reduced-motion fallbacks."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Ember is the only accent, used on ~10% of any screen. Its rarity is the point. No second accent hue.", "section": "colors" },
+      { "name": "The True-Gray Rule", "body": "Neutrals stay at chroma 0. Warmth comes from ember, type, and interaction, never a cream background.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Montserrat does the work alone. Hierarchy is weight + scale, never a second paired sans.", "section": "typography" },
+      { "name": "The Caveat-Sparingly Rule", "body": "The handwriting accent is one personal grace note per surface; never a heading, body, or label.", "section": "typography" },
+      { "name": "The Lift-On-State Rule", "body": "Cards are flat at rest; they respond with a neutral fill and a 1–2px translate, not heavier shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep ember to ~10% of any screen: one CTA, one active state, one link that matters.",
+      "Do build hierarchy from Montserrat weight + scale; one family only.",
+      "Do keep neutrals at chroma 0; let warmth come from ember, type, and interaction.",
+      "Do hold WCAG AA: body ≥4.5:1, large text ≥3:1, the warm 2px focus ring on every interactive element, and a prefers-reduced-motion fallback for every animation.",
+      "Do keep surfaces flat at rest and lift on state with a neutral fill and a small translate.",
+      "Do verify both themes: every choice must read in dark (default) and light."
+    ],
+    "donts": [
+      "Don't ship the generic AI-template look: display-serif headings, a tiny uppercase eyebrow on every section, identical icon-card grids, or gradient text.",
+      "Don't drift into corporate-enterprise stiffness: safe navy-and-gray, stock photography, vendor-deck layouts.",
+      "Don't build a flashy dev-portfolio: particle backgrounds, neon, looping motion that competes with the work.",
+      "Don't be minimal to the point of bland: restraint must still carry a point of view.",
+      "Don't introduce a second accent hue; use weight, size, or a neutral step instead.",
+      "Don't warm-tint the background toward cream/beige; the canvas stays true gray.",
+      "Don't use heavy drop shadows as the affordance for interactivity; movement and fill signal it."
+    ]
+  }
+}
