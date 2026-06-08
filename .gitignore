@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local AI-tool directories (kept out of the repo; .impeccable/ is intentionally tracked)
+/.agents/
+/.claude/
+/.cursor/
+/.gemini/
