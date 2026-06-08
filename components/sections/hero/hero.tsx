@@ -96,7 +96,7 @@ export default function Hero() {
             </span>
           </h1>
 
-          <div className="mb-[24px]">
+          <div className="mb-6">
             <p className="text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground w-full max-w-[420px] lg:max-w-[480px]">
               <span className="text-foreground font-medium">
                 At Mastercard&apos;s Creative Studio,

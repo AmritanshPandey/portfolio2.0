@@ -53,7 +53,7 @@ export function HorizontalCard({
 
         {/* IMAGE */}
         {image && (
-          <div className="relative h-[180px] md:h-full md:w-[38%] shrink-0 overflow-hidden bg-muted">
+          <div className="relative h-full md:h-full md:w-[38%] shrink-0 overflow-hidden bg-muted">
             <Image
               src={image}
               alt={title}
@@ -74,7 +74,7 @@ export function HorizontalCard({
         )}
 
         {/* CONTENT */}
-        <div className="relative flex flex-col justify-between flex-1 min-w-0 p-5 md:p-6 md:pl-7">
+        <div className="relative flex flex-col justify-between flex-1 p-5 md:p-6 md:pl-7 h-full">
 
           <div className="flex flex-col gap-2.5 max-w-lg">
             {category && (
@@ -85,13 +85,13 @@ export function HorizontalCard({
             <h3 className="text-[17px] md:text-[18px] font-semibold tracking-[-0.02em] leading-[1.25] text-foreground">
               {title}
             </h3>
-            <p className="text-[13px] leading-relaxed text-foreground/55 line-clamp-2">
+            <p className="text-[13px] leading-relaxed text-foreground/70 line-clamp-2">
               {description}
             </p>
           </div>
 
           {/* CTA */}
-          <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
+          <div className="mt-5 py-4 border-t border-border/50 flex items-center justify-between">
             <span className="text-[12px] font-medium text-foreground/40 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 transition-colors duration-200">
               {ctaLabel}
             </span>

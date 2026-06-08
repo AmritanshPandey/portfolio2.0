@@ -19,7 +19,7 @@ export function SectionTransition({
 
   return (
     <div className="mt-6 md:mt-10">
-      <div className="max-w-xl space-y-5">
+      <div className="max-w-xl space-y-4">
         {/* Divider — neutral; ember is reserved for intent, not decoration */}
         <div className="h-px w-20 rounded-full bg-border" />
 
