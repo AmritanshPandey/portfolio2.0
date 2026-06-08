@@ -164,39 +164,39 @@ function Chip({ active, onClick, children }: {
 
 const TYPE_SHOW = [
   { word: "Readability", font: F.serif, weight: 600, style: "normal", lbl: "The first job",
-    desc: "Before a typeface expresses personality, it must be effortless to read. Size, line length, line height, and contrast decide whether users absorb content or bounce. Readability is non-negotiable; everything else is a layer on top." },
+    desc: "Before a typeface has personality, it must be effortless to read. Size, measure, line height, and contrast decide whether users absorb the text or bounce. Everything else is a layer on top." },
   { word: "Personality", font: F.sans, weight: 600, style: "normal", lbl: "The second job",
-    desc: "Once text is readable, the typeface carries voice. A geometric sans feels precise and modern; a humanist serif feels warm and editorial. Personality should support the brand — never at the cost of legibility." },
+    desc: "Once text is readable, the typeface carries voice — a geometric sans reads precise and modern, a humanist serif warm and editorial. Voice supports the brand; it never costs legibility." },
   { word: "Hierarchy", font: F.mono, weight: 500, style: "normal", lbl: "The structure",
-    desc: "Hierarchy lets users instantly distinguish a heading from body, a label from a value, a primary action from a secondary one — without reading a word. It is created with size, weight, color, and space working together." },
+    desc: "Hierarchy lets users tell a heading from body, a label from a value, without reading a word. Size, weight, color, and space do it together." },
   { word: "Function", font: F.lora, weight: 400, style: "italic", lbl: "The discipline",
-    desc: "Functional typography asks one question of every type style: what is its job? Tokens named by role — not by appearance — keep that discipline. The system exists so designers stop re-deciding the same thing on every screen." },
+    desc: "Every type style should answer one question: what is its job? Tokens named by role keep that discipline, so designers stop re-deciding the same thing on every screen." },
 ]
 
 const CLASSES = [
   { spec: F.lora, size: 56, name: "Serif", font: "Lora · Georgia · Times",
-    desc: "Small strokes (serifs) finish each letter. Traditional, authoritative, editorial. Excellent for long-form reading in print and increasingly on screen.",
+    desc: "Small strokes finish each letter. Traditional, authoritative, editorial — excellent for long-form reading, in print and increasingly on screen.",
     traits: ["Editorial", "Trustworthy", "Long-form"] },
   { spec: F.sans, size: 56, name: "Sans-serif", font: "Inter · Helvetica · Arial",
-    desc: "No serifs — clean, neutral, modern. The default for UI because it stays legible at small sizes and on low-resolution screens.",
+    desc: "No serifs: clean, neutral, modern. The UI default — legible at small sizes and on low-resolution screens.",
     traits: ["Modern", "Neutral", "UI default"] },
   { spec: F.grotesk, size: 56, name: "Grotesk", font: "Space Grotesk · Helvetica · Founders",
-    desc: "Early sans-serifs with slightly irregular, mechanical forms. Confident and characterful — popular for product brands that want personality without serifs.",
+    desc: "Early sans-serifs with slightly mechanical forms. Confident and characterful — favoured by product brands wanting personality without serifs.",
     traits: ["Confident", "Characterful", "Brand"] },
   { spec: F.poppins, size: 56, name: "Geometric", font: "Poppins · Futura · Circular",
-    desc: "Built from near-perfect circles and straight lines. Precise, friendly, contemporary. Beautiful in headings; can tire the eye in long body copy.",
+    desc: "Built from circles and straight lines. Precise, friendly, contemporary. Great in headings; tiring in long body copy.",
     traits: ["Precise", "Friendly", "Display-leaning"] },
   { spec: F.lato, size: 56, name: "Humanist", font: "Lato · Frutiger · Source Sans",
-    desc: "Sans-serifs with calligraphic warmth and open apertures. The most readable sans category — excellent for body text and accessibility.",
+    desc: "Sans-serifs with calligraphic warmth and open apertures. The most readable sans — ideal for body text and accessibility.",
     traits: ["Warm", "Readable", "Accessible"] },
   { spec: F.mono, size: 46, name: "Monospace", font: "DM Mono · JetBrains · SF Mono",
-    desc: "Every character occupies equal width. Essential for code, data, and tabular numbers where alignment matters. Adds a technical, precise voice.",
+    desc: "Every character is equal width. Essential for code, data, and tabular numbers. Adds a technical, precise voice.",
     traits: ["Code", "Tabular", "Technical"] },
   { spec: F.serif, size: 56, name: "Display", font: "Playfair · Fraunces · Canela",
-    desc: "Designed for large sizes and impact, not paragraphs. High contrast and expressive detail. Use for hero moments — never for body or UI labels.",
+    desc: "Built for large sizes and impact, not paragraphs. High contrast, expressive detail. Hero moments only — never body or labels.",
     traits: ["Impact", "Hero-only", "Expressive"] },
   { spec: F.fraunces, size: 56, name: "Variable", font: "Fraunces · Inter · Recursive",
-    desc: "One file, continuous axes — weight, width, optical size — instead of many static cuts. Smaller payloads, fluid weight transitions, optical sizing at every scale.",
+    desc: "One file, continuous axes — weight, width, optical size. Smaller payloads, fluid weights, optical sizing at every scale.",
     traits: ["One file", "Fluid axes", "Performance"] },
 ]
 
@@ -230,12 +230,12 @@ const PAIRS = [
 ]
 
 const PRINCIPLES = [
-  { num: "01", title: "Design for reading first", body: "Personality is earned only after text is effortless to read. Size, measure, and contrast come before voice. A beautiful typeface that fatigues the reader has failed at its only essential job." },
-  { num: "02", title: "Consistency beats novelty", body: "A predictable scale used everywhere reads as quality. The temptation to introduce “just one more size” is how systems rot. Reuse the scale; let layout and spacing create variety, not new values." },
-  { num: "03", title: "Contrast creates hierarchy", body: "Order comes from decisive difference — in size, weight, or color — not from making everything large. One bold step beats five timid ones. If two things look equally important, neither is." },
-  { num: "04", title: "Spacing is typography", body: "Line height, paragraph spacing, and the measure shape readability as much as the letterforms. White space isn't empty — it's the medium that lets type breathe and the eye find rhythm." },
-  { num: "05", title: "Typography is interface design", body: "In most products, text is the interface. Treating the type system as core architecture — tokenized, accessible, consistent — is treating the product's primary medium with the seriousness it deserves." },
-  { num: "06", title: "Restraint scales", body: "Two families, a handful of sizes, two or three weights. A small, disciplined system covers nearly every interface and stays maintainable as the product grows. Range comes from how you combine, not how much you add." },
+  { num: "01", title: "Design for reading first", body: "Personality is earned only after text is effortless to read. Measure, size, and contrast come before voice. A beautiful typeface that fatigues the reader has failed its one essential job." },
+  { num: "02", title: "Consistency beats novelty", body: "A predictable scale used everywhere reads as quality. “Just one more size” is how systems rot. Reuse the scale; let layout and spacing create the variety." },
+  { num: "03", title: "Contrast creates hierarchy", body: "Order comes from decisive difference in size, weight, or color — not from making everything large. If two things look equally important, neither is." },
+  { num: "04", title: "Spacing is typography", body: "Line height, paragraph spacing, and measure shape readability as much as the letterforms. White space isn't empty; it's what lets type breathe." },
+  { num: "05", title: "Typography is interface design", body: "In most products, text is the interface. Treat the type system as core architecture — tokenized, accessible, consistent." },
+  { num: "06", title: "Restraint scales", body: "Two families, a few sizes, two or three weights covers nearly every interface and stays maintainable. Range comes from how you combine, not how much you add." },
 ]
 
 const LEGIBILITY = [
@@ -638,7 +638,7 @@ function A11yChecker() {
       </div>
       <div className="px-5 py-4 border-t border-border/60">
         <p className="text-[13px] leading-[1.7] text-muted-foreground">
-          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text and <b className="text-foreground">3:1</b> for large text (≥24px, or ≥18.66px bold). Body text should rarely fall below 16px, and the layout must stay usable at 200% zoom. Choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b> — a quiet but real win for dyslexic and low-vision readers.
+          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text and <b className="text-foreground">3:1</b> for large text (≥24px, or ≥18.66px bold). Keep body text at 16px or above, and the layout usable at 200% zoom. Choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b> — a quiet but real win for dyslexic and low-vision readers.
         </p>
       </div>
     </Tool>
@@ -747,7 +747,7 @@ export default function Page() {
       <Section id="foundations">
         <FadeIn><Eyebrow num="01" tag="Foundations" /></FadeIn>
         <FadeIn><Title>Typography foundations</Title></FadeIn>
-        <FadeIn><Lede>A typography system is the set of rules that govern how text looks and behaves across an entire product. It is the difference between text that is merely present and text that actively guides, reassures, and communicates.</Lede></FadeIn>
+        <FadeIn><Lede>A typography system is the set of rules governing how text looks and behaves across a product. It&apos;s the difference between text that is merely present and text that guides, reassures, and communicates.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {TYPE_SHOW.map(c => (
@@ -761,14 +761,14 @@ export default function Page() {
           ))}
         </FadeIn>
 
-        <Note label="Typography is UX, not styling">Roughly 95% of the information on the web is written language. The type system isn&apos;t a cosmetic pass at the end of a project — it is the primary medium through which the product communicates. Treat it as core architecture.</Note>
+        <Note label="Typography is UX, not styling">Roughly 95% of the web is written language. The type system isn&apos;t a cosmetic pass at the end — it&apos;s the primary medium the product communicates through. Treat it as core architecture.</Note>
       </Section>
 
       {/* 02 CLASSIFICATION */}
       <Section id="classification" muted>
         <FadeIn><Eyebrow num="02" tag="Classification" /></FadeIn>
         <FadeIn><Title>Font classification system</Title></FadeIn>
-        <FadeIn><Lede>Every typeface belongs to a family of forms with its own history, temperament, and ideal use. Knowing the categories lets you choose deliberately instead of by accident.</Lede></FadeIn>
+        <FadeIn><Lede>Every typeface belongs to a family of forms with its own temperament and ideal use. Knowing the categories lets you choose deliberately instead of by accident.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {CLASSES.map(c => (
@@ -798,7 +798,7 @@ export default function Page() {
       <Section id="scale">
         <FadeIn><Eyebrow num="03" tag="Type Scale" /></FadeIn>
         <FadeIn><Title>The modular type scale</Title></FadeIn>
-        <FadeIn><Lede>A type scale is a fixed set of sizes derived from one base and one ratio. Every size in the product comes from the scale — never an arbitrary value. This is what makes typography feel composed instead of chaotic.</Lede></FadeIn>
+        <FadeIn><Lede>A type scale is a fixed set of sizes derived from one base and one ratio. Every size comes from the scale, never an arbitrary value — which is what makes typography feel composed instead of chaotic.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Modular scale generator</SubEyebrow></FadeIn>
         <FadeIn><ModularScaleTool /></FadeIn>
@@ -808,13 +808,13 @@ export default function Page() {
       <Section id="reading" muted>
         <FadeIn><Eyebrow num="04" tag="Reading Experience" /></FadeIn>
         <FadeIn><Title>The reading experience</Title></FadeIn>
-        <FadeIn><Lede>Sizing the type is only half the job. Line length, vertical rhythm, and paragraph spacing decide whether reading feels effortless or exhausting. These are the quiet mechanics of comfort.</Lede></FadeIn>
+        <FadeIn><Lede>Sizing the type is only half the job. Line length, vertical rhythm, and paragraph spacing decide whether reading feels effortless or exhausting — the quiet mechanics of comfort.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <div className="rounded-xl border border-emerald-500/30 bg-card p-6">
             <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Comfortable</span>
             <p className="text-[14px] text-foreground/75" style={{ maxWidth: "62ch", lineHeight: 1.7 }}>
-              Lines of 50–75 characters let the eye return to the start of the next line without effort. Generous line height gives each line room to breathe, and the reader settles into a rhythm.
+              Lines of 50–75 characters let the eye return to the next line without effort. Generous line height gives each line room to breathe, and the reader settles into a rhythm.
             </p>
           </div>
           <div className="rounded-xl border border-red-500/30 bg-card p-6">
@@ -828,26 +828,26 @@ export default function Page() {
         <FadeIn><SubEyebrow>Tool · Reading width &amp; line-height simulator</SubEyebrow></FadeIn>
         <FadeIn><ReadingSimulator /></FadeIn>
 
-        <Note label="Vertical rhythm">Set line height and spacing on a consistent baseline unit (e.g. 4px or 8px). When headings, body, and spacing all snap to the same grid, the page acquires an invisible structure the eye reads as &ldquo;calm&rdquo; — even though most users could never name why.</Note>
+        <Note label="Vertical rhythm">Set line height and spacing on a consistent baseline unit (4px or 8px). When headings, body, and spacing snap to the same grid, the page gains an invisible structure the eye reads as &ldquo;calm&rdquo; — even if no one can name why.</Note>
       </Section>
 
       {/* 05 HIERARCHY */}
       <Section id="hierarchy">
         <FadeIn><Eyebrow num="05" tag="Hierarchy" /></FadeIn>
         <FadeIn><Title>Typographic hierarchy</Title></FadeIn>
-        <FadeIn><Lede>Hierarchy is how a layout tells you where to look first, second, third. It&apos;s built from four levers — size, weight, color/contrast, and space. Strong hierarchy needs only a few of them used decisively.</Lede></FadeIn>
+        <FadeIn><Lede>Hierarchy tells you where to look first, second, third. It&apos;s built from four levers — size, weight, color, and space — and strong hierarchy needs only a few of them used decisively.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Weight &amp; hierarchy playground</SubEyebrow></FadeIn>
         <FadeIn><HierarchyPlayground /></FadeIn>
 
-        <Note label="Contrast creates hierarchy — not size alone">The most common hierarchy failure is making everything big. If the heading is 32px and the subhead is 28px, there&apos;s no clear order. Aim for decisive jumps in at least one dimension: a bold 24px title above a regular 14px body reads more clearly than two similar large sizes.</Note>
+        <Note label="Contrast creates hierarchy — not size alone">The common failure is making everything big. A 32px heading over a 28px subhead has no clear order. Make a decisive jump in at least one dimension: a bold 24px title over regular 14px body reads more clearly than two similar large sizes.</Note>
       </Section>
 
       {/* 06 TYPOGRAPHY FOR UI */}
       <Section id="ui" muted>
         <FadeIn><Eyebrow num="06" tag="Typography for UI" /></FadeIn>
         <FadeIn><Title>Typography for interfaces</Title></FadeIn>
-        <FadeIn><Lede>Interface type lives under different pressure than editorial type: small sizes, dense layouts, tabular data, touch targets, and glanceable labels. Each context has its own rules.</Lede></FadeIn>
+        <FadeIn><Lede>Interface type lives under different pressure than editorial type: small sizes, dense layouts, tabular data, touch targets, glanceable labels. Each context has its own rules.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="rounded-xl border border-border/60 bg-card p-7">
@@ -901,14 +901,14 @@ export default function Page() {
           </div>
         </FadeIn>
 
-        <Note label="Dense interfaces need the system most">Dashboards and tables pack dozens of type styles per screen. Without a token system they drift into a dozen near-identical sizes. A tight scale of 5–6 UI sizes (label, caption, body, body-strong, subhead, value) covers almost every dense interface — resist adding more.</Note>
+        <Note label="Dense interfaces need the system most">Dashboards pack dozens of type styles per screen and, without a system, drift into near-identical sizes. A tight scale of 5–6 UI sizes (label, caption, body, body-strong, subhead, value) covers almost every dense interface — resist adding more.</Note>
       </Section>
 
       {/* 07 RESPONSIVE */}
       <Section id="responsive">
         <FadeIn><Eyebrow num="07" tag="Responsive" /></FadeIn>
         <FadeIn><Title>Responsive &amp; fluid typography</Title></FadeIn>
-        <FadeIn><Lede>Type can&apos;t be one size. <code className="font-mono text-[13px] text-orange-500">clamp()</code> lets a size scale smoothly between a minimum and maximum across the viewport — no breakpoints, no jumps. Define the floor, the ceiling, and let the middle flow.</Lede></FadeIn>
+        <FadeIn><Lede>Type can&apos;t be one size. <code className="font-mono text-[13px] text-orange-500">clamp()</code> scales smoothly between a min and max across the viewport — no breakpoints, no jumps. Set the floor and ceiling; let the middle flow.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Responsive clamp preview</SubEyebrow></FadeIn>
         <FadeIn><ResponsiveClampPreview /></FadeIn>
@@ -918,7 +918,7 @@ export default function Page() {
       <Section id="accessibility" muted>
         <FadeIn><Eyebrow num="08" tag="Accessibility" /></FadeIn>
         <FadeIn><Title>Accessible by default</Title></FadeIn>
-        <FadeIn><Lede>Accessible typography isn&apos;t a constraint bolted on at the end — it&apos;s a set of defaults that make the product better for everyone. Contrast, minimum sizes, zoom behaviour, and legible letterforms are the baseline.</Lede></FadeIn>
+        <FadeIn><Lede>Accessible typography isn&apos;t bolted on at the end — it&apos;s a set of defaults that make the product better for everyone. Contrast, minimum sizes, zoom behaviour, and legible letterforms are the baseline.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Contrast &amp; size checker</SubEyebrow></FadeIn>
         <FadeIn><A11yChecker /></FadeIn>
@@ -928,7 +928,7 @@ export default function Page() {
       <Section id="tokens">
         <FadeIn><Eyebrow num="09" tag="Tokens" /></FadeIn>
         <FadeIn><Title>Typography tokens</Title></FadeIn>
-        <FadeIn><Lede>Tokens turn typographic decisions into a single source of truth. Name them by role, layer them from raw value to semantic to component, and components stop hard-coding sizes forever.</Lede></FadeIn>
+        <FadeIn><Lede>Tokens turn typographic decisions into one source of truth. Name them by role, layer them from raw value to semantic to component, and components stop hard-coding sizes for good.</Lede></FadeIn>
 
         <FadeIn className="flex flex-col gap-2.5">
           {[
@@ -958,26 +958,26 @@ export default function Page() {
           </Tool>
         </FadeIn>
 
-        <Note label="Name by role, not by value">A token called <code className="font-mono text-[11px]">--text-body</code> survives a redesign; one called <code className="font-mono text-[11px]">--text-16</code> becomes a lie the moment body text changes to 17px. The number describes what it is; the role describes what it&apos;s for.</Note>
+        <Note label="Name by role, not by value">A token called <code className="font-mono text-[11px]">--text-body</code> survives a redesign; <code className="font-mono text-[11px]">--text-16</code> becomes a lie the moment body changes to 17px. The number says what it is; the role says what it&apos;s for.</Note>
       </Section>
 
       {/* 10 MISTAKES */}
       <Section id="mistakes" muted>
         <FadeIn><Eyebrow num="10" tag="Common Mistakes" /></FadeIn>
         <FadeIn><Title>Common typography mistakes</Title></FadeIn>
-        <FadeIn><Lede>Most typographic problems are a handful of recurring errors. Each has a simple correction — seeing them side by side is the fastest way to internalise the fix.</Lede></FadeIn>
+        <FadeIn><Lede>Most typographic problems are a handful of recurring errors, each with a simple correction. Seeing them side by side is the fastest way to internalise the fix.</Lede></FadeIn>
 
         <FadeIn className="space-y-3">
           {/* Weak contrast */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Weak contrast</span>
-              <p className="text-[14px] text-foreground/25">This body text is set in a low-contrast grey that drops well below 4.5:1. It looks &ldquo;subtle&rdquo; in the mockup and becomes unreadable in sunlight or for low-vision users.</p>
+              <p className="text-[14px] text-foreground/25">Low-contrast grey that drops well below 4.5:1. It looks &ldquo;subtle&rdquo; in the mockup and turns unreadable in sunlight or for low-vision users.</p>
               <p className="text-[12px] text-muted-foreground mt-4">Designers mistake low contrast for elegance.</p>
             </div>
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[14px] text-foreground/75">This body text clears 4.5:1 against the background. It still reads as calm and secondary — restraint comes from hierarchy and size, not from making text hard to see.</p>
+              <p className="text-[14px] text-foreground/75">This clears 4.5:1 and still reads as calm and secondary. Restraint comes from hierarchy and size, not from making text hard to see.</p>
               <p className="text-[12px] text-muted-foreground mt-4">Use weight and size for &ldquo;quiet,&rdquo; never failing contrast.</p>
             </div>
           </div>
@@ -986,12 +986,12 @@ export default function Page() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Tiny body text</span>
-              <p className="text-[11px] text-foreground/75" style={{ lineHeight: 1.4 }}>Body copy set at 11px to fit more on screen. Users pinch-zoom, lean in, and tire quickly. Density bought at the cost of readability is a bad trade.</p>
+              <p className="text-[11px] text-foreground/75" style={{ lineHeight: 1.4 }}>Body at 11px to fit more on screen. Users pinch-zoom, lean in, and tire fast. Density bought with readability is a bad trade.</p>
               <p className="text-[12px] text-muted-foreground mt-4">11px body to win a layout argument.</p>
             </div>
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[16px] text-foreground/75" style={{ lineHeight: 1.65 }}>Body copy at 16px with comfortable line height. Slightly less fits per screen — and every line is effortless to read on any device.</p>
+              <p className="text-[16px] text-foreground/75" style={{ lineHeight: 1.65 }}>Body at 16px with comfortable line height. Slightly less fits per screen — and every line is effortless on any device.</p>
               <p className="text-[12px] text-muted-foreground mt-4">16px floor for body; cut content, not size.</p>
             </div>
           </div>
@@ -1034,7 +1034,7 @@ export default function Page() {
       <Section id="principles">
         <FadeIn><Eyebrow num="11" tag="Principles" /></FadeIn>
         <FadeIn><Title>Typography principles</Title></FadeIn>
-        <FadeIn><Lede>A typography system isn&apos;t a font choice — it&apos;s a set of convictions about how text should serve the reader. These six hold up across products, brands, and platforms.</Lede></FadeIn>
+        <FadeIn><Lede>A typography system isn&apos;t a font choice — it&apos;s a set of convictions about how text serves the reader. These six hold up across products, brands, and platforms.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PRINCIPLES.map(p => (
