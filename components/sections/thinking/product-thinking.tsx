@@ -60,7 +60,7 @@ export default function ProductThinkingSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.5, delay: (i + 1) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-            className="group bg-card p-6 flex flex-col gap-3 hover:bg-muted/40 transition-colors duration-200"
+            className="card-surface group bg-card p-6 flex flex-col gap-3"
           >
             <span className="text-[11px] text-muted-foreground/50 tracking-wide">
               {p.number}

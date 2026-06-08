@@ -209,8 +209,6 @@ export function ShaderGrid({
       tintColor: gl.getUniformLocation(program, "u_tintColor"),
     }
 
-    setWebglActive(true)
-
     // ── State ─────────────────────────────────────────────────────────────
     let dpr = Math.min(window.devicePixelRatio || 1, maxDpr)
     let width = 0
@@ -232,6 +230,9 @@ export function ShaderGrid({
     let raf = 0
     let visible = true
     let lastTime = 0
+    // Hold the matching CSS fallback in place until WebGL has actually drawn its
+    // first frame, then hand off — avoids any empty frame or visible swap.
+    let painted = false
 
     // Frame-rate-independent exponential smoothing (rate in 1/sec). Keeps the
     // motion identical at 60Hz and 120Hz (ProMotion iPad / high-refresh displays).
@@ -297,6 +298,13 @@ export function ShaderGrid({
       gl.clearColor(0, 0, 0, 0)
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
+
+      // Reveal the canvas (and drop the fallback) only after the first real
+      // paint, so the swap is seamless instead of flashing the static grid.
+      if (!painted) {
+        painted = true
+        setWebglActive(true)
+      }
 
       // Keep animating while the field is settling or the cursor is active.
       const settling =
@@ -389,36 +397,62 @@ export function ShaderGrid({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, colorKey])
 
-  // Static CSS fallback — matches the resting dot field, per theme.
+  // Static CSS fallback — matches the resting WebGL dot field, per theme. The
+  // soft edge is centered on the true dot radius (instead of starting there and
+  // fading outward) so the dots read at the same size as the shader's — keeping
+  // them from looking bigger/crisper in the brief moment before WebGL paints.
+  const dotR = dotSize * spacing
   const fallbackBg = (c: RGBA) =>
-    `radial-gradient(circle, ${cssRgba(c)} ${dotSize * spacing}px, transparent ${
-      dotSize * spacing + 0.5
-    }px)`
+    `radial-gradient(circle, ${cssRgba(c)} ${Math.max(
+      0,
+      dotR - 0.5
+    )}px, transparent ${dotR + 0.5}px)`
+
+  // Mirrors the shader's vignette — smoothstep(1.15, 0.35, length(uv - 0.5)),
+  // sampled across the curve so the falloff is smooth rather than a few hard
+  // bands. `ellipse` (not circle) matches the shader's per-axis normalized UV,
+  // so the fade stays true on wide / non-square viewports.
+  const vignetteMask =
+    "radial-gradient(ellipse farthest-corner at center, " +
+    "#000 50%, " +
+    "rgba(0,0,0,0.98) 60%, " +
+    "rgba(0,0,0,0.91) 70%, " +
+    "rgba(0,0,0,0.82) 80%, " +
+    "rgba(0,0,0,0.71) 90%, " +
+    "rgba(0,0,0,0.58) 100%)"
 
   return (
     <div ref={wrapRef} className="pointer-events-none absolute inset-0">
-      {/* Static CSS fallback — hidden once WebGL takes over to avoid doubling. */}
-      {!webglActive && (
-        <>
-          <div
-            className="absolute inset-0 dark:hidden"
-            style={{
-              backgroundImage: fallbackBg(lightColor),
-              backgroundSize: `${spacing}px ${spacing}px`,
-            }}
-          />
-          <div
-            className="absolute inset-0 hidden dark:block"
-            style={{
-              backgroundImage: fallbackBg(darkColor),
-              backgroundSize: `${spacing}px ${spacing}px`,
-            }}
-          />
-        </>
-      )}
+      {/* Static CSS fallback. Stays mounted and crossfades out once WebGL has
+          painted (instead of an instant swap), so any residual difference from
+          the shader grid dissolves rather than flashing. Remains fully visible
+          when WebGL is unavailable / reduced motion (webglActive never flips). */}
+      <div
+        className="absolute inset-0 transition-opacity duration-300 ease-out"
+        style={{ opacity: webglActive ? 0 : 1 }}
+      >
+        <div
+          className="absolute inset-0 dark:hidden"
+          style={{
+            backgroundImage: fallbackBg(lightColor),
+            backgroundSize: `${spacing}px ${spacing}px`,
+            maskImage: vignetteMask,
+            WebkitMaskImage: vignetteMask,
+          }}
+        />
+        <div
+          className="absolute inset-0 hidden dark:block"
+          style={{
+            backgroundImage: fallbackBg(darkColor),
+            backgroundSize: `${spacing}px ${spacing}px`,
+            maskImage: vignetteMask,
+            WebkitMaskImage: vignetteMask,
+          }}
+        />
+      </div>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 h-full w-full transition-opacity duration-300 ease-out"
         style={{ opacity: webglActive ? 1 : 0 }}
       />
     </div>

@@ -38,7 +38,7 @@ export function ArticleCard({
           bg-transparent border border-transparent
 
           transition-all duration-300 ease-out
-          hover:bg-foreground/[0.04] dark:hover:bg-white/[0.03]
+          hover:bg-[var(--surface-hover)]
 
           hover:[transform:translate3d(0,-1.5px,0)]
         "

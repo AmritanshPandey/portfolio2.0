@@ -42,7 +42,7 @@ export default function LeadershipSection() {
         {ITEMS.map((item) => (
           <div
             key={item.id}
-            className="group bg-card p-6 flex flex-col gap-3 hover:bg-muted/40 transition-colors duration-200"
+            className="card-surface group bg-card p-6 flex flex-col gap-3"
           >
             <p className="text-[11px] text-muted-foreground/70 tracking-wide">
               {item.role}

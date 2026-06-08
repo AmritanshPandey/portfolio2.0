@@ -37,9 +37,7 @@ export default function ProductDesignApproachSection() {
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className={`
-              group relative px-7 py-7
-              bg-card hover:bg-orange-500/[0.02] dark:hover:bg-orange-500/[0.04]
-              transition-colors duration-200
+              card-surface group px-7 py-7 bg-card
               ${i < QUESTIONS.length - 1 ? "border-b border-border" : ""}
             `}
           >
@@ -64,13 +62,6 @@ export default function ProductDesignApproachSection() {
             <p className="text-[14px] md:text-[15px] leading-relaxed text-muted-foreground max-w-xl">
               {item.body}
             </p>
-
-            {/* Hover accent line */}
-            <div className="
-              absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full
-              bg-orange-500/0 group-hover:bg-orange-500/50
-              transition-colors duration-300
-            " />
           </motion.div>
         ))}
       </div>

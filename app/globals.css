@@ -44,6 +44,9 @@
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
 
+  /* Standard interactive hover — neutral fill */
+  --surface-hover: oklch(0.95 0 0);
+
   --radius: 0.75rem;
 }
 
@@ -65,6 +68,8 @@
 
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
+
+  --surface-hover: oklch(0.215 0 0);
 }
 
 /* ─────────────────────────
@@ -143,6 +148,19 @@
 
   .text-muted {
     color: var(--text-muted);
+  }
+
+  /* ─────────────────────────
+     STANDARD CARD HOVER
+     One hover treatment for all content cards: a neutral surface fill.
+     Tokenised, so it adapts to light / dark automatically.
+  ───────────────────────── */
+  .card-surface {
+    position: relative;
+    transition: background-color 200ms ease;
+  }
+  .card-surface:hover {
+    background-color: var(--surface-hover);
   }
 }
 
