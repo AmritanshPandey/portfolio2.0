@@ -3,6 +3,34 @@ import type { ArticleItem } from "@/lib/types/content"
 // featured: true → shown in the homepage Insights section (first 4 shown)
 export const articleItems: ArticleItem[] = [
   {
+    title:       "Building Scalable Typography for Modern Digital Products",
+    description: "Typography isn't decoration — it's the interface. A system of scale, rhythm, hierarchy, and restraint, with eight interactive tools: modular scale generator, pairing explorer, reading simulator, clamp() preview, and more.",
+    href:        "/articles/typography-system",
+    image:       "/article.png",
+    accent:      "linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #9a3412 100%)",
+    featured:    true,
+    readTime:    "16 min read",
+    date:        "Jun 2024",
+    category:    "Design Systems",
+    tags:        ["Typography", "Type Scale", "Design Tokens", "Accessibility"],
+    intro: "Roughly 95% of the web is written language — which makes the type system the product's primary medium, not a cosmetic pass. This is a complete framework: classification, the modular scale, reading mechanics, hierarchy, responsive type, accessibility, and tokens, each made live with an interactive tool.",
+  },
+
+  {
+    title:       "Building a Scalable Color System for Modern Digital Products",
+    description: "A color system isn't a palette — it's a set of rules for when and why each color appears. Foundations, surfaces, semantics, and how to build an 11-stop scale from a single hue.",
+    href:        "/articles/color-system",
+    image:       "/article.png",
+    accent:      "linear-gradient(135deg, #fb923c 0%, #f97316 45%, #c2410c 100%)",
+    featured:    true,
+    readTime:    "22 min read",
+    date:        "Jun 2024",
+    category:    "Design Systems",
+    tags:        ["Color", "Design Tokens", "Accessibility", "Foundations"],
+    intro: "Your primary color is the single most consequential decision in a design system — every hover, CTA, and focus ring stems from it. This is a complete framework for foundation colors, surfaces, typography, semantic states, picking a primary, and building a full 11-stop tonal scale.",
+  },
+
+  {
     title:       "The Silent Guardian — What Agentic Commerce Taught Me About Trust as Architecture",
     description: "When AI pays for you, where does Mastercard go? The wrong answer is everywhere. The right answer changed the company's direction.",
     href:        "/articles/silent-guardian-agentic-trust",
