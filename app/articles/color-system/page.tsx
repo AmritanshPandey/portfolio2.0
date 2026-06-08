@@ -51,11 +51,13 @@ function Section({ id, children, muted = false }: {
 }
 
 function Eyebrow({ num, tag }: { num: string; tag: string }) {
+  // A quiet chapter marker for a long-form sequence — not the orange,
+  // uppercase, wide-tracked eyebrow trope (per DESIGN.md / PRODUCT.md).
   return (
-    <div className="flex items-center gap-3 mb-6">
-      <span className="text-[11px] font-bold tracking-[0.18em] text-orange-500 font-mono">{num}</span>
-      <span className="w-12 h-px bg-border" />
-      <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">{tag}</span>
+    <div className="mb-5 font-mono text-[12px] text-muted-foreground">
+      <span className="tabular-nums text-foreground/50">{num}</span>
+      <span className="mx-2 text-border">/</span>
+      {tag}
     </div>
   )
 }
