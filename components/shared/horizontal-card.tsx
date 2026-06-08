@@ -42,7 +42,7 @@ export function HorizontalCard({
         "hover:border-border/50 dark:hover:border-white/[0.12]",
         "hover:shadow-[0_12px_40px_rgba(0,0,0,0.09)]",
         "dark:hover:shadow-[0_16px_56px_rgba(0,0,0,0.50)]",
-        "flex flex-col md:flex-row md:h-[200px]",
+        "flex flex-col md:flex-row md:min-h-[240px]",
       )}>
 
         {/* TOP EDGE HIGHLIGHT */}
@@ -53,7 +53,7 @@ export function HorizontalCard({
 
         {/* IMAGE */}
         {image && (
-          <div className="relative h-full md:h-full md:w-[38%] shrink-0 overflow-hidden bg-muted">
+          <div className="relative h-52 md:h-auto md:self-stretch md:w-[38%] shrink-0 overflow-hidden bg-muted">
             <Image
               src={image}
               alt={title}
@@ -76,16 +76,16 @@ export function HorizontalCard({
         {/* CONTENT */}
         <div className="relative flex flex-col justify-between flex-1 p-5 md:p-6 md:pl-7 h-full">
 
-          <div className="flex flex-col gap-2.5 max-w-lg">
+          <div className="flex flex-col gap-2.5 max-w-xl">
             {category && (
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
                 {category}
               </p>
             )}
-            <h3 className="text-[17px] md:text-[18px] font-semibold tracking-[-0.02em] leading-[1.25] text-foreground">
+            <h3 className="text-lg md:text-xl font-semibold tracking-[-0.02em] leading-[1.25] text-balance text-foreground">
               {title}
             </h3>
-            <p className="text-[13px] leading-relaxed text-foreground/70 line-clamp-2">
+            <p className="text-[13px] md:text-[14px] leading-relaxed text-foreground/70 line-clamp-3">
               {description}
             </p>
           </div>
