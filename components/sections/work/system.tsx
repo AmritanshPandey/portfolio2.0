@@ -23,6 +23,7 @@ export default function SystemsSection() {
               ctaLabel={system.ctaLabel}
               tags={system.tags}
               index={index}
+              showImage={false}
               imageHeight="h-52"
             />
           ))}

@@ -1,13 +1,13 @@
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
-import { HorizontalCard } from "@/components/shared/horizontal-card"
 import { VerticalCard } from "@/components/shared/vertical-card"
 import { workItems } from "@/lib/data"
 
 export default function WorkSection() {
   // Order is controlled by SEQUENCE in lib/data/work.ts.
-  // The first item is the flagship (full-width feature); the rest form the grid.
+  // Top 2 render large (first row); the other 3 render smaller (second row).
   const sorted = [...workItems].sort((a, b) => a.order - b.order)
-  const [flagship, ...rest] = sorted
+  const large  = sorted.slice(0, 2)
+  const small  = sorted.slice(2)
 
   return (
     <SectionSubgroup
@@ -18,22 +18,9 @@ export default function WorkSection() {
       <section data-cursor-zone="work">
         <div className="flex flex-col gap-4">
 
-          {/* ── FLAGSHIP — single full-width feature ─────────────────── */}
-          {flagship && (
-            <HorizontalCard
-              href={flagship.href}
-              image={flagship.image}
-              title={flagship.title}
-              description={flagship.description}
-              category={flagship.category}
-              ctaLabel="Read case study"
-              index={0}
-            />
-          )}
-
-          {/* ── SUPPORTING — grid of the rest ────────────────────────── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {rest.map((p) => (
+          {/* ── FIRST ROW — top 2, large ─────────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {large.map((p) => (
               <VerticalCard
                 key={p.href}
                 href={p.href}
@@ -42,6 +29,24 @@ export default function WorkSection() {
                 category={p.category}
                 metric={p.metric}
                 index={p.order}
+                showImage={false}
+                imageHeight="h-56"
+              />
+            ))}
+          </div>
+
+          {/* ── SECOND ROW — the other 3 ─────────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {small.map((p) => (
+              <VerticalCard
+                key={p.href}
+                href={p.href}
+                image={p.image}
+                title={p.title}
+                category={p.category}
+                metric={p.metric}
+                index={p.order}
+                showImage={false}
                 imageHeight="h-36"
               />
             ))}
