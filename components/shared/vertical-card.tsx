@@ -87,11 +87,11 @@ export function VerticalCard({
         "bg-card",
         "border border-border/70",
         "shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none",
-        "transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        "hover:-translate-y-[4px]",
+        // Only animate compositor-friendly props (transform/border) — no
+        // box-shadow transition, which forces a full repaint each frame.
+        "transition-[transform,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "hover:-translate-y-[3px]",
         "hover:border-orange-500/30 dark:hover:border-orange-400/25",
-        "hover:shadow-[0_18px_50px_-12px_rgba(249,115,22,0.18)]",
-        "dark:hover:shadow-[0_22px_60px_-14px_rgba(249,115,22,0.22)]",
       )}>
 
         {/* ── SOFT EMBER GLOW — subtle bloom from the bottom on hover */}
