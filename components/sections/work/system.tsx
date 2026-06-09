@@ -22,7 +22,7 @@ export default function SystemsSection() {
               category={system.category}
               ctaLabel={system.ctaLabel}
               tags={system.tags}
-              index={index}
+              index={index + 1}
               showImage={false}
               imageHeight="h-52"
             />

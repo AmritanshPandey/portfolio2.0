@@ -27,7 +27,6 @@ export function VerticalCard({
   href,
   image,
   title,
-  description,
   category,
   ctaLabel = "View case study",
   variant = "default",
@@ -133,20 +132,36 @@ export function VerticalCard({
         )}
 
         {/* ── CONTENT BLOCK */}
-        <div className="flex flex-col flex-1 px-4 pt-3 pb-4 gap-2.5">
+        <div className={clsx("flex flex-col flex-1 px-4 pb-4 gap-2.5", (!showImage || !image) ? "pt-5" : "pt-3")}>
 
-          {category && (
+          {/* Numeral-led header — anchors the card when there's no image.
+              The numeral replaces the image-overlay index; category sits beside it. */}
+          {(!showImage || !image) && index !== undefined && (
+            <div className="flex items-start justify-between gap-3 mb-0.5">
+              <span className="font-semibold tabular-nums text-[2.6rem] leading-none tracking-tight text-foreground/15 group-hover/card:text-orange-500/80 transition-colors duration-300 select-none">
+                {String(index).padStart(2, "0")}
+              </span>
+              {category && (
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40 text-right pt-1.5">
+                  {category}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Standalone category — only when an image is shown (numeral lives in the overlay) */}
+          {showImage && image && category && (
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
               {category}
             </p>
           )}
 
-          <h3 className="text-[15px] md:text-[16px] font-semibold tracking-[-0.02em] leading-[1.3] text-foreground line-clamp-2">
+          <h3 className="text-[15px] md:text-[17px] font-semibold tracking-[-0.02em] leading-[1.3] text-foreground line-clamp-2">
             {title}
           </h3>
 
           {metric && (
-            <p className="text-[11px] font-medium text-orange-600/70 dark:text-orange-400/60 border-l-2 border-orange-500/25 pl-2.5 leading-relaxed line-clamp-3 mt-auto pt-1">
+            <p className="text-[12px] text-foreground/60 leading-[1.6] line-clamp-3 mt-auto pt-1">
               {metric}
             </p>
           )}
