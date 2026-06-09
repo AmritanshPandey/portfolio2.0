@@ -11,27 +11,39 @@ import { Pill } from "@/components/shared/pill"
 export default function Hero() {
   const cardRef  = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
+  const tiltRaf  = useRef(0)
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const card  = cardRef.current
-    const glare = glareRef.current
+    const card = cardRef.current
     if (!card) return
 
-    const rect = card.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width   // 0→1
-    const y = (e.clientY - rect.top)  / rect.height  // 0→1
+    // Capture coords now (cheap); batch the layout read + style writes into a
+    // single rAF, throttled to one per frame — avoids a style recalc per event.
+    const cx = e.clientX
+    const cy = e.clientY
+    if (tiltRaf.current) return
 
-    const rX = -(y - 0.5) * 16   // tilt up/down  ±8°
-    const rY =  (x - 0.5) * 16   // tilt left/right ±8°
+    tiltRaf.current = requestAnimationFrame(() => {
+      tiltRaf.current = 0
+      const glare = glareRef.current
+      const rect = card.getBoundingClientRect()
+      const x = (cx - rect.left) / rect.width   // 0→1
+      const y = (cy - rect.top)  / rect.height  // 0→1
 
-    card.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.03,1.03,1.03)`
+      const rX = -(y - 0.5) * 16   // tilt up/down  ±8°
+      const rY =  (x - 0.5) * 16   // tilt left/right ±8°
 
-    if (glare) {
-      glare.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.16) 0%, transparent 65%)`
-    }
+      card.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.03,1.03,1.03)`
+
+      if (glare) {
+        glare.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.16) 0%, transparent 65%)`
+      }
+    })
   }, [])
 
   const onMouseLeave = useCallback(() => {
+    if (tiltRaf.current) { cancelAnimationFrame(tiltRaf.current); tiltRaf.current = 0 }
+
     const card  = cardRef.current
     const glare = glareRef.current
     if (!card) return
