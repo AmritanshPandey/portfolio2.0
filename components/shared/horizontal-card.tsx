@@ -74,7 +74,7 @@ export function HorizontalCard({
         )}
 
         {/* CONTENT */}
-        <div className="relative flex flex-col justify-between flex-1 p-5 md:p-6 md:pl-7 h-full">
+        <div className="relative flex flex-col flex-1 p-5 md:p-6 md:pl-7">
 
           <div className="flex flex-col gap-2.5 max-w-xl">
             {category && (
@@ -90,8 +90,8 @@ export function HorizontalCard({
             </p>
           </div>
 
-          {/* CTA */}
-          <div className="mt-5 py-4 border-t border-border/50 flex items-center justify-between">
+          {/* CTA — pinned to the bottom; mt-auto keeps spacing without forcing a fixed height */}
+          <div className="mt-auto pt-5 border-t border-border/50 flex items-center justify-between">
             <span className="text-[12px] font-medium text-foreground/40 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 transition-colors duration-200">
               {ctaLabel}
             </span>
