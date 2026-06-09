@@ -136,20 +136,20 @@ export const systemItems: SystemItem[] = [
   },
 
   {
-    category:    "Product System",
-    title:       "Fintech & AI Interface System",
-    description: "Defined interface patterns for regulated fintech and AI-driven products — covering risk states, compliance disclosures, and explainability under real production constraints.",
+    category:    "Design System",
+    title:       "Premium Fintech Design System UI Kit",
+    description: "A reusable digital finance UI kit for dashboards, payments, cards, wallets, transactions, analytics, onboarding, account management, and financial insights.",
     image:       "/assets/images/work/fintech-ai-system.jpg",
     href:        "/systems/fintech-ai-interface",
     ctaLabel:    "Explore system",
-    accent:      "linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #075985 100%)",
-    tags:        ["Fintech", "AI Design", "Risk States", "Compliance", "Explainability"],
-    problem:     "Financial and AI interfaces share a problem generic design systems don't solve: consequence. A poorly labelled risk state isn't a UX issue — it's a liability. An AI recommendation without appropriate confidence framing isn't a copy problem — it's a trust failure waiting to happen. Off-the-shelf component libraries weren't built for these edge cases. We had to define them from scratch.",
+    accent:      "linear-gradient(135deg, #111111 0%, #1f1f1f 58%, #9a3412 100%)",
+    tags:        ["Fintech", "UI Kit", "Design Tokens", "Payments", "Financial UX"],
+    problem:     "Digital finance products need interfaces that are calm under density, precise around money movement, and explicit when risk or compliance changes the user decision. This system turns those requirements into reusable foundations, components, and financial UX patterns for web and mobile product teams.",
     stats: [
-      { value: "12",   label: "banking partners live" },
-      { value: "40+",  label: "interface patterns defined" },
-      { value: "100%", label: "compliance audit pass rate" },
-      { value: "3×",   label: "faster regulated feature delivery" },
+      { value: "64+", label: "component specimens" },
+      { value: "16",  label: "financial color roles" },
+      { value: "15",  label: "money movement patterns" },
+      { value: "2",   label: "light and dark modes" },
     ],
     sections: [
       {
