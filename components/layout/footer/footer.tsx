@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
-import { ShaderHaze } from "@/components/shared/shader-haze"
 import {
   IconBrandLinkedin,
   IconBrandGithub,
@@ -152,10 +151,6 @@ function CopyEmail() {
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-muted dark:bg-neutral-950 border-t border-border">
-
-      {/* Ambient warm light haze — slow-drifting fractal noise that breathes
-          behind the content and lifts gently near the cursor. */}
-      <ShaderHaze />
 
       {/* Noise texture */}
       <div
