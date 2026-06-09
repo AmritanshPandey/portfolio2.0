@@ -8,19 +8,19 @@ const PRINCIPLES = [
     number: "01",
     title: "Incentives Drive Behavior",
     description:
-      "User behavior follows incentive structure, not stated intent. The most carefully designed interface fails when the mechanic beneath it rewards the wrong action. I map backwards from desired behavior: what does the system need to make true for users to act the way the product needs them to?",
+      "Behavior follows incentives, not stated intent. The cleanest interface fails when the mechanic beneath it rewards the wrong action — so I map backward from the behavior the product needs.",
   },
   {
     number: "02",
     title: "Designing Under Uncertainty",
     description:
-      "Most product decisions are made before the data exists to make them confidently. Waiting for certainty is itself a decision — often the wrong one. I use hypothesis-led framing: state what needs to be true, identify the fastest path to falsifying it, then design the experiment rather than the answer.",
+      "Most decisions happen before the data exists, and waiting for certainty is itself a decision — usually the wrong one. I state what must be true, then design the fastest experiment to prove it false.",
   },
   {
     number: "03",
     title: "Balancing Growth & Risk",
     description:
-      "In regulated environments, compliance isn't a constraint on design — it's a design input. The most durable fintech products treat risk as part of the brief. Usability, compliance, and long-term stability aren't trade-offs to manage; they're system properties that need to be designed for simultaneously.",
+      "In regulated products, compliance isn't a constraint on design — it's a design input. The most durable fintech treats risk as part of the brief, designing usability and stability together instead of trading them off.",
   },
 ]
 
@@ -39,7 +39,7 @@ export default function ProductThinkingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-card border-l-2 border-orange-500/50 p-7 md:p-10 flex flex-col justify-center"
+          className="bg-card p-7 md:p-10 flex flex-col justify-center"
         >
           <p className="text-[11px] text-muted-foreground/60 tracking-wide mb-5">
             Core Belief
@@ -68,7 +68,7 @@ export default function ProductThinkingSection() {
             <h3 className="text-[16px] font-semibold tracking-tight leading-snug text-foreground">
               {p.title}
             </h3>
-            <p className="text-[13px] leading-[1.7] text-foreground/55">
+            <p className="text-[13px] leading-[1.7] text-foreground/70">
               {p.description}
             </p>
           </motion.div>
