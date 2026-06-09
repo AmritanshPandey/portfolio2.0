@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { motion } from "framer-motion"
 import {
   CsSection,
@@ -12,7 +11,21 @@ import {
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
+  CsOnThisPage,
 } from "@/components/case-study"
+
+const SECTION_NAV = [
+  { id: "problem", label: "The Problem" },
+  { id: "stakes", label: "The Stakes" },
+  { id: "what-i-led", label: "What I Led" },
+  { id: "architecture", label: "System Architecture" },
+  { id: "key-decisions", label: "Key Decisions" },
+  { id: "inside-the-system", label: "Inside the System" },
+  { id: "tokens", label: "Tokens in Action" },
+  { id: "the-shift", label: "The Shift" },
+  { id: "what-changed", label: "What Changed" },
+  { id: "reflection", label: "Key Reflection" },
+]
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -36,7 +49,7 @@ function FadeIn({ children, delay = 0, className = "" }: {
 
 function Hero() {
   return (
-    <div className="relative overflow-hidden bg-neutral-950 min-h-[520px]">
+    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[520px]">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-[-200px] right-[-300px] w-[900px] h-[700px]
@@ -50,12 +63,12 @@ function Hero() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-neutral-500"
+          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
         >
           <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
-          <span className="text-orange-400/80">Enterprise Systems</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
+          <span className="w-1 h-1 rounded-full bg-border" />
+          <span className="text-orange-600 dark:text-orange-400">Enterprise Systems</span>
+          <span className="w-1 h-1 rounded-full bg-border" />
           <span>Mastercard · PartnerBank</span>
         </motion.div>
 
@@ -64,10 +77,10 @@ function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="text-4xl md:text-5xl lg:text-[3.4rem] font-semibold tracking-[-0.04em] leading-[0.96] text-white max-w-3xl mb-8"
+          className="type-page-title max-w-3xl mb-8"
         >
           Modular Systems for{" "}
-          <em className="not-italic text-orange-400">Enterprise</em>{" "}
+          <em className="not-italic text-orange-600 dark:text-orange-400">Enterprise</em>{" "}
           RFP Velocity.
         </motion.h1>
 
@@ -76,7 +89,7 @@ function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[17px] leading-relaxed text-neutral-400 max-w-2xl"
+          className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
         >
           Decoupled core UX from brand and visual layers across PartnerBank —
           Mastercard&apos;s white-label digital banking platform — turning a rigid
@@ -87,7 +100,7 @@ function Hero() {
       </div>
 
       {/* Bottom separator */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </div>
   )
 }
@@ -100,6 +113,8 @@ export default function Page() {
 
       <Hero />
 
+      <CsOnThisPage items={SECTION_NAV} />
+
       {/* Project info bar */}
       <CsInfoBar cells={[
         { label: "Client",        value: "Mastercard",       sub: "PartnerBank platform" },
@@ -110,7 +125,7 @@ export default function Page() {
       ]} />
 
       {/* Context */}
-      <CsSection label="The Problem">
+      <CsSection id="problem" label="The Problem" withDivider={false}>
         <div className="space-y-8">
           <div className="space-y-4">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -138,7 +153,7 @@ export default function Page() {
       </CsSection>
 
       {/* Stakes */}
-      <CsSection label="The Stakes" variant="muted">
+      <CsSection id="stakes" label="The Stakes" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -184,7 +199,7 @@ export default function Page() {
       </CsSection>
 
       {/* Approach */}
-      <CsSection label="What I Led">
+      <CsSection id="what-i-led" label="What I Led">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             From template to configurable architecture.
@@ -209,13 +224,13 @@ export default function Page() {
       </CsSection>
 
       {/* Architecture */}
-      <CsSection label="System Architecture" variant="dark">
+      <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A four-layer architecture.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Each layer has one job. Brand changes never touch UX logic; demo configuration
               never breaks core components. Decoupling is what made the system fast.
             </p>
@@ -227,11 +242,10 @@ export default function Page() {
             { num: "L4", title: "Demo Configuration Engine", body: "Sales-facing layer that assembles brand tokens + component selections into a deal-ready demo for any prospect.", meta: ["configure", "preview", "ship"] },
           ]} />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-20" />
       </CsSection>
 
       {/* Key Decisions (dark) */}
-      <CsSection label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -258,11 +272,10 @@ export default function Page() {
             impact="Per-RFP design effort reduced substantially. The team could respond to enterprise demos on compressed timelines that were previously impossible, which sales cited as a meaningful differentiator in several competitive RFPs."
           />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* Feature deep dives */}
-      <CsSection label="Inside the System">
+      <CsSection id="inside-the-system" label="Inside the System">
         <div className="space-y-20">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             Three shifts that made the system configurable.
@@ -398,7 +411,7 @@ export default function Page() {
       </CsSection>
 
       {/* Token demo */}
-      <CsSection label="Tokens in Action" variant="muted">
+      <CsSection id="tokens" label="Tokens in Action" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-6 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -453,7 +466,7 @@ export default function Page() {
       </CsSection>
 
       {/* Before / After */}
-      <CsSection label="The Shift">
+      <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             From static template to configurable system.
@@ -522,13 +535,13 @@ export default function Page() {
       </CsSection>
 
       {/* Outcomes */}
-      <CsSection label="What Changed" variant="dark">
+      <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A system built for sales velocity.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Enterprise deals close cross-functionally, but the system&apos;s new flexibility materially
               strengthened Mastercard&apos;s competitive positioning in high-value RFP cycles.
             </p>
@@ -551,19 +564,18 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-neutral-500 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium text-white tracking-tight leading-none mb-4 text-orange-400">{m.figure}</p>
-                  <p className="text-[14px] text-neutral-400 leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* Reflection */}
-      <CsSection label="Key Reflection">
+      <CsSection id="reflection" label="Key Reflection">
         <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             Customization and consistency aren&apos;t a trade-off — they&apos;re a{" "}

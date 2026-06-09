@@ -12,7 +12,22 @@ import {
   CsMetricBars,
   CsTimeline,
   CsNextStudies,
+  CsOnThisPage,
 } from "@/components/case-study"
+
+const SECTION_NAV = [
+  { id: "situation", label: "The Situation" },
+  { id: "problem", label: "The Problem" },
+  { id: "what-i-led", label: "What I Led" },
+  { id: "architecture", label: "System Architecture" },
+  { id: "key-decisions", label: "Key Decisions" },
+  { id: "core-flows", label: "Core Flows" },
+  { id: "tokens", label: "Tokens in Action" },
+  { id: "the-shift", label: "The Shift" },
+  { id: "what-changed", label: "What Changed" },
+  { id: "how-we-got-there", label: "How We Got There" },
+  { id: "reflection", label: "Key Reflection" },
+]
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -47,7 +62,7 @@ const TIMELINE = [
 
 function Hero() {
   return (
-    <div className="relative overflow-hidden bg-neutral-950 min-h-[520px]">
+    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[520px]">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-[-160px] left-[-200px] w-[800px] h-[700px]
@@ -61,12 +76,12 @@ function Hero() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-neutral-500"
+          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
         >
           <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
-          <span className="text-orange-400/80">D2C Commerce</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
+          <span className="w-1 h-1 rounded-full bg-border" />
+          <span className="text-orange-600 dark:text-orange-400">D2C Commerce</span>
+          <span className="w-1 h-1 rounded-full bg-border" />
           <span>Honasa Consumer</span>
         </motion.div>
 
@@ -75,10 +90,10 @@ function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="text-4xl md:text-5xl lg:text-[3.4rem] font-semibold tracking-[-0.04em] leading-[0.96] text-white max-w-3xl mb-8"
+          className="type-page-title max-w-3xl mb-8"
         >
           One System.{" "}
-          <em className="not-italic text-orange-400">Three Brands.</em>{" "}
+          <em className="not-italic text-orange-600 dark:text-orange-400">Three Brands.</em>{" "}
           Eight Weeks.
         </motion.h1>
 
@@ -87,7 +102,7 @@ function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[17px] leading-relaxed text-neutral-400 max-w-2xl"
+          className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
         >
           Built and scaled first-party commerce experiences across Mamaearth,
           The Derma Co., and Aqualogica by establishing a shared component
@@ -98,7 +113,7 @@ function Hero() {
       </div>
 
       {/* Bottom separator */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </div>
   )
 }
@@ -111,6 +126,8 @@ export default function Page() {
 
       <Hero />
 
+      <CsOnThisPage items={SECTION_NAV} />
+
       {/* Project info bar */}
       <CsInfoBar cells={[
         { label: "Organisation", value: "Honasa Consumer",   sub: "Mamaearth parent co." },
@@ -121,7 +138,7 @@ export default function Page() {
       ]} />
 
       {/* Situation */}
-      <CsSection label="The Situation">
+      <CsSection id="situation" label="The Situation" withDivider={false}>
         <div className="space-y-8">
           <div className="space-y-4">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -148,7 +165,7 @@ export default function Page() {
       </CsSection>
 
       {/* The problem */}
-      <CsSection label="The Problem" variant="muted">
+      <CsSection id="problem" label="The Problem" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -201,7 +218,7 @@ export default function Page() {
       </CsSection>
 
       {/* What I led */}
-      <CsSection label="What I Led">
+      <CsSection id="what-i-led" label="What I Led">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             From blank slate to shipped system.
@@ -226,13 +243,13 @@ export default function Page() {
       </CsSection>
 
       {/* System architecture (dark) */}
-      <CsSection label="System Architecture" variant="dark">
+      <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A shared backbone, a configurable surface.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Commerce logic is stable and shared. Brand identity is a token layer
               above it. Decoupling these two is what made three brands buildable
               by two designers in eight weeks.
@@ -266,11 +283,10 @@ export default function Page() {
             },
           ]} />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-20" />
       </CsSection>
 
       {/* Key decisions (dark) */}
-      <CsSection label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -297,11 +313,10 @@ export default function Page() {
             impact="All three brands adopted trust components in v1. Mamaearth saw measurable improvement in PDP-to-cart conversion. Other brands adopted the pattern in subsequent releases independently."
           />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* Feature deep dives */}
-      <CsSection label="Core Flows">
+      <CsSection id="core-flows" label="Core Flows">
         <div className="space-y-20">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             Where the design decisions showed up.
@@ -449,7 +464,7 @@ export default function Page() {
       </CsSection>
 
       {/* Tokens in Action */}
-      <CsSection label="Tokens in Action" variant="muted">
+      <CsSection id="tokens" label="Tokens in Action" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-6 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -507,7 +522,7 @@ export default function Page() {
       </CsSection>
 
       {/* Before / After */}
-      <CsSection label="The Shift">
+      <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             From marketplace dependency to owned channel.
@@ -579,13 +594,13 @@ export default function Page() {
       </CsSection>
 
       {/* Outcomes (dark) */}
-      <CsSection label="What Changed" variant="dark">
+      <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A system that kept paying back.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               The 8-week launch was just the start. The shared architecture
               made every subsequent brand addition and improvement faster than the one before.
             </p>
@@ -608,19 +623,18 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-neutral-500 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium text-orange-400 tracking-tight leading-none mb-4">{m.figure}</p>
-                  <p className="text-[14px] text-neutral-400 leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* Timeline */}
-      <CsSection label="How We Got There">
+      <CsSection id="how-we-got-there" label="How We Got There">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             Eight weeks, end to end.
@@ -630,7 +644,7 @@ export default function Page() {
       </CsSection>
 
       {/* Reflection */}
-      <CsSection label="Key Reflection">
+      <CsSection id="reflection" label="Key Reflection">
         <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             Scalable systems aren&apos;t built by adding features — they&apos;re built by ruthlessly

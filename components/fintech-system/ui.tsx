@@ -139,7 +139,7 @@ export function FinButton({
   }[size]
 
   const variantClass = {
-    primary: "border-[var(--fin-brand)] bg-[var(--fin-brand)] text-white shadow-[0_8px_24px_rgba(249,115,22,0.18)] hover:bg-[var(--fin-brand-strong)]",
+    primary: "border-[var(--fin-brand)] bg-[var(--fin-brand)] text-black shadow-[0_10px_28px_rgba(0,200,83,0.24)] hover:bg-[var(--fin-brand-strong)]",
     secondary: "border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[var(--fin-text-primary)] hover:bg-[var(--fin-muted)]",
     ghost: "border-transparent bg-transparent text-[var(--fin-text-secondary)] hover:bg-[var(--fin-muted)] hover:text-[var(--fin-text-primary)]",
     destructive: "border-[var(--fin-error-border)] bg-[var(--fin-error)] text-white hover:brightness-95",
@@ -242,13 +242,15 @@ export function FinKpiCard({
 
 export function FinCreditCardPreview() {
   return (
-    <div className="rounded-2xl border border-white/15 bg-[linear-gradient(135deg,#0f0f0f,#1d1d1d_54%,#7c2d12)] p-5 text-white shadow-[0_18px_52px_rgba(0,0,0,0.34)]">
+    <div className="rounded-[22px] border border-white/15 bg-[radial-gradient(circle_at_15%_12%,rgba(0,230,118,0.38),transparent_32%),linear-gradient(135deg,#050806,#101914_58%,#013f22)] p-5 text-white shadow-[0_18px_52px_rgba(0,0,0,0.34)]">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/60">Premium debit</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/60">Instant debit</p>
           <p className="mt-7 font-mono text-[18px] tracking-[0.18em]">4829  ••••  ••••  1048</p>
         </div>
-        <IconCards size={24} className="text-white/80" />
+        <div className="grid size-10 place-items-center rounded-full bg-[var(--fin-brand)] text-black">
+          <IconCards size={20} />
+        </div>
       </div>
       <div className="mt-6 flex items-end justify-between">
         <div>
@@ -368,7 +370,7 @@ export function FinSidebar({ items }: { items: FintechNavigationItem[] }) {
   return (
     <FinSurface className="w-full max-w-[260px] p-3">
       <div className="mb-4 flex items-center gap-2 px-2">
-        <div className="grid size-8 place-items-center rounded-[8px] bg-[var(--fin-brand)] text-white">
+        <div className="grid size-8 place-items-center rounded-[8px] bg-[var(--fin-brand)] text-black">
           <IconShieldCheck size={17} />
         </div>
         <div>
@@ -414,7 +416,7 @@ export function FinTopNav() {
       <div className="flex items-center gap-2">
         <FinButton variant="icon"><IconBell size={16} /></FinButton>
         <FinButton variant="icon"><IconDots size={16} /></FinButton>
-        <div className="grid size-8 place-items-center rounded-full bg-[var(--fin-brand)] text-[12px] font-bold text-white">AS</div>
+        <div className="grid size-8 place-items-center rounded-full bg-[var(--fin-brand)] text-[12px] font-bold text-black">AS</div>
       </div>
     </FinSurface>
   )
@@ -572,7 +574,7 @@ export function FinPatternPreview({ pattern }: { pattern: FintechPatternSpec }) 
       <div className="mt-4 grid gap-2">
         {pattern.primaryStates.slice(0, 4).map((state, index) => (
           <div key={state} className="flex items-center gap-2 text-[12px] text-[var(--fin-text-secondary)]">
-            <span className={cn("grid size-5 place-items-center rounded-full border text-[10px] font-bold", index === 0 ? "border-[var(--fin-brand)] bg-[var(--fin-brand)] text-white" : "border-[var(--fin-border)]")}>
+            <span className={cn("grid size-5 place-items-center rounded-full border text-[10px] font-bold", index === 0 ? "border-[var(--fin-brand)] bg-[var(--fin-brand)] text-black" : "border-[var(--fin-border)]")}>
               {index + 1}
             </span>
             {state}
@@ -674,7 +676,7 @@ export function FinNavigationMatrix() {
                 type="button"
                 className={cn(
                   "h-8 rounded-[8px] px-3 text-[13px] font-semibold",
-                  index === 0 ? "bg-[var(--fin-brand)] text-white" : "bg-[var(--fin-muted)] text-[var(--fin-text-secondary)]"
+                  index === 0 ? "bg-[var(--fin-brand)] text-black" : "bg-[var(--fin-muted)] text-[var(--fin-text-secondary)]"
                 )}
               >
                 {tab}
@@ -778,11 +780,11 @@ function ScreenFrame({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[24px] border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_82%,transparent)] p-3 shadow-[var(--fin-shadow-raised)] backdrop-blur-xl",
+        "relative overflow-hidden rounded-[24px] border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_84%,transparent)] p-3 shadow-[var(--fin-shadow-raised)] backdrop-blur-xl",
         className
       )}
     >
-      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--fin-brand)] to-transparent" />
       <div className="mb-3 flex items-center justify-between gap-3 px-1">
         <div>
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--fin-text-secondary)]">
@@ -804,21 +806,39 @@ function ScreenFrame({
 export function FinCommandCenterScreen() {
   return (
     <ScreenFrame title="Treasury command" eyebrow="Desktop screen" className="lg:col-span-2">
-      <div className="grid gap-3 rounded-[18px] border border-[var(--fin-border)] bg-[var(--fin-bg)] p-4 md:grid-cols-[1fr_260px]">
+      <div className="grid gap-3 rounded-[20px] border border-[var(--fin-border)] bg-[var(--fin-bg)] p-4 md:grid-cols-[1fr_260px]">
         <div className="space-y-4">
+          <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-[radial-gradient(circle_at_15%_18%,rgba(0,230,118,0.42),transparent_26%),linear-gradient(135deg,#050806,#0b120d_60%,#013f22)] p-5 text-white">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-[12px] text-white/62">Total operating cash</p>
+                <p className="mt-2 font-mono text-[38px] font-bold leading-none text-white tabular-nums">
+                  $482,490.24
+                </p>
+              </div>
+              <span className="inline-flex h-8 items-center rounded-full bg-[var(--fin-brand)] px-3 text-[12px] font-bold text-black">
+                Protected
+              </span>
+            </div>
+            <div className="mt-5 grid gap-2 sm:grid-cols-3">
+              {[
+                ["Inflow", "+$42.8k"],
+                ["Outflow", "$18.2k"],
+                ["Runway", "11.4 mo"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-[14px] border border-white/10 bg-white/[0.06] p-3">
+                  <p className="text-[11px] text-white/55">{label}</p>
+                  <p className="mt-1 font-mono text-[17px] font-bold text-white tabular-nums">{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-[12px] text-[var(--fin-text-secondary)]">Total operating cash</p>
-              <p className="mt-1 font-mono text-[34px] font-bold leading-none text-[var(--fin-text-primary)] tabular-nums">
-                $482,490.24
-              </p>
+              <p className="text-[14px] font-semibold text-[var(--fin-text-primary)]">Cash flow forecast</p>
+              <p className="mt-1 text-[12px] text-[var(--fin-text-secondary)]">Next 12 weeks of money movement</p>
             </div>
-            <FinBadge tone="safe">Protected</FinBadge>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <FinKpiCard label="Inflow" value="+$42.8k" description="Last 7 days" tone="income" trend="+8%" />
-            <FinKpiCard label="Outflow" value="$18.2k" description="Scheduled" tone="expense" trend="6" />
-            <FinKpiCard label="Runway" value="11.4 mo" description="Forecast" tone="safe" trend="Stable" />
+            <FinBadge tone="profit">+18.4%</FinBadge>
           </div>
           <FinMiniChart />
         </div>
@@ -844,7 +864,7 @@ export function FinCommandCenterScreen() {
 export function FinPaymentReviewScreen() {
   return (
     <ScreenFrame title="Payment review" eyebrow="Risk screen">
-      <div className="rounded-[18px] border border-[var(--fin-border)] bg-[var(--fin-bg)] p-4">
+      <div className="rounded-[20px] border border-[var(--fin-border)] bg-[var(--fin-bg)] p-4">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[12px] text-[var(--fin-text-secondary)]">Send amount</p>
@@ -869,6 +889,9 @@ export function FinPaymentReviewScreen() {
         <div className="mt-5 rounded-xl border border-[var(--fin-risk-border)] bg-[var(--fin-risk-soft)] p-3">
           <p className="text-[12px] font-semibold text-[var(--fin-risk)]">This transfer cannot be recalled after submission.</p>
         </div>
+        <div className="mt-3 rounded-xl border border-[var(--fin-brand-border)] bg-[var(--fin-brand-soft)] p-3">
+          <p className="text-[12px] font-semibold text-[var(--fin-text-primary)]">Biometric approval is required before money leaves the account.</p>
+        </div>
         <div className="mt-5 flex gap-2">
           <FinButton className="flex-1">Confirm</FinButton>
           <FinButton variant="secondary" className="flex-1">Save draft</FinButton>
@@ -881,40 +904,51 @@ export function FinPaymentReviewScreen() {
 export function FinMobileWalletScreen() {
   return (
     <ScreenFrame title="Wallet mobile" eyebrow="Mobile screen">
-      <div className="mx-auto max-w-[320px] rounded-[30px] border border-[var(--fin-border)] bg-[var(--fin-bg)] p-3">
-        <div className="rounded-[24px] border border-[var(--fin-border)] bg-[var(--fin-surface)] p-4">
+      <div className="mx-auto max-w-[320px] rounded-[34px] border border-[var(--fin-border)] bg-[#050806] p-3 text-white shadow-[0_24px_70px_rgba(0,0,0,0.34)]">
+        <div className="rounded-[28px] bg-[radial-gradient(circle_at_18%_8%,rgba(255,255,255,0.28),transparent_28%),linear-gradient(135deg,#00e676,#00c853_52%,#00a845)] p-5 text-black">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[12px] text-[var(--fin-text-secondary)]">Wallet balance</p>
-              <p className="mt-1 font-mono text-[28px] font-bold leading-none text-[var(--fin-text-primary)]">$8,420</p>
+              <p className="text-[13px] font-medium text-black/62">Wallet balance</p>
+              <p className="mt-2 text-[42px] font-semibold leading-[0.96] tracking-normal text-black tabular-nums">$8,420</p>
             </div>
-            <div className="grid size-10 place-items-center rounded-full bg-[var(--fin-brand)] text-white">
+            <div className="grid size-10 place-items-center rounded-full bg-black text-[var(--fin-brand)]">
               <IconWallet size={18} />
             </div>
           </div>
-          <div className="mt-5 grid grid-cols-3 gap-2">
-            {["Add", "Send", "Cards"].map((item) => (
+          <div className="mt-6 grid grid-cols-3 gap-2">
+            {([
+              ["Add", IconArrowDownLeft],
+              ["Send", IconArrowUpRight],
+              ["Cards", IconCards],
+            ] as [string, typeof IconWallet][]).map(([item, Icon]) => (
               <button
                 key={item}
                 type="button"
-                className="h-12 rounded-2xl border border-[var(--fin-border)] bg-[var(--fin-muted)] text-[12px] font-semibold text-[var(--fin-text-primary)]"
+                className="flex h-14 flex-col items-center justify-center gap-1 rounded-[18px] bg-black/10 text-[12px] font-semibold text-black backdrop-blur"
               >
+                <Icon size={17} />
                 {item}
               </button>
             ))}
           </div>
         </div>
-        <div className="mt-3 space-y-2">
-          {[
-            ["Apple Services", "-$12.99"],
-            ["Salary credit", "+$4,820"],
-            ["Card ending 1048", "-$86.20"],
-          ].map(([name, amount]) => (
-            <div key={name} className="flex items-center justify-between rounded-2xl border border-[var(--fin-border)] bg-[var(--fin-surface)] px-3 py-3">
-              <span className="text-[12px] font-semibold text-[var(--fin-text-primary)]">{name}</span>
-              <span className="font-mono text-[12px] font-semibold text-[var(--fin-text-secondary)]">{amount}</span>
-            </div>
-          ))}
+        <div className="mt-4 rounded-[24px] bg-white p-3 text-black">
+          <div className="mb-2 flex items-center justify-between px-1">
+            <p className="text-[13px] font-bold">Activity</p>
+            <p className="text-[11px] font-semibold text-black/45">Live</p>
+          </div>
+          <div className="space-y-2">
+            {[
+              ["Apple Services", "-$12.99"],
+              ["Salary credit", "+$4,820"],
+              ["Card ending 1048", "-$86.20"],
+            ].map(([name, amount]) => (
+              <div key={name} className="flex items-center justify-between rounded-[16px] bg-black/[0.04] px-3 py-3">
+                <span className="text-[12px] font-medium text-black/78">{name}</span>
+                <span className="text-[12px] font-semibold text-black tabular-nums">{amount}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mt-3">
           <FinMobileNav />

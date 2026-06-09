@@ -4,10 +4,12 @@ import { FocusList } from "@/components/shared/focus-list"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { SectionHeader } from "@/components/shared/section-header"
 import {
-  IconSparkles,
-  IconLayoutGrid,
-  IconShieldCheck,
-  IconAdjustments,
+  IconBike,
+  IconPlane,
+  IconChefHat,
+  IconCar,
+  IconBlocks,
+  IconSchool,
 } from "@tabler/icons-react"
 import clsx from "clsx"
 import { usePerformanceMode } from "@/hooks/use-performance-mode"
@@ -16,10 +18,12 @@ export default function AboutSection() {
   const { isHigh } = usePerformanceMode()
 
   const focus = [
-    { icon: IconSparkles,    text: "Exploring how AI reshapes product behavior" },
-    { icon: IconLayoutGrid,  text: "Designing systems that scale across products" },
-    { icon: IconShieldCheck, text: "Building trust in high-stakes environments" },
-    { icon: IconAdjustments, text: "Making better decisions under constraints" },
+    { icon: IconBike,    text: "Long bike rides, the longer the better" },
+    { icon: IconPlane,   text: "Going somewhere I haven't been" },
+    { icon: IconChefHat, text: "Cooking for people I like" },
+    { icon: IconCar,     text: "Collecting Hot Wheels" },
+    { icon: IconBlocks,  text: "Building Lego, piece by piece" },
+    { icon: IconSchool,  text: "Teaching and mentoring" },
   ]
 
   return (
@@ -27,6 +31,10 @@ export default function AboutSection() {
       id="about"
       className="relative overflow-hidden bg-white dark:bg-black text-foreground"
     >
+
+      {/* ENGRAVED SEAM — matches the band rhythm of <Section> above. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-black/[0.07] dark:bg-white/[0.08]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px z-[1] h-px bg-white/70 dark:bg-white/[0.03]" />
 
       {/* ── BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-[0] overflow-hidden">
@@ -42,9 +50,17 @@ export default function AboutSection() {
           )}
         />
 
-        {/* GLOW */}
+        {/* GLOW — subtle ambient bloom for depth. Ember stays faint (One Voice
+            Rule); a neutral lift adds dimension without a second accent hue. */}
+        <div className="pointer-events-none absolute inset-0">
+          {/* warm bloom, lower-right — sits behind the glass card */}
+          <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(249,115,22,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(249,115,22,0.17),transparent_70%)]" />
+          {/* neutral lift, upper-left */}
+          <div className="absolute inset-0 bg-[radial-gradient(520px_320px_at_12%_6%,rgba(0,0,0,0.04),transparent_60%)] dark:bg-[radial-gradient(560px_340px_at_12%_6%,rgba(255,255,255,0.05),transparent_62%)]" />
+        </div>
+        {/* on capable devices, a touch more warmth */}
         {isHigh && (
-          <div className="absolute inset-0 bg-[radial-gradient(500px_250px_at_85%_80%,rgba(255,120,40,0.05),transparent_65%)] dark:bg-[radial-gradient(420px_220px_at_85%_80%,rgba(255,120,40,0.18),transparent_70%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(440px_240px_at_82%_78%,rgba(255,140,60,0.05),transparent_72%)] dark:bg-[radial-gradient(440px_240px_at_82%_78%,rgba(255,140,60,0.10),transparent_72%)]" />
         )}
 
         {/* EDGE FADES */}
@@ -60,7 +76,7 @@ export default function AboutSection() {
           <SectionHeader
             eyebrow="About"
             title="Who I am"
-            description="A product designer who operates at the intersection of strategy, systems, and execution."
+            description="The work has its own pages. This one is the person behind it."
           />
         </div>
 
@@ -72,22 +88,27 @@ export default function AboutSection() {
             <PhotoCarousel />
           </div>
 
-          {/* RIGHT — bio */}
-          <div className="space-y-8 rounded-2xl bg-white/60 dark:bg-black/50 backdrop-blur-sm border border-border/40 p-6 md:p-8">
+          {/* RIGHT — bio (frosted glass over the grid + glow) */}
+          <div className="space-y-8 rounded-2xl p-6 md:p-8
+            border border-white/55 dark:border-white/10
+            bg-white/45 dark:bg-white/[0.045]
+            backdrop-blur-xl backdrop-saturate-150
+            ring-1 ring-inset ring-white/40 dark:ring-white/[0.05]
+            shadow-[0_12px_44px_-18px_rgba(0,0,0,0.28)] dark:shadow-[0_18px_54px_-22px_rgba(0,0,0,0.7)]">
 
             {/* TEXT */}
             <div className="space-y-5">
-              <p className="text-[17px] leading-[1.8] tracking-[-0.01em]">
-                I&apos;ve spent 7 years at the intersection of product and design — building systems that ship at Mastercard, leading a startup through a COVID pivot, pushing back on VP-level decisions and winning, and coding the React demo that Mastercard&apos;s CPO used at Money20/20.
+              <p className="type-prose text-foreground/82">
+                I&apos;m curious by default. New cities, long routes, unfamiliar food, and small systems all pull me in for the same reason: I like figuring out how things work.
               </p>
-              <p className="text-[17px] leading-[1.8] text-foreground/80">
-                I care about the problem more than the deliverable. That tends to show in the work.
+              <p className="type-prose text-foreground/80">
+                Off the clock, I&apos;m usually riding somewhere, cooking for people I like, collecting Hot Wheels, or building Lego. Precise, hands-on things help me reset.
               </p>
-              <p className="text-[17px] leading-[1.8] text-foreground/80">
-                Currently building toward product leadership — where design depth, business strategy, and systems thinking meet.
+              <p className="type-prose text-foreground/80">
+                Teaching matters most. Mentoring people, helping someone get unstuck, and watching an idea click is work I never get tired of.
               </p>
-              <p className="text-[16px] text-foreground/50 leading-[1.75]">
-                Outside of work, I spend time traveling, cooking, and going on long bike rides.
+              <p className="type-section-intro text-foreground/50">
+                Quietly happiest with a full day outside, a long route ahead, and nowhere I need to be.
               </p>
             </div>
 
@@ -95,7 +116,7 @@ export default function AboutSection() {
             <div className="border-t border-border/50" />
 
             {/* FOCUS */}
-            <FocusList focus={focus} title="Focus areas" iconSize="xl" />
+            <FocusList focus={focus} title="Off the clock" iconSize="xl" />
 
           </div>
         </div>

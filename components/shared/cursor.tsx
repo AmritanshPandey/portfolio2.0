@@ -5,12 +5,13 @@ import { useEffect, useRef, useCallback } from "react"
 const RING_SIZE = 36
 const DOT_SIZE  = 5
 
-type CursorState = "default" | "link" | "card"
+type CursorState = "default" | "link" | "card" | "text"
 
 const RING_SCALE: Record<CursorState, number> = {
   default: 1,
   link:    1.5,
   card:    1,   // ring hidden in card state
+  text:    1,   // ring hidden in text state (I-beam shown instead)
 }
 
 const LERP     = 0.20
@@ -31,31 +32,6 @@ export function FancyCursor() {
   const currentScale = useRef(RING_SCALE.default)
   const targetScale  = useRef(RING_SCALE.default)
   const activeState  = useRef<CursorState>("default")
-
-  const tick = useCallback(() => {
-    rx.current += (mx.current - rx.current) * LERP
-    ry.current += (my.current - ry.current) * LERP
-
-    currentScale.current += (targetScale.current - currentScale.current) * SCALE_LR
-
-    const ring  = ringRef.current
-    const dot   = dotRef.current
-    const pill  = pillRef.current
-    const half  = RING_SIZE / 2
-
-    if (ring) {
-      ring.style.transform = `translate3d(${rx.current - half}px,${ry.current - half}px,0) scale(${currentScale.current})`
-    }
-    if (dot) {
-      dot.style.transform = `translate3d(${mx.current - DOT_SIZE / 2}px,${my.current - DOT_SIZE / 2}px,0)`
-    }
-    if (pill) {
-      // Pill centered on lerped position
-      pill.style.transform = `translate3d(${rx.current}px,${ry.current}px,0)`
-    }
-
-    rafRef.current = requestAnimationFrame(tick)
-  }, [])
 
   const applyState = useCallback((state: CursorState, label?: string) => {
     const ring     = ringRef.current
@@ -146,6 +122,25 @@ export function FancyCursor() {
       }
     }
 
+    const tick = () => {
+      rx.current += (mx.current - rx.current) * LERP
+      ry.current += (my.current - ry.current) * LERP
+
+      currentScale.current += (targetScale.current - currentScale.current) * SCALE_LR
+
+      const pill = pillRef.current
+      const half = RING_SIZE / 2
+
+      ring.style.transform = `translate3d(${rx.current - half}px,${ry.current - half}px,0) scale(${currentScale.current})`
+      dot.style.transform = `translate3d(${mx.current - DOT_SIZE / 2}px,${my.current - DOT_SIZE / 2}px,0)`
+
+      if (pill) {
+        pill.style.transform = `translate3d(${rx.current}px,${ry.current}px,0)`
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
     rafRef.current = requestAnimationFrame(tick)
     window.addEventListener("mousemove",     onMove,  { passive: true })
     document.addEventListener("pointerover", onOver)
@@ -159,7 +154,7 @@ export function FancyCursor() {
       document.removeEventListener("mouseleave",  onLeave)
       document.removeEventListener("mouseenter",  onEnter)
     }
-  }, [tick, applyState])
+  }, [applyState])
 
   return (
     <>

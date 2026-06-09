@@ -32,7 +32,10 @@ export function Section({
   transitionVariant = "default",
 }: SectionProps) {
 
-  // 🎯 CLEAN BASE SURFACES (no baked orange)
+  // CLEAN BASE SURFACES — true-gray (chroma 0), no baked accent.
+  // Sections read as distinct editorial bands via a deliberate tonal step:
+  // `muted` always RECEDES (one step deeper than `default`) in both modes, so
+  // cards (surface 0.18 dark / white light) keep popping on every band.
   const bgStyles = {
     default: `
       bg-[oklch(0.985_0_0)] text-foreground
@@ -40,8 +43,8 @@ export function Section({
     `,
 
     muted: `
-      bg-[oklch(0.965_0.003_85)] text-foreground
-      dark:bg-[oklch(0.16_0.002_260)]
+      bg-[oklch(0.945_0_0)] text-foreground
+      dark:bg-[oklch(0.105_0_0)]
     `,
 
     dark: `
@@ -60,6 +63,12 @@ export function Section({
 
       {/* Sections are clean neutral surfaces. Ember is reserved for intent
           (CTAs, active states) per DESIGN.md's One Voice Rule — no ambient tint. */}
+
+      {/* ENGRAVED SEAM — borders do the dividing (DESIGN.md §Elevation).
+          A hairline rule + a 1px highlight lip reads as a tactile letterpress
+          edge between bands, not a faded glow. Full-bleed, top of each band. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.07] dark:bg-white/[0.08]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/70 dark:bg-white/[0.03]" />
 
       {/* CONTENT */}
       <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-20 md:py-28">
@@ -86,14 +95,6 @@ export function Section({
         )}
 
       </div>
-
-      {/* 🔥 PREMIUM SEPARATOR (soft, not harsh) */}
-      <div className="
-        absolute bottom-0 left-0 w-full h-px
-        bg-gradient-to-r
-        from-transparent via-foreground/10 to-transparent
-        dark:via-white/10
-      " />
 
     </section>
   )

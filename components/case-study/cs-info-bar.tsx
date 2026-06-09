@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import type { CSSProperties } from "react"
 
 export interface CsInfoBarCell {
   label: string
@@ -11,16 +12,17 @@ export function CsInfoBar({ cells }: { cells: CsInfoBarCell[] }) {
     <div className="border-y border-border bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]">
       <div className="max-w-[1000px] mx-auto px-6">
         <div
-          className="grid"
-          style={{ gridTemplateColumns: `repeat(${cells.length}, 1fr)` }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(var(--cs-info-cols),minmax(0,1fr))]"
+          style={{ "--cs-info-cols": cells.length } as CSSProperties}
         >
           {cells.map((cell, i) => (
             <div
               key={cell.label}
               className={clsx(
-                "py-7 flex flex-col gap-2.5",
-                i > 0 && "pl-7 border-l border-border/50",
-                i < cells.length - 1 && "pr-7"
+                "flex flex-col gap-2.5 border-border/50 py-5 sm:px-5 lg:py-7",
+                "border-t first:border-t-0 sm:[&:nth-child(-n+2)]:border-t-0 lg:border-t-0",
+                i > 0 && "lg:border-l",
+                i < cells.length - 1 && "lg:pr-7"
               )}
             >
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">

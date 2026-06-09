@@ -91,8 +91,7 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="
-            text-4xl md:text-5xl lg:text-[3.25rem]
-            font-semibold tracking-tight leading-[1.06]
+            type-page-title
             text-neutral-900 dark:text-white
             max-w-3xl mb-6
           "

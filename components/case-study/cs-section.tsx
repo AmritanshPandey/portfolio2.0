@@ -11,12 +11,14 @@ interface Props {
   children: ReactNode
   variant?: Variant
   withDivider?: boolean
+  /** Anchor target for the "On this page" rail. */
+  id?: string
 }
 
 const BG: Record<Variant, string> = {
   default: "bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] text-foreground",
-  muted:   "bg-[oklch(0.965_0.003_85)] dark:bg-[oklch(0.16_0.002_260)] text-foreground",
-  dark:    "bg-neutral-950 text-white",
+  muted:   "bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.105_0_0)] text-foreground",
+  dark:    "bg-[oklch(0.12_0_0)] text-white",
 }
 
 const DIVIDER: Record<Variant, string> = {
@@ -25,26 +27,14 @@ const DIVIDER: Record<Variant, string> = {
   dark:    "bg-white/[0.08]",
 }
 
-export function CsSection({ label, children, variant = "default", withDivider = true }: Props) {
+export function CsSection({ label, children, variant = "default", withDivider = true, id }: Props) {
   const isDark = variant === "dark"
 
   return (
-    <section className={clsx("relative w-full overflow-hidden transition-colors duration-300", BG[variant])}>
+    <section id={id} className={clsx("relative w-full overflow-hidden transition-colors duration-300", id && "scroll-mt-24", BG[variant])}>
 
-      {/* Ambient — light/dark only */}
-      {!isDark && (
-        <div className="pointer-events-none absolute inset-0">
-          <div className="
-            absolute inset-0
-            bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.04),transparent_60%)]
-            opacity-70 dark:hidden
-          " />
-          <div className="
-            hidden dark:block absolute inset-0
-            bg-[radial-gradient(900px_400px_at_20%_0%,rgba(249,115,22,0.07),transparent_60%)]
-          " />
-        </div>
-      )}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.07] dark:bg-white/[0.08]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/70 dark:bg-white/[0.03]" />
 
       <div className="relative max-w-[1000px] mx-auto px-6 py-20 md:py-24">
 
@@ -63,7 +53,7 @@ export function CsSection({ label, children, variant = "default", withDivider = 
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className={clsx(
               "text-[11px] font-semibold uppercase tracking-[0.18em] pt-0.5 shrink-0",
-              isDark ? "text-neutral-500" : "text-muted-foreground"
+              isDark ? "text-white/45" : "text-muted-foreground"
             )}
           >
             {label}
@@ -83,14 +73,7 @@ export function CsSection({ label, children, variant = "default", withDivider = 
         </div>
       </div>
 
-      {/* Bottom separator */}
-      {!isDark && (
-        <div className="
-          absolute bottom-0 left-0 w-full h-px
-          bg-gradient-to-r from-transparent via-foreground/10 to-transparent
-          dark:via-white/10
-        " />
-      )}
+      <div className="absolute bottom-0 left-0 h-px w-full bg-border/70 dark:bg-white/[0.08]" />
     </section>
   )
 }

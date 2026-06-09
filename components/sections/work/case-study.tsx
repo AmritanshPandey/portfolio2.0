@@ -11,15 +11,13 @@ export default function WorkSection() {
 
   return (
     <SectionSubgroup
-      label="Case Studies"
-      description="Product explorations addressing complex business and user constraints across fintech, commerce, and early-stage startups."
       variant="spacious"
     >
       <section data-cursor-zone="work">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5 md:gap-6">
 
-          {/* ── FIRST ROW — top 2, large ─────────────────────────────── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* First row: top 2 large cards */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
             {large.map((p) => (
               <VerticalCard
                 key={p.href}
@@ -28,15 +26,18 @@ export default function WorkSection() {
                 title={p.title}
                 category={p.category}
                 metric={p.metric}
+                tags={p.tags}
+                ctaLabel="Read case study"
                 index={p.order}
+                variant="featured"
                 showImage={false}
                 imageHeight="h-56"
               />
             ))}
           </div>
 
-          {/* ── SECOND ROW — the other 3 ─────────────────────────────── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Second row: supporting cards */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {small.map((p) => (
               <VerticalCard
                 key={p.href}
@@ -45,6 +46,8 @@ export default function WorkSection() {
                 title={p.title}
                 category={p.category}
                 metric={p.metric}
+                tags={undefined}
+                ctaLabel="Read case study"
                 index={p.order}
                 showImage={false}
                 imageHeight="h-36"

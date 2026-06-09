@@ -4,12 +4,24 @@ import { motion } from "framer-motion"
 import {
   CsSection,
   CsDecision,
-  CsList,
   CsInfoBar,
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
+  CsOnThisPage,
 } from "@/components/case-study"
+
+const SECTION_NAV = [
+  { id: "problem", label: "The Problem" },
+  { id: "my-role", label: "My Role" },
+  { id: "key-decisions", label: "Key Decisions" },
+  { id: "architecture", label: "System Architecture" },
+  { id: "outlook-problem", label: "The Outlook Problem" },
+  { id: "template-library", label: "Template Library" },
+  { id: "the-shift", label: "The Shift" },
+  { id: "what-changed", label: "What Changed" },
+  { id: "reflection", label: "Key Reflection" },
+]
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -41,18 +53,18 @@ const EMAIL_CLIENTS = [
 ]
 
 const STATUS_DOT: Record<string, string> = {
-  ok:      "bg-emerald-500",
-  partial: "bg-amber-400",
+  ok:      "bg-orange-500",
+  partial: "bg-orange-400",
   problem: "bg-red-500",
 }
 const STATUS_BG: Record<string, string> = {
   ok:      "bg-card border-border",
-  partial: "bg-amber-500/8 border-amber-400/40",
+  partial: "bg-orange-500/8 border-orange-400/40",
   problem: "bg-red-500/8 border-red-400/40",
 }
 const STATUS_TEXT: Record<string, string> = {
   ok:      "text-muted-foreground",
-  partial: "text-amber-700 dark:text-amber-400",
+  partial: "text-orange-700 dark:text-orange-400",
   problem: "text-red-700 dark:text-red-400",
 }
 
@@ -95,7 +107,7 @@ const CONSTRAINTS = [
 
 function Hero() {
   return (
-    <div className="relative overflow-hidden bg-neutral-950 min-h-[480px]">
+    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[480px]">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-[-120px] right-[-200px] w-[700px] h-[600px]
           bg-[radial-gradient(closest-side,rgba(249,115,22,0.14),transparent_70%)]" />
@@ -107,12 +119,12 @@ function Hero() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-neutral-500"
+          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
         >
           <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
-          <span className="text-orange-400/80">Design Systems</span>
-          <span className="w-1 h-1 rounded-full bg-neutral-700" />
+          <span className="w-1 h-1 rounded-full bg-border" />
+          <span className="text-orange-600 dark:text-orange-400">Design Systems</span>
+          <span className="w-1 h-1 rounded-full bg-border" />
           <span>Mastercard · Creative Studio</span>
         </motion.div>
 
@@ -123,10 +135,10 @@ function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl md:text-5xl lg:text-[3.2rem] font-semibold tracking-[-0.04em] leading-[0.96] text-white max-w-2xl mb-8"
+              className="type-page-title max-w-2xl mb-8"
             >
               From{" "}
-              <em className="not-italic text-orange-400">HTML dependency</em>{" "}
+              <em className="not-italic text-orange-600 dark:text-orange-400">HTML dependency</em>{" "}
               to no-code email infrastructure.
             </motion.h1>
 
@@ -134,7 +146,7 @@ function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[17px] leading-relaxed text-neutral-400 max-w-xl"
+              className="text-[17px] leading-relaxed text-muted-foreground max-w-xl"
             >
               Owned the component architecture and design system for Mastercard&apos;s
               global email builder — defining what got built, why, and in what order.
@@ -148,7 +160,7 @@ function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-500 mb-3">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
               The real constraint — email client compatibility
             </p>
             <div className="grid grid-cols-2 gap-1.5">
@@ -173,7 +185,7 @@ function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </div>
   )
 }
@@ -186,6 +198,8 @@ export default function Page() {
 
       <Hero />
 
+      <CsOnThisPage items={SECTION_NAV} />
+
       <CsInfoBar cells={[
         { label: "Client",     value: "Mastercard",          sub: "Creative Studio" },
         { label: "Role",       value: "Design System Lead",  sub: "Component architecture + governance" },
@@ -196,7 +210,7 @@ export default function Page() {
       ]} />
 
       {/* Problem */}
-      <CsSection label="The Problem">
+      <CsSection id="problem" label="The Problem" withDivider={false}>
         <div className="space-y-6">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             Mastercard&apos;s brand evolved. Its email system hadn&apos;t.
@@ -240,7 +254,7 @@ export default function Page() {
       </CsSection>
 
       {/* My Role */}
-      <CsSection label="My Role" variant="muted">
+      <CsSection id="my-role" label="My Role" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -276,9 +290,9 @@ export default function Page() {
               </div>
 
               {/* You — highlighted */}
-              <div className="p-7 bg-emerald-500/[0.08] border-r border-emerald-500/25">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-600 dark:text-emerald-400 mb-1">You — Design System Lead</p>
-                <p className="text-[16px] font-semibold text-emerald-900 dark:text-emerald-100 mb-5 tracking-tight">Component Architecture + Governance</p>
+              <div className="p-7 bg-orange-500/[0.08] border-r border-orange-500/25">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-600 dark:text-orange-400 mb-1">You — Design System Lead</p>
+                <p className="text-[16px] font-semibold text-orange-900 dark:text-orange-100 mb-5 tracking-tight">Component Architecture + Governance</p>
                 <ul className="flex flex-col gap-3">
                   {[
                     "Defined what components to build and why",
@@ -290,8 +304,8 @@ export default function Page() {
                     "Simplicity-over-complexity calls",
                     "Global Brand alignment",
                   ].map(item => (
-                    <li key={item} className="flex gap-2.5 text-[13px] text-emerald-800 dark:text-emerald-300">
-                      <span className="text-emerald-500 mt-0.5 shrink-0">✓</span>{item}
+                    <li key={item} className="flex gap-2.5 text-[13px] text-orange-800 dark:text-orange-300">
+                      <span className="text-orange-500 mt-0.5 shrink-0">✓</span>{item}
                     </li>
                   ))}
                 </ul>
@@ -322,7 +336,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key Decisions */}
-      <CsSection label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -349,17 +363,16 @@ export default function Page() {
             impact="Teams that previously avoided custom emails because HTML felt too risky began creating richer branded communication more frequently. Removing the HTML requirement changed the behaviour, not just the tooling."
           />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* System Architecture */}
-      <CsSection label="System Architecture" variant="dark">
+      <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               Four levels. One coherent system.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Foundations are stable. Components are reusable. Patterns are assembled.
               Templates are shipped. Each level builds on the one below — and a change
               to any level propagates upward automatically.
@@ -393,11 +406,10 @@ export default function Page() {
             },
           ]} />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-20" />
       </CsSection>
 
       {/* Outlook constraint table */}
-      <CsSection label="The Outlook Problem">
+      <CsSection id="outlook-problem" label="The Outlook Problem">
         <div className="space-y-8">
           <div className="space-y-3">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -413,13 +425,13 @@ export default function Page() {
             <div className="rounded-2xl border border-border overflow-hidden">
               {/* Header row */}
               <div className="grid grid-cols-3 border-b border-border">
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-400 bg-amber-500/5">
+                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 bg-orange-500/5">
                   What we wanted
                 </div>
                 <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-red-700 dark:text-red-400 bg-red-500/5 border-x border-border">
                   What Outlook could handle
                 </div>
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400 bg-emerald-500/5">
+                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 bg-orange-500/5">
                   What we actually built
                 </div>
               </div>
@@ -428,13 +440,13 @@ export default function Page() {
                   key={i}
                   className={`grid grid-cols-3 ${i < CONSTRAINTS.length - 1 ? "border-b border-border" : ""}`}
                 >
-                  <div className="px-6 py-4 text-[13px] text-amber-800 dark:text-amber-300/80 leading-relaxed bg-amber-500/[0.03]">
+                  <div className="px-6 py-4 text-[13px] text-orange-800 dark:text-orange-300/80 leading-relaxed bg-orange-500/[0.03]">
                     {row.wanted}
                   </div>
                   <div className="px-6 py-4 text-[13px] text-red-800 dark:text-red-300/80 leading-relaxed bg-red-500/[0.03] border-x border-border">
                     {row.limit}
                   </div>
-                  <div className="px-6 py-4 text-[13px] text-emerald-800 dark:text-emerald-300/80 leading-relaxed bg-emerald-500/[0.03]">
+                  <div className="px-6 py-4 text-[13px] text-orange-800 dark:text-orange-300/80 leading-relaxed bg-orange-500/[0.03]">
                     {row.built}
                   </div>
                 </div>
@@ -445,7 +457,7 @@ export default function Page() {
       </CsSection>
 
       {/* Template library */}
-      <CsSection label="Template Library" variant="muted">
+      <CsSection id="template-library" label="Template Library" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
@@ -511,7 +523,7 @@ export default function Page() {
       </CsSection>
 
       {/* Before / After builder */}
-      <CsSection label="The Shift">
+      <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
           <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
             From HTML knowledge required to anyone can build a branded email.
@@ -523,29 +535,29 @@ export default function Page() {
               {/* Before — dark code panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
                 <div className="px-6 py-4 bg-neutral-900 border-b border-white/10">
-                  <p className="text-[12px] font-medium text-neutral-500 uppercase tracking-[0.14em]">Before — manual HTML workflow</p>
+                  <p className="text-[12px] font-medium text-muted-foreground uppercase tracking-[0.14em]">Before — manual HTML workflow</p>
                 </div>
                 <div className="bg-neutral-950 p-6 font-mono text-[11px] leading-relaxed space-y-1">
                   <p className="text-red-400/80">&lt;table width=&quot;600&quot; border=&quot;0&quot; cellspacing=&quot;0&quot;&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&lt;tr&gt;&lt;td style=&quot;padding:0;margin:0;&quot;&gt;</p>
-                  <p className="text-purple-400/70">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
+                  <p className="text-orange-400/70">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style=&quot;color:#000&quot;&gt; &lt;!-- breaks in OL --&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style=&quot;font-family:Arial;&quot;&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- font ignored in Outlook 2016 --&gt;</p>
-                  <p className="text-emerald-400/70">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
+                  <p className="text-orange-400/70">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
                   <p className="text-red-500">&nbsp;&nbsp;&lt;!-- spacing broken on mobile --&gt;</p>
                   <p className="text-red-400/80">&lt;/table&gt;</p>
                 </div>
                 <div className="px-6 py-5 bg-neutral-900 border-t border-white/10">
                   <p className="text-[18px] font-medium text-red-400">HTML required</p>
-                  <p className="text-[11px] text-neutral-500 mt-1">Agency dependency · inconsistent output · weeks of turnaround</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">Agency dependency · inconsistent output · weeks of turnaround</p>
                 </div>
               </div>
 
               {/* After — clean builder panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
-                <div className="px-6 py-4 bg-emerald-500/10 border-b border-emerald-500/20">
-                  <p className="text-[12px] font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-[0.14em]">After — no-code builder</p>
+                <div className="px-6 py-4 bg-orange-500/10 border-b border-orange-500/20">
+                  <p className="text-[12px] font-medium text-orange-700 dark:text-orange-400 uppercase tracking-[0.14em]">After — no-code builder</p>
                 </div>
                 <div className="bg-muted/30 p-6 space-y-2.5">
                   {[
@@ -561,8 +573,8 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
-                <div className="px-6 py-5 bg-emerald-500/5 border-t border-emerald-500/20">
-                  <p className="text-[18px] font-medium text-emerald-600 dark:text-emerald-400">Zero HTML required</p>
+                <div className="px-6 py-5 bg-orange-500/5 border-t border-orange-500/20">
+                  <p className="text-[18px] font-medium text-orange-600 dark:text-orange-400">Zero HTML required</p>
                   <p className="text-[11px] text-muted-foreground mt-1">Any team · any region · on-brand · Outlook-safe</p>
                 </div>
               </div>
@@ -586,13 +598,13 @@ export default function Page() {
       </CsSection>
 
       {/* Impact */}
-      <CsSection label="What Changed" variant="dark">
+      <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A system the whole organisation adopted.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Backed by Global Brand. Used Mastercard-wide. The number wasn&apos;t how many
               components shipped — it was how many people stopped needing HTML to communicate.
             </p>
@@ -616,19 +628,18 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-6 py-10">
-                  <p className="font-mono text-[11px] text-neutral-500 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(22px,2.5vw,36px)] font-medium text-orange-400 tracking-tight leading-none mb-4">{m.figure}</p>
-                  <p className="text-[13px] text-neutral-400 leading-relaxed">{m.label}</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-16" />
       </CsSection>
 
       {/* Reflection */}
-      <CsSection label="Key Reflection">
+      <CsSection id="reflection" label="Key Reflection">
         <div className="space-y-10">
           <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">

@@ -23,21 +23,21 @@ export function SectionHeader({
   as: Tag = "h2",
 }: SectionHeaderProps) {
   const variants = {
-    default: { container: "max-w-[700px] space-y-4", title: "text-3xl md:text-4xl lg:text-5xl", desc: "text-sm md:text-base" },
-    compact: { container: "max-w-2xl space-y-4",      title: "text-3xl md:text-4xl lg:text-5xl", desc: "text-sm md:text-base" },
-    hero:    { container: "mb-10 md:mb-12 max-w-3xl space-y-5", title: "text-4xl md:text-5xl lg:text-6xl", desc: "text-base md:text-lg" },
+    default: { container: "max-w-[700px] space-y-4", title: "type-section-title" },
+    compact: { container: "max-w-2xl space-y-4", title: "type-section-title" },
+    hero: { container: "mb-10 md:mb-12 max-w-3xl space-y-5", title: "type-page-title" },
   }
 
   const styles = variants[variant]
 
   return (
     <div className={clsx(styles.container)}>
-      <Tag className={clsx("font-semibold tracking-tight leading-[1.08] text-balance text-neutral-900 dark:text-white", styles.title)}>
+      <Tag className={clsx("text-neutral-900 dark:text-white", styles.title)}>
         {title}
       </Tag>
 
       {description && (
-        <p className={clsx("text-muted-foreground leading-[1.6] max-w-xl", styles.desc)}>
+        <p className="type-section-intro text-muted-foreground">
           {description}
         </p>
       )}

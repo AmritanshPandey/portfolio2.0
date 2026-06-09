@@ -39,9 +39,11 @@ export function VerticalCard({
 }: Props) {
 
   const isCompact = variant === "compact"
+  const isFeatured = variant === "featured"
 
   const cursorLabelMap: Record<string, string> = {
     "View case study": "View",
+    "Read case study": "Read",
     "Explore": "Explore",
     "Read article": "Read",
   }
@@ -53,19 +55,19 @@ export function VerticalCard({
         href={href}
         data-cursor-card
         data-cursor-label={cursorLabel}
-        className="group/card flex items-center gap-4 py-3.5 rounded-xl px-3 -mx-3 hover:bg-foreground/[0.03] dark:hover:bg-white/[0.03] transition-colors duration-200"
+        className="group/card flex items-center gap-4 py-3.5 rounded-xl px-3 -mx-3 hover:bg-foreground/[0.03] dark:hover:bg-white/[0.03] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {showImage && image && (
           <div className="relative w-16 h-11 rounded-lg overflow-hidden shrink-0 bg-muted">
-            <Image src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover/card:scale-[1.06]" />
+            <Image src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]" />
           </div>
         )}
         <div className="flex-1 min-w-0">
-          {category && <p className="text-[10px] uppercase tracking-[0.16em] text-foreground/35 font-semibold mb-0.5">{category}</p>}
-          <h3 className="text-[14px] font-semibold tracking-tight text-foreground line-clamp-1">{title}</h3>
-          {metric && <p className="text-[11px] text-orange-500/60 dark:text-orange-400/50 mt-0.5 line-clamp-1">{metric}</p>}
+          {category && <p className="type-meta mb-0.5">{category}</p>}
+          <h3 className="text-[14px] font-semibold leading-[1.35] text-foreground line-clamp-1">{title}</h3>
+          {metric && <p className="type-caption mt-0.5 line-clamp-1 text-orange-500/60 dark:text-orange-400/50">{metric}</p>}
         </div>
-        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px] transition-all duration-200" />
+        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-all duration-500 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
       </Link>
     )
   }
@@ -75,7 +77,7 @@ export function VerticalCard({
       href={href}
       data-cursor-card
       data-cursor-label={cursorLabel}
-      className="group/card block rounded-2xl"
+      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -83,21 +85,21 @@ export function VerticalCard({
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.5, delay: (index ?? 0) * 0.05, ease: [0.22, 1, 0.36, 1] }}
         className={clsx(
-        "relative h-full flex flex-col rounded-2xl overflow-hidden",
+        "relative h-full flex flex-col overflow-hidden rounded-2xl",
         "bg-card",
-        "border border-border/70",
-        "shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none",
-        // Only animate compositor-friendly props (transform/border) — no
+        "border border-border/55",
+        // Soft top highlight (inset hairline) + a faint lift shadow read as a
+        // pressed, premium surface on dark without any glow or gradient.
+        "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_1px_2px_0_rgba(0,0,0,0.10)]",
+        isFeatured ? "min-h-[270px] md:min-h-[300px]" : "min-h-[220px]",
+        // Only animate compositor-friendly props (transform/border), not
         // box-shadow transition, which forces a full repaint each frame.
-        "transition-[transform,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        "hover:-translate-y-[3px]",
-        "hover:border-orange-500/30 dark:hover:border-orange-400/25",
+        "transition-[transform,border-color,background-color] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "hover:-translate-y-[2px]",
+        "hover:border-foreground/15 hover:bg-foreground/[0.02] dark:hover:border-white/[0.16] dark:hover:bg-white/[0.03]",
       )}>
 
-        {/* ── SOFT EMBER GLOW — subtle bloom from the bottom on hover */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 bg-[radial-gradient(420px_200px_at_50%_120%,rgba(249,115,22,0.10),transparent_70%)]" />
-
-        {/* ── IMAGE BLOCK */}
+        {/* Image block */}
         {showImage && image && (
           <div className={clsx("relative overflow-hidden shrink-0", imageHeight)}>
 
@@ -105,76 +107,93 @@ export function VerticalCard({
               src={image}
               alt={title}
               fill
-              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/card:scale-[1.05]"
+              className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/card:scale-[1.04]"
             />
 
-            {/* Bottom gradient — bleeds image into card body */}
+            {/* Bottom gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[hsl(var(--card))] opacity-80" />
 
             {/* Soft top vignette */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent" />
 
-            {/* Index number — top-left */}
+            {/* Index number */}
             {index !== undefined && (
               <span className="absolute top-3 left-3.5 font-mono text-[11px] font-medium text-white/40 tracking-wider select-none">
                 {String(index).padStart(2, "0")}
               </span>
             )}
 
-            {/* Arrow — top-right, appears on hover */}
+            {/* Arrow */}
             <span className={clsx(
               "absolute top-3 right-3",
               "w-8 h-8 rounded-full",
-              "bg-white/10 border border-white/20 backdrop-blur-sm",
+              "bg-black/20 border border-white/20",
               "flex items-center justify-center",
               "opacity-0 scale-90",
               "group-hover/card:opacity-100 group-hover/card:scale-100",
-              "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              "transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             )}>
-              <IconArrowUpRight size={14} stroke={2} className="text-white transition-transform duration-300 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
+              <IconArrowUpRight size={14} stroke={2} className="text-white transition-transform duration-500 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
             </span>
 
           </div>
         )}
 
-        {/* ── CONTENT BLOCK */}
-        <div className={clsx("flex flex-col flex-1 px-4 pb-4 gap-2.5", (!showImage || !image) ? "pt-4" : "pt-3")}>
+        {/* Content block */}
+        <div
+          className={clsx(
+            "relative flex flex-1 flex-col",
+            isFeatured
+              ? "px-7 pb-7 pt-7 md:px-8 md:pb-8 md:pt-8"
+              : "px-6 pb-6 pt-6"
+          )}
+        >
 
           {category && (
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
-              {category}
-            </p>
+            <p className="type-meta">{category}</p>
           )}
 
-          <h3 className="text-[15px] md:text-[17px] font-semibold tracking-[-0.02em] leading-[1.3] text-foreground line-clamp-2 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 transition-colors duration-200">
+          <h3
+            className={clsx(
+              "mt-2.5 text-foreground",
+              isFeatured
+                ? "type-card-title-featured max-w-[27rem]"
+                : "type-card-title"
+            )}
+          >
             {title}
           </h3>
 
           {metric && (
-            <p className="text-[12px] text-foreground/55 leading-[1.55] line-clamp-2 mt-auto pt-1">
+            <p
+              className={clsx(
+                "mt-3 max-w-[44rem] text-foreground/58",
+                isFeatured ? "type-card-body-featured" : "type-card-body"
+              )}
+            >
               {metric}
             </p>
           )}
 
           {tags && tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-auto pt-1">
+            <div className="mt-4 flex flex-wrap gap-1.5">
               {tags.map((tag) => (
-                <span key={tag} className="px-2 py-0.5 rounded-full bg-muted border border-border/60 text-[10px] font-medium text-foreground/50 leading-relaxed">
+                <span key={tag} className="type-caption rounded-full border border-border/55 bg-muted/45 px-2.5 py-1 leading-none text-foreground/55">
                   {tag}
                 </span>
               ))}
             </div>
           )}
 
-          {/* ── CTA ROW */}
-          <div className="flex items-center justify-between pt-3 mt-auto border-t border-border/50">
-            <span className="text-[12px] font-medium text-foreground/40 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 transition-colors duration-200">
+          {/* CTA row */}
+          <div className="mt-auto flex items-center justify-between border-t border-border/40 pt-5">
+            <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
               {ctaLabel}
             </span>
             <IconArrowUpRight
-              size={14}
+              size={15}
               stroke={2}
-              className="text-foreground/25 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px] transition-all duration-200"
+              className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
             />
           </div>
 

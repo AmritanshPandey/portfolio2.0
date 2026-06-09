@@ -58,12 +58,12 @@ export default function Hero() {
       className="relative overflow-hidden bg-background text-foreground"
     >
       {/* Dot grid — cursor-reactive WebGL shader (static CSS fallback inside) */}
-      <ShaderGrid />
+      <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
 
       {/* Soft vignette — fades later so the dot grid stays readable in the centre */}
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse 95% 80% at 50% 42%, transparent 55%, color-mix(in oklab, var(--background) 70%, transparent) 80%, var(--background) 100%)" }}
+        style={{ background: "radial-gradient(ellipse 95% 80% at 50% 42%, transparent 55%, transparent 76%, var(--background) 100%)" }}
       />
 
       {/* Warm pool — a single, subtle ember light, top-left. The "Warm Studio"
@@ -94,22 +94,22 @@ export default function Hero() {
             </div>
           </div>
 
-          <h1 className="font-medium tracking-[-0.02em] leading-[1.02] max-w-[620px]">
-            <span className="block text-[clamp(36px,5vw,60px)]">
+          <h1 className="type-page-title max-w-[620px]">
+            <span className="block">
               Designing <span className="shimmer-accent">fintech</span>
             </span>
             <div className="py-2">
-              <span className="block text-[clamp(36px,5vw,60px)] inline-block min-w-[10ch]">
+              <span className="inline-block min-w-[10ch]">
                 <TypingWord />
               </span>
             </div>
-            <span className="block text-[clamp(36px,5vw,60px)]">
+            <span className="block">
               that scale globally.
             </span>
           </h1>
 
           <div className="mb-6">
-            <p className="text-[15px] md:text-[16px] leading-[1.7] text-muted-foreground w-full max-w-[420px] lg:max-w-[480px]">
+            <p className="type-section-intro w-full max-w-[420px] text-muted-foreground lg:max-w-[480px]">
               <span className="text-foreground font-medium">
                 At Mastercard&apos;s Creative Studio,
               </span>{" "}
@@ -138,7 +138,7 @@ export default function Hero() {
             >
               <div className="relative aspect-[2/3] overflow-hidden">
                 <Image
-                  src="/assets/images/pic.jpg"
+                  src="/assets/images/pic.png"
                   alt="Amritansh Pandey"
                   fill
                   priority

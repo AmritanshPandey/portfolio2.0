@@ -8,19 +8,19 @@ const PRINCIPLES = [
     number: "01",
     title: "Incentives Drive Behavior",
     description:
-      "Behavior follows incentives, not stated intent. The cleanest interface fails when the mechanic beneath it rewards the wrong action — so I map backward from the behavior the product needs.",
+      "Behavior follows incentives, not stated intent. The cleanest interface fails when the mechanic beneath it rewards the wrong action, so I map backward from the behavior the product needs.",
   },
   {
     number: "02",
     title: "Designing Under Uncertainty",
     description:
-      "Most decisions happen before the data exists, and waiting for certainty is itself a decision — usually the wrong one. I state what must be true, then design the fastest experiment to prove it false.",
+      "Most decisions happen before the data exists, and waiting for certainty is itself a decision. Usually the wrong one. I state what must be true, then design the fastest experiment to prove it false.",
   },
   {
     number: "03",
     title: "Balancing Growth & Risk",
     description:
-      "In regulated products, compliance isn't a constraint on design — it's a design input. The most durable fintech treats risk as part of the brief, designing usability and stability together instead of trading them off.",
+      "In regulated products, compliance is not a constraint on design. It is a design input. The most durable fintech treats risk as part of the brief, designing usability and stability together instead of trading them off.",
   },
 ]
 
@@ -41,10 +41,10 @@ export default function ProductThinkingSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="bg-card p-7 md:p-10 flex flex-col justify-center"
         >
-          <p className="text-[11px] text-muted-foreground/60 tracking-wide mb-5">
+          <p className="type-caption mb-5 text-muted-foreground/60">
             Core Belief
           </p>
-          <p className="text-[24px] md:text-[28px] font-semibold leading-[1.35] tracking-[-0.02em] text-foreground">
+          <p className="type-card-title-featured text-foreground">
             Most product problems aren&apos;t solved by{" "}
             <span className="text-foreground/35">interfaces</span>.
             {" "}They&apos;re solved by{" "}
@@ -62,13 +62,13 @@ export default function ProductThinkingSection() {
             transition={{ duration: 0.5, delay: (i + 1) * 0.07, ease: [0.22, 1, 0.36, 1] }}
             className="card-surface group bg-card p-6 flex flex-col gap-3"
           >
-            <span className="text-[11px] text-muted-foreground/50 tracking-wide">
+            <span className="type-caption text-muted-foreground/50">
               {p.number}
             </span>
-            <h3 className="text-[16px] font-semibold tracking-tight leading-snug text-foreground">
+            <h3 className="type-card-title text-foreground">
               {p.title}
             </h3>
-            <p className="text-[13px] leading-[1.7] text-foreground/70">
+            <p className="type-card-body text-foreground/70">
               {p.description}
             </p>
           </motion.div>

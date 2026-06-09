@@ -37,6 +37,13 @@ const DETAIL_ROUTES: Record<string, { section: string; label: string; href: stri
   "/articles":     { section: "exploration", label: "Projects", href: "/#exploration" },
 }
 
+const DETAIL_NAV_LINKS = [
+  { label: "Home",     href: "/",             section: "hero",        icon: IconHome },
+  { label: "Work",     href: "/#work",        section: "work",        icon: undefined },
+  { label: "Projects", href: "/#exploration", section: "exploration", icon: undefined },
+  { label: "About",    href: "/#about",       section: "about",       icon: undefined },
+]
+
 function getDetailRoute(pathname: string) {
   for (const [prefix, meta] of Object.entries(DETAIL_ROUTES)) {
     if (pathname.startsWith(prefix)) return meta
@@ -165,6 +172,36 @@ function NavItem({
   )
 }
 
+function DetailNavItem({
+  href,
+  label,
+  icon: Icon,
+  active,
+  onClick,
+}: {
+  href: string
+  label: string
+  icon?: typeof IconHome
+  active?: boolean
+  onClick?: () => void
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={clsx(
+        "relative flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-150",
+        active
+          ? "bg-black/[0.05] text-foreground dark:bg-white/[0.09]"
+          : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
+      )}
+    >
+      {Icon ? <Icon size={15} className="opacity-75" /> : null}
+      {label}
+    </Link>
+  )
+}
+
 // ─────────────────────────
 // NAV PILL SHELL
 // shared glass/border styles
@@ -204,7 +241,6 @@ function NavShell({ scrolled, children, className }: {
 
 export default function Navbar() {
   const pathname    = usePathname()
-  const router      = useRouter()
   const isHome      = pathname === "/"
   const detailRoute = getDetailRoute(pathname)
   const isDetail    = !!detailRoute
@@ -255,20 +291,19 @@ export default function Navbar() {
       ══════════════════════════════════════════════ */}
       <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden md:block">
         {isDetail ? (
-          /* ── DETAIL: minimal pill ─────────────────── */
+          /* ── DETAIL: compact home-section nav ─────── */
           <NavShell scrolled={scrolled}>
-            <button
-              onClick={() => router.push(detailRoute!.href)}
-              className="
-                flex items-center gap-1.5 pl-2 pr-3 py-1.5 rounded-full
-                text-[13px] font-medium text-muted-foreground
-                hover:text-foreground hover:bg-black/[0.04] dark:hover:bg-white/[0.06]
-                transition-colors duration-200
-              "
-            >
-              <IconArrowLeft size={14} stroke={2} />
-              {detailRoute!.label}
-            </button>
+            <div className="flex items-center gap-1">
+              {DETAIL_NAV_LINKS.map((link) => (
+                <DetailNavItem
+                  key={link.href}
+                  href={link.href}
+                  label={link.label}
+                  icon={link.icon}
+                  active={effectiveActive === link.section}
+                />
+              ))}
+            </div>
 
             <div className="w-px h-4 bg-border/60 mx-1" />
 
@@ -359,16 +394,32 @@ export default function Navbar() {
             <div className="p-3 flex flex-col gap-1">
 
               {isDetail ? (
-                /* ── DETAIL: back + theme only ──────── */
+                /* ── DETAIL: section return nav ─────── */
                 <>
-                  <button
-                    onClick={() => { router.push(detailRoute!.href); setOpen(false) }}
-                    className="flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition"
+                  <Link
+                    href={detailRoute!.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 rounded-xl bg-muted/35 px-3 py-3 text-sm font-medium text-foreground transition hover:bg-muted/55"
                   >
                     <IconArrowLeft size={16} stroke={2} />
                     Back to {detailRoute!.label}
-                  </button>
+                  </Link>
+
                   <div className="h-px bg-border/50 my-0.5" />
+
+                  {DETAIL_NAV_LINKS.map((link) => (
+                    <DetailNavItem
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                      icon={link.icon}
+                      active={effectiveActive === link.section}
+                      onClick={() => setOpen(false)}
+                    />
+                  ))}
+
+                  <div className="h-px bg-border/50 my-0.5" />
+
                   <div className="flex items-center justify-between px-1 py-1">
                     <span className="text-xs text-muted-foreground pl-2">Theme</span>
                     <ThemeToggle />

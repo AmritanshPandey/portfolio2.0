@@ -31,25 +31,21 @@ export function HorizontalCard({
       href={href}
       data-cursor-card
       data-cursor-label={cursorLabel}
-      className="group/card block rounded-2xl"
+      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <div className={clsx(
         "relative rounded-2xl overflow-hidden",
-        "bg-card border border-border/70",
-        "shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none",
-        "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        "hover:-translate-y-[3px]",
-        "hover:border-border/50 dark:hover:border-white/[0.12]",
-        "hover:shadow-[0_12px_40px_rgba(0,0,0,0.09)]",
-        "dark:hover:shadow-[0_16px_56px_rgba(0,0,0,0.50)]",
+        "bg-card border border-border/65",
+        "shadow-[0_1px_0_rgba(255,255,255,0.04)]",
+        "transition-[transform,border-color,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "hover:-translate-y-[2px]",
+        "hover:border-foreground/20 hover:bg-foreground/[0.015]",
+        "dark:hover:border-white/20 dark:hover:bg-white/[0.025]",
         "flex flex-col md:flex-row md:min-h-[240px]",
       )}>
 
         {/* TOP EDGE HIGHLIGHT */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/8 to-transparent dark:via-white/15 pointer-events-none" />
-
-        {/* ORANGE GLOW — content side, bottom-right */}
-        <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 bg-[radial-gradient(320px_180px_at_100%_100%,rgba(234,88,12,0.07),transparent_60%)] dark:bg-[radial-gradient(320px_180px_at_100%_100%,rgba(249,115,22,0.11),transparent_60%)]" />
 
         {/* IMAGE */}
         {image && (
@@ -66,7 +62,7 @@ export function HorizontalCard({
             <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-card/60" />
             {/* Index */}
             {index !== undefined && (
-              <span className="absolute top-3 left-3.5 font-mono text-[11px] font-medium text-white/40 tracking-wider select-none">
+              <span className="type-caption absolute top-3 left-3.5 font-mono text-white/45 select-none">
                 {String(index + 1).padStart(2, "0")}
               </span>
             )}
@@ -78,27 +74,27 @@ export function HorizontalCard({
 
           <div className="flex flex-col gap-2.5 max-w-xl">
             {category && (
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/40">
+              <p className="type-meta">
                 {category}
               </p>
             )}
-            <h3 className="text-lg md:text-xl font-semibold tracking-[-0.02em] leading-[1.25] text-balance text-foreground">
+            <h3 className="type-subtitle text-foreground">
               {title}
             </h3>
-            <p className="text-[13px] md:text-[14px] leading-relaxed text-foreground/70 line-clamp-3">
+            <p className="type-card-body text-foreground/58 line-clamp-3">
               {description}
             </p>
           </div>
 
           {/* CTA — pinned to the bottom; mt-auto keeps spacing without forcing a fixed height */}
           <div className="mt-auto pt-5 border-t border-border/50 flex items-center justify-between">
-            <span className="text-[12px] font-medium text-foreground/40 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 transition-colors duration-200">
+            <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
               {ctaLabel}
             </span>
             <IconArrowUpRight
               size={14}
               stroke={2}
-              className="text-foreground/25 group-hover/card:text-orange-600 dark:group-hover/card:text-orange-400 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px] transition-all duration-200"
+              className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
             />
           </div>
 

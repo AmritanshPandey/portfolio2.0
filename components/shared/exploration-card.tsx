@@ -137,11 +137,7 @@ export function ExplorationCard({
       <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6 z-10">
 
         {/* TITLE */}
-        <h3 className="
-          text-base md:text-[17px] font-semibold leading-snug tracking-[-0.01em]
-          text-white
-          mb-2
-        ">
+        <h3 className="type-card-title mb-2 text-white">
           {title}
         </h3>
 
@@ -153,7 +149,7 @@ export function ExplorationCard({
           transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
           mb-0 group-hover:mb-3
         ">
-          <p className="text-[13px] text-white/70 leading-relaxed line-clamp-3">
+          <p className="type-card-body line-clamp-3 text-white/70">
             {description}
           </p>
         </div>
@@ -166,7 +162,7 @@ export function ExplorationCard({
               className="
                 px-2.5 py-0.5 rounded-full
                 bg-white/[0.10] border border-white/[0.12]
-                text-[11px] font-medium text-white/75 leading-relaxed
+                type-caption text-white/75
                 backdrop-blur-sm
               "
             >

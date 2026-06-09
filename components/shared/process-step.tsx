@@ -69,7 +69,7 @@ export function ProcessStep({
         {/* NUMBER */}
         <span
           className={clsx(
-            "text-[11px] font-medium tracking-[0.14em]",
+            "type-caption font-mono",
 
             isVertical ? "mt-[3px]" : "mb-2 block",
 
@@ -94,12 +94,7 @@ export function ProcessStep({
           {/* TITLE */}
           <h3
             className={clsx(
-              "font-medium tracking-tight leading-[1.3]",
-
-              isVertical
-                ? "text-base md:text-lg"
-                : "text-lg md:text-xl",
-
+              isVertical ? "type-card-title" : "type-subtitle",
               "text-foreground"
             )}
           >
@@ -109,11 +104,7 @@ export function ProcessStep({
           {/* DESCRIPTION */}
           <p
             className={clsx(
-              "leading-[1.6]",
-
-              isVertical
-                ? "text-sm md:text-[15px]"
-                : "text-sm md:text-base",
+              isVertical ? "type-card-body" : "type-section-intro",
 
               active
                 ? "text-muted-foreground"

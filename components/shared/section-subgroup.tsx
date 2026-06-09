@@ -31,24 +31,14 @@ export function SectionSubgroup({
 
           {/* LABEL */}
           {label && (
-            <p className="
-              text-xl md:text-2xl
-              font-medium tracking-tight
-              text-foreground
-              leading-snug
-            ">
+            <p className="type-subtitle text-foreground">
               {label}
             </p>
           )}
 
           {/* DESCRIPTION */}
           {description && (
-            <p className="
-              text-sm md:text-base
-              text-muted-foreground
-              leading-[1.6]
-              max-w-full
-            ">
+            <p className="type-section-intro text-muted-foreground">
               {description}
             </p>
           )}

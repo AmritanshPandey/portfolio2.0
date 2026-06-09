@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import { scrollToSection } from "@/lib/scroll"
 import { restoreScroll } from "@/lib/scroll-manager"
 
+const HOME_SECTION_IDS = new Set(["hero", "work", "approach", "exploration", "impact", "about"])
+
 export function ScrollToHash() {
   const pathname = usePathname()
 
@@ -13,6 +15,7 @@ export function ScrollToHash() {
 
     let attempts = 0
     const maxAttempts = 12
+    let cleanHashTimer: ReturnType<typeof setTimeout> | undefined
 
     // ── Zone detection (based on viewport)
     const updateCursorZone = () => {
@@ -54,6 +57,11 @@ export function ScrollToHash() {
 
           // sync zone after scroll settles
           setTimeout(updateCursorZone, 120)
+          if (pathname === "/" && HOME_SECTION_IDS.has(id)) {
+            cleanHashTimer = setTimeout(() => {
+              window.history.replaceState(window.history.state, "", "/")
+            }, 180)
+          }
           return
         }
       }
@@ -93,6 +101,7 @@ export function ScrollToHash() {
 
     return () => {
       clearTimeout(t)
+      if (cleanHashTimer) clearTimeout(cleanHashTimer)
       window.removeEventListener("scroll", onScroll)
     }
   }, [pathname])

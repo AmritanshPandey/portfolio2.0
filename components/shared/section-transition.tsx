@@ -12,9 +12,9 @@ export function SectionTransition({
   variant?: Variant
 }) {
   const textStyles = {
-    default:   "text-foreground text-lg md:text-xl",
-    muted:     "text-muted-foreground text-base md:text-lg",
-    highlight: "text-foreground text-xl md:text-2xl font-medium",
+    default: "type-section-intro text-foreground",
+    muted: "type-section-intro text-muted-foreground",
+    highlight: "type-subtitle text-foreground",
   }
 
   return (
@@ -23,7 +23,7 @@ export function SectionTransition({
         {/* Divider — neutral; ember is reserved for intent, not decoration */}
         <div className="h-px w-20 rounded-full bg-border" />
 
-        <p className={clsx("leading-[1.65] tracking-tight", textStyles[variant])}>
+        <p className={clsx(textStyles[variant])}>
           {text}
         </p>
       </div>

@@ -1,6 +1,6 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
-import { IconArrowUpRight, IconClock, IconCalendar } from "@tabler/icons-react"
+import { CategoryPill, ReadingMeta, ArticleProse } from "@/components/articles/article-ui"
+import { ArticleCard } from "@/components/shared/article-card"
 import { articleItems } from "@/lib/data"
 import type { ArticleSection } from "@/lib/types/content"
 
@@ -34,85 +34,46 @@ function ArticleHero({
   accent?:     string
 }) {
   return (
-    <div
-      className="relative w-full min-h-[440px] md:min-h-[500px] flex items-end"
-      style={{ background: accent ?? "linear-gradient(135deg,#ea580c,#c2410c)" }}
-    >
-      {/* Dot-grid texture */}
+    <header className="relative overflow-hidden border-b border-border/45 bg-background">
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-x-0 top-0 h-56 opacity-70"
+        style={{ background: accent ?? "linear-gradient(135deg,#ea580c,#c2410c)" }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-56"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
-          backgroundSize:  "22px 22px",
-          opacity:         0.15,
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.42) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+          opacity: 0.12,
         }}
       />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/10 via-background/40 to-background" />
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_30%,rgba(0,0,0,0.35)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
-
-      {/* Large background character */}
-      <span
-        className="absolute top-1/2 right-12 -translate-y-1/2 font-black leading-none select-none pointer-events-none hidden md:block"
-        style={{ fontSize: "240px", color: "rgba(255,255,255,0.04)" }}
-      >
-        {title[0]}
-      </span>
-
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-3xl mx-auto px-6 pb-14 pt-32 space-y-5">
-
-        {/* Category + meta */}
-        <div className="flex flex-wrap items-center gap-3">
-          {category && (
-            <span
-              className="text-[11px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full"
-              style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.9)" }}
-            >
-              {category}
-            </span>
-          )}
-          {readTime && (
-            <span className="flex items-center gap-1.5 text-[12px] text-white/60">
-              <IconClock size={12} />
-              {readTime}
-            </span>
-          )}
-          {date && (
-            <span className="flex items-center gap-1.5 text-[12px] text-white/60">
-              <IconCalendar size={12} />
-              {date}
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h1 className="text-3xl md:text-[2.6rem] font-bold tracking-tight leading-[1.1] text-white">
-          {title}
-        </h1>
-
-        {/* Description */}
-        <p className="text-[17px] text-white/70 leading-relaxed max-w-xl">
-          {description}
-        </p>
-
-        {/* Tags */}
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-1">
-            {tags.map(tag => (
-              <span
-                key={tag}
-                className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded"
-                style={{ background: "rgba(0,0,0,0.25)", color: "rgba(255,255,255,0.65)" }}
-              >
-                {tag}
-              </span>
-            ))}
+      <div className="relative mx-auto max-w-5xl px-6 pb-14 pt-32 md:pb-16 md:pt-40">
+        <div className="max-w-[760px]">
+          <div className="flex flex-wrap items-center gap-3">
+            {category ? <CategoryPill className="bg-background/70 backdrop-blur">{category}</CategoryPill> : null}
+            <ReadingMeta date={date} readTime={readTime} />
           </div>
-        )}
+
+          <h1 className="mt-6 text-[34px] font-semibold leading-[1.08] text-foreground md:text-[52px]">
+            {title}
+          </h1>
+
+          <p className="mt-5 max-w-[62ch] text-[17px] leading-8 text-muted-foreground md:text-[19px]">
+            {description}
+          </p>
+
+          {tags && tags.length > 0 ? (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {tags.map(tag => (
+                <CategoryPill key={tag}>{tag}</CategoryPill>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </header>
   )
 }
 
@@ -120,9 +81,8 @@ function ArticleHero({
 
 function PullQuote({ body }: { body: string }) {
   return (
-    <blockquote className="my-10 relative pl-6">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-full bg-orange-500" />
-      <p className="text-[1.25rem] md:text-[1.35rem] font-medium leading-[1.6] text-foreground/85">
+    <blockquote className="relative my-12 border-l-2 border-orange-500/70 pl-6">
+      <p className="text-[22px] font-medium leading-[1.55] text-foreground/90 md:text-[26px]">
         {body}
       </p>
     </blockquote>
@@ -131,12 +91,12 @@ function PullQuote({ body }: { body: string }) {
 
 function Callout({ body }: { body: string }) {
   return (
-    <div className="my-8 rounded-xl border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6 relative overflow-hidden">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500/60 rounded-l-xl" />
-      <p className="text-[14px] md:text-[15px] leading-[1.7] text-foreground/80 pl-2">
+    <aside className="relative my-10 overflow-hidden rounded-2xl border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6">
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500/60" />
+      <p className="pl-2 text-[15px] leading-7 text-foreground/82">
         {body}
       </p>
-    </div>
+    </aside>
   )
 }
 
@@ -144,19 +104,19 @@ function ProseSection({ section }: { section: ArticleSection }) {
   const paragraphs = (section.body ?? "").split("\n\n").filter(Boolean)
 
   return (
-    <div className="space-y-4">
+    <section className="space-y-5">
       {section.heading && (
-        <h2 className="text-[1.2rem] md:text-[1.3rem] font-semibold tracking-tight text-foreground mt-10 mb-4 flex items-center gap-3">
-          <span className="w-4 h-[2px] bg-orange-500 rounded-full flex-shrink-0" />
+        <h2 className="mt-14 flex items-center gap-3 text-[24px] font-semibold leading-[1.2] text-foreground md:text-[28px]">
+          <span className="h-[2px] w-5 flex-shrink-0 rounded-full bg-orange-500" />
           {section.heading}
         </h2>
       )}
       {paragraphs.map((para, i) => (
-        <p key={i} className="text-[16px] md:text-[17px] leading-[1.8] text-foreground/80">
+        <p key={i} className="text-[17px] leading-[1.85] text-foreground/82">
           {para}
         </p>
       ))}
-    </div>
+    </section>
   )
 }
 
@@ -474,46 +434,6 @@ function Takeaways({ items }: { items: string[] }) {
   )
 }
 
-// ─── Related articles ─────────────────────────────────────────────────────────
-
-function RelatedCard({
-  title, description, href, accent, category, readTime,
-}: {
-  title: string; description: string; href: string
-  accent?: string; category?: string; readTime?: string
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col rounded-xl overflow-hidden border border-border/40 hover:border-orange-500/25 transition-all duration-300 hover:-translate-y-1"
-    >
-      <div
-        className="relative h-28 flex-shrink-0"
-        style={{ background: accent ?? "linear-gradient(135deg,#ea580c,#c2410c)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)",
-            backgroundSize: "14px 14px",
-            opacity: 0.12,
-          }}
-        />
-      </div>
-      <div className="p-4 bg-background flex-1">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          {category ?? "Article"}
-          {readTime && ` · ${readTime}`}
-        </span>
-        <p className="text-[13px] font-medium leading-snug mt-1.5 mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2">
-          {title}
-        </p>
-        <p className="text-[12px] text-muted-foreground line-clamp-2 leading-relaxed">{description}</p>
-      </div>
-    </Link>
-  )
-}
-
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export function ArticleLayout({ slug }: { slug: string }) {
@@ -536,61 +456,78 @@ export function ArticleLayout({ slug }: { slug: string }) {
       />
 
       {/* Body */}
-      <div className="max-w-3xl mx-auto px-6 py-14">
+      <div className="mx-auto grid max-w-5xl gap-10 px-6 py-14 lg:grid-cols-[minmax(0,70ch)_220px] lg:items-start lg:py-18">
+        <ArticleProse>
+          {/* Intro */}
+          {article.intro && (
+            <p className="mb-10 border-b border-border/45 pb-10 text-[19px] font-medium leading-[1.75] text-foreground/90 md:text-[21px]">
+              {article.intro}
+            </p>
+          )}
 
-        {/* Intro */}
-        {article.intro && (
-          <p className="text-[18px] md:text-[19px] leading-[1.75] font-medium text-foreground/90 mb-10 pb-10 border-b border-border/40">
-            {article.intro}
-          </p>
-        )}
+          {/* Sections */}
+          {article.sections?.map((section, i) => (
+            <ArticleSection key={i} section={section} />
+          ))}
 
-        {/* Sections */}
-        {article.sections?.map((section, i) => (
-          <ArticleSection key={i} section={section} />
-        ))}
+          {/* Takeaways */}
+          {article.takeaways && article.takeaways.length > 0 && (
+            <Takeaways items={article.takeaways} />
+          )}
+        </ArticleProse>
 
-        {/* Takeaways */}
-        {article.takeaways && article.takeaways.length > 0 && (
-          <Takeaways items={article.takeaways} />
-        )}
+        <aside className="hidden lg:sticky lg:top-28 lg:block">
+          <div className="rounded-2xl border border-border/55 bg-card p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              Reading
+            </p>
+            <div className="mt-4 space-y-4">
+              {article.category ? (
+                <div>
+                  <p className="text-[11px] text-muted-foreground">Category</p>
+                  <p className="mt-1 text-[13px] font-medium text-foreground">{article.category}</p>
+                </div>
+              ) : null}
+              <ReadingMeta date={article.date} readTime={article.readTime} className="flex-col items-start gap-2" />
+              {article.tags && article.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {article.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className="rounded-full bg-muted px-2 py-1 text-[10px] font-medium text-muted-foreground">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </aside>
       </div>
 
       {/* Related */}
       {related.length > 0 && (
-        <div className="border-t border-border/40 bg-foreground/[0.015] dark:bg-white/[0.015]">
-          <div className="max-w-3xl mx-auto px-6 py-14">
-            <div className="flex items-center gap-3 mb-7">
-              <div className="w-4 h-[2px] bg-orange-500 rounded-full" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                More Articles
-              </p>
+        <section className="border-t border-border/45 bg-foreground/[0.015] dark:bg-white/[0.015]" aria-labelledby="more-articles">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <div className="mb-7 flex items-center gap-4">
+              <div className="h-px w-6 bg-orange-500/70" />
+              <h2 id="more-articles" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                More articles
+              </h2>
+              <div className="h-px flex-1 bg-border/60" />
             </div>
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map(a => (
-                <RelatedCard
+                <ArticleCard
                   key={a.href}
                   title={a.title}
                   description={a.description}
                   href={a.href}
-                  accent={a.accent}
+                  date={a.date}
                   category={a.category}
-                  readTime={a.readTime}
                 />
               ))}
             </div>
-
-            <div className="mt-10 text-center">
-              <Link
-                href="/articles"
-                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
-              >
-                All articles
-                <IconArrowUpRight size={14} />
-              </Link>
-            </div>
           </div>
-        </div>
+        </section>
       )}
     </main>
   )

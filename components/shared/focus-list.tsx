@@ -22,7 +22,7 @@ export function FocusList({
   return (
     <div>
       {title && (
-        <p className="text-[16px] font-medium text-foreground/45 mb-6 tracking-[0.12em] uppercase">
+        <p className="type-meta mb-6 text-foreground/45">
           {title}
         </p>
       )}
@@ -39,8 +39,8 @@ export function FocusList({
                 className="relative text-foreground/35 transition-colors duration-150 group-hover:text-orange-500"
               />
               <p className={clsx(
-                "relative leading-[1.65] transition-colors duration-150 group-hover:text-foreground",
-                isCompact ? "text-[14px] text-foreground/70" : "text-[15px] text-foreground/75"
+                "type-card-body relative transition-colors duration-150 group-hover:text-foreground",
+                isCompact ? "text-foreground/70" : "text-foreground/75"
               )}>
                 {item.text}
               </p>

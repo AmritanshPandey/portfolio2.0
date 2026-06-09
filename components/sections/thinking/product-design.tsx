@@ -7,7 +7,7 @@ const QUESTIONS = [
   {
     num: "01",
     q: "What's the forcing function?",
-    body: "What's actually making this problem urgent right now — and does that forcing function last?",
+    body: "What's actually making this problem urgent right now, and does that forcing function last?",
   },
   {
     num: "02",
@@ -43,7 +43,7 @@ export default function ProductDesignApproachSection() {
           >
             {/* Number */}
             <span className="
-              text-[11px] font-mono font-semibold tracking-[0.14em]
+              type-caption font-mono font-semibold
               text-orange-500/70 dark:text-orange-400/60
               block mb-3
             ">
@@ -51,15 +51,12 @@ export default function ProductDesignApproachSection() {
             </span>
 
             {/* Question */}
-            <p className="
-              text-[17px] md:text-[19px] font-semibold tracking-tight leading-snug
-              text-foreground mb-3
-            ">
+            <p className="type-card-title mb-3 text-foreground">
               {item.q}
             </p>
 
             {/* Answer */}
-            <p className="text-[14px] md:text-[15px] leading-relaxed text-muted-foreground max-w-xl">
+            <p className="type-card-body max-w-xl text-muted-foreground">
               {item.body}
             </p>
           </motion.div>

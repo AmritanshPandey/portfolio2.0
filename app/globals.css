@@ -73,6 +73,142 @@
 }
 
 /* ─────────────────────────
+   FINTECH SYSTEM SCOPE
+───────────────────────── */
+
+.fintech-system {
+  --fin-bg: var(--background);
+  --fin-surface: color-mix(in srgb, var(--surface-1) 94%, transparent);
+  --fin-surface-raised: color-mix(in srgb, var(--surface-1) 88%, var(--foreground) 6%);
+  --fin-muted: color-mix(in srgb, var(--surface-2) 86%, var(--foreground) 4%);
+  --fin-border: var(--border);
+  --fin-text-primary: var(--foreground);
+  --fin-text-secondary: var(--text-muted);
+
+  --fin-brand: #00c853;
+  --fin-brand-strong: #00a845;
+  --fin-brand-soft: rgba(0, 200, 83, 0.1);
+  --fin-brand-soft-strong: rgba(0, 200, 83, 0.24);
+  --fin-brand-border: rgba(0, 200, 83, 0.28);
+
+  --fin-accent: #0ea5a4;
+  --fin-accent-soft: rgba(14, 165, 164, 0.1);
+  --fin-accent-border: rgba(14, 165, 164, 0.24);
+
+  --fin-success: #07875b;
+  --fin-success-soft: #e7f7ef;
+  --fin-success-border: #a8dec6;
+
+  --fin-warning: #b54708;
+  --fin-warning-soft: #fff2d6;
+  --fin-warning-border: #f3c779;
+
+  --fin-error: #b42318;
+  --fin-error-soft: #ffe9e6;
+  --fin-error-border: #f3aaa3;
+
+  --fin-pending: #6941c6;
+  --fin-pending-soft: #f0ebff;
+  --fin-pending-border: #c7b9f5;
+
+  --fin-income: #047857;
+  --fin-income-soft: #e6f7ef;
+  --fin-income-border: #a6dec7;
+
+  --fin-expense: #b45309;
+  --fin-expense-soft: #fff5e6;
+  --fin-expense-border: #f2c887;
+
+  --fin-profit: #15803d;
+  --fin-profit-soft: #e8f8ed;
+  --fin-profit-border: #a7ddb8;
+
+  --fin-loss: #be123c;
+  --fin-loss-soft: #ffe8ee;
+  --fin-loss-border: #f4a8ba;
+
+  --fin-risk: #9a3412;
+  --fin-risk-soft: #fff1e7;
+  --fin-risk-border: #e8b78f;
+
+  --fin-safe: #065f46;
+  --fin-safe-soft: #e2f8f2;
+  --fin-safe-border: #9edccd;
+
+  --fin-focus: #00c853;
+  --fin-skeleton: color-mix(in srgb, var(--foreground) 9%, transparent);
+  --fin-shadow-flat: 0 1px 0 rgba(7, 18, 11, 0.05);
+  --fin-shadow-raised: 0 18px 54px rgba(7, 18, 11, 0.1);
+  --fin-shadow-overlay: 0 24px 80px rgba(7, 18, 11, 0.18);
+}
+
+.dark .fintech-system {
+  --fin-bg: var(--background);
+  --fin-surface: color-mix(in srgb, var(--surface-1) 86%, transparent);
+  --fin-surface-raised: color-mix(in srgb, var(--surface-1) 78%, white 5%);
+  --fin-muted: color-mix(in srgb, var(--surface-1) 74%, black 26%);
+  --fin-border: var(--border);
+  --fin-text-primary: var(--foreground);
+  --fin-text-secondary: var(--text-muted);
+
+  --fin-brand: #00e676;
+  --fin-brand-strong: #7cffaa;
+  --fin-brand-soft: rgba(0, 230, 118, 0.12);
+  --fin-brand-soft-strong: rgba(0, 230, 118, 0.28);
+  --fin-brand-border: rgba(0, 230, 118, 0.32);
+
+  --fin-accent: #55e0d7;
+  --fin-accent-soft: rgba(85, 224, 215, 0.12);
+  --fin-accent-border: rgba(85, 224, 215, 0.28);
+
+  --fin-success: #59d79d;
+  --fin-success-soft: rgba(89, 215, 157, 0.12);
+  --fin-success-border: rgba(89, 215, 157, 0.3);
+
+  --fin-warning: #f7b955;
+  --fin-warning-soft: rgba(247, 185, 85, 0.13);
+  --fin-warning-border: rgba(247, 185, 85, 0.34);
+
+  --fin-error: #ff9b8f;
+  --fin-error-soft: rgba(255, 155, 143, 0.12);
+  --fin-error-border: rgba(255, 155, 143, 0.34);
+
+  --fin-pending: #c4b5fd;
+  --fin-pending-soft: rgba(196, 181, 253, 0.13);
+  --fin-pending-border: rgba(196, 181, 253, 0.34);
+
+  --fin-income: #6ee7b7;
+  --fin-income-soft: rgba(110, 231, 183, 0.12);
+  --fin-income-border: rgba(110, 231, 183, 0.32);
+
+  --fin-expense: #fbbf24;
+  --fin-expense-soft: rgba(251, 191, 36, 0.12);
+  --fin-expense-border: rgba(251, 191, 36, 0.32);
+
+  --fin-profit: #86efac;
+  --fin-profit-soft: rgba(134, 239, 172, 0.12);
+  --fin-profit-border: rgba(134, 239, 172, 0.32);
+
+  --fin-loss: #fda4af;
+  --fin-loss-soft: rgba(253, 164, 175, 0.12);
+  --fin-loss-border: rgba(253, 164, 175, 0.32);
+
+  --fin-risk: #fed7aa;
+  --fin-risk-soft: rgba(254, 215, 170, 0.13);
+  --fin-risk-border: rgba(254, 215, 170, 0.34);
+
+  --fin-safe: #99f6e4;
+  --fin-safe-soft: rgba(153, 246, 228, 0.12);
+  --fin-safe-border: rgba(153, 246, 228, 0.32);
+
+  --fin-focus: #00e676;
+  --fin-skeleton: rgba(255, 255, 255, 0.08);
+  --fin-shadow-flat: 0 1px 0 rgba(255, 255, 255, 0.04);
+  --fin-shadow-raised: 0 24px 80px rgba(0, 0, 0, 0.38);
+  --fin-shadow-overlay: 0 26px 80px rgba(0, 0, 0, 0.56);
+}
+
+/* ─────────────────────────
    BASE
 ───────────────────────── */
 
@@ -115,6 +251,143 @@
 }
 
 @layer utilities {
+  .type-page-title {
+    font-size: 34px;
+    line-height: 1.14;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .type-section-title {
+    font-size: 30px;
+    line-height: 1.16;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .type-section-intro {
+    max-width: 62ch;
+    font-size: 15px;
+    line-height: 1.7;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  .type-subtitle {
+    font-size: 20px;
+    line-height: 1.28;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .type-card-title {
+    font-size: 18px;
+    line-height: 1.34;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .type-list-title {
+    font-size: 16px;
+    line-height: 1.42;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .type-card-title-featured {
+    font-size: 22px;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .type-card-body {
+    font-size: 13px;
+    line-height: 1.85;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  .type-card-body-featured {
+    font-size: 14px;
+    line-height: 1.9;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  .type-meta {
+    font-size: 12px;
+    line-height: 1.55;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: color-mix(in srgb, var(--foreground) 42%, transparent);
+  }
+
+  .type-caption {
+    font-size: 11px;
+    line-height: 1.45;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .type-cta {
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .type-prose {
+    font-size: 16px;
+    line-height: 1.8;
+    letter-spacing: 0;
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 768px) {
+    .type-page-title {
+      font-size: 44px;
+      line-height: 1.12;
+    }
+
+    .type-section-title {
+      font-size: 38px;
+      line-height: 1.14;
+    }
+
+    .type-section-intro {
+      font-size: 16px;
+    }
+
+    .type-subtitle {
+      font-size: 22px;
+      line-height: 1.28;
+    }
+
+    .type-card-title-featured {
+      font-size: 24px;
+    }
+
+    .type-prose {
+      font-size: 17px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .type-page-title {
+      font-size: 52px;
+    }
+
+    .type-section-title {
+      font-size: 44px;
+    }
+  }
+
   /* Premium underline for inline body links — opt in with `link-underline`. */
   .link-underline {
     text-decoration: underline;

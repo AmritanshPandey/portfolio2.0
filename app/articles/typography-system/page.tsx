@@ -3,12 +3,12 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { IconArrowUpRight, IconClock, IconCalendar } from "@tabler/icons-react"
+import { IconArrowUpRight } from "@tabler/icons-react"
 import { articleItems } from "@/lib/data"
+import { ArticleCard, ArticleHeader } from "@/components/articles/article-ui"
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 
-const ACCENT = "linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #9a3412 100%)"
 const HREF   = "/articles/typography-system"
 
 // Font families showcased in the classification + pairing tools.
@@ -649,41 +649,7 @@ function A11yChecker() {
 
 function Hero() {
   const a = articleItems.find(x => x.href === HREF)!
-  return (
-    <div className="relative w-full min-h-[440px] md:min-h-[500px] flex items-end" style={{ background: ACCENT }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)", backgroundSize: "22px 22px", opacity: 0.15 }}
-      />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_30%,rgba(0,0,0,0.35)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
-      <span
-        className="absolute top-1/2 right-12 -translate-y-1/2 leading-none select-none pointer-events-none hidden md:block"
-        style={{ fontSize: "240px", color: "rgba(255,255,255,0.06)", fontFamily: F.serif, fontWeight: 600 }}
-      >
-        Aa
-      </span>
-
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 pb-14 pt-32 space-y-5">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.9)" }}>
-            {a.category}
-          </span>
-          <span className="flex items-center gap-1.5 text-[12px] text-white/60"><IconClock size={12} />{a.readTime}</span>
-          <span className="flex items-center gap-1.5 text-[12px] text-white/60"><IconCalendar size={12} />{a.date}</span>
-        </div>
-        <h1 className="text-3xl md:text-[2.6rem] font-bold tracking-tight leading-[1.1] text-white">{a.title}</h1>
-        <p className="text-[17px] text-white/70 leading-relaxed max-w-xl">{a.description}</p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {a.tags?.map(tag => (
-            <span key={tag} className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded" style={{ background: "rgba(0,0,0,0.25)", color: "rgba(255,255,255,0.65)" }}>
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
+  return <ArticleHeader article={a} />
 }
 
 // ─── RELATED ──────────────────────────────────────────────────────────────—
@@ -691,30 +657,16 @@ function Hero() {
 function Related() {
   const related = articleItems.filter(a => a.href !== HREF).slice(0, 3)
   return (
-    <div className="border-t border-border/40 bg-foreground/[0.015] dark:bg-white/[0.015]">
-      <div className="max-w-4xl mx-auto px-6 py-14">
-        <div className="flex items-center gap-3 mb-7">
-          <div className="w-4 h-[2px] bg-orange-500 rounded-full" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">More Articles</p>
+    <section className="border-t border-border/45 bg-foreground/[0.015] dark:bg-white/[0.015]" aria-labelledby="more-articles">
+      <div className="mx-auto max-w-6xl px-6 py-16">
+        <div className="mb-7 flex items-center gap-4">
+          <div className="h-px w-6 bg-orange-500/70" />
+          <h2 id="more-articles" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">More articles</h2>
+          <div className="h-px flex-1 bg-border/60" />
         </div>
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {related.map(a => (
-            <Link
-              key={a.href}
-              href={a.href}
-              className="group flex flex-col rounded-xl overflow-hidden border border-border/40 hover:border-orange-500/25 transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="relative h-28 flex-shrink-0" style={{ background: a.accent }}>
-                <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.4) 1px, transparent 1px)", backgroundSize: "14px 14px", opacity: 0.12 }} />
-              </div>
-              <div className="p-4 bg-background flex-1">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  {a.category}{a.readTime && ` · ${a.readTime}`}
-                </span>
-                <p className="text-[13px] font-medium leading-snug mt-1.5 mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2">{a.title}</p>
-                <p className="text-[12px] text-muted-foreground line-clamp-2 leading-relaxed">{a.description}</p>
-              </div>
-            </Link>
+            <ArticleCard key={a.href} article={a} />
           ))}
         </div>
         <div className="mt-10 text-center">
@@ -723,7 +675,7 @@ function Related() {
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

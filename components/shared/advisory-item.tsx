@@ -58,8 +58,7 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
         <div className="flex items-center gap-2">
 
           <p className={clsx(
-            "text-[15px] md:text-[16px]",
-            "font-medium tracking-[-0.01em]",
+            "type-list-title",
             "text-foreground",
 
             "transition-colors duration-200"
@@ -85,9 +84,8 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
 
         {/* DESCRIPTION */}
         <p className={clsx(
-          "text-[14px]",
+          "type-card-body",
           "text-foreground/55",
-          "leading-[1.65]",
           "max-w-[520px]",
 
           "transition-colors duration-200",

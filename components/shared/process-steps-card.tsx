@@ -21,14 +21,14 @@ export function ProcessStepsCard({ steps }: { steps: Step[] }) {
             <div className="relative pl-4">
               <div className="absolute left-0 top-[6px] bottom-[6px] w-px bg-border/70 transition-colors duration-200 group-hover:bg-orange-600/50 dark:group-hover:bg-orange-400/50" />
               <div className="flex items-baseline gap-3">
-                <span className="text-xs font-semibold tracking-[0.14em] text-foreground/50 transition-colors duration-200 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+                <span className="type-caption text-foreground/50 transition-colors duration-200 group-hover:text-orange-600 dark:group-hover:text-orange-400">
                   {step.number}
                 </span>
-                <h3 className="text-base md:text-lg font-medium text-foreground tracking-tight transition-colors duration-200 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+                <h3 className="type-list-title text-foreground transition-colors duration-200 group-hover:text-orange-600 dark:group-hover:text-orange-400">
                   {step.title}
                 </h3>
               </div>
-              <p className="mt-2 text-sm md:text-[15px] text-foreground/65 leading-[1.65] max-w-[340px]">
+              <p className="type-card-body mt-2 max-w-[340px] text-foreground/65">
                 {step.description}
               </p>
             </div>

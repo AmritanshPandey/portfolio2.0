@@ -11,7 +11,19 @@ import {
   IconBulb,
   IconPresentation,
 } from "@tabler/icons-react"
-import { CsSection, CsDecision, CsAreaChart, CsDualLineChart, CsNextStudies } from "@/components/case-study"
+import { CsSection, CsDecision, CsAreaChart, CsDualLineChart, CsNextStudies, CsOnThisPage } from "@/components/case-study"
+
+const SECTION_NAV = [
+  { id: "story",           label: "The Story" },
+  { id: "context",         label: "Context" },
+  { id: "role-reality",    label: "Role Reality" },
+  { id: "act-1",           label: "Act 1 · Consumer" },
+  { id: "act-1-decisions", label: "Act 1 Decisions" },
+  { id: "pivot",           label: "The Pivot" },
+  { id: "act-3",           label: "Act 3 · B2B Rebuild" },
+  { id: "impact",          label: "Impact" },
+  { id: "reflection",      label: "Reflection" },
+]
 
 // ─── fade-in wrapper ────────────────────────────────────────────────────────
 
@@ -38,13 +50,13 @@ function HeroVisual() {
     <div className="w-full max-w-[360px] mx-auto space-y-3">
 
       {/* Act 1 */}
-      <div className="rounded-2xl border border-green-500/25 bg-green-500/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-green-600/70 dark:text-green-400/55 mb-2">
+      <div className="rounded-2xl border border-orange-500/25 bg-orange-500/[0.05] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-orange-600/70 dark:text-orange-400/55 mb-2">
           Act 1 · May–Oct 2020 · 6 months
         </p>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-green-600/70 dark:text-green-400/60">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-orange-600/70 dark:text-orange-400/60">
               <rect x="5" y="2" width="14" height="20" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </div>
@@ -70,13 +82,13 @@ function HeroVisual() {
       </div>
 
       {/* Pivot */}
-      <div className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.04] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-amber-600/70 dark:text-amber-400/55 mb-2">
+      <div className="rounded-2xl border border-orange-500/25 bg-orange-500/[0.04] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-orange-600/70 dark:text-orange-400/55 mb-2">
           Pivot · Oct–Nov 2020 · 6 weeks
         </p>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-amber-600/70 dark:text-amber-400/60">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-orange-600/70 dark:text-orange-400/60">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
           </div>
@@ -90,19 +102,19 @@ function HeroVisual() {
       {/* Connector */}
       <div className="flex items-stretch gap-3 px-2">
         <div className="flex flex-col items-center">
-          <div className="w-px flex-1 bg-purple-500/30" />
+          <div className="w-px flex-1 bg-orange-500/30" />
         </div>
         <div className="flex-1 my-1" />
       </div>
 
       {/* Act 3 */}
-      <div className="rounded-2xl border border-purple-500/25 bg-purple-500/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-purple-600/70 dark:text-purple-400/55 mb-2">
+      <div className="rounded-2xl border border-orange-500/25 bg-orange-500/[0.05] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-orange-600/70 dark:text-orange-400/55 mb-2">
           Act 3 · Nov 2020–Apr 2021 · 5 months
         </p>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-purple-600/70 dark:text-purple-400/60">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-orange-600/70 dark:text-orange-400/60">
               <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
             </svg>
           </div>
@@ -132,7 +144,7 @@ function HeroVisual() {
 
 function Hero() {
   const meta = [
-    { icon: <IconCode size={16} strokeWidth={1.75} />,         label: "Role",     value: "PM · Designer · Frontend" },
+    { icon: <IconCode size={16} strokeWidth={1.75} />,         label: "Role",     value: "Designer · PM · Frontend" },
     { icon: <IconUsers size={16} strokeWidth={1.75} />,        label: "Team",     value: "10 people" },
     { icon: <IconClock size={16} strokeWidth={1.75} />,        label: "Duration", value: "11 months" },
     { icon: <IconTrendingUp size={16} strokeWidth={1.75} />,   label: "Revenue",  value: "₹1.98Cr lifetime" },
@@ -183,6 +195,15 @@ function Hero() {
               <strong className="text-foreground font-medium">a full product lifecycle</strong>: a 0→1 consumer launch, a{" "}
               <strong className="text-foreground font-medium">COVID-forced B2B pivot</strong>, and a lesson about{" "}
               <strong className="text-foreground font-medium">what PMF looks like when it&apos;s rented from an external event</strong>.
+            </motion.p>
+
+            {/* Company/product naming bridge for resume cross-reference */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.09, ease: [0.22, 1, 0.36, 1] }}
+              className="text-sm leading-relaxed text-muted-foreground max-w-lg"
+            >
+              Dror was the flagship product at Lythouse — the company was originally Dror Labs.
             </motion.p>
 
             {/* Meta grid */}
@@ -252,8 +273,8 @@ function Hero() {
 function ActTimeline() {
   return (
     <div className="flex flex-col gap-0">
-      <div className="rounded-2xl border border-green-500/20 bg-green-500/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-green-600/70 dark:text-green-400/60 mb-1">Act 1 · May–Oct 2020 · 6 months</p>
+      <div className="rounded-2xl border border-orange-500/20 bg-orange-500/[0.03] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-1">Act 1 · May–Oct 2020 · 6 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Built and launched a consumer citizen safety app from 0→1. B2C freemium. Real users, near-zero revenue.</p>
       </div>
@@ -266,16 +287,16 @@ function ActTimeline() {
           <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. Citizens stop moving. Safety-while-moving use case evaporates. B2C growth stalls.</p>
         </div>
       </div>
-      <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-amber-600/70 dark:text-amber-400/60 mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
+      <div className="rounded-2xl border border-orange-500/20 bg-orange-500/[0.03] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
         <p className="text-[15px] font-medium text-foreground mb-1">The Pivot Decision</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">CEO identifies B2B inbound. We prototype a workplace safety product in days, validate with clients, commit.</p>
       </div>
       <div className="flex items-center gap-3 px-4 py-2">
         <div className="ml-[11px] w-px h-8 bg-border/50" />
       </div>
-      <div className="rounded-2xl border border-purple-500/20 bg-purple-500/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-purple-600/70 dark:text-purple-400/60 mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
+      <div className="rounded-2xl border border-orange-500/20 bg-orange-500/[0.05] p-5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">B2B SaaS Rebuild</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity + smart cards + factory manager dashboard I designed nights and coded afternoons in React.</p>
       </div>
@@ -343,13 +364,13 @@ function DailyRhythm() {
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
         <div className="flex h-8 rounded-full overflow-hidden border border-border/40 gap-px">
           <div className="bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-emerald-400/80 tracking-wide">UX DESIGN</span>
+            <span className="text-[9px] font-semibold text-orange-400/80 tracking-wide">UX DESIGN</span>
           </div>
           <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
             <span className="text-[9px] font-semibold text-muted-foreground tracking-wide">PRD</span>
           </div>
-          <div className="bg-purple-500/10 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-purple-600/70 dark:text-purple-400/70 tracking-wide">REACT</span>
+          <div className="bg-orange-500/10 flex items-center justify-center" style={{ width: "35%" }}>
+            <span className="text-[9px] font-semibold text-orange-600/70 dark:text-orange-400/70 tracking-wide">REACT</span>
           </div>
           <div className="bg-muted/40 flex items-center justify-center" style={{ width: "10%" }}>
             <span className="text-[9px] text-muted-foreground">…</span>
@@ -362,18 +383,18 @@ function DailyRhythm() {
 
       {/* Blocks */}
       <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/50 rounded-2xl border border-border overflow-hidden">
-        <div className="p-6 bg-neutral-950 dark:bg-neutral-900/80">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-400/70 mb-2">Night</p>
-          <p className="text-[14px] font-medium text-white mb-2">UX Design</p>
-          <p className="text-[12px] text-neutral-500 leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process — I was the handoff.</p>
+        <div className="p-6 bg-card">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">Night</p>
+          <p className="text-[14px] font-medium text-foreground mb-2">UX Design</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process — I was the handoff.</p>
         </div>
         <div className="p-6 bg-muted/40">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">12pm Standup</p>
           <p className="text-[14px] font-medium text-foreground mb-2">PRD Delivery</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise — a vague PRD meant broken builds by afternoon.</p>
         </div>
-        <div className="p-6 bg-purple-500/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-purple-600/70 dark:text-purple-400/60 mb-2">Afternoon</p>
+        <div className="p-6 bg-orange-500/[0.04]">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-2">Afternoon</p>
           <p className="text-[14px] font-medium text-foreground mb-2">React Frontend</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Coded the B2B dashboard frontend in React.js alongside the full-stack dev. Frontend would have blocked shipping without me.</p>
         </div>
@@ -385,7 +406,7 @@ function DailyRhythm() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
           {[
             { name: "Dhiraj Nauhbar", title: "Co-founder & CEO" },
-            { name: "Amritansh", title: "PM · Designer · Frontend" },
+            { name: "Amritansh", title: "Designer · PM · Frontend" },
             { name: "2 co-founders", title: "Operations & CTO" },
             { name: "2 full-stack devs", title: "Backend + full stack" },
             { name: "2 app developers", title: "Android + iOS" },
@@ -443,7 +464,7 @@ function GapsGrid() {
                 <span className="text-[12px] font-medium text-foreground">32%</span>
               </div>
               <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div className="h-full rounded-full bg-green-500/60" style={{ width: "32%" }} />
+                <div className="h-full rounded-full bg-orange-500/60" style={{ width: "32%" }} />
               </div>
               <div className="flex items-center justify-between mt-3 mb-2">
                 <span className="text-[12px] text-muted-foreground">Dropped off</span>
@@ -555,25 +576,25 @@ function ProductComparison() {
   return (
     <div className="overflow-hidden rounded-2xl border border-border">
       <div className="grid grid-cols-[1fr_1fr] divide-x divide-border">
-        <div className="px-6 py-4 bg-green-500/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-green-600/70 dark:text-green-400/60 mb-0.5">Act 1</p>
+        <div className="px-6 py-4 bg-orange-500/[0.04]">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-0.5">Act 1</p>
           <p className="text-[15px] font-medium text-foreground">Consumer Safety App</p>
         </div>
-        <div className="px-6 py-4 bg-purple-500/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-purple-600/70 dark:text-purple-400/60 mb-0.5">Act 3</p>
+        <div className="px-6 py-4 bg-orange-500/[0.04]">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-0.5">Act 3</p>
           <p className="text-[15px] font-medium text-foreground">B2B Workplace Safety SaaS</p>
         </div>
       </div>
       <div className="divide-y divide-border">
         {rows.map(r => (
           <div key={r.label} className="grid grid-cols-[1fr_1fr] divide-x divide-border">
-            <div className="px-6 py-4 bg-green-500/[0.02]">
+            <div className="px-6 py-4 bg-orange-500/[0.02]">
               <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-green-700/80 dark:text-green-400/70 leading-relaxed">{r.act1}</p>
+              <p className="text-[13px] text-orange-700/80 dark:text-orange-400/70 leading-relaxed">{r.act1}</p>
             </div>
-            <div className="px-6 py-4 bg-purple-500/[0.02]">
+            <div className="px-6 py-4 bg-orange-500/[0.02]">
               <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-purple-700/80 dark:text-purple-400/70 leading-relaxed">{r.act3}</p>
+              <p className="text-[13px] text-orange-700/80 dark:text-orange-400/70 leading-relaxed">{r.act3}</p>
             </div>
           </div>
         ))}
@@ -591,7 +612,7 @@ function DashboardMockup() {
         {/* Browser bar */}
         <div className="bg-neutral-900 h-9 flex items-center px-4 gap-2">
           <div className="flex gap-1.5">
-            {["bg-red-500/60", "bg-yellow-500/60", "bg-green-500/60"].map((c, i) => (
+            {["bg-red-500/60", "bg-orange-500/60", "bg-orange-500/60"].map((c, i) => (
               <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
             ))}
           </div>
@@ -603,17 +624,17 @@ function DashboardMockup() {
         <div className="bg-muted/20 p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-[12px] font-semibold text-foreground">Live safety overview — today</p>
-            <span className="text-[10px] text-green-500 bg-green-500/10 border border-green-500/20 rounded-full px-2 py-0.5">● Live</span>
+            <span className="text-[10px] text-orange-500 bg-orange-500/10 border border-orange-500/20 rounded-full px-2 py-0.5">● Live</span>
           </div>
           {/* Metric cards row */}
           <div className="grid grid-cols-3 gap-3 mb-4">
             {[
-              { num: "247", label: "Active workers", color: "foreground", bar: "82%", barColor: "bg-blue-500/60" },
-              { num: "14",  label: "Proximity events", color: "orange-600 dark:text-orange-400", bar: "14%", barColor: "bg-orange-500/60" },
-              { num: "94%", label: "Compliance score", color: "green-600 dark:text-green-400", bar: "94%", barColor: "bg-green-500/60" },
+              { num: "247", label: "Active workers", textColor: "text-foreground", bar: "82%", barColor: "bg-blue-500/60" },
+              { num: "14",  label: "Proximity events", textColor: "text-orange-600 dark:text-orange-400", bar: "14%", barColor: "bg-orange-500/60" },
+              { num: "94%", label: "Compliance score", textColor: "text-orange-600 dark:text-orange-400", bar: "94%", barColor: "bg-orange-500/60" },
             ].map(m => (
               <div key={m.label} className="rounded-xl border border-border bg-card p-4">
-                <p className={`text-[22px] font-bold text-${m.color} leading-none mb-1`}>{m.num}</p>
+                <p className={`text-[22px] font-bold ${m.textColor} leading-none mb-1`}>{m.num}</p>
                 <p className="text-[10px] text-muted-foreground mb-2">{m.label}</p>
                 <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                   <motion.div
@@ -815,7 +836,9 @@ export default function Page() {
 
       <Hero />
 
-      <CsSection label="The Story">
+      <CsOnThisPage items={SECTION_NAV} />
+
+      <CsSection id="story" label="The Story">
         <div className="space-y-6">
           <p className="text-[15px] text-muted-foreground leading-relaxed max-w-2xl">
             Three acts, two forcing functions, one lesson about building products whose market exists only because of the conditions that created them.
@@ -824,7 +847,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Context" variant="muted">
+      <CsSection id="context" label="Context" variant="muted">
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
@@ -838,7 +861,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Role Reality">
+      <CsSection id="role-reality" label="Role Reality">
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
@@ -852,7 +875,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Act 1 — Consumer App" variant="muted">
+      <CsSection id="act-1" label="Act 1 — Consumer App" variant="muted">
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
@@ -866,7 +889,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Act 1 Decisions" variant="dark">
+      <CsSection id="act-1-decisions" label="Act 1 Decisions" variant="dark">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -887,7 +910,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="The Pivot" variant="dark" withDivider={false}>
+      <CsSection id="pivot" label="The Pivot" variant="dark" withDivider={false}>
         <div className="space-y-5">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-white leading-snug">The decision that changed everything</h2>
@@ -905,10 +928,9 @@ export default function Page() {
           />
           <PivotValidation />
         </div>
-        <div className="h-px w-full bg-white/[0.06] mt-24" />
       </CsSection>
 
-      <CsSection label="Act 3 — B2B Rebuild">
+      <CsSection id="act-3" label="Act 3 — B2B Rebuild">
         <div className="space-y-8">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
@@ -940,7 +962,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Impact" variant="muted">
+      <CsSection id="impact" label="Impact" variant="muted">
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">What the numbers actually say</h2>
@@ -952,7 +974,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection label="Reflection">
+      <CsSection id="reflection" label="Reflection">
         <div className="space-y-10">
           <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">

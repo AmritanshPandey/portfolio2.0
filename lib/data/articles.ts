@@ -3,6 +3,28 @@ import type { ArticleItem } from "@/lib/types/content"
 // featured: true → shown in the homepage Insights section (first 4 shown)
 export const articleItems: ArticleItem[] = [
   {
+    title:       "Dating Apps Solved the Wrong Problem",
+    description: "Discovery was the easy half. The real problem is who actually gets seen. Here is how I use Gale–Shapley as the core and build fair weekly matching around it.",
+    href:        "/articles/dating-app-allocation",
+    image:       "/article.png",
+    accent:      "linear-gradient(135deg, #f472a8 0%, #ae2f3a 55%, #7c1c26 100%)",
+    featured:    true,
+    readTime:    "9 min read",
+    date:        "Jun 2026",
+    category:    "Product Strategy",
+    tags:        ["Matching Markets", "Marketplaces", "Incentives", "Optimization"],
+    intro: "Every dating app on your phone is great at one thing. It shows you people. Endless profiles, fast filters, a swipe in under a second. That part is basically solved. So why do these apps feel worse every year? Because showing you people was never the hard part. The hard part is who actually gets seen, by whom, and how often. That is the problem I have been working on. The longer I sat with it, the more it looked like a product decision dressed up as an algorithm.",
+    takeaways: [
+      "Dating apps solved discovery, which is a search problem. Who actually gets seen is the part still left open.",
+      "Optimizing for engagement rewards keeping people under-served. The goal you pick, not the UI, is the real product.",
+      "Gale–Shapley is the core, not the thing being replaced. Its mutuality and stability stay. The weekly, fair layer is built around it.",
+      "Reframing from one stable matching to a fair weekly allocation means the system always returns an answer.",
+      "Fairness has to reward a pairing, not a person. A per-person bonus cancels out and does nothing.",
+      "The tradeoff between quality, fairness, and stability is real. Picking a point on it is a product call, and worth making in the open.",
+    ],
+  },
+
+  {
     title:       "Building Scalable Typography for Modern Digital Products",
     description: "Typography isn't decoration — it's the interface. A system of scale, rhythm, hierarchy, and restraint, with eight interactive tools: modular scale generator, pairing explorer, reading simulator, clamp() preview, and more.",
     href:        "/articles/typography-system",

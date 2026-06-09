@@ -4,12 +4,13 @@ export interface WorkItem {
   description: string
   image: string
   href: string
+  tags?: string[]
   /** Short outcome / impact line shown on the card (e.g. "Used by 12 banking partners") */
   metric?: string
   /**
-   * "flagship" — primary case studies rendered with more visual weight.
+   * "flagship" - primary case studies rendered with more visual weight.
    * First flagship gets the full-width hero treatment; others sit in a 2-col row.
-   * "supporting" — secondary work rendered in a compact 2-col row below flagships.
+   * "supporting" - secondary work rendered in a compact 2-col row below flagships.
    */
   tier: "flagship" | "supporting"
   /** Render order within the tier (lower = first). */
@@ -124,11 +125,11 @@ export interface ArticleItem {
   readTime?: string
   category?: string
   tags?: string[]
-  /** CSS gradient string used as the article cover — overrides image */
+  /** CSS gradient string used as the article cover, overrides image */
   accent?: string
   /** true = show in the homepage Insights section (capped at 4) */
   featured: boolean
-  // ── full article content (optional — used by detail pages) ──
+  // Full article content, optional and used by detail pages.
   intro?: string
   sections?: ArticleSection[]
   takeaways?: string[]

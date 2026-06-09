@@ -55,7 +55,11 @@ void main() {
 `
 
 const FRAG_SRC = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform vec2  u_resolution; // device px
 uniform vec2  u_mouse;      // normalized UV (0..1), y-up to match gl_FragCoord
@@ -144,6 +148,7 @@ export function ShaderGrid({
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [webglActive, setWebglActive] = useState(false)
+  const [contextVersion, setContextVersion] = useState(0)
 
   const { isHigh, isBalanced } = usePerformanceMode()
   const maxDpr = isHigh ? 2 : isBalanced ? 1.5 : 1
@@ -161,12 +166,20 @@ export function ShaderGrid({
 
     const gl = (canvas.getContext("webgl", {
       alpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
       premultipliedAlpha: false,
-      antialias: true,
+      preserveDrawingBuffer: false,
+      powerPreference: "high-performance",
     }) ||
       canvas.getContext("experimental-webgl", {
         alpha: true,
+        antialias: false,
+        depth: false,
+        stencil: false,
         premultipliedAlpha: false,
+        preserveDrawingBuffer: false,
       })) as WebGLRenderingContext | null
     if (!gl) return
 
@@ -230,6 +243,8 @@ export function ShaderGrid({
     let raf = 0
     let visible = true
     let lastTime = 0
+    let resizeRaf = 0
+    let contextLost = false
     // Hold the matching CSS fallback in place until WebGL has actually drawn its
     // first frame, then hand off — avoids any empty frame or visible swap.
     let painted = false
@@ -243,19 +258,33 @@ export function ShaderGrid({
     let base = isDark() ? darkColor : lightColor
 
     const resize = () => {
+      if (contextLost) return
       dpr = Math.min(window.devicePixelRatio || 1, maxDpr)
       const rect = wrap.getBoundingClientRect()
-      width = Math.max(1, Math.round(rect.width * dpr))
-      height = Math.max(1, Math.round(rect.height * dpr))
-      canvas.width = width
-      canvas.height = height
+      const nextWidth = Math.max(1, Math.round(rect.width * dpr))
+      const nextHeight = Math.max(1, Math.round(rect.height * dpr))
+      if (nextWidth === width && nextHeight === height) return
+      width = nextWidth
+      height = nextHeight
+      if (canvas.width !== width) canvas.width = width
+      if (canvas.height !== height) canvas.height = height
       gl.viewport(0, 0, width, height)
       // Density derived from CSS spacing → consistent dot size on any screen.
-      density = Math.max(4, rect.height / spacing)
+      density = Math.max(4, rect.height / Math.max(8, spacing))
     }
     resize()
 
+    const scheduleResize = () => {
+      if (resizeRaf) return
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0
+        resize()
+        kick()
+      })
+    }
+
     const render = (now = performance.now()) => {
+      if (contextLost) return
       // Clamp dt so a backgrounded tab (huge gap) can't jolt the field.
       const dt = lastTime
         ? Math.min(Math.max((now - lastTime) / 1000, 1 / 240), 1 / 30)
@@ -319,14 +348,23 @@ export function ShaderGrid({
     }
 
     const kick = () => {
-      if (!raf && visible) raf = requestAnimationFrame(render)
+      if (!raf && visible && !contextLost) raf = requestAnimationFrame(render)
     }
 
     // ── Input → normalized 0..1 (y flipped to match gl_FragCoord) ─────────
     const setTarget = (clientX: number, clientY: number) => {
       const rect = canvas.getBoundingClientRect()
-      targetX = (clientX - rect.left) / Math.max(1, rect.width)
-      targetY = 1 - (clientY - rect.top) / Math.max(1, rect.height)
+      const inside =
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom
+      if (!inside) {
+        release()
+        return
+      }
+      targetX = Math.min(1, Math.max(0, (clientX - rect.left) / Math.max(1, rect.width)))
+      targetY = Math.min(1, Math.max(0, 1 - (clientY - rect.top) / Math.max(1, rect.height)))
       targetIntensity = 1
       kick()
     }
@@ -345,14 +383,33 @@ export function ShaderGrid({
     window.addEventListener("touchstart", onTouch, { passive: true })
     window.addEventListener("touchmove", onTouch, { passive: true })
     window.addEventListener("touchend", release, { passive: true })
+    window.addEventListener("touchcancel", release, { passive: true })
     window.addEventListener("blur", release)
+    window.addEventListener("resize", scheduleResize, { passive: true })
+    window.addEventListener("orientationchange", scheduleResize)
+    window.visualViewport?.addEventListener("resize", scheduleResize, { passive: true })
+    window.visualViewport?.addEventListener("scroll", scheduleResize, { passive: true })
     document.addEventListener("pointerleave", release)
+    const onVisibilityChange = () => {
+      visible = document.visibilityState === "visible"
+      if (visible) {
+        lastTime = 0
+        scheduleResize()
+        kick()
+      } else if (raf) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange)
 
-    const ro = new ResizeObserver(() => {
-      resize()
-      kick()
-    })
-    ro.observe(wrap)
+    const ro =
+      "ResizeObserver" in window
+        ? new ResizeObserver(() => {
+            scheduleResize()
+          })
+        : null
+    ro?.observe(wrap)
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -377,25 +434,48 @@ export function ShaderGrid({
       attributeFilter: ["class"],
     })
 
+    const onContextLost = (event: Event) => {
+      event.preventDefault()
+      contextLost = true
+      if (raf) cancelAnimationFrame(raf)
+      if (resizeRaf) cancelAnimationFrame(resizeRaf)
+      raf = 0
+      resizeRaf = 0
+      setWebglActive(false)
+    }
+    const onContextRestored = () => {
+      setContextVersion((version) => version + 1)
+    }
+    canvas.addEventListener("webglcontextlost", onContextLost)
+    canvas.addEventListener("webglcontextrestored", onContextRestored)
+
     // Paint once so the static grid is present even before any interaction.
     kick()
 
     return () => {
       if (raf) cancelAnimationFrame(raf)
+      if (resizeRaf) cancelAnimationFrame(resizeRaf)
       window.removeEventListener("pointermove", onPointerMove)
       window.removeEventListener("touchstart", onTouch)
       window.removeEventListener("touchmove", onTouch)
       window.removeEventListener("touchend", release)
+      window.removeEventListener("touchcancel", release)
       window.removeEventListener("blur", release)
+      window.removeEventListener("resize", scheduleResize)
+      window.removeEventListener("orientationchange", scheduleResize)
+      window.visualViewport?.removeEventListener("resize", scheduleResize)
+      window.visualViewport?.removeEventListener("scroll", scheduleResize)
       document.removeEventListener("pointerleave", release)
-      ro.disconnect()
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+      ro?.disconnect()
       io.disconnect()
       mo.disconnect()
-      gl.getExtension("WEBGL_lose_context")?.loseContext()
+      canvas.removeEventListener("webglcontextlost", onContextLost)
+      canvas.removeEventListener("webglcontextrestored", onContextRestored)
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, colorKey])
+  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, colorKey, contextVersion])
 
   // Static CSS fallback — matches the resting WebGL dot field, per theme. The
   // soft edge is centered on the true dot radius (instead of starting there and
@@ -453,7 +533,12 @@ export function ShaderGrid({
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full transition-opacity duration-300 ease-out"
-        style={{ opacity: webglActive ? 1 : 0 }}
+        style={{
+          opacity: webglActive ? 1 : 0,
+          display: "block",
+          contain: "strict",
+          transform: "translateZ(0)",
+        }}
       />
     </div>
   )
