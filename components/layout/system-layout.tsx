@@ -388,7 +388,7 @@ function RelatedCard({
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-export function SystemLayout({ slug }: { slug: string }) {
+export function SystemLayout({ slug, children }: { slug: string; children?: React.ReactNode }) {
   const system  = getSystem(slug)
   if (!system) notFound()
 
@@ -452,6 +452,9 @@ export function SystemLayout({ slug }: { slug: string }) {
           <Takeaways items={system.takeaways} />
         )}
       </div>
+
+      {/* Optional deep systems artifact (full-width), e.g. the token-system diagram */}
+      {children}
 
       {/* Related */}
       {related.length > 0 && (
