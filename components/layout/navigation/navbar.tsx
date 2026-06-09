@@ -24,7 +24,7 @@ const NAV_LINKS = [
   { label: "Home",     href: "#hero",        icon: true },
   { label: "Work",     href: "#work" },
   { label: "Projects", href: "#exploration" },
-  { label: "Impact",   href: "#impact" },
+  { label: "Insights",   href: "#inisghts" },
   { label: "About",    href: "#about" },
 ]
 

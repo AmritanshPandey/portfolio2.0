@@ -164,7 +164,7 @@ function Hero() {
         {/* Split layout */}
         <div className="grid lg:grid-cols-[1fr_440px] gap-16 xl:gap-20 items-start pb-0">
 
-          {/* LEFT — content */}
+          {/* LEFT, content */}
           <div className="flex flex-col gap-6">
 
             {/* Eyebrow */}
@@ -191,7 +191,7 @@ function Hero() {
               transition={{ duration: 0.5, delay: 0.07, ease: [0.22, 1, 0.36, 1] }}
               className="text-base leading-relaxed text-muted-foreground max-w-lg"
             >
-              Sole PM and designer at Dror — through{" "}
+              Sole PM and designer at Dror, through{" "}
               <strong className="text-foreground font-medium">a full product lifecycle</strong>: a 0→1 consumer launch, a{" "}
               <strong className="text-foreground font-medium">COVID-forced B2B pivot</strong>, and a lesson about{" "}
               <strong className="text-foreground font-medium">what PMF looks like when it&apos;s rented from an external event</strong>.
@@ -203,7 +203,7 @@ function Hero() {
               transition={{ duration: 0.5, delay: 0.09, ease: [0.22, 1, 0.36, 1] }}
               className="text-sm leading-relaxed text-muted-foreground max-w-lg"
             >
-              Dror was the flagship product at Lythouse — the company was originally Dror Labs.
+              Dror was the flagship product at Lythouse, the company was originally Dror Labs.
             </motion.p>
 
             {/* Meta grid */}
@@ -245,7 +245,7 @@ function Hero() {
             </motion.div>
           </div>
 
-          {/* RIGHT — visual */}
+          {/* RIGHT, visual */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -311,7 +311,7 @@ function ActTimeline() {
       </div>
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-5">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-1">Wind down · Post Apr 2021</p>
-        <p className="text-[15px] font-medium text-foreground mb-1">PMF was real — but rented</p>
+        <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Company hits ₹1.98Cr lifetime revenue, eventually winds down. The market we&apos;d built for stopped existing.</p>
       </div>
     </div>
@@ -325,8 +325,8 @@ function ForcingFunctions() {
     {
       num: "#1", date: "March 2020", accent: "orange" as const,
       event: "COVID-19 locks everyone home",
-      before: "We were 6 months into building a citizen safety app — location sharing, SOS alerts, safety circles for people moving through cities.",
-      after: "Citizens stop moving. Our core use case — safety while in transit — becomes irrelevant indefinitely. B2C growth stalls. Revenue near zero.",
+      before: "We were 6 months into building a citizen safety app, location sharing, SOS alerts, safety circles for people moving through cities.",
+      after: "Citizens stop moving. Our core use case, safety while in transit, becomes irrelevant indefinitely. B2C growth stalls. Revenue near zero.",
     },
     {
       num: "#2", date: "Late 2021", accent: "red" as const,
@@ -386,12 +386,12 @@ function DailyRhythm() {
         <div className="p-6 bg-card">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">Night</p>
           <p className="text-[14px] font-medium text-foreground mb-2">UX Design</p>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process — I was the handoff.</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process, I was the handoff.</p>
         </div>
         <div className="p-6 bg-muted/40">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">12pm Standup</p>
           <p className="text-[14px] font-medium text-foreground mb-2">PRD Delivery</p>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise — a vague PRD meant broken builds by afternoon.</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise, a vague PRD meant broken builds by afternoon.</p>
         </div>
         <div className="p-6 bg-orange-500/[0.04]">
           <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-2">Afternoon</p>
@@ -402,7 +402,7 @@ function DailyRhythm() {
 
       {/* Team */}
       <div className="rounded-2xl border border-border bg-muted/30 p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Full team — 10 people</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Full team, 10 people</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
           {[
             { name: "Dhiraj Nauhbar", title: "Co-founder & CEO" },
@@ -430,7 +430,7 @@ function GapsGrid() {
   const gaps = [
     { num: "Gap 01", finding: "Connectivity assumption",         change: "Life360 required persistent internet. In tier 2/3 India, patchy connectivity made real-time sharing unreliable exactly when it mattered." },
     { num: "Gap 02", finding: "English-first UI",                change: "Life360&apos;s onboarding was English-heavy and jargon-dense. Our primary users in smaller cities needed icon-first, low-literacy design." },
-    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "The &lsquo;track your family&rsquo; framing felt invasive in Indian social dynamics. We repositioned as a safety circle — opt-in, mutual, trust-first." },
+    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "The &lsquo;track your family&rsquo; framing felt invasive in Indian social dynamics. We repositioned as a safety circle, opt-in, mutual, trust-first." },
     { num: "Gap 04 · Research", finding: "68% drop-off in Life360 onboarding", change: "Ran Life360 with 15 Indian users. Primary drop-off: confusing permissions flow, English UI, assumption all members have active smartphones." },
   ]
   return (
@@ -487,7 +487,7 @@ function GapsGrid() {
       <div className="rounded-2xl border border-orange-500/20 bg-orange-500/[0.04] p-6">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-600/70 dark:text-orange-400/60 mb-3">The commercial reality of Act 1</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
-          The consumer app launched. We got real users. But the revenue model was broken from the start — B2C freemium in India in 2020 meant most users never paid. The product was validated socially, not commercially. Then COVID hit and citizens stopped moving. We had a live product, real users, and almost no revenue.
+          The consumer app launched. We got real users. But the revenue model was broken from the start, B2C freemium in India in 2020 meant most users never paid. The product was validated socially, not commercially. Then COVID hit and citizens stopped moving. We had a live product, real users, and almost no revenue.
         </p>
       </div>
     </div>
@@ -498,10 +498,10 @@ function GapsGrid() {
 
 function WhatWasCut() {
   const cuts = [
-    { feature: "Community reporting",       when: "V1",      why: "Trust risk — users feared false alerts and abuse" },
+    { feature: "Community reporting",       when: "V1",      why: "Trust risk, users feared false alerts and abuse" },
     { feature: "Live location sharing",      when: "V1",      why: "Privacy concern; battery drain on low-end devices" },
     { feature: "In-app emergency call",      when: "V1",      why: "Latency made it slower than native dialer every time" },
-    { feature: "Driving behaviour tracking", when: "Roadmap", why: "COVID made this irrelevant — no one was driving" },
+    { feature: "Driving behaviour tracking", when: "Roadmap", why: "COVID made this irrelevant, no one was driving" },
   ]
   return (
     <div className="rounded-2xl border border-white/[0.08] overflow-hidden">
@@ -568,7 +568,7 @@ function PivotValidation() {
 function ProductComparison() {
   const rows = [
     { label: "Primary user",  act1: "Citizens moving through cities",        act3: "Factory managers + essential workers" },
-    { label: "Revenue model", act1: "B2C freemium — mostly free",            act3: "Enterprise contracts — recurring" },
+    { label: "Revenue model", act1: "B2C freemium, mostly free",            act3: "Enterprise contracts, recurring" },
     { label: "Core feature",  act1: "SOS trigger + safety circle",           act3: "Bluetooth proximity + compliance dashboard" },
     { label: "Tech",          act1: "GPS, mobile app (Android + iOS)",       act3: "Bluetooth + smart card hardware + React" },
     { label: "What I built",  act1: "Full UX, PRDs, app design",             act3: "UX, PRDs, React.js frontend dashboard" },
@@ -623,7 +623,7 @@ function DashboardMockup() {
         {/* Dashboard body */}
         <div className="bg-muted/20 p-5">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-[12px] font-semibold text-foreground">Live safety overview — today</p>
+            <p className="text-[12px] font-semibold text-foreground">Live safety overview, today</p>
             <span className="text-[10px] text-orange-500 bg-orange-500/10 border border-orange-500/20 rounded-full px-2 py-0.5">● Live</span>
           </div>
           {/* Metric cards row */}
@@ -675,7 +675,7 @@ function DashboardMockup() {
           </div>
         </div>
       </div>
-      <p className="text-[11px] text-muted-foreground/60 text-center mt-2">Factory manager dashboard — React.js, designed and coded by me</p>
+      <p className="text-[11px] text-muted-foreground/60 text-center mt-2">Factory manager dashboard, React.js, designed and coded by me</p>
     </FadeIn>
   )
 }
@@ -764,7 +764,7 @@ function ImpactMetrics() {
       {/* Revenue chart */}
       <FadeIn>
         <CsAreaChart
-          title="Revenue trajectory — company lifetime"
+          title="Revenue trajectory, company lifetime"
           description="The pivot from B2C to B2B is the only moment revenue grew meaningfully"
           data={REVENUE_DATA}
           unit="₹L"
@@ -778,7 +778,7 @@ function ImpactMetrics() {
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-6">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-3">Honest assessment</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
-          ₹1.98Cr sounds like a success. In context it isn&apos;t. The company raised $494K (~₹4Cr) and generated ₹1.98Cr in lifetime revenue. The B2B pivot worked commercially — but only for as long as COVID made social distancing a compliance requirement. Once restrictions lifted, the problem we&apos;d built for stopped being urgent enough for enterprises to pay for. We proved we could sell. We didn&apos;t prove the market would last.
+          ₹1.98Cr sounds like a success. In context it isn&apos;t. The company raised $494K (~₹4Cr) and generated ₹1.98Cr in lifetime revenue. The B2B pivot worked commercially, but only for as long as COVID made social distancing a compliance requirement. Once restrictions lifted, the problem we&apos;d built for stopped being urgent enough for enterprises to pay for. We proved we could sell. We didn&apos;t prove the market would last.
         </p>
       </div>
     </div>
@@ -806,10 +806,10 @@ const COVID_DUAL_DATA = [
 
 function ReflectionCards() {
   const cards = [
-    { icon: <IconBulb size={16} strokeWidth={1.75} />, label: "What I&apos;d do differently", body: "Build for the post-COVID use case in parallel. Workplace safety as a category doesn&apos;t require a pandemic — but we never found the non-emergency version of our product. If we&apos;d started that search in early 2021, we might have had something before the urgency disappeared." },
+    { icon: <IconBulb size={16} strokeWidth={1.75} />, label: "What I&apos;d do differently", body: "Build for the post-COVID use case in parallel. Workplace safety as a category doesn&apos;t require a pandemic, but we never found the non-emergency version of our product. If we&apos;d started that search in early 2021, we might have had something before the urgency disappeared." },
     { icon: <IconTarget size={16} strokeWidth={1.75} />, label: "The PMF lesson", body: "PMF tied to an external forcing function is not durable PMF. Our retention was high, our NPS was strong, clients were happy. But none of that mattered when the underlying reason to buy disappeared. True PMF survives when the conditions that created it change." },
-    { icon: <IconPresentation size={16} strokeWidth={1.75} />, label: "What this changed in how I work", body: "I now ask &lsquo;what happens to this product when the forcing function goes away?&rsquo; before committing to any product direction. It&apos;s the question we never asked at Dror — because the forcing function felt permanent at the time." },
-    { icon: <IconCode size={16} strokeWidth={1.75} />, label: "The operational learning", body: "Designing nights, writing PRDs at noon, coding afternoons — that rhythm worked because I refused to be a bottleneck. But it&apos;s not scalable. In a lean team, the PM has to be willing to do whatever the product needs, not just what&apos;s in their job description." },
+    { icon: <IconPresentation size={16} strokeWidth={1.75} />, label: "What this changed in how I work", body: "I now ask &lsquo;what happens to this product when the forcing function goes away?&rsquo; before committing to any product direction. It&apos;s the question we never asked at Dror, because the forcing function felt permanent at the time." },
+    { icon: <IconCode size={16} strokeWidth={1.75} />, label: "The operational learning", body: "Designing nights, writing PRDs at noon, coding afternoons, that rhythm worked because I refused to be a bottleneck. But it&apos;s not scalable. In a lean team, the PM has to be willing to do whatever the product needs, not just what&apos;s in their job description." },
   ]
   return (
     <div className="grid sm:grid-cols-2 gap-4">
@@ -851,10 +851,10 @@ export default function Page() {
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              The product didn&apos;t fail. The world changed — twice.
+              The product didn&apos;t fail. The world changed, twice.
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Most startup failures are internal — wrong team, wrong execution, wrong market. Dror&apos;s story is different. We built the right product twice. Each time, an external event made our market disappear.
+              Most startup failures are internal, wrong team, wrong execution, wrong market. Dror&apos;s story is different. We built the right product twice. Each time, an external event made our market disappear.
             </p>
           </div>
           <ForcingFunctions />
@@ -875,11 +875,11 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection id="act-1" label="Act 1 — Consumer App" variant="muted">
+      <CsSection id="act-1" label="Act 1, Consumer App" variant="muted">
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              Building India&apos;s Life360 — from scratch
+              Building India&apos;s Life360, from scratch
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
               The CEO had an early MVP and initial seed funding. Life360 existed but wasn&apos;t built for India.
@@ -896,8 +896,8 @@ export default function Page() {
             title="Full Safety Suite or Single Reliable Action?"
             problem="We had requests for community reporting, live tracking, in-app emergency calls, and driving behaviour tools for V1. Shipping everything would delay launch and create a support surface we couldn't sustain."
             decision="Shipped a single core action: one-tap SOS trigger + safety circle setup. Everything else deferred with documented rationale. In a trust-sensitive category, one failure destroys retention permanently."
-            tradeoff="A less feature-complete V1 than stakeholders expected — but zero post-launch critical failures in the category that mattered most: emergency response."
-            impact="SOS reliability became the product's trust foundation. Fewer features, rock-solid core — what early retention data confirmed."
+            tradeoff="A less feature-complete V1 than stakeholders expected, but zero post-launch critical failures in the category that mattered most: emergency response."
+            impact="SOS reliability became the product's trust foundation. Fewer features, rock-solid core, what early retention data confirmed."
           />
           <CsDecision
             index={1}
@@ -915,7 +915,7 @@ export default function Page() {
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-white leading-snug">The decision that changed everything</h2>
             <p className="text-[14px] text-neutral-400 leading-relaxed max-w-xl">
-              Dhiraj was in conversations with enterprises about employee safety. The signal was clear: companies with essential workers needed exactly what we&apos;d built — but packaged for B2B. We validated fast.
+              Dhiraj was in conversations with enterprises about employee safety. The signal was clear: companies with essential workers needed exactly what we&apos;d built, but packaged for B2B. We validated fast.
             </p>
           </div>
           <CsDecision
@@ -930,22 +930,22 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection id="act-3" label="Act 3 — B2B Rebuild">
+      <CsSection id="act-3" label="Act 3, B2B Rebuild">
         <div className="space-y-8">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              Rebuilding for enterprise — Bluetooth, smart cards, and a React dashboard I partly coded myself
+              Rebuilding for enterprise, Bluetooth, smart cards, and a React dashboard I partly coded myself
             </h2>
           </div>
           <ProductComparison />
           <div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-5">How the product worked — 4 layers</p>
+            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-5">How the product worked, 4 layers</p>
             <div className="grid sm:grid-cols-2 gap-4">
               {[
                 { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>, num: "Layer 01 · Hardware", title: "Smart cards for every worker", desc: "Each essential worker carried a Bluetooth-enabled smart card. Cards detected proximity to other cards. When two workers got too close for too long, both devices vibrated and logged the event." },
                 { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2" strokeLinecap="round"/></svg>, num: "Layer 02 · Mobile", title: "Phone-based detection for managers", desc: "Workers with smartphones used the mobile app as a secondary detection layer. This reduced hardware cost for enterprises where some workers already had devices." },
                 { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>, num: "Layer 03 · Dashboard", title: "Real-time compliance view for managers", desc: "Factory managers got a web dashboard showing active worker count, proximity events, compliance score, and at-risk zones. This is what I designed nights and coded afternoons in React." },
-                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>, num: "Layer 04 · Reporting", title: "Exportable reports for enterprise compliance", desc: "Enterprises needed documentation for regulatory compliance. Weekly PDF reports with distancing metrics, event logs, and trend lines — added after the first client asked." },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>, num: "Layer 04 · Reporting", title: "Exportable reports for enterprise compliance", desc: "Enterprises needed documentation for regulatory compliance. Weekly PDF reports with distancing metrics, event logs, and trend lines, added after the first client asked." },
               ].map(l => (
                 <FadeIn key={l.num}>
                   <div className="rounded-2xl border border-border bg-card p-5 h-full">
@@ -967,7 +967,7 @@ export default function Page() {
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">What the numbers actually say</h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              These are company lifetime numbers, not just my 11 months. The B2B pivot is what generated real revenue — the consumer app validated the concept but couldn&apos;t monetise it.
+              These are company lifetime numbers, not just my 11 months. The B2B pivot is what generated real revenue, the consumer app validated the concept but couldn&apos;t monetise it.
             </p>
           </div>
           <ImpactMetrics />
@@ -978,13 +978,13 @@ export default function Page() {
         <div className="space-y-10">
           <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-              &ldquo;We didn&apos;t fail because we built the wrong product. We built the right product for a temporary world. The lesson isn&apos;t &lsquo;don&apos;t pivot.&rsquo; It&apos;s &lsquo;understand what your market is made of — and whether it exists without the forcing function that created it.&rsquo;&rdquo;
+              &ldquo;We didn&apos;t fail because we built the wrong product. We built the right product for a temporary world. The lesson isn&apos;t &lsquo;don&apos;t pivot.&rsquo; It&apos;s &lsquo;understand what your market is made of, and whether it exists without the forcing function that created it.&rsquo;&rdquo;
             </p>
           </blockquote>
           <FadeIn>
             <CsDualLineChart
               title="The correlation that ended us"
-              description="Our revenue tracked COVID severity — not product quality. When restrictions lifted, revenue fell."
+              description="Our revenue tracked COVID severity, not product quality. When restrictions lifted, revenue fell."
               data={COVID_DUAL_DATA}
               series={[
                 { key: "revenue", label: "Revenue (₹L)", color: "rgb(83,74,183)" },

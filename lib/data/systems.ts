@@ -3,14 +3,14 @@ import type { SystemItem } from "@/lib/types/content"
 export const systemItems: SystemItem[] = [
   {
     category:    "Design System",
-    title:       "Premium Fintech Design System UI Kit",
-    description: "A reusable digital finance UI kit for dashboards, payments, cards, wallets, transactions, analytics, onboarding, account management, and financial insights.",
+    title:       "Fintech Design System UI Kit",
+    description: "A reusable finance UI kit for dashboards, payments, wallets, cards, transactions, onboarding, and account management.",
     image:       "/assets/images/work/fintech-ai-system.jpg",
     href:        "/systems/fintech-ai-interface",
     ctaLabel:    "Explore system",
     accent:      "linear-gradient(135deg, #050806 0%, #0b120d 58%, #00c853 100%)",
     tags:        ["Fintech", "UI Kit", "Mobile Wallet", "Payments", "Financial UX"],
-    problem:     "Digital finance products need interfaces that are calm under density, precise around money movement, and explicit when risk or compliance changes the user decision. This system turns those requirements into reusable foundations, components, and financial UX patterns for web and mobile product teams.",
+    problem:     "Finance products need dense screens, clear money movement, and careful handling of risk. This system turns those needs into reusable foundations, components, and UX patterns for web and mobile teams.",
     stats: [
       { value: "64+", label: "component specimens" },
       { value: "16",  label: "financial color roles" },
@@ -20,27 +20,27 @@ export const systemItems: SystemItem[] = [
     sections: [
       {
         heading: "Why Generic Systems Fall Short",
-        body: "Most design systems are built for consumer products — where the worst outcome of a confusing interaction is abandonment. In fintech, the worst outcome is a mistaken transfer, a missed disclosure, or a user acting on AI-generated advice they didn't understand.\n\nThe interface patterns required for these contexts are absent from Tailwind, Material, or Radix. There's no 'irreversible action' component. No 'AI confidence' indicator. No 'regulatory disclosure' template. These had to be invented, tested, and documented as first-class primitives.",
+        body: "Most design systems are built for low-risk consumer products. In fintech, a confusing interaction can mean a mistaken transfer, a missed disclosure, or a user following AI advice they did not understand.\n\nTailwind, Material, and Radix do not define patterns for this level of risk. There is no default component for an irreversible action, AI confidence, or regulatory disclosure. Those patterns had to be defined, tested, and documented as part of the kit.",
       },
       {
-        body: "In high-stakes interfaces, the design system's job isn't to speed up development — it's to prevent the class of errors that only manifest in production at scale. Patterns for risk, confidence, and compliance need to be boring and consistent by design.",
+        body: "In high-stakes interfaces, the system's job is not only speed. It should prevent mistakes that are expensive to find in production. Risk, confidence, and compliance patterns need to be predictable by design.",
         type: "quote",
       },
       {
         heading: "Risk State Framework",
-        body: "The system defines four risk tiers — informational, caution, high-risk, and critical-irreversible — each with consistent visual language, required copy patterns, and mandated interaction constraints. A critical-irreversible action must include a confirmation step with explicit consequence statement. This isn't a guideline — it's enforced at the component level.\n\nThe tier system emerged from working with compliance and legal teams on what constitutes adequate disclosure. Design translated regulatory requirement into interaction constraint, and the constraint became a component prop.",
+        body: "The system defines four risk tiers: informational, caution, high-risk, and critical-irreversible. Each tier has required copy, visual treatment, and interaction rules. A critical action needs a confirmation step and a clear consequence statement. That rule lives in the component, not only in documentation.\n\nThe tier model came from working with compliance and legal teams on what counted as adequate disclosure. The regulatory need became an interaction constraint, then a component prop.",
       },
       {
         heading: "Designing for AI Explainability",
-        body: "AI-surfaced recommendations in financial contexts carry a specific design burden: users need to be able to trust them, question them, and override them — all without feeling like they're fighting the product.\n\nThe system defines three explainability patterns. Summary-first: lead with the recommendation, expand to reasoning on demand. Confidence framing: surface uncertainty explicitly for high-stakes decisions, suppress it for routine ones. Override affordance: every AI recommendation must have a clear, non-stigmatising path to user override.",
+        body: "AI recommendations in finance need a clear way to be checked. Users should see the recommendation, understand why it appeared when the stakes are high, and be able to override it without friction.\n\nThe system defines three patterns. Summary first: show the recommendation before the reasoning. Confidence framing: show uncertainty when the decision carries risk. Override affordance: every AI recommendation needs a clear path for the user to choose differently.",
       },
       {
-        body: "AI features in regulated contexts aren't done when they work correctly — they're done when a compliance officer can look at the interface and confirm that the disclosure is adequate and the override path is present.",
+        body: "AI features in regulated contexts are not done when the model works. They are done when the interface shows the disclosure clearly and gives the user a visible way to override the recommendation.",
         type: "callout",
       },
       {
         heading: "Compliance Integration",
-        body: "Regulatory requirements vary by market and product type. Rather than building per-market component variants, the system uses a disclosure slot — a standardised space in every high-stakes flow where compliance copy renders based on jurisdiction configuration. Design owns the template; legal owns the copy; the component ensures neither can be omitted.\n\nThe slot pattern reduced time-to-compliance-sign-off from three weeks to under five days by eliminating the back-and-forth on where copy would appear and how it would be formatted.",
+        body: "Regulatory copy changes by market and product type. Instead of creating separate components for every market, the system uses a disclosure slot in each high-risk flow. Design owns the placement and structure. Legal owns the copy. The component makes sure the slot cannot be skipped.\n\nThis reduced compliance sign-off from three weeks to under five days because teams no longer debated where the copy would go or how it would be formatted.",
       },
     ],
     visuals: [
@@ -89,22 +89,22 @@ export const systemItems: SystemItem[] = [
     components: [
       {
         name:        "RiskGate",
-        description: "Wraps any action with risk-tier-aware confirmation logic. Tier prop drives copy templates, required acknowledgements, and confirmation step requirements.",
+        description: "Wraps risky actions with confirmation rules based on tier, including copy, acknowledgement, and required confirmation steps.",
         tags:        ["Composable", "Tier-aware", "Compliance-ready"],
       },
       {
         name:        "AIRecommendation",
-        description: "Renders an AI-generated suggestion with configurable confidence framing, expandable reasoning panel, and accessible override affordance.",
+        description: "Shows an AI suggestion with confidence framing, optional reasoning, and a clear override path.",
         tags:        ["Explainability", "Progressive disclosure", "Override-safe"],
       },
       {
         name:        "DisclosureSlot",
-        description: "Jurisdiction-aware disclosure container. Renders compliance copy from configuration; errors in missing copy rather than silently omitting it.",
+        description: "Shows disclosure copy from market configuration and errors when required copy is missing.",
         tags:        ["Compliance", "i18n-ready", "Fail-loud"],
       },
       {
         name:        "ConfidenceIndicator",
-        description: "Communicates model certainty using a tiered visual language — suppressed for routine tasks, explicit for high-stakes decisions.",
+        description: "Shows model certainty only when the decision needs it, with stronger treatment for high-risk choices.",
         tags:        ["AI UX", "Context-sensitive", "Accessible"],
       },
     ],

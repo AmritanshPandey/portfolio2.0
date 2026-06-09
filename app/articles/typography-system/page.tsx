@@ -23,7 +23,7 @@ const F = {
   lato:   "'Lato', system-ui, sans-serif",
 }
 
-// ─── FADE-IN WRAPPER ───────────────────────────────────────────────────────—
+// ─── FADE-IN WRAPPER ───────────────────────────────────────────────────────, 
 
 function FadeIn({ children, delay = 0, className = "" }: {
   children: React.ReactNode; delay?: number; className?: string
@@ -57,7 +57,7 @@ function Section({ id, children, muted = false }: {
 }
 
 function Eyebrow({ num, tag }: { num: string; tag: string }) {
-  // A quiet chapter marker for a long-form sequence — not the orange,
+  // A quiet chapter marker for a long-form sequence, not the orange,
   // uppercase, wide-tracked eyebrow trope (per DESIGN.md / PRODUCT.md).
   return (
     <div className="mb-5 font-mono text-[12px] text-muted-foreground">
@@ -166,7 +166,7 @@ const TYPE_SHOW = [
   { word: "Readability", font: F.serif, weight: 600, style: "normal", lbl: "The first job",
     desc: "Before a typeface has personality, it must be effortless to read. Size, measure, line height, and contrast decide whether users absorb the text or bounce. Everything else is a layer on top." },
   { word: "Personality", font: F.sans, weight: 600, style: "normal", lbl: "The second job",
-    desc: "Once text is readable, the typeface carries voice — a geometric sans reads precise and modern, a humanist serif warm and editorial. Voice supports the brand; it never costs legibility." },
+    desc: "Once text is readable, the typeface carries voice, a geometric sans reads precise and modern, a humanist serif warm and editorial. Voice supports the brand; it never costs legibility." },
   { word: "Hierarchy", font: F.mono, weight: 500, style: "normal", lbl: "The structure",
     desc: "Hierarchy lets users tell a heading from body, a label from a value, without reading a word. Size, weight, color, and space do it together." },
   { word: "Function", font: F.lora, weight: 400, style: "italic", lbl: "The discipline",
@@ -175,28 +175,28 @@ const TYPE_SHOW = [
 
 const CLASSES = [
   { spec: F.lora, size: 56, name: "Serif", font: "Lora · Georgia · Times",
-    desc: "Small strokes finish each letter. Traditional, authoritative, editorial — excellent for long-form reading, in print and increasingly on screen.",
+    desc: "Small strokes finish each letter. Traditional, authoritative, editorial, excellent for long-form reading, in print and increasingly on screen.",
     traits: ["Editorial", "Trustworthy", "Long-form"] },
   { spec: F.sans, size: 56, name: "Sans-serif", font: "Inter · Helvetica · Arial",
-    desc: "No serifs: clean, neutral, modern. The UI default — legible at small sizes and on low-resolution screens.",
+    desc: "No serifs: clean, neutral, modern. The UI default, legible at small sizes and on low-resolution screens.",
     traits: ["Modern", "Neutral", "UI default"] },
   { spec: F.grotesk, size: 56, name: "Grotesk", font: "Space Grotesk · Helvetica · Founders",
-    desc: "Early sans-serifs with slightly mechanical forms. Confident and characterful — favoured by product brands wanting personality without serifs.",
+    desc: "Early sans-serifs with slightly mechanical forms. Confident and characterful, favoured by product brands wanting personality without serifs.",
     traits: ["Confident", "Characterful", "Brand"] },
   { spec: F.poppins, size: 56, name: "Geometric", font: "Poppins · Futura · Circular",
     desc: "Built from circles and straight lines. Precise, friendly, contemporary. Great in headings; tiring in long body copy.",
     traits: ["Precise", "Friendly", "Display-leaning"] },
   { spec: F.lato, size: 56, name: "Humanist", font: "Lato · Frutiger · Source Sans",
-    desc: "Sans-serifs with calligraphic warmth and open apertures. The most readable sans — ideal for body text and accessibility.",
+    desc: "Sans-serifs with calligraphic warmth and open apertures. The most readable sans, ideal for body text and accessibility.",
     traits: ["Warm", "Readable", "Accessible"] },
   { spec: F.mono, size: 46, name: "Monospace", font: "DM Mono · JetBrains · SF Mono",
     desc: "Every character is equal width. Essential for code, data, and tabular numbers. Adds a technical, precise voice.",
     traits: ["Code", "Tabular", "Technical"] },
   { spec: F.serif, size: 56, name: "Display", font: "Playfair · Fraunces · Canela",
-    desc: "Built for large sizes and impact, not paragraphs. High contrast, expressive detail. Hero moments only — never body or labels.",
+    desc: "Built for large sizes and impact, not paragraphs. High contrast, expressive detail. Hero moments only, never body or labels.",
     traits: ["Impact", "Hero-only", "Expressive"] },
   { spec: F.fraunces, size: 56, name: "Variable", font: "Fraunces · Inter · Recursive",
-    desc: "One file, continuous axes — weight, width, optical size. Smaller payloads, fluid weights, optical sizing at every scale.",
+    desc: "One file, continuous axes, weight, width, optical size. Smaller payloads, fluid weights, optical sizing at every scale.",
     traits: ["One file", "Fluid axes", "Performance"] },
 ]
 
@@ -232,9 +232,9 @@ const PAIRS = [
 const PRINCIPLES = [
   { num: "01", title: "Design for reading first", body: "Personality is earned only after text is effortless to read. Measure, size, and contrast come before voice. A beautiful typeface that fatigues the reader has failed its one essential job." },
   { num: "02", title: "Consistency beats novelty", body: "A predictable scale used everywhere reads as quality. “Just one more size” is how systems rot. Reuse the scale; let layout and spacing create the variety." },
-  { num: "03", title: "Contrast creates hierarchy", body: "Order comes from decisive difference in size, weight, or color — not from making everything large. If two things look equally important, neither is." },
+  { num: "03", title: "Contrast creates hierarchy", body: "Order comes from decisive difference in size, weight, or color, not from making everything large. If two things look equally important, neither is." },
   { num: "04", title: "Spacing is typography", body: "Line height, paragraph spacing, and measure shape readability as much as the letterforms. White space isn't empty; it's what lets type breathe." },
-  { num: "05", title: "Typography is interface design", body: "In most products, text is the interface. Treat the type system as core architecture — tokenized, accessible, consistent." },
+  { num: "05", title: "Typography is interface design", body: "In most products, text is the interface. Treat the type system as core architecture, tokenized, accessible, consistent." },
   { num: "06", title: "Restraint scales", body: "Two families, a few sizes, two or three weights covers nearly every interface and stays maintainable. Range comes from how you combine, not how much you add." },
 ]
 
@@ -244,7 +244,7 @@ const LEGIBILITY = [
   { font: F.mono, name: "DM Mono · disambiguated" },
 ]
 
-// ─── INTERACTIVE TOOLS ──────────────────────────────────────────────────────—
+// ─── INTERACTIVE TOOLS ──────────────────────────────────────────────────────, 
 
 function ModularScaleTool() {
   const [base, setBase] = useState(16)
@@ -413,7 +413,7 @@ function ReadingSimulator() {
       </ToolHead>
       <div className="px-5 py-8 flex justify-center bg-background/40">
         <p className="text-[16px] text-foreground/80" style={{ maxWidth: `${width}ch`, lineHeight: lh }}>
-          Typography is the craft of making language visible. The measure — the length of a line of text — is one of its oldest and most reliable controls. When a column is too wide the reader tires; too narrow and the rhythm fractures into fragments. Somewhere between forty-five and seventy-five characters lies the comfortable middle, where the eye sweeps and returns without conscious effort, and the words simply flow.
+          Typography is the craft of making language visible. The measure, the length of a line of text, is one of its oldest and most reliable controls. When a column is too wide the reader tires; too narrow and the rhythm fractures into fragments. Somewhere between forty-five and seventy-five characters lies the comfortable middle, where the eye sweeps and returns without conscious effort, and the words simply flow.
         </p>
       </div>
     </Tool>
@@ -426,7 +426,7 @@ function HierarchyPlayground() {
   const n = Object.values(s).filter(Boolean).length
   const strong = n === 4
   const verdict = strong
-    ? { color: "text-emerald-500", label: "Strong hierarchy.", text: "Four levers working together — the eye lands on the title, then price, then action, instantly." }
+    ? { color: "text-emerald-500", label: "Strong hierarchy.", text: "Four levers working together, the eye lands on the title, then price, then action, instantly." }
     : n <= 1
     ? { color: "text-red-500", label: "Flat.", text: "With almost no contrast, everything competes and nothing leads. The user has to read every word to find structure." }
     : { color: "text-amber-500", label: "Weak hierarchy.", text: "Some order, but the levels blur. Decisive contrast in size and weight reads far faster." }
@@ -612,7 +612,7 @@ function A11yChecker() {
       <div className="px-5 py-6">
         <div className="rounded-xl p-8" style={{ background: bg }}>
           <div style={{ color: fg, fontSize: size, fontWeight: 400, lineHeight: 1.5 }}>
-            The quick brown fox jumps over the lazy dog — 0123456789
+            The quick brown fox jumps over the lazy dog, 0123456789
           </div>
           <div className="flex flex-wrap gap-2.5 mt-5">
             {badges.map(([label, pass]) => (
@@ -638,21 +638,21 @@ function A11yChecker() {
       </div>
       <div className="px-5 py-4 border-t border-border/60">
         <p className="text-[13px] leading-[1.7] text-muted-foreground">
-          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text and <b className="text-foreground">3:1</b> for large text (≥24px, or ≥18.66px bold). Keep body text at 16px or above, and the layout usable at 200% zoom. Choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b> — a quiet but real win for dyslexic and low-vision readers.
+          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text and <b className="text-foreground">3:1</b> for large text (≥24px, or ≥18.66px bold). Keep body text at 16px or above, and the layout usable at 200% zoom. Choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b>, a quiet but real win for dyslexic and low-vision readers.
         </p>
       </div>
     </Tool>
   )
 }
 
-// ─── HERO ─────────────────────────────────────────────────────────────────—
+// ─── HERO ─────────────────────────────────────────────────────────────────, 
 
 function Hero() {
   const a = articleItems.find(x => x.href === HREF)!
   return <ArticleHeader article={a} />
 }
 
-// ─── RELATED ──────────────────────────────────────────────────────────────—
+// ─── RELATED ──────────────────────────────────────────────────────────────, 
 
 function Related() {
   const related = articleItems.filter(a => a.href !== HREF).slice(0, 3)
@@ -679,12 +679,12 @@ function Related() {
   )
 }
 
-// ─── PAGE ─────────────────────────────────────────────────────────────────—
+// ─── PAGE ─────────────────────────────────────────────────────────────────, 
 
 export default function Page() {
   return (
     <main>
-      {/* Showcase typefaces — loaded only on this article */}
+      {/* Showcase typefaces, loaded only on this article */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       {/* eslint-disable-next-line @next/next/no-page-custom-font -- showcase typefaces are intentionally scoped to this article only */}
@@ -713,7 +713,7 @@ export default function Page() {
           ))}
         </FadeIn>
 
-        <Note label="Typography is UX, not styling">Roughly 95% of the web is written language. The type system isn&apos;t a cosmetic pass at the end — it&apos;s the primary medium the product communicates through. Treat it as core architecture.</Note>
+        <Note label="Typography is UX, not styling">Roughly 95% of the web is written language. The type system isn&apos;t a cosmetic pass at the end, it&apos;s the primary medium the product communicates through. Treat it as core architecture.</Note>
       </Section>
 
       {/* 02 CLASSIFICATION */}
@@ -750,7 +750,7 @@ export default function Page() {
       <Section id="scale">
         <FadeIn><Eyebrow num="03" tag="Type Scale" /></FadeIn>
         <FadeIn><Title>The modular type scale</Title></FadeIn>
-        <FadeIn><Lede>A type scale is a fixed set of sizes derived from one base and one ratio. Every size comes from the scale, never an arbitrary value — which is what makes typography feel composed instead of chaotic.</Lede></FadeIn>
+        <FadeIn><Lede>A type scale is a fixed set of sizes derived from one base and one ratio. Every size comes from the scale, never an arbitrary value, which is what makes typography feel composed instead of chaotic.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Modular scale generator</SubEyebrow></FadeIn>
         <FadeIn><ModularScaleTool /></FadeIn>
@@ -760,7 +760,7 @@ export default function Page() {
       <Section id="reading" muted>
         <FadeIn><Eyebrow num="04" tag="Reading Experience" /></FadeIn>
         <FadeIn><Title>The reading experience</Title></FadeIn>
-        <FadeIn><Lede>Sizing the type is only half the job. Line length, vertical rhythm, and paragraph spacing decide whether reading feels effortless or exhausting — the quiet mechanics of comfort.</Lede></FadeIn>
+        <FadeIn><Lede>Sizing the type is only half the job. Line length, vertical rhythm, and paragraph spacing decide whether reading feels effortless or exhausting, the quiet mechanics of comfort.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <div className="rounded-xl border border-emerald-500/30 bg-card p-6">
@@ -780,19 +780,19 @@ export default function Page() {
         <FadeIn><SubEyebrow>Tool · Reading width &amp; line-height simulator</SubEyebrow></FadeIn>
         <FadeIn><ReadingSimulator /></FadeIn>
 
-        <Note label="Vertical rhythm">Set line height and spacing on a consistent baseline unit (4px or 8px). When headings, body, and spacing snap to the same grid, the page gains an invisible structure the eye reads as &ldquo;calm&rdquo; — even if no one can name why.</Note>
+        <Note label="Vertical rhythm">Set line height and spacing on a consistent baseline unit (4px or 8px). When headings, body, and spacing snap to the same grid, the page gains an invisible structure the eye reads as &ldquo;calm&rdquo;, even if no one can name why.</Note>
       </Section>
 
       {/* 05 HIERARCHY */}
       <Section id="hierarchy">
         <FadeIn><Eyebrow num="05" tag="Hierarchy" /></FadeIn>
         <FadeIn><Title>Typographic hierarchy</Title></FadeIn>
-        <FadeIn><Lede>Hierarchy tells you where to look first, second, third. It&apos;s built from four levers — size, weight, color, and space — and strong hierarchy needs only a few of them used decisively.</Lede></FadeIn>
+        <FadeIn><Lede>Hierarchy tells you where to look first, second, third. It&apos;s built from four levers, size, weight, color, and space, and strong hierarchy needs only a few of them used decisively.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Weight &amp; hierarchy playground</SubEyebrow></FadeIn>
         <FadeIn><HierarchyPlayground /></FadeIn>
 
-        <Note label="Contrast creates hierarchy — not size alone">The common failure is making everything big. A 32px heading over a 28px subhead has no clear order. Make a decisive jump in at least one dimension: a bold 24px title over regular 14px body reads more clearly than two similar large sizes.</Note>
+        <Note label="Contrast creates hierarchy, not size alone">The common failure is making everything big. A 32px heading over a 28px subhead has no clear order. Make a decisive jump in at least one dimension: a bold 24px title over regular 14px body reads more clearly than two similar large sizes.</Note>
       </Section>
 
       {/* 06 TYPOGRAPHY FOR UI */}
@@ -853,14 +853,14 @@ export default function Page() {
           </div>
         </FadeIn>
 
-        <Note label="Dense interfaces need the system most">Dashboards pack dozens of type styles per screen and, without a system, drift into near-identical sizes. A tight scale of 5–6 UI sizes (label, caption, body, body-strong, subhead, value) covers almost every dense interface — resist adding more.</Note>
+        <Note label="Dense interfaces need the system most">Dashboards pack dozens of type styles per screen and, without a system, drift into near-identical sizes. A tight scale of 5–6 UI sizes (label, caption, body, body-strong, subhead, value) covers almost every dense interface, resist adding more.</Note>
       </Section>
 
       {/* 07 RESPONSIVE */}
       <Section id="responsive">
         <FadeIn><Eyebrow num="07" tag="Responsive" /></FadeIn>
         <FadeIn><Title>Responsive &amp; fluid typography</Title></FadeIn>
-        <FadeIn><Lede>Type can&apos;t be one size. <code className="font-mono text-[13px] text-orange-500">clamp()</code> scales smoothly between a min and max across the viewport — no breakpoints, no jumps. Set the floor and ceiling; let the middle flow.</Lede></FadeIn>
+        <FadeIn><Lede>Type can&apos;t be one size. <code className="font-mono text-[13px] text-orange-500">clamp()</code> scales smoothly between a min and max across the viewport, no breakpoints, no jumps. Set the floor and ceiling; let the middle flow.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Responsive clamp preview</SubEyebrow></FadeIn>
         <FadeIn><ResponsiveClampPreview /></FadeIn>
@@ -870,7 +870,7 @@ export default function Page() {
       <Section id="accessibility" muted>
         <FadeIn><Eyebrow num="08" tag="Accessibility" /></FadeIn>
         <FadeIn><Title>Accessible by default</Title></FadeIn>
-        <FadeIn><Lede>Accessible typography isn&apos;t bolted on at the end — it&apos;s a set of defaults that make the product better for everyone. Contrast, minimum sizes, zoom behaviour, and legible letterforms are the baseline.</Lede></FadeIn>
+        <FadeIn><Lede>Accessible typography isn&apos;t bolted on at the end, it&apos;s a set of defaults that make the product better for everyone. Contrast, minimum sizes, zoom behaviour, and legible letterforms are the baseline.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Tool · Contrast &amp; size checker</SubEyebrow></FadeIn>
         <FadeIn><A11yChecker /></FadeIn>
@@ -884,9 +884,9 @@ export default function Page() {
 
         <FadeIn className="flex flex-col gap-2.5">
           {[
-            { lbl: "01 — Global / primitive", code: "--font-size-500: 20px;  --leading-snug: 1.25;  --weight-medium: 500;" },
-            { lbl: "02 — Semantic / role", code: "--text-heading: var(--font-size-500)/var(--leading-snug) var(--weight-medium);" },
-            { lbl: "03 — Component", code: "--card-title-font: var(--text-heading);" },
+            { lbl: "01, Global / primitive", code: "--font-size-500: 20px;  --leading-snug: 1.25;  --weight-medium: 500;" },
+            { lbl: "02, Semantic / role", code: "--text-heading: var(--font-size-500)/var(--leading-snug) var(--weight-medium);" },
+            { lbl: "03, Component", code: "--card-title-font: var(--text-heading);" },
           ].map((t, i) => (
             <div key={t.lbl}>
               <div className="rounded-xl border border-border/60 bg-card px-5 py-4">
@@ -943,7 +943,7 @@ export default function Page() {
             </div>
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[16px] text-foreground/75" style={{ lineHeight: 1.65 }}>Body at 16px with comfortable line height. Slightly less fits per screen — and every line is effortless on any device.</p>
+              <p className="text-[16px] text-foreground/75" style={{ lineHeight: 1.65 }}>Body at 16px with comfortable line height. Slightly less fits per screen, and every line is effortless on any device.</p>
               <p className="text-[12px] text-muted-foreground mt-4">16px floor for body; cut content, not size.</p>
             </div>
           </div>
@@ -953,7 +953,7 @@ export default function Page() {
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Too many weights</span>
               <p className="text-[14px] text-foreground/75">
-                <span style={{ fontWeight: 300 }}>Thin</span> <span style={{ fontWeight: 400 }}>Regular</span> <span style={{ fontWeight: 500 }}>Medium</span> <span style={{ fontWeight: 600 }}>Semibold</span> <span style={{ fontWeight: 700 }}>Bold</span> — five weights on one screen, none of them meaning anything specific.
+                <span style={{ fontWeight: 300 }}>Thin</span> <span style={{ fontWeight: 400 }}>Regular</span> <span style={{ fontWeight: 500 }}>Medium</span> <span style={{ fontWeight: 600 }}>Semibold</span> <span style={{ fontWeight: 700 }}>Bold</span>, five weights on one screen, none of them meaning anything specific.
               </p>
               <p className="text-[12px] text-muted-foreground mt-4">Every weight loaded &ldquo;just in case.&rdquo;</p>
             </div>
@@ -970,7 +970,7 @@ export default function Page() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
             <div className="bg-card p-7">
               <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Over-centered text</span>
-              <p className="text-[13px] text-foreground/75 text-center" style={{ lineHeight: 1.7 }}>Long passages set centered force the eye to hunt for the start of every line because the left edge moves. Centering is for short, symmetric moments — not paragraphs of running text like this one.</p>
+              <p className="text-[13px] text-foreground/75 text-center" style={{ lineHeight: 1.7 }}>Long passages set centered force the eye to hunt for the start of every line because the left edge moves. Centering is for short, symmetric moments, not paragraphs of running text like this one.</p>
               <p className="text-[12px] text-muted-foreground mt-4 text-center">Centering body copy &ldquo;for balance.&rdquo;</p>
             </div>
             <div className="bg-card p-7">
@@ -986,12 +986,12 @@ export default function Page() {
       <Section id="principles">
         <FadeIn><Eyebrow num="11" tag="Principles" /></FadeIn>
         <FadeIn><Title>Typography principles</Title></FadeIn>
-        <FadeIn><Lede>A typography system isn&apos;t a font choice — it&apos;s a set of convictions about how text serves the reader. These six hold up across products, brands, and platforms.</Lede></FadeIn>
+        <FadeIn><Lede>A typography system isn&apos;t a font choice, it&apos;s a set of convictions about how text serves the reader. These six hold up across products, brands, and platforms.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PRINCIPLES.map(p => (
             <div key={p.num} className="rounded-xl border border-border/60 bg-card p-7 hover:border-border transition-colors">
-              <span className="font-mono text-[11px] text-orange-500 tracking-[0.1em] mb-5 block">{p.num} —</span>
+              <span className="font-mono text-[11px] text-orange-500 tracking-[0.1em] mb-5 block">{p.num}, </span>
               <p className="font-semibold text-[18px] leading-[1.2] text-foreground mb-2.5" style={{ fontFamily: F.serif, fontWeight: 600 }}>{p.title}</p>
               <p className="text-[13px] text-muted-foreground leading-[1.7]">{p.body}</p>
             </div>
@@ -1025,6 +1025,6 @@ const TOKEN_CODE = `:root {
   --text-meta:       var(--weight-medium) var(--size-caption)/var(--leading-caption) var(--font-mono);
 }
 
-/* usage — components never hard-code sizes */
+/* usage, components never hard-code sizes */
 .page-title { font: var(--text-page-title); letter-spacing: -0.02em; }
 .card-meta  { font: var(--text-meta); text-transform: uppercase; letter-spacing: 0.08em; }`

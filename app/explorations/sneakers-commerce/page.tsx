@@ -15,7 +15,7 @@ export default function Page() {
       status="Concept"
       title="Sneakers Commerce System"
       hypothesis="Hypothesis: scarcity mechanics can be systematised without eroding brand trust."
-      description="A commerce system for sneaker discovery, drops, and authentication — studying how hype-driven marketplaces build and keep trust around collectible products."
+      description="A commerce system for sneaker discovery, drops, and authentication, studying how hype-driven marketplaces build and keep trust around collectible products."
     >
       <InProgressSections />
     </ContentPage>

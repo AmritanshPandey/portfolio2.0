@@ -24,14 +24,15 @@ export default function WorkSection() {
                 href={p.href}
                 image={p.image}
                 title={p.title}
-                category={p.category}
-                metric={p.metric}
+                category={p.metadata ?? p.category}
+                description={p.description}
                 tags={p.tags}
-                ctaLabel="Read case study"
+                ctaLabel="View case study"
                 index={p.order}
                 variant="featured"
                 showImage={false}
                 imageHeight="h-56"
+                thinkingBlock={p.thinkingBlock}
               />
             ))}
           </div>
@@ -44,13 +45,14 @@ export default function WorkSection() {
                 href={p.href}
                 image={p.image}
                 title={p.title}
-                category={p.category}
-                metric={p.metric}
+                category={p.metadata ?? p.category}
+                description={p.metric}
                 tags={undefined}
-                ctaLabel="Read case study"
+                ctaLabel="View case study"
                 index={p.order}
                 showImage={false}
                 imageHeight="h-36"
+                proofRow={p.proofRow}
               />
             ))}
           </div>

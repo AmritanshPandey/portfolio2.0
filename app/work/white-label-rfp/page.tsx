@@ -91,8 +91,8 @@ function Hero() {
           transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
         >
-          Decoupled core UX from brand and visual layers across PartnerBank —
-          Mastercard&apos;s white-label digital banking platform — turning a rigid
+          Decoupled core UX from brand and visual layers across PartnerBank  - 
+          Mastercard&apos;s white-label digital banking platform, turning a rigid
           template system into a configurable architecture that materially
           improved demo turnaround during high-stakes RFP cycles.
         </motion.p>
@@ -144,9 +144,9 @@ export default function Page() {
             </p>
           </div>
           <CsList items={[
-            "Custom demo creation was slow — each RFP was a bottleneck that required dedicated design effort",
+            "Custom demo creation was slow, each RFP was a bottleneck that required dedicated design effort",
             "Every bank required both visual and structural personalization, with no reusable foundation",
-            "Design effort scaled linearly with RFP volume — zero leverage across deals",
+            "Design effort scaled linearly with RFP volume, with no reuse across deals",
             "Sales responsiveness directly impacted competitive positioning in revenue-critical negotiations",
           ]} />
         </div>
@@ -161,7 +161,7 @@ export default function Page() {
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
               Enterprise RFP cycles are time-sensitive and highly competitive. The team faced
-              a clear trade-off — preserve system simplicity, or introduce modular customization
+              a clear trade-off, preserve system simplicity, or introduce modular customization
               to keep up with sales motion.
             </p>
           </div>
@@ -188,8 +188,8 @@ export default function Page() {
             <div className="pt-8 border-t border-border grid md:grid-cols-[200px_1fr] gap-6 items-start">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mt-1">My Position</p>
               <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
-                Customization at the brand layer would not compromise system integrity — if properly
-                modularized — and would{" "}
+                Customization at the brand layer would not compromise system integrity, if properly
+                modularized, and would{" "}
                 <em className="not-italic text-orange-500">materially improve</em>{" "}
                 enterprise sales responsiveness.
               </p>
@@ -207,7 +207,7 @@ export default function Page() {
           <div className="grid grid-cols-2 md:grid-cols-4 border-t border-border">
             {[
               { num: "01", title: "Structural Audit", body: "Identified the structural constraints baked into the existing system that blocked rapid customization." },
-              { num: "02", title: "Decouple Layers", body: "Separated the core UX architecture from the brand and visual layers — two systems instead of one." },
+              { num: "02", title: "Decouple Layers", body: "Separated the core UX architecture from the brand and visual layers, two systems instead of one." },
               { num: "03", title: "Modular Components", body: "Standardized banking modules into reusable component configurations swappable across deals." },
               { num: "04", title: "Token-Based Theming", body: "Introduced design tokens so each brand could be re-skinned via configuration, not redesign." },
             ].map((step, i) => (
@@ -236,8 +236,8 @@ export default function Page() {
             </p>
           </div>
           <CsArchStack layers={[
-            { num: "L1", title: "Core Banking UX Layer", body: "Stable, opinionated patterns for accounts, transactions, transfers, and statements — unchanged across deals.", meta: ["flows", "interactions", "states"] },
-            { num: "L2", title: "Modular Component Library", body: "Banking primitives — account card, transaction list, CTA block, hero — composable into any screen layout.", meta: ["primitives", "variants", "compositions"] },
+            { num: "L1", title: "Core Banking UX Layer", body: "Stable, opinionated patterns for accounts, transactions, transfers, and statements, unchanged across deals.", meta: ["flows", "interactions", "states"] },
+            { num: "L2", title: "Modular Component Library", body: "Banking primitives, account card, transaction list, CTA block, hero, composable into any screen layout.", meta: ["primitives", "variants", "compositions"] },
             { num: "L3", title: "Brand Token Layer", body: "Color, typography, radius, and elevation tokens that re-skin every component in one configuration pass.", meta: ["color", "type", "elevation"], isCore: true },
             { num: "L4", title: "Demo Configuration Engine", body: "Sales-facing layer that assembles brand tokens + component selections into a deal-ready demo for any prospect.", meta: ["configure", "preview", "ship"] },
           ]} />
@@ -250,15 +250,15 @@ export default function Page() {
           <CsDecision
             index={0}
             title="Component Modularity: Banking Screens as Swappable Parts"
-            problem="Every screen was tightly coupled — changing one element for a prospect required manually re-editing multiple interconnected pieces, with no way to reuse work across deals."
-            decision="Decomposed every screen into independent units: header, account card, transaction list, CTA block — each with variants and props. Screens became compositions, not one-off templates."
+            problem="Every screen was tightly coupled, changing one element for a prospect required manually re-editing multiple interconnected pieces, with no way to reuse work across deals."
+            decision="Decomposed every screen into independent units: header, account card, transaction list, CTA block, each with variants and props. Screens became compositions, not one-off templates."
             tradeoff="Required upfront investment in component architecture that wasn't immediately visible to stakeholders. Took two sprints before the compounding benefit became apparent in demo build times."
             impact="New deals could compose screens from the existing library rather than starting from scratch. Primitive count grew from 8 to 31 components over six months, each reused across multiple prospects."
           />
           <CsDecision
             index={1}
             title="Brand Token Layer: One Config File, One Brand Skin"
-            problem="Each prospect's brand identity was applied by hand — editing hex values, font references, and spacing across dozens of component files. It was effectively a redesign for every deal."
+            problem="Each prospect's brand identity was applied by hand, editing hex values, font references, and spacing across dozens of component files. It was effectively a redesign for every deal."
             decision="Centralized brand identity into a single token configuration: color, typography, radius, elevation. Any prospect's visual identity could be applied to the entire component library in a single config pass."
             tradeoff="The token schema had to be comprehensive enough to cover edge cases across all components, which required more upfront definition work than stakeholders expected. Some bespoke brand requests couldn't be tokenized and still required manual overrides."
             impact="Prospect onboarding dropped from multi-day design effort to a configuration pass. Sales could request a re-skinned demo for a new bank on short notice without design being a blocker."
@@ -266,7 +266,7 @@ export default function Page() {
           <CsDecision
             index={2}
             title="Demo Configuration Engine: Collapsing the Time-Critical Zone"
-            problem="The two slowest steps — brand application and component selection — were the ones that gated the sales team during live RFP cycles. Any delay in this zone directly impacted deal competitiveness."
+            problem="The two slowest steps, brand application and component selection, were the ones that gated the sales team during live RFP cycles. Any delay in this zone directly impacted deal competitiveness."
             decision="Built a configuration layer that combined brand token application and component assembly into a single pass. Sales could specify prospect parameters; the system produced a deal-ready demo configuration without requiring per-deal design cycles."
             tradeoff="The configuration engine introduced a new layer of system complexity that required engineering time to maintain. Some highly bespoke prospect requests still fell outside what the engine could handle and required custom work."
             impact="Per-RFP design effort reduced substantially. The team could respond to enterprise demos on compressed timelines that were previously impossible, which sales cited as a meaningful differentiator in several competitive RFPs."
@@ -281,11 +281,11 @@ export default function Page() {
             Three shifts that made the system configurable.
           </h2>
 
-          {/* Feature 1 — Component Modularity */}
+          {/* Feature 1, Component Modularity */}
           <CsFeature
             tag="01 / Component Modularity"
             title="Banking screens, broken into swappable parts."
-            body="Every screen was decomposed into independent, reusable units — header, account card, transaction list, CTA block — each with variants and props. Composition replaced replication."
+            body="Every screen was decomposed into independent, reusable units, header, account card, transaction list, CTA block, each with variants and props. Composition replaced replication."
             details={[
               { label: "Primitives", text: "Account Card · Transaction List · CTA Block" },
               { label: "Composition", text: "Page templates assembled per RFP" },
@@ -332,11 +332,11 @@ export default function Page() {
             }
           />
 
-          {/* Feature 2 — Token layer */}
+          {/* Feature 2, Token layer */}
           <CsFeature
             tag="02 / Brand Token Layer"
             title="One theme file, one brand skin."
-            body="Color, type, and spacing tokens were centralized into a single brand layer. A new prospect's visual identity could be applied to every component in the library through a configuration pass — no component-level redesign required."
+            body="Color, type, and spacing tokens were centralized into a single brand layer. A new prospect's visual identity could be applied to every component in the library through a configuration pass, no component-level redesign required."
             details={[
               { label: "Tokens", text: "Color · Type · Radius · Elevation" },
               { label: "Effort", text: "Manual redesign → config swap" },
@@ -370,11 +370,11 @@ export default function Page() {
             }
           />
 
-          {/* Feature 3 — Config engine */}
+          {/* Feature 3, Config engine */}
           <CsFeature
             tag="03 / Demo Configuration Engine"
             title="Time compressed where it mattered."
-            body="The configuration engine collapsed the brand-application and component-selection steps — the two phases that previously gated the sales team — into a fast, repeatable configuration pass."
+            body="The configuration engine collapsed the brand-application and component-selection steps, the two phases that previously gated the sales team, into a fast, repeatable configuration pass."
             details={[
               { label: "Compressed", text: "Brand config + component selection" },
               { label: "Result", text: "Sales got a deal-ready demo faster" },
@@ -474,7 +474,7 @@ export default function Page() {
           <CsBeforeAfter
             before={{
               strongText: "Linear effort per RFP.",
-              summary: "Every new bank started from the same template and required hands-on visual edits — design effort scaled 1-for-1 with deal volume.",
+              summary: "Every new bank started from the same template and required hands-on visual edits, design effort scaled 1-for-1 with deal volume.",
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   <g transform="translate(120,20)">
@@ -501,7 +501,7 @@ export default function Page() {
             }}
             after={{
               strongText: "Compounding effort.",
-              summary: "Every new bank inherits the system. Brand + component configuration replaces manual redesign — and every improvement benefits every future deal.",
+              summary: "Every new bank inherits the system. Brand + component configuration replaces manual redesign, and every improvement benefits every future deal.",
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   <g transform="translate(110,20)">
@@ -578,7 +578,7 @@ export default function Page() {
       <CsSection id="reflection" label="Key Reflection">
         <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-            Customization and consistency aren&apos;t a trade-off — they&apos;re a{" "}
+            Customization and consistency aren&apos;t a trade-off, they&apos;re a{" "}
             <em className="not-italic text-orange-500">layering problem</em>. The system became fast
             the moment we stopped treating{" "}
             <em className="not-italic text-orange-500">brand</em> as a property of components and

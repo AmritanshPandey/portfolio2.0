@@ -15,7 +15,7 @@ export default function Page() {
       status="Concept"
       title="AI Decision Engine"
       hypothesis="Hypothesis: structured frameworks reduce cognitive load on complex PM trade-off decisions."
-      description="A decision-support concept using weighted inputs, trade-offs, and scenario simulation to make hard product calls legible — without pretending to remove the judgement."
+      description="A decision-support concept using weighted inputs, trade-offs, and scenario simulation to make hard product calls legible, without pretending to remove the judgement."
     >
       <InProgressSections />
     </ContentPage>

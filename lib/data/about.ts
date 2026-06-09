@@ -25,13 +25,13 @@ export const leadershipItems: LeadershipItem[] = [
 
 export const advisoryItems: AdvisoryOrgItem[] = [
   {
-    title: "Covera — Product & UX Advisor",
+    title: "Covera, Product & UX Advisor",
     desc: "Advised on product strategy, customer experience, and early-stage roadmap decisions.",
     logo: "/assets/images/logos/covera.jpeg",
     link: "https://lovecovera.com/",
   },
   {
-    title: "Yon Innovations — Design & Tech Advisor",
+    title: "Yon Innovations, Design & Tech Advisor",
     desc: "Guided product direction, technology choices, and brand positioning from early stages.",
     logo: "/assets/images/logos/yosn.png",
     link: "https://www.yosn.events/",
@@ -40,13 +40,13 @@ export const advisoryItems: AdvisoryOrgItem[] = [
 
 export const teachingItems: AdvisoryOrgItem[] = [
   {
-    title: "Masters' Union — MasterCamp (UX Design)",
+    title: "Masters' Union, MasterCamp (UX Design)",
     desc: "Mentored students on product thinking and real-world UX problem solving.",
     logo: "/assets/images/logos/mu.jpeg",
     link: "https://mastersunion.org/",
   },
   {
-    title: "Designerrs — UI/UX Academy",
+    title: "Designerrs, UI/UX Academy",
     desc: "Guided designers on UX fundamentals, portfolio building, and practical workflows.",
     logo: "/assets/images/logos/da.jpeg",
     link: "https://designerrs.com/",

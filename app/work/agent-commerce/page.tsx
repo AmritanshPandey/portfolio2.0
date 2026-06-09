@@ -631,13 +631,13 @@ export default function Page() {
               {/* iPhone 16 device frame */}
               <div className="relative rounded-[3rem] border border-white/[0.12] bg-[#1b1b1d] p-[11px] shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
 
-                {/* Side buttons — action + volume (left), power (right) */}
+                {/* Side buttons, action + volume (left), power (right) */}
                 <span className="absolute -left-[3px] top-[96px] h-[26px] w-[3px] rounded-r bg-[#0e0e10]" />
                 <span className="absolute -left-[3px] top-[140px] h-[52px] w-[3px] rounded-r bg-[#0e0e10]" />
                 <span className="absolute -left-[3px] top-[204px] h-[52px] w-[3px] rounded-r bg-[#0e0e10]" />
                 <span className="absolute -right-[3px] top-[160px] h-[80px] w-[3px] rounded-l bg-[#0e0e10]" />
 
-                {/* Screen — iPhone 16 logical ratio 393 × 852 */}
+                {/* Screen, iPhone 16 logical ratio 393 × 852 */}
                 <div className="relative aspect-[393/852] overflow-hidden rounded-[2.3rem] bg-[#0a0a0a]">
                   <iframe
                     src="https://agent-pay-demo.vercel.app/"

@@ -2,7 +2,6 @@ import "./globals.css"
 import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
-import { FancyCursor } from "@/components/shared/cursor"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
@@ -28,19 +27,19 @@ export const metadata: Metadata = {
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Amritansh Pandey — Product Thinker at Mastercard. 7 years building fintech end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
+    "Amritansh Pandey, Product Thinker at Mastercard. 7 years building fintech end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
     url: "https://portfolio2-0-beta-one.vercel.app",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
-      "7 years building fintech end to end — from early demo to CPO stage. Agent Pay, PartnerBank, agentic commerce, and the demo the CPO used at Money20/20.",
+      "7 years building fintech end to end, from early demo to CPO stage. Agent Pay, PartnerBank, agentic commerce, and the demo the CPO used at Money20/20.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
-    description: "7 years building fintech end to end — from early demo to CPO stage.",
+    description: "7 years building fintech end to end, from early demo to CPO stage.",
   },
 }
 
@@ -76,8 +75,6 @@ export default function RootLayout({
 
             {/* Scroll restore */}
             <ScrollToHash />
-
-            <FancyCursor />
 
             {/* Navbar */}
             <Navbar />

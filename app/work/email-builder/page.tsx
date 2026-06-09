@@ -73,17 +73,17 @@ const STATUS_TEXT: Record<string, string> = {
 const CONSTRAINTS = [
   {
     wanted:  "CSS div-based flexible layouts",
-    limit:   "No div support — breaks entirely in Outlook Desktop",
-    built:   "Table-based layouts — rigid but universal and reliable",
+    limit:   "No div support, breaks entirely in Outlook Desktop",
+    built:   "Table-based layouts, rigid but universal and reliable",
   },
   {
     wanted:  "CSS-styled dynamic buttons",
-    limit:   "CSS buttons partially ignored — inconsistent borders and padding",
-    built:   "VML-backed buttons — renders consistently across all versions",
+    limit:   "CSS buttons partially ignored, inconsistent borders and padding",
+    built:   "VML-backed buttons, renders consistently across all versions",
   },
   {
     wanted:  "Web fonts (brand typeface)",
-    limit:   "Web fonts not supported — fallback to system fonts only",
+    limit:   "Web fonts not supported, fallback to system fonts only",
     built:   "Email-safe font stack with brand-aligned fallbacks",
   },
   {
@@ -98,8 +98,8 @@ const CONSTRAINTS = [
   },
   {
     wanted:  "HTML5 video embeds",
-    limit:   "Not supported — blank space or broken placeholder",
-    built:   "Animated GIF with static fallback image — works everywhere",
+    limit:   "Not supported, blank space or broken placeholder",
+    built:   "Animated GIF with static fallback image, works everywhere",
   },
 ]
 
@@ -149,7 +149,7 @@ function Hero() {
               className="text-[17px] leading-relaxed text-muted-foreground max-w-xl"
             >
               Owned the component architecture and design system for Mastercard&apos;s
-              global email builder — defining what got built, why, and in what order.
+              global email builder, defining what got built, why, and in what order.
               The constraint wasn&apos;t brand. It was Outlook.
             </motion.p>
           </div>
@@ -161,7 +161,7 @@ function Hero() {
             transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
-              The real constraint — email client compatibility
+              The real constraint, email client compatibility
             </p>
             <div className="grid grid-cols-2 gap-1.5">
               {EMAIL_CLIENTS.map(c => (
@@ -221,8 +221,8 @@ export default function Page() {
               <div className="rounded-2xl border border-border bg-card p-7">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Operational problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
-                  Custom emails required HTML knowledge. Teams either depended on agencies —
-                  slow, expensive, inconsistent — or avoided custom emails altogether and defaulted
+                  Custom emails required HTML knowledge. Teams either depended on agencies  - 
+                  slow, expensive, inconsistent, or avoided custom emails altogether and defaulted
                   to outdated generic templates. After the Mastercard.com rebrand, the gap between
                   the updated digital identity and downstream email communication became immediately visible.
                 </p>
@@ -243,8 +243,8 @@ export default function Page() {
             <div className="rounded-2xl border-l-4 border-foreground/30 bg-muted/40 px-8 py-6">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">The central tension</p>
               <p className="text-[16px] text-foreground leading-relaxed max-w-2xl">
-                Teams wanted richer, more branded communication. Outlook Desktop — still dominant
-                across enterprise — couldn&apos;t render it. The design system had to make the best
+                Teams wanted richer, more branded communication. Outlook Desktop, still dominant
+                across enterprise, couldn&apos;t render it. The design system had to make the best
                 possible email within the worst possible constraint.{" "}
                 <em className="not-italic font-medium">Simplicity wasn&apos;t a design preference. It was an engineering requirement.</em>
               </p>
@@ -262,7 +262,7 @@ export default function Page() {
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-xl">
               I didn&apos;t build the builder UI and I didn&apos;t write the HTML. I owned what went
-              inside both — the component architecture, design standards, governance model, and
+              inside both, the component architecture, design standards, governance model, and
               prioritisation of what to build next.
             </p>
           </div>
@@ -289,9 +289,9 @@ export default function Page() {
                 </ul>
               </div>
 
-              {/* You — highlighted */}
+              {/* You, highlighted */}
               <div className="p-7 bg-orange-500/[0.08] border-r border-orange-500/25">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-600 dark:text-orange-400 mb-1">You — Design System Lead</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-600 dark:text-orange-400 mb-1">You, Design System Lead</p>
                 <p className="text-[16px] font-semibold text-orange-900 dark:text-orange-100 mb-5 tracking-tight">Component Architecture + Governance</p>
                 <ul className="flex flex-col gap-3">
                   {[
@@ -341,25 +341,25 @@ export default function Page() {
           <CsDecision
             index={0}
             title="Modular reusable components, or bespoke one-off templates?"
-            problem="There was pressure to build 28 beautiful, hand-crafted individual templates. Faster to deliver, great for launch optics. But every future brand update would need to touch every template individually."
-            decision="Fought for a component library that teams assemble into any email layout. Started as a Figma library concept — designers create layouts themselves, then hand off for HTML build. Evolved into the no-code builder."
-            tradeoff="Required more upfront investment in architecture that wasn&apos;t immediately visible to stakeholders. The compounding benefit only became clear over time, when a brand update touched one component — not 28 templates."
+            problem="There was pressure to build 28 individual templates. That would have been faster for launch, but every future brand update would need manual edits across all templates."
+            decision="Fought for a component library that teams assemble into any email layout. Started as a Figma library concept, designers create layouts themselves, then hand off for HTML build. Evolved into the no-code builder."
+            tradeoff="Required more upfront investment in architecture that wasn&apos;t immediately visible to stakeholders. The compounding benefit only became clear over time, when a brand update touched one component, not 28 templates."
             impact="A brand update now propagates through every template by changing a single component. New email types are assembled from existing pieces, not built from scratch. The system scales without the effort scaling with it."
           />
           <CsDecision
             index={1}
             title="Push for design ambition, or design within the Outlook constraint?"
-            problem="Stakeholders wanted richer, more visual emails — multi-column layouts, custom fonts, dynamic CTAs. Outlook Desktop couldn&apos;t render any of it reliably without complex, brittle workarounds."
+            problem="Stakeholders wanted richer, more visual emails, multi-column layouts, custom fonts, dynamic CTAs. Outlook Desktop couldn&apos;t render any of it reliably without complex, brittle workarounds."
             decision="Every time a stakeholder pushed for more visual complexity, the answer was to simplify the design rather than push for complex engineering workarounds. Outlook Desktop is the floor, not an edge case to hack around."
-            tradeoff="Required repeatedly saying no to stakeholders who wanted more — and having Global Brand&apos;s endorsement to hold that line. Without organisational authority backing the governance model, it would have eroded on day one."
-            impact="The constraint produced more durable design. The emails that perform best in enterprise environments are rarely the most visually complex. Simplicity wasn&apos;t a compromise — it was the correct answer."
+            tradeoff="Required repeatedly saying no to stakeholders who wanted more, and having Global Brand&apos;s endorsement to hold that line. Without organisational authority backing the governance model, it would have eroded on day one."
+            impact="The constraint produced more durable design. The emails that perform best in enterprise environments are rarely the most visually complex. Simplicity wasn&apos;t a compromise, it was the correct answer."
           />
           <CsDecision
             index={2}
             title="Build a powerful feature-rich tool, or keep it simple enough for anyone to use?"
-            problem="The biggest adoption problem wasn&apos;t technical capability — it was intimidation. Teams avoided custom emails because HTML felt too risky. A more powerful tool with a high capability ceiling would solve for power users and fail for everyone else."
+            problem="The biggest adoption problem wasn&apos;t technical capability, it was intimidation. Teams avoided custom emails because HTML felt too risky. A more powerful tool with a high capability ceiling would solve for power users and fail for everyone else."
             decision="Radical simplicity: any non-HTML person should be able to build a branded email. Select a component. Fill in content. Ship it. No code, no design tool, no external vendor required."
-            tradeoff="Power users wanted advanced customisation, pixel-level control, export options. Those use cases were left underserved intentionally. The 80% case — any team, any region, on brand — mattered more than the 20%."
+            tradeoff="Power users wanted advanced customisation, pixel-level control, export options. Those use cases were left underserved intentionally. The 80% case, any team, any region, on brand, mattered more than the 20%."
             impact="Teams that previously avoided custom emails because HTML felt too risky began creating richer branded communication more frequently. Removing the HTML requirement changed the behaviour, not just the tooling."
           />
         </div>
@@ -374,7 +374,7 @@ export default function Page() {
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
               Foundations are stable. Components are reusable. Patterns are assembled.
-              Templates are shipped. Each level builds on the one below — and a change
+              Templates are shipped. Each level builds on the one below, and a change
               to any level propagates upward automatically.
             </p>
           </div>
@@ -388,20 +388,20 @@ export default function Page() {
             {
               num: "L2",
               title: "Components",
-              body: "50+ modular building blocks — hero banners, CTA modules, content cards, editorial blocks, product highlights, event modules, legal footers. All Outlook-safe.",
+              body: "50+ modular building blocks, hero banners, CTA modules, content cards, editorial blocks, product highlights, event modules, legal footers. All Outlook-safe.",
               meta: ["50+ components", "Outlook-safe"],
               isCore: true,
             },
             {
               num: "L3",
               title: "Patterns",
-              body: "Recurring email structures assembled from components — campaign layouts, launch announcements, newsletters, internal comms, event invitations.",
+              body: "Recurring email structures assembled from components, campaign layouts, launch announcements, newsletters, internal comms, event invitations.",
               meta: ["campaigns", "newsletters", "events"],
             },
             {
               num: "L4",
               title: "Templates",
-              body: "28 best-practice templates across 9 communication categories. Mastercard-wide. Every template is a composition of L2 components — update a component, update every template.",
+              body: "28 best-practice templates across 9 communication categories. Mastercard-wide. Every template is a composition of L2 components, update a component, update every template.",
               meta: ["28 templates", "9 categories"],
             },
           ]} />
@@ -464,7 +464,7 @@ export default function Page() {
               28 templates. 9 categories. All Outlook-safe.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              Every template is assembled from the component library — not built from scratch.
+              Every template is assembled from the component library, not built from scratch.
               Updating a component updates every template that uses it.
             </p>
           </div>
@@ -496,7 +496,7 @@ export default function Page() {
           <FadeIn>
             <div className="space-y-4">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Adoption strategy — the feedback loop
+                Adoption strategy, the feedback loop
               </p>
               <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
                 Building the system was half the job. Getting teams to actually use it was the other half.
@@ -532,10 +532,10 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-2 gap-5">
 
-              {/* Before — dark code panel */}
+              {/* Before, dark code panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
                 <div className="px-6 py-4 bg-neutral-900 border-b border-white/10">
-                  <p className="text-[12px] font-medium text-muted-foreground uppercase tracking-[0.14em]">Before — manual HTML workflow</p>
+                  <p className="text-[12px] font-medium text-muted-foreground uppercase tracking-[0.14em]">Before, manual HTML workflow</p>
                 </div>
                 <div className="bg-neutral-950 p-6 font-mono text-[11px] leading-relaxed space-y-1">
                   <p className="text-red-400/80">&lt;table width=&quot;600&quot; border=&quot;0&quot; cellspacing=&quot;0&quot;&gt;</p>
@@ -554,10 +554,10 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* After — clean builder panel */}
+              {/* After, clean builder panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
                 <div className="px-6 py-4 bg-orange-500/10 border-b border-orange-500/20">
-                  <p className="text-[12px] font-medium text-orange-700 dark:text-orange-400 uppercase tracking-[0.14em]">After — no-code builder</p>
+                  <p className="text-[12px] font-medium text-orange-700 dark:text-orange-400 uppercase tracking-[0.14em]">After, no-code builder</p>
                 </div>
                 <div className="bg-muted/30 p-6 space-y-2.5">
                   {[
@@ -586,8 +586,8 @@ export default function Page() {
             <div className="rounded-2xl bg-muted/40 border border-border p-7 max-w-3xl">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">The organisational shift</p>
               <p className="text-[15px] text-foreground leading-relaxed">
-                Teams that previously avoided custom emails — because HTML felt too risky or agency
-                turnaround was too slow — began creating richer branded communication more frequently.
+                Teams that previously avoided custom emails, because HTML felt too risky or agency
+                turnaround was too slow, began creating richer branded communication more frequently.
                 The barrier wasn&apos;t capability. It was confidence. Removing the HTML requirement
                 changed the behaviour, not just the tooling.{" "}
                 <em className="not-italic font-medium text-foreground">That&apos;s what a well-designed system does: it changes what people feel able to do.</em>
@@ -606,7 +606,7 @@ export default function Page() {
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
               Backed by Global Brand. Used Mastercard-wide. The number wasn&apos;t how many
-              components shipped — it was how many people stopped needing HTML to communicate.
+              components shipped, it was how many people stopped needing HTML to communicate.
             </p>
           </div>
 
@@ -621,7 +621,7 @@ export default function Page() {
 
           <div className="grid md:grid-cols-4 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
             {[
-              { num: "M.01", figure: "50+",      label: "Modular components — all Outlook-safe, all brand-compliant." },
+              { num: "M.01", figure: "50+",      label: "Modular components, all Outlook-safe, all brand-compliant." },
               { num: "M.02", figure: "28",        label: "Best-practice templates across 9 communication categories." },
               { num: "M.03", figure: "9",         label: "Communication categories covering the full range of Mastercard messaging needs." },
               { num: "M.04", figure: "Zero HTML", label: "Skill level required. Any team, any region can now build a branded email." },
@@ -656,11 +656,11 @@ export default function Page() {
               {[
                 {
                   label: "The governance lesson",
-                  body: "I faced significant stakeholder pushback on the governance model — people wanted more flexibility, more exceptions. Global Brand&apos;s endorsement was what held the line. Design systems need political backing, not just design quality. The best-designed system gets ignored without organisational authority behind it.",
+                  body: "I faced significant stakeholder pushback on the governance model, people wanted more flexibility, more exceptions. Global Brand&apos;s endorsement was what held the line. Design systems need political backing, not just design quality. The best-designed system gets ignored without organisational authority behind it.",
                 },
                 {
                   label: "Adoption is a design problem",
-                  body: "Building 50+ components and 28 templates was the visible work. The less visible work — training, feedback loops, iterating on friction, making the system feel safe to use — was equally important. Systems that don&apos;t get used don&apos;t exist, no matter how well-designed they are.",
+                  body: "Building 50+ components and 28 templates was the visible work. The less visible work, training, feedback loops, iterating on friction, making the system feel safe to use, was equally important. Systems that don&apos;t get used don&apos;t exist, no matter how well-designed they are.",
                 },
                 {
                   label: "Constraint as creative direction",
@@ -668,7 +668,7 @@ export default function Page() {
                 },
                 {
                   label: "What I&apos;d do differently",
-                  body: "I&apos;d have instrumented usage from launch — tracking which templates got used most, which components got customised, which categories drove the most adoption. That data would have accelerated the feedback loop and made the prioritisation conversations much sharper.",
+                  body: "I&apos;d have instrumented usage from launch, tracking which templates got used most, which components got customised, which categories drove the most adoption. That data would have accelerated the feedback loop and made the prioritisation conversations much sharper.",
                 },
               ].map((card, i) => (
                 <FadeIn key={card.label} delay={i * 0.06}>

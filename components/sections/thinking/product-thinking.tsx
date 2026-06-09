@@ -33,7 +33,7 @@ export default function ProductThinkingSection() {
     >
       <div className="grid md:grid-cols-2 gap-px bg-border/50 rounded-2xl overflow-hidden border border-border/50">
 
-        {/* ── BELIEF — top left */}
+        {/* ── BELIEF, top left */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ export default function ProductThinkingSection() {
           </p>
         </motion.div>
 
-        {/* ── PRINCIPLES — remaining 3 cells */}
+        {/* ── PRINCIPLES, remaining 3 cells */}
         {PRINCIPLES.map((p, i) => (
           <motion.div
             key={p.number}

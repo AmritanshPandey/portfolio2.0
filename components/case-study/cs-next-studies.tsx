@@ -46,9 +46,9 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
               key={item.href}
               href={item.href}
               title={item.title}
-              category={item.category}
+              category={item.metadata ?? item.category}
               metric={item.metric}
-              ctaLabel="Read case study"
+              ctaLabel="View case study"
               index={index + 1}
               showImage={false}
             />

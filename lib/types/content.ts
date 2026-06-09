@@ -1,10 +1,19 @@
 export interface WorkItem {
+  /** Metadata shown above the title. */
+  metadata?: string
   category: string
   title: string
   description: string
   image: string
   href: string
   tags?: string[]
+  featured?: boolean
+  thinkingBlock?: {
+    constraint: string
+    decision: string
+    outcome: string
+  }
+  proofRow?: string
   /** Short outcome / impact line shown on the card (e.g. "Used by 12 banking partners") */
   metric?: string
   /**

@@ -18,7 +18,7 @@ export default function Hero() {
     if (!card) return
 
     // Capture coords now (cheap); batch the layout read + style writes into a
-    // single rAF, throttled to one per frame — avoids a style recalc per event.
+    // single rAF, throttled to one per frame, avoids a style recalc per event.
     const cx = e.clientX
     const cy = e.clientY
     if (tiltRaf.current) return
@@ -57,23 +57,23 @@ export default function Hero() {
       id="hero"
       className="relative overflow-hidden bg-background text-foreground"
     >
-      {/* Dot grid — cursor-reactive WebGL shader (static CSS fallback inside) */}
+      {/* Dot grid, cursor-reactive WebGL shader (static CSS fallback inside) */}
       <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
 
-      {/* Soft vignette — fades later so the dot grid stays readable in the centre */}
+      {/* Soft vignette, fades later so the dot grid stays readable in the centre */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{ background: "radial-gradient(ellipse 95% 80% at 50% 42%, transparent 55%, transparent 76%, var(--background) 100%)" }}
       />
 
-      {/* Warm pool — a single, subtle ember light, top-left. The "Warm Studio"
+      {/* Warm pool, a single, subtle ember light, top-left. The "Warm Studio"
           North Star: one warm light on the work, not ambient tint everywhere. */}
       <div
         className="pointer-events-none absolute -top-48 -left-44 w-[640px] h-[640px] rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(232,98,26,0.08) 0%, rgba(232,98,26,0.03) 45%, transparent 72%)" }}
       />
 
-      {/* Top + bottom depth fades — single smooth gradient, grounds the section */}
+      {/* Top + bottom depth fades, single smooth gradient, grounds the section */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{ background: "linear-gradient(to bottom, var(--background) 0%, transparent 16%, transparent 84%, var(--background) 100%)" }}
@@ -126,7 +126,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right — image card with cursor tilt */}
+        {/* Right, image card with cursor tilt */}
         <div className="flex justify-center lg:justify-end mt-6 md:mt-0">
           <div className="relative w-full max-w-[320px]">
             <div
@@ -153,7 +153,7 @@ export default function Hero() {
                 </div>
                 <p className="text-base font-semibold text-white">Amritansh Pandey</p>
               </div>
-              {/* Specular glare — follows cursor */}
+              {/* Specular glare, follows cursor */}
               <div
                 ref={glareRef}
                 className="pointer-events-none absolute inset-0 z-10"

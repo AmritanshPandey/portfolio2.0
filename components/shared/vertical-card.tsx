@@ -22,6 +22,12 @@ type Props = {
   /** Tailwind height class for the image area. Defaults to "h-44". */
   imageHeight?: string
   tags?: string[]
+  thinkingBlock?: {
+    constraint: string
+    decision: string
+    outcome: string
+  }
+  proofRow?: string
 }
 
 export function VerticalCard({
@@ -32,14 +38,18 @@ export function VerticalCard({
   ctaLabel = "View case study",
   variant = "default",
   showImage = true,
+  description,
   metric,
   index,
   imageHeight = "h-44",
   tags,
+  thinkingBlock,
+  proofRow,
 }: Props) {
 
   const isCompact = variant === "compact"
   const isFeatured = variant === "featured"
+  const bodyText = description ?? metric
 
   const cursorLabelMap: Record<string, string> = {
     "View case study": "View",
@@ -87,16 +97,16 @@ export function VerticalCard({
         className={clsx(
         "relative h-full flex flex-col overflow-hidden rounded-2xl",
         "bg-card",
-        "border border-border/55",
+        "border border-border/50",
         // Soft top highlight (inset hairline) + a faint lift shadow read as a
-        // pressed, premium surface on dark without any glow or gradient.
+        // pressed surface on dark without glow or gradient.
         "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_1px_2px_0_rgba(0,0,0,0.10)]",
-        isFeatured ? "min-h-[270px] md:min-h-[300px]" : "min-h-[220px]",
+        isFeatured ? "min-h-[360px]" : "min-h-[235px]",
         // Only animate compositor-friendly props (transform/border), not
         // box-shadow transition, which forces a full repaint each frame.
-        "transition-[transform,border-color,background-color] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "transition-[transform,border-color,background-color] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
         "hover:-translate-y-[2px]",
-        "hover:border-foreground/15 hover:bg-foreground/[0.02] dark:hover:border-white/[0.16] dark:hover:bg-white/[0.03]",
+        "hover:border-foreground/14 hover:bg-foreground/[0.025] dark:hover:border-white/[0.15] dark:hover:bg-white/[0.035]",
       )}>
 
         {/* Image block */}
@@ -158,31 +168,55 @@ export function VerticalCard({
               "mt-2.5 text-foreground",
               isFeatured
                 ? "type-card-title-featured max-w-[27rem]"
-                : "type-card-title"
+                : "type-card-title leading-[1.2]"
             )}
           >
             {title}
           </h3>
 
-          {metric && (
+          {bodyText && (
             <p
               className={clsx(
-                "mt-3 max-w-[44rem] text-foreground/58",
+                "mt-4 max-w-[44rem] text-foreground/58",
                 isFeatured ? "type-card-body-featured" : "type-card-body"
               )}
             >
-              {metric}
+              {bodyText}
             </p>
           )}
 
           {tags && tags.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
+            <div className="mt-5 flex flex-wrap gap-1.5">
               {tags.map((tag) => (
-                <span key={tag} className="type-caption rounded-full border border-border/55 bg-muted/45 px-2.5 py-1 leading-none text-foreground/55">
+                <span
+                  key={tag}
+                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-foreground/42"
+                >
                   {tag}
                 </span>
               ))}
             </div>
+          )}
+
+          {isFeatured && thinkingBlock && (
+            <dl className="mt-6 space-y-2.5 text-[12px] leading-relaxed">
+              {[
+                ["Constraint", thinkingBlock.constraint],
+                ["Decision", thinkingBlock.decision],
+                ["Outcome", thinkingBlock.outcome],
+              ].map(([label, value]) => (
+                <div key={label} className="grid grid-cols-[86px_1fr] gap-3">
+                  <dt className="text-foreground/34">{label}</dt>
+                  <dd className="text-foreground/62">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          {!isFeatured && proofRow && (
+            <p className="mt-5 text-[12px] font-medium leading-relaxed text-foreground/48">
+              {proofRow}
+            </p>
           )}
 
           {/* CTA row */}

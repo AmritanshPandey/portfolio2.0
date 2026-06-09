@@ -106,7 +106,7 @@ function Hero() {
         >
           Built and scaled first-party commerce experiences across Mamaearth,
           The Derma Co., and Aqualogica by establishing a shared component
-          backbone with brand-level token overrides — shipping all three
+          backbone with brand-level token overrides, shipping all three
           storefronts on a hard 8-week deadline.
         </motion.p>
 
@@ -147,17 +147,17 @@ export default function Page() {
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
               Honasa Consumer operated Mamaearth, The Derma Co., and Aqualogica almost
               entirely through third-party marketplaces. Every sale funnelled through
-              Amazon or Nykaa — taking their commission and their customer data with it.
+              Amazon or Nykaa, taking their commission and their customer data with it.
             </p>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
               I joined as the first in-house UX designer with a mandate to build owned
               D2C storefronts before the next seasonal sale window. No design system,
-              no shared components, no prior UX process — and eight weeks on the clock.
+              no shared components, no prior UX process, and eight weeks on the clock.
             </p>
           </div>
           <CsList items={[
             "Revenue generated almost entirely through third-party marketplaces; margin pressure was compounding",
-            "No customer data ownership — the brands couldn&apos;t identify repeat buyers on their own platform",
+            "No customer data ownership, the brands couldn&apos;t identify repeat buyers on their own platform",
             "Three brands with distinct visual identities but identical commerce logic and a shared backend",
             "No existing design process, component library, or handoff workflow across the portfolio",
           ]} />
@@ -172,7 +172,7 @@ export default function Page() {
               Build three storefronts with one team.
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
-              The real design problem wasn&apos;t the UI — it was the math. Two designers,
+              The real design problem wasn&apos;t the UI, it was the math. Two designers,
               four engineers, three brands, and an 8-week window. Building each storefront
               independently was impossible. The only viable path was a system that
               made brand identity a configuration layer above shared commerce logic.
@@ -184,7 +184,7 @@ export default function Page() {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { num: "C1", label: "No Precedent",      body: "Zero existing process, design system, or component library to build on." },
-                { num: "C2", label: "Three Brand Voices", body: "Distinct visual identities and customer expectations — all non-negotiable." },
+                { num: "C2", label: "Three Brand Voices", body: "Distinct visual identities and customer expectations, all non-negotiable." },
                 { num: "C3", label: "8-Week Hard Launch", body: "A seasonal sale window set the deadline. There was no flexibility." },
                 { num: "C4", label: "Tiny Team",          body: "2 designers supporting 4 engineers across three parallel brand builds." },
                 { num: "C5", label: "Speed vs. Quality",  body: "Every decision forced a tradeoff between craft and the clock." },
@@ -206,7 +206,7 @@ export default function Page() {
             <div className="pt-8 border-t border-border grid md:grid-cols-[200px_1fr] gap-6 items-start">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mt-1">Key Insight</p>
               <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
-                All three brands shared identical commerce logic — they diverged
+                All three brands shared identical commerce logic, they diverged
                 only in visual language. That meant a{" "}
                 <em className="not-italic text-orange-500">single shared backbone</em>{" "}
                 with a brand token layer was the only architecture that could
@@ -227,7 +227,7 @@ export default function Page() {
             {[
               { num: "01", title: "Research Sprint",    body: "5-day compressed discovery: marketplace analytics, competitor audits, customer interviews, brand constraint sessions." },
               { num: "02", title: "System Architecture", body: "Defined shared component boundaries, brand token schema, and the MVP scope that would actually ship in the time available." },
-              { num: "03", title: "Parallel Design",    body: "Designed all core flows — PDP, cart, checkout, post-purchase — across three brands simultaneously using the shared system." },
+              { num: "03", title: "Parallel Design",    body: "Designed all core flows, PDP, cart, checkout, post-purchase, across three brands simultaneously using the shared system." },
               { num: "04", title: "Handoff & Launch",   body: "Delivered annotated specs, responsive guidelines, and edge case docs per component. Staged release across all three brands." },
             ].map((step, i) => (
               <FadeIn key={step.num} delay={i * 0.07}>
@@ -259,26 +259,26 @@ export default function Page() {
             {
               num: "L1",
               title: "Core Commerce Logic",
-              body: "PDP, cart, checkout, and post-purchase flows — stable, shared, and independent of any brand identity. Same logic powers all three storefronts.",
+              body: "PDP, cart, checkout, and post-purchase flows, stable, shared, and independent of any brand identity. Same logic powers all three storefronts.",
               meta: ["PDP", "Cart", "Checkout"],
             },
             {
               num: "L2",
               title: "Shared Component Library",
-              body: "Commerce primitives — product card, line item, quantity control, CTA — composable into any flow. One set of components, theming handled by the layer above.",
+              body: "Commerce primitives, product card, line item, quantity control, CTA, composable into any flow. One set of components, theming handled by the layer above.",
               meta: ["primitives", "variants", "responsive"],
             },
             {
               num: "L3",
               title: "Brand Token Layer",
-              body: "Color, typography, radius, and elevation tokens. Applying a new brand skin means updating a single configuration — no component-level redesign.",
+              body: "Color, typography, radius, and elevation tokens. Applying a new brand skin means updating a single configuration, no component-level redesign.",
               meta: ["color", "type", "elevation"],
               isCore: true,
             },
             {
               num: "L4",
               title: "Brand Storefront",
-              body: "Each brand gets its own storefront surface: campaign imagery, hero art direction, promotional layouts — brand-specific only where it genuinely matters.",
+              body: "Each brand gets its own storefront surface: campaign imagery, hero art direction, promotional layouts, brand-specific only where it genuinely matters.",
               meta: ["Mamaearth", "Derma Co.", "Aqualogica"],
             },
           ]} />
@@ -292,7 +292,7 @@ export default function Page() {
             index={0}
             title="Shared Commerce Backbone with Brand Token Overrides"
             problem="Building separate commerce experiences per brand would mean 3× the design and engineering effort. Any future improvement would need to be replicated three times, creating compounding maintenance cost."
-            decision="Designed a single component library where all commerce logic — PDP, cart, checkout, post-purchase — lives in shared components. Brand identity is applied through a token layer covering colors, typography, and imagery only."
+            decision="Designed a single component library where all commerce logic, PDP, cart, checkout, post-purchase, lives in shared components. Brand identity is applied through a token layer covering colors, typography, and imagery only."
             tradeoff="Reduced flexibility in early stages. Brand teams couldn&apos;t request bespoke layouts. This created friction initially but was essential for long-term maintainability and the only way the 8-week deadline was achievable."
             impact="All three storefronts shipped in 8 weeks with one designer and two engineers per brand sprint. Changes to core flows now propagate to all brands simultaneously."
           />
@@ -308,7 +308,7 @@ export default function Page() {
             index={2}
             title="Trust Signals as System-Level Components"
             problem="Research showed ingredient transparency was a primary purchase driver for Mamaearth customers. Other brands hadn&apos;t thought about this systematically, risking inconsistent trust signals across the portfolio."
-            decision="Built ingredient highlights, trust badges, and certification displays as reusable PDP components available to all brands — not hardcoded per brand as one-offs."
+            decision="Built ingredient highlights, trust badges, and certification displays as reusable PDP components available to all brands, not hardcoded per brand as one-offs."
             tradeoff="Required more upfront component design time and engineering spec work. But avoided brand-specific components that would be impossible to audit or improve across the portfolio."
             impact="All three brands adopted trust components in v1. Mamaearth saw measurable improvement in PDP-to-cart conversion. Other brands adopted the pattern in subsequent releases independently."
           />
@@ -326,7 +326,7 @@ export default function Page() {
           <CsFeature
             tag="01 / Product Detail Page"
             title="The purchase decision happens here."
-            body="Research showed 68% of drop-offs happened at the PDP — not checkout as originally assumed. Design energy went into ingredient transparency, trust signals, and a sticky CTA that reduced scroll-to-purchase friction."
+            body="Research showed 68% of drop-offs happened at the PDP, not checkout as originally assumed. Design energy went into ingredient transparency, trust signals, and a sticky CTA that reduced scroll-to-purchase friction."
             details={[
               { label: "Key Focus", text: "Ingredient panel · Trust badges · Sticky CTA" },
               { label: "Insight",   text: "68% of drop-off happened before checkout" },
@@ -373,7 +373,7 @@ export default function Page() {
             body="The cart unified product thumbnails, quantity controls, and cross-sell slots into a cohesive component that could be themed per brand without structural changes. One build, three appearances."
             details={[
               { label: "Structure", text: "Thumbnail · Quantity · Cross-sell · Summary" },
-              { label: "Theming",   text: "Brand token swap — no structural duplication" },
+              { label: "Theming",   text: "Brand token swap, no structural duplication" },
             ]}
             reverse
             visual={
@@ -472,7 +472,7 @@ export default function Page() {
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
               A single product card component, configured through three brand token
-              sets. No structural change — just a token swap.
+              sets. No structural change, just a token swap.
             </p>
           </div>
 
@@ -530,7 +530,7 @@ export default function Page() {
           <CsBeforeAfter
             before={{
               strongText: "Revenue without ownership.",
-              summary: "All sales through Amazon and Nykaa — their commissions, their customer data, their discovery algorithms. The brands were growing but building on rented ground.",
+              summary: "All sales through Amazon and Nykaa, their commissions, their customer data, their discovery algorithms. The brands were growing but building on rented ground.",
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   {/* Central marketplace */}
@@ -559,7 +559,7 @@ export default function Page() {
             }}
             after={{
               strongText: "Owned channel, owned data.",
-              summary: "All three brands on first-party storefronts. Purchase data, customer identity, and repeat-buyer relationships owned by Honasa — with a shared system that makes every future improvement compound across brands.",
+              summary: "All three brands on first-party storefronts. Purchase data, customer identity, and repeat-buyer relationships owned by Honasa, with a shared system that makes every future improvement compound across brands.",
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   {/* Shared system */}
@@ -617,9 +617,9 @@ export default function Page() {
 
           <div className="grid md:grid-cols-3 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
             {[
-              { num: "M.01", figure: "8 weeks",       label: "All three brand storefronts shipped within the seasonal sale deadline — with no post-launch critical bugs." },
-              { num: "M.02", figure: "3 weeks",        label: "Aqualogica Glow onboarded onto the system — down from 8 weeks for the initial three brands." },
-              { num: "M.03", figure: "Zero ramp-up",   label: "Two designers onboarded in Q2 with no from-scratch ramp — the system documentation became onboarding material." },
+              { num: "M.01", figure: "8 weeks",       label: "All three brand storefronts shipped within the seasonal sale deadline, with no post-launch critical bugs." },
+              { num: "M.02", figure: "3 weeks",        label: "Aqualogica Glow onboarded onto the system, down from 8 weeks for the initial three brands." },
+              { num: "M.03", figure: "Zero ramp-up",   label: "Two designers onboarded in Q2 with no from-scratch ramp, the system documentation became onboarding material." },
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
@@ -647,7 +647,7 @@ export default function Page() {
       <CsSection id="reflection" label="Key Reflection">
         <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-            Scalable systems aren&apos;t built by adding features — they&apos;re built by ruthlessly
+            Scalable systems aren&apos;t built by adding features, they&apos;re built by ruthlessly
             separating{" "}
             <em className="not-italic text-orange-500">what varies</em>{" "}
             from what doesn&apos;t, and making that separation{" "}

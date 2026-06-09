@@ -32,7 +32,7 @@ export default function AboutSection() {
       className="relative overflow-hidden bg-white dark:bg-black text-foreground"
     >
 
-      {/* ENGRAVED SEAM — matches the band rhythm of <Section> above. */}
+      {/* ENGRAVED SEAM, matches the band rhythm of <Section> above. */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-black/[0.07] dark:bg-white/[0.08]" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px z-[1] h-px bg-white/70 dark:bg-white/[0.03]" />
 
@@ -50,10 +50,10 @@ export default function AboutSection() {
           )}
         />
 
-        {/* GLOW — subtle ambient bloom for depth. Ember stays faint (One Voice
+        {/* GLOW, subtle ambient bloom for depth. Ember stays faint (One Voice
             Rule); a neutral lift adds dimension without a second accent hue. */}
         <div className="pointer-events-none absolute inset-0">
-          {/* warm bloom, lower-right — sits behind the glass card */}
+          {/* warm bloom, lower-right, sits behind the glass card */}
           <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(249,115,22,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(249,115,22,0.17),transparent_70%)]" />
           {/* neutral lift, upper-left */}
           <div className="absolute inset-0 bg-[radial-gradient(520px_320px_at_12%_6%,rgba(0,0,0,0.04),transparent_60%)] dark:bg-[radial-gradient(560px_340px_at_12%_6%,rgba(255,255,255,0.05),transparent_62%)]" />
@@ -83,12 +83,12 @@ export default function AboutSection() {
         {/* LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,0.85fr)_minmax(0,1.35fr)] xl:grid-cols-[minmax(360px,0.8fr)_minmax(0,1.4fr)] gap-6 lg:gap-10 items-center">
 
-          {/* LEFT — carousel */}
+          {/* LEFT, carousel */}
           <div className="flex justify-center lg:justify-start">
             <PhotoCarousel />
           </div>
 
-          {/* RIGHT — bio (frosted glass over the grid + glow) */}
+          {/* RIGHT, bio (frosted glass over the grid + glow) */}
           <div className="space-y-8 rounded-2xl p-6 md:p-8
             border border-white/55 dark:border-white/10
             bg-white/45 dark:bg-white/[0.045]
