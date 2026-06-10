@@ -43,7 +43,7 @@ function Section({ id, children }: {
       id={id}
       className="border-b border-border/40 bg-background"
     >
-      <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">{children}</div>
+      <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">{children}</div>
     </section>
   )
 }

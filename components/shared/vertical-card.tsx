@@ -1,9 +1,10 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import clsx from "clsx"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { IconArrowUpRight } from "@tabler/icons-react"
 
 type Variant = "default" | "compact" | "featured"
@@ -59,6 +60,32 @@ export function VerticalCard({
   }
   const cursorLabel = cursorLabelMap[ctaLabel] || "View"
 
+  // Cursor-following spotlight. Updates CSS vars on the card element directly
+  // (no React state → no re-render), rAF-throttled, and disabled for users who
+  // prefer reduced motion — the glow then rests at its default top-center spot.
+  const prefersReduced = useReducedMotion()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number | null>(null)
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    const el = cardRef.current
+    if (!el || rafRef.current) return
+    const { clientX, clientY } = e
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null
+      const r = el.getBoundingClientRect()
+      el.style.setProperty("--mx", `${((clientX - r.left) / r.width) * 100}%`)
+      el.style.setProperty("--my", `${((clientY - r.top) / r.height) * 100}%`)
+    })
+  }
+
+  const resetSpotlight = () => {
+    const el = cardRef.current
+    if (!el) return
+    el.style.setProperty("--mx", "50%")
+    el.style.setProperty("--my", "0%")
+  }
+
   if (isCompact) {
     return (
       <Link
@@ -93,9 +120,12 @@ export function VerticalCard({
       href={href}
       data-cursor-card
       data-cursor-label={cursorLabel}
+      onPointerMove={prefersReduced ? undefined : handlePointerMove}
+      onPointerLeave={prefersReduced ? undefined : resetSpotlight}
       className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <motion.div
+        ref={cardRef}
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -113,7 +143,16 @@ export function VerticalCard({
         "transition-[transform,border-color,background-color] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
         "hover:-translate-y-[2px]",
         "hover:border-foreground/14 hover:bg-foreground/[0.025] dark:hover:border-white/[0.15] dark:hover:bg-white/[0.035]",
+        // Tactile press — barely-there settle on click.
+        "active:translate-y-0 active:scale-[0.994] active:duration-150",
       )}>
+
+        {/* Amber spotlight — follows the cursor on hover (rests top-center). */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+          style={{ background: "radial-gradient(300px 220px at var(--mx, 50%) var(--my, 0%), rgba(249,115,22,0.10), transparent 70%)" }}
+        />
 
         {/* Image block */}
         {showImage && image && (

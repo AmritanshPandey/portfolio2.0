@@ -66,12 +66,13 @@ export function CTA({
           "active:scale-[0.97]",
           "transition-all duration-300",
 
-          // PRIMARY
+          // PRIMARY — dark text on ember keeps the brand color vivid and passes
+          // WCAG AA more reliably than white text on orange.
           variant === "primary" && [
-            "bg-accent text-white",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_18px_rgba(255,90,0,0.18)]",
+            "bg-accent text-neutral-950",
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(255,90,0,0.18)]",
             "hover:bg-accent",
-            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_26px_rgba(255,90,0,0.28)]",
+            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_26px_rgba(255,90,0,0.28)]",
             "active:scale-[0.97]",
           ],
 

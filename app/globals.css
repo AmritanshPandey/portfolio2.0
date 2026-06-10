@@ -77,6 +77,20 @@
   --surface-hover: oklch(0.215 0 0);
 }
 
+.footer-social-link:hover,
+.footer-social-link:focus-visible {
+  border-color: color-mix(in srgb, var(--footer-link-brand) 42%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 24px var(--footer-link-glow);
+}
+
+.footer-social-link:hover .footer-social-icon,
+.footer-social-link:focus-visible .footer-social-icon {
+  color: var(--footer-link-brand);
+  filter: drop-shadow(0 0 7px var(--footer-link-glow));
+}
+
 /* ─────────────────────────
    FINTECH SYSTEM SCOPE
 ───────────────────────── */
@@ -512,12 +526,17 @@
 
 /* ─────────────────────────
    HIDE NATIVE CURSOR
-   Only on real pointer devices (mouse / trackpad).
-   Touch / stylus devices keep their default cursors.
+   Only on real pointer devices (mouse / trackpad), and only while the
+   custom cursor is actually mounted (FancyCursor adds html.custom-cursor).
+   Touch / stylus devices and every page without the custom cursor keep
+   their default cursors.
 ───────────────────────── */
 
 @media (pointer: fine) {
-  *, *::before, *::after {
+  html.custom-cursor,
+  html.custom-cursor *,
+  html.custom-cursor *::before,
+  html.custom-cursor *::after {
     cursor: none !important;
   }
 }

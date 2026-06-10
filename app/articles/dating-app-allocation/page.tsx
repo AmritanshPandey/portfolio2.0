@@ -36,7 +36,7 @@ function FadeIn({ children, delay = 0, className = "" }: {
 function Section({ children }: { children: React.ReactNode; muted?: boolean }) {
   return (
     <section className="border-b border-border/40 bg-background">
-      <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">{children}</div>
+      <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">{children}</div>
     </section>
   )
 }

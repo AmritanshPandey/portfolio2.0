@@ -34,7 +34,7 @@ export default function Page() {
         title="Explorations"
         description="Self-directed work outside client constraints — from a reusable fintech interface system to live product prototypes — where I test product and system ideas and leave behind a clearer point of view."
         transition="Those system choices shape how I approach new work."
-        transitionVariant="highlight"
+
       >
         <ExplorationsSection />
       </Section>

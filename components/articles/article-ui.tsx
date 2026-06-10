@@ -26,28 +26,28 @@ export function CategoryPill({
 
 function ArticleMetaStack({ article }: { article: ArticleItem }) {
   return (
-    <dl className="grid gap-5 text-[12px] leading-5 text-muted-foreground">
+    <dl className="grid gap-4 text-[12px] leading-5 text-muted-foreground">
       {article.category ? (
-        <div>
-          <dt className="mb-1 font-medium text-foreground/45">Category</dt>
-          <dd className="font-medium text-foreground/75">{article.category}</dd>
+        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
+          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Category</dt>
+          <dd className="mt-2 font-medium text-foreground">{article.category}</dd>
         </div>
       ) : null}
       {article.date || article.readTime ? (
-        <div>
-          <dt className="mb-1 font-medium text-foreground/45">Reading</dt>
-          <dd className="space-y-1">
+        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
+          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Reading</dt>
+          <dd className="mt-2 space-y-1 font-medium text-foreground/78">
             {article.date ? <p>{article.date}</p> : null}
             {article.readTime ? <p>{article.readTime}</p> : null}
           </dd>
         </div>
       ) : null}
       {article.tags && article.tags.length > 0 ? (
-        <div>
-          <dt className="mb-2 font-medium text-foreground/45">Topics</dt>
-          <dd className="flex flex-wrap gap-x-2 gap-y-1.5">
+        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
+          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Topics</dt>
+          <dd className="mt-2 flex flex-wrap gap-1.5">
             {article.tags.slice(0, 4).map((tag) => (
-              <span key={tag} className="text-foreground/58">
+              <span key={tag} className="rounded-full border border-border/60 bg-foreground/[0.03] px-2 py-1 text-[11px] text-foreground/68">
                 {tag}
               </span>
             ))}
@@ -89,32 +89,70 @@ export function ReadingMeta({
 
 export function ArticleHeader({ article }: { article: ArticleItem }) {
   return (
-    <header className="border-b border-border/45 bg-background">
-      <div className="mx-auto max-w-6xl px-6 pb-16 pt-32 md:pb-20 md:pt-40">
-        <div className="grid gap-10 lg:grid-cols-[180px_minmax(0,780px)] lg:items-start">
-          <aside className="hidden pt-5 lg:block">
-            <ArticleMetaStack article={article} />
+    <header className="relative overflow-hidden border-b border-border/45 bg-background">
+      <div
+        aria-hidden
+        className="absolute right-[-14%] top-14 h-80 w-80 rounded-full opacity-[0.10] blur-3xl dark:opacity-[0.16] md:h-[30rem] md:w-[30rem]"
+        style={{ background: article.accent ?? "var(--accent)" }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.32] dark:opacity-[0.18]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: "linear-gradient(to bottom, black, transparent 78%)",
+        }}
+      />
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent_0%,var(--background)_68%)]" />
+
+      <div className="relative mx-auto max-w-6xl px-6 pb-14 pt-28 md:pb-18 md:pt-36">
+        <div>
+          <aside className="hidden lg:block">
+            {/* <div className="rounded-2xl border border-border/60 bg-card/72 p-3 backdrop-blur-sm">
+              <div className="mb-3 flex items-center justify-between px-1">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Article
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              </div>
+              <ArticleMetaStack article={article} />
+            </div> */}
           </aside>
 
-          <div className="min-w-0 pt-5">
-            <div className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] font-medium text-muted-foreground lg:hidden">
-              {article.category ? <span className="text-foreground/75">{article.category}</span> : null}
-              {article.category && (article.date || article.readTime) ? <span className="text-foreground/22">/</span> : null}
-              <ReadingMeta date={article.date} readTime={article.readTime} className="gap-2 text-[12px]" />
+          <div className="min-w-0">
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              {article.category ? <CategoryPill>{article.category}</CategoryPill> : null}
+              {article.date ? (
+                <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground backdrop-blur-sm">
+                  {article.date}
+                </span>
+              ) : null}
+              {article.readTime ? (
+                <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground backdrop-blur-sm">
+                  {article.readTime}
+                </span>
+              ) : null}
             </div>
 
-            <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.05] text-foreground text-balance md:text-[60px]">
+            <h1 className="max-w-[930px] text-balance text-[42px] font-semibold leading-[1.02] text-foreground md:text-[64px] lg:text-[72px]">
               {article.title}
             </h1>
 
-            <p className="mt-6 max-w-[64ch] text-[18px] leading-8 text-foreground/68 md:text-[20px] md:leading-9">
+            <p className="mt-7 max-w-[68ch] text-[18px] leading-8 text-foreground/68 md:text-[21px] md:leading-9">
               {article.description}
             </p>
 
             {article.tags && article.tags.length > 0 ? (
-              <div className="mt-8 flex flex-wrap gap-x-3 gap-y-2 border-t border-border/55 pt-5 text-[12px] leading-5 text-muted-foreground lg:hidden">
+              <div className="mt-8 flex flex-wrap gap-2 border-t border-border/55 pt-5">
                 {article.tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
+                  <span
+                    key={tag}
+                    className="rounded-full border border-border/55 bg-card/60 px-3 py-1.5 text-[12px] font-medium text-muted-foreground backdrop-blur-sm"
+                  >
+                    {tag}
+                  </span>
                 ))}
               </div>
             ) : null}
@@ -286,7 +324,7 @@ export function BlogGrid({ articles }: { articles: ArticleItem[] }) {
 
 export function ArticleProse({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-[70ch] text-[17px] leading-[1.85] text-foreground/82">
+    <div className=" text-[17px] leading-[1.85] text-foreground/82">
       {children}
     </div>
   )

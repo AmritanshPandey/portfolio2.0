@@ -84,40 +84,40 @@ const ROADMAP = [
 function PhoneVisual() {
   return (
     <div className="relative flex justify-center">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.12)_0%,transparent_65%)] dark:bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.18)_0%,transparent_65%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.10)_0%,transparent_62%)] dark:bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.16)_0%,transparent_62%)]" />
 
-      <div className="relative z-10 w-[220px] rounded-[28px] border border-white/[0.15] bg-[#111] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
+      <div className="relative z-10 w-[190px] overflow-hidden rounded-[26px] border border-black/[0.12] bg-white shadow-[0_16px_44px_-34px_rgba(0,0,0,0.38)] md:w-[205px] dark:border-white/[0.14] dark:bg-[#111] dark:shadow-[0_28px_70px_rgba(0,0,0,0.56)]">
         {/* Notch */}
-        <div className="h-5 bg-[#0a0a0a] flex items-center justify-center">
-          <div className="w-12 h-[5px] rounded-full bg-[#333]" />
+        <div className="flex h-5 items-center justify-center bg-neutral-100 dark:bg-[#0a0a0a]">
+          <div className="h-[5px] w-12 rounded-full bg-neutral-300 dark:bg-[#333]" />
         </div>
         {/* Header */}
-        <div className="bg-[#111] px-3.5 py-2.5 flex items-center gap-2 border-b border-white/[0.06]">
-          <div className="w-6 h-6 rounded-full bg-accent flex items-center justify-center text-[9px] font-bold text-black shrink-0">
+        <div className="flex items-center gap-2 border-b border-black/[0.08] bg-white px-3.5 py-2.5 dark:border-white/[0.06] dark:bg-[#111]">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-white dark:text-black">
             AI
           </div>
           <div>
-            <p className="text-[11px] font-medium text-white leading-none mb-0.5">ChatAI Agent</p>
+            <p className="mb-0.5 text-[11px] font-medium leading-none text-foreground dark:text-white">ChatAI Agent</p>
             <p className="text-[10px] text-accent">● Active, booking your trip</p>
           </div>
         </div>
         {/* Chat body */}
-        <div className="px-2.5 py-3 flex flex-col gap-2">
-          <div className="self-end max-w-[85%] bg-[#222] rounded-[10px] rounded-br-[3px] px-2.5 py-2">
-            <p className="text-[10px] text-white/70 leading-[1.5]">Book me a flight to Tokyo, business class</p>
+        <div className="flex flex-col gap-2 px-2.5 py-3">
+          <div className="max-w-[85%] self-end rounded-[10px] rounded-br-[3px] bg-muted px-2.5 py-2 dark:bg-[#222]">
+            <p className="text-[10px] leading-[1.5] text-muted-foreground dark:text-white/70">Book me a flight to Tokyo, business class</p>
           </div>
-          <div className="self-start max-w-[85%] bg-[#1a1a1a] rounded-[10px] rounded-bl-[3px] px-2.5 py-2">
-            <p className="text-[10px] text-white/80 leading-[1.5]">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
+          <div className="max-w-[85%] self-start rounded-[10px] rounded-bl-[3px] bg-card px-2.5 py-2 ring-1 ring-border/80 dark:bg-[#1a1a1a] dark:ring-0">
+            <p className="text-[10px] leading-[1.5] text-foreground/75 dark:text-white/80">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
           </div>
           {/* Trust moment */}
-          <div className="bg-accent/[0.08] border border-accent/25 rounded-[10px] p-2.5 mt-0.5">
+          <div className="mt-0.5 rounded-[10px] border border-accent/35 bg-accent/[0.07] p-2.5 dark:border-accent/25 dark:bg-accent/[0.08]">
             <p className="text-[9px] uppercase tracking-[0.05em] font-semibold text-accent mb-1.5">Payment secured</p>
-            <p className="text-[10px] text-white/60 leading-[1.4] mb-2">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
+            <p className="mb-2 text-[10px] leading-[1.4] text-muted-foreground dark:text-white/60">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
               <p className="text-[9px] font-medium text-accent">Transaction verified and protected</p>
             </div>
-            <p className="text-[8px] text-neutral-600 text-right mt-2 tracking-[0.04em]">Secured by trusted payment network ✦</p>
+            <p className="mt-2 text-right text-[8px] tracking-[0.04em] text-muted-foreground/70 dark:text-neutral-600">Secured by trusted payment network ✦</p>
           </div>
         </div>
       </div>
@@ -215,8 +215,24 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
 }
 
 function Hero() {
+  const proof = [
+    { label: "Direction", value: "Silent guardian adopted" },
+    { label: "Demo", value: "Used by CPO + SVPs" },
+    { label: "Research", value: "6 flows · 3 regions" },
+  ]
+
   return (
     <CsHeroShell
+      className="
+        lg:[&_[data-cs-hero-inner]]:max-w-[1120px]
+        lg:[&_[data-cs-hero-grid]]:grid-cols-[minmax(0,1fr)_260px]
+        lg:[&_[data-cs-hero-grid]]:gap-14
+        lg:[&_[data-cs-hero-title]]:max-w-[780px]
+        lg:[&_[data-cs-hero-title]]:text-[48px]
+        xl:[&_[data-cs-hero-title]]:text-[52px]
+        [&_[data-cs-hero-lede]]:max-w-[660px]
+        lg:[&_[data-cs-hero-aside]]:pt-12
+      "
       breadcrumb={{ kind: "Case Study", category: "Agentic Commerce", client: "Mastercard · Creative Studio" }}
       badge="Flagship · Ongoing"
       title={
@@ -233,34 +249,26 @@ function Hero() {
           show Google and ChatGPT where Mastercard fits.
         </>
       }
-      asideCol="300px"
+      asideCol="260px"
       aside={<PhoneVisual />}
     >
-      <div className="flex flex-wrap gap-2 mb-8">
-        {[
-          { label: "Silent guardian, adopted direction", orange: true },
-          { label: "Used by CPO + SVPs live" },
-          { label: "6 research flows · 3 regions" },
-          { label: "React + Claude AI · 2 weeks" },
-          { label: "Haptic Labs · ElevenLabs" },
-        ].map(p => (
-          <span
-            key={p.label}
-            className={`text-[11px] font-medium px-3 py-1 rounded-full border ${
-              p.orange
-                ? "bg-accent/10 border-accent/35 text-accent"
-                : "border-border text-muted-foreground"
-            }`}
-          >
-            {p.label}
-          </span>
+      <div className="grid max-w-2xl gap-2 border-y border-border/60 py-4 sm:grid-cols-3">
+        {proof.map((item) => (
+          <div key={item.label} className="min-w-0">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              {item.label}
+            </p>
+            <p className="mt-1 text-sm font-medium leading-snug text-foreground">
+              {item.value}
+            </p>
+          </div>
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-border/60">
-        <span className="text-[11px] text-muted-foreground mr-1">Presented at</span>
+      <div className="mt-5 flex max-w-2xl flex-wrap items-center gap-2">
+        <span className="mr-1 text-[11px] text-muted-foreground">Presented at</span>
         {["Money20/20", "Mastercard Connections", "Innovate at McLaren HQ"].map(e => (
-          <span key={e} className="text-[11px] font-medium px-3 py-1 rounded-full border border-accent/30 text-accent">
+          <span key={e} className="rounded-full border border-border px-3 py-1 text-[11px] font-medium text-muted-foreground">
             {e}
           </span>
         ))}

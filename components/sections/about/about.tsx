@@ -1,9 +1,9 @@
 "use client"
 
+import { useCallback, useRef, type CSSProperties } from "react"
 import { FocusList } from "@/components/shared/focus-list"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { SectionHeader } from "@/components/shared/section-header"
-import { ShaderGrid } from "@/components/shared/shader-grid"
 import {
   IconBike,
   IconPlane,
@@ -14,6 +14,10 @@ import {
 } from "@tabler/icons-react"
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const rafRef = useRef(0)
+  const pointerRef = useRef({ x: "50%", y: "42%" })
+
   const focus = [
     { icon: IconBike,    text: "Long bike rides, the longer the better" },
     { icon: IconPlane,   text: "Going somewhere I haven't been" },
@@ -23,10 +27,46 @@ export default function AboutSection() {
     { icon: IconSchool,  text: "Teaching and mentoring" },
   ]
 
+  const moveGridLight = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    if (e.pointerType === "touch") return
+    const section = sectionRef.current
+    if (!section) return
+
+    const rect = section.getBoundingClientRect()
+    pointerRef.current = {
+      x: `${((e.clientX - rect.left) / rect.width) * 100}%`,
+      y: `${((e.clientY - rect.top) / rect.height) * 100}%`,
+    }
+
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      section.style.setProperty("--about-grid-x", pointerRef.current.x)
+      section.style.setProperty("--about-grid-y", pointerRef.current.y)
+      section.style.setProperty("--about-grid-alpha", "1")
+    })
+  }, [])
+
+  const releaseGridLight = useCallback(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+    }
+    sectionRef.current?.style.setProperty("--about-grid-alpha", "0")
+  }, [])
+
   return (
     <section
+      ref={sectionRef}
       id="about"
-      className="relative overflow-hidden bg-white text-foreground dark:bg-black"
+      className="relative overflow-hidden bg-[oklch(0.98_0_0)] text-foreground dark:bg-[oklch(0.14_0_0)]"
+      onPointerMove={moveGridLight}
+      onPointerLeave={releaseGridLight}
+      style={{
+        "--about-grid-x": "50%",
+        "--about-grid-y": "42%",
+        "--about-grid-alpha": "0",
+      } as CSSProperties}
     >
 
       {/* ENGRAVED SEAM, matches the band rhythm of <Section> above. */}
@@ -35,8 +75,93 @@ export default function AboutSection() {
 
       {/* ── BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {/* GRID, interactive dot-field (matches Section bg="grid" + hero) */}
-        <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
+        {/* Crisp premium grid: fine 24px cells with a quiet 96px major rhythm. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-40 dark:opacity-50"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(12,12,12,0.055) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(12,12,12,0.055) 1px, transparent 1px)
+            `,
+            backgroundSize: "24px 24px",
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-38 dark:opacity-48"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(12,12,12,0.115) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(12,12,12,0.115) 1px, transparent 1px)
+            `,
+            backgroundSize: "96px 96px",
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 78%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 78%, transparent 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden dark:block opacity-50"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,0.055) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.055) 1px, transparent 1px)
+            `,
+            backgroundSize: "24px 24px",
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden dark:block opacity-48"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,0.115) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.115) 1px, transparent 1px)
+            `,
+            backgroundSize: "96px 96px",
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 78%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 78%, transparent 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-20 dark:opacity-70"
+          style={{
+            background:
+              "radial-gradient(ellipse 78% 58% at 50% 38%, transparent 0%, transparent 54%, rgba(0,0,0,0.22) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 transition-opacity duration-500"
+          style={{
+            opacity: "var(--about-grid-alpha)",
+            background:
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(12,12,12,0.075), rgba(249,115,22,0.05) 28%, transparent 68%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden transition-opacity duration-500 dark:block"
+          style={{
+            opacity: "var(--about-grid-alpha)",
+            background:
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(255,255,255,0.105), rgba(249,115,22,0.045) 28%, transparent 68%)",
+          }}
+        />
 
         {/* GLOW, faint ambient bloom for depth behind the glass card. Ember stays
             subtle (One Voice Rule); a neutral lift adds dimension, no 2nd accent. */}

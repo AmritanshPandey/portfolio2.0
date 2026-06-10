@@ -28,6 +28,8 @@ type RGBA = readonly [number, number, number, number] // 0..1
 type RGB = readonly [number, number, number] // 0..1
 
 interface ShaderGridProps {
+  className?: string
+  fallbackClassName?: string
   /** CSS px between dots — drives the grid density (resolution-independent) */
   spacing?: number
   /** dot radius as a fraction of the cell (0..0.5) — keep tiny */
@@ -109,7 +111,11 @@ void main() {
   // are black, so a weak mix would just look dark, not orange. Subtlety comes
   // from a small, soft pocket + a gentle brightness lift, not a washed-out hue.
   float motion = length(vel) * force;
-  float warm   = clamp(force * 1.0 + motion * 6.0, 0.0, 1.0);
+  // Couple the ember tint to proximity (not just motion) so a STILL hover
+  // reads orange across the whole pocket. Otherwise the alpha lift below just
+  // darkens the black light-mode dots into grey wherever the hue hasn't yet
+  // saturated.
+  float warm   = clamp(force * 2.2 + motion * 6.0, 0.0, 1.0);
 
   vec3  color = mix(u_baseColor.rgb, u_tintColor, warm);
   // Brighten near the cursor; the glow sidesteps most of the vignette so it
@@ -138,6 +144,8 @@ const cssRgba = (c: RGBA) =>
   )},${c[3]})`
 
 export function ShaderGrid({
+  className,
+  fallbackClassName,
   spacing = 16,
   dotSize = 0.08,
   radius = 0.15,
@@ -502,13 +510,13 @@ export function ShaderGrid({
     "rgba(0,0,0,0.58) 100%)"
 
   return (
-    <div ref={wrapRef} className="pointer-events-none absolute inset-0">
+    <div ref={wrapRef} className={`pointer-events-none absolute inset-0 ${className ?? ""}`}>
       {/* Static CSS fallback. Stays mounted and crossfades out once WebGL has
           painted (instead of an instant swap), so any residual difference from
           the shader grid dissolves rather than flashing. Remains fully visible
           when WebGL is unavailable / reduced motion (webglActive never flips). */}
       <div
-        className="absolute inset-0 transition-opacity duration-300 ease-out"
+        className={`absolute inset-0 transition-opacity duration-300 ease-out ${fallbackClassName ?? ""}`}
         style={{ opacity: webglActive ? 0 : 1 }}
       >
         <div

@@ -58,7 +58,10 @@ export function CsHeroShell({
         <div className="absolute inset-0 bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(249,115,22,0.04),transparent_60%)] dark:bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(249,115,22,0.07),transparent_60%)]" />
       </div>
 
-      <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
+      <div
+        data-cs-hero-inner
+        className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20"
+      >
 
         {/* Breadcrumb */}
         <motion.nav
@@ -79,6 +82,7 @@ export function CsHeroShell({
         </motion.nav>
 
         <div
+          data-cs-hero-grid
           className={clsx(
             hasAside
               ? "grid lg:grid-cols-[1fr_var(--cs-aside)] gap-12 lg:gap-16 items-start"
@@ -100,6 +104,7 @@ export function CsHeroShell({
             )}
 
             <motion.h1
+              data-cs-hero-title
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.06, ease: EASE }}
@@ -112,6 +117,7 @@ export function CsHeroShell({
             </motion.h1>
 
             <motion.p
+              data-cs-hero-lede
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.12, ease: EASE }}
@@ -138,6 +144,7 @@ export function CsHeroShell({
           {/* Right column — bespoke visual */}
           {hasAside && (
             <motion.div
+              data-cs-hero-aside
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.22, ease: EASE }}

@@ -39,19 +39,19 @@ export function Section({
   // cards (surface 0.18 dark / white light) keep popping on every band.
   const bgStyles = {
     default: `
-      bg-[oklch(0.985_0_0)] text-foreground
+      bg-[oklch(0.98_0_0)] text-foreground
       dark:bg-[oklch(0.14_0_0)]
     `,
 
     muted: `
-      bg-[oklch(0.945_0_0)] text-foreground
+      bg-[oklch(0.965_0_0)] text-foreground
       dark:bg-[oklch(0.105_0_0)]
     `,
 
     // Clean `default` surface with an interactive dot-field backdrop,
     // rendered via <ShaderGrid> below when bg === "grid".
     grid: `
-      bg-[oklch(0.985_0_0)] text-foreground
+      bg-[oklch(0.98_0_0)] text-foreground
       dark:bg-[oklch(0.14_0_0)]
     `,
 
@@ -72,7 +72,18 @@ export function Section({
       {/* Interactive dot-field backdrop — only for the `grid` band. Decorative,
           pointer-events-none, and self-pausing when off-screen. */}
       {bg === "grid" && (
-        <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
+        <ShaderGrid
+          spacing={18}
+          dotSize={0.07}
+          radius={0.13}
+          drag={1.35}
+          maxDrag={0.01}
+          // Softer than the default so the dot field reads as a quiet texture
+          // and never competes with the section's reading text (legibility first,
+          // dots are decorative — per DESIGN.md).
+          lightColor={[0, 0, 0, 0.2]}
+          darkColor={[1, 1, 1, 0.26]}
+        />
       )}
 
       {/* Sections are clean neutral surfaces. Ember is reserved for intent

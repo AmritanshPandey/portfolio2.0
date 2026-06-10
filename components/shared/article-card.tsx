@@ -41,6 +41,13 @@ export function ArticleCard({
           dark:hover:border-white/20 dark:hover:bg-white/[0.02]
         "
       >
+        {/* Amber glow — blooms from top-center on hover */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+          style={{ background: "radial-gradient(260px 160px at 50% 0%, rgba(249,115,22,0.08), transparent 70%)" }}
+        />
+
         <div className="relative flex flex-1 flex-col gap-4 px-5 pb-5 pt-5">
 
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

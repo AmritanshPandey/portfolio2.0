@@ -5,23 +5,96 @@ import { motion } from "framer-motion"
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 
-// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+const HREF = "/articles/typography-system"
 
-const HREF   = "/articles/typography-system"
-
-// Font families showcased in the classification + pairing tools.
 const F = {
-  serif:  "'Playfair Display', Georgia, serif",
-  sans:   "'Inter', system-ui, sans-serif",
-  mono:   "'DM Mono', 'Courier New', monospace",
-  lora:   "'Lora', Georgia, serif",
-  grotesk:"'Space Grotesk', system-ui, sans-serif",
-  fraunces:"'Fraunces', Georgia, serif",
-  poppins:"'Poppins', system-ui, sans-serif",
-  lato:   "'Lato', system-ui, sans-serif",
+  serif:    "'Playfair Display', Georgia, serif",
+  sans:     "'Inter', system-ui, sans-serif",
+  mono:     "'DM Mono', 'Courier New', monospace",
+  lora:     "'Lora', Georgia, serif",
+  grotesk:  "'Space Grotesk', system-ui, sans-serif",
+  fraunces: "'Fraunces', Georgia, serif",
+  poppins:  "'Poppins', system-ui, sans-serif",
+  lato:     "'Lato', system-ui, sans-serif",
 }
 
-// ─── FADE-IN WRAPPER ───────────────────────────────────────────────────────, 
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+
+const TYPE_SHOW = [
+  { word: "Readability", font: F.serif,  weight: 600, style: "normal", lbl: "The first job",
+    desc: "Before personality, text must be effortless to read. Size, measure, line height, and contrast come first." },
+  { word: "Personality", font: F.sans,   weight: 600, style: "normal", lbl: "The second job",
+    desc: "A geometric sans reads precise and modern; a humanist serif warm and editorial. Voice supports brand without costing legibility." },
+  { word: "Hierarchy",   font: F.mono,   weight: 500, style: "normal", lbl: "The structure",
+    desc: "Size, weight, color, and space let users tell a heading from body, a label from a value — without reading a word." },
+  { word: "Function",    font: F.lora,   weight: 400, style: "italic", lbl: "The discipline",
+    desc: "Every style answers one question: what is its job? Tokens named by role keep that discipline across every screen." },
+]
+
+const CLASSES = [
+  { spec: F.lora,     size: 52, name: "Serif",      font: "Lora · Georgia · Times",
+    desc: "Traditional, authoritative, editorial. Excellent for long-form reading.",       traits: ["Editorial", "Trustworthy", "Long-form"] },
+  { spec: F.sans,     size: 52, name: "Sans-serif",  font: "Inter · Helvetica · Arial",
+    desc: "Clean, neutral, modern. The UI default, legible at small sizes.",               traits: ["Modern", "Neutral", "UI default"] },
+  { spec: F.grotesk,  size: 52, name: "Grotesk",     font: "Space Grotesk · Founders",
+    desc: "Slightly mechanical forms. Confident and characterful without serifs.",          traits: ["Confident", "Characterful", "Brand"] },
+  { spec: F.poppins,  size: 52, name: "Geometric",   font: "Poppins · Futura · Circular",
+    desc: "Built from circles and lines. Precise and friendly in headings, tiring in body.", traits: ["Precise", "Friendly", "Display-leaning"] },
+  { spec: F.lato,     size: 52, name: "Humanist",    font: "Lato · Frutiger · Source Sans",
+    desc: "Calligraphic warmth and open apertures. The most readable sans.",                traits: ["Warm", "Readable", "Accessible"] },
+  { spec: F.mono,     size: 42, name: "Monospace",   font: "DM Mono · JetBrains · SF Mono",
+    desc: "Equal-width characters. Essential for code, data, and tabular numbers.",        traits: ["Code", "Tabular", "Technical"] },
+  { spec: F.serif,    size: 52, name: "Display",     font: "Playfair · Fraunces · Canela",
+    desc: "Built for large sizes and impact. Hero moments only — never body or labels.",    traits: ["Impact", "Hero-only", "Expressive"] },
+  { spec: F.fraunces, size: 52, name: "Variable",    font: "Fraunces · Inter · Recursive",
+    desc: "One file, continuous axes. Smaller payloads, fluid weights, optical sizing.",   traits: ["One file", "Fluid axes", "Performance"] },
+]
+
+const SCALE_ROLES = [
+  { key: "display",  name: "Display",     exp: 7,  lh: 1.04, ls: -0.02,  sample: "Display" },
+  { key: "h1",       name: "Heading 1",   exp: 6,  lh: 1.08, ls: -0.02,  sample: "Heading One" },
+  { key: "h2",       name: "Heading 2",   exp: 5,  lh: 1.12, ls: -0.015, sample: "Heading Two" },
+  { key: "h3",       name: "Heading 3",   exp: 4,  lh: 1.18, ls: -0.01,  sample: "Heading Three" },
+  { key: "h4",       name: "Heading 4",   exp: 3,  lh: 1.25, ls: -0.005, sample: "Heading Four" },
+  { key: "h5",       name: "Heading 5",   exp: 2,  lh: 1.3,  ls: 0,      sample: "Heading Five" },
+  { key: "body-lg",  name: "Body Large",  exp: 1,  lh: 1.6,  ls: 0,      sample: "Larger body copy for intros" },
+  { key: "body",     name: "Body",        exp: 0,  lh: 1.65, ls: 0,      sample: "Default body text for reading" },
+  { key: "small",    name: "Small",       exp: -1, lh: 1.5,  ls: 0,      sample: "Secondary and supporting text" },
+  { key: "caption",  name: "Caption",     exp: -2, lh: 1.45, ls: 0.01,   sample: "Captions, metadata, footnotes" },
+]
+
+const SCALE_PRESETS = [
+  { name: "Minor Third",   r: 1.2 },
+  { name: "Major Third",   r: 1.25 },
+  { name: "Perfect Fourth",r: 1.333 },
+  { name: "Aug. Fourth",   r: 1.414 },
+  { name: "Golden Ratio",  r: 1.618 },
+]
+
+const PAIRS = [
+  { name: "Editorial", h: F.serif,    b: F.sans,  hw: 400, hs: "italic" as const, note: "Display serif + humanist sans" },
+  { name: "Modern UI", h: F.sans,     b: F.sans,  hw: 700, hs: "normal" as const, note: "One grotesk, two weights" },
+  { name: "Technical", h: F.grotesk,  b: F.mono,  hw: 500, hs: "normal" as const, note: "Grotesk + monospace" },
+  { name: "Literary",  h: F.fraunces, b: F.lora,  hw: 600, hs: "normal" as const, note: "Display serif + reading serif" },
+  { name: "Geometric", h: F.poppins,  b: F.lato,  hw: 600, hs: "normal" as const, note: "Geometric + humanist sans" },
+]
+
+const PRINCIPLES = [
+  { num: "01", title: "Design for reading first",  body: "Personality is earned only after text is effortless to read. Measure, size, and contrast come before voice." },
+  { num: "02", title: "Consistency beats novelty", body: "A predictable scale used everywhere reads as quality. 'Just one more size' is how systems rot." },
+  { num: "03", title: "Contrast creates hierarchy",body: "Order comes from decisive difference in size, weight, or color — not from making everything large." },
+  { num: "04", title: "Spacing is typography",     body: "Line height, paragraph spacing, and measure shape readability as much as the letterforms." },
+  { num: "05", title: "Typography is interface",   body: "In most products, text is the interface. Treat the type system as core architecture." },
+  { num: "06", title: "Restraint scales",          body: "Two families, a few sizes, two weights covers nearly every interface and stays maintainable." },
+]
+
+const LEGIBILITY = [
+  { font: F.sans, name: "Inter · clear apertures" },
+  { font: F.lato, name: "Lato · humanist, open" },
+  { font: F.mono, name: "DM Mono · disambiguated" },
+]
+
+// ─── PRIMITIVES ───────────────────────────────────────────────────────────────
 
 function FadeIn({ children, delay = 0, className = "" }: {
   children: React.ReactNode; delay?: number; className?: string
@@ -39,44 +112,29 @@ function FadeIn({ children, delay = 0, className = "" }: {
   )
 }
 
-// ─── PRIMITIVES ───────────────────────────────────────────────────────────────
-
-function Section({ id, children }: {
+function Section({ id, children, muted }: {
   id?: string; children: React.ReactNode; muted?: boolean
 }) {
   return (
-    <section
-      id={id}
-      className="border-b border-border/40 bg-background"
-    >
-      <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">{children}</div>
+    <section id={id} className={`border-b border-border/40 ${muted ? "bg-muted/30" : "bg-background"}`}>
+      <div className="max-w-4xl mx-auto py-14 md:py-18">{children}</div>
     </section>
   )
 }
 
 function Eyebrow({ num, tag }: { num: string; tag: string }) {
-  // A quiet chapter marker for a long-form sequence, not the orange,
-  // uppercase, wide-tracked eyebrow trope (per DESIGN.md / PRODUCT.md).
   return (
-    <div className="mb-5 font-mono text-[12px] text-muted-foreground">
-      <span className="tabular-nums text-foreground/50">{num}</span>
+    <div className="mb-4 font-mono text-[11px] text-muted-foreground">
+      <span className="tabular-nums text-foreground/40">{num}</span>
       <span className="mx-2 text-border">/</span>
       {tag}
     </div>
   )
 }
 
-function SubEyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground mb-5 mt-10">
-      {children}
-    </p>
-  )
-}
-
 function Title({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl md:text-[2.1rem] font-bold tracking-tight leading-[1.12] text-foreground mb-4">
+    <h2 className="text-2xl md:text-[2rem] font-bold tracking-tight leading-[1.12] text-foreground mb-3">
       {children}
     </h2>
   )
@@ -84,25 +142,12 @@ function Title({ children }: { children: React.ReactNode }) {
 
 function Lede({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[15px] md:text-base leading-[1.8] text-muted-foreground max-w-xl mb-10">
+    <p className="text-[15px] leading-[1.75] text-muted-foreground max-w-[58ch] mb-8">
       {children}
     </p>
   )
 }
 
-function Note({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <FadeIn>
-      <div className="my-8 rounded-lg border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6 relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 rounded-l-xl" />
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-orange-500 mb-2 pl-2">{label}</p>
-        <p className="text-[13px] md:text-[14px] leading-[1.7] text-foreground/80 pl-2">{children}</p>
-      </div>
-    </FadeIn>
-  )
-}
-
-// Reusable copy-to-clipboard button
 function CopyButton({ text, className = "" }: { text: string; className?: string }) {
   const [done, setDone] = useState(false)
   return (
@@ -115,8 +160,8 @@ function CopyButton({ text, className = "" }: { text: string; className?: string
       }}
       className={`font-mono text-[10px] uppercase tracking-[0.08em] rounded-md border px-3 py-1.5 transition-colors ${
         done
-          ? "border-orange-500 text-orange-500"
-          : "border-border text-muted-foreground hover:border-orange-500 hover:text-orange-500"
+          ? "border-accent text-accent"
+          : "border-border text-muted-foreground hover:border-accent hover:text-accent"
       } ${className}`}
     >
       {done ? "Copied ✓" : "Copy"}
@@ -124,12 +169,6 @@ function CopyButton({ text, className = "" }: { text: string; className?: string
   )
 }
 
-// Tool shell + small controls
-function Tool({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-border bg-card overflow-hidden">{children}</div>
-  )
-}
 function ToolHead({ children }: { children: React.ReactNode }) {
   return (
     <div className="px-5 py-4 border-b border-border/60 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -137,9 +176,11 @@ function ToolHead({ children }: { children: React.ReactNode }) {
     </div>
   )
 }
+
 function CtlLabel({ children }: { children: React.ReactNode }) {
   return <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{children}</span>
 }
+
 function Chip({ active, onClick, children }: {
   active?: boolean; onClick: () => void; children: React.ReactNode
 }) {
@@ -149,7 +190,7 @@ function Chip({ active, onClick, children }: {
       onClick={onClick}
       className={`font-mono text-[11px] rounded-lg border px-3 py-1.5 transition-colors ${
         active
-          ? "border-orange-500 text-orange-500 bg-orange-500/[0.08]"
+          ? "border-accent text-accent bg-accent/[0.08]"
           : "border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground/60"
       }`}
     >
@@ -158,91 +199,7 @@ function Chip({ active, onClick, children }: {
   )
 }
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-
-const TYPE_SHOW = [
-  { word: "Readability", font: F.serif, weight: 600, style: "normal", lbl: "The first job",
-    desc: "Before a typeface has personality, it must be effortless to read. Size, measure, line height, and contrast decide whether users absorb the text or bounce. Everything else is a layer on top." },
-  { word: "Personality", font: F.sans, weight: 600, style: "normal", lbl: "The second job",
-    desc: "Once text is readable, the typeface carries voice, a geometric sans reads precise and modern, a humanist serif warm and editorial. Voice supports the brand; it never costs legibility." },
-  { word: "Hierarchy", font: F.mono, weight: 500, style: "normal", lbl: "The structure",
-    desc: "Hierarchy lets users tell a heading from body, a label from a value, without reading a word. Size, weight, color, and space do it together." },
-  { word: "Function", font: F.lora, weight: 400, style: "italic", lbl: "The discipline",
-    desc: "Every type style should answer one question: what is its job? Tokens named by role keep that discipline, so designers stop re-deciding the same thing on every screen." },
-]
-
-const CLASSES = [
-  { spec: F.lora, size: 56, name: "Serif", font: "Lora · Georgia · Times",
-    desc: "Small strokes finish each letter. Traditional, authoritative, editorial, excellent for long-form reading, in print and increasingly on screen.",
-    traits: ["Editorial", "Trustworthy", "Long-form"] },
-  { spec: F.sans, size: 56, name: "Sans-serif", font: "Inter · Helvetica · Arial",
-    desc: "No serifs: clean, neutral, modern. The UI default, legible at small sizes and on low-resolution screens.",
-    traits: ["Modern", "Neutral", "UI default"] },
-  { spec: F.grotesk, size: 56, name: "Grotesk", font: "Space Grotesk · Helvetica · Founders",
-    desc: "Early sans-serifs with slightly mechanical forms. Confident and characterful, favoured by product brands wanting personality without serifs.",
-    traits: ["Confident", "Characterful", "Brand"] },
-  { spec: F.poppins, size: 56, name: "Geometric", font: "Poppins · Futura · Circular",
-    desc: "Built from circles and straight lines. Precise, friendly, contemporary. Great in headings; tiring in long body copy.",
-    traits: ["Precise", "Friendly", "Display-leaning"] },
-  { spec: F.lato, size: 56, name: "Humanist", font: "Lato · Frutiger · Source Sans",
-    desc: "Sans-serifs with calligraphic warmth and open apertures. The most readable sans, ideal for body text and accessibility.",
-    traits: ["Warm", "Readable", "Accessible"] },
-  { spec: F.mono, size: 46, name: "Monospace", font: "DM Mono · JetBrains · SF Mono",
-    desc: "Every character is equal width. Essential for code, data, and tabular numbers. Adds a technical, precise voice.",
-    traits: ["Code", "Tabular", "Technical"] },
-  { spec: F.serif, size: 56, name: "Display", font: "Playfair · Fraunces · Canela",
-    desc: "Built for large sizes and impact, not paragraphs. High contrast, expressive detail. Hero moments only, never body or labels.",
-    traits: ["Impact", "Hero-only", "Expressive"] },
-  { spec: F.fraunces, size: 56, name: "Variable", font: "Fraunces · Inter · Recursive",
-    desc: "One file, continuous axes, weight, width, optical size. Smaller payloads, fluid weights, optical sizing at every scale.",
-    traits: ["One file", "Fluid axes", "Performance"] },
-]
-
-const SCALE_ROLES = [
-  { key: "display", name: "Display",    exp: 7,  lh: 1.04, ls: -0.02,  sample: "Display" },
-  { key: "h1",      name: "Heading 1",  exp: 6,  lh: 1.08, ls: -0.02,  sample: "Heading One" },
-  { key: "h2",      name: "Heading 2",  exp: 5,  lh: 1.12, ls: -0.015, sample: "Heading Two" },
-  { key: "h3",      name: "Heading 3",  exp: 4,  lh: 1.18, ls: -0.01,  sample: "Heading Three" },
-  { key: "h4",      name: "Heading 4",  exp: 3,  lh: 1.25, ls: -0.005, sample: "Heading Four" },
-  { key: "h5",      name: "Heading 5",  exp: 2,  lh: 1.3,  ls: 0,      sample: "Heading Five" },
-  { key: "body-lg", name: "Body Large", exp: 1,  lh: 1.6,  ls: 0,      sample: "Larger body copy for intros" },
-  { key: "body",    name: "Body",       exp: 0,  lh: 1.65, ls: 0,      sample: "Default body text for reading" },
-  { key: "small",   name: "Small",      exp: -1, lh: 1.5,  ls: 0,      sample: "Secondary and supporting text" },
-  { key: "caption", name: "Caption",    exp: -2, lh: 1.45, ls: 0.01,   sample: "Captions, metadata, footnotes" },
-]
-
-const SCALE_PRESETS = [
-  { name: "Minor Third", r: 1.2 },
-  { name: "Major Third", r: 1.25 },
-  { name: "Perfect Fourth", r: 1.333 },
-  { name: "Aug. Fourth", r: 1.414 },
-  { name: "Golden Ratio", r: 1.618 },
-]
-
-const PAIRS = [
-  { name: "Editorial", h: F.serif, b: F.sans, hw: 400, hs: "italic" as const, note: "Display serif + humanist sans" },
-  { name: "Modern UI", h: F.sans, b: F.sans, hw: 700, hs: "normal" as const, note: "One grotesk, two weights" },
-  { name: "Technical", h: F.grotesk, b: F.mono, hw: 500, hs: "normal" as const, note: "Grotesk + monospace" },
-  { name: "Literary", h: F.fraunces, b: F.lora, hw: 600, hs: "normal" as const, note: "Display serif + reading serif" },
-  { name: "Geometric", h: F.poppins, b: F.lato, hw: 600, hs: "normal" as const, note: "Geometric + humanist sans" },
-]
-
-const PRINCIPLES = [
-  { num: "01", title: "Design for reading first", body: "Personality is earned only after text is effortless to read. Measure, size, and contrast come before voice. A beautiful typeface that fatigues the reader has failed its one essential job." },
-  { num: "02", title: "Consistency beats novelty", body: "A predictable scale used everywhere reads as quality. “Just one more size” is how systems rot. Reuse the scale; let layout and spacing create the variety." },
-  { num: "03", title: "Contrast creates hierarchy", body: "Order comes from decisive difference in size, weight, or color, not from making everything large. If two things look equally important, neither is." },
-  { num: "04", title: "Spacing is typography", body: "Line height, paragraph spacing, and measure shape readability as much as the letterforms. White space isn't empty; it's what lets type breathe." },
-  { num: "05", title: "Typography is interface design", body: "In most products, text is the interface. Treat the type system as core architecture, tokenized, accessible, consistent." },
-  { num: "06", title: "Restraint scales", body: "Two families, a few sizes, two or three weights covers nearly every interface and stays maintainable. Range comes from how you combine, not how much you add." },
-]
-
-const LEGIBILITY = [
-  { font: F.sans, name: "Inter · clear apertures" },
-  { font: F.lato, name: "Lato · humanist, open" },
-  { font: F.mono, name: "DM Mono · disambiguated" },
-]
-
-// ─── INTERACTIVE TOOLS ──────────────────────────────────────────────────────, 
+// ─── TOOLS ────────────────────────────────────────────────────────────────────
 
 function ModularScaleTool() {
   const [base, setBase] = useState(16)
@@ -271,7 +228,7 @@ function ModularScaleTool() {
   }, [base, ratio, fmt])
 
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-col gap-2">
           <CtlLabel>Base size</CtlLabel>
@@ -279,7 +236,7 @@ function ModularScaleTool() {
             <input
               type="number" min={12} max={22} step={1} value={base}
               onChange={e => setBase(Math.max(12, Math.min(22, Number(e.target.value) || 16)))}
-              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-orange-500"
+              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-accent"
             />
             <span className="font-mono text-[11px] text-muted-foreground">px</span>
           </div>
@@ -290,9 +247,9 @@ function ModularScaleTool() {
             <input
               type="range" min={1.1} max={1.7} step={0.001} value={ratio}
               onChange={e => setRatio(Number(e.target.value))}
-              className="w-40 accent-orange-500"
+              className="w-36 accent-orange-500"
             />
-            <span className="font-mono text-[13px] text-orange-500 w-12">{ratio.toFixed(3)}</span>
+            <span className="font-mono text-[13px] text-accent w-12">{ratio.toFixed(3)}</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -307,20 +264,20 @@ function ModularScaleTool() {
         </div>
       </ToolHead>
 
-      <div className="px-5 py-5">
+      <div className="px-5 py-4">
         <div className="flex flex-col">
           {SCALE_ROLES.map(r => {
             const px = sizeFor(r.exp)
             return (
-              <div key={r.key} className="flex items-baseline gap-5 py-3 border-b border-border/40 last:border-0">
+              <div key={r.key} className="flex items-baseline gap-5 py-2.5 border-b border-border/40 last:border-0">
                 <div className="font-mono text-[10px] text-muted-foreground w-[120px] flex-shrink-0 leading-[1.6]">
-                  <span className="block text-[11px] uppercase tracking-[0.06em] text-orange-500">{r.name}</span>
-                  {Math.round(px)}px · {r.lh} · {r.ls ? `${r.ls}em` : "0"}
+                  <span className="block text-[10px] uppercase tracking-[0.06em] text-accent">{r.name}</span>
+                  {Math.round(px)}px · {r.lh}
                 </div>
                 <div
                   className="text-foreground overflow-hidden text-ellipsis whitespace-nowrap"
                   style={{
-                    fontSize: Math.min(px, 64),
+                    fontSize: Math.min(px, 60),
                     lineHeight: r.lh,
                     letterSpacing: `${r.ls}em`,
                     fontWeight: px >= sizeFor(2) ? 500 : 400,
@@ -344,9 +301,9 @@ function ModularScaleTool() {
           </div>
           <CopyButton text={tokens} />
         </div>
-        <pre className="font-mono text-[12px] leading-[1.7] text-foreground/70 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{tokens}</pre>
+        <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{tokens}</pre>
       </div>
-    </Tool>
+    </>
   )
 }
 
@@ -354,7 +311,7 @@ function FontPairingExplorer() {
   const [i, setI] = useState(0)
   const p = PAIRS[i]
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-wrap gap-2">
           {PAIRS.map((pair, idx) => (
@@ -362,46 +319,46 @@ function FontPairingExplorer() {
           ))}
         </div>
       </ToolHead>
-      <div className="px-5 py-7 md:px-8">
+      <div className="px-6 py-8 md:px-8">
         <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-4">{p.note}</div>
         <div
-          className="text-foreground mb-4 leading-[1.1] tracking-[-0.01em]"
-          style={{ fontFamily: p.h, fontWeight: p.hw, fontStyle: p.hs, fontSize: 38 }}
+          className="text-foreground mb-5 leading-[1.1] tracking-[-0.01em]"
+          style={{ fontFamily: p.h, fontWeight: p.hw, fontStyle: p.hs, fontSize: 36 }}
         >
           The grand tour of modern typography
         </div>
-        <p className="text-[16px] leading-[1.75] text-muted-foreground" style={{ fontFamily: p.b, maxWidth: "62ch" }}>
+        <p className="text-[15px] leading-[1.75] text-muted-foreground" style={{ fontFamily: p.b, maxWidth: "60ch" }}>
           Pairing is about contrast with harmony. A high-contrast display serif over a calm humanist sans gives editorial authority; a grotesk over a monospace reads technical and precise. The heading sets the voice; the body keeps it readable.
         </p>
       </div>
-    </Tool>
+    </>
   )
 }
 
 function ReadingSimulator() {
   const [width, setWidth] = useState(62)
   const [lh, setLh] = useState(1.7)
-  const ok = width >= 45 && width <= 78 && lh >= 1.4 && lh <= 1.9
+  const ok   = width >= 45 && width <= 78 && lh >= 1.4 && lh <= 1.9
   const warn = (width >= 38 && width < 45) || (width > 78 && width <= 90) || (lh >= 1.25 && lh < 1.4)
   const verdict = ok ? "✓ Comfortable" : warn ? "~ Acceptable" : "✕ Fatiguing"
-  const vColor = ok ? "text-emerald-500" : warn ? "text-amber-500" : "text-red-500"
+  const vColor  = ok ? "text-emerald-500" : warn ? "text-amber-500" : "text-red-500"
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-col gap-2">
           <CtlLabel>Line length</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={30} max={100} step={1} value={width}
-              onChange={e => setWidth(Number(e.target.value))} className="w-40 accent-orange-500" />
-            <span className="font-mono text-[13px] text-orange-500 w-12">{width}ch</span>
+              onChange={e => setWidth(Number(e.target.value))} className="w-36 accent-orange-500" />
+            <span className="font-mono text-[13px] text-accent w-12">{width}ch</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <CtlLabel>Line height</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={1} max={2.2} step={0.01} value={lh}
-              onChange={e => setLh(Number(e.target.value))} className="w-40 accent-orange-500" />
-            <span className="font-mono text-[13px] text-orange-500 w-12">{lh.toFixed(2)}</span>
+              onChange={e => setLh(Number(e.target.value))} className="w-36 accent-orange-500" />
+            <span className="font-mono text-[13px] text-accent w-12">{lh.toFixed(2)}</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -411,10 +368,10 @@ function ReadingSimulator() {
       </ToolHead>
       <div className="px-5 py-8 flex justify-center bg-background/40">
         <p className="text-[16px] text-foreground/80" style={{ maxWidth: `${width}ch`, lineHeight: lh }}>
-          Typography is the craft of making language visible. The measure, the length of a line of text, is one of its oldest and most reliable controls. When a column is too wide the reader tires; too narrow and the rhythm fractures into fragments. Somewhere between forty-five and seventy-five characters lies the comfortable middle, where the eye sweeps and returns without conscious effort, and the words simply flow.
+          Typography is the craft of making language visible. The measure — the length of a line of text — is one of its oldest and most reliable controls. When a column is too wide the reader tires; too narrow and the rhythm fractures into fragments. Somewhere between forty-five and seventy-five characters lies the comfortable middle, where the eye sweeps and returns without conscious effort, and the words simply flow.
         </p>
       </div>
-    </Tool>
+    </>
   )
 }
 
@@ -422,21 +379,16 @@ function HierarchyPlayground() {
   const [s, setS] = useState({ size: true, weight: true, color: true, space: true })
   const toggle = (k: keyof typeof s) => setS(prev => ({ ...prev, [k]: !prev[k] }))
   const n = Object.values(s).filter(Boolean).length
-  const strong = n === 4
-  const verdict = strong
-    ? { color: "text-emerald-500", label: "Strong hierarchy.", text: "Four levers working together, the eye lands on the title, then price, then action, instantly." }
-    : n <= 1
-    ? { color: "text-red-500", label: "Flat.", text: "With almost no contrast, everything competes and nothing leads. The user has to read every word to find structure." }
-    : { color: "text-amber-500", label: "Weak hierarchy.", text: "Some order, but the levels blur. Decisive contrast in size and weight reads far faster." }
+  const verdict =
+    n === 4 ? { color: "text-emerald-500", label: "Strong hierarchy.", text: "Four levers working together — the eye lands on the title, then price, then action, instantly." }
+    : n <= 1 ? { color: "text-red-500",     label: "Flat.",             text: "Almost no contrast: everything competes, nothing leads. The user must read every word to find structure." }
+    :           { color: "text-amber-500",   label: "Weak hierarchy.",   text: "Some order, but the levels blur. Decisive contrast in size and weight reads far faster." }
 
-  const labels: [keyof typeof s, string][] = [
-    ["size", "Size contrast"], ["weight", "Weight contrast"], ["color", "Color contrast"], ["space", "Spacing"],
-  ]
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-wrap gap-2">
-          {labels.map(([k, lbl]) => (
+          {([ ["size","Size contrast"], ["weight","Weight contrast"], ["color","Color contrast"], ["space","Spacing"] ] as [keyof typeof s, string][]).map(([k, lbl]) => (
             <Chip key={k} active={s[k]} onClick={() => toggle(k)}>{lbl}</Chip>
           ))}
         </div>
@@ -452,26 +404,21 @@ function HierarchyPlayground() {
           <div
             className="leading-[1.2]"
             style={{
-              fontSize: s.size ? 24 : 15,
-              fontWeight: s.weight ? 600 : 400,
-              color: s.color ? "var(--foreground)" : "var(--text-muted)",
-              marginBottom: s.space ? 8 : 2,
+              fontSize: s.size ? 24 : 15, fontWeight: s.weight ? 600 : 400,
+              color: s.color ? "var(--foreground)" : "var(--text-muted)", marginBottom: s.space ? 8 : 2,
             }}
           >
             Everything your team needs to ship
           </div>
           <p className="text-[14px] leading-[1.65] text-muted-foreground" style={{ marginBottom: s.space ? 16 : 4 }}>
-            Unlimited projects, advanced analytics, priority support, and a shared design-token pipeline that keeps every surface consistent.
+            Unlimited projects, advanced analytics, priority support, and a shared design-token pipeline.
           </p>
           <div className="flex items-center justify-between">
             <span style={{ fontSize: s.size ? 22 : 15, fontWeight: s.weight ? 600 : 400, color: s.color ? "var(--foreground)" : "var(--text-muted)" }}>
               $29<span className="text-[13px] text-muted-foreground">/mo</span>
             </span>
-            <button
-              type="button"
-              className="rounded-lg bg-orange-500 text-white px-4 py-2 text-[14px]"
-              style={{ fontWeight: s.weight ? 500 : 400 }}
-            >
+            {/* Demo button — intentionally uses raw orange-500 to show the color in isolation */}
+            <button type="button" className="rounded-lg bg-orange-500 text-background px-4 py-2 text-[14px]" style={{ fontWeight: s.weight ? 500 : 400 }}>
               Start trial
             </button>
           </div>
@@ -482,36 +429,32 @@ function HierarchyPlayground() {
           <b className={verdict.color}>{verdict.label}</b> {verdict.text}
         </p>
       </div>
-    </Tool>
+    </>
   )
 }
 
-const DEVICES = [
-  { n: "Mobile", w: 375 },
-  { n: "Tablet", w: 768 },
-  { n: "Desktop", w: 1100 },
-]
+const DEVICES = [ { n: "Mobile", w: 375 }, { n: "Tablet", w: 768 }, { n: "Desktop", w: 1100 } ]
 const MINVW = 360, MAXVW = 1280
 
 function ResponsiveClampPreview() {
   const [min, setMin] = useState(28)
   const [max, setMax] = useState(72)
-  const [vw, setVw] = useState(1100)
+  const [vw, setVw]   = useState(1100)
 
-  const slope = (max - min) / (MAXVW - MINVW)
-  const inter = min - slope * MINVW
+  const slope    = (max - min) / (MAXVW - MINVW)
+  const inter    = min - slope * MINVW
   const rendered = Math.max(min, Math.min(max, inter + slope * vw))
-  const code = `font-size: clamp(${min}px, ${inter.toFixed(2)}px + ${(slope * 100).toFixed(2)}vw, ${max}px);`
+  const code     = `font-size: clamp(${min}px, ${inter.toFixed(2)}px + ${(slope * 100).toFixed(2)}vw, ${max}px);`
 
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-col gap-2">
           <CtlLabel>Min size</CtlLabel>
           <div className="flex items-center gap-2">
             <input type="number" min={12} max={60} value={min}
               onChange={e => setMin(Math.max(12, Math.min(60, Number(e.target.value) || 12)))}
-              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-orange-500" />
+              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-accent" />
             <span className="font-mono text-[11px] text-muted-foreground">px</span>
           </div>
         </div>
@@ -520,16 +463,14 @@ function ResponsiveClampPreview() {
           <div className="flex items-center gap-2">
             <input type="number" min={20} max={120} value={max}
               onChange={e => setMax(Math.max(20, Math.min(120, Number(e.target.value) || 20)))}
-              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-orange-500" />
+              className="w-20 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground outline-none focus:border-accent" />
             <span className="font-mono text-[11px] text-muted-foreground">px</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <CtlLabel>Viewport</CtlLabel>
-          <div className="flex flex-wrap gap-2">
-            {DEVICES.map(d => (
-              <Chip key={d.n} active={vw === d.w} onClick={() => setVw(d.w)}>{d.n}</Chip>
-            ))}
+          <div className="flex gap-2">
+            {DEVICES.map(d => <Chip key={d.n} active={vw === d.w} onClick={() => setVw(d.w)}>{d.n}</Chip>)}
           </div>
         </div>
       </ToolHead>
@@ -551,9 +492,9 @@ function ResponsiveClampPreview() {
           <CtlLabel>Generated CSS</CtlLabel>
           <CopyButton text={code} />
         </div>
-        <pre className="font-mono text-[12px] leading-[1.7] text-foreground/70 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{code}</pre>
+        <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{code}</pre>
       </div>
-    </Tool>
+    </>
   )
 }
 
@@ -573,16 +514,14 @@ function A11yChecker() {
     return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05)
   })()
   const large = size >= 24
-  const aaNeed = large ? 3 : 4.5
-  const aaaNeed = large ? 4.5 : 7
   const badges: [string, boolean][] = [
-    [`AA ${large ? "large" : "normal"}`, ratio >= aaNeed],
-    [`AAA ${large ? "large" : "normal"}`, ratio >= aaaNeed],
-    [size >= 16 ? "Body size ✓" : "Below 16px body", size >= 16],
+    [`AA ${large ? "large" : "normal"}`,  ratio >= (large ? 3 : 4.5)],
+    [`AAA ${large ? "large" : "normal"}`, ratio >= (large ? 4.5 : 7)],
+    [size >= 16 ? "Body size ✓" : "Below 16px", size >= 16],
   ]
 
   return (
-    <Tool>
+    <>
       <ToolHead>
         <div className="flex flex-col gap-2">
           <CtlLabel>Text</CtlLabel>
@@ -598,37 +537,32 @@ function A11yChecker() {
           <CtlLabel>Size</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={11} max={32} step={1} value={size}
-              onChange={e => setSize(Number(e.target.value))} className="w-36 accent-orange-500" />
-            <span className="font-mono text-[13px] text-orange-500 w-12">{size}px</span>
+              onChange={e => setSize(Number(e.target.value))} className="w-32 accent-orange-500" />
+            <span className="font-mono text-[13px] text-accent w-12">{size}px</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">
           <CtlLabel>Ratio</CtlLabel>
-          <span className="font-mono text-[13px] text-orange-500">{ratio.toFixed(2)}:1</span>
+          <span className="font-mono text-[13px] text-accent">{ratio.toFixed(2)}:1</span>
         </div>
       </ToolHead>
-      <div className="px-5 py-6">
-        <div className="rounded-xl p-8" style={{ background: bg }}>
+      <div className="px-5 py-5">
+        <div className="rounded-xl p-7" style={{ background: bg }}>
           <div style={{ color: fg, fontSize: size, fontWeight: 400, lineHeight: 1.5 }}>
             The quick brown fox jumps over the lazy dog, 0123456789
           </div>
-          <div className="flex flex-wrap gap-2.5 mt-5">
+          <div className="flex flex-wrap gap-2.5 mt-4">
             {badges.map(([label, pass]) => (
-              <span
-                key={label}
-                className={`font-mono text-[11px] px-3 py-1.5 rounded-md ${
-                  pass ? "bg-emerald-500/15 text-emerald-300" : "bg-red-500/15 text-red-300"
-                }`}
-              >
+              <span key={label} className={`font-mono text-[11px] px-3 py-1.5 rounded-md ${pass ? "bg-emerald-500/15 text-emerald-300" : "bg-red-500/15 text-red-300"}`}>
                 {pass ? "✓ " : "✕ "}{label}
               </span>
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
+        <div className="grid grid-cols-3 gap-3 mt-4">
           {LEGIBILITY.map(l => (
-            <div key={l.name} className="rounded-xl border border-border/60 p-5 text-center bg-card">
-              <div className="text-[28px] text-foreground mb-2" style={{ fontFamily: l.font }}>Il1 O0 rn m</div>
+            <div key={l.name} className="rounded-xl border border-border/60 p-4 text-center bg-card">
+              <div className="text-[26px] text-foreground mb-1.5" style={{ fontFamily: l.font }}>Il1 O0 rn</div>
               <div className="font-mono text-[10px] text-muted-foreground">{l.name}</div>
             </div>
           ))}
@@ -636,163 +570,153 @@ function A11yChecker() {
       </div>
       <div className="px-5 py-4 border-t border-border/60">
         <p className="text-[13px] leading-[1.7] text-muted-foreground">
-          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text and <b className="text-foreground">3:1</b> for large text (≥24px, or ≥18.66px bold). Keep body text at 16px or above, and the layout usable at 200% zoom. Choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b>, a quiet but real win for dyslexic and low-vision readers.
+          WCAG AA requires <b className="text-foreground">4.5:1</b> for normal text, <b className="text-foreground">3:1</b> for large (≥24px). Keep body at 16px minimum, and choose letterforms that disambiguate <b className="text-foreground">I l 1</b> and <b className="text-foreground">O 0</b>.
         </p>
       </div>
-    </Tool>
+    </>
   )
 }
 
-// ─── HERO ─────────────────────────────────────────────────────────────────, 
+// ─── TYPOGRAPHY LAB ───────────────────────────────────────────────────────────
 
-function Hero() {
-  const a = articleItems.find(x => x.href === HREF)!
-  return <ArticleHeader article={a} />
+const LAB_TABS = [
+  { id: "scale",     label: "Scale generator" },
+  { id: "pairs",     label: "Font pairing" },
+  { id: "reading",   label: "Reading comfort" },
+  { id: "hierarchy", label: "Hierarchy" },
+  { id: "clamp",     label: "Fluid clamp" },
+  { id: "a11y",      label: "Contrast" },
+]
+
+function TypographyLab() {
+  const [tab, setTab] = useState("scale")
+  return (
+    <div className="rounded-2xl border border-border bg-card overflow-hidden">
+      {/* Tab bar — all tools mount immediately to preserve state when switching */}
+      <div className="flex flex-wrap border-b border-border bg-muted/30">
+        {LAB_TABS.map(t => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setTab(t.id)}
+            className={`px-4 py-3 text-[12px] font-medium transition-colors duration-150 border-r border-border/40 last:border-r-0 ${
+              tab === t.id
+                ? "bg-card text-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Keep all tools mounted to preserve their state when switching tabs */}
+      <div className={tab === "scale"     ? "block" : "hidden"}><ModularScaleTool /></div>
+      <div className={tab === "pairs"     ? "block" : "hidden"}><FontPairingExplorer /></div>
+      <div className={tab === "reading"   ? "block" : "hidden"}><ReadingSimulator /></div>
+      <div className={tab === "hierarchy" ? "block" : "hidden"}><HierarchyPlayground /></div>
+      <div className={tab === "clamp"     ? "block" : "hidden"}><ResponsiveClampPreview /></div>
+      <div className={tab === "a11y"      ? "block" : "hidden"}><A11yChecker /></div>
+    </div>
+  )
 }
 
-// ─── RELATED ──────────────────────────────────────────────────────────────, 
-
-// ─── PAGE ─────────────────────────────────────────────────────────────────, 
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function Page() {
+  const article = articleItems.find(x => x.href === HREF)!
   return (
     <main>
-      {/* Showcase typefaces, loaded only on this article */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      {/* eslint-disable-next-line @next/next/no-page-custom-font -- showcase typefaces are intentionally scoped to this article only */}
+      {/* eslint-disable-next-line @next/next/no-page-custom-font */}
       <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=Poppins:wght@400;500;600&family=Lato:wght@300;400;700&display=swap"
         rel="stylesheet"
       />
 
-      <Hero />
+      <ArticleHeader article={article} />
 
-      {/* 01 FOUNDATIONS */}
+      {/* 01 · FOUNDATIONS */}
       <Section id="foundations">
         <FadeIn><Eyebrow num="01" tag="Foundations" /></FadeIn>
-        <FadeIn><Title>Typography foundations</Title></FadeIn>
-        <FadeIn><Lede>A typography system is the set of rules governing how text looks and behaves across a product. It&apos;s the difference between text that is merely present and text that guides, reassures, and communicates.</Lede></FadeIn>
+        <FadeIn><Title>What a type system is for</Title></FadeIn>
+        <FadeIn><Lede>A typography system turns text from decoration into communication. It sets the rules for size, hierarchy, spacing, and voice — once, so every surface inherits them without rethinking.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {TYPE_SHOW.map(c => (
-            <div key={c.word} className="rounded-xl border border-border/60 bg-card p-7 hover:border-border transition-colors">
-              <div className="mb-4 leading-[1.05] tracking-[-0.01em] text-foreground" style={{ fontFamily: c.font, fontWeight: c.weight, fontStyle: c.style, fontSize: 42 }}>
+            <div key={c.word} className="rounded-xl border border-border/60 bg-card p-6 hover:border-border transition-colors">
+              <div className="mb-3 leading-[1.05] tracking-[-0.01em] text-foreground" style={{ fontFamily: c.font, fontWeight: c.weight, fontStyle: c.style, fontSize: 40 }}>
                 {c.word}
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-orange-500 mb-1.5">{c.lbl}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-1">{c.lbl}</p>
               <p className="text-[13px] text-muted-foreground leading-[1.65]">{c.desc}</p>
             </div>
           ))}
         </FadeIn>
-
-        <Note label="Typography is UX, not styling">Roughly 95% of the web is written language. The type system isn&apos;t a cosmetic pass at the end, it&apos;s the primary medium the product communicates through. Treat it as core architecture.</Note>
       </Section>
 
-      {/* 02 CLASSIFICATION */}
+      {/* 02 · CLASSIFICATION */}
       <Section id="classification" muted>
         <FadeIn><Eyebrow num="02" tag="Classification" /></FadeIn>
-        <FadeIn><Title>Font classification system</Title></FadeIn>
-        <FadeIn><Lede>Every typeface belongs to a family of forms with its own temperament and ideal use. Knowing the categories lets you choose deliberately instead of by accident.</Lede></FadeIn>
+        <FadeIn><Title>Font classification</Title></FadeIn>
+        <FadeIn><Lede>Every typeface has a temperament. Knowing the categories lets you choose deliberately instead of by accident.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {CLASSES.map(c => (
             <div key={c.name} className="rounded-xl border border-border/60 bg-card overflow-hidden hover:border-border transition-colors">
-              <div className="px-7 pt-8 pb-5 text-foreground border-b border-border/60 leading-none" style={{ fontFamily: c.spec, fontSize: c.size }}>
+              <div className="px-6 pt-7 pb-4 text-foreground border-b border-border/60 leading-none" style={{ fontFamily: c.spec, fontSize: c.size }}>
                 Ag
               </div>
-              <div className="px-7 py-5">
-                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-orange-500 mb-1">{c.name}</p>
-                <p className="font-mono text-[10px] text-muted-foreground mb-3">{c.font}</p>
-                <p className="text-[13px] text-foreground/75 leading-[1.7] mb-3">{c.desc}</p>
+              <div className="px-6 py-5">
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent mb-0.5">{c.name}</p>
+                <p className="font-mono text-[10px] text-muted-foreground mb-2.5">{c.font}</p>
+                <p className="text-[13px] text-foreground/75 leading-[1.65] mb-3">{c.desc}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {c.traits.map(t => (
-                    <span key={t} className="font-mono text-[9px] uppercase tracking-[0.06em] text-muted-foreground border border-border rounded-full px-2.5 py-1">{t}</span>
+                    <span key={t} className="font-mono text-[9px] uppercase tracking-[0.06em] text-muted-foreground border border-border rounded-full px-2 py-0.5">{t}</span>
                   ))}
                 </div>
               </div>
             </div>
           ))}
         </FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Font pairing explorer</SubEyebrow></FadeIn>
-        <FadeIn><FontPairingExplorer /></FadeIn>
       </Section>
 
-      {/* 03 TYPE SCALE */}
-      <Section id="scale">
-        <FadeIn><Eyebrow num="03" tag="Type Scale" /></FadeIn>
-        <FadeIn><Title>The modular type scale</Title></FadeIn>
-        <FadeIn><Lede>A type scale is a fixed set of sizes derived from one base and one ratio. Every size comes from the scale, never an arbitrary value, which is what makes typography feel composed instead of chaotic.</Lede></FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Modular scale generator</SubEyebrow></FadeIn>
-        <FadeIn><ModularScaleTool /></FadeIn>
+      {/* 03 · TYPOGRAPHY LAB */}
+      <Section id="lab">
+        <FadeIn><Eyebrow num="03" tag="Typography Lab" /></FadeIn>
+        <FadeIn><Title>Interactive tools</Title></FadeIn>
+        <FadeIn><Lede>Six tools in one place: scale generator, font pairing, reading comfort, hierarchy playground, fluid clamp, and contrast checker.</Lede></FadeIn>
+        <FadeIn><TypographyLab /></FadeIn>
       </Section>
 
-      {/* 04 READING */}
-      <Section id="reading" muted>
-        <FadeIn><Eyebrow num="04" tag="Reading Experience" /></FadeIn>
-        <FadeIn><Title>The reading experience</Title></FadeIn>
-        <FadeIn><Lede>Sizing the type is only half the job. Line length, vertical rhythm, and paragraph spacing decide whether reading feels effortless or exhausting, the quiet mechanics of comfort.</Lede></FadeIn>
-
-        <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-          <div className="rounded-xl border border-emerald-500/30 bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Comfortable</span>
-            <p className="text-[14px] text-foreground/75" style={{ maxWidth: "62ch", lineHeight: 1.7 }}>
-              Lines of 50–75 characters let the eye return to the next line without effort. Generous line height gives each line room to breathe, and the reader settles into a rhythm.
-            </p>
-          </div>
-          <div className="rounded-xl border border-red-500/30 bg-card p-6">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Fatiguing</span>
-            <p className="text-[14px] text-foreground/75" style={{ lineHeight: 1.25 }}>
-              Lines that run the full width of a wide screen force long eye journeys and make it easy to lose your place when returning to the left edge, while cramped line height removes the breathing room each line needs, so the paragraph becomes a wall of text that the eye slides off rather than reads.
-            </p>
-          </div>
-        </FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Reading width &amp; line-height simulator</SubEyebrow></FadeIn>
-        <FadeIn><ReadingSimulator /></FadeIn>
-
-        <Note label="Vertical rhythm">Set line height and spacing on a consistent baseline unit (4px or 8px). When headings, body, and spacing snap to the same grid, the page gains an invisible structure the eye reads as &ldquo;calm&rdquo;, even if no one can name why.</Note>
-      </Section>
-
-      {/* 05 HIERARCHY */}
-      <Section id="hierarchy">
-        <FadeIn><Eyebrow num="05" tag="Hierarchy" /></FadeIn>
-        <FadeIn><Title>Typographic hierarchy</Title></FadeIn>
-        <FadeIn><Lede>Hierarchy tells you where to look first, second, third. It&apos;s built from four levers, size, weight, color, and space, and strong hierarchy needs only a few of them used decisively.</Lede></FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Weight &amp; hierarchy playground</SubEyebrow></FadeIn>
-        <FadeIn><HierarchyPlayground /></FadeIn>
-
-        <Note label="Contrast creates hierarchy, not size alone">The common failure is making everything big. A 32px heading over a 28px subhead has no clear order. Make a decisive jump in at least one dimension: a bold 24px title over regular 14px body reads more clearly than two similar large sizes.</Note>
-      </Section>
-
-      {/* 06 TYPOGRAPHY FOR UI */}
+      {/* 04 · UI PATTERNS */}
       <Section id="ui" muted>
-        <FadeIn><Eyebrow num="06" tag="Typography for UI" /></FadeIn>
-        <FadeIn><Title>Typography for interfaces</Title></FadeIn>
-        <FadeIn><Lede>Interface type lives under different pressure than editorial type: small sizes, dense layouts, tabular data, touch targets, glanceable labels. Each context has its own rules.</Lede></FadeIn>
+        <FadeIn><Eyebrow num="04" tag="UI Patterns" /></FadeIn>
+        <FadeIn><Title>Typography in interfaces</Title></FadeIn>
+        <FadeIn><Lede>Interface type lives under different pressure: small sizes, dense layouts, tabular data, glanceable labels. Each context has its own rules.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="rounded-xl border border-border/60 bg-card p-7">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-orange-500 mb-5">Buttons &amp; actions</h4>
+          <div className="rounded-xl border border-border/60 bg-card p-6">
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Buttons &amp; actions</h4>
             <div className="flex flex-wrap items-center gap-2.5">
-              <button type="button" className="rounded-lg bg-orange-500 text-white px-4 py-2 text-[14px] font-medium">Primary action</button>
+              {/* Demo buttons — intentionally showing raw colors as design examples */}
+              <button type="button" className="rounded-lg bg-orange-500 text-background px-4 py-2 text-[14px] font-medium">Primary action</button>
               <button type="button" className="rounded-lg bg-transparent text-foreground border border-border px-4 py-2 text-[14px] font-medium">Secondary</button>
             </div>
-            <p className="text-[11px] text-muted-foreground mt-4 leading-[1.6]">14–15px, medium weight, generous letter-spacing on uppercase. Labels are verbs. Never let a button label wrap.</p>
+            <p className="text-[11px] text-muted-foreground mt-4 leading-[1.6]">14–15px medium weight. Labels are verbs. Never let a button label wrap.</p>
           </div>
 
-          <div className="rounded-xl border border-border/60 bg-card p-7">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-orange-500 mb-5">Forms &amp; inputs</h4>
+          <div className="rounded-xl border border-border/60 bg-card p-6">
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Forms &amp; inputs</h4>
             <label className="block text-[12px] font-medium text-foreground mb-1.5">Work email</label>
             <input readOnly value="ada@studio.com" className="w-full bg-background border border-border rounded-md px-3 py-2 text-foreground text-[14px]" />
-            <p className="text-[11px] text-muted-foreground mt-1.5 leading-[1.6]">Label 12–13px medium · input 14–16px (≥16px on mobile to stop iOS zoom) · hint 11–12px muted.</p>
+            <p className="text-[11px] text-muted-foreground mt-2 leading-[1.6]">Label 12px medium · input 14–16px (≥16px on mobile) · hint 11–12px muted.</p>
           </div>
 
-          <div className="rounded-xl border border-border/60 bg-card p-7">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-orange-500 mb-5">Data tables</h4>
+          <div className="rounded-xl border border-border/60 bg-card p-6">
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Data tables</h4>
             <table className="w-full border-collapse">
               <thead>
                 <tr>
@@ -811,161 +735,60 @@ export default function Page() {
                 ))}
               </tbody>
             </table>
-            <p className="text-[11px] text-muted-foreground mt-3 leading-[1.6]">Tabular-figure numerals so digits align in columns. Labels uppercase mono; values regular.</p>
+            <p className="text-[11px] text-muted-foreground mt-3 leading-[1.6]">Tabular-figure numerals so digits align. Labels uppercase mono; values regular.</p>
           </div>
 
-          <div className="rounded-xl border border-border/60 bg-card p-7">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-orange-500 mb-5">Navigation</h4>
-            <div className="flex gap-6 items-center">
+          <div className="rounded-xl border border-border/60 bg-card p-6">
+            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Navigation</h4>
+            <div className="flex gap-5 items-center">
               <span className="text-[13px] text-foreground font-medium">Overview</span>
               {["Projects", "Members", "Settings"].map(n => (
                 <span key={n} className="text-[13px] text-muted-foreground">{n}</span>
               ))}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-4 leading-[1.6]">13–14px. Current item earns weight and full contrast; the rest recede to muted. Hierarchy by state, not size.</p>
+            <p className="text-[11px] text-muted-foreground mt-4 leading-[1.6]">13–14px. Active item earns weight and full contrast; the rest recede to muted.</p>
           </div>
         </FadeIn>
-
-        <Note label="Dense interfaces need the system most">Dashboards pack dozens of type styles per screen and, without a system, drift into near-identical sizes. A tight scale of 5–6 UI sizes (label, caption, body, body-strong, subhead, value) covers almost every dense interface, resist adding more.</Note>
       </Section>
 
-      {/* 07 RESPONSIVE */}
-      <Section id="responsive">
-        <FadeIn><Eyebrow num="07" tag="Responsive" /></FadeIn>
-        <FadeIn><Title>Responsive &amp; fluid typography</Title></FadeIn>
-        <FadeIn><Lede>Type can&apos;t be one size. <code className="font-mono text-[13px] text-orange-500">clamp()</code> scales smoothly between a min and max across the viewport, no breakpoints, no jumps. Set the floor and ceiling; let the middle flow.</Lede></FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Responsive clamp preview</SubEyebrow></FadeIn>
-        <FadeIn><ResponsiveClampPreview /></FadeIn>
-      </Section>
-
-      {/* 08 ACCESSIBILITY */}
-      <Section id="accessibility" muted>
-        <FadeIn><Eyebrow num="08" tag="Accessibility" /></FadeIn>
-        <FadeIn><Title>Accessible by default</Title></FadeIn>
-        <FadeIn><Lede>Accessible typography isn&apos;t bolted on at the end, it&apos;s a set of defaults that make the product better for everyone. Contrast, minimum sizes, zoom behaviour, and legible letterforms are the baseline.</Lede></FadeIn>
-
-        <FadeIn><SubEyebrow>Tool · Contrast &amp; size checker</SubEyebrow></FadeIn>
-        <FadeIn><A11yChecker /></FadeIn>
-      </Section>
-
-      {/* 09 TOKENS */}
+      {/* 05 · TOKENS + PRINCIPLES */}
       <Section id="tokens">
-        <FadeIn><Eyebrow num="09" tag="Tokens" /></FadeIn>
-        <FadeIn><Title>Typography tokens</Title></FadeIn>
-        <FadeIn><Lede>Tokens turn typographic decisions into one source of truth. Name them by role, layer them from raw value to semantic to component, and components stop hard-coding sizes for good.</Lede></FadeIn>
+        <FadeIn><Eyebrow num="05" tag="Tokens &amp; Principles" /></FadeIn>
+        <FadeIn><Title>From convictions to code</Title></FadeIn>
+        <FadeIn><Lede>Tokens turn typographic decisions into one source of truth. The principles behind them are what keep the system from growing in the wrong directions.</Lede></FadeIn>
 
-        <FadeIn className="flex flex-col gap-2.5">
+        {/* Token cascade */}
+        <FadeIn className="flex flex-col gap-2 mb-8">
           {[
-            { lbl: "01, Global / primitive", code: "--font-size-500: 20px;  --leading-snug: 1.25;  --weight-medium: 500;" },
-            { lbl: "02, Semantic / role", code: "--text-heading: var(--font-size-500)/var(--leading-snug) var(--weight-medium);" },
-            { lbl: "03, Component", code: "--card-title-font: var(--text-heading);" },
+            { lbl: "01 · Global / primitive", code: "--font-size-500: 20px;  --leading-snug: 1.25;  --weight-medium: 500;" },
+            { lbl: "02 · Semantic / role",    code: "--text-heading: var(--font-size-500)/var(--leading-snug) var(--weight-medium);" },
+            { lbl: "03 · Component",          code: "--card-title-font: var(--text-heading);" },
           ].map((t, i) => (
             <div key={t.lbl}>
               <div className="rounded-xl border border-border/60 bg-card px-5 py-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-orange-500 mb-2">{t.lbl}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent mb-2">{t.lbl}</p>
                 <code className="font-mono text-[12px] text-foreground/70">{t.code}</code>
               </div>
-              {i < 2 && <p className="text-center text-muted-foreground text-[12px] py-1">↓ referenced by</p>}
+              {i < 2 && <p className="text-center text-muted-foreground text-[12px] py-1">↓</p>}
             </div>
           ))}
         </FadeIn>
 
-        <FadeIn><SubEyebrow>Real token architecture · CSS custom properties</SubEyebrow></FadeIn>
-        <FadeIn>
-          <Tool>
-            <div className="px-5 py-4">
-              <div className="flex justify-end mb-3">
-                <CopyButton text={TOKEN_CODE} />
-              </div>
-              <pre className="font-mono text-[12px] leading-[1.7] text-foreground/70 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{TOKEN_CODE}</pre>
-            </div>
-          </Tool>
+        {/* Full token block */}
+        <FadeIn className="rounded-2xl border border-border bg-card overflow-hidden mb-10">
+          <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">Token reference</span>
+            <CopyButton text={TOKEN_CODE} />
+          </div>
+          <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 px-5 py-4 overflow-x-auto">{TOKEN_CODE}</pre>
         </FadeIn>
 
-        <Note label="Name by role, not by value">A token called <code className="font-mono text-[11px]">--text-body</code> survives a redesign; <code className="font-mono text-[11px]">--text-16</code> becomes a lie the moment body changes to 17px. The number says what it is; the role says what it&apos;s for.</Note>
-      </Section>
-
-      {/* 10 MISTAKES */}
-      <Section id="mistakes" muted>
-        <FadeIn><Eyebrow num="10" tag="Common Mistakes" /></FadeIn>
-        <FadeIn><Title>Common typography mistakes</Title></FadeIn>
-        <FadeIn><Lede>Most typographic problems are a handful of recurring errors, each with a simple correction. Seeing them side by side is the fastest way to internalise the fix.</Lede></FadeIn>
-
-        <FadeIn className="space-y-3">
-          {/* Weak contrast */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Weak contrast</span>
-              <p className="text-[14px] text-foreground/25">Low-contrast grey that drops well below 4.5:1. It looks &ldquo;subtle&rdquo; in the mockup and turns unreadable in sunlight or for low-vision users.</p>
-              <p className="text-[12px] text-muted-foreground mt-4">Designers mistake low contrast for elegance.</p>
-            </div>
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[14px] text-foreground/75">This clears 4.5:1 and still reads as calm and secondary. Restraint comes from hierarchy and size, not from making text hard to see.</p>
-              <p className="text-[12px] text-muted-foreground mt-4">Use weight and size for &ldquo;quiet,&rdquo; never failing contrast.</p>
-            </div>
-          </div>
-
-          {/* Tiny body */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Tiny body text</span>
-              <p className="text-[11px] text-foreground/75" style={{ lineHeight: 1.4 }}>Body at 11px to fit more on screen. Users pinch-zoom, lean in, and tire fast. Density bought with readability is a bad trade.</p>
-              <p className="text-[12px] text-muted-foreground mt-4">11px body to win a layout argument.</p>
-            </div>
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[16px] text-foreground/75" style={{ lineHeight: 1.65 }}>Body at 16px with comfortable line height. Slightly less fits per screen, and every line is effortless on any device.</p>
-              <p className="text-[12px] text-muted-foreground mt-4">16px floor for body; cut content, not size.</p>
-            </div>
-          </div>
-
-          {/* Too many weights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Too many weights</span>
-              <p className="text-[14px] text-foreground/75">
-                <span style={{ fontWeight: 300 }}>Thin</span> <span style={{ fontWeight: 400 }}>Regular</span> <span style={{ fontWeight: 500 }}>Medium</span> <span style={{ fontWeight: 600 }}>Semibold</span> <span style={{ fontWeight: 700 }}>Bold</span>, five weights on one screen, none of them meaning anything specific.
-              </p>
-              <p className="text-[12px] text-muted-foreground mt-4">Every weight loaded &ldquo;just in case.&rdquo;</p>
-            </div>
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[14px] text-foreground/75">
-                <span style={{ fontWeight: 400 }}>Regular for body.</span> <span style={{ fontWeight: 600 }}>Semibold for emphasis.</span> Two weights, each with a clear job. The contrast between them does all the work.
-              </p>
-              <p className="text-[12px] text-muted-foreground mt-4">2–3 weights, each assigned a role.</p>
-            </div>
-          </div>
-
-          {/* Over-centered */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl border border-border/60 overflow-hidden bg-border/40">
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-red-500 mb-4 inline-block">✕ Over-centered text</span>
-              <p className="text-[13px] text-foreground/75 text-center" style={{ lineHeight: 1.7 }}>Long passages set centered force the eye to hunt for the start of every line because the left edge moves. Centering is for short, symmetric moments, not paragraphs of running text like this one.</p>
-              <p className="text-[12px] text-muted-foreground mt-4 text-center">Centering body copy &ldquo;for balance.&rdquo;</p>
-            </div>
-            <div className="bg-card p-7">
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-emerald-500 mb-4 inline-block">✓ Corrected</span>
-              <p className="text-[13px] text-foreground/75 text-left" style={{ lineHeight: 1.7 }}>Running text is left-aligned, giving the eye a fixed return edge. Centering is reserved for headings, single lines, and short callouts where it adds elegance without cost.</p>
-              <p className="text-[12px] text-muted-foreground mt-4">Left-align paragraphs; center only short lines.</p>
-            </div>
-          </div>
-        </FadeIn>
-      </Section>
-
-      {/* 11 PRINCIPLES */}
-      <Section id="principles">
-        <FadeIn><Eyebrow num="11" tag="Principles" /></FadeIn>
-        <FadeIn><Title>Typography principles</Title></FadeIn>
-        <FadeIn><Lede>A typography system isn&apos;t a font choice, it&apos;s a set of convictions about how text serves the reader. These six hold up across products, brands, and platforms.</Lede></FadeIn>
-
+        {/* Principles */}
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PRINCIPLES.map(p => (
-            <div key={p.num} className="rounded-xl border border-border/60 bg-card p-7 hover:border-border transition-colors">
-              <span className="font-mono text-[11px] text-orange-500 tracking-[0.1em] mb-5 block">{p.num}, </span>
-              <p className="font-semibold text-[18px] leading-[1.2] text-foreground mb-2.5" style={{ fontFamily: F.serif, fontWeight: 600 }}>{p.title}</p>
+            <div key={p.num} className="rounded-xl border border-border/60 bg-card p-6 hover:border-border transition-colors">
+              <span className="font-mono text-[11px] text-accent tracking-[0.1em] mb-4 block">{p.num}</span>
+              <p className="font-semibold text-[17px] leading-[1.25] text-foreground mb-2" style={{ fontFamily: F.serif }}>{p.title}</p>
               <p className="text-[13px] text-muted-foreground leading-[1.7]">{p.body}</p>
             </div>
           ))}
@@ -998,6 +821,6 @@ const TOKEN_CODE = `:root {
   --text-meta:       var(--weight-medium) var(--size-caption)/var(--leading-caption) var(--font-mono);
 }
 
-/* usage, components never hard-code sizes */
+/* usage — components never hard-code sizes */
 .page-title { font: var(--text-page-title); letter-spacing: -0.02em; }
 .card-meta  { font: var(--text-meta); text-transform: uppercase; letter-spacing: 0.08em; }`

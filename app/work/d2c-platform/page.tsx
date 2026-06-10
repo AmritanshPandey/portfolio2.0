@@ -62,7 +62,7 @@ function HeroAside() {
     { name: "Aqualogica",    accent: BRAND.aqualogica, token: "--brand-blue", product: "Glow+ Dew" },
   ]
   return (
-    <div className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm shadow-[0_30px_70px_-40px_rgba(0,0,0,0.55)]">
+    <div className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm shadow-[0_12px_34px_-30px_rgba(0,0,0,0.38)] dark:shadow-[0_30px_70px_-40px_rgba(0,0,0,0.55)]">
       {/* Shared system base */}
       <div className="flex items-center justify-between rounded-xl border border-border/70 bg-muted/40 px-3.5 py-3 mb-3">
         <div className="flex items-center gap-2">
@@ -126,6 +126,277 @@ function Hero() {
       asideCol="340px"
       aside={<HeroAside />}
     />
+  )
+}
+
+// ─── CORE FLOW VISUALS ──────────────────────────────────────────────────────
+
+function PdpVisual() {
+  const proofItems = [
+    { label: "Ingredient proof", value: "Persistent drawer" },
+    { label: "Trust badges", value: "Reusable system block" },
+    { label: "Sticky CTA", value: "Always within reach" },
+  ]
+
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.025),transparent_48%)] dark:bg-[radial-gradient(circle_at_22%_14%,rgba(249,115,22,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_48%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.11] dark:opacity-[0.08]" />
+
+      <div className="relative grid h-full grid-rows-[auto_1fr_auto] gap-3 p-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              PDP focus
+            </p>
+            <p className="mt-1 text-sm font-medium text-foreground">
+              Purchase proof moved above checkout
+            </p>
+          </div>
+          <div className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-right">
+            <p className="text-lg font-semibold leading-none text-accent">68%</p>
+            <p className="mt-0.5 text-[9px] text-muted-foreground">pre-checkout</p>
+          </div>
+        </div>
+
+        <div className="grid min-h-0 grid-cols-[0.95fr_1.25fr] gap-3">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-background/78 p-4 shadow-[0_18px_48px_-36px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+            <div className="absolute inset-x-0 top-0 h-1 bg-accent" />
+            <div className="relative h-full rounded-xl bg-muted/70 p-3">
+              <div className="flex h-full items-center justify-center rounded-lg bg-background/80">
+                <div className="h-20 w-20 rounded-full border border-accent/55 bg-accent/10 shadow-[0_0_40px_rgba(249,115,22,0.10)]" />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid min-h-0 grid-rows-[auto_1fr] gap-3">
+            <div className="rounded-2xl border border-border bg-background/78 p-4 backdrop-blur-sm">
+              <div className="mb-3 flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <div className="h-2.5 w-36 rounded-full bg-foreground" />
+                  <div className="h-2 w-24 rounded-full bg-muted-foreground/45" />
+                </div>
+                <span className="rounded-full border border-accent/35 bg-accent/10 px-2.5 py-1 text-[10px] font-medium text-accent">
+                  PDP
+                </span>
+              </div>
+
+              <div className="grid grid-cols-4 gap-1.5">
+                {["Browse", "PDP", "Cart", "Pay"].map((step, index) => (
+                  <div key={step} className="space-y-1.5">
+                    <div
+                      className={`h-8 rounded-lg border ${
+                        index === 1
+                          ? "border-accent bg-accent/15"
+                          : "border-border bg-muted/70"
+                      }`}
+                    />
+                    <p className={`text-center text-[9px] ${index === 1 ? "text-accent" : "text-muted-foreground"}`}>
+                      {step}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid min-h-0 grid-cols-3 gap-2">
+              {proofItems.map(item => (
+                <div
+                  key={item.label}
+                  className="flex min-w-0 flex-col justify-between rounded-2xl border border-border bg-background/72 p-3 backdrop-blur-sm"
+                >
+                  <div>
+                    <div className="mb-2 h-1.5 w-9 rounded-full bg-accent" />
+                    <p className="text-[11px] font-medium leading-snug text-foreground">
+                      {item.label}
+                    </p>
+                  </div>
+                  <p className="mt-2 text-[10px] leading-snug text-muted-foreground">
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-background/82 p-2 backdrop-blur-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div className="pl-2">
+              <div className="h-2 w-24 rounded-full bg-muted-foreground/45" />
+              <div className="mt-1.5 h-2 w-16 rounded-full bg-muted-foreground/25" />
+            </div>
+            <div className="min-h-10 flex-1 rounded-xl bg-foreground px-4 py-3">
+              <div className="mx-auto h-2 w-28 rounded-full bg-background" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CartVisual() {
+  const themes = [
+    { name: "Mamaearth", accent: BRAND.mamaearth, tint: "rgba(0,175,239,0.14)", radius: "14px" },
+    { name: "Derma Co.", accent: BRAND.dermaco, tint: "rgba(33,122,110,0.14)", radius: "8px" },
+    { name: "Aqualogica", accent: BRAND.aqualogica, tint: "rgba(0,102,204,0.14)", radius: "12px" },
+  ]
+
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(circle_at_50%_8%,rgba(249,115,22,0.15),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
+
+      <div className="relative grid h-full grid-cols-[1.1fr_0.9fr] gap-4 p-3">
+        <div className="flex min-h-0 flex-col justify-between rounded-3xl border border-border bg-background/82 p-4 shadow-[0_20px_56px_-40px_rgba(0,0,0,0.55)] backdrop-blur-sm">
+          <div className="flex items-center justify-between border-b border-border/70 pb-3">
+            <div>
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Shared cart component
+              </p>
+              <p className="mt-1 text-sm font-medium text-foreground">
+                One structure, many skins
+              </p>
+            </div>
+            <span className="rounded-full bg-accent/10 px-3 py-1 text-[10px] font-medium text-accent">
+              v1 component
+            </span>
+          </div>
+
+          <div className="grid min-h-0 gap-2 py-3">
+            {[0, 1].map(item => (
+              <div key={item} className="grid grid-cols-[48px_1fr_auto] items-center gap-3 rounded-2xl border border-border bg-card/75 p-3">
+                <div className="h-12 rounded-xl bg-muted" />
+                <div className="space-y-2">
+                  <div className="h-2.5 w-36 rounded-full bg-foreground/80" />
+                  <div className="h-2 w-24 rounded-full bg-muted-foreground/45" />
+                </div>
+                <div className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1">
+                  <span className="h-3 w-3 rounded bg-muted" />
+                  <span className="h-3 w-4 rounded bg-accent" />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-[1fr_auto] gap-3">
+            <div className="rounded-2xl border border-border bg-card/75 p-3">
+              <div className="mb-2 h-2 w-20 rounded-full bg-muted-foreground/35" />
+              <div className="h-2 w-32 rounded-full bg-muted-foreground/20" />
+            </div>
+            <div className="grid min-w-32 place-items-center rounded-2xl bg-accent px-5">
+              <div className="h-2 w-20 rounded-full bg-white/85" />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid min-h-0 gap-2.5">
+          {themes.map(theme => (
+            <div
+              key={theme.name}
+              className="grid grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border border-border bg-background/72 p-3 backdrop-blur-sm"
+              style={{
+                ["--brand" as string]: theme.accent,
+                ["--brand-soft" as string]: theme.tint,
+                borderRadius: theme.radius,
+              }}
+            >
+              <div className="h-10 w-10 rounded-xl bg-[var(--brand-soft)] ring-1 ring-[var(--brand)]/25" />
+              <div className="min-w-0">
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <p className="truncate text-[11px] font-semibold" style={{ color: theme.accent }}>
+                    {theme.name}
+                  </p>
+                  <span className="h-2.5 w-8 rounded-full bg-[var(--brand)]" />
+                </div>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <div className="h-7 rounded-lg bg-[var(--brand)]" />
+                  <div className="h-7 rounded-lg border border-border bg-card/80" />
+                  <div className="h-7 rounded-lg bg-[var(--brand-soft)]" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CheckoutVisual() {
+  const before = ["01", "02", "03", "04", "05", "06"]
+  const after = [
+    { label: "Delivery", detail: "Address autocomplete" },
+    { label: "Payment", detail: "UPI · Cards · COD" },
+    { label: "Confirm", detail: "Review + place" },
+  ]
+
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_18%_20%,rgba(249,115,22,0.15),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_50%)]" />
+
+      <div className="relative grid h-full grid-rows-[auto_1fr] gap-4 p-3">
+        <div className="grid grid-cols-[1fr_auto] items-center gap-4 rounded-2xl border border-border bg-background/78 p-4 backdrop-blur-sm">
+          <div>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              Checkout compression
+            </p>
+            <p className="mt-1 text-sm font-medium text-foreground">
+              The form became one focused page.
+            </p>
+          </div>
+          <div className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-sm font-semibold text-accent">
+            6 → 3
+          </div>
+        </div>
+
+        <div className="grid min-h-0 grid-cols-[0.9fr_1.1fr] gap-3">
+          <div className="flex min-h-0 flex-col justify-between rounded-2xl border border-border bg-background/68 p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              Before · six steps
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {before.map(step => (
+                <div key={step} className="grid h-14 place-items-center rounded-xl border border-border bg-muted/50 text-[11px] text-muted-foreground">
+                  {step}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs leading-snug text-muted-foreground">
+              More screens, more waiting, more abandonment before completion.
+            </p>
+          </div>
+
+          <div className="flex min-h-0 flex-col justify-between rounded-2xl border border-accent/35 bg-accent/8 p-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+              After · three decisions
+            </p>
+            <div className="grid gap-2.5">
+              {after.map((step, index) => (
+                <div
+                  key={step.label}
+                  className={`grid grid-cols-[44px_1fr] items-center gap-3 rounded-2xl border p-3 ${
+                    index === 0
+                      ? "border-accent bg-background/82"
+                      : "border-border bg-background/68"
+                  }`}
+                >
+                  <div className={`grid h-10 w-10 place-items-center rounded-xl font-mono text-[11px] ${
+                    index === 0 ? "bg-accent text-white" : "bg-muted text-muted-foreground"
+                  }`}>
+                    0{index + 1}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{step.label}</p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">{step.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -295,12 +566,12 @@ export default function Page() {
       </CsSection>
 
       {/* Key decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="muted">
         <div className="space-y-5">
           <CsDecision
             index={0}
             title="Shared Commerce Backbone with Brand Token Overrides"
-            problem="Building separate commerce experiences per brand would mean 3× the design and engineering effort. Any future improvement would need to be replicated three times, creating compounding maintenance cost."
+            problem="Building separate commerce experiences per brand would mean 3x the design and engineering effort. Any future improvement would need to be replicated three times, creating compounding maintenance cost."
             decision="Designed a single component library where all commerce logic, PDP, cart, checkout, post-purchase, lives in shared components. Brand identity is applied through a token layer covering colors, typography, and imagery only."
             tradeoff="Reduced flexibility in early stages. Brand teams couldn&apos;t request bespoke layouts. This created friction initially but was essential for long-term maintainability and the only way the 8-week deadline was achievable."
             impact="All three storefronts shipped in 8 weeks with one designer and two engineers per brand sprint. Changes to core flows now propagate to all brands simultaneously."
@@ -333,6 +604,7 @@ export default function Page() {
 
           {/* PDP */}
           <CsFeature
+            stacked
             tag="01 / Product Detail Page"
             title="The purchase decision happens here."
             body="Research showed 68% of drop-offs happened at the PDP, not checkout as originally assumed. Design energy went into ingredient transparency, trust signals, and a sticky CTA that reduced scroll-to-purchase friction."
@@ -340,43 +612,12 @@ export default function Page() {
               { label: "Key Focus", text: "Ingredient panel · Trust badges · Sticky CTA" },
               { label: "Insight",   text: "68% of drop-off happened before checkout" },
             ]}
-            visual={
-              <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                {/* Phone frame */}
-                <rect x="120" y="10" width="160" height="280" rx="20" fill="var(--surface-1)" stroke="var(--border)" />
-                {/* Status bar */}
-                <rect x="140" y="24" width="120" height="6" rx="3" fill="var(--surface-2)" />
-                {/* Product image placeholder */}
-                <rect x="134" y="40" width="132" height="80" rx="8" fill="var(--surface-2)" />
-                <circle cx="200" cy="80" r="20" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
-                {/* Product name */}
-                <rect x="134" y="132" width="90" height="8" rx="3" fill="var(--foreground)" />
-                <rect x="134" y="146" width="60" height="6" rx="3" fill="var(--text-muted)" />
-                {/* Trust badge row */}
-                <g transform="translate(134,162)">
-                  {[0, 38, 76].map(x => (
-                    <g key={x} transform={`translate(${x},0)`}>
-                      <rect width="32" height="20" rx="4" fill="rgba(249,115,22,0.1)" stroke="rgb(249,115,22)" strokeWidth="0.75" />
-                    </g>
-                  ))}
-                </g>
-                {/* Ingredient panel indicator */}
-                <rect x="134" y="192" width="132" height="28" rx="6" fill="var(--surface-2)" stroke="var(--border)" />
-                <rect x="144" y="200" width="70" height="5" rx="2" fill="var(--text-muted)" />
-                <rect x="144" y="209" width="50" height="5" rx="2" fill="var(--surface-2)" />
-                {/* Sticky CTA */}
-                <rect x="134" y="256" width="132" height="24" rx="8" fill="var(--foreground)" />
-                <rect x="160" y="264" width="80" height="6" rx="3" fill="var(--background)" />
-                {/* Label */}
-                <text x="320" y="85" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">STICKY</text>
-                <text x="320" y="97" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">CTA</text>
-                <path d="M 314 90 L 290 268" stroke="var(--text-muted)" strokeWidth="0.75" fill="none" opacity="0.4" />
-              </svg>
-            }
+            visual={<PdpVisual />}
           />
 
           {/* Cart */}
           <CsFeature
+            stacked
             tag="02 / Cart"
             title="A single cart component, themed three ways."
             body="The cart unified product thumbnails, quantity controls, and cross-sell slots into a cohesive component that could be themed per brand without structural changes. One build, three appearances."
@@ -384,44 +625,12 @@ export default function Page() {
               { label: "Structure", text: "Thumbnail · Quantity · Cross-sell · Summary" },
               { label: "Theming",   text: "Brand token swap, no structural duplication" },
             ]}
-            reverse
-            visual={
-              <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <text x="20" y="26" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
-                {[
-                  { x: 20,  color: BRAND.mamaearth,  label: "Mamaearth" },
-                  { x: 150, color: BRAND.dermaco,    label: "Derma Co." },
-                  { x: 280, color: BRAND.aqualogica, label: "Aqualogica" },
-                ].map(b => (
-                  <g key={b.label} transform={`translate(${b.x},40)`}>
-                    <rect width="110" height="240" rx="14" fill="var(--surface-1)" stroke="var(--border)" />
-                    {/* Cart header */}
-                    <rect x="12" y="14" width="50" height="6" rx="3" fill={b.color} opacity="0.6" />
-                    {/* Line items */}
-                    {[0, 1].map(i => (
-                      <g key={i} transform={`translate(12,${34 + i * 60})`}>
-                        <rect width="86" height="50" rx="8" fill="var(--surface-2)" />
-                        <rect x="8" y="8" width="24" height="34" rx="5" fill={b.color} opacity="0.15" />
-                        <rect x="40" y="12" width="38" height="5" rx="3" fill="var(--foreground)" />
-                        <rect x="40" y="22" width="28" height="4" rx="2" fill="var(--text-muted)" />
-                        <rect x="40" y="33" width="20" height="11" rx="3" fill={b.color} />
-                      </g>
-                    ))}
-                    {/* Checkout CTA */}
-                    <rect x="12" y="164" width="86" height="28" rx="8" fill={b.color} />
-                    {/* Cross-sell */}
-                    <rect x="12" y="200" width="86" height="28" rx="8" fill="var(--surface-2)" />
-                    <text x="55" y="220" textAnchor="middle" fontFamily="monospace" fontSize="8" fill="var(--text-muted)">you may like</text>
-                    {/* Brand label */}
-                    <text x="55" y="252" textAnchor="middle" fontSize="9" fontWeight="500" fill={b.color}>{b.label}</text>
-                  </g>
-                ))}
-              </svg>
-            }
+            visual={<CartVisual />}
           />
 
           {/* Checkout */}
           <CsFeature
+            stacked
             tag="03 / Checkout Flow"
             title="From six steps to three."
             body="Single-page checkout reduced form steps from 6 to 3 across all brands, with address autocomplete and persistent order summary reducing cognitive load at the highest-drop-off stage."
@@ -429,45 +638,7 @@ export default function Page() {
               { label: "Reduction", text: "6 form steps → 3 across all brands" },
               { label: "Key UX",    text: "Address autocomplete · Persistent summary" },
             ]}
-            visual={
-              <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <g fontSize="10" fontWeight="500" fill="var(--foreground)" fontFamily="sans-serif">
-                  {/* Before: 6 steps (collapsed) */}
-                  <text x="20" y="30" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">BEFORE · 6 STEPS</text>
-                  {[0,1,2,3,4,5].map(i => (
-                    <g key={i} transform={`translate(${20 + i * 56},44)`}>
-                      <rect width="48" height="32" rx="6" fill="var(--surface-2)" stroke="var(--border)" />
-                      <text x="24" y="21" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{`0${i+1}`}</text>
-                    </g>
-                  ))}
-                  <path d="M 36 64 L 68 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 92 64 L 124 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 148 64 L 180 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 204 64 L 236 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 260 64 L 292 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
-                </g>
-
-                {/* Divider */}
-                <line x1="20" y1="110" x2="380" y2="110" stroke="var(--border)" strokeWidth="1" />
-
-                {/* After: 3 steps */}
-                <text x="20" y="136" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.08em">AFTER · 3 STEPS</text>
-                {[
-                  { label: "Delivery", detail: "Address autocomplete" },
-                  { label: "Payment",  detail: "UPI · Cards · COD" },
-                  { label: "Confirm",  detail: "Review + place" },
-                ].map((step, i) => (
-                  <g key={step.label} transform={`translate(${20 + i * 124},148)`}>
-                    <rect width="112" height="72" rx="10" fill="var(--surface-1)" stroke={i === 0 ? "rgb(249,115,22)" : "var(--border)"} strokeWidth={i === 0 ? 1.5 : 1} />
-                    <text x="56" y="28" textAnchor="middle" fontSize="9" fontFamily="monospace" fill={i === 0 ? "rgb(249,115,22)" : "var(--text-muted)"}>{`0${i+1}`}</text>
-                    <text x="56" y="46" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--foreground)">{step.label}</text>
-                    <text x="56" y="60" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{step.detail}</text>
-                  </g>
-                ))}
-                <path d="M 132 184 L 144 184" stroke="rgb(249,115,22)" strokeWidth="1" fill="none" opacity="0.6" />
-                <path d="M 256 184 L 268 184" stroke="rgb(249,115,22)" strokeWidth="1" fill="none" opacity="0.6" />
-              </svg>
-            }
+            visual={<CheckoutVisual />}
           />
         </div>
       </CsSection>

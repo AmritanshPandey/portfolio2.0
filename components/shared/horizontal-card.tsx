@@ -44,6 +44,13 @@ export function HorizontalCard({
         "flex flex-col md:flex-row md:min-h-[240px]",
       )}>
 
+        {/* Amber glow — blooms from top-center on hover */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+          style={{ background: "radial-gradient(360px 220px at 50% 0%, rgba(249,115,22,0.08), transparent 70%)" }}
+        />
+
         {/* TOP EDGE HIGHLIGHT */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/8 to-transparent dark:via-white/15 pointer-events-none" />
 

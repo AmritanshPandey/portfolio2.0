@@ -148,7 +148,7 @@ function ImageCompare({ section }: { section: ArticleSection }) {
             <div className="relative overflow-hidden rounded-xl border border-accent/25 bg-muted/20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={a.src} alt={a.alt ?? ""} loading="lazy" decoding="async" className="w-full h-auto block" />
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[10px] font-bold uppercase tracking-wider text-background backdrop-blur-sm">
                 {a.label ?? "After"}
               </span>
             </div>
@@ -388,7 +388,7 @@ export function ArticleLayout({ slug }: { slug: string }) {
       <ArticleHeader article={article} />
 
       {/* Body */}
-      <div className="mx-auto max-w-4xl px-6 py-14 lg:py-18">
+      <div className="mx-auto max-w-6xl px-6 py-14 lg:py-20">
         <ArticleProse>
           {/* Intro */}
           {article.intro && (

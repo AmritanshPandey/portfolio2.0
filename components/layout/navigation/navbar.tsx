@@ -60,6 +60,21 @@ function getDetailRoute(pathname: string) {
   return null
 }
 
+// Section ids that actually have a nav entry.
+const NAV_IDS = NAV_LINKS.map((l) => l.href.replace("#", ""))
+
+// Map the currently-tracked section to the nearest preceding nav entry, so the
+// active pill stays anchored while scrolling through sections that aren't in the
+// nav (e.g. Approach, Advisory) instead of blinking out and back.
+function navSectionFor(activeId: string) {
+  const idx = SECTION_IDS.indexOf(activeId)
+  if (idx === -1) return activeId
+  for (let i = idx; i >= 0; i--) {
+    if (NAV_IDS.includes(SECTION_IDS[i])) return SECTION_IDS[i]
+  }
+  return activeId
+}
+
 // ─────────────────────────
 // SCROLL HOOKS
 // ─────────────────────────
@@ -158,9 +173,12 @@ function NavItem({
   }
 
   return (
-    <button
+    <a
+      href={pathname === "/" ? href : `/${href}`}
       onClick={handleClick}
-      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[14px] font-medium"
+      aria-current={isActive ? "true" : undefined}
+      aria-label={icon ? label : undefined}
+      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {/* Sliding pill — layoutId moves it between active items via spring transform */}
       {isActive && (
@@ -176,7 +194,7 @@ function NavItem({
       )}>
         {icon ? <IconHome size={16} className="opacity-70" /> : label}
       </span>
-    </button>
+    </a>
   )
 }
 
@@ -197,8 +215,11 @@ function DetailNavItem({
     <Link
       href={href}
       onClick={onClick}
+      aria-current={active ? "true" : undefined}
+      aria-label={Icon && !label ? "Home" : undefined}
       className={clsx(
         "relative flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "bg-black/[0.05] text-foreground dark:bg-white/[0.09]"
           : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
@@ -280,6 +301,8 @@ export default function Navbar() {
   }, [open])
 
   const effectiveActive = detailRoute?.section ?? (isHome ? active : "hero")
+  // Keep the highlight on the nearest nav entry for unlinked sections (Approach, Advisory).
+  const activeNavSection = navSectionFor(effectiveActive)
 
   return (
     <>
@@ -301,6 +324,18 @@ export default function Navbar() {
         {isDetail ? (
           /* ── DETAIL: compact home-section nav ─────── */
           <NavShell scrolled={scrolled}>
+            {/* Back-to-section affordance */}
+            <Link
+              href={detailRoute!.href}
+              aria-label={`Back to ${detailRoute!.label}`}
+              className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <IconArrowLeft size={15} stroke={2} />
+              <span className="hidden lg:inline">Back to {detailRoute!.label}</span>
+            </Link>
+
+            <div className="w-px h-4 bg-border/60 mx-1" />
+
             <div className="flex items-center gap-1">
               {DETAIL_NAV_LINKS.map((link) => (
                 <DetailNavItem
@@ -327,7 +362,7 @@ export default function Navbar() {
                   href={href}
                   label={label}
                   icon={icon}
-                  isActive={effectiveActive === href.replace("#", "")}
+                  isActive={activeNavSection === href.replace("#", "")}
                   setActiveImmediate={setActive}
                 />
               ))}
@@ -355,8 +390,9 @@ export default function Navbar() {
       <button
         ref={btnRef}
         onClick={() => setOpen(v => !v)}
+        aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         className="
-          fixed bottom-6 right-6 z-50 md:hidden
+          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 md:hidden
           w-14 h-14 rounded-full flex items-center justify-center
           bg-white dark:bg-neutral-900
           border border-black/[0.06] dark:border-white/[0.08]
@@ -392,7 +428,7 @@ export default function Navbar() {
             exit={{    opacity: 0, y: 8  }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="
-              fixed bottom-24 right-6 z-50 md:hidden w-64
+              fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 md:hidden w-64
               rounded-2xl overflow-hidden
               bg-white dark:bg-neutral-900
               border border-black/[0.06] dark:border-white/[0.08]
@@ -442,7 +478,7 @@ export default function Navbar() {
                       href={href}
                       label={label}
                       icon={icon}
-                      isActive={effectiveActive === href.replace("#", "")}
+                      isActive={activeNavSection === href.replace("#", "")}
                       setActiveImmediate={(id) => { setActive(id); setOpen(false) }}
                       closeMenu={() => setOpen(false)}
                     />
