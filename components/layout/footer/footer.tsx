@@ -150,8 +150,8 @@ export default function Footer() {
                 href="/#work"
                 className="
                   inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full
-                  bg-accent px-5 text-sm font-semibold text-neutral-950
-                  transition-colors duration-200 hover:bg-accent/90
+                  bg-accent text-white dark:bg-accent/90 dark:text-neutral-950 px-5 text-sm font-semibold
+                  transition-colors duration-200 hover:bg-accent/90 dark:hover:bg-accent/80
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background
                   sm:w-auto
                 "

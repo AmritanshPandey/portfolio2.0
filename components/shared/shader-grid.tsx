@@ -18,10 +18,12 @@ import { usePerformanceMode } from "@/hooks/use-performance-mode"
  * is hidden) once WebGL is confirmed active.
  *
  * Input: fine pointers only — mouse, trackpad, pen. Touch-primary devices
- * (phones / tablets) keep the static dot grid; the pointer-driven glow reads as
- * oversized, ember-tinted dots under a finger, so WebGL is skipped there.
- * Retina-safe — the canvas scales with DPR while the shader math stays
- * resolution-independent.
+ * (phones / tablets) should not display the interactive grid by default; the
+ * parent container can hide the `ShaderGrid` on small viewports to avoid the
+ * oversized, ember-tinted interaction that appears under a finger. When the
+ * component is mounted it still falls back to a static CSS grid if WebGL is
+ * unavailable or reduced-motion is requested. Retina-safe — the canvas scales
+ * with DPR while the shader math stays resolution-independent.
  */
 
 type RGBA = readonly [number, number, number, number] // 0..1

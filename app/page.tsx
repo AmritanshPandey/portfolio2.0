@@ -42,7 +42,7 @@ export default function Page() {
       {/* ───────────────── APPROACH ───────────────── */}
       <Section
         id="approach"
-        bg="grid"
+        bg="default"
         title="Approach"
         description="A practical operating model for moving from ambiguity to a decision teams can build from."
         transition="The same approach turns into a sharper set of decision frameworks."
