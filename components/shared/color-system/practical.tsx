@@ -52,7 +52,7 @@ export function DarkModeRemap() {
               <div key={t.role} className="flex items-center gap-2 text-[11px]">
                 <span className="w-4 h-4 rounded border border-border/60 shrink-0" style={{ background: v(i) }} />
                 <span className="text-foreground/80 w-32 shrink-0 truncate">{t.role}</span>
-                <span className="font-mono text-orange-600 dark:text-orange-400">{mode === "light" ? t.ll : t.dl}</span>
+                <span className="font-mono text-accent">{mode === "light" ? t.ll : t.dl}</span>
                 <span className="font-mono text-muted-foreground/50 line-through ml-auto">{mode === "light" ? t.dl : t.ll}</span>
               </div>
             ))}

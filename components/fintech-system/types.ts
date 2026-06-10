@@ -91,6 +91,8 @@ export interface FintechPatternSpec {
     | "consent"
     | "connection"
     | "subscription"
+    | "stock-order"
+    | "crypto-transfer"
 }
 
 export interface FintechNavigationItem {

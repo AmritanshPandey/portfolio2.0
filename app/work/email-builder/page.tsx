@@ -2,26 +2,14 @@
 
 import { motion } from "framer-motion"
 import {
+  CsHeroShell,
   CsSection,
   CsDecision,
   CsInfoBar,
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
-  CsOnThisPage,
 } from "@/components/case-study"
-
-const SECTION_NAV = [
-  { id: "problem", label: "The Problem" },
-  { id: "my-role", label: "My Role" },
-  { id: "key-decisions", label: "Key Decisions" },
-  { id: "architecture", label: "System Architecture" },
-  { id: "outlook-problem", label: "The Outlook Problem" },
-  { id: "template-library", label: "Template Library" },
-  { id: "the-shift", label: "The Shift" },
-  { id: "what-changed", label: "What Changed" },
-  { id: "reflection", label: "Key Reflection" },
-]
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -53,18 +41,18 @@ const EMAIL_CLIENTS = [
 ]
 
 const STATUS_DOT: Record<string, string> = {
-  ok:      "bg-orange-500",
-  partial: "bg-orange-400",
+  ok:      "bg-accent",
+  partial: "bg-accent",
   problem: "bg-red-500",
 }
 const STATUS_BG: Record<string, string> = {
   ok:      "bg-card border-border",
-  partial: "bg-orange-500/8 border-orange-400/40",
+  partial: "bg-accent/8 border-accent/40",
   problem: "bg-red-500/8 border-red-400/40",
 }
 const STATUS_TEXT: Record<string, string> = {
   ok:      "text-muted-foreground",
-  partial: "text-orange-700 dark:text-orange-400",
+  partial: "text-accent",
   problem: "text-red-700 dark:text-red-400",
 }
 
@@ -105,88 +93,50 @@ const CONSTRAINTS = [
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 
+/** Signature visual — the real constraint: email-client compatibility. */
+function HeroAside() {
+  return (
+    <div>
+      <div className="grid grid-cols-2 gap-1.5">
+        {EMAIL_CLIENTS.map(c => (
+          <div key={c.name} className={`rounded-xl p-3 border ${STATUS_BG[c.status]}`}>
+            <div className="flex items-center gap-2 mb-1">
+              <div className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[c.status]}`} />
+              <span className="text-[12px] font-medium text-foreground">{c.name}</span>
+            </div>
+            <p className={`text-[10px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
+          </div>
+        ))}
+      </div>
+      <p className="text-[10px] text-muted-foreground/80 mt-3 leading-relaxed">
+        Every design decision was filtered through: &ldquo;Will this render in Outlook Desktop?&rdquo;
+      </p>
+    </div>
+  )
+}
+
 function Hero() {
   return (
-    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[480px]">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[-120px] right-[-200px] w-[700px] h-[600px]
-          bg-[radial-gradient(closest-side,rgba(249,115,22,0.14),transparent_70%)]" />
-      </div>
-
-      <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
-
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
-        >
-          <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span className="text-orange-600 dark:text-orange-400">Design Systems</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span>Mastercard · Creative Studio</span>
-        </motion.div>
-
-        <div className="grid md:grid-cols-[1fr_340px] gap-12 items-start">
-
-          <div>
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              className="type-page-title max-w-2xl mb-8"
-            >
-              From{" "}
-              <em className="not-italic text-orange-600 dark:text-orange-400">HTML dependency</em>{" "}
-              to no-code email infrastructure.
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[17px] leading-relaxed text-muted-foreground max-w-xl"
-            >
-              Owned the component architecture and design system for Mastercard&apos;s
-              global email builder, defining what got built, why, and in what order.
-              The constraint wasn&apos;t brand. It was Outlook.
-            </motion.p>
-          </div>
-
-          {/* Email client compat grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">
-              The real constraint, email client compatibility
-            </p>
-            <div className="grid grid-cols-2 gap-1.5">
-              {EMAIL_CLIENTS.map(c => (
-                <div
-                  key={c.name}
-                  className={`rounded-xl p-3 border ${STATUS_BG[c.status]}`}
-                >
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[c.status]}`} />
-                    <span className="text-[12px] font-medium text-foreground">{c.name}</span>
-                  </div>
-                  <p className={`text-[10px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-[10px] text-neutral-600 mt-2 leading-relaxed">
-              Every design decision was filtered through: &ldquo;Will this render in Outlook Desktop?&rdquo;
-            </p>
-          </motion.div>
-
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-    </div>
+    <CsHeroShell
+      breadcrumb={{ kind: "Case Study", category: "Design Systems", client: "Mastercard · Creative Studio" }}
+      title={
+        <>
+          From{" "}
+          <em className="not-italic text-accent">HTML dependency</em>{" "}
+          to no-code email infrastructure.
+        </>
+      }
+      lede={
+        <>
+          Owned the component architecture and design system for Mastercard&apos;s
+          global email builder, defining what got built, why, and in what order.
+          The constraint wasn&apos;t brand. It was Outlook.
+        </>
+      }
+      asideLabel="The real constraint — client compatibility"
+      asideCol="340px"
+      aside={<HeroAside />}
+    />
   )
 }
 
@@ -197,8 +147,6 @@ export default function Page() {
     <div className="min-h-screen">
 
       <Hero />
-
-      <CsOnThisPage items={SECTION_NAV} />
 
       <CsInfoBar cells={[
         { label: "Client",     value: "Mastercard",          sub: "Creative Studio" },
@@ -212,7 +160,7 @@ export default function Page() {
       {/* Problem */}
       <CsSection id="problem" label="The Problem" withDivider={false}>
         <div className="space-y-6">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             Mastercard&apos;s brand evolved. Its email system hadn&apos;t.
           </h2>
 
@@ -257,7 +205,7 @@ export default function Page() {
       <CsSection id="my-role" label="My Role" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Three people. Three clear ownership boundaries.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-xl">
@@ -290,9 +238,9 @@ export default function Page() {
               </div>
 
               {/* You, highlighted */}
-              <div className="p-7 bg-orange-500/[0.08] border-r border-orange-500/25">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-orange-600 dark:text-orange-400 mb-1">You, Design System Lead</p>
-                <p className="text-[16px] font-semibold text-orange-900 dark:text-orange-100 mb-5 tracking-tight">Component Architecture + Governance</p>
+              <div className="p-7 bg-accent/[0.08] border-r border-accent/25">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent mb-1">You, Design System Lead</p>
+                <p className="text-[16px] font-semibold text-accent mb-5 tracking-tight">Component Architecture + Governance</p>
                 <ul className="flex flex-col gap-3">
                   {[
                     "Defined what components to build and why",
@@ -304,8 +252,8 @@ export default function Page() {
                     "Simplicity-over-complexity calls",
                     "Global Brand alignment",
                   ].map(item => (
-                    <li key={item} className="flex gap-2.5 text-[13px] text-orange-800 dark:text-orange-300">
-                      <span className="text-orange-500 mt-0.5 shrink-0">✓</span>{item}
+                    <li key={item} className="flex gap-2.5 text-[13px] text-accent">
+                      <span className="text-accent mt-0.5 shrink-0">✓</span>{item}
                     </li>
                   ))}
                 </ul>
@@ -369,7 +317,7 @@ export default function Page() {
       <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Four levels. One coherent system.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
@@ -412,7 +360,7 @@ export default function Page() {
       <CsSection id="outlook-problem" label="The Outlook Problem">
         <div className="space-y-8">
           <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               What we wanted vs. what Outlook could handle.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-xl">
@@ -425,13 +373,13 @@ export default function Page() {
             <div className="rounded-2xl border border-border overflow-hidden">
               {/* Header row */}
               <div className="grid grid-cols-3 border-b border-border">
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 bg-orange-500/5">
+                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent bg-accent/5">
                   What we wanted
                 </div>
                 <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-red-700 dark:text-red-400 bg-red-500/5 border-x border-border">
                   What Outlook could handle
                 </div>
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-700 dark:text-orange-400 bg-orange-500/5">
+                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent bg-accent/5">
                   What we actually built
                 </div>
               </div>
@@ -440,13 +388,13 @@ export default function Page() {
                   key={i}
                   className={`grid grid-cols-3 ${i < CONSTRAINTS.length - 1 ? "border-b border-border" : ""}`}
                 >
-                  <div className="px-6 py-4 text-[13px] text-orange-800 dark:text-orange-300/80 leading-relaxed bg-orange-500/[0.03]">
+                  <div className="px-6 py-4 text-[13px] text-accent/80 leading-relaxed bg-accent/[0.03]">
                     {row.wanted}
                   </div>
                   <div className="px-6 py-4 text-[13px] text-red-800 dark:text-red-300/80 leading-relaxed bg-red-500/[0.03] border-x border-border">
                     {row.limit}
                   </div>
-                  <div className="px-6 py-4 text-[13px] text-orange-800 dark:text-orange-300/80 leading-relaxed bg-orange-500/[0.03]">
+                  <div className="px-6 py-4 text-[13px] text-accent/80 leading-relaxed bg-accent/[0.03]">
                     {row.built}
                   </div>
                 </div>
@@ -460,7 +408,7 @@ export default function Page() {
       <CsSection id="template-library" label="Template Library" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               28 templates. 9 categories. All Outlook-safe.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
@@ -525,7 +473,7 @@ export default function Page() {
       {/* Before / After builder */}
       <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             From HTML knowledge required to anyone can build a branded email.
           </h2>
 
@@ -535,29 +483,29 @@ export default function Page() {
               {/* Before, dark code panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
                 <div className="px-6 py-4 bg-neutral-900 border-b border-white/10">
-                  <p className="text-[12px] font-medium text-muted-foreground uppercase tracking-[0.14em]">Before, manual HTML workflow</p>
+                  <p className="text-[12px] font-medium text-neutral-400 uppercase tracking-[0.14em]">Before, manual HTML workflow</p>
                 </div>
                 <div className="bg-neutral-950 p-6 font-mono text-[11px] leading-relaxed space-y-1">
                   <p className="text-red-400/80">&lt;table width=&quot;600&quot; border=&quot;0&quot; cellspacing=&quot;0&quot;&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&lt;tr&gt;&lt;td style=&quot;padding:0;margin:0;&quot;&gt;</p>
-                  <p className="text-orange-400/70">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
+                  <p className="text-accent/70">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style=&quot;color:#000&quot;&gt; &lt;!-- breaks in OL --&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style=&quot;font-family:Arial;&quot;&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- font ignored in Outlook 2016 --&gt;</p>
-                  <p className="text-orange-400/70">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
+                  <p className="text-accent/70">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
                   <p className="text-red-500">&nbsp;&nbsp;&lt;!-- spacing broken on mobile --&gt;</p>
                   <p className="text-red-400/80">&lt;/table&gt;</p>
                 </div>
                 <div className="px-6 py-5 bg-neutral-900 border-t border-white/10">
                   <p className="text-[18px] font-medium text-red-400">HTML required</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">Agency dependency · inconsistent output · weeks of turnaround</p>
+                  <p className="text-[11px] text-neutral-400 mt-1">Agency dependency · inconsistent output · weeks of turnaround</p>
                 </div>
               </div>
 
               {/* After, clean builder panel */}
               <div className="rounded-2xl overflow-hidden border border-border">
-                <div className="px-6 py-4 bg-orange-500/10 border-b border-orange-500/20">
-                  <p className="text-[12px] font-medium text-orange-700 dark:text-orange-400 uppercase tracking-[0.14em]">After, no-code builder</p>
+                <div className="px-6 py-4 bg-accent/10 border-b border-accent/20">
+                  <p className="text-[12px] font-medium text-accent uppercase tracking-[0.14em]">After, no-code builder</p>
                 </div>
                 <div className="bg-muted/30 p-6 space-y-2.5">
                   {[
@@ -573,8 +521,8 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
-                <div className="px-6 py-5 bg-orange-500/5 border-t border-orange-500/20">
-                  <p className="text-[18px] font-medium text-orange-600 dark:text-orange-400">Zero HTML required</p>
+                <div className="px-6 py-5 bg-accent/5 border-t border-accent/20">
+                  <p className="text-[18px] font-medium text-accent">Zero HTML required</p>
                   <p className="text-[11px] text-muted-foreground mt-1">Any team · any region · on-brand · Outlook-safe</p>
                 </div>
               </div>
@@ -601,7 +549,7 @@ export default function Page() {
       <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A system the whole organisation adopted.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
@@ -619,7 +567,7 @@ export default function Page() {
             ]}
           />
 
-          <div className="grid md:grid-cols-4 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
+          <div className="grid md:grid-cols-4 divide-x divide-border border-t border-b border-border">
             {[
               { num: "M.01", figure: "50+",      label: "Modular components, all Outlook-safe, all brand-compliant." },
               { num: "M.02", figure: "28",        label: "Best-practice templates across 9 communication categories." },
@@ -629,7 +577,7 @@ export default function Page() {
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-6 py-10">
                   <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
-                  <p className="text-[clamp(22px,2.5vw,36px)] font-medium text-orange-400 tracking-tight leading-none mb-4">{m.figure}</p>
+                  <p className="text-[clamp(22px,2.5vw,36px)] font-medium text-accent tracking-tight leading-none mb-4">{m.figure}</p>
                   <p className="text-[13px] text-muted-foreground leading-relaxed">{m.label}</p>
                 </div>
               </FadeIn>
@@ -644,9 +592,9 @@ export default function Page() {
           <blockquote className="pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
               The challenge wasn&apos;t creating email templates. It was designing a system{" "}
-              <em className="not-italic text-orange-500">constrained enough</em> to work in Outlook
+              <em className="not-italic text-accent">constrained enough</em> to work in Outlook
               and{" "}
-              <em className="not-italic text-orange-500">flexible enough</em> that any team would
+              <em className="not-italic text-accent">flexible enough</em> that any team would
               actually want to use it. Governance only works if someone with authority backs it.
             </p>
           </blockquote>

@@ -2,24 +2,12 @@
 
 import { motion } from "framer-motion"
 import {
+  CsHeroShell,
   CsSection,
   CsDecision,
   CsInfoBar,
   CsNextStudies,
-  CsOnThisPage,
 } from "@/components/case-study"
-
-const SECTION_NAV = [
-  { id: "problem", label: "Problem" },
-  { id: "research", label: "Research" },
-  { id: "key-decisions", label: "Key Decisions" },
-  { id: "silent-guardian", label: "Silent Guardian" },
-  { id: "solution", label: "Solution" },
-  { id: "live-demo", label: "Live Demo" },
-  { id: "impact", label: "Impact" },
-  { id: "adjacent-work", label: "Adjacent Work" },
-  { id: "reflection", label: "Reflection" },
-]
 
 // ─── FADE-IN WRAPPER ─────────────────────────────────────────────────────────
 
@@ -53,7 +41,7 @@ const IMPACT_ROWS = [
 const ROADMAP = [
   {
     version: "V1", date: "8 months · shipped",
-    badge: "Complete", badgeClass: "bg-orange-500/15 text-orange-400",
+    badge: "Complete", badgeClass: "bg-accent/15 text-accent",
     items: [
       "6 Figma research flows",
       "Assisted + Autonomous typology",
@@ -67,7 +55,7 @@ const ROADMAP = [
   },
   {
     version: "V2", date: "In progress",
-    badge: "Active", badgeClass: "bg-orange-500/15 text-orange-400",
+    badge: "Active", badgeClass: "bg-accent/15 text-accent",
     items: [
       "Research findings → refined flows",
       "Updated demos from V1 insights",
@@ -79,7 +67,7 @@ const ROADMAP = [
   },
   {
     version: "Future", date: "Vision",
-    badge: "Roadmap", badgeClass: "bg-neutral-800 text-neutral-500",
+    badge: "Roadmap", badgeClass: "bg-muted text-muted-foreground",
     items: [
       "Real transaction integration",
       "Full platform standardisation",
@@ -92,156 +80,192 @@ const ROADMAP = [
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 
-function Hero() {
+/** Signature visual — the agent booking flow with the silent-guardian trust moment. */
+function PhoneVisual() {
   return (
-    <div className="relative min-h-[640px] overflow-hidden bg-[oklch(0.985_0_0)] text-foreground dark:bg-[oklch(0.14_0_0)]">
+    <div className="relative flex justify-center">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.12)_0%,transparent_65%)] dark:bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.18)_0%,transparent_65%)]" />
 
-      {/* Ambient glows */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_10%_0%,rgba(249,115,22,0.06),transparent_60%)] opacity-70 dark:bg-[radial-gradient(900px_500px_at_10%_0%,rgba(249,115,22,0.09),transparent_60%)]" />
-      </div>
-
-      <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-
-          {/* ── Left: copy ── */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
-            >
-              <span>Case Study</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
-              <span className="text-orange-600 dark:text-orange-400">Agentic Commerce</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
-              <span>Mastercard · Creative Studio</span>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.04 }}
-              className="inline-block text-[10px] uppercase tracking-[0.16em] text-muted-foreground border border-border rounded px-2.5 py-1 mb-6"
-            >
-              Flagship · Ongoing
-            </motion.p>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-              className="type-page-title max-w-lg text-foreground mb-6"
-            >
-              The{" "}
-              <em className="not-italic text-orange-400">silent guardian</em>
-              : Mastercard&apos;s role in AI-led payments.
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="type-section-intro text-muted-foreground mb-8"
-            >
-              Agentic commerce is payment without a payment screen. I built the research toolkit,
-              the multi-sensory trust framework, and the React demo the CPO used at Money20/20 to
-              show Google and ChatGPT where Mastercard fits.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.18 }}
-              className="flex flex-wrap gap-2 mb-8"
-            >
-              {[
-                { label: "Silent guardian, adopted direction", orange: true },
-                { label: "Used by CPO + SVPs live" },
-                { label: "6 research flows · 3 regions" },
-                { label: "React + Claude AI · 2 weeks" },
-                { label: "Haptic Labs · ElevenLabs" },
-              ].map(p => (
-                <span
-                  key={p.label}
-                  className={`text-[11px] font-medium px-3 py-1 rounded-full border ${
-                    p.orange
-                      ? "bg-orange-500/10 border-orange-500/35 text-orange-600 dark:text-orange-400"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  {p.label}
-                </span>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.28 }}
-              className="flex flex-wrap items-center gap-2 pt-6 border-t border-border/60"
-            >
-              <span className="text-[11px] text-muted-foreground mr-1">Presented at</span>
-              {["Money20/20", "Mastercard Connections", "Innovate at McLaren HQ"].map(e => (
-                <span key={e} className="text-[11px] font-medium px-3 py-1 rounded-full border border-orange-500/30 text-orange-600 dark:text-orange-400">
-                  {e}
-                </span>
-              ))}
-            </motion.div>
+      <div className="relative z-10 w-[220px] rounded-[28px] border border-white/[0.15] bg-[#111] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
+        {/* Notch */}
+        <div className="h-5 bg-[#0a0a0a] flex items-center justify-center">
+          <div className="w-12 h-[5px] rounded-full bg-[#333]" />
+        </div>
+        {/* Header */}
+        <div className="bg-[#111] px-3.5 py-2.5 flex items-center gap-2 border-b border-white/[0.06]">
+          <div className="w-6 h-6 rounded-full bg-accent flex items-center justify-center text-[9px] font-bold text-black shrink-0">
+            AI
           </div>
-
-          {/* ── Right: phone visual ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="relative flex justify-center"
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.12)_0%,transparent_65%)] dark:bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.18)_0%,transparent_65%)]" />
-
-            <div className="relative z-10 w-[220px] rounded-[28px] border border-white/[0.15] bg-[#111] overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
-              {/* Notch */}
-              <div className="h-5 bg-[#0a0a0a] flex items-center justify-center">
-                <div className="w-12 h-[5px] rounded-full bg-[#333]" />
-              </div>
-              {/* Header */}
-              <div className="bg-[#111] px-3.5 py-2.5 flex items-center gap-2 border-b border-white/[0.06]">
-                <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-[9px] font-bold text-black shrink-0">
-                  AI
-                </div>
-                <div>
-                  <p className="text-[11px] font-medium text-white leading-none mb-0.5">ChatAI Agent</p>
-                  <p className="text-[10px] text-orange-400">● Active, booking your trip</p>
-                </div>
-              </div>
-              {/* Chat body */}
-              <div className="px-2.5 py-3 flex flex-col gap-2">
-                <div className="self-end max-w-[85%] bg-[#222] rounded-[10px] rounded-br-[3px] px-2.5 py-2">
-                  <p className="text-[10px] text-white/70 leading-[1.5]">Book me a flight to Tokyo, business class</p>
-                </div>
-                <div className="self-start max-w-[85%] bg-[#1a1a1a] rounded-[10px] rounded-bl-[3px] px-2.5 py-2">
-                  <p className="text-[10px] text-white/80 leading-[1.5]">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
-                </div>
-                {/* Trust moment */}
-                <div className="bg-orange-500/[0.08] border border-orange-500/25 rounded-[10px] p-2.5 mt-0.5">
-                  <p className="text-[9px] uppercase tracking-[0.05em] font-semibold text-orange-400 mb-1.5">Payment secured</p>
-                  <p className="text-[10px] text-white/60 leading-[1.4] mb-2">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0" />
-                    <p className="text-[9px] font-medium text-orange-400">Transaction verified and protected</p>
-                  </div>
-                  <p className="text-[8px] text-neutral-600 text-right mt-2 tracking-[0.04em]">Secured by trusted payment network ✦</p>
-                </div>
-              </div>
+          <div>
+            <p className="text-[11px] font-medium text-white leading-none mb-0.5">ChatAI Agent</p>
+            <p className="text-[10px] text-accent">● Active, booking your trip</p>
+          </div>
+        </div>
+        {/* Chat body */}
+        <div className="px-2.5 py-3 flex flex-col gap-2">
+          <div className="self-end max-w-[85%] bg-[#222] rounded-[10px] rounded-br-[3px] px-2.5 py-2">
+            <p className="text-[10px] text-white/70 leading-[1.5]">Book me a flight to Tokyo, business class</p>
+          </div>
+          <div className="self-start max-w-[85%] bg-[#1a1a1a] rounded-[10px] rounded-bl-[3px] px-2.5 py-2">
+            <p className="text-[10px] text-white/80 leading-[1.5]">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
+          </div>
+          {/* Trust moment */}
+          <div className="bg-accent/[0.08] border border-accent/25 rounded-[10px] p-2.5 mt-0.5">
+            <p className="text-[9px] uppercase tracking-[0.05em] font-semibold text-accent mb-1.5">Payment secured</p>
+            <p className="text-[10px] text-white/60 leading-[1.4] mb-2">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+              <p className="text-[9px] font-medium text-accent">Transaction verified and protected</p>
             </div>
-          </motion.div>
-
+            <p className="text-[8px] text-neutral-600 text-right mt-2 tracking-[0.04em]">Secured by trusted payment network ✦</p>
+          </div>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 w-full h-px bg-border/70 dark:bg-white/[0.08]" />
     </div>
+  )
+}
+
+// ─── VISUALS ────────────────────────────────────────────────────────────────
+
+/** Anxiety across the 7-stage journey — peaks exactly where the guardian appears. */
+function AnxietyCurve() {
+  const stages = ["Intent", "Browse", "Select", "Confirm", "Verify", "Complete", "Done"]
+  const xs = [40, 140, 240, 340, 440, 540, 640]
+  const guardian: [number, number][] = [[340, 56], [440, 45], [540, 73]]
+  return (
+    <svg
+      viewBox="0 0 700 188"
+      className="w-full h-auto min-w-[560px]"
+      role="img"
+      aria-label="User anxiety across the payment journey, peaking at the three guardian moments: confirm, verify, complete."
+    >
+      <defs>
+        <linearGradient id="anx-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(249,115,22,0.32)" />
+          <stop offset="100%" stopColor="rgba(249,115,22,0)" />
+        </linearGradient>
+      </defs>
+
+      {/* guardian zone */}
+      <rect x="300" y="22" width="240" height="128" rx="10" fill="rgba(249,115,22,0.05)" stroke="rgba(249,115,22,0.2)" strokeDasharray="3 5" />
+      <text x="420" y="16" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="#f97316" letterSpacing="0.12em">GUARDIAN ZONE</text>
+
+      <line x1="20" y1="150" x2="680" y2="150" stroke="rgba(255,255,255,0.1)" />
+      <text x="20" y="40" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.4)">anxiety</text>
+
+      {/* area + line */}
+      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133 L 660 150 L 40 150 Z" fill="url(#anx-fill)" />
+      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* guardian markers */}
+      {guardian.map(([x, y], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r="11" fill="none" stroke="#f97316" strokeOpacity="0.3" />
+          <circle cx={x} cy={y} r="5.5" fill="#f97316" />
+        </g>
+      ))}
+
+      {/* stage labels */}
+      {stages.map((s, i) => {
+        const active = i >= 3 && i <= 5
+        return (
+          <text key={s} x={xs[i]} y="174" textAnchor="middle" fontSize="10" fontWeight={active ? 600 : 400} fill={active ? "#f97316" : "rgba(255,255,255,0.42)"}>{s}</text>
+        )
+      })}
+    </svg>
+  )
+}
+
+/** Glyphs for the three sensory channels — visual mark, audio cue, haptic pulse. */
+function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
+  if (kind === "sound") {
+    const bars = [3, 6, 10, 7, 4, 14, 22, 16, 5, 8, 6, 4, 18, 24, 17, 6, 9, 5, 3, 16, 21, 15, 7, 4, 8, 5]
+    const hot = new Set([5, 6, 7, 12, 13, 14, 19, 20, 21])
+    return (
+      <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
+        {bars.map((h, i) => (
+          <rect key={i} x={6 + i * 9} y={24 - h / 2} width="3.5" height={h} rx="1.75"
+            fill={hot.has(i) ? "#f97316" : "var(--text-muted)"} opacity={hot.has(i) ? 1 : 0.5} />
+        ))}
+      </svg>
+    )
+  }
+  if (kind === "haptic") {
+    return (
+      <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
+        <line x1="6" y1="24" x2="234" y2="24" stroke="var(--border)" />
+        {[44, 120, 196].map((cx, bi) => {
+          const amp = [7, 15, 10][bi]
+          let d = `M ${cx - 21} 24`
+          for (let k = 0; k < 6; k++) d += ` L ${cx - 21 + (k + 1) * 6} ${24 + (k % 2 ? amp : -amp)}`
+          d += ` L ${cx + 21} 24`
+          return <path key={bi} d={d} fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        })}
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
+      <line x1="6" y1="24" x2="234" y2="24" stroke="var(--border)" />
+      {[60, 120, 180].map((x, i) => (
+        <text key={i} x={x} y={i === 1 ? 31 : 30} textAnchor="middle" fontSize={i === 1 ? 22 : 15} fill="#f97316" opacity={i === 1 ? 1 : 0.5}>✦</text>
+      ))}
+    </svg>
+  )
+}
+
+function Hero() {
+  return (
+    <CsHeroShell
+      breadcrumb={{ kind: "Case Study", category: "Agentic Commerce", client: "Mastercard · Creative Studio" }}
+      badge="Flagship · Ongoing"
+      title={
+        <>
+          The{" "}
+          <em className="not-italic text-accent">silent guardian</em>
+          : Mastercard&apos;s role in AI-led payments.
+        </>
+      }
+      lede={
+        <>
+          Agentic commerce is payment without a payment screen. I built the research toolkit,
+          the multi-sensory trust framework, and the React demo the CPO used at Money20/20 to
+          show Google and ChatGPT where Mastercard fits.
+        </>
+      }
+      asideCol="300px"
+      aside={<PhoneVisual />}
+    >
+      <div className="flex flex-wrap gap-2 mb-8">
+        {[
+          { label: "Silent guardian, adopted direction", orange: true },
+          { label: "Used by CPO + SVPs live" },
+          { label: "6 research flows · 3 regions" },
+          { label: "React + Claude AI · 2 weeks" },
+          { label: "Haptic Labs · ElevenLabs" },
+        ].map(p => (
+          <span
+            key={p.label}
+            className={`text-[11px] font-medium px-3 py-1 rounded-full border ${
+              p.orange
+                ? "bg-accent/10 border-accent/35 text-accent"
+                : "border-border text-muted-foreground"
+            }`}
+          >
+            {p.label}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-border/60">
+        <span className="text-[11px] text-muted-foreground mr-1">Presented at</span>
+        {["Money20/20", "Mastercard Connections", "Innovate at McLaren HQ"].map(e => (
+          <span key={e} className="text-[11px] font-medium px-3 py-1 rounded-full border border-accent/30 text-accent">
+            {e}
+          </span>
+        ))}
+      </div>
+    </CsHeroShell>
   )
 }
 
@@ -252,8 +276,6 @@ export default function Page() {
     <div className="min-h-screen">
 
       <Hero />
-
-      <CsOnThisPage items={SECTION_NAV} />
 
       <CsInfoBar cells={[
         { label: "My Role",    value: "Lead · Creative Studio", sub: "toolkit + flows + React demo" },
@@ -268,10 +290,10 @@ export default function Page() {
       <CsSection id="problem" label="Problem" variant="dark" withDivider={false}>
         <div className="space-y-8">
           <div className="max-w-2xl space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               When AI pays for you, where does trust come from?
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               In normal payments, trust lives in the interface. You see the checkout, you tap, you
               see the Mastercard logo, you feel safe. Agentic commerce removes all of that. Three
               problems landed at once.
@@ -303,10 +325,10 @@ export default function Page() {
               },
             ].map((layer, i) => (
               <FadeIn key={i} delay={i * 0.08}>
-                <div className={`p-6 border border-white/[0.07] rounded-2xl ${layer.orange ? "bg-orange-500/[0.04]" : "bg-white/[0.02]"}`}>
-                  <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-neutral-500 mb-2">{layer.num}</p>
-                  <p className={`text-[17px] font-medium mb-3 leading-snug ${layer.orange ? "text-orange-400" : "text-white"}`}>{layer.title}</p>
-                  <p className={`text-[13px] leading-relaxed ${layer.orange ? "text-orange-500/70" : "text-neutral-400"}`}>{layer.body}</p>
+                <div className={`p-6 border rounded-2xl ${layer.orange ? "bg-accent/[0.06] border-accent/25" : "bg-card border-border"}`}>
+                  <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-muted-foreground mb-2">{layer.num}</p>
+                  <p className={`text-[17px] font-medium mb-3 leading-snug ${layer.orange ? "text-accent" : "text-foreground"}`}>{layer.title}</p>
+                  <p className={`text-[13px] leading-relaxed ${layer.orange ? "text-accent/75" : "text-muted-foreground"}`}>{layer.body}</p>
                 </div>
               </FadeIn>
             ))}
@@ -317,7 +339,7 @@ export default function Page() {
       <CsSection id="research" label="Research">
         <div className="space-y-8">
           <div className="max-w-2xl space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               What the multilingual study surfaced
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed">
@@ -386,7 +408,7 @@ export default function Page() {
       {/* ── DECISIONS ── dark */}
       <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-6">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight mb-2">
+          <h2 className="type-case-title text-foreground mb-2">
             Four calls that shaped the work
           </h2>
           <CsDecision
@@ -427,21 +449,33 @@ export default function Page() {
       <CsSection id="silent-guardian" label="The silent guardian" variant="dark">
         <div className="space-y-10">
           <div className="max-w-2xl space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Invisible until the moment it matters. Then unmistakable.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               The payment journey runs seven stages. Mastercard is present the whole way,
               processing and protecting, but visible at only three: the moments where someone
               needs to know they are safe.
             </p>
           </div>
 
+          {/* Anxiety curve — where trust needs to show up */}
+          <FadeIn>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-4">
+                Where anxiety peaks across the journey
+              </p>
+              <div className="overflow-x-auto">
+                <AnxietyCurve />
+              </div>
+            </div>
+          </FadeIn>
+
           {/* Flow diagram */}
           <FadeIn>
             <div className="relative overflow-x-auto">
               {/* Connecting line */}
-              <div className="absolute top-[14px] left-0 right-0 h-px bg-white/[0.08] pointer-events-none" />
+              <div className="absolute top-[14px] left-0 right-0 h-px bg-border dark:bg-white/[0.08] pointer-events-none" />
               <div className="relative flex min-w-[560px]">
                 {[
                   { label: ["User", "intent"],         active: false, role: []                     },
@@ -455,15 +489,15 @@ export default function Page() {
                   <div key={i} className="flex-1 flex flex-col items-center relative z-10">
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 ${
                       node.active
-                        ? "bg-orange-500 shadow-[0_0_20px_rgba(20,184,166,0.45)]"
-                        : "bg-white/[0.05] border border-white/[0.12]"
+                        ? "bg-accent shadow-[0_0_20px_rgba(249,115,22,0.45)]"
+                        : "bg-muted border border-border"
                     }`}>
                       {node.active && <span className="text-[10px] text-black font-bold">✓</span>}
                     </div>
-                    <p className={`text-[10px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-white font-medium" : "text-neutral-600"}`}>
+                    <p className={`text-[10px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-foreground font-medium" : "text-muted-foreground/60"}`}>
                       {node.label.map((line, j) => <span key={j} className="block">{line}</span>)}
                     </p>
-                    <p className="text-[9px] text-center text-orange-500 leading-[1.35] min-h-[24px]">
+                    <p className="text-[9px] text-center text-accent leading-[1.35] min-h-[24px]">
                       {node.role.map((line, j) => <span key={j} className="block">{line}</span>)}
                     </p>
                   </div>
@@ -475,10 +509,10 @@ export default function Page() {
           {/* Legend */}
           <div className="flex flex-wrap gap-6">
             {[
-              { dot: "bg-white/[0.15] border border-white/[0.12]", label: "Mastercard silent, processing in the background" },
-              { dot: "bg-orange-500",                                 label: "Mastercard present, trust signal active" },
+              { dot: "bg-muted border border-border", label: "Mastercard silent, processing in the background" },
+              { dot: "bg-accent",                 label: "Mastercard present, trust signal active" },
             ].map(l => (
-              <div key={l.label} className="flex items-center gap-2 text-[12px] text-neutral-400">
+              <div key={l.label} className="flex items-center gap-2 text-[12px] text-muted-foreground">
                 <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${l.dot}`} />
                 {l.label}
               </div>
@@ -487,11 +521,11 @@ export default function Page() {
 
           {/* Philosophy callout */}
           <FadeIn>
-            <div className="p-6 border border-white/[0.07] rounded-2xl bg-white/[0.02] max-w-2xl">
-              <p className="text-[16px] font-medium text-white mb-3 leading-snug">
+            <div className="p-6 border border-border rounded-2xl bg-card max-w-2xl">
+              <p className="text-[16px] font-medium text-foreground mb-3 leading-snug">
                 Why this is a product call, not a style choice
               </p>
-              <p className="text-[13px] text-neutral-400 leading-relaxed">
+              <p className="text-[13px] text-muted-foreground leading-relaxed">
                 The useful question was never how prominent the brand should be. It was which
                 moments brand presence actually lowers someone&apos;s anxiety. Answering that is what
                 the silent guardian does, and it ends up defining Mastercard&apos;s whole role in
@@ -504,7 +538,7 @@ export default function Page() {
       {/* ── SOLUTION ── light */}
       <CsSection id="solution" label="Solution">
         <div className="space-y-12">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             What I built, and why each piece existed
           </h2>
 
@@ -538,7 +572,7 @@ export default function Page() {
                     <div className="flex flex-col gap-3">
                       {col.flows.map(f => (
                         <div key={f.num} className="flex gap-3 p-3 bg-muted rounded-lg">
-                          <span className="text-[11px] font-medium text-orange-600 dark:text-orange-400 shrink-0 mt-0.5">{f.num}</span>
+                          <span className="text-[11px] font-medium text-accent shrink-0 mt-0.5">{f.num}</span>
                           <div>
                             <p className="text-[13px] font-medium text-foreground mb-0.5">{f.title}</p>
                             <p className="text-[12px] text-muted-foreground leading-snug">{f.desc}</p>
@@ -584,6 +618,9 @@ export default function Page() {
               ].map((s, i) => (
                 <FadeIn key={i} delay={i * 0.07}>
                   <div className="p-6 bg-card border border-border rounded-2xl h-full flex flex-col">
+                    <div className="mb-4 grid h-14 place-items-center rounded-xl border border-border/60 bg-muted/40 px-3">
+                      <SensoryGlyph kind={s.name === "Sound" ? "sound" : s.name === "Haptics" ? "haptic" : "visual"} />
+                    </div>
                     <p className="text-[15px] font-medium text-foreground mb-2">{s.name}</p>
                     <p className="text-[13px] text-muted-foreground leading-relaxed flex-1 mb-4">{s.desc}</p>
                     <p className="text-[11px] text-muted-foreground/70">{s.collab}</p>
@@ -601,10 +638,10 @@ export default function Page() {
 
           {/* Left: annotation */}
           <div className="space-y-6">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Built in 2 weeks.<br />Used by the CPO<br />at Money20/20.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Figma prototypes fall apart the moment a meeting goes off-script. The CPO needed
               something he could hold, hand over, and run mid-conversation. So I built a working
               React version of Agent Pay, powered by Claude, in two weeks.
@@ -616,9 +653,9 @@ export default function Page() {
                 { title: "Voice mode", desc: "ElevenLabs voice for hands-free demos and voice-first research." },
                 { title: "Runs on a phone", desc: "No laptop, no Figma login. The CPO opens it and demos live." },
               ].map((f, i) => (
-                <div key={i} className="p-4 bg-white/[0.03] border border-white/[0.07] rounded-xl">
-                  <p className="text-[13px] font-medium text-white mb-0.5">{f.title}</p>
-                  <p className="text-[12px] text-neutral-400 leading-snug">{f.desc}</p>
+                <div key={i} className="p-4 bg-card border border-border rounded-xl">
+                  <p className="text-[13px] font-medium text-foreground mb-0.5">{f.title}</p>
+                  <p className="text-[12px] text-muted-foreground leading-snug">{f.desc}</p>
                 </div>
               ))}
             </div>
@@ -626,7 +663,7 @@ export default function Page() {
 
           {/* Right: phone frame + iframe */}
           <div className="relative flex flex-col items-center">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,184,166,0.18)_0%,transparent_65%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.18)_0%,transparent_65%)]" />
             <div className="relative z-10 w-[320px] max-w-full">
               {/* iPhone 16 device frame */}
               <div className="relative rounded-[3rem] border border-white/[0.12] bg-[#1b1b1d] p-[11px] shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
@@ -649,7 +686,7 @@ export default function Page() {
                 </div>
               </div>
             </div>
-            <p className="relative z-10 text-center mt-4 text-[11px] text-neutral-500 leading-relaxed max-w-[320px]">
+            <p className="relative z-10 text-center mt-4 text-[11px] text-muted-foreground leading-relaxed max-w-[320px]">
               This is the white-labelled version. The Mastercard-branded build is the one the CPO uses with Google, ChatGPT, and merchant partners.
             </p>
           </div>
@@ -659,7 +696,7 @@ export default function Page() {
       {/* ── IMPACT ── light */}
       <CsSection id="impact" label="Impact">
         <div className="space-y-10">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             What this work actually changed
           </h2>
 
@@ -672,9 +709,9 @@ export default function Page() {
                 { label: "Research flows",      value: "6",        sub: "NAM · EU · South America" },
                 { label: "React demo",          value: "2 weeks",  sub: "solo build · live in production" },
               ].map(m => (
-                <div key={m.label} className={`p-4 rounded-xl border ${m.orange ? "bg-orange-500/[0.08] border-orange-500/20" : "bg-muted border-border"}`}>
+                <div key={m.label} className={`p-4 rounded-xl border ${m.orange ? "bg-accent/[0.08] border-accent/20" : "bg-muted border-border"}`}>
                   <p className="text-[11px] text-muted-foreground mb-1">{m.label}</p>
-                  <p className={`text-[22px] font-semibold tracking-tight leading-none mb-1 ${m.orange ? "text-orange-600 dark:text-orange-400" : "text-foreground"}`}>{m.value}</p>
+                  <p className={`text-[22px] font-semibold tracking-tight leading-none mb-1 ${m.orange ? "text-accent" : "text-foreground"}`}>{m.value}</p>
                   <p className="text-[11px] text-muted-foreground">{m.sub}</p>
                 </div>
               ))}
@@ -744,7 +781,7 @@ export default function Page() {
       {/* ── REFLECTION ── dark */}
       <CsSection id="reflection" label="Reflection" variant="dark">
         <div className="space-y-8">
-          <blockquote className="text-xl md:text-2xl font-light italic text-white/85 border-l-[3px] border-orange-500 pl-6 leading-relaxed max-w-2xl">
+          <blockquote className="text-xl md:text-2xl font-light italic text-foreground/85 border-l-[3px] border-accent pl-6 leading-relaxed max-w-2xl">
             &ldquo;Agentic commerce taught me that trust is less about where you put the logo
             and more about what happens, and what someone feels, at the moment they need to
             know they are safe.&rdquo;
@@ -770,9 +807,9 @@ export default function Page() {
               },
             ].map((card, i) => (
               <FadeIn key={i} delay={i * 0.07}>
-                <div className="p-6 border border-white/[0.07] rounded-2xl bg-white/[0.02] h-full">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-neutral-500 mb-3">{card.label}</p>
-                  <p className="text-[13px] text-neutral-400 leading-relaxed">{card.body}</p>
+                <div className="p-6 border border-border rounded-2xl bg-card h-full">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground mb-3">{card.label}</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">{card.body}</p>
                 </div>
               </FadeIn>
             ))}

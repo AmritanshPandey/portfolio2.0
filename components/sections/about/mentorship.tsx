@@ -36,10 +36,10 @@ export default function AdvisorySection() {
           <div className="
             inline-flex items-baseline gap-2
             px-4 py-2.5 rounded-xl
-            bg-orange-500/[0.08] dark:bg-orange-400/[0.10]
-            border border-orange-500/20 dark:border-orange-400/20
+            bg-accent/[0.08] dark:bg-accent/[0.10]
+            border border-accent/20 dark:border-accent/20
           ">
-            <span className="text-2xl font-semibold text-orange-600 dark:text-orange-400 leading-none">
+            <span className="text-2xl font-semibold text-accent leading-none">
               4
             </span>
             <span className="text-sm text-foreground/70 leading-snug">
@@ -67,7 +67,7 @@ export default function AdvisorySection() {
                     mt-[6px] w-1.5 h-1.5 rounded-full
                     bg-foreground/30
                     transition-all duration-300
-                    group-hover:bg-orange-600 dark:group-hover:bg-orange-400
+                    group-hover:bg-accent dark:group-hover:bg-accent
                     group-hover:scale-125
                   " />
 

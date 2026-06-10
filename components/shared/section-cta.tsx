@@ -5,7 +5,6 @@ import clsx from "clsx"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { scrollToSection } from "@/lib/scroll"
-import { saveScroll } from "@/lib/scroll-manager"
 import { useMagnetic } from "@/hooks/use-magnetic"
 
 type Variant = "primary" | "secondary" | "tertiary"
@@ -42,7 +41,6 @@ export function CTA({
       e.preventDefault()
 
       const id = href.replace("#", "")
-      saveScroll(pathname)
 
       if (pathname === "/") {
         scrollToSection(id)
@@ -70,9 +68,9 @@ export function CTA({
 
           // PRIMARY
           variant === "primary" && [
-            "bg-orange-600 text-white",
+            "bg-accent text-white",
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_18px_rgba(255,90,0,0.18)]",
-            "hover:bg-orange-500",
+            "hover:bg-accent",
             "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_26px_rgba(255,90,0,0.28)]",
             "active:scale-[0.97]",
           ],
@@ -84,7 +82,7 @@ export function CTA({
             "text-foreground/70",
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
             "hover:text-foreground",
-            "hover:border-orange-500/40",
+            "hover:border-accent/40",
             "hover:bg-background/70",
             "hover:shadow-[0_6px_18px_rgba(255,90,0,0.12)]",
             "hover:-translate-y-[1px]",
@@ -94,7 +92,7 @@ export function CTA({
           ],
 
           // FOCUS
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
 
           className
         )}
@@ -143,7 +141,7 @@ export function CTA({
       className={clsx(
         "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
         "text-foreground/70 hover:text-foreground transition",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 rounded",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 rounded",
         className
       )}
     >
@@ -151,7 +149,7 @@ export function CTA({
         {label}
         <span className="
           absolute left-0 -bottom-px h-px w-0
-          bg-orange-600 dark:bg-orange-400
+          bg-accent dark:bg-accent
           transition-all duration-300 ease-out
           group-hover/cta:w-full
         " />

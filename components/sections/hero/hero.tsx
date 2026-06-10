@@ -86,7 +86,7 @@ export default function Hero() {
 
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-foreground/[0.03] text-[12px] text-muted-foreground">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
               Product Thinker • Mastercard
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-foreground/[0.03] text-[12px] text-muted-foreground">

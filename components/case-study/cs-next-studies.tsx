@@ -29,7 +29,7 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
 
           <Link
             href="/#work"
-            className="group inline-flex min-h-11 items-center gap-2 text-[14px] font-medium text-muted-foreground transition-colors duration-500 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="group inline-flex min-h-11 items-center gap-2 text-[14px] font-medium text-muted-foreground transition-colors duration-500 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             All case studies
             <IconArrowRight

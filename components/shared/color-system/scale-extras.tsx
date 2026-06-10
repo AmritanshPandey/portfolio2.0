@@ -178,7 +178,7 @@ export function DarkModeMapper({ accent, neutral }: { accent: Stop[]; neutral: S
         {(["light", "dark"] as const).map(m => (
           <button key={m} onClick={() => setMode(m)} aria-pressed={mode === m}
             className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors capitalize ${
-              mode === m ? "border-orange-500/50 bg-orange-500/10 text-orange-600 dark:text-orange-400"
+              mode === m ? "border-orange-500/50 bg-orange-500/10 text-accent"
                 : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
             {m}
           </button>
@@ -194,7 +194,7 @@ export function DarkModeMapper({ accent, neutral }: { accent: Stop[]; neutral: S
               <div key={r.role} className="flex items-center gap-2.5 px-3.5 py-2 border-b border-border/60 last:border-0 text-[11px]">
                 <span className="w-4 h-4 rounded border border-border/60 shrink-0" style={{ background: pick(r.src, active) }} />
                 <span className="font-mono text-foreground/80 w-24">{r.role}</span>
-                <span className="font-mono text-orange-600 dark:text-orange-400">{r.src === "n" ? "neutral" : "accent"}-{active}</span>
+                <span className="font-mono text-accent">{r.src === "n" ? "neutral" : "accent"}-{active}</span>
                 <span className="font-mono text-muted-foreground/50 ml-auto">{r.light}→{r.dark}</span>
               </div>
             )

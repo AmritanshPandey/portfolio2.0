@@ -113,14 +113,14 @@ function CopyEmail() {
         group flex items-center gap-2.5 px-4 py-2.5 rounded-xl
         bg-card border border-border
         text-sm font-medium text-foreground
-        hover:border-orange-500/40 hover:bg-card
+        hover:border-accent/40 hover:bg-card
         transition-all duration-200
       "
     >
       <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-200">
         {email}
       </span>
-      <span className="flex items-center justify-center w-5 h-5 rounded-md bg-muted border border-border group-hover:border-orange-500/30 transition-colors duration-200">
+      <span className="flex items-center justify-center w-5 h-5 rounded-md bg-muted border border-border group-hover:border-accent/30 transition-colors duration-200">
         <AnimatePresence mode="wait" initial={false}>
           {copied ? (
             <motion.span key="check"
@@ -191,8 +191,8 @@ export default function Footer() {
               className="
                 flex items-center gap-2 px-4 py-2.5 rounded-xl
                 text-sm font-medium
-                text-orange-600 dark:text-orange-400
-                hover:text-orange-700 dark:hover:text-orange-300
+                text-accent
+                hover:text-accent
                 transition-colors duration-200
               "
             >

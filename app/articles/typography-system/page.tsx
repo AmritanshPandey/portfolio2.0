@@ -1,11 +1,9 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import Link from "next/link"
 import { motion } from "framer-motion"
-import { IconArrowUpRight } from "@tabler/icons-react"
 import { articleItems } from "@/lib/data"
-import { ArticleCard, ArticleHeader } from "@/components/articles/article-ui"
+import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 
@@ -43,13 +41,13 @@ function FadeIn({ children, delay = 0, className = "" }: {
 
 // ─── PRIMITIVES ───────────────────────────────────────────────────────────────
 
-function Section({ id, children, muted = false }: {
+function Section({ id, children }: {
   id?: string; children: React.ReactNode; muted?: boolean
 }) {
   return (
     <section
       id={id}
-      className={`border-b border-border/40 ${muted ? "bg-foreground/[0.015] dark:bg-white/[0.015]" : ""}`}
+      className="border-b border-border/40 bg-background"
     >
       <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">{children}</div>
     </section>
@@ -95,8 +93,8 @@ function Lede({ children }: { children: React.ReactNode }) {
 function Note({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <FadeIn>
-      <div className="my-8 rounded-xl border border-orange-500/20 bg-orange-500/[0.05] p-5 md:p-6 relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500/60 rounded-l-xl" />
+      <div className="my-8 rounded-lg border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6 relative overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 rounded-l-xl" />
         <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-orange-500 mb-2 pl-2">{label}</p>
         <p className="text-[13px] md:text-[14px] leading-[1.7] text-foreground/80 pl-2">{children}</p>
       </div>
@@ -654,31 +652,6 @@ function Hero() {
 
 // ─── RELATED ──────────────────────────────────────────────────────────────, 
 
-function Related() {
-  const related = articleItems.filter(a => a.href !== HREF).slice(0, 3)
-  return (
-    <section className="border-t border-border/45 bg-foreground/[0.015] dark:bg-white/[0.015]" aria-labelledby="more-articles">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="mb-7 flex items-center gap-4">
-          <div className="h-px w-6 bg-orange-500/70" />
-          <h2 id="more-articles" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">More articles</h2>
-          <div className="h-px flex-1 bg-border/60" />
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map(a => (
-            <ArticleCard key={a.href} article={a} />
-          ))}
-        </div>
-        <div className="mt-10 text-center">
-          <Link href="/articles" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-            All articles <IconArrowUpRight size={14} />
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ─── PAGE ─────────────────────────────────────────────────────────────────, 
 
 export default function Page() {
@@ -999,7 +972,7 @@ export default function Page() {
         </FadeIn>
       </Section>
 
-      <Related />
+      <RelatedArticles currentHref={HREF} />
     </main>
   )
 }

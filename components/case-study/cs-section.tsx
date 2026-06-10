@@ -7,85 +7,49 @@ import type { ReactNode } from "react"
 type Variant = "default" | "muted" | "dark"
 
 interface Props {
-  label: string
+  /** Kept for call-site compatibility; section headings are rendered by each page. */
+  label?: string
   children: ReactNode
   variant?: Variant
+  /** Deprecated — section separation now comes from the single edge line. */
   withDivider?: boolean
-  /** Anchor target for the "On this page" rail. */
+  /** Anchor target for in-page links. */
   id?: string
 }
 
 const BG: Record<Variant, string> = {
   default: "bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] text-foreground",
   muted:   "bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.105_0_0)] text-foreground",
-  dark:    "bg-[oklch(0.12_0_0)] text-white",
+  // "dark" is a contrast/accent band: a deeper neutral in light mode, near-black in dark mode.
+  dark:    "bg-[oklch(0.925_0_0)] dark:bg-[oklch(0.12_0_0)] text-foreground",
 }
 
-const DIVIDER: Record<Variant, string> = {
-  default: "bg-border/60",
-  muted:   "bg-border/60",
-  dark:    "bg-white/[0.08]",
-}
+const EDGE_LINE = "bg-border/70 dark:bg-white/[0.08]"
+const EDGE_HIGHLIGHT = "bg-white/70 dark:bg-white/[0.03]"
 
-const EDGE_LINE: Record<Variant, string> = {
-  default: "bg-border/70 dark:bg-white/[0.08]",
-  muted:   "bg-border/70 dark:bg-white/[0.08]",
-  dark:    "bg-white/[0.08]",
-}
-
-const EDGE_HIGHLIGHT: Record<Variant, string> = {
-  default: "bg-white/70 dark:bg-white/[0.03]",
-  muted:   "bg-white/70 dark:bg-white/[0.03]",
-  dark:    "bg-white/[0.03]",
-}
-
-export function CsSection({ label, children, variant = "default", withDivider = true, id }: Props) {
-  const isDark = variant === "dark"
-
+export function CsSection({ children, variant = "default", id }: Props) {
   return (
     <section id={id} className={clsx("relative w-full overflow-hidden transition-colors duration-300", id && "scroll-mt-24", BG[variant])}>
 
-      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-0 h-px", EDGE_LINE[variant])} />
-      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-px h-px", EDGE_HIGHLIGHT[variant])} />
+      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-0 h-px", EDGE_LINE)} />
+      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-px h-px", EDGE_HIGHLIGHT)} />
 
-      <div className="relative max-w-[1000px] mx-auto px-6 py-20 md:py-24">
+      <div className="relative max-w-[820px] mx-auto px-6 py-20 md:py-24">
 
-        {/* Top divider */}
-        {withDivider && (
-          <div className={clsx("h-px w-full mb-16", DIVIDER[variant])} />
-        )}
+        {/* Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="min-w-0"
+        >
+          {children}
+        </motion.div>
 
-        <div className="grid md:grid-cols-[180px_1fr] gap-10 md:gap-16 items-start">
-
-          {/* Section label */}
-          <motion.p
-            initial={{ opacity: 0, x: -8 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className={clsx(
-              "text-[11px] font-semibold uppercase tracking-[0.18em] pt-0.5 shrink-0",
-              isDark ? "text-white/45" : "text-muted-foreground"
-            )}
-          >
-            {label}
-          </motion.p>
-
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="min-w-0"
-          >
-            {children}
-          </motion.div>
-
-        </div>
       </div>
 
-      <div className={clsx("absolute bottom-0 left-0 h-px w-full", EDGE_LINE[variant])} />
+      <div className={clsx("absolute bottom-0 left-0 h-px w-full", EDGE_LINE)} />
     </section>
   )
 }

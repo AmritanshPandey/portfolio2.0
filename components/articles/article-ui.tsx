@@ -2,6 +2,8 @@ import Link from "next/link"
 import { IconArrowUpRight, IconCalendar, IconClock } from "@tabler/icons-react"
 import type { ArticleItem } from "@/lib/types/content"
 import { cn } from "@/lib/utils"
+import { articleItems } from "@/lib/data"
+import { ArticleCard as RelatedArticleCard } from "@/components/shared/article-card"
 
 export function CategoryPill({
   children,
@@ -19,6 +21,40 @@ export function CategoryPill({
     >
       {children}
     </span>
+  )
+}
+
+function ArticleMetaStack({ article }: { article: ArticleItem }) {
+  return (
+    <dl className="grid gap-5 text-[12px] leading-5 text-muted-foreground">
+      {article.category ? (
+        <div>
+          <dt className="mb-1 font-medium text-foreground/45">Category</dt>
+          <dd className="font-medium text-foreground/75">{article.category}</dd>
+        </div>
+      ) : null}
+      {article.date || article.readTime ? (
+        <div>
+          <dt className="mb-1 font-medium text-foreground/45">Reading</dt>
+          <dd className="space-y-1">
+            {article.date ? <p>{article.date}</p> : null}
+            {article.readTime ? <p>{article.readTime}</p> : null}
+          </dd>
+        </div>
+      ) : null}
+      {article.tags && article.tags.length > 0 ? (
+        <div>
+          <dt className="mb-2 font-medium text-foreground/45">Topics</dt>
+          <dd className="flex flex-wrap gap-x-2 gap-y-1.5">
+            {article.tags.slice(0, 4).map((tag) => (
+              <span key={tag} className="text-foreground/58">
+                {tag}
+              </span>
+            ))}
+          </dd>
+        </div>
+      ) : null}
+    </dl>
   )
 }
 
@@ -53,46 +89,79 @@ export function ReadingMeta({
 
 export function ArticleHeader({ article }: { article: ArticleItem }) {
   return (
-    <header className="relative overflow-hidden border-b border-border/45 bg-background">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-56 opacity-70"
-        style={{ background: article.accent ?? "linear-gradient(135deg,#ea580c,#c2410c)" }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-56"
-        style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.42) 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-          opacity: 0.12,
-        }}
-      />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/10 via-background/40 to-background" />
+    <header className="border-b border-border/45 bg-background">
+      <div className="mx-auto max-w-6xl px-6 pb-16 pt-32 md:pb-20 md:pt-40">
+        <div className="grid gap-10 lg:grid-cols-[180px_minmax(0,780px)] lg:items-start">
+          <aside className="hidden pt-5 lg:block">
+            <ArticleMetaStack article={article} />
+          </aside>
 
-      <div className="relative mx-auto max-w-5xl px-6 pb-14 pt-32 md:pb-16 md:pt-40">
-        <div className="max-w-[760px]">
-          <div className="flex flex-wrap items-center gap-3">
-            {article.category ? <CategoryPill className="bg-background/70 backdrop-blur">{article.category}</CategoryPill> : null}
-            <ReadingMeta date={article.date} readTime={article.readTime} />
-          </div>
-
-          <h1 className="mt-6 text-[34px] font-semibold leading-[1.08] text-foreground md:text-[52px]">
-            {article.title}
-          </h1>
-
-          <p className="mt-5 max-w-[62ch] text-[17px] leading-8 text-muted-foreground md:text-[19px]">
-            {article.description}
-          </p>
-
-          {article.tags && article.tags.length > 0 ? (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {article.tags.map((tag) => (
-                <CategoryPill key={tag}>{tag}</CategoryPill>
-              ))}
+          <div className="min-w-0 pt-5">
+            <div className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] font-medium text-muted-foreground lg:hidden">
+              {article.category ? <span className="text-foreground/75">{article.category}</span> : null}
+              {article.category && (article.date || article.readTime) ? <span className="text-foreground/22">/</span> : null}
+              <ReadingMeta date={article.date} readTime={article.readTime} className="gap-2 text-[12px]" />
             </div>
-          ) : null}
+
+            <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.05] text-foreground text-balance md:text-[60px]">
+              {article.title}
+            </h1>
+
+            <p className="mt-6 max-w-[64ch] text-[18px] leading-8 text-foreground/68 md:text-[20px] md:leading-9">
+              {article.description}
+            </p>
+
+            {article.tags && article.tags.length > 0 ? (
+              <div className="mt-8 flex flex-wrap gap-x-3 gap-y-2 border-t border-border/55 pt-5 text-[12px] leading-5 text-muted-foreground lg:hidden">
+                {article.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </header>
+  )
+}
+
+export function RelatedArticles({ currentHref }: { currentHref: string }) {
+  const related = articleItems.filter((article) => article.href !== currentHref).slice(0, 3)
+
+  if (related.length === 0) return null
+
+  return (
+    <section className="border-t border-border/45 bg-background" aria-labelledby="more-articles">
+      <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4 pt-5">
+          <div>
+            <p className="text-[12px] font-medium text-muted-foreground">More from the journal</p>
+            <h2 id="more-articles" className="mt-2 text-[24px] font-semibold leading-tight text-foreground md:text-[30px]">
+              Continue reading
+            </h2>
+          </div>
+          <Link
+            href="/articles"
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
+          >
+            All articles <IconArrowUpRight size={14} />
+          </Link>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((article) => (
+            <RelatedArticleCard
+              key={article.href}
+              title={article.title}
+              description={article.description}
+              href={article.href}
+              date={article.date}
+              readTime={article.readTime}
+              category={article.category}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -138,10 +207,10 @@ export function FeaturedArticleCard({ article }: { article: ArticleItem }) {
       href={article.href}
       data-cursor-card
       data-cursor-label="Read"
-      className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+      className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
       aria-label={`Read featured article: ${article.title}`}
     >
-      <article className="grid overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-300 hover:-translate-y-1 hover:border-orange-500/30 md:grid-cols-[0.9fr_1.1fr]">
+      <article className="grid overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/30 md:grid-cols-[0.9fr_1.1fr]">
         <ArticleVisual article={article} featured />
         <div className="flex min-h-[300px] flex-col p-6 md:p-8 lg:p-10">
           <div className="flex flex-wrap items-center gap-3">
@@ -156,7 +225,7 @@ export function FeaturedArticleCard({ article }: { article: ArticleItem }) {
           </p>
           <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border/50 pt-6">
             <ReadingMeta date={article.date} readTime={article.readTime} />
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-orange-600 transition group-hover:gap-3 dark:text-orange-400">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-accent transition group-hover:gap-3">
               Read article
               <IconArrowUpRight size={15} />
             </span>
@@ -173,16 +242,16 @@ export function ArticleCard({ article }: { article: ArticleItem }) {
       href={article.href}
       data-cursor-card
       data-cursor-label="Read"
-      className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+      className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
       aria-label={`Read article: ${article.title}`}
     >
-      <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-300 hover:-translate-y-1 hover:border-orange-500/30">
+      <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/30">
         <ArticleVisual article={article} />
         <div className="flex flex-1 flex-col p-5">
           <div className="flex flex-wrap items-center gap-2">
             {article.category ? <CategoryPill>{article.category}</CategoryPill> : null}
           </div>
-          <h3 className="mt-4 text-[17px] font-semibold leading-[1.28] text-foreground transition group-hover:text-orange-600 dark:group-hover:text-orange-400">
+          <h3 className="mt-4 text-[17px] font-semibold leading-[1.28] text-foreground transition group-hover:text-accent">
             {article.title}
           </h3>
           <p className="mt-3 line-clamp-3 text-[14px] leading-6 text-muted-foreground">

@@ -52,7 +52,7 @@ export default function ContentPage({
       </h1>
 
       {hypothesis && (
-        <p className="border-l-2 border-orange-500/50 pl-4 mb-6 text-[15px] md:text-[16px] leading-[1.6] text-foreground/80 italic">
+        <p className="border-l-2 border-accent/50 pl-4 mb-6 text-[15px] md:text-[16px] leading-[1.6] text-foreground/80 italic">
           {hypothesis}
         </p>
       )}

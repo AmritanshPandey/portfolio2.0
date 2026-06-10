@@ -32,7 +32,7 @@ export function CsBeforeAfter({ before, after }: CsBeforeAfterProps) {
             Before
           </p>
         </div>
-        <div className="aspect-[4/3] rounded-2xl bg-muted/40 border border-dashed border-border p-8 flex items-center justify-center overflow-hidden opacity-75">
+        <div className="aspect-[4/3] rounded-2xl bg-muted/40 border border-dashed border-border p-8 flex items-center justify-center overflow-hidden">
           {before.visual}
         </div>
         <p className="text-[14px] text-muted-foreground leading-relaxed">
@@ -52,8 +52,8 @@ export function CsBeforeAfter({ before, after }: CsBeforeAfterProps) {
         className="flex flex-col gap-5"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-          <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-orange-600/70 dark:text-orange-400/60">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-accent/70">
             After
           </p>
         </div>

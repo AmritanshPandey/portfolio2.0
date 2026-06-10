@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import {
+  CsHeroShell,
   CsSection,
   CsDecision,
   CsList,
@@ -11,21 +12,7 @@ import {
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
-  CsOnThisPage,
 } from "@/components/case-study"
-
-const SECTION_NAV = [
-  { id: "problem", label: "The Problem" },
-  { id: "stakes", label: "The Stakes" },
-  { id: "what-i-led", label: "What I Led" },
-  { id: "architecture", label: "System Architecture" },
-  { id: "key-decisions", label: "Key Decisions" },
-  { id: "inside-the-system", label: "Inside the System" },
-  { id: "tokens", label: "Tokens in Action" },
-  { id: "the-shift", label: "The Shift" },
-  { id: "what-changed", label: "What Changed" },
-  { id: "reflection", label: "Key Reflection" },
-]
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -47,61 +34,73 @@ function FadeIn({ children, delay = 0, className = "" }: {
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 
+/** Signature visual — the four-layer configurable architecture, distilled. */
+function HeroAside() {
+  const layers = [
+    { num: "L1", title: "Core Banking UX",   meta: "stable flows",      accent: false },
+    { num: "L2", title: "Component Library",  meta: "swappable parts",   accent: false },
+    { num: "L3", title: "Brand Token Layer",  meta: "one config, one skin", accent: true },
+    { num: "L4", title: "Demo Config Engine", meta: "deal-ready output", accent: false },
+  ]
+  return (
+    <div className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm shadow-[0_30px_70px_-40px_rgba(0,0,0,0.55)]">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Configurable architecture
+        </p>
+        <span className="font-mono text-[10px] text-accent">4 layers</span>
+      </div>
+      <div className="flex flex-col gap-1.5">
+        {layers.map(l => (
+          <div
+            key={l.num}
+            className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 transition-colors ${
+              l.accent
+                ? "border-accent/40 bg-accent/[0.07]"
+                : "border-border/70 bg-muted/40"
+            }`}
+          >
+            <span className={`font-mono text-[11px] shrink-0 ${l.accent ? "text-accent" : "text-muted-foreground"}`}>
+              {l.num}
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block text-[13px] font-medium text-foreground leading-tight">{l.title}</span>
+              <span className="block text-[11px] text-muted-foreground">{l.meta}</span>
+            </span>
+            {l.accent && <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-[11px]">
+        <span className="text-muted-foreground">Brand changes never touch UX logic</span>
+      </div>
+    </div>
+  )
+}
+
 function Hero() {
   return (
-    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[520px]">
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[-200px] right-[-300px] w-[900px] h-[700px]
-          bg-[radial-gradient(closest-side,rgba(249,115,22,0.18),transparent_70%)]" />
-      </div>
-
-      <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
-
-        {/* Breadcrumb */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
-        >
-          <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span className="text-orange-600 dark:text-orange-400">Enterprise Systems</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span>Mastercard · PartnerBank</span>
-        </motion.div>
-
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="type-page-title max-w-3xl mb-8"
-        >
+    <CsHeroShell
+      breadcrumb={{ kind: "Case Study", category: "Enterprise Systems", client: "Mastercard · PartnerBank" }}
+      title={
+        <>
           Modular Systems for{" "}
-          <em className="not-italic text-orange-600 dark:text-orange-400">Enterprise</em>{" "}
+          <em className="not-italic text-accent">Enterprise</em>{" "}
           RFP Velocity.
-        </motion.h1>
-
-        {/* Lede */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
-        >
+        </>
+      }
+      lede={
+        <>
           Decoupled core UX from brand and visual layers across PartnerBank,
           Mastercard&apos;s white-label digital banking platform. A rigid template
           system became a configurable architecture for faster demo turnaround
           during high-stakes RFP cycles.
-        </motion.p>
-
-      </div>
-
-      {/* Bottom separator */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-    </div>
+        </>
+      }
+      asideLabel="System model"
+      asideCol="320px"
+      aside={<HeroAside />}
+    />
   )
 }
 
@@ -112,8 +111,6 @@ export default function Page() {
     <div className="min-h-screen">
 
       <Hero />
-
-      <CsOnThisPage items={SECTION_NAV} />
 
       {/* Project info bar */}
       <CsInfoBar cells={[
@@ -128,7 +125,7 @@ export default function Page() {
       <CsSection id="problem" label="The Problem" withDivider={false}>
         <div className="space-y-8">
           <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A system built for consistency, not customization.
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
@@ -156,7 +153,7 @@ export default function Page() {
       <CsSection id="stakes" label="The Stakes" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Rigidity vs. revenue velocity.
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
@@ -175,10 +172,10 @@ export default function Page() {
                 <p className="text-[13px] text-muted-foreground leading-relaxed">Keep the template model. Accept the linear cost of manual personalization on every RFP.</p>
               </div>
               <div className="flex items-center justify-center bg-muted border-y border-border text-muted-foreground text-[20px] italic font-serif">vs</div>
-              <div className="p-7 bg-orange-500 flex flex-col gap-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-orange-950/60">Option B · Evolve</p>
-                <p className="text-[18px] font-medium text-orange-950 leading-snug">Introduce modular customization to support revenue velocity.</p>
-                <p className="text-[13px] text-orange-950/70 leading-relaxed">Decouple brand from architecture. Make personalization configurable. Compound effort across deals.</p>
+              <div className="p-7 bg-accent flex flex-col gap-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-background/60">Option B · Evolve</p>
+                <p className="text-[18px] font-medium text-background leading-snug">Introduce modular customization to support revenue velocity.</p>
+                <p className="text-[13px] text-background/70 leading-relaxed">Decouple brand from architecture. Make personalization configurable. Compound effort across deals.</p>
               </div>
             </div>
           </FadeIn>
@@ -190,7 +187,7 @@ export default function Page() {
               <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
                 Customization at the brand layer would not compromise system integrity, if properly
                 modularized, and would{" "}
-                <em className="not-italic text-orange-500">materially improve</em>{" "}
+                <em className="not-italic text-accent">materially improve</em>{" "}
                 enterprise sales responsiveness.
               </p>
             </div>
@@ -201,7 +198,7 @@ export default function Page() {
       {/* Approach */}
       <CsSection id="what-i-led" label="What I Led">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             From template to configurable architecture.
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 border-t border-border">
@@ -213,7 +210,7 @@ export default function Page() {
             ].map((step, i) => (
               <FadeIn key={step.num} delay={i * 0.07}>
                 <div className={`p-6 border-b border-border ${i < 3 ? "border-r" : ""} h-full`}>
-                  <p className="text-[11px] font-mono text-orange-500 tracking-[0.08em] mb-4">{step.num}</p>
+                  <p className="text-[11px] font-mono text-accent tracking-[0.08em] mb-4">{step.num}</p>
                   <p className="text-[16px] font-semibold text-foreground mb-3 tracking-tight">{step.title}</p>
                   <p className="text-[13px] text-muted-foreground leading-relaxed">{step.body}</p>
                 </div>
@@ -227,10 +224,10 @@ export default function Page() {
       <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A four-layer architecture.
             </h2>
-            <p className="text-[15px] text-white/55 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Each layer has one job. Brand changes never touch UX logic; demo configuration
               never breaks core components. Decoupling is what made the system fast.
             </p>
@@ -277,7 +274,7 @@ export default function Page() {
       {/* Feature deep dives */}
       <CsSection id="inside-the-system" label="Inside the System">
         <div className="space-y-20">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             Three shifts that made the system configurable.
           </h2>
 
@@ -414,7 +411,7 @@ export default function Page() {
       <CsSection id="tokens" label="Tokens in Action" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-6 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Same component. Three brand skins.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
@@ -426,7 +423,7 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-3 gap-5">
               {[
-                { brand: "Brand · A", primary: "#FF7A1A", gradient: "from-orange-500 to-orange-700", bank: "North Bank", num: "•••• 4287", type: "Premier · Debit", radius: "12px", font: "Inter" },
+                { brand: "Brand · A", primary: "#FF7A1A", gradient: "from-accent to-orange-700", bank: "North Bank", num: "•••• 4287", type: "Premier · Debit", radius: "12px", font: "Inter" },
                 { brand: "Brand · B", primary: "#D4A24C", gradient: "from-[#D4A24C] to-[#8B6508]", bank: "Heritage Trust", num: "•••• 9120", type: "Private · Credit", radius: "8px", font: "Instrument" },
                 { brand: "Brand · C", primary: "#4DA88A", gradient: "from-[#4DA88A] to-[#2F6F5A]", bank: "Verde Bank", num: "•••• 7503", type: "Everyday · Debit", radius: "14px", font: "Inter" },
               ].map((t) => (
@@ -468,7 +465,7 @@ export default function Page() {
       {/* Before / After */}
       <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             From static template to configurable system.
           </h2>
           <CsBeforeAfter
@@ -538,10 +535,10 @@ export default function Page() {
       <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A system built for sales velocity.
             </h2>
-            <p className="text-[15px] text-white/55 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Enterprise deals close cross-functionally, but the system&apos;s new flexibility materially
               strengthened Mastercard&apos;s competitive positioning in high-value RFP cycles.
             </p>
@@ -556,7 +553,7 @@ export default function Page() {
             ]}
           />
 
-          <div className="grid md:grid-cols-3 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
+          <div className="grid md:grid-cols-3 divide-x divide-border border-t border-b border-border">
             {[
               { num: "M.01", figure: "~70%", label: "Reduction in per-RFP design effort, measured against the prior template workflow." },
               { num: "M.02", figure: "Template → Config", label: "Shifted the platform from a rigid template to a reusable configuration model." },
@@ -564,9 +561,9 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-white/40 tracking-[0.06em] mb-5">{m.num}</p>
-                  <p className="text-[clamp(28px,3vw,42px)] font-medium text-white tracking-tight leading-none mb-4 text-orange-400">{m.figure}</p>
-                  <p className="text-[14px] text-white/55 leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground/60 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="text-[clamp(28px,3vw,42px)] font-medium tracking-tight leading-none mb-4 text-accent">{m.figure}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
@@ -576,12 +573,12 @@ export default function Page() {
 
       {/* Reflection */}
       <CsSection id="reflection" label="Key Reflection">
-        <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
+        <blockquote className="border-l-2 border-accent/60 pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             Customization and consistency aren&apos;t a trade-off, they&apos;re a{" "}
-            <em className="not-italic text-orange-500">layering problem</em>. The system became fast
+            <em className="not-italic text-accent">layering problem</em>. The system became fast
             the moment we stopped treating{" "}
-            <em className="not-italic text-orange-500">brand</em> as a property of components and
+            <em className="not-italic text-accent">brand</em> as a property of components and
             started treating it as a layer above them.
           </p>
         </blockquote>

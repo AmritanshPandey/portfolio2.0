@@ -3,8 +3,9 @@
 import clsx from "clsx"
 import { SectionHeader } from "./section-header"
 import { SectionTransition } from "./section-transition"
+import { ShaderGrid } from "./shader-grid"
 
-type Bg = "default" | "muted" | "dark"
+type Bg = "default" | "muted" | "dark" | "grid"
 
 interface SectionProps {
   id?: string
@@ -47,6 +48,13 @@ export function Section({
       dark:bg-[oklch(0.105_0_0)]
     `,
 
+    // Clean `default` surface with an interactive dot-field backdrop,
+    // rendered via <ShaderGrid> below when bg === "grid".
+    grid: `
+      bg-[oklch(0.985_0_0)] text-foreground
+      dark:bg-[oklch(0.14_0_0)]
+    `,
+
     dark: `
       bg-neutral-950 text-white
     `,
@@ -60,6 +68,12 @@ export function Section({
         bgStyles[bg]
       )}
     >
+
+      {/* Interactive dot-field backdrop — only for the `grid` band. Decorative,
+          pointer-events-none, and self-pausing when off-screen. */}
+      {bg === "grid" && (
+        <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
+      )}
 
       {/* Sections are clean neutral surfaces. Ember is reserved for intent
           (CTAs, active states) per DESIGN.md's One Voice Rule — no ambient tint. */}

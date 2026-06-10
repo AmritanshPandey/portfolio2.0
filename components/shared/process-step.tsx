@@ -47,7 +47,7 @@ export function ProcessStep({
       {/* ── ACCENT LINE */}
       <div
         className={clsx(
-          "absolute bg-orange-500",
+          "absolute bg-accent",
 
           isVertical
             ? "left-[-1px] top-0 w-[2px] h-full"

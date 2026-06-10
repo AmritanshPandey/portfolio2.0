@@ -379,6 +379,22 @@ export const fintechComponentSpecs: FintechComponentSpec[] = [
     accessibility: "Use row headers, captions where needed, and text equivalents for chart trends.",
   },
   {
+    name: "Trading components",
+    category: "Trading",
+    description: "Watchlists, quote headers, price charts, order tickets, positions, fills, and market status surfaces.",
+    states: ["default", "hover", "focus", "loading", "error"],
+    props: ["symbol", "price", "change", "side", "orderType", "quantity", "timeInForce"],
+    accessibility: "Price movement uses signed labels and icons; order submission requires readable estimated cost and risk copy.",
+  },
+  {
+    name: "Crypto wallet components",
+    category: "Crypto Wallet",
+    description: "Asset balances, chain selector, wallet address, QR receive, swap, send, gas estimate, and custody warning surfaces.",
+    states: ["default", "hover", "focus", "loading", "error"],
+    props: ["asset", "network", "address", "balance", "gas", "custodyMode", "risk"],
+    accessibility: "Addresses remain copyable text, network warnings are explicit, and irreversible transfers require confirmation.",
+  },
+  {
     name: "Feedback components",
     category: "Feedback",
     description: "Toasts, alerts, inline validation, empty states, loading states, skeletons, confirmations, and recovery.",
@@ -524,6 +540,22 @@ export const fintechPatternSpecs: FintechPatternSpec[] = [
     primaryStates: ["Active", "Paused", "Past due", "Cancelled"],
     riskBehavior: "Make recurring charge timing, cancellation effect, and mandate status explicit.",
     previewKind: "subscription",
+  },
+  {
+    name: "Stock order ticket",
+    trigger: "User buys, sells, or adjusts an equity, ETF, option-lite, or fractional share position.",
+    requiredData: ["Symbol", "Side", "Order type", "Quantity", "Estimated value"],
+    primaryStates: ["Quote", "Configure", "Review", "Submitted", "Filled"],
+    riskBehavior: "Show live price freshness, market hours, estimated total, and order-type consequences before submission.",
+    previewKind: "stock-order",
+  },
+  {
+    name: "Crypto transfer",
+    trigger: "User sends, receives, swaps, or bridges a digital asset from a custodial or self-custody wallet.",
+    requiredData: ["Asset", "Network", "Address", "Amount", "Gas fee"],
+    primaryStates: ["Asset", "Address", "Network check", "Review", "Broadcast"],
+    riskBehavior: "Network mismatch, irreversible transfer, address truncation, and gas volatility must be explicit before broadcast.",
+    previewKind: "crypto-transfer",
   },
 ]
 

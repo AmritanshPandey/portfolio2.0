@@ -71,7 +71,7 @@ export function TypingWord({
       <span
         className={
           className ??
-          "text-orange-600/90 dark:text-orange-400/90 font-medium whitespace-nowrap"
+          "text-accent/90 font-medium whitespace-nowrap"
         }
       >
         {displayed || " "}
@@ -83,7 +83,7 @@ export function TypingWord({
           ml-[2px] inline-block
           w-[1.5px] h-[0.9em]
           rounded-full
-          bg-orange-500/80 dark:bg-orange-400/80
+          bg-accent/80 dark:bg-accent/80
           animate-pulse
         "
       />

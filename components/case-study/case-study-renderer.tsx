@@ -1,5 +1,3 @@
-"use client"
-
 import type { CaseStudy } from "@/lib/types/case-study"
 import {
   CsHero,
@@ -29,13 +27,13 @@ export function CaseStudyRenderer({ data }: Props) {
       />
 
       {/* ── 2. CONTEXT ───────────────────────────── */}
-      <CsSection label="Context" variant="default">
+      <CsSection id="context" label="Context" variant="default">
         <CsList items={data.context.points} />
       </CsSection>
 
       {/* ── 3. PROBLEM ───────────────────────────── */}
-      <CsSection label="Problem" variant="muted">
-        <blockquote className="border-l-2 border-orange-500/50 pl-6">
+      <CsSection id="problem" label="Problem" variant="muted">
+        <blockquote className="border-l-2 border-accent/50 pl-6">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             {data.problem.statement}
           </p>
@@ -43,12 +41,12 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 4. CONSTRAINTS ───────────────────────── */}
-      <CsSection label="Constraints" variant="default">
+      <CsSection id="constraints" label="Constraints" variant="default">
         <CsList items={data.constraints.points} />
       </CsSection>
 
       {/* ── 5. ROLE ──────────────────────────────── */}
-      <CsSection label="My Role" variant="muted">
+      <CsSection id="my-role" label="My Role" variant="muted">
         <div className="space-y-10">
           <div>
             <p className="
@@ -72,7 +70,7 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 6. APPROACH ──────────────────────────── */}
-      <CsSection label="Approach" variant="default">
+      <CsSection id="approach" label="Approach" variant="default">
         <div className="space-y-12">
           <div>
             <p className="
@@ -105,7 +103,7 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 7. KEY DECISIONS ─────────────────────── */}
-      <CsSection label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-5">
           {data.decisions.map((decision, i) => (
             <CsDecision key={i} {...decision} index={i} />
@@ -114,7 +112,7 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 8. SYSTEM DESIGN ─────────────────────── */}
-      <CsSection label="System Design" variant="dark" withDivider={false}>
+      <CsSection id="system-design" label="System Design" variant="dark" withDivider={false}>
         <div className="space-y-10">
           <CsSystem
             shared={data.system.shared}
@@ -134,7 +132,7 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 9. SOLUTION ──────────────────────────── */}
-      <CsSection label="Solution" variant="default">
+      <CsSection id="solution" label="Solution" variant="default">
         <div className="space-y-10">
           <div>
             <p className="
@@ -165,23 +163,23 @@ export function CaseStudyRenderer({ data }: Props) {
       </CsSection>
 
       {/* ── 10. IMPACT ───────────────────────────── */}
-      <CsSection label="Impact" variant="muted">
+      <CsSection id="impact" label="Impact" variant="muted">
         <CsList items={data.impact.points} variant="numbered" />
       </CsSection>
 
       {/* ── 11. TRADEOFFS & LEARNINGS ────────────── */}
-      <CsSection label="Tradeoffs & Learnings" variant="default">
+      <CsSection id="tradeoffs-learnings" label="Tradeoffs & Learnings" variant="default">
         <CsList items={data.tradeoffs} />
       </CsSection>
 
       {/* ── 12. TIMELINE ─────────────────────────── */}
-      <CsSection label="Timeline" variant="muted">
+      <CsSection id="timeline" label="Timeline" variant="muted">
         <CsTimeline items={data.evolution.timeline} />
       </CsSection>
 
       {/* ── 13. TAKEAWAY ─────────────────────────── */}
-      <CsSection label="Takeaway" variant="default">
-        <blockquote className="border-l-2 border-orange-500/60 pl-6">
+      <CsSection id="takeaway" label="Takeaway" variant="default">
+        <blockquote className="border-l-2 border-accent/60 pl-6">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             {data.takeaway}
           </p>

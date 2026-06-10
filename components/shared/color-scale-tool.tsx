@@ -199,7 +199,7 @@ export function ColorScaleTool() {
           ] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)} aria-pressed={tab === k}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
-                tab === k ? "border-orange-500/50 bg-orange-500/10 text-orange-600 dark:text-orange-400"
+                tab === k ? "border-orange-500/50 bg-orange-500/10 text-accent"
                   : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
               {label}
             </button>

@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation"
-import { CategoryPill, ReadingMeta, ArticleProse } from "@/components/articles/article-ui"
-import { ArticleCard } from "@/components/shared/article-card"
+import {
+  ArticleHeader,
+  ArticleProse,
+  RelatedArticles,
+} from "@/components/articles/article-ui"
 import { articleItems } from "@/lib/data"
 import type { ArticleSection } from "@/lib/types/content"
 
@@ -8,73 +11,6 @@ import type { ArticleSection } from "@/lib/types/content"
 
 function getArticle(slug: string) {
   return articleItems.find(a => a.href === `/articles/${slug}`) ?? null
-}
-
-function getRelated(currentHref: string) {
-  return articleItems.filter(a => a.href !== currentHref).slice(0, 3)
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-
-function ArticleHero({
-  title,
-  description,
-  category,
-  readTime,
-  date,
-  tags,
-  accent,
-}: {
-  title:       string
-  description: string
-  category?:   string
-  readTime?:   string
-  date?:       string
-  tags?:       string[]
-  accent?:     string
-}) {
-  return (
-    <header className="relative overflow-hidden border-b border-border/45 bg-background">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-56 opacity-70"
-        style={{ background: accent ?? "linear-gradient(135deg,#ea580c,#c2410c)" }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-56"
-        style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.42) 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-          opacity: 0.12,
-        }}
-      />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/10 via-background/40 to-background" />
-
-      <div className="relative mx-auto max-w-5xl px-6 pb-14 pt-32 md:pb-16 md:pt-40">
-        <div className="max-w-[760px]">
-          <div className="flex flex-wrap items-center gap-3">
-            {category ? <CategoryPill className="bg-background/70 backdrop-blur">{category}</CategoryPill> : null}
-            <ReadingMeta date={date} readTime={readTime} />
-          </div>
-
-          <h1 className="mt-6 text-[34px] font-semibold leading-[1.08] text-foreground md:text-[52px]">
-            {title}
-          </h1>
-
-          <p className="mt-5 max-w-[62ch] text-[17px] leading-8 text-muted-foreground md:text-[19px]">
-            {description}
-          </p>
-
-          {tags && tags.length > 0 ? (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {tags.map(tag => (
-                <CategoryPill key={tag}>{tag}</CategoryPill>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </header>
-  )
 }
 
 // ─── Section renderers ────────────────────────────────────────────────────────
@@ -91,7 +27,7 @@ function PullQuote({ body }: { body: string }) {
 
 function Callout({ body }: { body: string }) {
   return (
-    <aside className="relative my-10 overflow-hidden rounded-2xl border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6">
+    <aside className="relative my-10 overflow-hidden rounded-2xl border border-accent/20 bg-accent/[0.04] p-5 md:p-6">
       <p className="pl-2 text-[15px] leading-7 text-foreground/82">
         {body}
       </p>
@@ -106,7 +42,7 @@ function ProseSection({ section }: { section: ArticleSection }) {
     <section className="space-y-5">
       {section.heading && (
         <h2 className="mt-14 flex items-center gap-3 text-[24px] font-semibold leading-[1.2] text-foreground md:text-[28px]">
-          <span className="h-[2px] w-5 flex-shrink-0 rounded-full bg-orange-500" />
+          <span className="h-[2px] w-5 flex-shrink-0 rounded-full bg-accent" />
           {section.heading}
         </h2>
       )}
@@ -134,6 +70,8 @@ function ImageFull({ section }: { section: ArticleSection }) {
         <img
           src={section.src ?? ""}
           alt={section.alt ?? ""}
+          loading="lazy"
+          decoding="async"
           className="w-full h-auto block"
         />
       </div>
@@ -162,12 +100,14 @@ function ImageCaptioned({ section }: { section: ArticleSection }) {
         <img
           src={section.src ?? ""}
           alt={section.alt ?? ""}
+          loading="lazy"
+          decoding="async"
           className="w-full h-auto block"
         />
       </div>
       {(section.caption || section.source) && (
         <figcaption className="mt-3 flex gap-2 items-start">
-          <span className="text-orange-500 flex-shrink-0 text-[13px] leading-5">↑</span>
+          <span className="text-accent flex-shrink-0 text-[13px] leading-5">↑</span>
           <span className="text-[13px] text-muted-foreground leading-relaxed">
             {section.caption}
             {section.source && (
@@ -196,7 +136,7 @@ function ImageCompare({ section }: { section: ArticleSection }) {
           <div className="space-y-2">
             <div className="relative overflow-hidden rounded-xl border border-border/30 bg-muted/20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={b.src} alt={b.alt ?? ""} className="w-full h-auto block" />
+              <img src={b.src} alt={b.alt ?? ""} loading="lazy" decoding="async" className="w-full h-auto block" />
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 text-[10px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm">
                 {b.label ?? "Before"}
               </span>
@@ -205,10 +145,10 @@ function ImageCompare({ section }: { section: ArticleSection }) {
         )}
         {a && (
           <div className="space-y-2">
-            <div className="relative overflow-hidden rounded-xl border border-orange-500/25 bg-muted/20">
+            <div className="relative overflow-hidden rounded-xl border border-accent/25 bg-muted/20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={a.src} alt={a.alt ?? ""} className="w-full h-auto block" />
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-orange-500/80 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+              <img src={a.src} alt={a.alt ?? ""} loading="lazy" decoding="async" className="w-full h-auto block" />
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-sm">
                 {a.label ?? "After"}
               </span>
             </div>
@@ -246,6 +186,8 @@ function ImageGrid({ section }: { section: ArticleSection }) {
               <img
                 src={img.src}
                 alt={img.alt ?? ""}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-auto block object-cover"
               />
             </div>
@@ -288,6 +230,8 @@ function ImageFloat({ section }: { section: ArticleSection }) {
           <img
             src={section.src ?? ""}
             alt={section.alt ?? ""}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto block"
           />
         </div>
@@ -302,7 +246,7 @@ function ImageFloat({ section }: { section: ArticleSection }) {
       <div className="flex-1 space-y-3">
         {section.heading && (
           <h2 className="text-[1.1rem] md:text-[1.2rem] font-semibold tracking-tight text-foreground flex items-center gap-3">
-            <span className="w-4 h-[2px] bg-orange-500 rounded-full flex-shrink-0" />
+            <span className="w-4 h-[2px] bg-accent rounded-full flex-shrink-0" />
             {section.heading}
           </h2>
         )}
@@ -343,7 +287,7 @@ function BrowserFrame({
       </div>
       {/* Screenshot */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full h-auto block" />
+      <img src={src} alt={alt} loading="lazy" decoding="async" className="w-full h-auto block" />
     </div>
   )
 }
@@ -358,7 +302,7 @@ function PhoneFrame({ src, alt }: { src: string; alt: string }) {
         </div>
         {/* Screen content */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} className="w-full h-auto block" />
+        <img src={src} alt={alt} loading="lazy" decoding="async" className="w-full h-auto block" />
         {/* Home indicator */}
         <div className="bg-black flex justify-center py-2.5">
           <div className="w-24 h-[4px] rounded-full bg-white/25" />
@@ -412,15 +356,15 @@ function Takeaways({ items }: { items: string[] }) {
   return (
     <div className="my-12 rounded-2xl border border-border/50 bg-foreground/[0.02] dark:bg-white/[0.02] overflow-hidden">
       <div className="px-6 py-4 border-b border-border/50 flex items-center gap-3">
-        <div className="w-4 h-[2px] bg-orange-500 rounded-full" />
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-orange-500">
+        <div className="w-4 h-[2px] bg-accent rounded-full" />
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
           Key Takeaways
         </p>
       </div>
       <div className="px-6 py-5 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-4 items-start">
-            <span className="text-[11px] font-mono font-bold text-orange-500/70 mt-1 w-5 flex-shrink-0">
+            <span className="text-[11px] font-mono font-bold text-accent/70 mt-1 w-5 flex-shrink-0">
               {String(i + 1).padStart(2, "0")}
             </span>
             <p className="text-[14px] md:text-[15px] leading-[1.65] text-foreground/75">
@@ -439,23 +383,12 @@ export function ArticleLayout({ slug }: { slug: string }) {
   const article = getArticle(slug)
   if (!article) notFound()
 
-  const related = getRelated(article.href)
-
   return (
     <main>
-      {/* Hero */}
-      <ArticleHero
-        title={article.title}
-        description={article.description}
-        category={article.category}
-        readTime={article.readTime}
-        date={article.date}
-        tags={article.tags}
-        accent={article.accent}
-      />
+      <ArticleHeader article={article} />
 
       {/* Body */}
-      <div className="mx-auto grid max-w-5xl gap-10 px-6 py-14 lg:grid-cols-[minmax(0,70ch)_220px] lg:items-start lg:py-18">
+      <div className="mx-auto max-w-4xl px-6 py-14 lg:py-18">
         <ArticleProse>
           {/* Intro */}
           {article.intro && (
@@ -474,60 +407,9 @@ export function ArticleLayout({ slug }: { slug: string }) {
             <Takeaways items={article.takeaways} />
           )}
         </ArticleProse>
-
-        <aside className="hidden lg:sticky lg:top-28 lg:block">
-          <div className="rounded-2xl border border-border/55 bg-card p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Reading
-            </p>
-            <div className="mt-4 space-y-4">
-              {article.category ? (
-                <div>
-                  <p className="text-[11px] text-muted-foreground">Category</p>
-                  <p className="mt-1 text-[13px] font-medium text-foreground">{article.category}</p>
-                </div>
-              ) : null}
-              <ReadingMeta date={article.date} readTime={article.readTime} className="flex-col items-start gap-2" />
-              {article.tags && article.tags.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {article.tags.slice(0, 4).map((tag) => (
-                    <span key={tag} className="rounded-full bg-muted px-2 py-1 text-[10px] font-medium text-muted-foreground">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </aside>
       </div>
 
-      {/* Related */}
-      {related.length > 0 && (
-        <section className="border-t border-border/45 bg-foreground/[0.015] dark:bg-white/[0.015]" aria-labelledby="more-articles">
-          <div className="mx-auto max-w-6xl px-6 py-16">
-            <div className="mb-7 flex items-center gap-4">
-              <div className="h-px w-6 bg-orange-500/70" />
-              <h2 id="more-articles" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                More articles
-              </h2>
-              <div className="h-px flex-1 bg-border/60" />
-            </div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map(a => (
-                <ArticleCard
-                  key={a.href}
-                  title={a.title}
-                  description={a.description}
-                  href={a.href}
-                  date={a.date}
-                  category={a.category}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <RelatedArticles currentHref={article.href} />
     </main>
   )
 }

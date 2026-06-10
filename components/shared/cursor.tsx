@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
+import { usePathname } from "next/navigation"
 
 const RING_SIZE = 36
 const DOT_SIZE  = 5
@@ -18,6 +19,9 @@ const LERP     = 0.20
 const SCALE_LR = 0.16
 
 export function FancyCursor() {
+  const pathname = usePathname()
+  const enabled = pathname === "/"
+
   const dotRef   = useRef<HTMLDivElement>(null)
   const ringRef  = useRef<HTMLDivElement>(null)
   // Pill refs
@@ -68,6 +72,7 @@ export function FancyCursor() {
   }, [])
 
   useEffect(() => {
+    if (!enabled) return
     if (!window.matchMedia("(pointer: fine)").matches) return
 
     const dot      = dotRef.current
@@ -154,7 +159,9 @@ export function FancyCursor() {
       document.removeEventListener("mouseleave",  onLeave)
       document.removeEventListener("mouseenter",  onEnter)
     }
-  }, [applyState])
+  }, [applyState, enabled])
+
+  if (!enabled) return null
 
   return (
     <>

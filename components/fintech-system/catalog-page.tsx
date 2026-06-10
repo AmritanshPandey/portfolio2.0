@@ -1,5 +1,8 @@
+import type { ReactNode } from "react"
 import {
+  IconChartCandle,
   IconCircleCheck,
+  IconCoinBitcoin,
   IconComponents,
   IconGridDots,
   IconLayoutDashboard,
@@ -47,20 +50,31 @@ function SectionHeader({
   description: string
 }) {
   return (
-    <div id={id} className="scroll-mt-28">
-      <div className="mb-6 flex items-start justify-between gap-5">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--fin-brand)]">
-            {label}
-          </p>
-          <h2 className="mt-3 max-w-3xl text-[24px] font-semibold leading-[1.18] text-[var(--fin-text-primary)] md:text-[28px]">
-            {title}
-          </h2>
-          <p className="mt-3 max-w-[68ch] text-[15px] leading-7 text-[var(--fin-text-secondary)] md:text-[16px]">
-            {description}
-          </p>
-        </div>
+    <div id={id} className="mb-6 scroll-mt-28">
+      <p className="fin-eyebrow text-[var(--fin-brand)]">{label}</p>
+      <h2 className="fin-h2 mt-3 max-w-3xl text-[var(--fin-text-primary)]">{title}</h2>
+      <p className="fin-lead mt-3 max-w-[68ch] text-[var(--fin-text-secondary)]">{description}</p>
+    </div>
+  )
+}
+
+/** One card header for the whole catalog: optional icon, title, optional trailing action. */
+function CardHeader({
+  icon,
+  title,
+  action,
+}: {
+  icon?: ReactNode
+  title: string
+  action?: ReactNode
+}) {
+  return (
+    <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-2">
+        {icon ? <span className="shrink-0 text-[var(--fin-brand)]">{icon}</span> : null}
+        <h3 className="fin-h3 truncate text-[var(--fin-text-primary)]">{title}</h3>
       </div>
+      {action ? <div className="shrink-0">{action}</div> : null}
     </div>
   )
 }
@@ -95,13 +109,10 @@ function ColorSystemSection() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {paletteStories.map((story) => (
-        <FinSurface key={story.title} className="p-4 md:p-5">
-          <div className="flex min-h-28 flex-col justify-between gap-5">
-            <div>
-              <p className="text-[15px] font-semibold leading-6 text-[var(--fin-text-primary)]">{story.title}</p>
-              <p className="mt-2 text-[13px] leading-6 text-[var(--fin-text-secondary)]">{story.description}</p>
-            </div>
-            <div className="flex flex-wrap gap-2">
+        <FinSurface key={story.title} pad>
+          <div className="flex h-full flex-col gap-4">
+            {/* The palette itself, shown as color — the focal moment of the color system */}
+            <div className="flex h-16 gap-px overflow-hidden rounded-xl border border-[var(--fin-border)] bg-[var(--fin-border)]">
               {story.tokens.map((tokenName) => {
                 const token = findToken(tokenName)
                 if (!token) return null
@@ -109,21 +120,33 @@ function ColorSystemSection() {
                 return (
                   <div
                     key={token.token}
-                    className="flex min-w-24 items-center gap-2 rounded-[8px] border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] p-2"
-                  >
+                    className="flex-1 transition-[flex-grow] duration-300 ease-out hover:flex-[1.6]"
+                    style={{ backgroundColor: token.value }}
+                    title={`${token.name} · ${token.token}`}
+                  />
+                )
+              })}
+            </div>
+
+            <div>
+              <h3 className="fin-h3 text-[var(--fin-text-primary)]">{story.title}</h3>
+              <p className="fin-body mt-2 text-[var(--fin-text-secondary)]">{story.description}</p>
+            </div>
+
+            {/* Legend, compact */}
+            <div className="mt-auto flex flex-wrap gap-x-4 gap-y-2">
+              {story.tokens.map((tokenName) => {
+                const token = findToken(tokenName)
+                if (!token) return null
+
+                return (
+                  <span key={token.token} className="inline-flex items-center gap-1.5">
                     <span
-                      className="size-8 shrink-0 rounded-[7px] border border-black/10 dark:border-white/10"
+                      className="size-3 shrink-0 rounded-[4px] border border-black/10 dark:border-white/10"
                       style={{ backgroundColor: token.value }}
                     />
-                    <span className="min-w-0">
-                      <span className="block truncate text-[12px] font-semibold text-[var(--fin-text-primary)]">
-                        {token.name}
-                      </span>
-                      <span className="block truncate font-mono text-[10px] text-[var(--fin-text-secondary)]">
-                        {token.token}
-                      </span>
-                    </span>
-                  </div>
+                    <span className="fin-mono text-[var(--fin-text-secondary)]">{token.token}</span>
+                  </span>
                 )
               })}
             </div>
@@ -139,10 +162,10 @@ function TypographySection() {
     <FinSurface className="overflow-hidden">
       <div className="divide-y divide-[var(--fin-border)]">
         {fintechTypeStyles.map((style) => (
-          <div key={style.token} className="grid gap-4 px-4 py-4 lg:grid-cols-[190px_1fr_220px] lg:items-center">
+          <div key={style.token} className="grid gap-4 px-5 py-4 lg:grid-cols-[190px_1fr_220px] lg:items-center">
             <div>
-              <p className="text-[13px] font-semibold text-[var(--fin-text-primary)]">{style.name}</p>
-              <p className="mt-1 font-mono text-[11px] text-[var(--fin-text-secondary)]">{style.token}</p>
+              <p className="fin-body font-semibold text-[var(--fin-text-primary)]">{style.name}</p>
+              <p className="fin-mono mt-1 text-[var(--fin-text-secondary)]">{style.token}</p>
             </div>
             <p
               className={style.numeric ? "font-mono tabular-nums" : undefined}
@@ -155,8 +178,8 @@ function TypographySection() {
             >
               {style.sample}
             </p>
-            <div className="text-[12px] leading-5 text-[var(--fin-text-secondary)]">
-              <p>{style.size} / {style.lineHeight} / {style.weight}</p>
+            <div className="fin-meta text-[var(--fin-text-secondary)]">
+              <p className="tabular-nums">{style.size} / {style.lineHeight} / {style.weight}</p>
               <p>{style.usage}</p>
             </div>
           </div>
@@ -168,45 +191,45 @@ function TypographySection() {
 
 function ScaleSection() {
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-      <FinSurface className="p-4">
-        <p className="text-[15px] font-semibold text-[var(--fin-text-primary)]">Spacing scale</p>
-        <div className="mt-4 space-y-3">
+    <div className="grid gap-4 lg:grid-cols-2">
+      <FinSurface pad>
+        <CardHeader title="Spacing scale" />
+        <div className="space-y-3">
           {fintechSpacingTokens.map((token) => (
             <div key={token.token} className="grid grid-cols-[80px_1fr] gap-3">
               <div>
-                <p className="text-[12px] font-semibold text-[var(--fin-text-primary)]">{token.name}</p>
-                <p className="font-mono text-[11px] text-[var(--fin-text-secondary)]">{token.value}</p>
+                <p className="fin-meta font-semibold text-[var(--fin-text-primary)]">{token.name}</p>
+                <p className="fin-mono text-[var(--fin-text-secondary)]">{token.value}</p>
               </div>
               <div>
                 <div className="h-3 rounded bg-[var(--fin-brand-soft-strong)]" style={{ width: token.value }} />
-                <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">{token.usage}</p>
+                <p className="fin-meta mt-1.5 text-[var(--fin-text-secondary)]">{token.usage}</p>
               </div>
             </div>
           ))}
         </div>
       </FinSurface>
 
-      <FinSurface className="p-4">
-        <p className="text-[15px] font-semibold text-[var(--fin-text-primary)]">Radius and elevation</p>
-        <div className="mt-4 grid gap-3">
+      <FinSurface pad>
+        <CardHeader title="Radius and elevation" />
+        <div className="grid gap-3">
           {fintechElevationTokens.map((token) => (
             <div
               key={token.token}
-              className="rounded-[8px] border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] p-4"
+              className="rounded-lg border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] p-4"
               style={{ boxShadow: token.value }}
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-[13px] font-semibold text-[var(--fin-text-primary)]">{token.name}</p>
-                <p className="font-mono text-[11px] text-[var(--fin-text-secondary)]">{token.token}</p>
+                <p className="fin-meta font-semibold text-[var(--fin-text-primary)]">{token.name}</p>
+                <p className="fin-mono text-[var(--fin-text-secondary)]">{token.token}</p>
               </div>
-              <p className="mt-2 text-[12px] leading-5 text-[var(--fin-text-secondary)]">{token.usage}</p>
+              <p className="fin-meta mt-2 text-[var(--fin-text-secondary)]">{token.usage}</p>
             </div>
           ))}
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2 text-[12px] text-[var(--fin-text-secondary)]">
+        <div className="mt-3 grid grid-cols-2 gap-2">
           {["Cards 8px", "Buttons 8px", "Inputs 8px", "Modals 12px", "Dropdowns 8px", "Tooltips 6px"].map((item) => (
-            <div key={item} className="rounded-[8px] border border-[var(--fin-border)] p-2">{item}</div>
+            <div key={item} className="fin-meta rounded-lg border border-[var(--fin-border)] px-2.5 py-2 text-[var(--fin-text-secondary)]">{item}</div>
           ))}
         </div>
       </FinSurface>
@@ -217,39 +240,293 @@ function ScaleSection() {
 function LayoutAndIconSection() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <FinSurface className="p-4">
-        <div className="flex items-center gap-2">
-          <IconGridDots size={18} className="text-[var(--fin-brand)]" />
-          <p className="text-[15px] font-semibold text-[var(--fin-text-primary)]">Grid and layout rules</p>
-        </div>
-        <div className="mt-4 space-y-2">
+      <FinSurface pad>
+        <CardHeader icon={<IconGridDots size={18} />} title="Grid and layout rules" />
+        <div className="space-y-2.5">
           {fintechLayoutRules.map((rule) => (
-            <div key={rule} className="flex gap-2 text-[13px] leading-5 text-[var(--fin-text-secondary)]">
+            <div key={rule} className="fin-body flex gap-2 text-[var(--fin-text-secondary)]">
               <IconCircleCheck size={15} className="mt-0.5 shrink-0 text-[var(--fin-safe)]" />
               <p>{rule}</p>
             </div>
           ))}
         </div>
       </FinSurface>
-      <FinSurface className="p-4">
-        <div className="flex items-center gap-2">
-          <IconComponents size={18} className="text-[var(--fin-brand)]" />
-          <p className="text-[15px] font-semibold text-[var(--fin-text-primary)]">Icon system</p>
-        </div>
-        <div className="mt-4 grid grid-cols-4 gap-2 text-center text-[11px] font-semibold text-[var(--fin-text-secondary)]">
-          {[IconLayoutDashboard, IconLock, IconPalette, IconRoute, IconTypography, IconGridDots, IconComponents, IconCircleCheck].map((Icon, index) => (
-            <div key={index} className="grid min-h-16 place-items-center rounded-[8px] border border-[var(--fin-border)] bg-[var(--fin-muted)]">
+      <FinSurface pad>
+        <CardHeader icon={<IconComponents size={18} />} title="Icon system" />
+        <div className="grid grid-cols-4 gap-2">
+          {[IconLayoutDashboard, IconLock, IconPalette, IconRoute, IconTypography, IconGridDots, IconComponents, IconChartCandle, IconCoinBitcoin, IconCircleCheck].map((Icon, index) => (
+            <div key={index} className="grid min-h-16 place-items-center rounded-lg border border-[var(--fin-border)] bg-[var(--fin-muted)]">
               <Icon size={20} className="text-[var(--fin-brand)]" />
             </div>
           ))}
         </div>
         <div className="mt-4 space-y-2">
           {fintechIconRules.map((rule) => (
-            <p key={rule} className="text-[13px] leading-5 text-[var(--fin-text-secondary)]">{rule}</p>
+            <p key={rule} className="fin-body text-[var(--fin-text-secondary)]">{rule}</p>
           ))}
         </div>
       </FinSurface>
     </div>
+  )
+}
+
+function ComponentPreviewShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="mt-5 min-h-[148px] overflow-hidden rounded-xl border border-[var(--fin-border)] bg-[var(--fin-muted)] p-3">
+      {children}
+    </div>
+  )
+}
+
+function ComponentCategorySpecimen({ category }: { category: string }) {
+  if (category === "Navigation") {
+    return (
+      <ComponentPreviewShell>
+        <div className="rounded-[10px] border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] p-2.5">
+          <div className="flex items-center gap-2">
+            <div className="grid size-8 place-items-center rounded-lg bg-[var(--fin-brand)] text-black">
+              <IconLayoutDashboard size={16} />
+            </div>
+            {["Home", "Pay", "Cards"].map((item, index) => (
+              <span
+                key={item}
+                className={index === 0
+                  ? "rounded-full bg-[var(--fin-brand-soft)] px-3 py-1.5 text-[12px] font-semibold text-[var(--fin-brand)]"
+                  : "rounded-full px-3 py-1.5 text-[12px] font-semibold text-[var(--fin-text-secondary)]"}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+          <div className="mt-3 grid grid-cols-4 gap-1 rounded-[10px] border border-[var(--fin-border)] bg-[var(--fin-muted)] p-1">
+            {["Home", "Send", "Cards", "More"].map((item, index) => (
+              <span key={item} className={index === 0 ? "rounded-lg bg-[var(--fin-surface-raised)] px-2 py-2 text-center text-[11px] font-semibold text-[var(--fin-text-primary)]" : "px-2 py-2 text-center text-[11px] font-semibold text-[var(--fin-text-secondary)]"}>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Buttons") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-2">
+          <button type="button" className="h-10 rounded-full bg-[var(--fin-brand)] px-4 text-[13px] font-semibold text-black">
+            Approve payment
+          </button>
+          <div className="grid grid-cols-[1fr_40px] gap-2">
+            <button type="button" className="h-10 rounded-full border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[13px] font-semibold text-[var(--fin-text-primary)]">
+              Review
+            </button>
+            <button type="button" className="grid size-10 place-items-center rounded-full border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[var(--fin-text-secondary)]" aria-label="Open route">
+              <IconRoute size={16} />
+            </button>
+          </div>
+          <button type="button" className="h-9 rounded-full border border-[var(--fin-error-border)] bg-[var(--fin-error-soft)] text-[12px] font-semibold text-[var(--fin-error)]">
+            Freeze card
+          </button>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Inputs") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-3">
+          {[
+            ["Amount", "$24,000.00"],
+            ["Recipient", "Northstar Payroll"],
+          ].map(([label, value]) => (
+            <label key={label} className="grid gap-1">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--fin-text-secondary)]">{label}</span>
+              <span className="flex h-10 items-center rounded-lg border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] px-3 text-[13px] font-semibold text-[var(--fin-text-primary)]">
+                {value}
+              </span>
+            </label>
+          ))}
+          <div className="grid grid-cols-6 gap-1.5">
+            {[0, 1, 2, 3, 4, 5].map((index) => (
+              <span key={index} className="grid h-8 place-items-center rounded-lg border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[15px] text-[var(--fin-text-primary)]">
+                {index < 4 ? "•" : ""}
+              </span>
+            ))}
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Cards") {
+    return (
+      <ComponentPreviewShell>
+        <div className="rounded-xl border border-white/10 bg-[linear-gradient(135deg,#050806,#101914_60%,#013f22)] p-4 text-white">
+          <div className="flex items-start justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/55">Instant debit</span>
+            <IconComponents size={18} className="text-[var(--fin-brand)]" />
+          </div>
+          <p className="mt-6 font-mono text-[18px] font-semibold tracking-[0.08em]">4829 •••• 1048</p>
+          <div className="mt-5 flex items-end justify-between gap-4">
+            <span className="text-[12px] text-white/58">Avery Stone</span>
+            <span className="text-[13px] font-semibold tabular-nums">$8,000</span>
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Data") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-3">
+          <div className="flex h-16 items-end gap-1.5 border-b border-[var(--fin-border)]">
+            {[42, 54, 39, 68, 73, 58, 82].map((height, index) => (
+              <span
+                key={`${height}-${index}`}
+                className="flex-1 rounded-t"
+                style={{
+                  height: `${height}%`,
+                  background: "linear-gradient(180deg,var(--fin-brand),color-mix(in srgb,var(--fin-brand) 30%,transparent))",
+                }}
+              />
+            ))}
+          </div>
+          {[
+            ["Stripe payout", "+$12,804", "Settled", "income"],
+            ["Wire transfer", "-$24,000", "Review", "pending"],
+          ].map(([name, amount, status, tone]) => (
+            <div key={name} className="flex items-center justify-between gap-3">
+              <span className="truncate text-[12px] font-semibold text-[var(--fin-text-primary)]">{name}</span>
+              <span className="flex items-center gap-2">
+                <FinBadge tone={tone as "income" | "pending"} className="h-5 px-2 text-[10px]">{status}</FinBadge>
+                <span className="font-mono text-[12px] font-semibold tabular-nums text-[var(--fin-text-primary)]">{amount}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Trading") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="grid size-9 place-items-center rounded-lg bg-[var(--fin-brand-soft)] text-[var(--fin-brand)]">
+                <IconChartCandle size={17} />
+              </div>
+              <div>
+                <p className="text-[13px] font-semibold text-[var(--fin-text-primary)]">NVDA</p>
+                <p className="text-[11px] text-[var(--fin-text-secondary)]">Market open</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-[15px] font-semibold tabular-nums text-[var(--fin-text-primary)]">$142.64</p>
+              <p className="text-[11px] font-semibold text-[var(--fin-profit)]">+2.18%</p>
+            </div>
+          </div>
+          <svg viewBox="0 0 260 72" className="h-[58px] w-full" aria-hidden>
+            <path d="M2 52 C30 28 44 45 68 30 C96 12 112 44 138 28 C166 10 188 36 210 24 C232 12 240 17 258 10" fill="none" stroke="var(--fin-brand)" strokeLinecap="round" strokeWidth="4" />
+          </svg>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" className="h-8 rounded-lg bg-[var(--fin-brand)] text-[12px] font-semibold text-black">Buy</button>
+            <button type="button" className="h-8 rounded-lg border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[12px] font-semibold text-[var(--fin-text-secondary)]">Sell</button>
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Crypto Wallet") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-3">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] text-[var(--fin-text-secondary)]">Portfolio value</p>
+              <p className="mt-1 font-mono text-[22px] font-semibold tabular-nums text-[var(--fin-text-primary)]">$27,763</p>
+            </div>
+            <IconCoinBitcoin size={24} className="text-[var(--fin-brand)]" />
+          </div>
+          <div className="grid grid-cols-3 gap-1.5">
+            {["Send", "Receive", "Swap"].map((item) => (
+              <button key={item} type="button" className="h-9 rounded-lg bg-[var(--fin-surface-raised)] text-[11px] font-semibold text-[var(--fin-text-secondary)]">
+                {item}
+              </button>
+            ))}
+          </div>
+          <div className="rounded-lg border border-[var(--fin-risk-border)] bg-[var(--fin-risk-soft)] px-3 py-2 text-[11px] font-semibold leading-4 text-[var(--fin-risk)]">
+            Bitcoin network only. Wrong network can lose funds.
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Feedback") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-2">
+          <div className="rounded-lg border border-[var(--fin-success-border)] bg-[var(--fin-success-soft)] px-3 py-2">
+            <FinBadge tone="success">Transfer complete</FinBadge>
+            <p className="mt-2 text-[12px] text-[var(--fin-text-secondary)]">Receipt saved to statements.</p>
+          </div>
+          <div className="rounded-lg border border-[var(--fin-error-border)] bg-[var(--fin-error-soft)] px-3 py-2">
+            <FinBadge tone="error">Recovery needed</FinBadge>
+            <p className="mt-2 text-[12px] text-[var(--fin-text-secondary)]">No money moved. Try another card.</p>
+          </div>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  if (category === "Security") {
+    return (
+      <ComponentPreviewShell>
+        <div className="grid gap-3">
+          <div className="flex items-start gap-3">
+            <div className="grid size-9 place-items-center rounded-lg bg-[var(--fin-safe-soft)] text-[var(--fin-safe)]">
+              <IconLock size={17} />
+            </div>
+            <div>
+              <p className="text-[13px] font-semibold text-[var(--fin-text-primary)]">Verify payment</p>
+              <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Confirm before sending $24,000.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-6 gap-1.5">
+            {[0, 1, 2, 3, 4, 5].map((index) => (
+              <span key={index} className="grid h-8 place-items-center rounded-lg border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] text-[15px] text-[var(--fin-text-primary)]">
+                {index < 4 ? "•" : ""}
+              </span>
+            ))}
+          </div>
+          <FinBadge tone="safe">Secure session</FinBadge>
+        </div>
+      </ComponentPreviewShell>
+    )
+  }
+
+  return (
+    <ComponentPreviewShell>
+      <div className="mx-auto max-w-[260px] rounded-xl border border-[var(--fin-border)] bg-[var(--fin-surface-raised)] p-4 shadow-[var(--fin-shadow-overlay)]">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[13px] font-semibold text-[var(--fin-text-primary)]">Confirm transfer</p>
+            <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Review consequence before submitting.</p>
+          </div>
+          <IconCircleCheck size={16} className="text-[var(--fin-brand)]" />
+        </div>
+        <div className="mt-4 flex justify-end gap-2">
+          <button type="button" className="h-8 rounded-lg border border-[var(--fin-border)] px-3 text-[12px] font-semibold text-[var(--fin-text-secondary)]">Cancel</button>
+          <button type="button" className="h-8 rounded-lg bg-[var(--fin-brand)] px-3 text-[12px] font-semibold text-black">Confirm</button>
+        </div>
+      </div>
+    </ComponentPreviewShell>
   )
 }
 
@@ -261,33 +538,34 @@ function ComponentsSection() {
     Inputs: "Handles money, identity, credentials, search, and dates with readable helper states instead of noisy validation.",
     Cards: "Frames balances, cards, alerts, and insights as small decisions people can understand at a glance.",
     Data: "Turns dense transactions, KPIs, filters, charts, and tables into scannable financial rhythm.",
+    Trading: "Covers quote views, watchlists, order tickets, positions, fills, and market-state language for brokerage products.",
+    "Crypto Wallet": "Covers asset balances, network selection, wallet addresses, receive QR, swaps, gas fees, and irreversible transfer warnings.",
     Feedback: "Confirms what happened, what is still processing, and what needs recovery without sounding robotic.",
     Security: "Treats consent, risk, authentication, and session prompts as calm trust moments.",
     Overlays: "Keeps modals, drawers, sheets, popovers, and confirmations focused on the consequence of the choice.",
   }
-  const specimenCategories = ["Cards", "Data", "Security"]
+  const specimenCategories = ["Cards", "Data", "Trading", "Crypto Wallet", "Security"]
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-3 md:grid-cols-2">
+    <div className="space-y-10">
+      <div className="grid gap-4 md:grid-cols-2">
         {categories.map((category) => {
           const specs = fintechComponentSpecs.filter((spec) => spec.category === category)
           return (
-            <FinSurface key={category} className="p-4 md:p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-[17px] font-semibold text-[var(--fin-text-primary)]">{category}</h3>
-                  <p className="mt-2 text-[13px] leading-6 text-[var(--fin-text-secondary)]">
-                    {componentStories[category]}
-                  </p>
-                </div>
+            <FinSurface key={category} pad>
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="fin-h3 text-[var(--fin-text-primary)]">{category}</h3>
                 <FinBadge tone="neutral" icon={false}>{specs.length}</FinBadge>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <p className="fin-body mt-2 text-[var(--fin-text-secondary)]">
+                {componentStories[category]}
+              </p>
+              <ComponentCategorySpecimen category={category} />
+              <div className="mt-4 flex flex-wrap gap-1.5">
                 {specs.slice(0, 5).map((spec) => (
                   <span
                     key={spec.name}
-                    className="rounded-full border border-[var(--fin-border)] bg-[var(--fin-muted)] px-2.5 py-1 text-[11px] font-medium text-[var(--fin-text-secondary)]"
+                    className="fin-meta rounded-full border border-[var(--fin-border)] bg-[var(--fin-muted)] px-2.5 py-1 font-medium text-[var(--fin-text-secondary)]"
                   >
                     {spec.name}
                   </span>
@@ -300,17 +578,15 @@ function ComponentsSection() {
 
       <div className="space-y-5">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--fin-text-secondary)]">
-            Selected specimens
-          </p>
-          <p className="mt-2 max-w-[62ch] text-[14px] leading-7 text-[var(--fin-text-secondary)]">
+          <p className="fin-eyebrow text-[var(--fin-text-secondary)]">Selected specimens</p>
+          <p className="fin-body mt-2 max-w-[62ch] text-[var(--fin-text-secondary)]">
             A few living examples show the tone: compact, calm, and focused on the decision in front of the user.
           </p>
         </div>
         <div className="space-y-6">
           {specimenCategories.map((category) => (
             <section key={category} className="grid gap-3">
-              <h3 className="text-[18px] font-semibold text-[var(--fin-text-primary)]">{category}</h3>
+              <h3 className="fin-h3 text-[var(--fin-text-primary)]">{category}</h3>
               {fintechComponentPreviewMap[category]}
             </section>
           ))}
@@ -343,9 +619,9 @@ function AccessibilitySection() {
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       {rules.map((rule) => (
-        <FinSurface key={rule} className="p-4">
+        <FinSurface key={rule} pad>
           <IconCircleCheck size={18} className="text-[var(--fin-safe)]" />
-          <p className="mt-3 text-[13px] leading-5 text-[var(--fin-text-secondary)]">{rule}</p>
+          <p className="fin-body mt-3 text-[var(--fin-text-secondary)]">{rule}</p>
         </FinSurface>
       ))}
     </div>
@@ -361,15 +637,23 @@ export function FintechSystemCatalogPage() {
         <div className="relative mx-auto max-w-6xl px-5 pb-12 pt-28 md:px-8 md:pb-16 md:pt-32">
           <div className="grid gap-9 lg:grid-cols-[1fr_340px] lg:items-end">
             <div>
+              {/* Standardised breadcrumb kicker */}
+              <nav className="mb-6 flex flex-wrap items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--fin-text-secondary)]">
+                <span>Design System</span>
+                <span className="h-1 w-1 rounded-full" style={{ background: "var(--fin-brand)" }} />
+                <span style={{ color: "var(--fin-brand)" }}>Fintech Interface</span>
+                <span className="h-1 w-1 rounded-full bg-[var(--fin-border)]" />
+                <span>Reusable Library</span>
+              </nav>
               <div className="mb-5 flex flex-wrap items-center gap-2">
                 <FinBadge tone="safe">Cash-like clarity</FinBadge>
                 <FinBadge tone="neutral" icon={false}>Mobile-first</FinBadge>
                 <FinBadge tone="neutral" icon={false}>Fast finance</FinBadge>
               </div>
-              <h1 className="max-w-3xl text-[34px] font-semibold leading-[1.08] text-[var(--fin-text-primary)] md:text-[52px]">
+              <h1 className="type-page-title max-w-3xl text-[var(--fin-text-primary)]">
                 Money movement that feels instant, clear, and calm.
               </h1>
-              <p className="mt-5 max-w-[62ch] text-[17px] leading-8 text-[var(--fin-text-secondary)] md:text-[19px]">
+              <p className="mt-5 max-w-[62ch] text-[17px] leading-relaxed text-[var(--fin-text-secondary)]">
                 A reusable fintech design system for the moments people check balances, send money, approve payments, and decide whether something feels trustworthy.
               </p>
             </div>
@@ -406,12 +690,12 @@ export function FintechSystemCatalogPage() {
             {[
               ["03", "example screens"],
               ["04", "palette stories"],
-              ["08", "component families"],
-              ["15", "money flows"],
+              ["10", "component families"],
+              ["17", "money flows"],
             ].map(([value, label]) => (
-              <div key={label} className="rounded-[18px] border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_78%,transparent)] p-4 shadow-[var(--fin-shadow-flat)] backdrop-blur">
-                <p className="font-mono text-[24px] font-bold text-[var(--fin-text-primary)] tabular-nums">{value}</p>
-                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--fin-text-secondary)]">{label}</p>
+              <div key={label} className="rounded-2xl border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_78%,transparent)] p-5 shadow-[var(--fin-shadow-flat)] backdrop-blur">
+                <p className="text-[30px] font-semibold leading-none tracking-[-0.02em] text-[var(--fin-text-primary)] tabular-nums">{value}</p>
+                <p className="fin-eyebrow mt-2 text-[var(--fin-text-secondary)]">{label}</p>
               </div>
             ))}
           </div>
@@ -420,15 +704,13 @@ export function FintechSystemCatalogPage() {
 
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[180px_1fr]">
         <aside className="hidden lg:block">
-          <nav className="sticky top-28 space-y-1 border-l border-[var(--fin-border)] pl-4" aria-label="Fintech system sections">
-            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--fin-text-secondary)]">
-              On this page
-            </p>
+          <nav className="sticky top-28 space-y-0.5 border-l border-[var(--fin-border)] pl-4" aria-label="Fintech system sections">
+            <p className="fin-eyebrow mb-3 text-[var(--fin-text-secondary)]">On this page</p>
             {sectionNav.slice(1).map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="block rounded-md px-2 py-2 text-[13px] font-medium text-[var(--fin-text-secondary)] transition-colors hover:bg-[var(--fin-muted)] hover:text-[var(--fin-text-primary)]"
+                className="fin-body block rounded-md px-2 py-1.5 font-medium text-[var(--fin-text-secondary)] transition-colors hover:bg-[var(--fin-muted)] hover:text-[var(--fin-text-primary)]"
               >
                 {item.label}
               </a>
@@ -441,8 +723,8 @@ export function FintechSystemCatalogPage() {
             <SectionHeader
               id="screens"
               label="Example screens"
-              title="Three product moments, one system language"
-              description="The system is shown through a treasury command center, a high-risk payment review, and a mobile wallet. Each screen keeps the same visual grammar: quiet containers, crisp numbers, readable status, and a single confident green action."
+              title="Core product moments, one system language"
+              description="The system is shown through a treasury command center, a high-risk payment review, and a mobile wallet. The component library also extends into brokerage and crypto-wallet flows without changing the visual grammar."
             />
             <FinExampleScreens />
           </section>
@@ -466,8 +748,8 @@ export function FintechSystemCatalogPage() {
             <SectionHeader
               id="components"
               label="Component library"
-              title="Components organized around real money tasks"
-              description="Instead of showing every state as a technical inventory, the catalog groups components by what they help a person do: move money, review risk, read activity, recover from errors, and trust a session."
+              title="Components organized around real financial tasks"
+              description="Instead of showing every state as a technical inventory, the catalog groups components by what they help a person do: move money, trade assets, manage crypto wallets, review risk, read activity, recover from errors, and trust a session."
             />
             <ComponentsSection />
           </section>
@@ -476,8 +758,8 @@ export function FintechSystemCatalogPage() {
             <SectionHeader
               id="patterns"
               label="Financial UX patterns"
-              title="Reusable flows for money movement and trust"
-              description="Each pattern records trigger, required data, primary states, and compliance or risk behavior so teams can scale decisions across payments, cards, lending, wealth, analytics, and admin workflows."
+              title="Reusable flows for money, markets, and trust"
+              description="Each pattern records trigger, required data, primary states, and compliance or risk behavior so teams can scale decisions across payments, cards, lending, trading, crypto wallets, wealth, analytics, and admin workflows."
             />
             <PatternsSection />
           </section>

@@ -50,6 +50,7 @@ export function ExplorationCard({
         src={image}
         alt={title}
         fill
+        sizes="(max-width: 768px) 100vw, 50vw"
         className="
           object-cover object-center
           transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]

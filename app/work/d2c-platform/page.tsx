@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import {
+  CsHeroShell,
   CsSection,
   CsDecision,
   CsList,
@@ -12,22 +13,15 @@ import {
   CsMetricBars,
   CsTimeline,
   CsNextStudies,
-  CsOnThisPage,
 } from "@/components/case-study"
 
-const SECTION_NAV = [
-  { id: "situation", label: "The Situation" },
-  { id: "problem", label: "The Problem" },
-  { id: "what-i-led", label: "What I Led" },
-  { id: "architecture", label: "System Architecture" },
-  { id: "key-decisions", label: "Key Decisions" },
-  { id: "core-flows", label: "Core Flows" },
-  { id: "tokens", label: "Tokens in Action" },
-  { id: "the-shift", label: "The Shift" },
-  { id: "what-changed", label: "What Changed" },
-  { id: "how-we-got-there", label: "How We Got There" },
-  { id: "reflection", label: "Key Reflection" },
-]
+// ─── BRAND COLORS ─────────────────────────────────────────────────────────────
+// The real storefront accents — this is the token layer that varies per brand.
+const BRAND = {
+  mamaearth: "#00AFEF",
+  dermaco: "#217A6E",
+  aqualogica: "#0066CC",
+} as const
 
 // ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
 
@@ -60,61 +54,78 @@ const TIMELINE = [
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 
-function Hero() {
+/** Signature visual — one shared backbone, three brand token sets. */
+function HeroAside() {
+  const brands = [
+    { name: "Mamaearth",     accent: BRAND.mamaearth,  token: "--brand-cyan", product: "Vitamin C" },
+    { name: "The Derma Co.", accent: BRAND.dermaco,    token: "--brand-teal", product: "AHA · BHA" },
+    { name: "Aqualogica",    accent: BRAND.aqualogica, token: "--brand-blue", product: "Glow+ Dew" },
+  ]
   return (
-    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)] min-h-[520px]">
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[-160px] left-[-200px] w-[800px] h-[700px]
-          bg-[radial-gradient(closest-side,rgba(249,115,22,0.15),transparent_70%)]" />
+    <div className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm shadow-[0_30px_70px_-40px_rgba(0,0,0,0.55)]">
+      {/* Shared system base */}
+      <div className="flex items-center justify-between rounded-xl border border-border/70 bg-muted/40 px-3.5 py-3 mb-3">
+        <div className="flex items-center gap-2">
+          <span className="grid h-6 w-6 place-items-center rounded-md bg-foreground text-[10px] font-bold text-background">S</span>
+          <span className="text-[12px] font-medium text-foreground">Shared component system</span>
+        </div>
+        <span className="font-mono text-[10px] text-muted-foreground">PDP · Cart · Checkout</span>
       </div>
 
-      <div className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20">
+      {/* Fan-out connector */}
+      <div className="flex justify-center text-muted-foreground/50">
+        <svg width="100%" height="16" viewBox="0 0 220 16" className="max-w-[220px]" fill="none" stroke="currentColor" strokeWidth="1">
+          <path d="M110 0 V6 M110 6 H40 V16 M110 6 H110 V16 M110 6 H180 V16" />
+        </svg>
+      </div>
 
-        {/* Breadcrumb */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex items-center gap-3 mb-10 text-[11px] tracking-[0.22em] uppercase text-muted-foreground"
-        >
-          <span>Case Study</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span className="text-orange-600 dark:text-orange-400">D2C Commerce</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span>Honasa Consumer</span>
-        </motion.div>
+      {/* Three brand skins */}
+      <div className="grid grid-cols-3 gap-2">
+        {brands.map(b => (
+          <div key={b.name} className="rounded-xl border border-border/70 bg-background/60 p-2.5 flex flex-col gap-2">
+            <div className="h-10 rounded-md" style={{ background: `linear-gradient(135deg, ${b.accent}, color-mix(in srgb, ${b.accent} 55%, #000))` }} />
+            <div>
+              <p className="text-[10px] font-semibold text-foreground leading-tight truncate">{b.name}</p>
+              <p className="text-[9px] text-muted-foreground truncate">{b.product}</p>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: b.accent }} />
+              <span className="font-mono text-[8px] text-muted-foreground truncate">{b.token}</span>
+            </div>
+          </div>
+        ))}
+      </div>
 
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="type-page-title max-w-3xl mb-8"
-        >
+      <p className="mt-4 pt-3 border-t border-border/60 text-[11px] text-muted-foreground">
+        One backbone · three token sets · eight weeks
+      </p>
+    </div>
+  )
+}
+
+function Hero() {
+  return (
+    <CsHeroShell
+      breadcrumb={{ kind: "Case Study", category: "D2C Commerce", client: "Honasa Consumer" }}
+      title={
+        <>
           One System.{" "}
-          <em className="not-italic text-orange-600 dark:text-orange-400">Three Brands.</em>{" "}
+          <em className="not-italic text-accent">Three Brands.</em>{" "}
           Eight Weeks.
-        </motion.h1>
-
-        {/* Lede */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
-        >
+        </>
+      }
+      lede={
+        <>
           Built and scaled first-party commerce experiences across Mamaearth,
           The Derma Co., and Aqualogica by establishing a shared component
           backbone with brand-level token overrides, shipping all three
           storefronts on a hard 8-week deadline.
-        </motion.p>
-
-      </div>
-
-      {/* Bottom separator */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-    </div>
+        </>
+      }
+      asideLabel="Multi-brand model"
+      asideCol="340px"
+      aside={<HeroAside />}
+    />
   )
 }
 
@@ -125,8 +136,6 @@ export default function Page() {
     <div className="min-h-screen">
 
       <Hero />
-
-      <CsOnThisPage items={SECTION_NAV} />
 
       {/* Project info bar */}
       <CsInfoBar cells={[
@@ -141,7 +150,7 @@ export default function Page() {
       <CsSection id="situation" label="The Situation" withDivider={false}>
         <div className="space-y-8">
           <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Three brands, no owned channel, and a tight window.
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
@@ -168,7 +177,7 @@ export default function Page() {
       <CsSection id="problem" label="The Problem" variant="muted">
         <div className="space-y-8">
           <div className="space-y-3">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Build three storefronts with one team.
             </h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground max-w-xl">
@@ -192,7 +201,7 @@ export default function Page() {
               ].map((c, i) => (
                 <FadeIn key={c.num} delay={i * 0.05}>
                   <div className="rounded-2xl border border-border bg-card p-5">
-                    <p className="text-[10px] font-mono text-orange-500 tracking-[0.1em] mb-3">{c.num}</p>
+                    <p className="text-[10px] font-mono text-accent tracking-[0.1em] mb-3">{c.num}</p>
                     <p className="text-[14px] font-semibold text-foreground mb-2 tracking-tight">{c.label}</p>
                     <p className="text-[13px] text-muted-foreground leading-relaxed">{c.body}</p>
                   </div>
@@ -208,7 +217,7 @@ export default function Page() {
               <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
                 All three brands shared identical commerce logic, they diverged
                 only in visual language. That meant a{" "}
-                <em className="not-italic text-orange-500">single shared backbone</em>{" "}
+                <em className="not-italic text-accent">single shared backbone</em>{" "}
                 with a brand token layer was the only architecture that could
                 ship three storefronts in eight weeks.
               </p>
@@ -220,7 +229,7 @@ export default function Page() {
       {/* What I led */}
       <CsSection id="what-i-led" label="What I Led">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             From blank slate to shipped system.
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 border-t border-border">
@@ -232,7 +241,7 @@ export default function Page() {
             ].map((step, i) => (
               <FadeIn key={step.num} delay={i * 0.07}>
                 <div className={`p-6 border-b border-border ${i < 3 ? "border-r" : ""} h-full`}>
-                  <p className="text-[11px] font-mono text-orange-500 tracking-[0.08em] mb-4">{step.num}</p>
+                  <p className="text-[11px] font-mono text-accent tracking-[0.08em] mb-4">{step.num}</p>
                   <p className="text-[16px] font-semibold text-foreground mb-3 tracking-tight">{step.title}</p>
                   <p className="text-[13px] text-muted-foreground leading-relaxed">{step.body}</p>
                 </div>
@@ -246,10 +255,10 @@ export default function Page() {
       <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A shared backbone, a configurable surface.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               Commerce logic is stable and shared. Brand identity is a token layer
               above it. Decoupling these two is what made three brands buildable
               by two designers in eight weeks.
@@ -318,7 +327,7 @@ export default function Page() {
       {/* Feature deep dives */}
       <CsSection id="core-flows" label="Core Flows">
         <div className="space-y-20">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             Where the design decisions showed up.
           </h2>
 
@@ -380,9 +389,9 @@ export default function Page() {
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
                 <text x="20" y="26" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
                 {[
-                  { x: 20,  color: "rgb(249,115,22)", label: "Mamaearth" },
-                  { x: 150, color: "rgb(45,155,138)",  label: "Derma Co." },
-                  { x: 280, color: "rgb(75,142,191)",  label: "Aqualogica" },
+                  { x: 20,  color: BRAND.mamaearth,  label: "Mamaearth" },
+                  { x: 150, color: BRAND.dermaco,    label: "Derma Co." },
+                  { x: 280, color: BRAND.aqualogica, label: "Aqualogica" },
                 ].map(b => (
                   <g key={b.label} transform={`translate(${b.x},40)`}>
                     <rect width="110" height="240" rx="14" fill="var(--surface-1)" stroke="var(--border)" />
@@ -467,7 +476,7 @@ export default function Page() {
       <CsSection id="tokens" label="Tokens in Action" variant="muted">
         <div className="space-y-8">
           <div className="grid md:grid-cols-2 gap-6 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               Same system. Three distinct brands.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
@@ -479,9 +488,9 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-3 gap-5">
               {[
-                { brand: "Mamaearth",    primary: "#FF8A00", gradient: "from-[#FF8A00] to-[#CC5500]", radius: "14px", font: "DM Sans",   tagline: "Natural · Toxin Free" },
-                { brand: "The Derma Co.", primary: "#2D9B8A", gradient: "from-[#2D9B8A] to-[#1B6B5E]", radius: "8px",  font: "Inter",    tagline: "Clinically Tested" },
-                { brand: "Aqualogica",   primary: "#4B8EBF", gradient: "from-[#4B8EBF] to-[#2A5E8F]", radius: "12px", font: "Figtree",  tagline: "Glow · Hydrate" },
+                { brand: "Mamaearth",     primary: BRAND.mamaearth,  radius: "14px", font: "DM Sans", tagline: "Natural · Toxin Free" },
+                { brand: "The Derma Co.", primary: BRAND.dermaco,    radius: "8px",  font: "Inter",   tagline: "Clinically Tested" },
+                { brand: "Aqualogica",    primary: BRAND.aqualogica, radius: "12px", font: "Figtree", tagline: "Glow · Hydrate" },
               ].map(t => (
                 <div key={t.brand} className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-5 hover:-translate-y-0.5 transition-transform duration-300">
                   <div className="flex items-center justify-between">
@@ -491,7 +500,7 @@ export default function Page() {
 
                   {/* Mini product card */}
                   <div className="rounded-xl overflow-hidden border border-border">
-                    <div className={`bg-gradient-to-br ${t.gradient} h-24 flex items-center justify-center relative`}>
+                    <div className="h-24 flex items-center justify-center relative" style={{ background: `linear-gradient(135deg, ${t.primary}, color-mix(in srgb, ${t.primary} 58%, #000))` }}>
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.2),transparent_60%)]" />
                       <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30" />
                     </div>
@@ -524,7 +533,7 @@ export default function Page() {
       {/* Before / After */}
       <CsSection id="the-shift" label="The Shift">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             From marketplace dependency to owned channel.
           </h2>
           <CsBeforeAfter
@@ -535,22 +544,22 @@ export default function Page() {
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   {/* Central marketplace */}
                   <g transform="translate(100,20)">
-                    <rect width="160" height="52" rx="10" fill="var(--surface-2)" stroke="var(--border)" strokeDasharray="3 4" />
+                    <rect width="160" height="52" rx="10" fill="var(--surface-2)" stroke="var(--text-muted)" strokeOpacity="0.4" strokeDasharray="3 4" />
                     <text x="80" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.06em">3RD PARTY</text>
                     <text x="80" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--foreground)">Amazon · Nykaa</text>
                   </g>
                   {/* Brands feeding into marketplace */}
-                  <g stroke="var(--text-muted)" fill="none" opacity="0.4">
+                  <g stroke="var(--text-muted)" fill="none" opacity="0.55">
                     <path d="M 80 150 L 140 72" />
                     <path d="M 180 150 L 180 72" />
                     <path d="M 280 150 L 220 72" />
                   </g>
                   {["Mamaearth", "Derma Co.", "Aqualogica"].map((name, i) => (
                     <g key={name} transform={`translate(${40 + i * 100},150)`}>
-                      <rect width="80" height="80" rx="10" fill="var(--surface-1)" stroke="var(--border)" />
-                      <rect x="10" y="12" width="60" height="5" rx="3" fill="var(--surface-2)" />
-                      <rect x="10" y="23" width="40" height="5" rx="3" fill="var(--surface-2)" />
-                      <text x="40" y="62" textAnchor="middle" fontSize="8" fill="var(--text-muted)" letterSpacing="0.04em">{name}</text>
+                      <rect width="80" height="80" rx="10" fill="var(--surface-1)" stroke="var(--text-muted)" strokeOpacity="0.4" />
+                      <rect x="10" y="12" width="60" height="5" rx="3" fill="var(--text-muted)" opacity="0.28" />
+                      <rect x="10" y="23" width="40" height="5" rx="3" fill="var(--text-muted)" opacity="0.28" />
+                      <text x="40" y="62" textAnchor="middle" fontSize="8" fill="var(--foreground)" opacity="0.72" letterSpacing="0.04em">{name}</text>
                       <text x="40" y="73" textAnchor="middle" fontFamily="monospace" fontSize="7" fill="var(--text-muted)">no data</text>
                     </g>
                   ))}
@@ -574,9 +583,9 @@ export default function Page() {
                     <path d="M 280 150 L 220 72" />
                   </g>
                   {[
-                    { name: "Mamaearth",    color: "rgb(255,138,0)" },
-                    { name: "Derma Co.",    color: "rgb(45,155,138)" },
-                    { name: "Aqualogica",   color: "rgb(75,142,191)" },
+                    { name: "Mamaearth",    color: BRAND.mamaearth },
+                    { name: "Derma Co.",    color: BRAND.dermaco },
+                    { name: "Aqualogica",   color: BRAND.aqualogica },
                   ].map((b, i) => (
                     <g key={b.name} transform={`translate(${40 + i * 100},150)`}>
                       <rect width="80" height="80" rx="10" fill={b.color} />
@@ -597,10 +606,10 @@ export default function Page() {
       <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
           <div className="grid md:grid-cols-2 gap-8 items-end">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
+            <h2 className="type-case-title text-foreground">
               A system that kept paying back.
             </h2>
-            <p className="text-[15px] text-neutral-400 leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
               The 8-week launch was just the start. The shared architecture
               made every subsequent brand addition and improvement faster than the one before.
             </p>
@@ -615,7 +624,7 @@ export default function Page() {
             ]}
           />
 
-          <div className="grid md:grid-cols-3 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
+          <div className="grid md:grid-cols-3 divide-x divide-border border-t border-b border-border">
             {[
               { num: "M.01", figure: "8 weeks",       label: "All three brand storefronts shipped within the seasonal sale deadline, with no post-launch critical bugs." },
               { num: "M.02", figure: "3 weeks",        label: "Aqualogica Glow onboarded onto the system, down from 8 weeks for the initial three brands." },
@@ -623,9 +632,9 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-neutral-500 tracking-[0.06em] mb-5">{m.num}</p>
-                  <p className="text-[clamp(28px,3vw,42px)] font-medium text-orange-400 tracking-tight leading-none mb-4">{m.figure}</p>
-                  <p className="text-[14px] text-neutral-400 leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground/60 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="text-[clamp(28px,3vw,42px)] font-medium text-accent tracking-tight leading-none mb-4">{m.figure}</p>
+                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
@@ -636,7 +645,7 @@ export default function Page() {
       {/* Timeline */}
       <CsSection id="how-we-got-there" label="How We Got There">
         <div className="space-y-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground leading-snug tracking-tight">
+          <h2 className="type-case-title text-foreground">
             Eight weeks, end to end.
           </h2>
           <CsTimeline items={TIMELINE} />
@@ -649,9 +658,9 @@ export default function Page() {
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             Scalable systems aren&apos;t built by adding features, they&apos;re built by ruthlessly
             separating{" "}
-            <em className="not-italic text-orange-500">what varies</em>{" "}
+            <em className="not-italic text-accent">what varies</em>{" "}
             from what doesn&apos;t, and making that separation{" "}
-            <em className="not-italic text-orange-500">explicit at the very start</em>.
+            <em className="not-italic text-accent">explicit at the very start</em>.
           </p>
         </blockquote>
       </CsSection>

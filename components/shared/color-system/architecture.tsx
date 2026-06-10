@@ -60,7 +60,7 @@ export function TokenTaxonomy() {
             {COMPONENT.map(c => (
               <button key={c.tok} onClick={() => setSel(c.tok)}
                 className={`text-left font-mono text-[11px] px-2.5 py-1.5 rounded-md transition-colors ${
-                  sel === c.tok ? "bg-orange-500/10 text-orange-600 dark:text-orange-400" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
+                  sel === c.tok ? "bg-orange-500/10 text-accent" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
                 {c.tok}
               </button>
             ))}
@@ -165,7 +165,7 @@ export function ColorVersioning() {
           <pre className="font-mono text-[11px] leading-relaxed bg-foreground/[0.04] border border-border rounded-lg p-3 overflow-x-auto">
 <span className="text-muted-foreground">{`/* tokens.css */`}</span>{"\n"}
 <span className="text-foreground/80">--color-action: </span>
-<span className="text-orange-600 dark:text-orange-400">{c.label}</span>
+<span className="text-accent">{c.label}</span>
 <span className="text-foreground/80">;</span></pre>
           <p className="text-[12px] text-muted-foreground leading-relaxed mt-4">
             Every component references the <code className="font-mono text-[11px]">--color-action</code> alias, never the raw stop.

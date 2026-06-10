@@ -43,7 +43,7 @@ export function CsTimeline({ items }: Props) {
               relative z-10
               mx-[11px] mt-1
               w-2.5 h-2.5 rounded-full
-              bg-orange-500/80
+              bg-accent/80
               ring-4 ring-background
               shrink-0
             " />

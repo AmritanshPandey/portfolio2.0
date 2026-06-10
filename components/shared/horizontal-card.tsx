@@ -31,7 +31,7 @@ export function HorizontalCard({
       href={href}
       data-cursor-card
       data-cursor-label={cursorLabel}
-      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <div className={clsx(
         "relative rounded-2xl overflow-hidden",
@@ -54,6 +54,7 @@ export function HorizontalCard({
               src={image}
               alt={title}
               fill
+              sizes="(max-width: 768px) 100vw, 38vw"
               className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/card:scale-[1.04]"
             />
             {/* Blend bottom into card on mobile */}

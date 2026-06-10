@@ -141,7 +141,7 @@ export function FigmaVariables() {
               <div key={s.name} className="flex items-center gap-2.5 text-[11px]">
                 <span className="w-4 h-4 rounded border border-border/60" style={{ background: mode === "light" ? s.lh : s.dh }} />
                 <span className="font-mono text-foreground/80 w-16">{s.name}</span>
-                <span className="font-mono text-orange-600 dark:text-orange-400">→ {mode === "light" ? s.light : s.dark}</span>
+                <span className="font-mono text-accent">→ {mode === "light" ? s.light : s.dark}</span>
                 <span className="text-muted-foreground/60 ml-auto text-[10px]">{s.scope}</span>
               </div>
             ))}

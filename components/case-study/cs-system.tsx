@@ -54,7 +54,7 @@ export function CsSystem({ shared, brandSpecific }: Props) {
               >
                 <span className={`
                   mt-[8px] w-1.5 h-1.5 rounded-full shrink-0
-                  ${accent ? "bg-orange-500/70" : "bg-neutral-600"}
+                  ${accent ? "bg-accent/70" : "bg-neutral-600"}
                 `} />
                 {item}
               </motion.li>

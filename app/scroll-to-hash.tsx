@@ -7,11 +7,9 @@ import { scrollToSection } from "@/lib/scroll"
 const HOME_SECTION_IDS = new Set([
   "hero",
   "work",
-  "systems",
-  "approach",
-  "thinking",
-  "insights",
   "explorations",
+  "approach",
+  "insights",
   "leadership",
   "advisory",
   "about",

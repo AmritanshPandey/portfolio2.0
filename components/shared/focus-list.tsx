@@ -31,12 +31,12 @@ export function FocusList({
           const Icon = item.icon
           return (
             <div key={index} className="group relative flex items-start gap-3">
-              <div className="absolute -inset-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-orange-500/[0.04] dark:bg-orange-400/[0.06]" />
+              <div className="absolute -inset-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-accent/[0.04] dark:bg-accent/[0.06]" />
               <AppIcon
                 icon={Icon}
                 size={iconSize}
                 stroke={2}
-                className="relative text-foreground/35 transition-colors duration-150 group-hover:text-orange-500"
+                className="relative text-foreground/35 transition-colors duration-150 group-hover:text-accent"
               />
               <p className={clsx(
                 "type-card-body relative transition-colors duration-150 group-hover:text-foreground",

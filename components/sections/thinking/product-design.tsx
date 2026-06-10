@@ -39,8 +39,7 @@ const STEPS = [
 export default function ProductDesignApproachSection() {
   return (
     <SectionSubgroup
-      label="Approach"
-      description="A practical sequence for turning ambiguity into a decision that can survive handoff."
+      
       variant="spacious"
     >
       <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
@@ -57,7 +56,7 @@ export default function ProductDesignApproachSection() {
           >
             <span className="
               type-caption font-mono font-semibold
-              text-orange-500/70 dark:text-orange-400/60
+              text-accent/65
               block mb-3
             ">
               {item.num}

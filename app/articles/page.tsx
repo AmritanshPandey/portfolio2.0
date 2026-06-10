@@ -12,7 +12,7 @@ export default function ArticlesPage() {
     <main className="min-h-screen bg-background">
       <section className="mx-auto max-w-6xl px-6 pb-12 pt-32 md:pb-16 md:pt-36">
         <div className="max-w-3xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-orange-500">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
             THINKING
           </p>
           <h1 className="mt-4 text-[38px] font-semibold leading-[1.08] text-foreground md:text-[58px]">
@@ -36,7 +36,7 @@ export default function ArticlesPage() {
       {featured ? (
         <section className="mx-auto max-w-6xl px-6 pb-14" aria-labelledby="featured-article">
           <div className="mb-5 flex items-center gap-4">
-            <div className="h-px w-6 bg-orange-500/70" />
+            <div className="h-px w-6 bg-accent/70" />
             <h2 id="featured-article" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Featured article
             </h2>
@@ -48,7 +48,7 @@ export default function ArticlesPage() {
 
       <section className="mx-auto max-w-6xl px-6 pb-28" aria-labelledby="article-archive">
         <div className="mb-6 flex items-center gap-4">
-          <div className="h-px w-6 bg-orange-500/70" />
+          <div className="h-px w-6 bg-accent/70" />
           <h2 id="article-archive" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             Article archive
           </h2>

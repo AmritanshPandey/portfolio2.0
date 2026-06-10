@@ -22,6 +22,7 @@
 
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-accent: var(--accent);
 
   --radius-lg: var(--radius);
 }
@@ -41,6 +42,8 @@
 
   --border: oklch(0.9 0 0);
   --ring: oklch(0.65 0.18 50);
+  /* Ember brand accent — orange-600 in light, orange-400 in dark */
+  --accent: oklch(0.646 0.222 41.116);
 
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -66,6 +69,7 @@
 
   --border: oklch(1 0 0 / 10%);
   --ring: oklch(0.7 0.18 50);
+  --accent: oklch(0.75 0.183 55.934);
 
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
@@ -209,6 +213,57 @@
   --fin-shadow-overlay: 0 26px 80px rgba(0, 0, 0, 0.56);
 }
 
+/* Fintech catalog — one typographic scale, applied everywhere.
+   Roles only (size / weight / spacing); color stays on --fin-text-* tokens. */
+.fintech-system .fin-h2 {
+  font-size: 22px;
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.fintech-system .fin-h3 {
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.006em;
+}
+.fintech-system .fin-eyebrow {
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.fintech-system .fin-lead {
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+.fintech-system .fin-body {
+  font-size: 13px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+.fintech-system .fin-meta {
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+.fintech-system .fin-mono {
+  font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+@media (min-width: 768px) {
+  .fintech-system .fin-h2 {
+    font-size: 26px;
+  }
+}
+
 /* ─────────────────────────
    BASE
 ───────────────────────── */
@@ -282,6 +337,23 @@
     font-weight: 600;
     letter-spacing: 0;
     text-wrap: balance;
+  }
+
+  /* Case-study section headings — matches the ad-hoc text-2xl/3xl pattern used
+     across all case study pages, now named for consistency. */
+  .type-case-title {
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .type-case-title {
+      font-size: 30px;
+      line-height: 1.25;
+    }
   }
 
   .type-card-title {

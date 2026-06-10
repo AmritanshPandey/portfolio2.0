@@ -14,7 +14,6 @@ import {
 } from "@tabler/icons-react"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { scrollToSection } from "@/lib/scroll"
-import { saveScroll } from "@/lib/scroll-manager"
 
 // ─────────────────────────
 // CONSTANTS
@@ -31,11 +30,9 @@ const NAV_LINKS = [
 const SECTION_IDS = [
   "hero",
   "work",
-  "systems",
-  "approach",
-  "thinking",
-  "insights",
   "explorations",
+  "approach",
+  "insights",
   "leadership",
   "advisory",
   "about",
@@ -43,7 +40,7 @@ const SECTION_IDS = [
 
 const DETAIL_ROUTES: Record<string, { section: string; label: string; href: string }> = {
   "/work":         { section: "work",        label: "Work",     href: "/#work" },
-  "/systems":      { section: "systems",     label: "Systems",  href: "/#systems" },
+  "/systems":      { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/explorations": { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/articles":     { section: "insights",    label: "Insights", href: "/#insights" },
 }
@@ -147,7 +144,6 @@ function NavItem({
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     setActiveImmediate(id)
-    saveScroll(pathname)
 
     if (id === "hero") {
       if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" })
@@ -293,7 +289,7 @@ export default function Navbar() {
       {isDetail && (
         <div
           ref={progressBarRef}
-          className="fixed top-0 left-0 right-0 h-[2px] z-[60] bg-orange-500/70 origin-left"
+          className="fixed top-0 left-0 right-0 h-[2px] z-[60] bg-accent/70 origin-left"
           style={{ transform: "scaleX(0)" }}
         />
       )}

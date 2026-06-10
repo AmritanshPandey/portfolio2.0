@@ -48,7 +48,7 @@ export default function Page() {
               "Battery and thermal management as UX concerns, not just engineering ones",
             ].map((item, i) => (
               <li key={i} className="flex gap-2.5">
-                <span className="text-orange-500 shrink-0 mt-0.5">·</span>
+                <span className="text-accent shrink-0 mt-0.5">·</span>
                 {item}
               </li>
             ))}

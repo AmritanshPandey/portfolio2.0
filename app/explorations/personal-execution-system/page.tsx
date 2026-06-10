@@ -146,6 +146,14 @@ export default function Page() {
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--background),transparent_42%,var(--background))]" />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-28 md:grid-cols-[minmax(0,1fr)_420px] md:px-6 md:pb-24 md:pt-32">
           <div className="flex max-w-3xl flex-col justify-center">
+            {/* Standardised breadcrumb kicker */}
+            <nav className="mb-6 flex flex-wrap items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              <span>Exploration</span>
+              <span className="h-1 w-1 rounded-full bg-accent/60" />
+              <span className="text-accent">Personal Tool</span>
+              <span className="h-1 w-1 rounded-full bg-border" />
+              <span>Self-built · Live</span>
+            </nav>
             <div className="mb-6 flex flex-wrap items-center gap-3">
               <PlanrMark />
               <span className="type-meta rounded-full border border-border/70 bg-card px-3 py-1 text-foreground/58">
@@ -169,14 +177,14 @@ export default function Page() {
                 href="https://planr-75429.web.app/"
                 target="_blank"
                 rel="noreferrer"
-                className="type-cta inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-foreground px-5 text-background transition-colors duration-500 hover:bg-foreground/82 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="type-cta inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-foreground px-5 text-background transition-colors duration-500 hover:bg-foreground/82 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 Open live app
                 <IconArrowUpRight size={16} stroke={2} />
               </a>
               <a
                 href="#system"
-                className="type-cta inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-card px-5 text-foreground/72 transition-colors duration-500 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="type-cta inline-flex min-h-11 items-center justify-center rounded-lg border border-border bg-card px-5 text-foreground/72 transition-colors duration-500 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 View system model
               </a>
@@ -193,13 +201,13 @@ export default function Page() {
 
       <section className="border-b border-border/60 bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.105_0_0)]">
         <div className="mx-auto max-w-6xl px-5 py-16 md:px-6 md:py-20">
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             {metrics.map((item) => (
-              <div key={item.label} className="bg-card p-6 md:p-7">
-                <p className="font-mono text-[30px] font-semibold leading-none tracking-normal text-foreground">
+              <div key={item.label} className="rounded-2xl border border-border/60 bg-card p-5">
+                <p className="text-[30px] font-semibold leading-none tracking-[-0.02em] tabular-nums text-foreground">
                   {item.value}
                 </p>
-                <p className="type-card-body mt-3 text-foreground/58">{item.label}</p>
+                <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{item.label}</p>
               </div>
             ))}
           </div>
@@ -401,13 +409,13 @@ function PlanrLiveFrame() {
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="type-card-title text-foreground">PlanR live app</h3>
-          <p className="type-card-body mt-1 text-foreground/58">393 x 852 viewport, matching iPhone 16.</p>
+          <p className="type-card-body mt-1 text-foreground/58"></p>
         </div>
         <a
           href="https://planr-75429.web.app/"
           target="_blank"
           rel="noreferrer"
-          className="type-cta inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-background px-3.5 text-foreground/68 transition-colors duration-500 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="type-cta inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-background px-3.5 text-foreground/68 transition-colors duration-500 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           Open app
           <IconArrowUpRight size={15} stroke={2} />

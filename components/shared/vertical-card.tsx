@@ -65,17 +65,23 @@ export function VerticalCard({
         href={href}
         data-cursor-card
         data-cursor-label={cursorLabel}
-        className="group/card flex items-center gap-4 py-3.5 rounded-xl px-3 -mx-3 hover:bg-foreground/[0.03] dark:hover:bg-white/[0.03] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="group/card flex items-center gap-4 py-3.5 rounded-xl px-3 -mx-3 hover:bg-foreground/[0.03] dark:hover:bg-white/[0.03] transition-colors duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {showImage && image && (
           <div className="relative w-16 h-11 rounded-lg overflow-hidden shrink-0 bg-muted">
-            <Image src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]" />
+            <Image
+              src={image}
+              alt={title}
+              fill
+              sizes="64px"
+              className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
+            />
           </div>
         )}
         <div className="flex-1 min-w-0">
           {category && <p className="type-meta mb-0.5">{category}</p>}
           <h3 className="text-[14px] font-semibold leading-[1.35] text-foreground line-clamp-1">{title}</h3>
-          {metric && <p className="type-caption mt-0.5 line-clamp-1 text-orange-500/60 dark:text-orange-400/50">{metric}</p>}
+          {metric && <p className="type-caption mt-0.5 line-clamp-1 text-accent/60">{metric}</p>}
         </div>
         <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-all duration-500 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
       </Link>
@@ -87,7 +93,7 @@ export function VerticalCard({
       href={href}
       data-cursor-card
       data-cursor-label={cursorLabel}
-      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -117,6 +123,7 @@ export function VerticalCard({
               src={image}
               alt={title}
               fill
+              sizes={isFeatured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
               className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/card:scale-[1.04]"
             />
 

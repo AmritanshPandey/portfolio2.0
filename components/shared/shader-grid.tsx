@@ -17,8 +17,10 @@ import { usePerformanceMode } from "@/hooks/use-performance-mode"
  * unavailable or under reduced motion. The canvas only paints (and the fallback
  * is hidden) once WebGL is confirmed active.
  *
- * Input: pointer + touch (mouse, trackpad, iPad / mobile Safari), normalized to
- * 0→1. Retina-safe — the canvas scales with DPR while the shader math stays
+ * Input: fine pointers only — mouse, trackpad, pen. Touch-primary devices
+ * (phones / tablets) keep the static dot grid; the pointer-driven glow reads as
+ * oversized, ember-tinted dots under a finger, so WebGL is skipped there.
+ * Retina-safe — the canvas scales with DPR while the shader math stays
  * resolution-independent.
  */
 
@@ -163,6 +165,11 @@ export function ShaderGrid({
 
     // ── Guard: honour reduced motion (keep the static CSS dot grid) ───────
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    // ── Guard: touch-primary devices (phones / tablets) keep the static grid.
+    // The pointer glow + drag reads as oversized, ember-tinted dots under a
+    // finger and muddies readability, so skip the interactive WebGL entirely.
+    if (window.matchMedia("(pointer: coarse)").matches) return
 
     const gl = (canvas.getContext("webgl", {
       alpha: true,
@@ -373,17 +380,14 @@ export function ShaderGrid({
       kick()
     }
 
-    const onPointerMove = (e: PointerEvent) => setTarget(e.clientX, e.clientY)
-    const onTouch = (e: TouchEvent) => {
-      const t = e.touches[0]
-      if (t) setTarget(t.clientX, t.clientY)
+    // Mouse / trackpad / pen only — never react to touch (it produces the
+    // oversized, ember-tinted "blob under the finger" the design is avoiding).
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return
+      setTarget(e.clientX, e.clientY)
     }
 
     window.addEventListener("pointermove", onPointerMove, { passive: true })
-    window.addEventListener("touchstart", onTouch, { passive: true })
-    window.addEventListener("touchmove", onTouch, { passive: true })
-    window.addEventListener("touchend", release, { passive: true })
-    window.addEventListener("touchcancel", release, { passive: true })
     window.addEventListener("blur", release)
     window.addEventListener("resize", scheduleResize, { passive: true })
     window.addEventListener("orientationchange", scheduleResize)
@@ -456,10 +460,6 @@ export function ShaderGrid({
       if (raf) cancelAnimationFrame(raf)
       if (resizeRaf) cancelAnimationFrame(resizeRaf)
       window.removeEventListener("pointermove", onPointerMove)
-      window.removeEventListener("touchstart", onTouch)
-      window.removeEventListener("touchmove", onTouch)
-      window.removeEventListener("touchend", release)
-      window.removeEventListener("touchcancel", release)
       window.removeEventListener("blur", release)
       window.removeEventListener("resize", scheduleResize)
       window.removeEventListener("orientationchange", scheduleResize)

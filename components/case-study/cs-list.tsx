@@ -7,10 +7,11 @@ type Variant = "bullet" | "numbered"
 interface Props {
   items: string[]
   variant?: Variant
+  /** Accepted for call-site compatibility; list colour now follows the theme. */
   dark?: boolean
 }
 
-export function CsList({ items, variant = "bullet", dark = false }: Props) {
+export function CsList({ items, variant = "bullet" }: Props) {
   return (
     <ul className="space-y-4">
       {items.map((item, i) => (
@@ -23,16 +24,16 @@ export function CsList({ items, variant = "bullet", dark = false }: Props) {
           className={`
             flex items-start gap-3.5
             text-sm md:text-[15px] leading-relaxed
-            ${dark ? "text-neutral-300" : "text-foreground/80"}
+            text-foreground/80
           `}
         >
           {variant === "bullet" && (
-            <span className="mt-[8px] w-1.5 h-1.5 rounded-full bg-orange-500/60 shrink-0" />
+            <span className="mt-[8px] w-1.5 h-1.5 rounded-full bg-accent/60 shrink-0" />
           )}
           {variant === "numbered" && (
             <span className="
               mt-0.5 text-[10px] font-bold tabular-nums
-              text-orange-500 dark:text-orange-400
+              text-accent
               w-5 shrink-0 text-right
             ">
               {String(i + 1).padStart(2, "0")}

@@ -3,6 +3,7 @@
 import { FocusList } from "@/components/shared/focus-list"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { SectionHeader } from "@/components/shared/section-header"
+import { ShaderGrid } from "@/components/shared/shader-grid"
 import {
   IconBike,
   IconPlane,
@@ -32,6 +33,17 @@ export default function AboutSection() {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-black/[0.07] dark:bg-white/[0.08]" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px z-[1] h-px bg-white/70 dark:bg-white/[0.03]" />
 
+      {/* ── BACKGROUND */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        {/* GRID, interactive dot-field (matches Section bg="grid" + hero) */}
+        <ShaderGrid spacing={18} dotSize={0.07} radius={0.13} drag={1.35} maxDrag={0.01} />
+
+        {/* GLOW, faint ambient bloom for depth behind the glass card. Ember stays
+            subtle (One Voice Rule); a neutral lift adds dimension, no 2nd accent. */}
+        <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(249,115,22,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(249,115,22,0.17),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(520px_320px_at_12%_6%,rgba(0,0,0,0.04),transparent_60%)] dark:bg-[radial-gradient(560px_340px_at_12%_6%,rgba(255,255,255,0.05),transparent_62%)]" />
+      </div>
+
       {/* ── CONTENT */}
       <div className="relative z-[1] max-w-7xl mx-auto px-6 py-16 md:py-20">
 
@@ -52,8 +64,13 @@ export default function AboutSection() {
             <PhotoCarousel />
           </div>
 
-          {/* RIGHT, bio */}
-          <div className="space-y-8 rounded-2xl border border-border bg-card p-6 md:p-8">
+          {/* RIGHT, bio (frosted glass over the grid + glow) */}
+          <div className="space-y-8 rounded-2xl p-6 md:p-8
+            border border-white/55 dark:border-white/10
+            bg-white/45 dark:bg-white/[0.045]
+            backdrop-blur-xl backdrop-saturate-150
+            ring-1 ring-inset ring-white/40 dark:ring-white/[0.05]
+            shadow-[0_12px_44px_-18px_rgba(0,0,0,0.28)] dark:shadow-[0_18px_54px_-22px_rgba(0,0,0,0.7)]">
 
             {/* TEXT */}
             <div className="space-y-5">

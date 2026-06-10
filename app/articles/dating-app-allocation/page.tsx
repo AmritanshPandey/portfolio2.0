@@ -1,10 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { motion } from "framer-motion"
-import { IconArrowUpRight } from "@tabler/icons-react"
 import { articleItems } from "@/lib/data"
-import { ArticleCard, ArticleHeader } from "@/components/articles/article-ui"
+import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import {
   LineageStrip,
   DiscoveryVsAllocation,
@@ -35,10 +33,10 @@ function FadeIn({ children, delay = 0, className = "" }: {
   )
 }
 
-function Section({ children, muted = false }: { children: React.ReactNode; muted?: boolean }) {
+function Section({ children }: { children: React.ReactNode; muted?: boolean }) {
   return (
-    <section className={`border-b border-border/40 ${muted ? "bg-foreground/[0.015] dark:bg-white/[0.015]" : ""}`}>
-      <div className="max-w-3xl mx-auto px-6 py-14 md:py-16">{children}</div>
+    <section className="border-b border-border/40 bg-background">
+      <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">{children}</div>
     </section>
   )
 }
@@ -53,23 +51,23 @@ function Eyebrow({ num, tag }: { num: string; tag: string }) {
   )
 }
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-[1.55rem] md:text-[1.8rem] font-semibold tracking-tight leading-[1.15] text-foreground mb-4">{children}</h2>
+  return <h2 className="max-w-3xl text-[1.55rem] md:text-[1.8rem] font-semibold leading-[1.15] text-foreground mb-4">{children}</h2>
 }
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="text-[16px] md:text-[17px] leading-[1.8] text-foreground/80 mb-4">{children}</p>
+  return <p className="max-w-3xl text-[16px] md:text-[17px] leading-[1.8] text-foreground/80 mb-4">{children}</p>
 }
 function Quote({ children }: { children: React.ReactNode }) {
   return (
-    <blockquote className="my-9 relative pl-6">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-full bg-orange-500" />
+    <blockquote className="my-9 relative max-w-3xl pl-6">
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-full bg-accent" />
       <p className="text-[1.2rem] md:text-[1.3rem] font-medium leading-[1.6] text-foreground/85">{children}</p>
     </blockquote>
   )
 }
 function Callout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="my-8 rounded-xl border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6 relative overflow-hidden">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500/60 rounded-l-xl" />
+    <div className="my-8 max-w-3xl rounded-lg border border-accent/20 bg-accent/[0.04] p-5 md:p-6 relative overflow-hidden">
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent/60 rounded-l-xl" />
       <p className="text-[14px] md:text-[15px] leading-[1.7] text-foreground/80 pl-2">{children}</p>
     </div>
   )
@@ -95,43 +93,18 @@ function Takeaways({ items }: { items: string[] }) {
   return (
     <div className="my-4 rounded-2xl border border-border/50 bg-foreground/[0.02] dark:bg-white/[0.02] overflow-hidden">
       <div className="px-6 py-4 border-b border-border/50 flex items-center gap-3">
-        <div className="w-4 h-[2px] bg-orange-500 rounded-full" />
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-orange-500">Key Takeaways</p>
+        <div className="w-4 h-[2px] bg-accent rounded-full" />
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Key Takeaways</p>
       </div>
       <div className="px-6 py-5 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-4 items-start">
-            <span className="text-[11px] font-mono font-bold text-orange-500/70 mt-1 w-5 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-[11px] font-mono font-bold text-accent/70 mt-1 w-5 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
             <p className="text-[14px] md:text-[15px] leading-[1.65] text-foreground/75">{item}</p>
           </div>
         ))}
       </div>
     </div>
-  )
-}
-
-function Related() {
-  const related = articleItems.filter(a => a.href !== HREF).slice(0, 3)
-  return (
-    <section className="border-t border-border/45 bg-foreground/[0.015] dark:bg-white/[0.015]" aria-labelledby="more-articles">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="mb-7 flex items-center gap-4">
-          <div className="h-px w-6 bg-orange-500/70" />
-          <h2 id="more-articles" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">More articles</h2>
-          <div className="h-px flex-1 bg-border/60" />
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map(a => (
-            <ArticleCard key={a.href} article={a} />
-          ))}
-        </div>
-        <div className="mt-10 text-center">
-          <Link href="/articles" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-            All articles <IconArrowUpRight size={14} />
-          </Link>
-        </div>
-      </div>
-    </section>
   )
 }
 
@@ -271,7 +244,7 @@ export default function Page() {
         )}
       </Section>
 
-      <Related />
+      <RelatedArticles currentHref={HREF} />
     </main>
   )
 }
