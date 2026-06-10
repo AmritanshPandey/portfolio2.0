@@ -1,14 +1,46 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useLayoutEffect } from "react"
 import { usePathname } from "next/navigation"
 import { scrollToSection } from "@/lib/scroll"
-import { restoreScroll } from "@/lib/scroll-manager"
 
-const HOME_SECTION_IDS = new Set(["hero", "work", "approach", "exploration", "impact", "about"])
+const HOME_SECTION_IDS = new Set([
+  "hero",
+  "work",
+  "systems",
+  "approach",
+  "thinking",
+  "insights",
+  "explorations",
+  "leadership",
+  "advisory",
+  "about",
+])
+
+function resetPageScroll() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+}
 
 export function ScrollToHash() {
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (!("scrollRestoration" in window.history)) return
+
+    const previous = window.history.scrollRestoration
+    window.history.scrollRestoration = "manual"
+
+    return () => {
+      window.history.scrollRestoration = previous
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    if (window.location.hash) return
+    resetPageScroll()
+  }, [pathname])
 
   useEffect(() => {
     const hash = window.location.hash
@@ -66,13 +98,11 @@ export function ScrollToHash() {
         }
       }
 
-      // 2. restore fallback
+      // 2. Default page navigation should always start from the top.
       if (!hash) {
-        const restored = restoreScroll(pathname)
-        if (restored) {
-          setTimeout(updateCursorZone, 120)
-          return
-        }
+        resetPageScroll()
+        setTimeout(updateCursorZone, 120)
+        return
       }
 
       // 3. retry until DOM ready

@@ -91,10 +91,10 @@ function Hero() {
           transition={{ duration: 0.5, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           className="text-[17px] leading-relaxed text-muted-foreground max-w-2xl"
         >
-          Decoupled core UX from brand and visual layers across PartnerBank  - 
-          Mastercard&apos;s white-label digital banking platform, turning a rigid
-          template system into a configurable architecture that materially
-          improved demo turnaround during high-stakes RFP cycles.
+          Decoupled core UX from brand and visual layers across PartnerBank,
+          Mastercard&apos;s white-label digital banking platform. A rigid template
+          system became a configurable architecture for faster demo turnaround
+          during high-stakes RFP cycles.
         </motion.p>
 
       </div>
@@ -230,7 +230,7 @@ export default function Page() {
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A four-layer architecture.
             </h2>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-[15px] text-white/55 leading-relaxed">
               Each layer has one job. Brand changes never touch UX logic; demo configuration
               never breaks core components. Decoupling is what made the system fast.
             </p>
@@ -294,37 +294,37 @@ export default function Page() {
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
                 {/* Assembled screen */}
                 <g transform="translate(40,40)">
-                  <rect width="140" height="220" rx="10" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
-                  <rect x="14" y="14" width="112" height="20" rx="3" fill="hsl(var(--muted))" />
+                  <rect width="140" height="220" rx="10" fill="var(--surface-1)" stroke="var(--border)" />
+                  <rect x="14" y="14" width="112" height="20" rx="3" fill="var(--surface-2)" />
                   <rect x="14" y="46" width="112" height="56" rx="6" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
-                  <rect x="14" y="114" width="112" height="12" rx="3" fill="hsl(var(--muted))" />
-                  <rect x="14" y="132" width="112" height="12" rx="3" fill="hsl(var(--muted))" />
-                  <rect x="14" y="150" width="112" height="12" rx="3" fill="hsl(var(--muted))" />
-                  <rect x="14" y="178" width="112" height="28" rx="6" fill="hsl(var(--foreground))" />
-                  <text x="70" y="198" textAnchor="middle" fontSize="9" fill="hsl(var(--background))" fontWeight="500" letterSpacing="0.06em">CTA</text>
+                  <rect x="14" y="114" width="112" height="12" rx="3" fill="var(--surface-2)" />
+                  <rect x="14" y="132" width="112" height="12" rx="3" fill="var(--surface-2)" />
+                  <rect x="14" y="150" width="112" height="12" rx="3" fill="var(--surface-2)" />
+                  <rect x="14" y="178" width="112" height="28" rx="6" fill="var(--foreground)" />
+                  <text x="70" y="198" textAnchor="middle" fontSize="9" fill="var(--background)" fontWeight="500" letterSpacing="0.06em">CTA</text>
                 </g>
                 {/* Arrow */}
-                <g stroke="hsl(var(--muted-foreground))" fill="none" strokeWidth="1" opacity="0.5">
+                <g stroke="var(--text-muted)" fill="none" strokeWidth="1" opacity="0.5">
                   <path d="M 200 150 L 240 150" />
                   <path d="M 234 145 L 240 150 L 234 155" />
                 </g>
                 {/* Components */}
-                <g transform="translate(252,30)" fill="hsl(var(--muted-foreground))" fontSize="10" letterSpacing="0.06em">
-                  <rect width="120" height="30" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))" strokeWidth="1" />
+                <g transform="translate(252,30)" fill="var(--text-muted)" fontSize="10" letterSpacing="0.06em">
+                  <rect width="120" height="30" rx="6" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
                   <text x="14" y="19">Header</text>
                   <g transform="translate(0,44)">
-                    <rect width="120" height="44" rx="6" fill="hsl(var(--card))" stroke="rgb(249,115,22)" strokeWidth="1" />
+                    <rect width="120" height="44" rx="6" fill="var(--surface-1)" stroke="rgb(249,115,22)" strokeWidth="1" />
                     <text x="14" y="20" fill="rgb(249,115,22)" fontWeight="500">Account Card</text>
                     <text x="14" y="34" fontSize="9" opacity="0.5">variant: balance</text>
                   </g>
                   <g transform="translate(0,102)">
-                    <rect width="120" height="60" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))" strokeWidth="1" />
+                    <rect width="120" height="60" rx="6" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
                     <text x="14" y="19">Transaction List</text>
                     <text x="14" y="34" fontSize="9" opacity="0.5">variant: compact</text>
                     <text x="14" y="48" fontSize="9" opacity="0.5">rows: 5</text>
                   </g>
                   <g transform="translate(0,176)">
-                    <rect width="120" height="30" rx="6" fill="hsl(var(--card))" stroke="hsl(var(--border))" strokeWidth="1" />
+                    <rect width="120" height="30" rx="6" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
                     <text x="14" y="19">CTA Block</text>
                   </g>
                 </g>
@@ -344,7 +344,7 @@ export default function Page() {
             reverse
             visual={
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <text x="20" y="32" fontFamily="monospace" fontSize="10" fill="hsl(var(--muted-foreground))" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
+                <text x="20" y="32" fontFamily="monospace" fontSize="10" fill="var(--text-muted)" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
                 {[
                   { x: 20,  color: "rgb(249,115,22)", label: "brand-a" },
                   { x: 145, color: "rgb(212,162,76)",  label: "brand-b" },
@@ -355,16 +355,16 @@ export default function Page() {
                     <rect x="14" y="14" width="50" height="6" rx="3" fill="rgba(255,255,255,0.4)" />
                     <rect x="14" y="28" width="80" height="8" rx="3" fill="white" />
                     <rect x="14" y="44" width="60" height="6" rx="3" fill="rgba(255,255,255,0.6)" />
-                    <text x="55" y="166" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))">{b.label}</text>
+                    <text x="55" y="166" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="var(--text-muted)">{b.label}</text>
                   </g>
                 ))}
                 <g transform="translate(20,220)">
-                  <rect width="360" height="56" rx="10" fill="hsl(var(--card))" stroke="hsl(var(--border))" strokeWidth="1" />
-                  <text x="20" y="22" fontFamily="monospace" fontSize="11" fill="hsl(var(--muted-foreground))">color.primary:</text>
+                  <rect width="360" height="56" rx="10" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
+                  <text x="20" y="22" fontFamily="monospace" fontSize="11" fill="var(--text-muted)">color.primary:</text>
                   <circle cx="138" cy="18" r="6" fill="rgb(249,115,22)" />
-                  <text x="150" y="22" fontFamily="monospace" fontSize="11" fill="hsl(var(--foreground))">var(--brand)</text>
-                  <text x="20" y="42" fontFamily="monospace" fontSize="11" fill="hsl(var(--muted-foreground))">typography.head:</text>
-                  <text x="150" y="42" fontFamily="monospace" fontSize="11" fill="hsl(var(--foreground))">var(--type-display)</text>
+                  <text x="150" y="22" fontFamily="monospace" fontSize="11" fill="var(--foreground)">var(--brand)</text>
+                  <text x="20" y="42" fontFamily="monospace" fontSize="11" fill="var(--text-muted)">typography.head:</text>
+                  <text x="150" y="42" fontFamily="monospace" fontSize="11" fill="var(--foreground)">var(--type-display)</text>
                 </g>
               </svg>
             }
@@ -381,7 +381,7 @@ export default function Page() {
             ]}
             visual={
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <g fontSize="11" fontWeight="500" fill="hsl(var(--foreground))">
+                <g fontSize="11" fontWeight="500" fill="var(--foreground)">
                   {[
                     { x: 20,  y: 60, num: "01", label: "RFP Received", accent: false },
                     { x: 154, y: 60, num: "02", label: "Brand Config", accent: true },
@@ -390,13 +390,13 @@ export default function Page() {
                     { x: 220, y: 170, num: "05", label: "Sales Pitch", accent: false },
                   ].map(s => (
                     <g key={s.num} transform={`translate(${s.x},${s.y})`}>
-                      <rect width="92" height="48" rx="8" fill="hsl(var(--card))" stroke={s.accent ? "rgb(249,115,22)" : "hsl(var(--border))"} strokeWidth="1" />
-                      <text x="14" y="20" fontSize="9" letterSpacing="2" fill={s.accent ? "rgb(249,115,22)" : "hsl(var(--muted-foreground))"}>{s.num}</text>
-                      <text x="14" y="36" fill={s.accent ? "rgb(249,115,22)" : "hsl(var(--foreground))"}>{s.label}</text>
+                      <rect width="92" height="48" rx="8" fill="var(--surface-1)" stroke={s.accent ? "rgb(249,115,22)" : "var(--border)"} strokeWidth="1" />
+                      <text x="14" y="20" fontSize="9" letterSpacing="2" fill={s.accent ? "rgb(249,115,22)" : "var(--text-muted)"}>{s.num}</text>
+                      <text x="14" y="36" fill={s.accent ? "rgb(249,115,22)" : "var(--foreground)"}>{s.label}</text>
                     </g>
                   ))}
                 </g>
-                <g stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.4">
+                <g stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.4">
                   <path d="M 112 84 L 154 84" />
                   <path d="M 246 84 L 288 84" />
                   <path d="M 334 108 C 334 140 180 140 180 168" />
@@ -478,22 +478,22 @@ export default function Page() {
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   <g transform="translate(120,20)">
-                    <rect width="120" height="52" rx="10" fill="hsl(var(--muted))" stroke="hsl(var(--border))" strokeDasharray="3 4" />
-                    <text x="60" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.06em">SINGLE TEMPLATE</text>
-                    <text x="60" y="38" textAnchor="middle" fontSize="11" fontWeight="500" fill="hsl(var(--foreground))">Static UI</text>
+                    <rect width="120" height="52" rx="10" fill="var(--surface-2)" stroke="var(--border)" strokeDasharray="3 4" />
+                    <text x="60" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.06em">SINGLE TEMPLATE</text>
+                    <text x="60" y="38" textAnchor="middle" fontSize="11" fontWeight="500" fill="var(--foreground)">Static UI</text>
                   </g>
-                  <g stroke="hsl(var(--border))" fill="none">
+                  <g stroke="var(--border)" fill="none">
                     <path d="M 180 72 C 180 110 80 110 80 150" />
                     <path d="M 180 72 L 180 150" />
                     <path d="M 180 72 C 180 110 280 110 280 150" />
                   </g>
                   {[40, 140, 240].map((x, i) => (
                     <g key={x} transform={`translate(${x},150)`}>
-                      <rect width="80" height="90" rx="10" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
-                      <rect x="10" y="12" width="60" height="5" rx="3" fill="hsl(var(--muted))" />
-                      <rect x="10" y="23" width="50" height="5" rx="3" fill="hsl(var(--muted))" />
-                      <text x="40" y="72" textAnchor="middle" fontSize="8" fill="hsl(var(--muted-foreground))" letterSpacing="0.06em">BANK {i + 1}</text>
-                      <text x="40" y="83" textAnchor="middle" fontFamily="monospace" fontSize="7" fill="hsl(var(--muted-foreground))">manual edits</text>
+                      <rect width="80" height="90" rx="10" fill="var(--surface-1)" stroke="var(--border)" />
+                      <rect x="10" y="12" width="60" height="5" rx="3" fill="var(--surface-2)" />
+                      <rect x="10" y="23" width="50" height="5" rx="3" fill="var(--surface-2)" />
+                      <text x="40" y="72" textAnchor="middle" fontSize="8" fill="var(--text-muted)" letterSpacing="0.06em">BANK {i + 1}</text>
+                      <text x="40" y="83" textAnchor="middle" fontFamily="monospace" fontSize="7" fill="var(--text-muted)">manual edits</text>
                     </g>
                   ))}
                 </svg>
@@ -507,7 +507,7 @@ export default function Page() {
                   <g transform="translate(110,20)">
                     <rect width="140" height="52" rx="10" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
                     <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.06em">CONFIG ENGINE</text>
-                    <text x="70" y="38" textAnchor="middle" fontSize="11" fontWeight="500" fill="hsl(var(--foreground))">Tokens + Components</text>
+                    <text x="70" y="38" textAnchor="middle" fontSize="11" fontWeight="500" fill="var(--foreground)">Tokens + Components</text>
                   </g>
                   <g stroke="rgb(249,115,22)" fill="none" opacity="0.7">
                     <path d="M 180 72 C 180 110 80 110 80 150" />
@@ -541,7 +541,7 @@ export default function Page() {
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A system built for sales velocity.
             </h2>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-[15px] text-white/55 leading-relaxed">
               Enterprise deals close cross-functionally, but the system&apos;s new flexibility materially
               strengthened Mastercard&apos;s competitive positioning in high-value RFP cycles.
             </p>
@@ -559,14 +559,14 @@ export default function Page() {
           <div className="grid md:grid-cols-3 divide-x divide-white/[0.08] border-t border-b border-white/[0.08]">
             {[
               { num: "M.01", figure: "~70%", label: "Reduction in per-RFP design effort, measured against the prior template workflow." },
-              { num: "M.02", figure: "Template → Config", label: "Shifted the platform from a rigid template to a scalable configuration model." },
+              { num: "M.02", figure: "Template → Config", label: "Shifted the platform from a rigid template to a reusable configuration model." },
               { num: "M.03", figure: "Faster Sales Loop", label: "Materially improved demo responsiveness during high-stakes enterprise negotiations." },
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-white/40 tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium text-white tracking-tight leading-none mb-4 text-orange-400">{m.figure}</p>
-                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="text-[14px] text-white/55 leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}

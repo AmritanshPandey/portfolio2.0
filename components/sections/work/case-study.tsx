@@ -4,10 +4,10 @@ import { workItems } from "@/lib/data"
 
 export default function WorkSection() {
   // Order is controlled by SEQUENCE in lib/data/work.ts.
-  // Top 2 render large (first row); the other 3 render smaller (second row).
+  // Featured cards render large; supporting cards render compact below.
   const sorted = [...workItems].sort((a, b) => a.order - b.order)
-  const large  = sorted.slice(0, 2)
-  const small  = sorted.slice(2)
+  const large  = sorted.filter((item) => item.featured)
+  const small  = sorted.filter((item) => !item.featured)
 
   return (
     <SectionSubgroup
@@ -46,7 +46,7 @@ export default function WorkSection() {
                 image={p.image}
                 title={p.title}
                 category={p.metadata ?? p.category}
-                description={p.metric}
+                description={p.description}
                 tags={undefined}
                 ctaLabel="View case study"
                 index={p.order}

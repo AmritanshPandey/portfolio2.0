@@ -45,7 +45,7 @@ export function CsDecision({ title, problem, decision, tradeoff, impact, index =
       `}>
         {parts.map(({ label, value, accent }) => (
           <div key={label} className="px-6 py-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-600 mb-2.5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500 mb-2.5">
               {label}
             </p>
             <p className={`text-sm leading-relaxed ${accent ? "text-white" : "text-neutral-400"}`}>

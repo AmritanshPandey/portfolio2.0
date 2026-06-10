@@ -9,14 +9,14 @@ export default function AdvisorySection() {
   return (
     <SectionSubgroup
       label="Advisory"
-      description="Trusted by startups and institutions to shape product direction and mentor designers."
+      description="Product guidance, UX critique, portfolio mentoring, and early roadmap support for founders, institutions, and designers."
       variant="spacious"
     >
       <div className="space-y-14">
 
         {/* PRODUCT ADVISORY */}
         <div className="space-y-5">
-          <p className="text-[12px] tracking-[0.18em] uppercase text-foreground/60">
+          <p className="type-meta">
             Product Advisory
           </p>
           <div className="space-y-2">
@@ -28,7 +28,7 @@ export default function AdvisorySection() {
 
         {/* MENTORSHIP */}
         <div className="space-y-5 pt-6 border-t border-border/60">
-          <p className="text-[12px] tracking-[0.18em] uppercase text-foreground/60">
+          <p className="type-meta">
             Mentorship
           </p>
 
@@ -59,8 +59,7 @@ export default function AdvisorySection() {
                   rel="noopener noreferrer"
                   className="
                     group flex items-start gap-3 py-2
-                    transition-all duration-300
-                    hover:translate-x-[4px]
+                    transition-colors duration-300
                   "
                 >
                   {/* DOT */}
@@ -101,7 +100,7 @@ export default function AdvisorySection() {
 
         {/* TEACHING */}
         <div className="space-y-5 pt-6 border-t border-border/60">
-          <p className="text-[12px] tracking-[0.18em] uppercase text-foreground/60">
+          <p className="type-meta">
             Teaching & Workshops
           </p>
           <div className="space-y-2">

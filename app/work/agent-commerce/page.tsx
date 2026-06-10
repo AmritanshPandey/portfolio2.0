@@ -303,7 +303,7 @@ export default function Page() {
               },
             ].map((layer, i) => (
               <FadeIn key={i} delay={i * 0.08}>
-                <div className={`p-6 border border-white/[0.07] rounded-2xl border-l-[3px] ${layer.accent} ${layer.orange ? "bg-orange-500/[0.04]" : "bg-white/[0.02]"}`}>
+                <div className={`p-6 border border-white/[0.07] rounded-2xl ${layer.orange ? "bg-orange-500/[0.04]" : "bg-white/[0.02]"}`}>
                   <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-neutral-500 mb-2">{layer.num}</p>
                   <p className={`text-[17px] font-medium mb-3 leading-snug ${layer.orange ? "text-orange-400" : "text-white"}`}>{layer.title}</p>
                   <p className={`text-[13px] leading-relaxed ${layer.orange ? "text-orange-500/70" : "text-neutral-400"}`}>{layer.body}</p>
@@ -371,7 +371,7 @@ export default function Page() {
           </div>
 
           <FadeIn>
-            <div className="p-5 bg-card border border-l-[3px] border-border rounded-2xl">
+            <div className="p-5 bg-card border border-border rounded-2xl">
               <p className="text-[13px] text-muted-foreground leading-relaxed">
                 <strong className="text-foreground font-medium">The findings are confidential.</strong>{" "}
                 The study showed clear regional differences in how people respond to trust signals in

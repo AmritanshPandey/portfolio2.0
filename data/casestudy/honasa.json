@@ -19,7 +19,7 @@
   },
 
   "problem": {
-    "statement": "How might we create a scalable commerce experience across brands while maintaining identity and speed of execution?"
+    "statement": "How might we create one commerce foundation across brands while preserving identity and speed of execution?"
   },
 
   "constraints": [
@@ -90,5 +90,5 @@
     "Some brand-specific nuances deferred"
   ],
 
-  "takeaway": "I build scalable product systems by balancing speed, constraints, and long-term growth."
+  "takeaway": "Durable product systems come from balancing speed, constraints, and long-term ownership."
 }

@@ -138,7 +138,7 @@ export default function Hero() {
             >
               <div className="relative aspect-[2/3] overflow-hidden">
                 <Image
-                  src="/assets/images/pic.png"
+                  src="/assets/images/pic.jpg"
                   alt="Amritansh Pandey"
                   fill
                   priority

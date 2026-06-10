@@ -8,7 +8,7 @@ export default function InsightsSection() {
   return (
     <SectionSubgroup
       label="Insights"
-      description="Writing on product, systems, and decision-making."
+      description="Writing that makes the reasoning explicit: incentives, systems, trust, risk, and product tradeoffs."
       variant="spacious"
     >
       <section data-cursor-zone="thinking">
@@ -21,6 +21,7 @@ export default function InsightsSection() {
               href={article.href}
               date={article.date}
               category={article.category}
+              readTime={article.readTime}
             />
           ))}
         </div>

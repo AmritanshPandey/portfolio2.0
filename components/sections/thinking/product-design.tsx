@@ -3,21 +3,36 @@
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
 import { motion } from "framer-motion"
 
-const QUESTIONS = [
+const STEPS = [
   {
     num: "01",
-    q: "What's the forcing function?",
-    body: "What's actually making this problem urgent right now, and does that forcing function last?",
+    q: "Frame the constraint",
+    body: "Name what is fixed: time, risk, legacy systems, brand rules, compliance, stakeholders, or engineering capacity.",
   },
   {
     num: "02",
-    q: "What would have to be true for the opposite approach to be right?",
-    body: "The strongest test of any decision is whether you can honestly argue the other side.",
+    q: "Map the system",
+    body: "Find the shared flows, repeated decisions, handoff points, and edge cases before designing the visible surface.",
   },
   {
     num: "03",
-    q: "Who isn't in the room whose constraints will break this later?",
-    body: "Engineering, legal, sales, the user in a low-connectivity environment. Find them before you commit.",
+    q: "Choose the smallest useful solution",
+    body: "Cut the first version down to the decision that needs proof, then protect the path for what repeats later.",
+  },
+  {
+    num: "04",
+    q: "Prototype the decision",
+    body: "Use Figma, code, content models, or a working demo depending on what risk needs to be tested.",
+  },
+  {
+    num: "05",
+    q: "Align teams",
+    body: "Turn the decision into a shared artifact: a flow, rule, token model, prototype, or implementation note.",
+  },
+  {
+    num: "06",
+    q: "Scale what repeats",
+    body: "Promote repeated choices into components, templates, documentation, and governance only after the pattern proves useful.",
   },
 ]
 
@@ -25,11 +40,11 @@ export default function ProductDesignApproachSection() {
   return (
     <SectionSubgroup
       label="Approach"
-      description="How I think before I decide."
+      description="A practical sequence for turning ambiguity into a decision that can survive handoff."
       variant="spacious"
     >
-      <div className="flex flex-col gap-0 rounded-2xl border border-border overflow-hidden">
-        {QUESTIONS.map((item, i) => (
+      <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border/60 sm:grid-cols-2 lg:grid-cols-3">
+        {STEPS.map((item, i) => (
           <motion.div
             key={item.num}
             initial={{ opacity: 0, y: 16 }}
@@ -37,11 +52,9 @@ export default function ProductDesignApproachSection() {
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.45, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className={`
-              card-surface group px-7 py-7 bg-card
-              ${i < QUESTIONS.length - 1 ? "border-b border-border" : ""}
+              card-surface group bg-card px-6 py-7 md:px-7
             `}
           >
-            {/* Number */}
             <span className="
               type-caption font-mono font-semibold
               text-orange-500/70 dark:text-orange-400/60
@@ -50,12 +63,10 @@ export default function ProductDesignApproachSection() {
               {item.num}
             </span>
 
-            {/* Question */}
             <p className="type-card-title mb-3 text-foreground">
               {item.q}
             </p>
 
-            {/* Answer */}
             <p className="type-card-body max-w-xl text-muted-foreground">
               {item.body}
             </p>

@@ -3,14 +3,14 @@ import type { SystemItem } from "@/lib/types/content"
 export const systemItems: SystemItem[] = [
   {
     category:    "Design System",
-    title:       "Fintech Design System UI Kit",
-    description: "A reusable finance UI kit for dashboards, payments, wallets, cards, transactions, onboarding, and account management.",
+    title:       "Fintech Interface System for Risk, Money Movement, and AI",
+    description: "A reusable foundation for finance products: risk states, disclosure slots, payment patterns, AI recommendation rules, and light/dark token behavior.",
     image:       "/assets/images/work/fintech-ai-system.jpg",
     href:        "/systems/fintech-ai-interface",
     ctaLabel:    "Explore system",
     accent:      "linear-gradient(135deg, #050806 0%, #0b120d 58%, #00c853 100%)",
-    tags:        ["Fintech", "UI Kit", "Mobile Wallet", "Payments", "Financial UX"],
-    problem:     "Finance products need dense screens, clear money movement, and careful handling of risk. This system turns those needs into reusable foundations, components, and UX patterns for web and mobile teams.",
+    tags:        ["Risk States", "AI Explainability", "Payments", "Tokens", "Handoff"],
+    problem:     "Finance products need dense screens, clear money movement, and careful handling of risk. This system turns those needs into reusable foundations, component rules, and UX patterns for web and mobile teams.",
     stats: [
       { value: "64+", label: "component specimens" },
       { value: "16",  label: "financial color roles" },
@@ -23,7 +23,7 @@ export const systemItems: SystemItem[] = [
         body: "Most design systems are built for low-risk consumer products. In fintech, a confusing interaction can mean a mistaken transfer, a missed disclosure, or a user following AI advice they did not understand.\n\nTailwind, Material, and Radix do not define patterns for this level of risk. There is no default component for an irreversible action, AI confidence, or regulatory disclosure. Those patterns had to be defined, tested, and documented as part of the kit.",
       },
       {
-        body: "In high-stakes interfaces, the system's job is not only speed. It should prevent mistakes that are expensive to find in production. Risk, confidence, and compliance patterns need to be predictable by design.",
+        body: "In high-stakes interfaces, the system's job is not only speed. It should prevent mistakes that are expensive to find in production. Risk, confidence, and compliance patterns need to be predictable before a product team starts designing a flow.",
         type: "quote",
       },
       {

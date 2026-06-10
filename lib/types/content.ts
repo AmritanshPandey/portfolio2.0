@@ -29,6 +29,10 @@ export interface WorkItem {
 export interface ExplorationItem {
   title: string
   description: string
+  question?: string
+  tested?: string
+  built?: string
+  learned?: string
   image: string
   href: string
   tags: string[]

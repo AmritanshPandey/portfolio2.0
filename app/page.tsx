@@ -7,7 +7,7 @@ import ProductDesignApproachSection from "@/components/sections/thinking/product
 import ProductThinkingSection from "@/components/sections/thinking/product-thinking"
 import CaseStudy from "@/components/sections/work/case-study"
 import ExplorationsSection from "@/components/sections/work/exploration"
-import { FancyDivider } from "@/components/shared/divider"
+import SystemsSection from "@/components/sections/work/system"
 import { Section } from "@/components/shared/section"
 
 export default function Page() {
@@ -22,53 +22,92 @@ export default function Page() {
         id="work"
         bg="default"
         title="Selected Work"
-        description="Case studies across fintech, commerce, and early-stage products. Each one traces the constraint, the decision it forced, and the outcome that followed."
-        transition="The same systems thinking shows up in personal experiments and product builds."
+        description="Case studies across AI payments, enterprise demo systems, commerce infrastructure, and early-stage product work. Each one is framed around the constraint, the decision, and what changed after the work shipped."
+        transition="The strongest work was not only screen-level. It created reusable foundations teams could keep using."
       >
         <CaseStudy />
+      </Section>
+
+      {/* ───────────────── SYSTEMS ───────────────── */}
+      <Section
+        id="systems"
+        bg="dark"
+        title="Systems"
+        description="Reusable foundations for product logic, theming, governance, and handoff. The goal is to reduce repeated decisions without flattening context."
+        transition="Those system choices shape how I approach new work."
+        transitionVariant="highlight"
+      >
+        <SystemsSection />
       </Section>
 
       {/* ───────────────── APPROACH ───────────────── */}
       <Section
         id="approach"
         bg="muted"
-        title="How I Think"
-        transition="Thinking feeds into side projects, where ideas get tested outside of client constraints."
+        title="Approach"
+        description="A practical operating model for moving from ambiguity to a decision teams can build from."
+        transition="The same approach turns into a sharper set of decision frameworks."
       >
         <ProductDesignApproachSection />
-        <FancyDivider variant="gradient" className="my-8 md:my-12" />
+      </Section>
+
+      {/* ───────────────── THINKING ───────────────── */}
+      <Section
+        id="thinking"
+        bg="default"
+        title="Thinking"
+        description="Frameworks I use when a product problem is unclear, political, technical, or easy to over-design."
+        transition="Writing is where I test these ideas in public."
+      >
         <ProductThinkingSection />
       </Section>
 
-      {/* ───────────────── EXPLORATION ───────────────── */}
+      {/* ───────────────── INSIGHTS ───────────────── */}
       <Section
-        id="exploration"
-        bg="default"
-        title="Building and Testing Ideas Outside of Work"
-        description="Personal products and design systems built to test ideas outside the usual constraints."
-        transition="Writing is where I pressure-test the same ideas in a more direct form."
+        id="insights"
+        bg="muted"
+        title="Insights"
+        description="Short essays on systems, incentives, risk, AI trust, and decision-making."
+        transition="Explorations are where those ideas become working prototypes."
       >
-        <ExplorationsSection />
-        <FancyDivider variant="gradient" className="my-8 md:my-12" />
         <InsightsSection />
       </Section>
 
-      {/* ───────────────── IMPACT (ANCHOR) ───────────────── */}
-      {/* <Section
-        id="impact"
+      {/* ───────────────── EXPLORATIONS ───────────────── */}
+      <Section
+        id="explorations"
+        bg="default"
+        title="Explorations"
+        description="Personal builds that test product and system questions outside client constraints."
+        transition="Some of the same habits show up in how I lead, mentor, and align teams."
+      >
+        <ExplorationsSection />
+      </Section>
+
+      {/* ───────────────── LEADERSHIP ───────────────── */}
+      <Section
+        id="leadership"
         bg="muted"
-        title="Driving Outcomes Beyond Product Design"
-        transition="Beyond work and impact, here's more about how I think and what I focus on."
+        title="Leadership"
+        description="Influence through decision framing, stakeholder alignment, documentation, critique, and making product quality easier to repeat."
+        transition="Advisory work is a smaller, more direct version of the same pattern."
       >
         <LeadershipSection />
-        <FancyDivider variant="gradient" className="my-8 md:my-12" />
+      </Section>
+
+      {/* ───────────────── ADVISORY ───────────────── */}
+      <Section
+        id="advisory"
+        bg="default"
+        title="Advisory"
+        description="A compact view of the teams, founders, and designers I have helped with product direction, UX critique, and portfolio growth."
+        transition="The last section is less about work output and more about what keeps me curious."
+      >
         <AdvisorySection />
-      </Section> */}
+      </Section>
 
       {/* ───────────────── ABOUT ───────────────── */}
-  
-        <AboutSection />
-   
+      <AboutSection />
 
     </main>
   )

@@ -180,7 +180,7 @@ export default function Footer() {
               Always interested in interesting problems.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              If something here resonated — or you want to talk design, systems, or product — I&apos;m easy to reach.
+              If something here resonated, or you want to talk design, systems, or product, I&apos;m easy to reach.
             </p>
           </div>
 

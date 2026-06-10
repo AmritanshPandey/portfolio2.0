@@ -249,7 +249,7 @@ export default function Page() {
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A shared backbone, a configurable surface.
             </h2>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-[15px] text-neutral-400 leading-relaxed">
               Commerce logic is stable and shared. Brand identity is a token layer
               above it. Decoupling these two is what made three brands buildable
               by two designers in eight weeks.
@@ -334,15 +334,15 @@ export default function Page() {
             visual={
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
                 {/* Phone frame */}
-                <rect x="120" y="10" width="160" height="280" rx="20" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
+                <rect x="120" y="10" width="160" height="280" rx="20" fill="var(--surface-1)" stroke="var(--border)" />
                 {/* Status bar */}
-                <rect x="140" y="24" width="120" height="6" rx="3" fill="hsl(var(--muted))" />
+                <rect x="140" y="24" width="120" height="6" rx="3" fill="var(--surface-2)" />
                 {/* Product image placeholder */}
-                <rect x="134" y="40" width="132" height="80" rx="8" fill="hsl(var(--muted))" />
+                <rect x="134" y="40" width="132" height="80" rx="8" fill="var(--surface-2)" />
                 <circle cx="200" cy="80" r="20" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
                 {/* Product name */}
-                <rect x="134" y="132" width="90" height="8" rx="3" fill="hsl(var(--foreground))" />
-                <rect x="134" y="146" width="60" height="6" rx="3" fill="hsl(var(--muted-foreground))" />
+                <rect x="134" y="132" width="90" height="8" rx="3" fill="var(--foreground)" />
+                <rect x="134" y="146" width="60" height="6" rx="3" fill="var(--text-muted)" />
                 {/* Trust badge row */}
                 <g transform="translate(134,162)">
                   {[0, 38, 76].map(x => (
@@ -352,16 +352,16 @@ export default function Page() {
                   ))}
                 </g>
                 {/* Ingredient panel indicator */}
-                <rect x="134" y="192" width="132" height="28" rx="6" fill="hsl(var(--muted))" stroke="hsl(var(--border))" />
-                <rect x="144" y="200" width="70" height="5" rx="2" fill="hsl(var(--muted-foreground))" />
-                <rect x="144" y="209" width="50" height="5" rx="2" fill="hsl(var(--muted))" />
+                <rect x="134" y="192" width="132" height="28" rx="6" fill="var(--surface-2)" stroke="var(--border)" />
+                <rect x="144" y="200" width="70" height="5" rx="2" fill="var(--text-muted)" />
+                <rect x="144" y="209" width="50" height="5" rx="2" fill="var(--surface-2)" />
                 {/* Sticky CTA */}
-                <rect x="134" y="256" width="132" height="24" rx="8" fill="hsl(var(--foreground))" />
-                <rect x="160" y="264" width="80" height="6" rx="3" fill="hsl(var(--background))" />
+                <rect x="134" y="256" width="132" height="24" rx="8" fill="var(--foreground)" />
+                <rect x="160" y="264" width="80" height="6" rx="3" fill="var(--background)" />
                 {/* Label */}
-                <text x="320" y="85" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.08em">STICKY</text>
-                <text x="320" y="97" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.08em">CTA</text>
-                <path d="M 314 90 L 290 268" stroke="hsl(var(--muted-foreground))" strokeWidth="0.75" fill="none" opacity="0.4" />
+                <text x="320" y="85" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">STICKY</text>
+                <text x="320" y="97" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">CTA</text>
+                <path d="M 314 90 L 290 268" stroke="var(--text-muted)" strokeWidth="0.75" fill="none" opacity="0.4" />
               </svg>
             }
           />
@@ -378,31 +378,31 @@ export default function Page() {
             reverse
             visual={
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <text x="20" y="26" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
+                <text x="20" y="26" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
                 {[
                   { x: 20,  color: "rgb(249,115,22)", label: "Mamaearth" },
                   { x: 150, color: "rgb(45,155,138)",  label: "Derma Co." },
                   { x: 280, color: "rgb(75,142,191)",  label: "Aqualogica" },
                 ].map(b => (
                   <g key={b.label} transform={`translate(${b.x},40)`}>
-                    <rect width="110" height="240" rx="14" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
+                    <rect width="110" height="240" rx="14" fill="var(--surface-1)" stroke="var(--border)" />
                     {/* Cart header */}
                     <rect x="12" y="14" width="50" height="6" rx="3" fill={b.color} opacity="0.6" />
                     {/* Line items */}
                     {[0, 1].map(i => (
                       <g key={i} transform={`translate(12,${34 + i * 60})`}>
-                        <rect width="86" height="50" rx="8" fill="hsl(var(--muted))" />
+                        <rect width="86" height="50" rx="8" fill="var(--surface-2)" />
                         <rect x="8" y="8" width="24" height="34" rx="5" fill={b.color} opacity="0.15" />
-                        <rect x="40" y="12" width="38" height="5" rx="3" fill="hsl(var(--foreground))" />
-                        <rect x="40" y="22" width="28" height="4" rx="2" fill="hsl(var(--muted-foreground))" />
+                        <rect x="40" y="12" width="38" height="5" rx="3" fill="var(--foreground)" />
+                        <rect x="40" y="22" width="28" height="4" rx="2" fill="var(--text-muted)" />
                         <rect x="40" y="33" width="20" height="11" rx="3" fill={b.color} />
                       </g>
                     ))}
                     {/* Checkout CTA */}
                     <rect x="12" y="164" width="86" height="28" rx="8" fill={b.color} />
                     {/* Cross-sell */}
-                    <rect x="12" y="200" width="86" height="28" rx="8" fill="hsl(var(--muted))" />
-                    <text x="55" y="220" textAnchor="middle" fontFamily="monospace" fontSize="8" fill="hsl(var(--muted-foreground))">you may like</text>
+                    <rect x="12" y="200" width="86" height="28" rx="8" fill="var(--surface-2)" />
+                    <text x="55" y="220" textAnchor="middle" fontFamily="monospace" fontSize="8" fill="var(--text-muted)">you may like</text>
                     {/* Brand label */}
                     <text x="55" y="252" textAnchor="middle" fontSize="9" fontWeight="500" fill={b.color}>{b.label}</text>
                   </g>
@@ -422,24 +422,24 @@ export default function Page() {
             ]}
             visual={
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
-                <g fontSize="10" fontWeight="500" fill="hsl(var(--foreground))" fontFamily="sans-serif">
+                <g fontSize="10" fontWeight="500" fill="var(--foreground)" fontFamily="sans-serif">
                   {/* Before: 6 steps (collapsed) */}
-                  <text x="20" y="30" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.08em">BEFORE · 6 STEPS</text>
+                  <text x="20" y="30" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.08em">BEFORE · 6 STEPS</text>
                   {[0,1,2,3,4,5].map(i => (
                     <g key={i} transform={`translate(${20 + i * 56},44)`}>
-                      <rect width="48" height="32" rx="6" fill="hsl(var(--muted))" stroke="hsl(var(--border))" />
-                      <text x="24" y="21" textAnchor="middle" fontSize="9" fill="hsl(var(--muted-foreground))">{`0${i+1}`}</text>
+                      <rect width="48" height="32" rx="6" fill="var(--surface-2)" stroke="var(--border)" />
+                      <text x="24" y="21" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{`0${i+1}`}</text>
                     </g>
                   ))}
-                  <path d="M 36 64 L 68 64" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 92 64 L 124 64" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 148 64 L 180 64" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 204 64 L 236 64" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
-                  <path d="M 260 64 L 292 64" stroke="hsl(var(--muted-foreground))" strokeWidth="1" fill="none" opacity="0.3" />
+                  <path d="M 36 64 L 68 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
+                  <path d="M 92 64 L 124 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
+                  <path d="M 148 64 L 180 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
+                  <path d="M 204 64 L 236 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
+                  <path d="M 260 64 L 292 64" stroke="var(--text-muted)" strokeWidth="1" fill="none" opacity="0.3" />
                 </g>
 
                 {/* Divider */}
-                <line x1="20" y1="110" x2="380" y2="110" stroke="hsl(var(--border))" strokeWidth="1" />
+                <line x1="20" y1="110" x2="380" y2="110" stroke="var(--border)" strokeWidth="1" />
 
                 {/* After: 3 steps */}
                 <text x="20" y="136" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.08em">AFTER · 3 STEPS</text>
@@ -449,10 +449,10 @@ export default function Page() {
                   { label: "Confirm",  detail: "Review + place" },
                 ].map((step, i) => (
                   <g key={step.label} transform={`translate(${20 + i * 124},148)`}>
-                    <rect width="112" height="72" rx="10" fill="hsl(var(--card))" stroke={i === 0 ? "rgb(249,115,22)" : "hsl(var(--border))"} strokeWidth={i === 0 ? 1.5 : 1} />
-                    <text x="56" y="28" textAnchor="middle" fontSize="9" fontFamily="monospace" fill={i === 0 ? "rgb(249,115,22)" : "hsl(var(--muted-foreground))"}>{`0${i+1}`}</text>
-                    <text x="56" y="46" textAnchor="middle" fontSize="11" fontWeight="600" fill="hsl(var(--foreground))">{step.label}</text>
-                    <text x="56" y="60" textAnchor="middle" fontSize="9" fill="hsl(var(--muted-foreground))">{step.detail}</text>
+                    <rect width="112" height="72" rx="10" fill="var(--surface-1)" stroke={i === 0 ? "rgb(249,115,22)" : "var(--border)"} strokeWidth={i === 0 ? 1.5 : 1} />
+                    <text x="56" y="28" textAnchor="middle" fontSize="9" fontFamily="monospace" fill={i === 0 ? "rgb(249,115,22)" : "var(--text-muted)"}>{`0${i+1}`}</text>
+                    <text x="56" y="46" textAnchor="middle" fontSize="11" fontWeight="600" fill="var(--foreground)">{step.label}</text>
+                    <text x="56" y="60" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{step.detail}</text>
                   </g>
                 ))}
                 <path d="M 132 184 L 144 184" stroke="rgb(249,115,22)" strokeWidth="1" fill="none" opacity="0.6" />
@@ -535,23 +535,23 @@ export default function Page() {
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   {/* Central marketplace */}
                   <g transform="translate(100,20)">
-                    <rect width="160" height="52" rx="10" fill="hsl(var(--muted))" stroke="hsl(var(--border))" strokeDasharray="3 4" />
-                    <text x="80" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="hsl(var(--muted-foreground))" letterSpacing="0.06em">3RD PARTY</text>
-                    <text x="80" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="hsl(var(--foreground))">Amazon · Nykaa</text>
+                    <rect width="160" height="52" rx="10" fill="var(--surface-2)" stroke="var(--border)" strokeDasharray="3 4" />
+                    <text x="80" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="var(--text-muted)" letterSpacing="0.06em">3RD PARTY</text>
+                    <text x="80" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--foreground)">Amazon · Nykaa</text>
                   </g>
                   {/* Brands feeding into marketplace */}
-                  <g stroke="hsl(var(--muted-foreground))" fill="none" opacity="0.4">
+                  <g stroke="var(--text-muted)" fill="none" opacity="0.4">
                     <path d="M 80 150 L 140 72" />
                     <path d="M 180 150 L 180 72" />
                     <path d="M 280 150 L 220 72" />
                   </g>
                   {["Mamaearth", "Derma Co.", "Aqualogica"].map((name, i) => (
                     <g key={name} transform={`translate(${40 + i * 100},150)`}>
-                      <rect width="80" height="80" rx="10" fill="hsl(var(--card))" stroke="hsl(var(--border))" />
-                      <rect x="10" y="12" width="60" height="5" rx="3" fill="hsl(var(--muted))" />
-                      <rect x="10" y="23" width="40" height="5" rx="3" fill="hsl(var(--muted))" />
-                      <text x="40" y="62" textAnchor="middle" fontSize="8" fill="hsl(var(--muted-foreground))" letterSpacing="0.04em">{name}</text>
-                      <text x="40" y="73" textAnchor="middle" fontFamily="monospace" fontSize="7" fill="hsl(var(--muted-foreground))">no data</text>
+                      <rect width="80" height="80" rx="10" fill="var(--surface-1)" stroke="var(--border)" />
+                      <rect x="10" y="12" width="60" height="5" rx="3" fill="var(--surface-2)" />
+                      <rect x="10" y="23" width="40" height="5" rx="3" fill="var(--surface-2)" />
+                      <text x="40" y="62" textAnchor="middle" fontSize="8" fill="var(--text-muted)" letterSpacing="0.04em">{name}</text>
+                      <text x="40" y="73" textAnchor="middle" fontFamily="monospace" fontSize="7" fill="var(--text-muted)">no data</text>
                     </g>
                   ))}
                 </svg>
@@ -566,7 +566,7 @@ export default function Page() {
                   <g transform="translate(110,20)">
                     <rect width="140" height="52" rx="10" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
                     <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.06em">SHARED SYSTEM</text>
-                    <text x="70" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="hsl(var(--foreground))">Token + Components</text>
+                    <text x="70" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--foreground)">Token + Components</text>
                   </g>
                   <g stroke="rgb(249,115,22)" fill="none" opacity="0.7">
                     <path d="M 80 150 L 140 72" />
@@ -600,7 +600,7 @@ export default function Page() {
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-snug tracking-tight">
               A system that kept paying back.
             </h2>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-[15px] text-neutral-400 leading-relaxed">
               The 8-week launch was just the start. The shared architecture
               made every subsequent brand addition and improvement faster than the one before.
             </p>
@@ -623,9 +623,9 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-neutral-500 tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium text-orange-400 tracking-tight leading-none mb-4">{m.figure}</p>
-                  <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
+                  <p className="text-[14px] text-neutral-400 leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>
               </FadeIn>
             ))}
@@ -645,7 +645,7 @@ export default function Page() {
 
       {/* Reflection */}
       <CsSection id="reflection" label="Key Reflection">
-        <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
+        <blockquote className="pl-6 max-w-2xl">
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             Scalable systems aren&apos;t built by adding features, they&apos;re built by ruthlessly
             separating{" "}

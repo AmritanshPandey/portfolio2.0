@@ -23,24 +23,36 @@ import { saveScroll } from "@/lib/scroll-manager"
 const NAV_LINKS = [
   { label: "Home",     href: "#hero",        icon: true },
   { label: "Work",     href: "#work" },
-  { label: "Projects", href: "#exploration" },
-  { label: "Insights",   href: "#inisghts" },
+  { label: "Exploration", href: "#explorations" },
+  { label: "Insights", href: "#insights" },
   { label: "About",    href: "#about" },
 ]
 
-const SECTION_IDS = ["hero", "work", "exploration", "impact", "about"]
+const SECTION_IDS = [
+  "hero",
+  "work",
+  "systems",
+  "approach",
+  "thinking",
+  "insights",
+  "explorations",
+  "leadership",
+  "advisory",
+  "about",
+]
 
 const DETAIL_ROUTES: Record<string, { section: string; label: string; href: string }> = {
   "/work":         { section: "work",        label: "Work",     href: "/#work" },
-  "/systems":      { section: "work",        label: "Work",     href: "/#work" },
-  "/explorations": { section: "exploration", label: "Projects", href: "/#exploration" },
-  "/articles":     { section: "exploration", label: "Projects", href: "/#exploration" },
+  "/systems":      { section: "systems",     label: "Systems",  href: "/#systems" },
+  "/explorations": { section: "explorations", label: "Exploration", href: "/#explorations" },
+  "/articles":     { section: "insights",    label: "Insights", href: "/#insights" },
 }
 
 const DETAIL_NAV_LINKS = [
   { label: "Home",     href: "/",             section: "hero",        icon: IconHome },
   { label: "Work",     href: "/#work",        section: "work",        icon: undefined },
-  { label: "Projects", href: "/#exploration", section: "exploration", icon: undefined },
+  { label: "Exploration", href: "/#explorations", section: "explorations", icon: undefined },
+  { label: "Insights", href: "/#insights",    section: "insights",    icon: undefined },
   { label: "About",    href: "/#about",       section: "about",       icon: undefined },
 ]
 

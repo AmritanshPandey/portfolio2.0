@@ -2,6 +2,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
+import { FancyCursor } from "@/components/shared/cursor"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
@@ -75,6 +76,8 @@ export default function RootLayout({
 
             {/* Scroll restore */}
             <ScrollToHash />
+
+            <FancyCursor />
 
             {/* Navbar */}
             <Navbar />

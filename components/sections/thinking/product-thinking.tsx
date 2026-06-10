@@ -6,21 +6,33 @@ import { motion } from "framer-motion"
 const PRINCIPLES = [
   {
     number: "01",
-    title: "Incentives Drive Behavior",
+    title: "Constraint → Decision → Outcome",
     description:
-      "Behavior follows incentives, not stated intent. The cleanest interface fails when the mechanic beneath it rewards the wrong action, so I map backward from the behavior the product needs.",
+      "I write the constraint first, then the decision it forced, then what changed. It keeps the case for a design choice grounded.",
   },
   {
     number: "02",
-    title: "Designing Under Uncertainty",
+    title: "Reuse Before Rebuild",
     description:
-      "Most decisions happen before the data exists, and waiting for certainty is itself a decision. Usually the wrong one. I state what must be true, then design the fastest experiment to prove it false.",
+      "Before adding a new component or flow, I check whether an existing pattern can stretch. New patterns need a reason beyond preference.",
   },
   {
     number: "03",
-    title: "Balancing Growth & Risk",
+    title: "Prototype the Risky Assumption First",
     description:
-      "In regulated products, compliance is not a constraint on design. It is a design input. The most durable fintech treats risk as part of the brief, designing usability and stability together instead of trading them off.",
+      "If the risk is trust, build the trust moment. If the risk is sales, build the demo. The prototype should test the decision, not show every screen.",
+  },
+  {
+    number: "04",
+    title: "Separate Structure From Expression",
+    description:
+      "Product logic, tokens, and component behavior should stay stable while brand expression changes above them. That is how systems scale without looking generic.",
+  },
+  {
+    number: "05",
+    title: "Design for Handoff, Not Just Approval",
+    description:
+      "A good review deck is not enough. The decision needs rules, edge cases, ownership, and a shape engineering can build from without re-litigating the intent.",
   },
 ]
 
@@ -28,10 +40,10 @@ export default function ProductThinkingSection() {
   return (
     <SectionSubgroup
       label="Thinking"
-      description="How I make product decisions under constraints."
+      description="Decision frameworks I reach for when the problem is bigger than a screen."
       variant="spacious"
     >
-      <div className="grid md:grid-cols-2 gap-px bg-border/50 rounded-2xl overflow-hidden border border-border/50">
+      <div className="grid gap-px overflow-hidden rounded-2xl border border-border/50 bg-border/50 md:grid-cols-2 lg:grid-cols-3">
 
         {/* ── BELIEF, top left */}
         <motion.div
@@ -39,16 +51,14 @@ export default function ProductThinkingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-card p-7 md:p-10 flex flex-col justify-center"
+          className="bg-card p-7 md:p-10 flex flex-col justify-center lg:row-span-2"
         >
           <p className="type-caption mb-5 text-muted-foreground/60">
             Core Belief
           </p>
           <p className="type-card-title-featured text-foreground">
-            Most product problems aren&apos;t solved by{" "}
-            <span className="text-foreground/35">interfaces</span>.
-            {" "}They&apos;re solved by{" "}
-            <span className="text-orange-600 dark:text-orange-400">better decisions</span>.
+            The interface is usually the record of a decision that happened earlier.
+            {" "}Make that decision visible.
           </p>
         </motion.div>
 

@@ -5,9 +5,12 @@ import {
   IconArrowRight,
   IconArrowUpRight,
   IconBell,
+  IconBriefcase,
   IconCards,
   IconCheck,
+  IconChevronDown,
   IconChevronRight,
+  IconChevronUp,
   IconCircleCheck,
   IconClock,
   IconCreditCard,
@@ -24,6 +27,7 @@ import {
   IconSearch,
   IconSettings,
   IconShieldCheck,
+  IconStar,
   IconTrendingDown,
   IconTrendingUp,
   IconWallet,
@@ -622,26 +626,395 @@ export function FinInputMatrix() {
   )
 }
 
+function ConsumerSpecStage({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn("rounded-[24px] bg-black p-4 md:p-5", className)}>
+      {children}
+    </div>
+  )
+}
+
+function ConsumerCard({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn("rounded-[30px] bg-white text-[#202124] shadow-[0_18px_44px_rgba(0,0,0,0.18)]", className)}>
+      {children}
+    </div>
+  )
+}
+
+function Sparkline({
+  color,
+  path,
+  className,
+}: {
+  color: string
+  path: string
+  className?: string
+}) {
+  return (
+    <svg viewBox="0 0 120 64" className={cn("h-16 w-32", className)} aria-hidden>
+      <path
+        d={path}
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="5"
+      />
+    </svg>
+  )
+}
+
+function FinPriceTargetCard() {
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="relative h-[360px] w-full max-w-[310px] overflow-hidden p-0">
+        <div className="absolute inset-x-0 top-5 flex items-center gap-3 px-4 text-center text-[13px] font-semibold text-black/38">
+          <span className="h-px flex-1 bg-black/10" />
+          <span>$110,000</span>
+          <span className="h-px flex-1 bg-black/10" />
+        </div>
+        <div className="absolute inset-x-0 bottom-5 flex items-center gap-3 px-4 text-center text-[13px] font-semibold text-black/38">
+          <span className="h-px flex-1 bg-black/10" />
+          <span>$78,400</span>
+          <span className="h-px flex-1 bg-black/10" />
+        </div>
+        <svg viewBox="0 0 310 360" className="absolute inset-0 h-full w-full" aria-hidden>
+          {[54, 92, 130, 168, 206, 244, 282].map((y) => (
+            <path key={y} d={`M0 ${y}H310`} stroke="#e6e6e6" strokeWidth="1.5" />
+          ))}
+          <path d="M0 145H310" stroke="#111" strokeDasharray="3 5" strokeLinecap="round" strokeWidth="2" />
+          <path d="M0 205H310" stroke="#12c7eb" strokeDasharray="3 5" strokeLinecap="round" strokeWidth="2" />
+          <path
+            d="M0 237 C30 232 35 205 70 211 C105 217 95 242 126 236 C154 231 150 160 186 162 C219 164 207 236 247 222 C278 211 265 148 310 133"
+            fill="none"
+            stroke="#12c7eb"
+            strokeLinecap="round"
+            strokeWidth="4"
+          />
+        </svg>
+        <div className="absolute left-1/2 top-[78px] -translate-x-1/2 rounded-[18px] bg-[#e8e8e8] px-6 py-4 text-center after:absolute after:left-1/2 after:top-full after:size-5 after:-translate-x-1/2 after:-translate-y-3 after:rotate-45 after:bg-[#e8e8e8]">
+          <p className="relative z-10 text-[23px] font-bold leading-none tabular-nums">95,260.00</p>
+          <p className="relative z-10 mt-1 text-[14px] font-bold text-black/55">↑ 2.35%</p>
+        </div>
+        <div className="absolute left-1/2 top-[165px] flex -translate-x-1/2 items-center gap-3 rounded-full bg-[#eeeeee] p-1">
+          <button type="button" className="grid size-9 place-items-center rounded-full bg-black/10 text-black/70" aria-label="Decrease target">
+            <IconChevronDown size={17} />
+          </button>
+          <button type="button" className="h-9 rounded-full bg-[#12c7eb] px-7 text-[14px] font-bold text-white">
+            Set
+          </button>
+          <button type="button" className="grid size-9 place-items-center rounded-full bg-black/10 text-black/70" aria-label="Increase target">
+            <IconChevronUp size={17} />
+          </button>
+        </div>
+        <p className="absolute left-1/2 top-[208px] -translate-x-1/2 text-[12px] font-bold uppercase tracking-[0.06em] text-[#12c7eb]">
+          Current price
+        </p>
+        <span className="absolute bottom-[72px] left-1/2 size-11 -translate-x-1/2 rounded-full bg-[#d9d9d9]" />
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinDistributionCard() {
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="w-full max-w-[360px] p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <h4 className="text-[22px] font-bold leading-none">Distributions</h4>
+            <span className="mt-4 block size-12 rounded-full bg-[#d8d8d8]" />
+          </div>
+          <button type="button" className="h-11 rounded-full bg-[#ededed] px-5 text-[15px] font-bold">
+            Edit
+          </button>
+        </div>
+        <div className="mx-auto mt-2 grid size-44 place-items-center rounded-full bg-[conic-gradient(#303030_0_73%,transparent_73%_76%,#00d557_76%_86%,transparent_86%_89%,#8a22f2_89%_96%,transparent_96%_98%,#12c7eb_98%_100%)]">
+          <div className="grid size-[136px] place-items-center rounded-full bg-white text-center">
+            <div>
+              <p className="text-[42px] font-black leading-none">73%</p>
+              <p className="mt-2 text-[16px] font-medium text-black/58">Cash balance</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-7 grid grid-cols-3 text-center">
+          {[
+            ["10%", "Savings", "#00d557"],
+            ["10%", "Stock", "#8a22f2"],
+            ["7%", "Bitcoin", "#12c7eb"],
+          ].map(([value, label, color]) => (
+            <div key={label}>
+              <p className="text-[26px] font-black leading-none" style={{ color }}>{value}</p>
+              <p className="mt-2 text-[16px] font-medium text-black/72">{label}</p>
+            </div>
+          ))}
+        </div>
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinAssetRowsCard() {
+  const rows = [
+    {
+      name: "Savings",
+      value: "$140.00",
+      sub: "$160 to goal",
+      visual: (
+        <div className="grid size-16 place-items-center rounded-full bg-[conic-gradient(#00d557_0_38%,#e8e8e8_38%_100%)]">
+          <div className="grid size-12 place-items-center rounded-full bg-white text-[20px]">☂</div>
+        </div>
+      ),
+    },
+    {
+      name: "Bitcoin",
+      value: "$110.00",
+      sub: "↑ 1.18% today",
+      accent: "text-[#078a3f]",
+      visual: <Sparkline color="#12c7eb" path="M4 46 C12 20 14 6 22 36 C29 62 41 54 50 52 C60 48 66 40 74 45 C82 50 84 28 91 38 C99 48 102 18 116 28" />,
+    },
+    {
+      name: "Stocks",
+      value: "$210.00",
+      sub: "↑ 2.55% today",
+      accent: "text-[#078a3f]",
+      visual: <Sparkline color="#8a22f2" path="M4 18 C10 58 18 56 24 30 C31 6 39 22 44 14 C52 4 58 30 65 24 C76 16 84 40 92 48 C103 58 106 22 116 16" />,
+    },
+  ]
+
+  return (
+    <ConsumerSpecStage className="space-y-3">
+      {rows.map((row) => (
+        <ConsumerCard key={row.name} className="flex min-h-[116px] items-center justify-between gap-4 rounded-[22px] px-5 py-4">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-[18px] font-bold leading-none">{row.name}</p>
+              <IconChevronRight size={17} className="text-black/42" />
+            </div>
+            <p className="mt-3 text-[34px] font-black leading-none tracking-normal tabular-nums">{row.value}</p>
+            <p className={cn("mt-3 text-[16px] font-medium text-black/58", row.accent)}>{row.sub}</p>
+          </div>
+          <div className="shrink-0">{row.visual}</div>
+        </ConsumerCard>
+      ))}
+    </ConsumerSpecStage>
+  )
+}
+
+function FinLocalSpotsCard() {
+  const places = [
+    ["Rangoon Bistro", "Open until 10pm · Restaurant", "bg-[#4f67d8]", "Rangoon"],
+    ["Lovejoy Bakery", "Open until 5pm · Bakery", "bg-[#756a42]", "Lovejoy"],
+    ["Wallflower Coffee Co", "Open until 11pm · Cafe", "bg-[#ffe4c4]", "Coffee"],
+  ]
+
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="w-full max-w-[380px] p-7">
+        <h4 className="max-w-[260px] text-[32px] font-black leading-[0.98] tracking-normal">
+          Find the best spots in Portland
+        </h4>
+        <div className="mt-7 space-y-5">
+          {places.map(([name, meta, bg, label]) => (
+            <div key={name} className="grid grid-cols-[52px_1fr_auto] items-center gap-4">
+              <div className={cn("grid size-12 place-items-center rounded-[10px] text-center text-[9px] font-bold leading-none text-white", bg)}>
+                {label}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-[17px] font-bold leading-none">{name}</p>
+                <p className="mt-1 truncate text-[14px] font-medium text-black/56">{meta}</p>
+              </div>
+              <button type="button" className="h-10 rounded-full bg-[#eeeeee] px-5 text-[15px] font-bold">
+                Add
+              </button>
+            </div>
+          ))}
+        </div>
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinEarningsStripCard() {
+  const bars = [28, 18, 12, 34, 78, 30, 24, 12, 28, 24, 10, 13, 12, 12, 10, 10, 9, 9, 9, 9, 9, 9, 9]
+
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="w-full max-w-[430px] rounded-[24px] p-6">
+        <div className="flex items-center justify-between gap-4">
+          <h4 className="text-[24px] font-black">Earnings</h4>
+          <div className="flex items-center gap-2 text-[24px] font-medium text-black/62">
+            <span>$389 in May</span>
+            <IconChevronRight size={24} />
+          </div>
+        </div>
+        <div className="mt-7 flex h-12 items-center gap-2">
+          {bars.map((height, index) => (
+            <span
+              key={`${height}-${index}`}
+              className="w-2.5 rounded-full"
+              style={{
+                height,
+                backgroundColor: index < 2 || index === 4 || index === 5 || index === 8 || index === 9
+                  ? "#00d557"
+                  : index < 14
+                    ? "#a8efc4"
+                    : "#e7e7e7",
+              }}
+            />
+          ))}
+        </div>
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinStockActionCard() {
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="relative h-[380px] w-full max-w-[300px] overflow-hidden rounded-[28px] p-6">
+        <div className="grid size-14 place-items-center rounded-full bg-[#00d557] text-white">
+          <IconStar size={28} fill="currentColor" />
+        </div>
+        <h4 className="mt-5 text-[23px] font-black">Capsule Corp.</h4>
+        <p className="mt-3 text-[18px] font-bold text-[#00d557]">↑ 1.01%</p>
+        <svg viewBox="0 0 300 180" className="absolute inset-x-0 bottom-[92px] h-40 w-full" aria-hidden>
+          <path
+            d="M0 125 C34 118 31 82 72 90 C116 98 102 130 139 123 C166 118 165 54 198 70 C230 86 216 126 254 108 C281 95 277 53 300 55"
+            fill="none"
+            stroke="#00d557"
+            strokeLinecap="round"
+            strokeWidth="4"
+          />
+        </svg>
+        <span className="absolute left-1/2 top-[166px] size-14 -translate-x-1/2 rounded-full bg-[#d9d9d9]" />
+        <div className="absolute inset-x-6 bottom-[72px] grid grid-cols-5 gap-2">
+          {["1D", "1W", "1M", "1Y", "ALL"].map((range, index) => (
+            <button
+              key={range}
+              type="button"
+              className={cn("h-8 rounded-full text-[12px] font-bold", index === 0 ? "bg-[#d0d0d0]" : "bg-[#eeeeee]")}
+            >
+              {range}
+            </button>
+          ))}
+        </div>
+        <div className="absolute inset-x-5 bottom-5 grid grid-cols-3 gap-3">
+          {["Buy", "Sell", "Send"].map((action) => (
+            <button key={action} type="button" className="h-11 rounded-full bg-[#00d557] text-[14px] font-bold text-white">
+              {action}
+            </button>
+          ))}
+        </div>
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinLargeProgressCard() {
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <div className="relative grid size-[310px] place-items-center rounded-full bg-[conic-gradient(#12c7eb_0_62%,#e9e9e9_62%_100%)]">
+        <div className="grid size-[270px] place-items-center rounded-full bg-white">
+          <p className="text-[72px] font-black tracking-normal text-[#202124]">62%</p>
+        </div>
+        <div className="absolute bottom-[42px] left-[46px] grid size-14 place-items-center rounded-full bg-[#12c7eb]">
+          <span className="size-7 rounded-full bg-white" />
+        </div>
+      </div>
+    </ConsumerSpecStage>
+  )
+}
+
+function FinPaymentReceiptCard() {
+  return (
+    <ConsumerSpecStage className="grid place-items-center">
+      <ConsumerCard className="w-full max-w-[340px] p-7">
+        <div className="size-14 overflow-hidden rounded-full bg-[linear-gradient(135deg,#bcc7d6,#4b5563)]" />
+        <div className="mt-5 flex items-center gap-2">
+          <h4 className="text-[24px] font-black leading-none">Diego the Barber</h4>
+          <IconBriefcase size={20} className="text-[#00d557]" />
+        </div>
+        <p className="mt-3 text-[16px] font-medium text-black/58">Yesterday at 12:25pm</p>
+        <p className="mt-1 text-[16px] font-medium text-black/58">For boy&apos;s haircut</p>
+        <p className="mt-7 text-[48px] font-black leading-none tracking-normal tabular-nums">$41.20</p>
+        <div className="my-8 h-px bg-black/10" />
+        <h5 className="text-[19px] font-black">Payment details</h5>
+        <div className="mt-5 space-y-3 text-[16px]">
+          {[
+            ["You paid Diego the Barber", "$40.00"],
+            ["Credit card fee", "$1.20"],
+            ["Total sent", "$41.20"],
+          ].map(([label, value]) => (
+            <div key={label} className="flex items-center justify-between gap-4">
+              <span className="text-black/58">{label}</span>
+              <span className="font-bold tabular-nums">{value}</span>
+            </div>
+          ))}
+        </div>
+      </ConsumerCard>
+    </ConsumerSpecStage>
+  )
+}
+
+export function FinConsumerCardSpecimens() {
+  return (
+    <div className="grid gap-4 xl:grid-cols-2">
+      <FinPriceTargetCard />
+      <FinDistributionCard />
+      <FinAssetRowsCard />
+      <FinStockActionCard />
+      <FinLocalSpotsCard />
+      <FinPaymentReceiptCard />
+    </div>
+  )
+}
+
+export function FinConsumerDataSpecimens() {
+  return (
+    <div className="grid gap-4 xl:grid-cols-2">
+      <FinEarningsStripCard />
+      <FinLargeProgressCard />
+    </div>
+  )
+}
+
 export function FinCardMatrix() {
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <div className="grid gap-4">
-        <FinKpiCard label="Available balance" value="$482,490" description="Across 4 operating accounts" tone="profit" trend="+12.4%" />
-        <FinKpiCard label="Risk exposure" value="$18,442" description="Card liability under review" tone="risk" trend="Review" />
+    <div className="grid gap-5">
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-4">
+          <FinKpiCard label="Available balance" value="$482,490" description="Across 4 operating accounts" tone="profit" trend="+12.4%" />
+          <FinKpiCard label="Risk exposure" value="$18,442" description="Card liability under review" tone="risk" trend="Review" />
+        </div>
+        <FinCreditCardPreview />
+        <div className="grid gap-4">
+          <FinSurface className="p-4">
+            <FinBadge tone="info">Insight</FinBadge>
+            <p className="mt-3 text-[14px] font-semibold text-[var(--fin-text-primary)]">Payroll reserve is below target</p>
+            <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Move $14,800 from operating to maintain the next payroll buffer.</p>
+          </FinSurface>
+          <FinSurface className="p-4">
+            <FinBadge tone="warning">Alert</FinBadge>
+            <p className="mt-3 text-[14px] font-semibold text-[var(--fin-text-primary)]">Wire cut-off in 42 minutes</p>
+            <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Submit reviewed transfers now for same-day settlement.</p>
+          </FinSurface>
+        </div>
       </div>
-      <FinCreditCardPreview />
-      <div className="grid gap-4">
-        <FinSurface className="p-4">
-          <FinBadge tone="info">Insight</FinBadge>
-          <p className="mt-3 text-[14px] font-semibold text-[var(--fin-text-primary)]">Payroll reserve is below target</p>
-          <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Move $14,800 from operating to maintain the next payroll buffer.</p>
-        </FinSurface>
-        <FinSurface className="p-4">
-          <FinBadge tone="warning">Alert</FinBadge>
-          <p className="mt-3 text-[14px] font-semibold text-[var(--fin-text-primary)]">Wire cut-off in 42 minutes</p>
-          <p className="mt-1 text-[12px] leading-5 text-[var(--fin-text-secondary)]">Submit reviewed transfers now for same-day settlement.</p>
-        </FinSurface>
-      </div>
+      <FinConsumerCardSpecimens />
     </div>
   )
 }
@@ -712,6 +1085,7 @@ export function FinDataMatrix() {
         <FinButton variant="ghost" size="sm">Next</FinButton>
       </div>
       <FinDataTable />
+      <FinConsumerDataSpecimens />
     </div>
   )
 }

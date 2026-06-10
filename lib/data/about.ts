@@ -3,36 +3,36 @@ import type { LeadershipItem, AdvisoryOrgItem, MenteeItem } from "@/lib/types/co
 export const leadershipItems: LeadershipItem[] = [
   {
     number: "01",
-    title: "Driving Enterprise Product Narratives",
-    desc: "Shaped interactive demos for high-stakes RFPs, translating complex systems into clear, decision-driving narratives.",
+    title: "Framing enterprise product decisions",
+    desc: "Turned complex product systems into clear demo narratives for RFPs, executive reviews, and partner conversations.",
   },
   {
     number: "02",
-    title: "Enabling Sales Through Product Thinking",
-    desc: "Built prototypes that aligned product capabilities with client needs, accelerating deal cycles and clarity.",
+    title: "Supporting sales with product clarity",
+    desc: "Built prototypes that helped sales teams explain capability, constraints, and value without waiting on bespoke design support.",
   },
   {
     number: "03",
-    title: "Connecting Research to Product Direction",
-    desc: "Synthesized insights across banking flows to identify gaps and influence roadmap decisions.",
+    title: "Connecting research to roadmap decisions",
+    desc: "Synthesized banking and agentic commerce research into gaps, flow changes, and next-version priorities.",
   },
   {
     number: "04",
-    title: "Building Scalable Demo Infrastructure",
-    desc: "Created reusable demo systems enabling consistent storytelling across teams and stakeholders.",
+    title: "Building reusable demo infrastructure",
+    desc: "Created demo systems that made storytelling more consistent across product, engineering, sales, and leadership.",
   },
 ]
 
 export const advisoryItems: AdvisoryOrgItem[] = [
   {
     title: "Covera, Product & UX Advisor",
-    desc: "Advised on product strategy, customer experience, and early-stage roadmap decisions.",
+    desc: "Advised the founding team on product direction, customer experience, and the order of early roadmap bets.",
     logo: "/assets/images/logos/covera.jpeg",
     link: "https://lovecovera.com/",
   },
   {
     title: "Yon Innovations, Design & Tech Advisor",
-    desc: "Guided product direction, technology choices, and brand positioning from early stages.",
+    desc: "Guided product direction, technical choices, and brand positioning while the team shaped its first market-facing offer.",
     logo: "/assets/images/logos/yosn.png",
     link: "https://www.yosn.events/",
   },
@@ -41,13 +41,13 @@ export const advisoryItems: AdvisoryOrgItem[] = [
 export const teachingItems: AdvisoryOrgItem[] = [
   {
     title: "Masters' Union, MasterCamp (UX Design)",
-    desc: "Mentored students on product thinking and real-world UX problem solving.",
+    desc: "Mentored students on product framing, critique, and turning research into portfolio-ready case studies.",
     logo: "/assets/images/logos/mu.jpeg",
     link: "https://mastersunion.org/",
   },
   {
     title: "Designerrs, UI/UX Academy",
-    desc: "Guided designers on UX fundamentals, portfolio building, and practical workflows.",
+    desc: "Guided designers on UX fundamentals, practical workflows, case study structure, and stronger design rationale.",
     logo: "/assets/images/logos/da.jpeg",
     link: "https://designerrs.com/",
   },

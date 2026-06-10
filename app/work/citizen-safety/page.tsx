@@ -976,7 +976,7 @@ export default function Page() {
 
       <CsSection id="reflection" label="Reflection">
         <div className="space-y-10">
-          <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
+          <blockquote className="pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
               &ldquo;We didn&apos;t fail because we built the wrong product. We built the right product for a temporary world. The lesson isn&apos;t &lsquo;don&apos;t pivot.&rsquo; It&apos;s &lsquo;understand what your market is made of, and whether it exists without the forcing function that created it.&rsquo;&rdquo;
             </p>

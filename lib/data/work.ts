@@ -24,7 +24,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
       "Built the trust framework and React demo used in a CPO-led Money20/20 showcase.",
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
-    metric: "Built the trust framework and React demo used in a CPO-led Money20/20 showcase.",
+    metric: "CPO-led Money20/20 demo for AI-led payments.",
     tags: ["Trust UX", "AI Payments", "Prototype"],
     featured: true,
     thinkingBlock: {
@@ -55,7 +55,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
     category: "Commerce Infrastructure / Honasa",
     title: "Honasa: One commerce system for many D2C brands",
     description:
-      "Created one shared checkout, catalog, and campaign system for multiple D2C brands.",
+      "Shared checkout, catalog, and campaign patterns without flattening the brands.",
     image: "/assets/images/work/commerce-platform.jpg",
     href: "/work/d2c-platform",
     metric: "Shared checkout, catalog, and campaign patterns without flattening the brands.",
@@ -66,7 +66,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
     category: "Design Systems / Mastercard",
     title: "Mastercard Email Builder: Moving teams out of HTML",
     description:
-      "Owned the component architecture for a global email builder, including what shipped and how teams would use it.",
+      "50+ components and 28 templates helped teams ship on-brand emails without code.",
     image: "/assets/images/work/design-tokens.jpg",
     href: "/work/email-builder",
     metric: "50+ components and 28 templates helped teams ship on-brand emails without code.",
@@ -77,7 +77,7 @@ const ITEMS: Omit<WorkItem, "tier" | "order">[] = [
     category: "0→1 Product / Dror",
     title: "Dror: Building and pivoting a safety product",
     description:
-      "Worked as PM, designer, and React frontend dev across two products in eleven months, from a consumer safety app to a B2B workplace safety pivot.",
+      "Shipped two products, reached ₹1.98Cr revenue, and learned where PMF breaks.",
     image: "/assets/images/work/fintech-ai-system.jpg",
     href: "/work/citizen-safety",
     metric: "Shipped two products, reached ₹1.98Cr revenue, and learned where PMF breaks.",

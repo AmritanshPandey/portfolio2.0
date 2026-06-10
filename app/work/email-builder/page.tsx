@@ -171,7 +171,7 @@ function Hero() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <div className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[c.status]}`} />
-                    <span className="text-[12px] font-medium text-white">{c.name}</span>
+                    <span className="text-[12px] font-medium text-foreground">{c.name}</span>
                   </div>
                   <p className={`text-[10px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
                 </div>
@@ -221,8 +221,8 @@ export default function Page() {
               <div className="rounded-2xl border border-border bg-card p-7">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Operational problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
-                  Custom emails required HTML knowledge. Teams either depended on agencies  - 
-                  slow, expensive, inconsistent, or avoided custom emails altogether and defaulted
+                  Custom emails required HTML knowledge. Teams either depended on agencies,
+                  which was slow, expensive, and inconsistent, or avoided custom emails altogether and defaulted
                   to outdated generic templates. After the Mastercard.com rebrand, the gap between
                   the updated digital identity and downstream email communication became immediately visible.
                 </p>
@@ -240,7 +240,7 @@ export default function Page() {
           </FadeIn>
 
           <FadeIn>
-            <div className="rounded-2xl border-l-4 border-foreground/30 bg-muted/40 px-8 py-6">
+            <div className="rounded-2xl border border-border bg-muted/40 px-8 py-6">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">The central tension</p>
               <p className="text-[16px] text-foreground leading-relaxed max-w-2xl">
                 Teams wanted richer, more branded communication. Outlook Desktop, still dominant
@@ -641,7 +641,7 @@ export default function Page() {
       {/* Reflection */}
       <CsSection id="reflection" label="Key Reflection">
         <div className="space-y-10">
-          <blockquote className="border-l-2 border-orange-500/60 pl-6 max-w-2xl">
+          <blockquote className="pl-6 max-w-2xl">
             <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
               The challenge wasn&apos;t creating email templates. It was designing a system{" "}
               <em className="not-italic text-orange-500">constrained enough</em> to work in Outlook

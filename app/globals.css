@@ -18,6 +18,7 @@
 
   --color-card: var(--surface-1);
   --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-muted);
 
   --color-border: var(--border);
   --color-ring: var(--ring);
@@ -434,6 +435,18 @@
   }
   .card-surface:hover {
     background-color: var(--surface-hover);
+  }
+}
+
+/* ─────────────────────────
+   HIDE NATIVE CURSOR
+   Only on real pointer devices (mouse / trackpad).
+   Touch / stylus devices keep their default cursors.
+───────────────────────── */
+
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
   }
 }
 

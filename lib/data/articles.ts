@@ -4,7 +4,7 @@ import type { ArticleItem } from "@/lib/types/content"
 export const articleItems: ArticleItem[] = [
   {
     title:       "Dating Apps Solved the Wrong Problem",
-    description: "Discovery was the easy half. The real problem is who actually gets seen. Here is how I use Gale–Shapley as the core and build fair weekly matching around it.",
+    description: "The hard problem is not showing more profiles. It is deciding who gets seen, how often, and under what fairness rules.",
     href:        "/articles/dating-app-allocation",
     image:       "/article.png",
     accent:      "linear-gradient(135deg, #f472a8 0%, #ae2f3a 55%, #7c1c26 100%)",
@@ -25,8 +25,8 @@ export const articleItems: ArticleItem[] = [
   },
 
   {
-    title:       "Building Scalable Typography for Modern Digital Products",
-    description: "Typography isn't decoration, it's the interface. A system of scale, rhythm, hierarchy, and restraint, with eight interactive tools: modular scale generator, pairing explorer, reading simulator, clamp() preview, and more.",
+    title:       "Typography Systems for Product Interfaces",
+    description: "A practical look at scale, rhythm, hierarchy, responsive type, and the token decisions that make text usable across product surfaces.",
     href:        "/articles/typography-system",
     image:       "/article.png",
     accent:      "linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #9a3412 100%)",
@@ -39,8 +39,8 @@ export const articleItems: ArticleItem[] = [
   },
 
   {
-    title:       "Building a Scalable Color System for Modern Digital Products",
-    description: "A color system isn't a palette, it's a set of rules for when and why each color appears. Foundations, surfaces, semantics, and how to build an 11-stop scale from a single hue.",
+    title:       "Color Systems Are Rules, Not Palettes",
+    description: "Foundations, surfaces, semantic roles, accessibility, and how to build an 11-stop scale that teams can apply consistently.",
     href:        "/articles/color-system",
     image:       "/article.png",
     accent:      "linear-gradient(135deg, #fb923c 0%, #f97316 45%, #c2410c 100%)",
@@ -53,8 +53,8 @@ export const articleItems: ArticleItem[] = [
   },
 
   {
-    title:       "The Silent Guardian, What Agentic Commerce Taught Me About Trust as Architecture",
-    description: "When AI pays for you, where does Mastercard go? The wrong answer is everywhere. The right answer changed the company's direction.",
+    title:       "Trust as Architecture in Agentic Commerce",
+    description: "When AI pays for you, the payment brand has fewer visible moments. The design problem becomes when trust should appear.",
     href:        "/articles/silent-guardian-agentic-trust",
     image:       "/article.png",
     accent:      "linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #134e4a 100%)",

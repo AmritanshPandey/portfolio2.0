@@ -101,7 +101,7 @@ export function VerticalCard({
         // Soft top highlight (inset hairline) + a faint lift shadow read as a
         // pressed surface on dark without glow or gradient.
         "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_1px_2px_0_rgba(0,0,0,0.10)]",
-        isFeatured ? "min-h-[360px]" : "min-h-[235px]",
+        isFeatured ? "min-h-[330px]" : "min-h-[215px]",
         // Only animate compositor-friendly props (transform/border), not
         // box-shadow transition, which forces a full repaint each frame.
         "transition-[transform,border-color,background-color] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -199,15 +199,15 @@ export function VerticalCard({
           )}
 
           {isFeatured && thinkingBlock && (
-            <dl className="mt-6 space-y-2.5 text-[12px] leading-relaxed">
+            <dl className="mt-7 space-y-3 text-[12px] leading-relaxed">
               {[
                 ["Constraint", thinkingBlock.constraint],
                 ["Decision", thinkingBlock.decision],
                 ["Outcome", thinkingBlock.outcome],
               ].map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[86px_1fr] gap-3">
-                  <dt className="text-foreground/34">{label}</dt>
-                  <dd className="text-foreground/62">{value}</dd>
+                <div key={label} className="grid gap-1 sm:grid-cols-[86px_1fr] sm:gap-3">
+                  <dt className="text-foreground/32">{label}</dt>
+                  <dd className="text-foreground/58">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -220,15 +220,17 @@ export function VerticalCard({
           )}
 
           {/* CTA row */}
-          <div className="mt-auto flex items-center justify-between border-t border-border/40 pt-5">
-            <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
-              {ctaLabel}
-            </span>
-            <IconArrowUpRight
-              size={15}
-              stroke={2}
-              className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
-            />
+          <div className="mt-auto pt-7">
+            <div className="flex items-center justify-between border-t border-border/40 pt-6">
+              <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
+                {ctaLabel}
+              </span>
+              <IconArrowUpRight
+                size={15}
+                stroke={2}
+                className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
+              />
+            </div>
           </div>
 
         </div>

@@ -8,6 +8,7 @@ type Props = {
   description: string
   href: string
   date?: string
+  readTime?: string
   category?: string
   /** Accepted for call-site compatibility; no longer rendered. */
   image?: string
@@ -19,6 +20,7 @@ export function ArticleCard({
   description,
   href,
   date,
+  readTime,
   category = "Article",
 }: Props) {
   return (
@@ -42,11 +44,15 @@ export function ArticleCard({
       >
         <div className="relative flex flex-1 flex-col gap-3.5 px-5 pb-5 pt-5">
 
-          {category && (
-            <p className="type-meta">
-              {category}
-            </p>
-          )}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            {category && <p className="type-meta">{category}</p>}
+            {readTime && (
+              <>
+                <span className="text-foreground/20">/</span>
+                <p className="type-meta">{readTime}</p>
+              </>
+            )}
+          </div>
 
           <h3 className="type-card-title text-foreground">
             {title}
@@ -58,9 +64,7 @@ export function ArticleCard({
             </p>
           )}
 
-          {date && (
-            <p className="type-caption text-foreground/40">{date}</p>
-          )}
+          {date && <p className="type-caption text-foreground/40">{date}</p>}
 
           {/* CTA row */}
           <div className="mt-auto flex items-center justify-between border-t border-border/45 pt-4">

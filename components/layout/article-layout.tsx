@@ -81,7 +81,7 @@ function ArticleHero({
 
 function PullQuote({ body }: { body: string }) {
   return (
-    <blockquote className="relative my-12 border-l-2 border-orange-500/70 pl-6">
+    <blockquote className="relative my-12 pl-6">
       <p className="text-[22px] font-medium leading-[1.55] text-foreground/90 md:text-[26px]">
         {body}
       </p>
@@ -92,7 +92,6 @@ function PullQuote({ body }: { body: string }) {
 function Callout({ body }: { body: string }) {
   return (
     <aside className="relative my-10 overflow-hidden rounded-2xl border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6">
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500/60" />
       <p className="pl-2 text-[15px] leading-7 text-foreground/82">
         {body}
       </p>

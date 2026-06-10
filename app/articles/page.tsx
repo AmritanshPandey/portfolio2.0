@@ -19,7 +19,7 @@ export default function ArticlesPage() {
             Writing on product systems, UX decisions, and digital craft
           </h1>
           <p className="mt-6 max-w-2xl text-[16px] leading-8 text-muted-foreground md:text-[18px]">
-            A collection of notes, essays, and breakdowns on designing scalable products, building systems, and making better decisions under constraints.
+            A collection of notes, essays, and breakdowns on product systems, constraints, and better decision-making.
           </p>
         </div>
 

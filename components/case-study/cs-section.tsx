@@ -27,14 +27,26 @@ const DIVIDER: Record<Variant, string> = {
   dark:    "bg-white/[0.08]",
 }
 
+const EDGE_LINE: Record<Variant, string> = {
+  default: "bg-border/70 dark:bg-white/[0.08]",
+  muted:   "bg-border/70 dark:bg-white/[0.08]",
+  dark:    "bg-white/[0.08]",
+}
+
+const EDGE_HIGHLIGHT: Record<Variant, string> = {
+  default: "bg-white/70 dark:bg-white/[0.03]",
+  muted:   "bg-white/70 dark:bg-white/[0.03]",
+  dark:    "bg-white/[0.03]",
+}
+
 export function CsSection({ label, children, variant = "default", withDivider = true, id }: Props) {
   const isDark = variant === "dark"
 
   return (
     <section id={id} className={clsx("relative w-full overflow-hidden transition-colors duration-300", id && "scroll-mt-24", BG[variant])}>
 
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.07] dark:bg-white/[0.08]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/70 dark:bg-white/[0.03]" />
+      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-0 h-px", EDGE_LINE[variant])} />
+      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-px h-px", EDGE_HIGHLIGHT[variant])} />
 
       <div className="relative max-w-[1000px] mx-auto px-6 py-20 md:py-24">
 
@@ -73,7 +85,7 @@ export function CsSection({ label, children, variant = "default", withDivider = 
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 h-px w-full bg-border/70 dark:bg-white/[0.08]" />
+      <div className={clsx("absolute bottom-0 left-0 h-px w-full", EDGE_LINE[variant])} />
     </section>
   )
 }
