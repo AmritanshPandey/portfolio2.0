@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useRef, useCallback, useEffect } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
-import { ShaderHaze } from "@/components/shared/shader-haze"
+import { ShaderGrid } from "@/components/shared/shader-grid"
 import { Pill } from "@/components/shared/pill"
 import { gsap, prefersReducedMotion } from "@/lib/gsap"
 
@@ -119,9 +119,19 @@ export default function Hero() {
       ref={rootRef}
       className="relative overflow-hidden bg-background text-foreground"
     >
-      {/* Living warm light — the one shader moment of the page. Static
-          gradient fallback + reduced-motion handling live inside. */}
-      <ShaderHaze lightAlpha={0.18} darkAlpha={0.4} speed={0.8} />
+      {/* Cursor-reactive dot field — the pointer drags the dots like water
+          and pools an ember glow around itself. Fine-pointer desktops only;
+          the static-grid fallback + reduced-motion handling live inside. */}
+      <div className="hidden lg:block">
+        <ShaderGrid
+          spacing={18}
+          dotSize={0.07}
+          radius={0.13}
+          drag={1.35}
+          maxDrag={0.01}
+          fallbackClassName="hidden lg:block"
+        />
+      </div>
 
       {/* Ground the section into the page bg, top and bottom */}
       <div
@@ -147,60 +157,61 @@ export default function Hero() {
       />
 
       <div className="hero-vh relative z-10 mx-auto flex w-full max-w-6xl flex-col px-5 sm:px-6 pt-28 md:pt-32">
-        <div className="relative flex flex-1 flex-col justify-center pb-10">
+        <div className="relative flex flex-1 flex-col justify-center pb-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-x-14">
 
-          {/* ── The statement — full-width display type ─────────────── */}
-          <p
-            data-hero-fade
-            className="mb-6 flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
-          >
-            <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
-            Product Thinker · Mastercard · 7 yrs in product
-          </p>
-
-          <h1 className="type-display-hero relative z-10 max-w-[14ch]">
-            <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-              <span data-hero-line className="block">Designing fintech</span>
-            </span>
-            <span className="block overflow-hidden py-[0.06em] -my-[0.06em]">
-              <span data-hero-line className="block">
-                <RollingWord className="shimmer-accent" />
-              </span>
-            </span>
-            <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em]">
-              <span data-hero-line className="block">that scale globally.</span>
-            </span>
-          </h1>
-
-          {/* ── Supporting row: intro + CTAs ────────────────────────── */}
-          <div className="mt-8 flex max-w-[560px] flex-col items-start gap-6 md:mt-10">
+          {/* ── Left column: statement + supporting row ─────────────── */}
+          <div className="flex min-w-0 flex-col">
             <p
               data-hero-fade
-              className="type-section-intro text-muted-foreground"
+              className="mb-6 flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
             >
-              <span className="font-medium text-foreground">
-                At Mastercard&apos;s Creative Studio,
-              </span>{" "}
-              designing systems and platforms that power global banking
-              partnerships
-              <span className="font-medium text-foreground">
-                {" "}from early demos to production-ready experiences.
-              </span>
+              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+              Product Thinker · Mastercard · 7 yrs in product
             </p>
 
-            <div
-              data-hero-fade
-              className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4"
-            >
-              <CTA label="View work" href="#work" className="sm:w-auto sm:px-7 shadow-[0_6px_18px_rgba(0,0,0,0.08)]" />
-              <CTA label="Resume" href="/resume.pdf" variant="secondary" className="sm:w-auto sm:px-7" />
+            <h1 className="type-display-hero relative z-10 max-w-[14ch]">
+              <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+                <span data-hero-line className="block">Designing fintech</span>
+              </span>
+              <span className="block overflow-hidden py-[0.06em] -my-[0.06em]">
+                <span data-hero-line className="block">
+                  <RollingWord className="shimmer-accent" />
+                </span>
+              </span>
+              <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em]">
+                <span data-hero-line className="block">that scale globally.</span>
+              </span>
+            </h1>
+
+            <div className="mt-8 flex max-w-[560px] flex-col items-start gap-6 md:mt-10">
+              <p
+                data-hero-fade
+                className="type-section-intro text-muted-foreground"
+              >
+                <span className="font-medium text-foreground">
+                  At Mastercard&apos;s Creative Studio,
+                </span>{" "}
+                designing systems and platforms that power global banking
+                partnerships
+                <span className="font-medium text-foreground">
+                  {" "}from early demos to production-ready experiences.
+                </span>
+              </p>
+
+              <div
+                data-hero-fade
+                className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4"
+              >
+                <CTA label="View work" href="#work" className="sm:w-auto sm:px-7 shadow-[0_6px_18px_rgba(0,0,0,0.08)]" />
+                <CTA label="Resume" href="/resume.pdf" variant="secondary" className="sm:w-auto sm:px-7" />
+              </div>
             </div>
           </div>
 
-          {/* ── The person — a tilted polaroid riding the whitespace ── */}
+          {/* ── Right column: the tilted polaroid, in its own lane ──── */}
           <div
             data-hero-card
-            className="relative mx-auto mt-12 w-[240px] rotate-[-2deg] lg:absolute lg:right-2 lg:top-1/2 lg:mt-0 lg:w-[clamp(220px,21vw,290px)] lg:-translate-y-1/2 lg:rotate-[2.5deg]"
+            className="relative mx-auto mt-12 w-[240px] rotate-[-2deg] lg:mx-0 lg:mt-0 lg:w-[clamp(216px,19vw,280px)] lg:justify-self-end lg:rotate-[2.5deg]"
           >
             <div
               ref={cardRef}

@@ -327,13 +327,21 @@
 
 @layer utilities {
   /* Hero display — the one place the site is allowed to be loud.
-     Fluid up to 96px, tight but never cramped. */
+     Below lg the statement owns the full width; from lg it shares the
+     row with the photo column, so the scale steps down to keep each
+     line unbroken beside it (no text ever runs under the card). */
   .type-display-hero {
     font-size: clamp(2.7rem, 7.2vw, 6rem);
     line-height: 1.02;
     font-weight: 700;
     letter-spacing: -0.035em;
     text-wrap: balance;
+  }
+
+  @media (min-width: 1024px) {
+    .type-display-hero {
+      font-size: clamp(3.1rem, 6.5vw, 5.25rem);
+    }
   }
 
   /* Case-study / internal page hero — bigger than type-page-title,
