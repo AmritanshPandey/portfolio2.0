@@ -7,8 +7,6 @@ import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   IconHome,
-  IconMenu2,
-  IconX,
   IconDownload,
   IconArrowLeft,
 } from "@tabler/icons-react"
@@ -391,6 +389,8 @@ export default function Navbar() {
         ref={btnRef}
         onClick={() => setOpen(v => !v)}
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={open}
+        data-menu-open={open}
         className="
           fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 md:hidden
           w-14 h-14 rounded-full flex items-center justify-center
@@ -400,23 +400,13 @@ export default function Navbar() {
           active:scale-[0.92] transition
         "
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {open ? (
-            <motion.span key="x"
-              initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}
-            >
-              <IconX size={22} />
-            </motion.span>
-          ) : (
-            <motion.span key="menu"
-              initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}
-            >
-              <IconMenu2 size={22} />
-            </motion.span>
-          )}
-        </AnimatePresence>
+        {/* Morphing burger — bars gather, then twist into the X (see
+            .menu-morph in globals.css for the two-phase choreography) */}
+        <span aria-hidden className="menu-morph">
+          <span />
+          <span />
+          <span />
+        </span>
       </button>
 
       <AnimatePresence>
