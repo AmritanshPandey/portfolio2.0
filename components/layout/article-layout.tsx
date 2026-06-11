@@ -4,6 +4,8 @@ import {
   ArticleProse,
   RelatedArticles,
 } from "@/components/articles/article-ui"
+import { ReadingProgress } from "@/components/shared/reading-progress"
+import { Reveal } from "@/components/shared/motion"
 import { articleItems } from "@/lib/data"
 import type { ArticleSection } from "@/lib/types/content"
 
@@ -17,8 +19,14 @@ function getArticle(slug: string) {
 
 function PullQuote({ body }: { body: string }) {
   return (
-    <blockquote className="relative my-12 pl-6">
-      <p className="text-[22px] font-medium leading-[1.55] text-foreground/90 md:text-[26px]">
+    <blockquote className="relative my-14 px-6 md:px-10">
+      <span
+        aria-hidden
+        className="absolute -top-7 left-0 select-none text-[88px] font-black leading-none text-accent/25"
+      >
+        &ldquo;
+      </span>
+      <p className="text-[22px] font-medium leading-[1.55] tracking-[-0.01em] text-foreground/90 md:text-[27px]">
         {body}
       </p>
     </blockquote>
@@ -385,26 +393,31 @@ export function ArticleLayout({ slug }: { slug: string }) {
 
   return (
     <main>
+      <ReadingProgress />
       <ArticleHeader article={article} />
 
-      {/* Body */}
-      <div className="mx-auto max-w-6xl px-6 py-14 lg:py-20">
+      {/* Body — a measured reading column (~72ch); wide visuals punch out */}
+      <div className="mx-auto max-w-[760px] px-6 py-14 lg:py-20">
         <ArticleProse>
           {/* Intro */}
           {article.intro && (
-            <p className="mb-10 border-b border-border/45 pb-10 text-[19px] font-medium leading-[1.75] text-foreground/90 md:text-[21px]">
+            <Reveal as="p" y={20} className="mb-10 border-b border-border/45 pb-10 text-[19px] font-medium leading-[1.75] text-foreground/90 md:text-[21px]">
               {article.intro}
-            </p>
+            </Reveal>
           )}
 
           {/* Sections */}
           {article.sections?.map((section, i) => (
-            <ArticleSection key={i} section={section} />
+            <Reveal key={i} y={22} start="top 92%">
+              <ArticleSection section={section} />
+            </Reveal>
           ))}
 
           {/* Takeaways */}
           {article.takeaways && article.takeaways.length > 0 && (
-            <Takeaways items={article.takeaways} />
+            <Reveal y={22} start="top 92%">
+              <Takeaways items={article.takeaways} />
+            </Reveal>
           )}
         </ArticleProse>
       </div>

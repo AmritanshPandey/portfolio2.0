@@ -307,6 +307,11 @@
     text-wrap: balance;
   }
 
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    color: var(--foreground);
+  }
+
   p {
     text-wrap: pretty;
   }
@@ -321,6 +326,26 @@
 }
 
 @layer utilities {
+  /* Hero display — the one place the site is allowed to be loud.
+     Fluid up to 96px, tight but never cramped. */
+  .type-display-hero {
+    font-size: clamp(2.7rem, 7.2vw, 6rem);
+    line-height: 1.02;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  /* Case-study / internal page hero — bigger than type-page-title,
+     calmer than the home hero. */
+  .type-hero-internal {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.06;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
   .type-page-title {
     font-size: 34px;
     line-height: 1.14;
@@ -631,6 +656,78 @@
 }
 
 /* ─────────────────────────
+   HERO VIEWPORT
+   svh keeps the hero honest under iOS Safari's collapsing URL bar;
+   the vh line is the fallback for engines without svh (≤ Safari 15.3).
+───────────────────────── */
+
+.hero-vh {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* ─────────────────────────
+   WORK INDEX
+   Editorial project list: hovering one row lets the others recede.
+   Pointer-fine only, so touch devices never see dimmed rows.
+───────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  .work-index:hover .work-row {
+    opacity: 0.38;
+  }
+  .work-index:hover .work-row:hover,
+  .work-index .work-row:focus-visible {
+    opacity: 1;
+  }
+}
+
+.work-row {
+  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─────────────────────────
+   SCROLL CUE
+   A thin line that draws downward and resets — the hero's quiet
+   "there's more" gesture.
+───────────────────────── */
+
+@keyframes scroll-cue {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  45%  { transform: scaleY(1); transform-origin: top; }
+  55%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+.scroll-cue::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 100%;
+  margin-inline: auto;
+  background: color-mix(in srgb, var(--foreground) 45%, transparent);
+  animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* ─────────────────────────
+   READING PROGRESS
+   2px ember bar pinned to the very top of article / case-study pages.
+   Driven by transform only — compositor-cheap, Safari-safe.
+───────────────────────── */
+
+.reading-progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  z-index: 80;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* ─────────────────────────
    REDUCED MOTION
    Honour the OS-level preference. Decorative motion collapses to a
    static end-state; all content stays fully visible and legible.
@@ -660,5 +757,14 @@
   .shimmer-accent,
   .dark .shimmer-accent {
     animation: none !important;
+  }
+
+  .scroll-cue::after {
+    animation: none !important;
+    transform: scaleY(1);
+  }
+
+  .work-index:hover .work-row {
+    opacity: 1;
   }
 }

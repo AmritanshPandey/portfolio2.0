@@ -102,6 +102,7 @@ export default function PhotoCarousel({
                       src={src}
                       alt={`${altPrefix} ${i + 1}`}
                       fill
+                      sizes="(max-width: 768px) 90vw, 360px"
                       className="object-cover"
                     />
                   </div>

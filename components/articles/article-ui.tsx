@@ -4,6 +4,7 @@ import type { ArticleItem } from "@/lib/types/content"
 import { cn } from "@/lib/utils"
 import { articleItems } from "@/lib/data"
 import { ArticleCard as RelatedArticleCard } from "@/components/shared/article-card"
+import { Reveal, TextReveal } from "@/components/shared/motion"
 
 export function CategoryPill({
   children,
@@ -103,60 +104,51 @@ export function ArticleHeader({ article }: { article: ArticleItem }) {
             "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
           backgroundSize: "56px 56px",
           maskImage: "linear-gradient(to bottom, black, transparent 78%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black, transparent 78%)",
         }}
       />
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,transparent_0%,var(--background)_68%)]" />
 
       <div className="relative mx-auto max-w-6xl px-6 pb-14 pt-28 md:pb-18 md:pt-36">
-        <div>
-          <aside className="hidden lg:block">
-            {/* <div className="rounded-2xl border border-border/60 bg-card/72 p-3 backdrop-blur-sm">
-              <div className="mb-3 flex items-center justify-between px-1">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Article
-                </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              </div>
-              <ArticleMetaStack article={article} />
-            </div> */}
-          </aside>
-
-          <div className="min-w-0">
-            <div className="mb-6 flex flex-wrap items-center gap-2">
-              {article.category ? <CategoryPill>{article.category}</CategoryPill> : null}
-              {article.date ? (
-                <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground backdrop-blur-sm">
-                  {article.date}
-                </span>
-              ) : null}
-              {article.readTime ? (
-                <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground backdrop-blur-sm">
-                  {article.readTime}
-                </span>
-              ) : null}
-            </div>
-
-            <h1 className="max-w-[930px] text-balance text-[42px] font-semibold leading-[1.02] text-foreground md:text-[64px] lg:text-[72px]">
-              {article.title}
-            </h1>
-
-            <p className="mt-7 max-w-[68ch] text-[18px] leading-8 text-foreground/68 md:text-[21px] md:leading-9">
-              {article.description}
-            </p>
-
-            {article.tags && article.tags.length > 0 ? (
-              <div className="mt-8 flex flex-wrap gap-2 border-t border-border/55 pt-5">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-border/55 bg-card/60 px-3 py-1.5 text-[12px] font-medium text-muted-foreground backdrop-blur-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+        <div className="min-w-0">
+          <Reveal as="div" y={14} start="top 96%" className="mb-6 flex flex-wrap items-center gap-2">
+            {article.category ? <CategoryPill>{article.category}</CategoryPill> : null}
+            {article.date ? (
+              <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground">
+                {article.date}
+              </span>
             ) : null}
-          </div>
+            {article.readTime ? (
+              <span className="inline-flex h-7 items-center rounded-full border border-border/55 bg-card/65 px-3 text-[11px] font-medium text-muted-foreground">
+                {article.readTime}
+              </span>
+            ) : null}
+          </Reveal>
+
+          <TextReveal
+            as="h1"
+            start="top 96%"
+            className="max-w-[930px] text-balance text-[40px] font-semibold leading-[1.04] tracking-[-0.02em] text-foreground md:text-[60px] lg:text-[68px]"
+          >
+            {article.title}
+          </TextReveal>
+
+          <Reveal as="p" y={20} delay={0.2} start="top 96%" className="mt-7 max-w-[68ch] text-[18px] leading-8 text-foreground/68 md:text-[21px] md:leading-9">
+            {article.description}
+          </Reveal>
+
+          {article.tags && article.tags.length > 0 ? (
+            <Reveal as="div" y={14} delay={0.3} start="top 96%" className="mt-8 flex flex-wrap gap-2 border-t border-border/55 pt-5">
+              {article.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-border/55 bg-card/60 px-3 py-1.5 text-[12px] font-medium text-muted-foreground"
+                >
+                  {tag}
+                </span>
+              ))}
+            </Reveal>
+          ) : null}
         </div>
       </div>
     </header>
@@ -204,36 +196,60 @@ export function RelatedArticles({ currentHref }: { currentHref: string }) {
 }
 
 function ArticleVisual({ article, featured = false }: { article: ArticleItem; featured?: boolean }) {
+  const wash = article.accent ?? "linear-gradient(135deg,#f97316,#9a3412)"
+
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-border/50 bg-muted",
+        "relative overflow-hidden rounded-2xl border border-white/[0.08] bg-neutral-950",
         featured ? "min-h-[260px] md:min-h-full" : "h-40"
       )}
-      style={{ background: article.accent ?? "linear-gradient(135deg,#f97316,#9a3412)" }}
     >
+      {/* Accent wash — the article's own color as a pooled light, not a slab */}
       <div
-        className="absolute inset-0 opacity-[0.13]"
+        aria-hidden
+        className="absolute inset-0 opacity-50"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px)",
-          backgroundSize: "18px 18px",
+          background: wash,
+          maskImage: "radial-gradient(130% 110% at 12% -10%, black 0%, transparent 64%)",
+          WebkitMaskImage: "radial-gradient(130% 110% at 12% -10%, black 0%, transparent 64%)",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,transparent_35%,rgba(0,0,0,0.28)_100%)]" />
-      <span className="absolute bottom-3 right-4 select-none text-[96px] font-black leading-none text-white/[0.055] md:text-[132px]">
+      {/* Fine dot screen for tooth */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.12]"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
+        }}
+      />
+      {/* Oversized initial, cropped at the plate's edge */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute -bottom-7 right-1 select-none font-black leading-none text-white/[0.07]",
+          featured ? "text-[180px]" : "text-[120px]"
+        )}
+      >
         {article.title[0]}
       </span>
-      <div className="absolute inset-x-0 bottom-0 p-4">
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
         <div className="flex flex-wrap gap-1.5">
           {article.tags?.slice(0, featured ? 3 : 1).map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-black/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/75 backdrop-blur-sm"
+              className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[10px] font-medium text-white/80"
             >
               {tag}
             </span>
           ))}
         </div>
+        {article.readTime ? (
+          <span className="font-mono text-[10px] tracking-[0.08em] text-white/45">
+            {article.readTime}
+          </span>
+        ) : null}
       </div>
     </div>
   )

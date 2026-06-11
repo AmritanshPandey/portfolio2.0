@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import clsx from "clsx"
+import { ReadingProgress } from "@/components/shared/reading-progress"
 import type { CSSProperties, ReactNode } from "react"
 
 interface Breadcrumb {
@@ -51,6 +52,8 @@ export function CsHeroShell({
 
   return (
     <div className={clsx("relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]", className)}>
+
+      <ReadingProgress />
 
       {/* Ambient glow — two soft accent layers for depth */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
@@ -109,7 +112,7 @@ export function CsHeroShell({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.06, ease: EASE }}
               className={clsx(
-                "type-page-title text-neutral-900 dark:text-white mb-6",
+                "type-hero-internal text-neutral-900 dark:text-white mb-6",
                 hasAside ? "max-w-xl" : "max-w-3xl"
               )}
             >

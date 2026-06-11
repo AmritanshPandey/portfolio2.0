@@ -1,4 +1,5 @@
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
+import { Reveal } from "@/components/shared/motion"
 import { explorationItems, systemItems } from "@/lib/data"
 import { ExplorationProductCard, type ExplorationCardData } from "./exploration-product-card"
 
@@ -27,11 +28,11 @@ export default function ExplorationsSection() {
   return (
     <SectionSubgroup variant="spacious">
       <section data-cursor-zone="exploration">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Reveal stagger={0.12} y={30} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {cards.map((card) => (
             <ExplorationProductCard key={card.href} card={card} />
           ))}
-        </div>
+        </Reveal>
       </section>
     </SectionSubgroup>
   )

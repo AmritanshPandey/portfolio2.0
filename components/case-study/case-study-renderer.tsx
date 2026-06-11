@@ -33,7 +33,13 @@ export function CaseStudyRenderer({ data }: Props) {
 
       {/* ── 3. PROBLEM ───────────────────────────── */}
       <CsSection id="problem" label="Problem" variant="muted">
-        <blockquote className="border-l-2 border-accent/50 pl-6">
+        <blockquote className="relative px-6 md:px-10">
+          <span
+            aria-hidden
+            className="absolute -top-6 left-0 select-none text-[76px] font-black leading-none text-accent/25"
+          >
+            &ldquo;
+          </span>
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             {data.problem.statement}
           </p>
@@ -179,7 +185,13 @@ export function CaseStudyRenderer({ data }: Props) {
 
       {/* ── 13. TAKEAWAY ─────────────────────────── */}
       <CsSection id="takeaway" label="Takeaway" variant="default">
-        <blockquote className="border-l-2 border-accent/60 pl-6">
+        <blockquote className="relative px-6 md:px-10">
+          <span
+            aria-hidden
+            className="absolute -top-6 left-0 select-none text-[76px] font-black leading-none text-accent/25"
+          >
+            &ldquo;
+          </span>
           <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
             {data.takeaway}
           </p>

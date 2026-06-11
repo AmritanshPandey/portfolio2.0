@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { Reveal, TextReveal } from "@/components/shared/motion"
 
 type Variant = "default" | "compact" | "hero"
 type HeadingLevel = "h1" | "h2" | "h3"
@@ -32,14 +33,17 @@ export function SectionHeader({
 
   return (
     <div className={clsx(styles.container)}>
-      <Tag className={clsx("text-neutral-900 dark:text-white", styles.title)}>
+      <TextReveal
+        as={Tag}
+        className={clsx("text-neutral-900 dark:text-white", styles.title)}
+      >
         {title}
-      </Tag>
+      </TextReveal>
 
       {description && (
-        <p className="type-section-intro text-muted-foreground">
+        <Reveal as="p" y={18} delay={0.12} className="type-section-intro text-muted-foreground">
           {description}
-        </p>
+        </Reveal>
       )}
     </div>
   )

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { IconArrowLeft } from "@tabler/icons-react"
+import { ReadingProgress } from "@/components/shared/reading-progress"
 import type { CaseStudyMeta } from "@/lib/types/case-study"
 
 interface Props {
@@ -35,6 +36,8 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
 
   return (
     <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]">
+
+      <ReadingProgress />
 
       {/* Ambient light — matches Section component pattern */}
       <div className="pointer-events-none absolute inset-0">
@@ -91,7 +94,7 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="
-            type-page-title
+            type-hero-internal
             text-neutral-900 dark:text-white
             max-w-3xl mb-6
           "

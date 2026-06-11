@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
+import { Grain } from "@/components/shared/motion"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
@@ -78,6 +79,9 @@ export default function RootLayout({
             <ScrollToHash />
 
             <FancyCursor />
+
+            {/* Film grain — one quiet texture across every page */}
+            <Grain />
 
             {/* Navbar */}
             <Navbar />
