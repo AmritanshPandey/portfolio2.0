@@ -121,13 +121,29 @@ export default function Hero() {
     >
       {/* Living warm light — the one shader moment of the page. Static
           gradient fallback + reduced-motion handling live inside. */}
-      <ShaderHaze lightAlpha={0.16} darkAlpha={0.34} speed={0.8} />
+      <ShaderHaze lightAlpha={0.18} darkAlpha={0.4} speed={0.8} />
 
       {/* Ground the section into the page bg, top and bottom */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{ background: "linear-gradient(to bottom, var(--background) 0%, transparent 18%, transparent 78%, var(--background) 100%)" }}
+      />
+
+      {/* Stage vignette — eases the haze off at the edges so the light
+          reads as pooled on the work, not wallpapered across the section */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(120% 90% at 50% 42%, transparent 52%, color-mix(in srgb, var(--background) 72%, transparent) 100%)" }}
+      />
+
+      {/* Low warm pool anchoring the proof strip — the second, quieter
+          light of the studio scene */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 left-[-8%] h-[420px] w-[640px] rounded-full opacity-60 dark:opacity-100"
+        style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.07), transparent 70%)" }}
       />
 
       <div className="hero-vh relative z-10 mx-auto flex w-full max-w-6xl flex-col px-5 sm:px-6 pt-28 md:pt-32">

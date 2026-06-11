@@ -64,15 +64,16 @@ export function CTA({
           "w-full px-5 py-3 rounded-full text-[15px] font-medium",
           "overflow-hidden",
           "active:scale-[0.97]",
-          "transition-all duration-300",
+          "transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
 
           // PRIMARY — white text on accent in light mode, dark in dark mode.
           variant === "primary" && [
             "bg-accent text-white dark:text-neutral-950",
             "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(255,90,0,0.18)]",
             "hover:bg-accent",
-            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_26px_rgba(255,90,0,0.28)]",
-            "active:scale-[0.97]",
+            "hover:-translate-y-[1.5px]",
+            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_34px_rgba(255,90,0,0.32)]",
+            "active:scale-[0.97] active:translate-y-0",
           ],
 
           // SECONDARY
@@ -97,12 +98,12 @@ export function CTA({
           className
         )}
       >
-          {/* shimmer (subtle) */}
+          {/* shimmer (subtle) — slow sweep, reads as light catching the pill */}
           <span className="
             pointer-events-none absolute inset-0 -translate-x-full
-            transition-transform duration-500 ease-out
+            transition-transform duration-900 ease-[cubic-bezier(0.22,1,0.36,1)]
             group-hover/cta:translate-x-full
-            bg-gradient-to-r from-transparent via-white/[0.05] to-transparent
+            bg-gradient-to-r from-transparent via-white/[0.07] to-transparent
           " />
 
           {/* INNER */}

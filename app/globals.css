@@ -674,7 +674,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .work-index:hover .work-row {
-    opacity: 0.38;
+    opacity: 0.32;
   }
   .work-index:hover .work-row:hover,
   .work-index .work-row:focus-visible {
@@ -683,7 +683,8 @@
 }
 
 .work-row {
-  transition: opacity 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Long exponential ease-out — rows breathe rather than snap */
+  transition: opacity 650ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 /* ─────────────────────────

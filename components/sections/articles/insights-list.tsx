@@ -55,17 +55,25 @@ export function InsightsList({ items }: { items: ArticleItem[] }) {
           <h3
             className={clsx(
               "order-1 md:order-none min-w-0 text-[clamp(1.15rem,2vw,1.5rem)] font-semibold leading-[1.22] tracking-[-0.012em] text-foreground",
-              "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2"
+              "transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2"
             )}
           >
             {item.title}
           </h3>
 
-          <IconArrowUpRight
-            size={17}
-            stroke={2}
-            className="order-1 md:order-none shrink-0 text-foreground/30 transition-all duration-500 group-hover:-translate-y-[2px] group-hover:translate-x-[2px] group-hover:text-accent"
-          />
+          <span className="order-1 md:order-none relative grid shrink-0 place-items-center overflow-hidden">
+            <IconArrowUpRight
+              size={17}
+              stroke={2}
+              className="col-start-1 row-start-1 text-foreground/30 transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[160%] group-hover:-translate-y-[160%]"
+            />
+            <IconArrowUpRight
+              size={17}
+              stroke={2}
+              aria-hidden
+              className="col-start-1 row-start-1 -translate-x-[160%] translate-y-[160%] text-accent transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-hover:translate-y-0"
+            />
+          </span>
         </Link>
       ))}
     </div>

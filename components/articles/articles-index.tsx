@@ -27,8 +27,20 @@ export function ArticlesIndex({ articles }: { articles: ArticleItem[] }) {
   const rest = active ? filtered : filtered.slice(1)
 
   return (
-    <main className="min-h-screen bg-background">
-      <section className="mx-auto max-w-6xl px-6 pb-12 pt-32 md:pb-16 md:pt-36">
+    <main className="relative min-h-screen bg-background">
+      {/* Studio light — same quiet key light the home bands carry */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[520px] overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-0 dark:opacity-100"
+          style={{ background: "radial-gradient(62% 100% at 50% 0%, rgba(255,255,255,0.045) 0%, transparent 72%)" }}
+        />
+        <div
+          className="absolute -top-44 right-[-10%] h-[520px] w-[700px]"
+          style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.05), transparent 72%)" }}
+        />
+      </div>
+
+      <section className="relative mx-auto max-w-6xl px-6 pb-12 pt-32 md:pb-16 md:pt-36">
         <div className="max-w-3xl">
           <TextReveal
             as="h1"

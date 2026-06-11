@@ -106,7 +106,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
             <h3
               className={clsx(
                 "leading-[1.08] font-bold tracking-[-0.02em] text-foreground",
-                "transition-[transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2",
+                "transition-[transform,color] duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2",
                 item.featured
                   ? "text-[clamp(1.6rem,3.4vw,2.6rem)]"
                   : "text-[clamp(1.35rem,2.6vw,2rem)]"
@@ -127,16 +127,30 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
 
           <span
             className={clsx(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/60",
-              "transition-[background-color,border-color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              "group-hover:border-accent/50 group-hover:bg-accent group-hover:text-white dark:group-hover:text-neutral-950"
+              "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/60",
+              "transition-[border-color,transform] duration-600 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "group-hover:scale-105 group-hover:border-accent/60"
             )}
           >
-            <IconArrowUpRight
-              size={17}
-              stroke={2}
-              className="transition-transform duration-500 group-hover:-translate-y-[2px] group-hover:translate-x-[2px]"
+            {/* Fill grows from the centre — no hard background swap */}
+            <span
+              aria-hidden
+              className="absolute inset-0 scale-0 rounded-full bg-accent transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
             />
+            {/* Arrow swap: one flies out top-right, its twin arrives from bottom-left */}
+            <span className="relative z-10 grid place-items-center text-foreground group-hover:text-white dark:group-hover:text-neutral-950">
+              <IconArrowUpRight
+                size={17}
+                stroke={2}
+                className="col-start-1 row-start-1 transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[160%] group-hover:-translate-y-[160%]"
+              />
+              <IconArrowUpRight
+                size={17}
+                stroke={2}
+                aria-hidden
+                className="col-start-1 row-start-1 -translate-x-[160%] translate-y-[160%] transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-hover:translate-y-0"
+              />
+            </span>
           </span>
         </Link>
       ))}

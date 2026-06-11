@@ -86,8 +86,34 @@ export function Section({
         />
       )}
 
-      {/* Sections are clean neutral surfaces. Ember is reserved for intent
-          (CTAs, active states) per DESIGN.md's One Voice Rule — no ambient tint. */}
+      {/* STUDIO LIGHT — every band carries one quiet light source so large
+          surfaces never read as flat digital fills. Dark mode: a soft key
+          light pooling from the top edge. Light mode: a gentle grounding
+          shade at the base. The receded `muted` bands additionally get a
+          low warm pool — the "one warm light on the work" of the North Star,
+          kept at whisper level so ember stays the voice of intent. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-x-0 top-0 h-[440px] opacity-0 dark:opacity-100"
+          style={{ background: "radial-gradient(62% 100% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 72%)" }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-[260px] dark:hidden"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.028), transparent)" }}
+        />
+        {bg === "muted" && (
+          <>
+            <div
+              className="absolute -top-44 right-[-12%] h-[560px] w-[760px] dark:hidden"
+              style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.045), transparent 72%)" }}
+            />
+            <div
+              className="absolute -top-44 right-[-12%] hidden h-[560px] w-[760px] dark:block"
+              style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.065), transparent 72%)" }}
+            />
+          </>
+        )}
+      </div>
 
       {/* ENGRAVED SEAM — borders do the dividing (DESIGN.md §Elevation).
           A hairline rule + a 1px highlight lip reads as a tactile letterpress
