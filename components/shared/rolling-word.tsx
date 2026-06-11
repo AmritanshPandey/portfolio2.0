@@ -60,10 +60,14 @@ export function RollingWord({
   }, [words, hold])
 
   return (
+    // The mask runs 0.2em taller than the line box (pulled back with a
+    // negative bottom margin so baseline alignment is untouched) and each
+    // word slot matches it, giving descenders — y, p, g — room to render
+    // without being cropped by the overflow clip.
     <span
       ref={maskRef}
       className="inline-block overflow-hidden align-bottom"
-      style={{ height: "1.02em" }}
+      style={{ height: "1.22em", marginBottom: "-0.2em" }}
     >
       <span ref={colRef} className="flex flex-col">
         {[...words, words[0]].map((word, i) => (
@@ -71,7 +75,7 @@ export function RollingWord({
             key={`${word}-${i}`}
             aria-hidden={i > 0 || undefined}
             className={className}
-            style={{ height: "1.02em", lineHeight: 1.02 }}
+            style={{ height: "1.22em", lineHeight: 1.02 }}
           >
             {word}
           </span>

@@ -76,6 +76,12 @@ uniform float u_radius;     // influence radius (aspect-corrected UV)
 uniform vec2  u_velocity;   // cursor drag vector (normalized UV / frame, gained)
 uniform vec4  u_baseColor;  // base dot rgba
 uniform vec3  u_tintColor;  // tint near cursor
+uniform float u_time;       // seconds — drives the ambient shimmer
+uniform vec4  u_ripple;     // xy: click centre (0..1, y-up) · z: age s · w: 1 while live
+
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
 
 void main() {
   // ── Normalized UV space ────────────────────────────────────────────────
@@ -92,37 +98,60 @@ void main() {
   float dist  = length(dir);
   float force = smoothstep(u_radius, 0.0, dist) * u_intensity;
 
-  // Sample the field "upstream" of the motion so dots appear pulled along with
-  // the cursor, then relax back to rest the moment it stops. Purely driven by
-  // velocity — no displacement when the pointer is still, so it stays polished.
-  vec2  warped = auv - vel * force;
+  // ── Gravity well — a standing pull toward the pointer while it rests.
+  //    Sampling away from the cursor renders the field displaced toward it,
+  //    so dots lean in and stick; squared falloff keeps the centre strongest.
+  vec2  dirN = dist > 0.0001 ? dir / dist : vec2(0.0);
+  float well = smoothstep(u_radius * 1.9, 0.0, dist) * u_intensity;
+  vec2  grav = dirN * well * well * 0.016;
+
+  // ── Click ripple — one ring that pushes dots outward and lights them up,
+  //    expanding from the press point and decaying over ~1.5s.
+  vec2  rc    = vec2(u_ripple.x * aspect, u_ripple.y);
+  vec2  rdir  = auv - rc;
+  float rdist = length(rdir);
+  float ringR = u_ripple.z * 0.85;
+  // exp(-x²) written out by hand: pow() is undefined for negative bases in
+  // GLSL ES, and (rdist - ringR) swings negative inside the ring.
+  float band  = (rdist - ringR) * 16.0;
+  float wave  = exp(-band * band) * exp(-u_ripple.z * 2.4) * u_ripple.w;
+  vec2  rip   = (rdist > 0.0001 ? rdir / rdist : vec2(0.0)) * wave * 0.02;
+
+  // Velocity drag samples upstream of the motion; the well pulls inward; the
+  // ripple pushes outward. No displacement at rest, so the field stays calm.
+  vec2  warped = auv - vel * force + grav - rip;
 
   // ── Procedural dot grid (no textures) ──────────────────────────────────
-  vec2  cell = fract(warped * u_density) - 0.5;
-  float d    = length(cell);
+  vec2  cellId = floor(warped * u_density);
+  vec2  cell   = fract(warped * u_density) - 0.5;
+  float d      = length(cell);
 
   // Resolution-aware antialiasing: ~1px soft edge regardless of DPR.
-  float aa  = u_density / u_resolution.y;
-  float dot = 1.0 - smoothstep(u_dotSize - aa, u_dotSize + aa, d);
+  float aa   = u_density / u_resolution.y;
+  float disc = 1.0 - smoothstep(u_dotSize - aa, u_dotSize + aa, d);
+
+  // ── A living field: per-dot character + a slow breathing shimmer ───────
+  //    Some dots sit brighter than others (organic, not a perfect raster),
+  //    and the whole field breathes on a long phase offset per dot.
+  float seed      = hash(cellId);
+  float character = 0.72 + 0.55 * seed;
+  float breathe   = 0.86 + 0.14 * sin(u_time * 0.55 + seed * 6.2831);
 
   // ── Color + subtle falloff / vignette for depth ────────────────────────
   float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
 
   // The cursor is a glow pocket. The hue goes (near) fully orange within the
   // pocket so it reads as orange in BOTH themes — in light mode the base dots
-  // are black, so a weak mix would just look dark, not orange. Subtlety comes
-  // from a small, soft pocket + a gentle brightness lift, not a washed-out hue.
+  // are black, so a weak mix would just look dark, not orange. The ripple ring
+  // borrows the same ember as it passes through.
   float motion = length(vel) * force;
-  // Couple the ember tint to proximity (not just motion) so a STILL hover
-  // reads orange across the whole pocket. Otherwise the alpha lift below just
-  // darkens the black light-mode dots into grey wherever the hue hasn't yet
-  // saturated.
-  float warm   = clamp(force * 2.2 + motion * 6.0, 0.0, 1.0);
+  float warm   = clamp(force * 2.2 + motion * 6.0 + wave * 1.6, 0.0, 1.0);
 
   vec3  color = mix(u_baseColor.rgb, u_tintColor, warm);
   // Brighten near the cursor; the glow sidesteps most of the vignette so it
   // stays orange even toward the edges, while the resting grid fades for depth.
-  float alpha = (u_baseColor.a * vignette + force * 0.35 + motion * 3.0) * dot;
+  float alpha = (u_baseColor.a * vignette * character * breathe +
+                 force * 0.35 + motion * 3.0 + wave * 0.6) * disc;
 
   gl_FragColor = vec4(color, alpha);
 }
@@ -237,6 +266,8 @@ export function ShaderGrid({
       velocity: gl.getUniformLocation(program, "u_velocity"),
       baseColor: gl.getUniformLocation(program, "u_baseColor"),
       tintColor: gl.getUniformLocation(program, "u_tintColor"),
+      time: gl.getUniformLocation(program, "u_time"),
+      ripple: gl.getUniformLocation(program, "u_ripple"),
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -257,6 +288,10 @@ export function ShaderGrid({
     let velY = 0
     let intensity = 0
     let targetIntensity = 0
+    // Click ripple — centre in normalized UV, age derived per frame.
+    let rippleX = 0.5
+    let rippleY = 0.5
+    let rippleStart = -1e9
     let raf = 0
     let visible = true
     let lastTime = 0
@@ -340,6 +375,16 @@ export function ShaderGrid({
       gl.uniform2f(u.velocity, dragX, dragY)
       gl.uniform4f(u.baseColor, base[0], base[1], base[2], base[3])
       gl.uniform3f(u.tintColor, tintColor[0], tintColor[1], tintColor[2])
+      // Wrap the clock hourly to keep float precision healthy in the shader.
+      gl.uniform1f(u.time, (now / 1000) % 3600)
+      const rippleAge = (now - rippleStart) / 1000
+      gl.uniform4f(
+        u.ripple,
+        rippleX,
+        rippleY,
+        Math.min(rippleAge, 10),
+        rippleAge < 1.8 ? 1 : 0
+      )
 
       gl.clearColor(0, 0, 0, 0)
       gl.clear(gl.COLOR_BUFFER_BIT)
@@ -352,12 +397,10 @@ export function ShaderGrid({
         setWebglActive(true)
       }
 
-      // Keep animating while the field is settling or the cursor is active.
-      const settling =
-        Math.abs(targetX - mx) > 0.001 ||
-        Math.abs(targetY - my) > 0.001 ||
-        Math.abs(targetIntensity - intensity) > 0.002
-      if (visible && (settling || targetIntensity > 0)) {
+      // The shimmer breathes continuously, so keep rendering while the field
+      // is on screen; IntersectionObserver + visibilitychange pause it the
+      // moment it scrolls away or the tab hides.
+      if (visible) {
         raf = requestAnimationFrame(render)
       } else {
         raf = 0
@@ -397,7 +440,25 @@ export function ShaderGrid({
       setTarget(e.clientX, e.clientY)
     }
 
+    // A click drops a ripple into the field — one ring, then calm again.
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return
+      const rect = canvas.getBoundingClientRect()
+      if (
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom
+      )
+        return
+      rippleX = (e.clientX - rect.left) / Math.max(1, rect.width)
+      rippleY = 1 - (e.clientY - rect.top) / Math.max(1, rect.height)
+      rippleStart = performance.now()
+      kick()
+    }
+
     window.addEventListener("pointermove", onPointerMove, { passive: true })
+    window.addEventListener("pointerdown", onPointerDown, { passive: true })
     window.addEventListener("blur", release)
     window.addEventListener("resize", scheduleResize, { passive: true })
     window.addEventListener("orientationchange", scheduleResize)
@@ -470,6 +531,7 @@ export function ShaderGrid({
       if (raf) cancelAnimationFrame(raf)
       if (resizeRaf) cancelAnimationFrame(resizeRaf)
       window.removeEventListener("pointermove", onPointerMove)
+      window.removeEventListener("pointerdown", onPointerDown)
       window.removeEventListener("blur", release)
       window.removeEventListener("resize", scheduleResize)
       window.removeEventListener("orientationchange", scheduleResize)

@@ -30,8 +30,10 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } })
 
+      // 135% (not ~110) because the reveal masks carry extra descender
+      // slack below the line box — the line must clear that window too.
       tl.from("[data-hero-line]", {
-        yPercent: 112,
+        yPercent: 135,
         duration: 1.05,
         stagger: 0.1,
       })
@@ -169,16 +171,19 @@ export default function Hero() {
               Product Thinker · Mastercard · 7 yrs in product
             </p>
 
+            {/* Each reveal mask carries 0.22em of bottom slack (pulled back
+                with a negative margin) so descenders — g, y, p — never get
+                cropped by the overflow clip at tight line-height. */}
             <h1 className="type-display-hero relative z-10 max-w-[14ch]">
-              <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+              <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
                 <span data-hero-line className="block">Designing fintech</span>
               </span>
-              <span className="block overflow-hidden py-[0.06em] -my-[0.06em]">
+              <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
                 <span data-hero-line className="block">
                   <RollingWord className="shimmer-accent" />
                 </span>
               </span>
-              <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em]">
+              <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
                 <span data-hero-line className="block">that scale globally.</span>
               </span>
             </h1>
