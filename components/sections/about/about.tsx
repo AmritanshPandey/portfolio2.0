@@ -150,7 +150,7 @@ export default function AboutSection() {
           style={{
             opacity: "var(--about-grid-alpha)",
             background:
-              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(12,12,12,0.075), rgba(249,115,22,0.05) 28%, transparent 68%)",
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(12,12,12,0.075), rgba(244,63,94,0.05) 28%, transparent 68%)",
           }}
         />
         <div
@@ -159,13 +159,13 @@ export default function AboutSection() {
           style={{
             opacity: "var(--about-grid-alpha)",
             background:
-              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(255,255,255,0.105), rgba(249,115,22,0.045) 28%, transparent 68%)",
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(255,255,255,0.105), rgba(244,63,94,0.045) 28%, transparent 68%)",
           }}
         />
 
         {/* GLOW, faint ambient bloom for depth behind the glass card. Ember stays
             subtle (One Voice Rule); a neutral lift adds dimension, no 2nd accent. */}
-        <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(249,115,22,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(249,115,22,0.17),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(244,63,94,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(244,63,94,0.17),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(520px_320px_at_12%_6%,rgba(0,0,0,0.04),transparent_60%)] dark:bg-[radial-gradient(560px_340px_at_12%_6%,rgba(255,255,255,0.05),transparent_62%)]" />
       </div>
 

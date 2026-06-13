@@ -176,7 +176,7 @@ function NavItem({
       onClick={handleClick}
       aria-current={isActive ? "true" : undefined}
       aria-label={icon ? label : undefined}
-      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {/* Sliding pill — layoutId moves it between active items via spring transform */}
       {isActive && (
@@ -217,7 +217,7 @@ function DetailNavItem({
       aria-label={Icon && !label ? "Home" : undefined}
       className={clsx(
         "relative flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "bg-black/[0.05] text-foreground dark:bg-white/[0.09]"
           : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
@@ -326,7 +326,7 @@ export default function Navbar() {
             <Link
               href={detailRoute!.href}
               aria-label={`Back to ${detailRoute!.label}`}
-              className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <IconArrowLeft size={15} stroke={2} />
               <span className="hidden lg:inline">Back to {detailRoute!.label}</span>

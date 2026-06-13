@@ -7,9 +7,9 @@ type Step = {
 export function ProcessStepsCard({ steps }: { steps: Step[] }) {
   return (
     <div className="relative rounded-3xl p-8 md:p-12 bg-card text-card-foreground border border-border overflow-hidden">
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[rgba(255,90,0,0.08)] via-[rgba(255,90,0,0.04)] to-transparent blur-xl opacity-70" />
-      <div className="pointer-events-none absolute -top-28 -right-28 w-[300px] h-[300px] bg-[radial-gradient(circle,rgba(255,90,0,0.06),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(255,140,60,0.12),transparent_70%)] blur-3xl" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent,rgba(255,90,0,0.04),transparent)] dark:bg-[linear-gradient(110deg,transparent,rgba(255,140,60,0.06),transparent)] opacity-50" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[rgba(225,29,72,0.08)] via-[rgba(225,29,72,0.04)] to-transparent blur-xl opacity-70" />
+      <div className="pointer-events-none absolute -top-28 -right-28 w-[300px] h-[300px] bg-[radial-gradient(circle,rgba(225,29,72,0.06),transparent_70%)] dark:bg-[radial-gradient(circle,rgba(251,113,133,0.12),transparent_70%)] blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent,rgba(225,29,72,0.04),transparent)] dark:bg-[linear-gradient(110deg,transparent,rgba(251,113,133,0.06),transparent)] opacity-50" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent dark:via-white/20" />
 
       <div className="relative grid md:grid-cols-2 gap-10 md:gap-12">

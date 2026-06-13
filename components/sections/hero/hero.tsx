@@ -155,7 +155,7 @@ export default function Hero() {
       <div
         aria-hidden
         className="pointer-events-none absolute -bottom-32 left-[-8%] h-[420px] w-[640px] rounded-full opacity-60 dark:opacity-100"
-        style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.07), transparent 70%)" }}
+        style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.07), transparent 70%)" }}
       />
 
       <div className="hero-vh relative z-10 mx-auto flex w-full max-w-6xl flex-col px-5 sm:px-6 pt-28 md:pt-32">
@@ -167,7 +167,7 @@ export default function Hero() {
               data-hero-fade
               className="mb-6 flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
             >
-              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
               Product Thinker · Mastercard · 7 yrs in product
             </p>
 

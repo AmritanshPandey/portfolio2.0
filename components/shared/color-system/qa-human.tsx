@@ -58,7 +58,7 @@ export function ColorAudit() {
         <div className="p-5 border-b md:border-b-0 md:border-r border-border/60">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2">Paste values from code / Figma</p>
           <textarea value={raw} onChange={e => setRaw(e.target.value)} spellCheck={false} rows={9}
-            className="w-full font-mono text-[12px] bg-background border border-border rounded-lg p-3 text-foreground focus:border-orange-500/60 outline-none resize-none" />
+            className="w-full font-mono text-[12px] bg-background border border-border rounded-lg p-3 text-foreground focus:border-rose-500/60 outline-none resize-none" />
           <div className="flex gap-3 mt-3 text-[11px]">
             {Object.entries(STATUS).map(([k, v]) => (
               <span key={k} className="flex items-center gap-1.5 text-muted-foreground">
@@ -183,9 +183,9 @@ export function RecommendedTools() {
       <div className="p-5 grid sm:grid-cols-2 gap-3">
         {list.map(t => (
           <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer"
-            className="group rounded-xl border border-border/60 p-4 hover:border-orange-500/30 transition-colors">
+            className="group rounded-xl border border-border/60 p-4 hover:border-rose-500/30 transition-colors">
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-[14px] font-semibold text-foreground group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{t.name}</span>
+              <span className="text-[14px] font-semibold text-foreground group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">{t.name}</span>
               <IconArrowUpRight size={13} className="text-muted-foreground" />
             </div>
             <p className="text-[12px] text-foreground/75 leading-relaxed mb-2"><span className="text-green-600 dark:text-green-400 font-medium">Good for · </span>{t.good}</p>
@@ -215,10 +215,10 @@ export function GettingBuyIn() {
       <div className="p-5 flex flex-col gap-2.5">
         {OBJECTIONS.map((o, i) => (
           <button key={i} onClick={() => setOpen(open === i ? null : i)}
-            className="text-left rounded-xl border border-border/60 p-4 hover:border-orange-500/25 transition-colors">
+            className="text-left rounded-xl border border-border/60 p-4 hover:border-rose-500/25 transition-colors">
             <div className="flex items-center gap-3">
               <span className="text-[13px] font-medium text-foreground/85">{o.say}</span>
-              <span className="ml-auto text-[11px] font-mono text-orange-500 shrink-0">{open === i ? "− reframe" : "+ reframe"}</span>
+              <span className="ml-auto text-[11px] font-mono text-rose-600 dark:text-rose-400 shrink-0">{open === i ? "− reframe" : "+ reframe"}</span>
             </div>
             {open === i && (
               <p className="text-[13px] text-muted-foreground leading-relaxed mt-3 pt-3 border-t border-border/50">{o.reframe}</p>
@@ -257,7 +257,7 @@ export function OneOffProblem() {
         <div className="p-5 border-b md:border-b-0 md:border-r border-border/60">
           <div className="flex items-center justify-between mb-3">
             <p className="text-[12px] font-semibold text-foreground">Ad-hoc “just this once”</p>
-            <button onClick={addOneOff} className="text-[11px] font-medium px-2.5 py-1 rounded-md border border-border hover:border-orange-500/40 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">+ add a one-off</button>
+            <button onClick={addOneOff} className="text-[11px] font-medium px-2.5 py-1 rounded-md border border-border hover:border-rose-500/40 hover:text-rose-600 dark:hover:text-rose-400 transition-colors">+ add a one-off</button>
           </div>
           <div className="flex flex-wrap gap-1.5 min-h-[72px]">
             {oneOffs.length === 0 && <span className="text-[12px] text-muted-foreground">Click “add a one-off” a few times…</span>}

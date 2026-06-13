@@ -247,7 +247,7 @@ function ModularScaleTool() {
             <input
               type="range" min={1.1} max={1.7} step={0.001} value={ratio}
               onChange={e => setRatio(Number(e.target.value))}
-              className="w-36 accent-orange-500"
+              className="w-36 accent-rose-500"
             />
             <span className="font-mono text-[13px] text-accent w-12">{ratio.toFixed(3)}</span>
           </div>
@@ -349,7 +349,7 @@ function ReadingSimulator() {
           <CtlLabel>Line length</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={30} max={100} step={1} value={width}
-              onChange={e => setWidth(Number(e.target.value))} className="w-36 accent-orange-500" />
+              onChange={e => setWidth(Number(e.target.value))} className="w-36 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{width}ch</span>
           </div>
         </div>
@@ -357,7 +357,7 @@ function ReadingSimulator() {
           <CtlLabel>Line height</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={1} max={2.2} step={0.01} value={lh}
-              onChange={e => setLh(Number(e.target.value))} className="w-36 accent-orange-500" />
+              onChange={e => setLh(Number(e.target.value))} className="w-36 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{lh.toFixed(2)}</span>
           </div>
         </div>
@@ -417,8 +417,8 @@ function HierarchyPlayground() {
             <span style={{ fontSize: s.size ? 22 : 15, fontWeight: s.weight ? 600 : 400, color: s.color ? "var(--foreground)" : "var(--text-muted)" }}>
               $29<span className="text-[13px] text-muted-foreground">/mo</span>
             </span>
-            {/* Demo button — intentionally uses raw orange-500 to show the color in isolation */}
-            <button type="button" className="rounded-lg bg-orange-500 text-background px-4 py-2 text-[14px]" style={{ fontWeight: s.weight ? 500 : 400 }}>
+            {/* Demo button — intentionally uses raw rose-600 to show the color in isolation */}
+            <button type="button" className="rounded-lg bg-rose-600 text-white px-4 py-2 text-[14px]" style={{ fontWeight: s.weight ? 500 : 400 }}>
               Start trial
             </button>
           </div>
@@ -537,7 +537,7 @@ function A11yChecker() {
           <CtlLabel>Size</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={11} max={32} step={1} value={size}
-              onChange={e => setSize(Number(e.target.value))} className="w-32 accent-orange-500" />
+              onChange={e => setSize(Number(e.target.value))} className="w-32 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{size}px</span>
           </div>
         </div>
@@ -702,7 +702,7 @@ export default function Page() {
             <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Buttons &amp; actions</h4>
             <div className="flex flex-wrap items-center gap-2.5">
               {/* Demo buttons — intentionally showing raw colors as design examples */}
-              <button type="button" className="rounded-lg bg-orange-500 text-background px-4 py-2 text-[14px] font-medium">Primary action</button>
+              <button type="button" className="rounded-lg bg-rose-600 text-white px-4 py-2 text-[14px] font-medium">Primary action</button>
               <button type="button" className="rounded-lg bg-transparent text-foreground border border-border px-4 py-2 text-[14px] font-medium">Secondary</button>
             </div>
             <p className="text-[11px] text-muted-foreground mt-4 leading-[1.6]">14–15px medium weight. Labels are verbs. Never let a button label wrap.</p>

@@ -21,7 +21,7 @@ const COMPONENT = [
 function Tier({ n, name, val, mono = true, swatch }: { n: string; name: string; val: string; mono?: boolean; swatch?: string }) {
   return (
     <div className="flex items-center gap-3 rounded-lg border border-border/60 bg-card px-4 py-3">
-      <span className="font-mono text-[10px] text-orange-500 w-6 shrink-0">{n}</span>
+      <span className="font-mono text-[10px] text-rose-600 dark:text-rose-400 w-6 shrink-0">{n}</span>
       <div className="min-w-0">
         <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{name}</p>
         <p className={`text-[13px] text-foreground truncate ${mono ? "font-mono" : ""}`}>{val}</p>
@@ -60,7 +60,7 @@ export function TokenTaxonomy() {
             {COMPONENT.map(c => (
               <button key={c.tok} onClick={() => setSel(c.tok)}
                 className={`text-left font-mono text-[11px] px-2.5 py-1.5 rounded-md transition-colors ${
-                  sel === c.tok ? "bg-orange-500/10 text-accent" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
+                  sel === c.tok ? "bg-rose-500/10 text-accent" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
                 {c.tok}
               </button>
             ))}
@@ -91,7 +91,7 @@ export function TokenTaxonomy() {
 // ════════════════════════════════════════════════════════════════════════════
 
 const CONTEXTS = [
-  { key: "marketing", label: "Marketing", grad: "linear-gradient(135deg,#f97316,#db2777,#7c3aed)",
+  { key: "marketing", label: "Marketing", grad: "linear-gradient(135deg,#f43f5e,#db2777,#7c3aed)",
     rule: "Expressive gradients and off-palette hues are encouraged — but body copy, CTAs, and form fields still use system tokens, and text must pass contrast." },
   { key: "empty", label: "Empty state", grad: "linear-gradient(135deg,#22d3ee,#3b82f6)",
     rule: "Illustration palettes may live outside the system. The surrounding UI — buttons, text, the primary action — stays on tokens." },
@@ -118,7 +118,7 @@ export function BreakTheSystem() {
           </div>
         </div>
         <div className="p-6 md:border-l border-t md:border-t-0 border-border/60 flex flex-col justify-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-orange-500 mb-2">The policy</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400 mb-2">The policy</p>
           <p className="text-[14px] text-foreground/80 leading-relaxed">{ctx.rule}</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed mt-4">
             “Break the system” isn&apos;t a free pass — it&apos;s a documented exception with a boundary. Naming where off-system color is allowed is what stops every screen from becoming an exception.

@@ -41,9 +41,10 @@
   --surface-2: oklch(0.98 0 0);
 
   --border: oklch(0.9 0 0);
-  --ring: oklch(0.65 0.18 50);
-  /* Ember brand accent — orange-600 in light, orange-400 in dark */
-  --accent: oklch(0.646 0.222 41.116);
+  --ring: oklch(0.6 0.22 17);
+  /* Rose brand accent. Light: deepened just past rose-600 so it clears AA
+     4.5:1 as text on the near-white canvas, not only as a fill. Dark: rose-400. */
+  --accent: oklch(0.558 0.232 16);
 
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -68,8 +69,8 @@
   --surface-2: oklch(0.14 0 0);
 
   --border: oklch(1 0 0 / 10%);
-  --ring: oklch(0.7 0.18 50);
-  --accent: oklch(0.75 0.183 55.934);
+  --ring: oklch(0.72 0.19 13);
+  --accent: oklch(0.712 0.194 13.428);
 
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
@@ -630,14 +631,14 @@
 }
 
 .shimmer-accent {
-  /* light mode — orange → amber → orange */
+  /* light mode — deep rose → rose → deep rose; every stop holds ≥3:1 on white */
   background: linear-gradient(
     90deg,
-    #ea580c 0%,
-    #f97316 30%,
-    #fbbf24 50%,
-    #f97316 70%,
-    #ea580c 100%
+    #be123c 0%,
+    #e11d48 30%,
+    #f43f5e 50%,
+    #e11d48 70%,
+    #be123c 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -650,11 +651,11 @@
   /* dark mode — slightly lighter range */
   background: linear-gradient(
     90deg,
-    #fb923c 0%,
-    #fdba74 35%,
-    #fde68a 50%,
-    #fdba74 65%,
-    #fb923c 100%
+    #fb7185 0%,
+    #fda4af 35%,
+    #fecdd3 50%,
+    #fda4af 65%,
+    #fb7185 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -788,7 +789,7 @@
 
 /* ─────────────────────────
    READING PROGRESS
-   2px ember bar pinned to the very top of article / case-study pages.
+   2px rose bar pinned to the very top of article / case-study pages.
    Driven by transform only — compositor-cheap, Safari-safe.
 ───────────────────────── */
 

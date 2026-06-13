@@ -38,7 +38,7 @@ function ScaleRow({
               key={s.stop}
               onClick={() => onCopy(s.hex, key)}
               className="group relative flex flex-col text-left focus-visible:z-10"
-              style={s.anchor ? { outline: "2px solid #f97316", outlineOffset: "-2px", zIndex: 1 } : undefined}
+              style={s.anchor ? { outline: "2px solid #f43f5e", outlineOffset: "-2px", zIndex: 1 } : undefined}
               title={`Copy ${s.hex}`}
             >
               <div className="h-16 md:h-20 flex flex-col justify-between p-1.5" style={{ background: s.hex }}>
@@ -199,7 +199,7 @@ export function ColorScaleTool() {
           ] as const).map(([k, label]) => (
             <button key={k} onClick={() => setTab(k)} aria-pressed={tab === k}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
-                tab === k ? "border-orange-500/50 bg-orange-500/10 text-accent"
+                tab === k ? "border-rose-500/50 bg-rose-500/10 text-accent"
                   : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
               {label}
             </button>
@@ -225,13 +225,13 @@ export function ColorScaleTool() {
         </span>
         {FORMATS.map(fmt => (
           <button key={fmt} onClick={() => copy(buildExport(fmt), `fmt-${fmt}`)}
-            className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-orange-500/40 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+            className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-rose-500/40 hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
             {copied === `fmt-${fmt}` ? <IconCheck size={13} /> : <IconCopy size={13} />}
             {fmt}
           </button>
         ))}
         <button onClick={() => copy(shareLink(), "link")}
-          className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-orange-500/40 hover:text-orange-600 dark:hover:text-orange-400 transition-colors ml-auto">
+          className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-rose-500/40 hover:text-rose-600 dark:hover:text-rose-400 transition-colors ml-auto">
           {copied === "link" ? <IconCheck size={13} /> : <IconLink size={13} />}
           {copied === "link" ? "Link copied" : "Share link"}
         </button>

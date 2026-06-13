@@ -35,8 +35,8 @@ interface ShaderHazeProps {
   speed?: number
 }
 
-// Brand ember (#e8731f-ish) — warm light, not a hard orange.
-const DEFAULT_TINT: RGB = [0.93, 0.47, 0.18]
+// Brand rose (#fb7185-ish) — warm light, not a hard red.
+const DEFAULT_TINT: RGB = [0.984, 0.443, 0.522]
 
 const VERT_SRC = `
 attribute vec2 a_pos;

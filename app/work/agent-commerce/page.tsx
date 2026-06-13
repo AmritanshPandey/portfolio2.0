@@ -84,7 +84,7 @@ const ROADMAP = [
 function PhoneVisual() {
   return (
     <div className="relative flex justify-center">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.10)_0%,transparent_62%)] dark:bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.16)_0%,transparent_62%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.10)_0%,transparent_62%)] dark:bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.16)_0%,transparent_62%)]" />
 
       <div className="relative z-10 w-[190px] overflow-hidden rounded-[26px] border border-black/[0.12] bg-white shadow-[0_16px_44px_-34px_rgba(0,0,0,0.38)] md:w-[205px] dark:border-white/[0.14] dark:bg-[#111] dark:shadow-[0_28px_70px_rgba(0,0,0,0.56)]">
         {/* Notch */}
@@ -141,27 +141,27 @@ function AnxietyCurve() {
     >
       <defs>
         <linearGradient id="anx-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(249,115,22,0.32)" />
-          <stop offset="100%" stopColor="rgba(249,115,22,0)" />
+          <stop offset="0%" stopColor="rgba(244,63,94,0.32)" />
+          <stop offset="100%" stopColor="rgba(244,63,94,0)" />
         </linearGradient>
       </defs>
 
       {/* guardian zone */}
-      <rect x="300" y="22" width="240" height="128" rx="10" fill="rgba(249,115,22,0.05)" stroke="rgba(249,115,22,0.2)" strokeDasharray="3 5" />
-      <text x="420" y="16" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="#f97316" letterSpacing="0.12em">GUARDIAN ZONE</text>
+      <rect x="300" y="22" width="240" height="128" rx="10" fill="rgba(244,63,94,0.05)" stroke="rgba(244,63,94,0.2)" strokeDasharray="3 5" />
+      <text x="420" y="16" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="#f43f5e" letterSpacing="0.12em">GUARDIAN ZONE</text>
 
       <line x1="20" y1="150" x2="680" y2="150" stroke="rgba(255,255,255,0.1)" />
       <text x="20" y="40" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.4)">anxiety</text>
 
       {/* area + line */}
       <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133 L 660 150 L 40 150 Z" fill="url(#anx-fill)" />
-      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133" fill="none" stroke="#f43f5e" strokeWidth="2.5" strokeLinecap="round" />
 
       {/* guardian markers */}
       {guardian.map(([x, y], i) => (
         <g key={i}>
-          <circle cx={x} cy={y} r="11" fill="none" stroke="#f97316" strokeOpacity="0.3" />
-          <circle cx={x} cy={y} r="5.5" fill="#f97316" />
+          <circle cx={x} cy={y} r="11" fill="none" stroke="#f43f5e" strokeOpacity="0.3" />
+          <circle cx={x} cy={y} r="5.5" fill="#f43f5e" />
         </g>
       ))}
 
@@ -169,7 +169,7 @@ function AnxietyCurve() {
       {stages.map((s, i) => {
         const active = i >= 3 && i <= 5
         return (
-          <text key={s} x={xs[i]} y="174" textAnchor="middle" fontSize="10" fontWeight={active ? 600 : 400} fill={active ? "#f97316" : "rgba(255,255,255,0.42)"}>{s}</text>
+          <text key={s} x={xs[i]} y="174" textAnchor="middle" fontSize="10" fontWeight={active ? 600 : 400} fill={active ? "#f43f5e" : "rgba(255,255,255,0.42)"}>{s}</text>
         )
       })}
     </svg>
@@ -185,7 +185,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
       <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
         {bars.map((h, i) => (
           <rect key={i} x={6 + i * 9} y={24 - h / 2} width="3.5" height={h} rx="1.75"
-            fill={hot.has(i) ? "#f97316" : "var(--text-muted)"} opacity={hot.has(i) ? 1 : 0.5} />
+            fill={hot.has(i) ? "#f43f5e" : "var(--text-muted)"} opacity={hot.has(i) ? 1 : 0.5} />
         ))}
       </svg>
     )
@@ -199,7 +199,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
           let d = `M ${cx - 21} 24`
           for (let k = 0; k < 6; k++) d += ` L ${cx - 21 + (k + 1) * 6} ${24 + (k % 2 ? amp : -amp)}`
           d += ` L ${cx + 21} 24`
-          return <path key={bi} d={d} fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          return <path key={bi} d={d} fill="none" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         })}
       </svg>
     )
@@ -208,7 +208,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
     <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
       <line x1="6" y1="24" x2="234" y2="24" stroke="var(--border)" />
       {[60, 120, 180].map((x, i) => (
-        <text key={i} x={x} y={i === 1 ? 31 : 30} textAnchor="middle" fontSize={i === 1 ? 22 : 15} fill="#f97316" opacity={i === 1 ? 1 : 0.5}>✦</text>
+        <text key={i} x={x} y={i === 1 ? 31 : 30} textAnchor="middle" fontSize={i === 1 ? 22 : 15} fill="#f43f5e" opacity={i === 1 ? 1 : 0.5}>✦</text>
       ))}
     </svg>
   )
@@ -321,14 +321,14 @@ export default function Page() {
                 num: "Layer 02 · Internal problem",
                 title: "Four teams were building the same flows, and nobody had named the duplication.",
                 body: "Product, Tech, Research, and Brand were each building their own agentic flows. Different outputs, duplicated work, no shared language. No one had been asked to fix it. I flagged it and proposed one toolkit every team could build from.",
-                accent: "border-l-orange-500",
+                accent: "border-l-rose-500",
                 orange: false,
               },
               {
                 num: "Layer 03 · The design philosophy problem",
                 title: "Brand wanted to be everywhere. The right answer was to be almost nowhere.",
                 body: "Brand wanted the logo across the whole flow. My read was the opposite: these flows work because they feel fluid, and constant branding breaks that. The real question was not how visible Mastercard should be, but which moments its presence actually builds trust.",
-                accent: "border-l-orange-500",
+                accent: "border-l-rose-500",
                 orange: true,
               },
             ].map((layer, i) => (
@@ -497,7 +497,7 @@ export default function Page() {
                   <div key={i} className="flex-1 flex flex-col items-center relative z-10">
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 ${
                       node.active
-                        ? "bg-accent shadow-[0_0_20px_rgba(249,115,22,0.45)]"
+                        ? "bg-accent shadow-[0_0_20px_rgba(244,63,94,0.45)]"
                         : "bg-muted border border-border"
                     }`}>
                       {node.active && <span className="text-[10px] text-black font-bold">✓</span>}
@@ -671,7 +671,7 @@ export default function Page() {
 
           {/* Right: phone frame + iframe */}
           <div className="relative flex flex-col items-center">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.18)_0%,transparent_65%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.18)_0%,transparent_65%)]" />
             <div className="relative z-10 w-[320px] max-w-full">
               {/* iPhone 16 device frame */}
               <div className="relative rounded-[3rem] border border-white/[0.12] bg-[#1b1b1d] p-[11px] shadow-[0_40px_100px_rgba(0,0,0,0.7)]">

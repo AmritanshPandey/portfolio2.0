@@ -22,7 +22,7 @@ function useCopy() {
 function CopyBtn({ onClick, active, label }: { onClick: () => void; active: boolean; label: string }) {
   return (
     <button onClick={onClick}
-      className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-orange-500/40 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
+      className="flex items-center gap-1.5 text-[12px] font-medium px-3 py-2 rounded-lg border border-border hover:border-rose-500/40 hover:text-rose-600 dark:hover:text-rose-400 transition-colors">
       {active ? <IconCheck size={13} /> : <IconCopy size={13} />}{label}
     </button>
   )
@@ -59,14 +59,14 @@ export function ContrastChecker({ scale }: { scale: Stop[] }) {
         <label className="flex flex-col gap-1">
           <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Foreground</span>
           <select value={fg} onChange={e => setFg(e.target.value)}
-            className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-orange-500/60 outline-none">
+            className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none">
             {optionEls}
           </select>
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Background</span>
           <select value={bg} onChange={e => setBg(e.target.value)}
-            className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-orange-500/60 outline-none">
+            className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none">
             {optionEls}
           </select>
         </label>
@@ -178,7 +178,7 @@ export function DarkModeMapper({ accent, neutral }: { accent: Stop[]; neutral: S
         {(["light", "dark"] as const).map(m => (
           <button key={m} onClick={() => setMode(m)} aria-pressed={mode === m}
             className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors capitalize ${
-              mode === m ? "border-orange-500/50 bg-orange-500/10 text-accent"
+              mode === m ? "border-rose-500/50 bg-rose-500/10 text-accent"
                 : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
             {m}
           </button>

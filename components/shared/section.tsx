@@ -105,11 +105,11 @@ export function Section({
           <>
             <div
               className="absolute -top-44 right-[-12%] h-[560px] w-[760px] dark:hidden"
-              style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.045), transparent 72%)" }}
+              style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.045), transparent 72%)" }}
             />
             <div
               className="absolute -top-44 right-[-12%] hidden h-[560px] w-[760px] dark:block"
-              style={{ background: "radial-gradient(closest-side, rgba(249,115,22,0.065), transparent 72%)" }}
+              style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.065), transparent 72%)" }}
             />
           </>
         )}

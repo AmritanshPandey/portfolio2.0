@@ -196,7 +196,7 @@ export function RelatedArticles({ currentHref }: { currentHref: string }) {
 }
 
 function ArticleVisual({ article, featured = false }: { article: ArticleItem; featured?: boolean }) {
-  const wash = article.accent ?? "linear-gradient(135deg,#f97316,#9a3412)"
+  const wash = article.accent ?? "linear-gradient(135deg,#f43f5e,#881337)"
 
   return (
     <div

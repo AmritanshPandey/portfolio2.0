@@ -140,7 +140,7 @@ function PdpVisual() {
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.025),transparent_48%)] dark:bg-[radial-gradient(circle_at_22%_14%,rgba(249,115,22,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_48%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.025),transparent_48%)] dark:bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_48%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.11] dark:opacity-[0.08]" />
 
       <div className="relative grid h-full grid-rows-[auto_1fr_auto] gap-3 p-3">
@@ -164,7 +164,7 @@ function PdpVisual() {
             <div className="absolute inset-x-0 top-0 h-1 bg-accent" />
             <div className="relative h-full rounded-xl bg-muted/70 p-3">
               <div className="flex h-full items-center justify-center rounded-lg bg-background/80">
-                <div className="h-20 w-20 rounded-full border border-accent/55 bg-accent/10 shadow-[0_0_40px_rgba(249,115,22,0.10)]" />
+                <div className="h-20 w-20 rounded-full border border-accent/55 bg-accent/10 shadow-[0_0_40px_rgba(244,63,94,0.10)]" />
               </div>
             </div>
           </div>
@@ -245,7 +245,7 @@ function CartVisual() {
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(circle_at_50%_8%,rgba(249,115,22,0.15),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.15),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
 
       <div className="relative grid h-full grid-cols-[1.1fr_0.9fr] gap-4 p-3">
         <div className="flex min-h-0 flex-col justify-between rounded-3xl border border-border bg-background/82 p-4 shadow-[0_20px_56px_-40px_rgba(0,0,0,0.55)] backdrop-blur-sm">
@@ -333,7 +333,7 @@ function CheckoutVisual() {
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(249,115,22,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_18%_20%,rgba(249,115,22,0.15),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.15),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_50%)]" />
 
       <div className="relative grid h-full grid-rows-[auto_1fr] gap-4 p-3">
         <div className="grid grid-cols-[1fr_auto] items-center gap-4 rounded-2xl border border-border bg-background/78 p-4 backdrop-blur-sm">
@@ -744,11 +744,11 @@ export default function Page() {
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   {/* Shared system */}
                   <g transform="translate(110,20)">
-                    <rect width="140" height="52" rx="10" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
-                    <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.06em">SHARED SYSTEM</text>
+                    <rect width="140" height="52" rx="10" fill="rgba(244,63,94,0.12)" stroke="rgb(244,63,94)" strokeWidth="1" />
+                    <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(244,63,94)" letterSpacing="0.06em">SHARED SYSTEM</text>
                     <text x="70" y="38" textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--foreground)">Token + Components</text>
                   </g>
-                  <g stroke="rgb(249,115,22)" fill="none" opacity="0.7">
+                  <g stroke="rgb(244,63,94)" fill="none" opacity="0.7">
                     <path d="M 80 150 L 140 72" />
                     <path d="M 180 150 L 180 72" />
                     <path d="M 280 150 L 220 72" />

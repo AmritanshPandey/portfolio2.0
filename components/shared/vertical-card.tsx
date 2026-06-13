@@ -151,7 +151,7 @@ export function VerticalCard({
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
-          style={{ background: "radial-gradient(300px 220px at var(--mx, 50%) var(--my, 0%), rgba(249,115,22,0.10), transparent 70%)" }}
+          style={{ background: "radial-gradient(300px 220px at var(--mx, 50%) var(--my, 0%), rgba(244,63,94,0.10), transparent 70%)" }}
         />
 
         {/* Image block */}

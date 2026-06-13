@@ -208,15 +208,15 @@ export function DiscoveryVsAllocation() {
         </div>
         <p className="text-[12.5px] text-muted-foreground mt-3 leading-relaxed">Turn a messy pool of strangers into a scrollable, filterable feed. We are very good at this.</p>
       </div>
-      <div className="rounded-xl border border-orange-500/30 bg-orange-500/[0.03] p-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-orange-500 mb-3">Unsolved · economics problem</p>
+      <div className="rounded-xl border border-rose-500/30 bg-rose-500/[0.03] p-5">
+        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400 mb-3">Unsolved · economics problem</p>
         <p className="text-[15px] font-semibold text-foreground mb-3">Allocation</p>
         <div className="flex flex-wrap gap-1.5">
           {Array.from({ length: 28 }).map((_, i) => (
             <span
               key={i}
               className="w-4 h-4 rounded-[3px]"
-              style={{ background: i < 3 ? "#f97316" : i < 7 ? "rgba(249,115,22,0.35)" : "rgba(120,120,120,0.12)" }}
+              style={{ background: i < 3 ? "#f43f5e" : i < 7 ? "rgba(244,63,94,0.35)" : "rgba(120,120,120,0.12)" }}
             />
           ))}
         </div>
@@ -262,7 +262,7 @@ export function ConcentrationDemo() {
             <motion.div
               key={i}
               className="flex-1 rounded-t-[2px]"
-              style={{ background: fair ? "#f97316" : i < 3 ? "#f97316" : "rgba(120,120,120,0.3)" }}
+              style={{ background: fair ? "#f43f5e" : i < 3 ? "#f43f5e" : "rgba(120,120,120,0.3)" }}
               animate={{ height: `${(a / max) * 100}%` }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
@@ -279,7 +279,7 @@ export function ConcentrationDemo() {
             </button>
             <button
               onClick={() => setFair(true)}
-              className={`font-mono text-[11px] px-3 py-1.5 rounded-md border transition ${fair ? "bg-orange-500 border-orange-500 text-white" : "border-border/50 text-muted-foreground"}`}
+              className={`font-mono text-[11px] px-3 py-1.5 rounded-md border transition ${fair ? "bg-rose-600 border-rose-600 text-white" : "border-border/50 text-muted-foreground"}`}
             >
               Fair allocation
             </button>
@@ -291,7 +291,7 @@ export function ConcentrationDemo() {
               <input
                 type="range" min={1} max={4} step={0.1} value={k}
                 onChange={e => setK(+e.target.value)}
-                className="flex-1 accent-orange-500"
+                className="flex-1 accent-rose-500"
               />
             </label>
           )}
@@ -362,8 +362,8 @@ export function TradeoffFrontier() {
               <circle key={i} cx={sx(p.total)} cy={sy(p.quiet)} r={2.6} className="fill-muted-foreground/60" />
             ))}
             {/* current */}
-            <circle cx={sx(cur.total)} cy={sy(cur.quiet)} r={7} fill="#f97316" stroke="white" strokeWidth={1.5} />
-            <text x={sx(cur.total)} y={sy(cur.quiet) - 13} textAnchor="middle" fill="#f97316" style={{ fontSize: 12, fontFamily: "monospace", fontWeight: 600 }}>
+            <circle cx={sx(cur.total)} cy={sy(cur.quiet)} r={7} fill="#f43f5e" stroke="white" strokeWidth={1.5} />
+            <text x={sx(cur.total)} y={sy(cur.quiet) - 13} textAnchor="middle" fill="#f43f5e" style={{ fontSize: 12, fontFamily: "monospace", fontWeight: 600 }}>
               λ={lam.toFixed(2)}
             </text>
           </svg>
@@ -372,10 +372,10 @@ export function TradeoffFrontier() {
         {/* controls + metrics */}
         <div className="p-5 md:p-6 flex flex-col">
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-orange-500">λ · fairness dial</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400">λ · fairness dial</span>
             <span className="font-semibold text-[26px] text-foreground tabular-nums">{lam.toFixed(2)}</span>
           </div>
-          <input type="range" min={0} max={2.5} step={0.05} value={lam} onChange={e => setLam(+e.target.value)} className="w-full accent-orange-500" />
+          <input type="range" min={0} max={2.5} step={0.05} value={lam} onChange={e => setLam(+e.target.value)} className="w-full accent-rose-500" />
           <div className="flex justify-between font-mono text-[10px] text-muted-foreground mt-1 mb-5">
             <span>0 · compatibility</span><span>2.5 · fairness first</span>
           </div>
@@ -396,9 +396,9 @@ export function TradeoffFrontier() {
 
 function Metric({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className={`rounded-lg border px-3 py-2.5 ${accent ? "border-orange-500/30 bg-orange-500/[0.04]" : "border-border/50 bg-background"}`}>
+    <div className={`rounded-lg border px-3 py-2.5 ${accent ? "border-rose-500/30 bg-rose-500/[0.04]" : "border-border/50 bg-background"}`}>
       <p className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-muted-foreground leading-tight">{label}</p>
-      <p className={`font-semibold text-[22px] tabular-nums mt-1 ${accent ? "text-orange-500" : "text-foreground"}`}>{value}</p>
+      <p className={`font-semibold text-[22px] tabular-nums mt-1 ${accent ? "text-rose-600 dark:text-rose-400" : "text-foreground"}`}>{value}</p>
     </div>
   )
 }
@@ -424,7 +424,7 @@ function BarGroup({ title, rows, pick, denom }: {
               <div className="h-7 rounded-md bg-foreground/[0.05] overflow-hidden">
                 <motion.div
                   className="h-full rounded-md flex items-center justify-end pr-2 font-mono text-[11px] text-white"
-                  style={{ background: r.color, boxShadow: r.hi ? "0 0 14px rgba(249,115,22,0.4)" : undefined }}
+                  style={{ background: r.color, boxShadow: r.hi ? "0 0 14px rgba(244,63,94,0.4)" : undefined }}
                   initial={{ width: 0 }}
                   whileInView={{ width: `${Math.max(8, Math.min(100, (val / denom) * 100))}%` }}
                   viewport={{ once: true }}
@@ -450,7 +450,7 @@ export function EngineComparison() {
   const rows: EngineRow[] = [
     { name: "Gale–Shapley", m: gs, color: "rgba(120,120,120,0.55)" },
     { name: "Irving's", m: irv, color: "rgba(180,140,70,0.7)" },
-    { name: "FairMatch", m: fm, color: "#f97316", hi: true },
+    { name: "FairMatch", m: fm, color: "#f43f5e", hi: true },
   ]
 
   return (
@@ -459,12 +459,12 @@ export function EngineComparison() {
       <div className="p-5 md:p-6 space-y-6">
         <BarGroup title="Match value delivered (total)" rows={rows} pick={m => m.total} denom={MATCH_MAX} />
         <BarGroup title="Fairness · reach for the under-served" rows={rows} pick={m => m.quiet} denom={FAIR_MAX} />
-        <div className="rounded-lg border border-orange-500/25 bg-gradient-to-r from-orange-500/[0.06] to-transparent p-4">
+        <div className="rounded-lg border border-rose-500/25 bg-gradient-to-r from-rose-500/[0.06] to-transparent p-4">
           <p className="text-[13.5px] leading-relaxed text-foreground/80">
             On pure stability, Gale&ndash;Shapley and Irving are hard to beat. One partner each, perfectly stable.
             FairMatch keeps that same stability at its core and adds two things. Several introductions per person,
             and a push that sends sought-after partners toward people who would otherwise be skipped. So it gets
-            <b className="text-orange-500"> more total match value and more reach for the under-served</b>, and unlike
+            <b className="text-rose-600 dark:text-rose-400"> more total match value and more reach for the under-served</b>, and unlike
             the other two it can never come back with no solution.
           </p>
         </div>
@@ -495,11 +495,11 @@ export function WeeklyLoop() {
           transition={{ duration: 0.45, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
           className="relative rounded-xl border border-border/50 bg-background p-4"
         >
-          <span className="font-mono text-[11px] text-orange-500/70 tracking-[0.1em]">{s.si}</span>
+          <span className="font-mono text-[11px] text-rose-600/70 dark:text-rose-400/70 tracking-[0.1em]">{s.si}</span>
           <p className="font-semibold text-[16px] tracking-tight text-foreground mt-1.5 mb-1.5">{s.h}</p>
           <p className="text-[12.5px] leading-relaxed text-muted-foreground">{s.p}</p>
           {i < 3 && (
-            <span className="hidden lg:block absolute -right-[11px] top-1/2 -translate-y-1/2 text-orange-500/50 text-base z-10">→</span>
+            <span className="hidden lg:block absolute -right-[11px] top-1/2 -translate-y-1/2 text-rose-600/50 dark:text-rose-400/50 text-base z-10">→</span>
           )}
         </motion.div>
       ))}

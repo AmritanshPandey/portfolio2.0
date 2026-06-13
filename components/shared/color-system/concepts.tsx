@@ -48,7 +48,7 @@ export function PerceptualUniformity() {
       <div className="p-4 border-b border-border/60">
         <label className="flex items-center gap-3 text-[11px] text-muted-foreground">
           <span className="font-bold uppercase tracking-[0.14em]">Lightness</span>
-          <input type="range" min={30} max={85} value={L} onChange={e => setL(+e.target.value)} className="w-56 accent-orange-500" />
+          <input type="range" min={30} max={85} value={L} onChange={e => setL(+e.target.value)} className="w-56 accent-rose-500" />
           <span className="font-mono">{L}%</span>
         </label>
       </div>
@@ -168,7 +168,7 @@ export function NeutralTemperature() {
           {TEMP_PRESETS.map(p => (
             <button key={p.key} onClick={() => { setH(p.h); setS(p.s) }}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
-                h === p.h && s === p.s ? "border-orange-500/50 bg-orange-500/10 text-accent"
+                h === p.h && s === p.s ? "border-rose-500/50 bg-rose-500/10 text-accent"
                   : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
               {p.label}
             </button>
@@ -177,12 +177,12 @@ export function NeutralTemperature() {
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="flex items-center gap-3 text-[11px] text-muted-foreground">
             <span className="font-bold uppercase tracking-[0.14em]">Hue</span>
-            <input type="range" min={0} max={359} value={h} onChange={e => setH(+e.target.value)} className="w-44 accent-orange-500" />
+            <input type="range" min={0} max={359} value={h} onChange={e => setH(+e.target.value)} className="w-44 accent-rose-500" />
             <span className="font-mono">{h}°</span>
           </label>
           <label className="flex items-center gap-3 text-[11px] text-muted-foreground">
             <span className="font-bold uppercase tracking-[0.14em]">Saturation</span>
-            <input type="range" min={0} max={16} value={s} onChange={e => setS(+e.target.value)} className="w-36 accent-orange-500" />
+            <input type="range" min={0} max={16} value={s} onChange={e => setS(+e.target.value)} className="w-36 accent-rose-500" />
             <span className="font-mono">{s}%</span>
           </label>
         </div>

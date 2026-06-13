@@ -57,8 +57,8 @@ export function CsHeroShell({
 
       {/* Ambient glow — two soft accent layers for depth */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(249,115,22,0.07),transparent_62%)] dark:bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(249,115,22,0.11),transparent_62%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(249,115,22,0.04),transparent_60%)] dark:bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(249,115,22,0.07),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(244,63,94,0.07),transparent_62%)] dark:bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(244,63,94,0.11),transparent_62%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(244,63,94,0.04),transparent_60%)] dark:bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(244,63,94,0.07),transparent_60%)]" />
       </div>
 
       <div

@@ -293,7 +293,7 @@ export default function Page() {
                 <g transform="translate(40,40)">
                   <rect width="140" height="220" rx="10" fill="var(--surface-1)" stroke="var(--border)" />
                   <rect x="14" y="14" width="112" height="20" rx="3" fill="var(--surface-2)" />
-                  <rect x="14" y="46" width="112" height="56" rx="6" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
+                  <rect x="14" y="46" width="112" height="56" rx="6" fill="rgba(244,63,94,0.12)" stroke="rgb(244,63,94)" strokeWidth="1" />
                   <rect x="14" y="114" width="112" height="12" rx="3" fill="var(--surface-2)" />
                   <rect x="14" y="132" width="112" height="12" rx="3" fill="var(--surface-2)" />
                   <rect x="14" y="150" width="112" height="12" rx="3" fill="var(--surface-2)" />
@@ -310,8 +310,8 @@ export default function Page() {
                   <rect width="120" height="30" rx="6" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
                   <text x="14" y="19">Header</text>
                   <g transform="translate(0,44)">
-                    <rect width="120" height="44" rx="6" fill="var(--surface-1)" stroke="rgb(249,115,22)" strokeWidth="1" />
-                    <text x="14" y="20" fill="rgb(249,115,22)" fontWeight="500">Account Card</text>
+                    <rect width="120" height="44" rx="6" fill="var(--surface-1)" stroke="rgb(244,63,94)" strokeWidth="1" />
+                    <text x="14" y="20" fill="rgb(244,63,94)" fontWeight="500">Account Card</text>
                     <text x="14" y="34" fontSize="9" opacity="0.5">variant: balance</text>
                   </g>
                   <g transform="translate(0,102)">
@@ -343,7 +343,7 @@ export default function Page() {
               <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible">
                 <text x="20" y="32" fontFamily="monospace" fontSize="10" fill="var(--text-muted)" letterSpacing="0.08em">SAME COMPONENT · DIFFERENT TOKENS</text>
                 {[
-                  { x: 20,  color: "rgb(249,115,22)", label: "brand-a" },
+                  { x: 20,  color: "rgb(244,63,94)", label: "brand-a" },
                   { x: 145, color: "rgb(212,162,76)",  label: "brand-b" },
                   { x: 270, color: "rgb(77,168,138)",  label: "brand-c" },
                 ].map(b => (
@@ -358,7 +358,7 @@ export default function Page() {
                 <g transform="translate(20,220)">
                   <rect width="360" height="56" rx="10" fill="var(--surface-1)" stroke="var(--border)" strokeWidth="1" />
                   <text x="20" y="22" fontFamily="monospace" fontSize="11" fill="var(--text-muted)">color.primary:</text>
-                  <circle cx="138" cy="18" r="6" fill="rgb(249,115,22)" />
+                  <circle cx="138" cy="18" r="6" fill="rgb(244,63,94)" />
                   <text x="150" y="22" fontFamily="monospace" fontSize="11" fill="var(--foreground)">var(--brand)</text>
                   <text x="20" y="42" fontFamily="monospace" fontSize="11" fill="var(--text-muted)">typography.head:</text>
                   <text x="150" y="42" fontFamily="monospace" fontSize="11" fill="var(--foreground)">var(--type-display)</text>
@@ -387,9 +387,9 @@ export default function Page() {
                     { x: 220, y: 170, num: "05", label: "Sales Pitch", accent: false },
                   ].map(s => (
                     <g key={s.num} transform={`translate(${s.x},${s.y})`}>
-                      <rect width="92" height="48" rx="8" fill="var(--surface-1)" stroke={s.accent ? "rgb(249,115,22)" : "var(--border)"} strokeWidth="1" />
-                      <text x="14" y="20" fontSize="9" letterSpacing="2" fill={s.accent ? "rgb(249,115,22)" : "var(--text-muted)"}>{s.num}</text>
-                      <text x="14" y="36" fill={s.accent ? "rgb(249,115,22)" : "var(--foreground)"}>{s.label}</text>
+                      <rect width="92" height="48" rx="8" fill="var(--surface-1)" stroke={s.accent ? "rgb(244,63,94)" : "var(--border)"} strokeWidth="1" />
+                      <text x="14" y="20" fontSize="9" letterSpacing="2" fill={s.accent ? "rgb(244,63,94)" : "var(--text-muted)"}>{s.num}</text>
+                      <text x="14" y="36" fill={s.accent ? "rgb(244,63,94)" : "var(--foreground)"}>{s.label}</text>
                     </g>
                   ))}
                 </g>
@@ -399,8 +399,8 @@ export default function Page() {
                   <path d="M 334 108 C 334 140 180 140 180 168" />
                   <path d="M 180 194 L 220 194" />
                 </g>
-                <rect x="148" y="34" width="240" height="98" rx="14" fill="none" stroke="rgb(249,115,22)" strokeDasharray="3 5" opacity="0.45" />
-                <text x="268" y="26" textAnchor="middle" fontFamily="monospace" fontSize="10" fill="rgb(249,115,22)" letterSpacing="0.08em">TIME-CRITICAL ZONE</text>
+                <rect x="148" y="34" width="240" height="98" rx="14" fill="none" stroke="rgb(244,63,94)" strokeDasharray="3 5" opacity="0.45" />
+                <text x="268" y="26" textAnchor="middle" fontFamily="monospace" fontSize="10" fill="rgb(244,63,94)" letterSpacing="0.08em">TIME-CRITICAL ZONE</text>
               </svg>
             }
           />
@@ -423,7 +423,7 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-3 gap-5">
               {[
-                { brand: "Brand · A", primary: "#FF7A1A", gradient: "from-accent to-orange-700", bank: "North Bank", num: "•••• 4287", type: "Premier · Debit", radius: "12px", font: "Inter" },
+                { brand: "Brand · A", primary: "#F43F5E", gradient: "from-accent to-rose-700", bank: "North Bank", num: "•••• 4287", type: "Premier · Debit", radius: "12px", font: "Inter" },
                 { brand: "Brand · B", primary: "#D4A24C", gradient: "from-[#D4A24C] to-[#8B6508]", bank: "Heritage Trust", num: "•••• 9120", type: "Private · Credit", radius: "8px", font: "Instrument" },
                 { brand: "Brand · C", primary: "#4DA88A", gradient: "from-[#4DA88A] to-[#2F6F5A]", bank: "Verde Bank", num: "•••• 7503", type: "Everyday · Debit", radius: "14px", font: "Inter" },
               ].map((t) => (
@@ -502,17 +502,17 @@ export default function Page() {
               visual: (
                 <svg viewBox="0 0 360 260" className="w-full h-full overflow-visible">
                   <g transform="translate(110,20)">
-                    <rect width="140" height="52" rx="10" fill="rgba(249,115,22,0.12)" stroke="rgb(249,115,22)" strokeWidth="1" />
-                    <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(249,115,22)" letterSpacing="0.06em">CONFIG ENGINE</text>
+                    <rect width="140" height="52" rx="10" fill="rgba(244,63,94,0.12)" stroke="rgb(244,63,94)" strokeWidth="1" />
+                    <text x="70" y="22" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="rgb(244,63,94)" letterSpacing="0.06em">CONFIG ENGINE</text>
                     <text x="70" y="38" textAnchor="middle" fontSize="11" fontWeight="500" fill="var(--foreground)">Tokens + Components</text>
                   </g>
-                  <g stroke="rgb(249,115,22)" fill="none" opacity="0.7">
+                  <g stroke="rgb(244,63,94)" fill="none" opacity="0.7">
                     <path d="M 180 72 C 180 110 80 110 80 150" />
                     <path d="M 180 72 L 180 150" />
                     <path d="M 180 72 C 180 110 280 110 280 150" />
                   </g>
                   {[
-                    { x: 40,  color: "rgb(249,115,22)", label: "BANK A" },
+                    { x: 40,  color: "rgb(244,63,94)", label: "BANK A" },
                     { x: 140, color: "rgb(212,162,76)",  label: "BANK B" },
                     { x: 240, color: "rgb(77,168,138)",  label: "BANK C" },
                   ].map(b => (

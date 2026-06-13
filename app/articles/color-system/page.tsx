@@ -87,9 +87,9 @@ function Lede({ children }: { children: React.ReactNode }) {
 function Note({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <FadeIn>
-      <div className="my-8 rounded-lg border border-orange-500/20 bg-orange-500/[0.04] p-5 md:p-6 relative overflow-hidden">
+      <div className="my-8 rounded-lg border border-rose-500/20 bg-rose-500/[0.04] p-5 md:p-6 relative overflow-hidden">
         <div className="absolute left-0 top-0 bottom-0 rounded-l-xl" />
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-orange-500 mb-2 pl-2">{label}</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400 mb-2 pl-2">{label}</p>
         <p className="text-[13px] md:text-[14px] leading-[1.7] text-foreground/80 pl-2">{children}</p>
       </div>
     </FadeIn>
@@ -108,9 +108,9 @@ function Code({ children }: { children: React.ReactNode }) {
 // Wraps an interactive tool so it reads as a distinct, hands-on region, // a soft orange ring + tint and a floating "Interactive" marker.
 function ToolFrame({ label = "Interactive", children }: { label?: string; children: React.ReactNode }) {
   return (
-    <div className="relative rounded-lg ring-1 ring-orange-500/20 bg-orange-500/[0.02] p-3 md:p-4 mt-2">
-      <span className="absolute -top-2.5 left-5 z-10 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-background border border-orange-500/40 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-orange-500">
-        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 motion-safe:animate-pulse" />
+    <div className="relative rounded-lg ring-1 ring-rose-500/20 bg-rose-500/[0.02] p-3 md:p-4 mt-2">
+      <span className="absolute -top-2.5 left-5 z-10 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-background border border-rose-500/40 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400">
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 motion-safe:animate-pulse" />
         {label}
       </span>
       {children}
@@ -442,7 +442,7 @@ export default function Page() {
         <FadeIn className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {PRINCIPLES.map(p => (
             <div key={p.num} className="rounded-xl border border-border/60 p-6 bg-card hover:border-border transition-colors">
-              <span className="font-mono text-[11px] text-orange-500 tracking-[0.1em] block mb-5">{p.num}, </span>
+              <span className="font-mono text-[11px] text-rose-600 dark:text-rose-400 tracking-[0.1em] block mb-5">{p.num}, </span>
               <p className="text-[19px] font-semibold tracking-tight mb-2.5 leading-tight text-foreground">{p.title}</p>
               <p className="text-[13px] text-muted-foreground leading-[1.7]">{p.body}</p>
             </div>
@@ -453,7 +453,7 @@ export default function Page() {
       {/* 08 PICKING PRIMARY */}
       <Section id="primary-selection" muted>
         <FadeIn><Eyebrow num="08" tag="Picking Your Primary" /></FadeIn>
-        <FadeIn><Title>How to select your <span className="text-orange-500">primary color</span></Title></FadeIn>
+        <FadeIn><Title>How to select your <span className="text-rose-600 dark:text-rose-400">primary color</span></Title></FadeIn>
         <FadeIn><Lede>Your primary is the most consequential decision in the system, every hover, CTA, and focus ring stems from it. Here&apos;s the framework for choosing it well.</Lede></FadeIn>
 
         <FadeIn><SubEyebrow>Step 1, Choose a hue family</SubEyebrow></FadeIn>
@@ -461,7 +461,7 @@ export default function Page() {
           {HUES.map(h => (
             <div
               key={h.name}
-              className={`rounded-lg overflow-hidden border ${h.active ? "border-orange-500" : "border-border/60"} bg-card transition-transform hover:-translate-y-0.5`}
+              className={`rounded-lg overflow-hidden border ${h.active ? "border-rose-500" : "border-border/60"} bg-card transition-transform hover:-translate-y-0.5`}
             >
               <div className="h-14" style={{ background: h.grad }} />
               <div className="p-2.5">
@@ -478,7 +478,7 @@ export default function Page() {
         <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {CRITERIA.map(c => (
             <div key={c.i} className="rounded-xl border border-border/60 p-5 bg-card flex gap-4 items-start">
-              <span className="font-mono text-[22px] text-orange-500/60 leading-none min-w-[32px]">{c.i}</span>
+              <span className="font-mono text-[22px] text-rose-600/60 dark:text-rose-400/60 leading-none min-w-[32px]">{c.i}</span>
               <div>
                 <p className="text-[14px] text-foreground mb-1.5">{c.title}</p>
                 <p className="text-[12px] text-muted-foreground leading-[1.65]">{c.body}</p>
@@ -549,19 +549,19 @@ export default function Page() {
       {/* 09 SWATCH SCALE */}
       <Section id="swatch-scale">
         <FadeIn><Eyebrow num="09" tag="Swatch Scale" /></FadeIn>
-        <FadeIn><Title>Building the complete <span className="text-orange-500">color swatch</span></Title></FadeIn>
+        <FadeIn><Title>Building the complete <span className="text-rose-600 dark:text-rose-400">color swatch</span></Title></FadeIn>
         <FadeIn><Lede>A complete swatch is a tonal scale of 11 stops, from near-white to near-black, all derived from a single hue. It is the raw-material layer of the system. Every semantic token eventually maps back to a stop in one of these scales.</Lede></FadeIn>
 
         <FadeIn className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="rounded-xl border border-border/60 p-5 bg-card flex gap-4 items-start">
-            <span className="font-mono text-[16px] text-orange-500 leading-none min-w-[32px]">11</span>
+            <span className="font-mono text-[16px] text-rose-600 dark:text-rose-400 leading-none min-w-[32px]">11</span>
             <div>
               <p className="text-[14px] text-foreground mb-1.5">Why 11 stops (50 through 950)?</p>
               <p className="text-[12px] text-muted-foreground leading-[1.65]">Enough resolution for every context, pale backgrounds, mid-weight fills, dark text, from one hue. Fewer leaves gaps; more creates ambiguity.</p>
             </div>
           </div>
           <div className="rounded-xl border border-border/60 p-5 bg-card flex gap-4 items-start">
-            <span className="font-mono text-[16px] text-orange-500 leading-none min-w-[32px]">500</span>
+            <span className="font-mono text-[16px] text-rose-600 dark:text-rose-400 leading-none min-w-[32px]">500</span>
             <div>
               <p className="text-[14px] text-foreground mb-1.5">Why 500 is the anchor, not 0</p>
               <p className="text-[12px] text-muted-foreground leading-[1.65]">The primary sits mid-scale, leaving five lighter tints above and five darker shades below, symmetrical room for hover and active variants in both directions.</p>
@@ -577,10 +577,10 @@ export default function Page() {
           </div>
           <div className="grid grid-cols-6 md:grid-cols-11 rounded-xl overflow-hidden border border-border/60">
             {SCALE.map(s => (
-              <div key={s.step} className="flex flex-col" style={s.base ? { outline: "2px solid #f97316", outlineOffset: "-2px", zIndex: 1 } : undefined}>
+              <div key={s.step} className="flex flex-col" style={s.base ? { outline: "2px solid #f43f5e", outlineOffset: "-2px", zIndex: 1 } : undefined}>
                 <div className="h-20" style={{ background: s.hex }} />
                 <div className="p-2 bg-card border-t border-border/60">
-                  <span className={`block font-mono text-[9px] mb-0.5 tracking-[0.04em] ${s.base ? "text-orange-500" : "text-orange-500/80"}`}>{s.step}{s.base ? " ★" : ""}</span>
+                  <span className={`block font-mono text-[9px] mb-0.5 tracking-[0.04em] ${s.base ? "text-rose-600 dark:text-rose-400" : "text-rose-600/80 dark:text-rose-400/80"}`}>{s.step}{s.base ? " ★" : ""}</span>
                   <span className="font-mono text-[8px] text-muted-foreground">{s.hex}</span>
                 </div>
               </div>
@@ -608,7 +608,7 @@ export default function Page() {
               <div className="flex gap-1 mb-3">
                 {z.chips.map((c, i) => <div key={i} className="h-6 flex-1 rounded" style={{ background: c }} />)}
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-orange-500 mb-1.5">{z.label}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-rose-600 dark:text-rose-400 mb-1.5">{z.label}</p>
               <p className="text-[13px] text-foreground mb-1.5">{z.title}</p>
               <p className="text-[12px] text-muted-foreground leading-[1.6]">{z.desc}</p>
             </div>
@@ -620,7 +620,7 @@ export default function Page() {
         <FadeIn className="rounded-xl border border-border/60 overflow-hidden bg-card">
           {BUILD_STEPS.map(s => (
             <div key={s.n} className="flex items-start gap-5 p-5 border-b border-border/60 last:border-0 hover:bg-foreground/[0.02] transition-colors">
-              <span className="font-mono text-[11px] text-orange-500 min-w-[28px] pt-0.5 tracking-[0.1em]">{s.n}</span>
+              <span className="font-mono text-[11px] text-rose-600 dark:text-rose-400 min-w-[28px] pt-0.5 tracking-[0.1em]">{s.n}</span>
               <div>
                 <p className="text-[14px] text-foreground mb-1">{s.title}</p>
                 <p className="text-[12px] text-muted-foreground leading-[1.65]">{s.desc}</p>
@@ -653,7 +653,7 @@ export default function Page() {
       {/* 10 DARK MODE */}
       <Section id="dark-mode" muted>
         <FadeIn><Eyebrow num="10" tag="Dark Mode" /></FadeIn>
-        <FadeIn><Title>Dark mode is a <span className="text-orange-500">remap</span>, not an invert</Title></FadeIn>
+        <FadeIn><Title>Dark mode is a <span className="text-rose-600 dark:text-rose-400">remap</span>, not an invert</Title></FadeIn>
         <FadeIn><Lede>The mistake is inverting colors. The fix is re-mapping role tokens to different scale stops: your darkest gray becomes the background, your lightest becomes the text. Same tokens, different resolution per mode.</Lede></FadeIn>
         <FadeIn><ToolFrame><DarkModeRemap /></ToolFrame></FadeIn>
         <Note label="Lighten accents in the dark">A mid accent that passes contrast on white often fails on a dark surface. In dark mode, accents usually step one or two stops lighter (blue-600 → blue-400) so they keep their 4.5:1 against the new background.</Note>
@@ -678,7 +678,7 @@ export default function Page() {
       {/* 13 PERCEPTUAL */}
       <Section id="perceptual">
         <FadeIn><Eyebrow num="13" tag="Perceptual Uniformity" /></FadeIn>
-        <FadeIn><Title>Why HSL lies, and <span className="text-orange-500">OKLCH</span> doesn&apos;t</Title></FadeIn>
+        <FadeIn><Title>Why HSL lies, and <span className="text-rose-600 dark:text-rose-400">OKLCH</span> doesn&apos;t</Title></FadeIn>
         <FadeIn><Lede>Two HSL colors at the same lightness can look dramatically different in brightness. HSL lightness is a math construct; perceptual spaces like OKLCH and LCH model human vision, which is why they produce better-looking, more even scales.</Lede></FadeIn>
         <FadeIn><ToolFrame><PerceptualUniformity /></ToolFrame></FadeIn>
       </Section>
@@ -702,7 +702,7 @@ export default function Page() {
       {/* 16 TAXONOMY */}
       <Section id="taxonomy" muted>
         <FadeIn><Eyebrow num="16" tag="Token Architecture" /></FadeIn>
-        <FadeIn><Title>Token naming: <span className="text-orange-500">global → alias → component</span></Title></FadeIn>
+        <FadeIn><Title>Token naming: <span className="text-rose-600 dark:text-rose-400">global → alias → component</span></Title></FadeIn>
         <FadeIn><Lede>A full taxonomy has three tiers. Global tokens are the raw scale; alias tokens assign a semantic role; component tokens override for one component. Most teams stop at alias and never explain when the third tier is warranted.</Lede></FadeIn>
         <FadeIn><ToolFrame><TokenTaxonomy /></ToolFrame></FadeIn>
       </Section>

@@ -228,7 +228,7 @@ function ActTimeline() {
 function ForcingFunctions() {
   const ffs = [
     {
-      num: "#1", date: "March 2020", accent: "orange" as const,
+      num: "#1", date: "March 2020", accent: "rose" as const,
       event: "COVID-19 locks everyone home",
       before: "We were 6 months into building a citizen safety app, location sharing, SOS alerts, safety circles for people moving through cities.",
       after: "Citizens stop moving. Our core use case, safety while in transit, becomes irrelevant indefinitely. B2C growth stalls. Revenue near zero.",
@@ -243,8 +243,8 @@ function ForcingFunctions() {
   return (
     <div className="grid sm:grid-cols-2 gap-4">
       {ffs.map(ff => (
-        <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "orange" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
-          <p className={`text-[9px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "orange" ? "text-accent/70" : "text-red-600/70 dark:text-red-400/60"}`}>
+        <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
+          <p className={`text-[9px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent/70" : "text-red-600/70 dark:text-red-400/60"}`}>
             Forcing function {ff.num} · {ff.date}
           </p>
           <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
@@ -570,7 +570,7 @@ function DashboardMockup() {
               ))}
             </div>
             <div className="flex gap-3 mt-2">
-              {[{ c: "rgba(34,197,94,0.6)", l: "High compliance" }, { c: "rgba(249,115,22,0.6)", l: "At risk" }].map(l => (
+              {[{ c: "rgba(34,197,94,0.6)", l: "High compliance" }, { c: "rgba(244,63,94,0.6)", l: "At risk" }].map(l => (
                 <div key={l.l} className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-sm" style={{ background: l.c }} />
                   <span className="text-[10px] text-muted-foreground">{l.l}</span>
