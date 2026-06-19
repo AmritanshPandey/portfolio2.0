@@ -15,6 +15,7 @@ interface SectionProps {
   title?: string
   description?: string
   headerVariant?: "default" | "compact" | "hero"
+  headerAnimated?: boolean
   transition?: string
   transitionEyebrow?: string
   transitionVariant?: "default" | "muted" | "highlight"
@@ -28,6 +29,7 @@ export function Section({
   title,
   description,
   headerVariant = "default",
+  headerAnimated = true,
   transition,
   transitionEyebrow,
   transitionVariant = "default",
@@ -86,40 +88,87 @@ export function Section({
         />
       )}
 
-      {/* STUDIO LIGHT — every band carries one quiet light source so large
-          surfaces never read as flat digital fills. Dark mode: a soft key
-          light pooling from the top edge. Light mode: a gentle grounding
-          shade at the base. The receded `muted` bands additionally get a
-          low warm pool — the "one warm light on the work" of the North Star,
-          kept at whisper level so ember stays the voice of intent. */}
+      {/* SURFACE + LIGHT ─────────────────────────────────────────────────────
+          Three layers per band:
+          1. Fine dot grain  — tactile surface, fades at seams
+          2. Directional key — off-centre so it reads as a real light source
+          3. Edge vignette   — dark-mode depth; content sits inside the band
+          Muted bands also carry a warm emerald pool + faint counter-shadow. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+
+        {/* 1 ── DOT GRAIN ── */}
         <div
-          className="absolute inset-x-0 top-0 h-[440px] opacity-0 dark:opacity-100"
-          style={{ background: "radial-gradient(62% 100% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 72%)" }}
+          className="absolute inset-0 dark:hidden"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.07) 0.75px, transparent 0.75px)`,
+            backgroundSize: `22px 22px`,
+            maskImage: `linear-gradient(to bottom, transparent 0%, black 9%, black 88%, transparent 100%)`,
+            WebkitMaskImage: `linear-gradient(to bottom, transparent 0%, black 9%, black 88%, transparent 100%)`,
+          }}
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-[260px] dark:hidden"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.028), transparent)" }}
+          className="absolute inset-0 hidden dark:block"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.04) 0.75px, transparent 0.75px)`,
+            backgroundSize: `22px 22px`,
+            maskImage: `linear-gradient(to bottom, transparent 0%, black 9%, black 88%, transparent 100%)`,
+            WebkitMaskImage: `linear-gradient(to bottom, transparent 0%, black 9%, black 88%, transparent 100%)`,
+          }}
         />
+
+        {/* 2 ── KEY LIGHT ── */}
+        {/* Dark: slightly left-of-centre so it reads as a real directional source */}
+        <div
+          className="absolute inset-x-0 top-0 h-[500px] opacity-0 dark:opacity-100"
+          style={{ background: "radial-gradient(55% 80% at 44% 0%, rgba(255,255,255,0.055) 0%, transparent 70%)" }}
+        />
+        {/* Light: gentle grounding shade at base */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[280px] dark:hidden"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.03), transparent)" }}
+        />
+
+        {/* 3 ── EDGE VIGNETTE (dark only) ── */}
+        {/* Left/right edges recede so content reads as lit from above, not floating on an infinite plane */}
+        <div
+          className="absolute inset-0 hidden dark:block"
+          style={{ background: `linear-gradient(to right, rgba(0,0,0,0.14), transparent 13%, transparent 87%, rgba(0,0,0,0.14))` }}
+        />
+        {/* Bottom-right counter-gradient on default bands — second, dimmer fill light */}
+        {(bg === "default" || bg === "grid") && (
+          <div
+            className="absolute inset-0 hidden dark:block"
+            style={{ background: "radial-gradient(65% 45% at 88% 98%, rgba(255,255,255,0.02) 0%, transparent 70%)" }}
+          />
+        )}
+
+        {/* 4 ── MUTED BAND ACCENT ── */}
         {bg === "muted" && (
           <>
+            {/* Emerald pool — moved slightly inward so it bleeds across the seam naturally */}
             <div
-              className="absolute -top-44 right-[-12%] h-[560px] w-[760px] dark:hidden"
-              style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.045), transparent 72%)" }}
+              className="absolute -top-28 right-[-6%] h-[500px] w-[660px] dark:hidden"
+              style={{ background: "radial-gradient(closest-side, rgba(16,185,129,0.06), transparent 70%)" }}
             />
             <div
-              className="absolute -top-44 right-[-12%] hidden h-[560px] w-[760px] dark:block"
-              style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.065), transparent 72%)" }}
+              className="absolute -top-28 right-[-6%] hidden h-[500px] w-[660px] dark:block"
+              style={{ background: "radial-gradient(closest-side, rgba(16,185,129,0.09), transparent 70%)" }}
+            />
+            {/* Faint counter-shadow at bottom-left for dimensionality (dark only) */}
+            <div
+              className="absolute -bottom-16 left-[-6%] hidden h-[380px] w-[520px] dark:block"
+              style={{ background: "radial-gradient(closest-side, rgba(255,255,255,0.016), transparent 72%)" }}
             />
           </>
         )}
+
       </div>
 
       {/* ENGRAVED SEAM — borders do the dividing (DESIGN.md §Elevation).
           A hairline rule + a 1px highlight lip reads as a tactile letterpress
           edge between bands, not a faded glow. Full-bleed, top of each band. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.07] dark:bg-white/[0.08]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/70 dark:bg-white/[0.03]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.05] dark:bg-white/[0.06]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/30 dark:bg-white/[0.02]" />
 
       {/* CONTENT */}
       <div className="relative max-w-6xl mx-auto px-5 md:px-6 py-20 md:py-28">
@@ -130,6 +179,7 @@ export function Section({
             title={title}
             description={description}
             variant={headerVariant}
+            animated={headerAnimated}
           />
         )}
 

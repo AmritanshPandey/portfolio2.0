@@ -12,6 +12,7 @@ interface SectionHeaderProps {
   description?: string
   variant?: Variant
   as?: HeadingLevel
+  animated?: boolean
   /** Accepted for caller compatibility; gradient-text word emphasis (shimmer)
    *  removed per DESIGN.md. Hierarchy now comes from size + weight. */
   accentIndex?: number
@@ -22,6 +23,7 @@ export function SectionHeader({
   description,
   variant = "default",
   as: Tag = "h2",
+  animated = true,
 }: SectionHeaderProps) {
   const variants = {
     default: { container: "max-w-[700px] space-y-4", title: "type-section-title" },
@@ -33,17 +35,29 @@ export function SectionHeader({
 
   return (
     <div className={clsx(styles.container)}>
-      <TextReveal
-        as={Tag}
-        className={clsx("text-neutral-900 dark:text-white", styles.title)}
-      >
-        {title}
-      </TextReveal>
+      {animated ? (
+        <TextReveal
+          as={Tag}
+          className={clsx("text-neutral-900 dark:text-white", styles.title)}
+        >
+          {title}
+        </TextReveal>
+      ) : (
+        <Tag className={clsx("text-neutral-900 dark:text-white", styles.title)}>
+          {title}
+        </Tag>
+      )}
 
       {description && (
-        <Reveal as="p" y={18} delay={0.12} className="type-section-intro text-muted-foreground">
-          {description}
-        </Reveal>
+        animated ? (
+          <Reveal as="p" y={18} delay={0.12} className="type-section-intro text-muted-foreground">
+            {description}
+          </Reveal>
+        ) : (
+          <p className="type-section-intro text-muted-foreground">
+            {description}
+          </p>
+        )
       )}
     </div>
   )

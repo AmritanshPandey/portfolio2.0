@@ -114,7 +114,7 @@ function FooterLink({
   }
 
   return (
-    <Link href={href} className={className} style={style}>
+    <Link href={href} className={className} style={style}  target="_blank">
       {content}
     </Link>
   )
@@ -129,15 +129,10 @@ export default function Footer() {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/70 dark:from-neutral-950/10 dark:to-neutral-950/80" />
 
       <div className="relative mx-auto max-w-6xl px-6 py-14 md:py-18">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
           <div className="max-w-3xl">
-            <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
-              Closing note
-            </p>
-            <h2 className="text-balance text-3xl font-semibold leading-[1.08] tracking-tight text-foreground md:text-5xl">
-              Still thinking through systems, products, and the moments where trust is designed.
-            </h2>
-            <p className="mt-5 max-w-2xl text-[15px] leading-7 text-muted-foreground md:text-base">
+         
+            <p className=" text-[16px] leading-7 text-muted-foreground md:text-base">
               I work where product logic, interface craft, and financial systems meet. If the work here
               connects with something you are building, I am easy to reach.
             </p>
@@ -161,10 +156,7 @@ export default function Footer() {
               </Link>
             </div>
 
-            <p className="flex items-center gap-2 text-sm text-muted-foreground lg:text-right">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-              Available for product design, systems, and advisory conversations.
-            </p>
+          
           </div>
         </div>
 
@@ -179,7 +171,7 @@ export default function Footer() {
 
           <div className="flex flex-col gap-2 text-xs text-muted-foreground md:items-end">
             <p>© {new Date().getFullYear()} Amritansh Pandey</p>
-            <p>Built to think out loud.</p>
+           
           </div>
         </div>
       </div>

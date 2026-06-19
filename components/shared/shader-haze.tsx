@@ -36,7 +36,7 @@ interface ShaderHazeProps {
 }
 
 // Brand rose (#fb7185-ish) — warm light, not a hard red.
-const DEFAULT_TINT: RGB = [0.984, 0.443, 0.522]
+const DEFAULT_TINT: RGB = [0.204, 0.827, 0.600]
 
 const VERT_SRC = `
 attribute vec2 a_pos;

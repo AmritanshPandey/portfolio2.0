@@ -282,7 +282,7 @@ export default function Navbar() {
 
   // Close on resize
   useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 768) setOpen(false) }
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false) }
     window.addEventListener("resize", onResize)
     return () => window.removeEventListener("resize", onResize)
   }, [])
@@ -318,7 +318,7 @@ export default function Navbar() {
       {/* ══════════════════════════════════════════════
           DESKTOP
       ══════════════════════════════════════════════ */}
-      <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+      <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden lg:block">
         {isDetail ? (
           /* ── DETAIL: compact home-section nav ─────── */
           <NavShell scrolled={scrolled}>
@@ -392,7 +392,7 @@ export default function Navbar() {
         aria-expanded={open}
         data-menu-open={open}
         className="
-          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 md:hidden
+          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 lg:hidden
           w-14 h-14 rounded-full flex items-center justify-center
           bg-white dark:bg-neutral-900
           border border-black/[0.06] dark:border-white/[0.08]
@@ -418,7 +418,7 @@ export default function Navbar() {
             exit={{    opacity: 0, y: 8  }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="
-              fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 md:hidden w-64
+              fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 lg:hidden w-64
               rounded-2xl overflow-hidden
               bg-white dark:bg-neutral-900
               border border-black/[0.06] dark:border-white/[0.08]

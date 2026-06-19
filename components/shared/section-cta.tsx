@@ -69,10 +69,10 @@ export function CTA({
           // PRIMARY — white text on accent in light mode, dark in dark mode.
           variant === "primary" && [
             "bg-accent text-white dark:text-neutral-950",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(225,29,72,0.18)]",
+            "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(16,185,129,0.18)]",
             "hover:bg-accent",
             "hover:-translate-y-[1.5px]",
-            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_34px_rgba(225,29,72,0.32)]",
+            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_34px_rgba(16,185,129,0.32)]",
             "active:scale-[0.97] active:translate-y-0",
           ],
 
@@ -85,7 +85,7 @@ export function CTA({
             "hover:text-foreground",
             "hover:border-accent/40",
             "hover:bg-background/70",
-            "hover:shadow-[0_6px_18px_rgba(225,29,72,0.12)]",
+            "hover:shadow-[0_6px_18px_rgba(16,185,129,0.12)]",
             "hover:-translate-y-[1px]",
             "dark:bg-white/[0.04]",
             "dark:border-white/[0.08]",

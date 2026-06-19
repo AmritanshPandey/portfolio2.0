@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import { gsap, prefersReducedMotion } from "@/lib/gsap"
+import { useEffect, useRef, useState } from "react"
 
 interface RollingWordProps {
   words?: string[]
@@ -18,7 +17,7 @@ const DEFAULT_WORDS = ["systems", "platforms", "experiences", "products"]
  * column rolls up one step with a single confident ease. The first word
  * is duplicated at the end so the loop wraps without a visible jump.
  *
- * Pauses off-screen and in hidden tabs (GSAP ticker), and renders the
+ * Pauses off-screen and in hidden tabs, and renders the
  * first word statically under reduced motion or without JS.
  */
 export function RollingWord({
@@ -27,35 +26,38 @@ export function RollingWord({
   className,
 }: RollingWordProps) {
   const maskRef = useRef<HTMLSpanElement>(null)
-  const colRef = useRef<HTMLSpanElement>(null)
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
     const mask = maskRef.current
-    const col = colRef.current
-    if (!mask || !col || prefersReducedMotion() || words.length < 2) return
+    if (
+      !mask ||
+      words.length < 2 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return
 
-    const steps = words.length // includes the wrap onto the duplicated first word
-    const tl = gsap.timeline({ repeat: -1, paused: true })
-    for (let i = 1; i <= steps; i++) {
-      tl.to(col, {
-        yPercent: (-100 * i) / (steps + 1),
-        duration: 0.75,
-        ease: "power4.inOut",
-        delay: hold,
-      })
+    let timer: number | null = null
+    const start = () => {
+      if (timer !== null) return
+      timer = window.setInterval(() => {
+        if (!document.hidden) setIndex((current) => (current + 1) % words.length)
+      }, hold * 1000)
     }
-    // Snap from the duplicate back to the real first word, invisibly.
-    tl.set(col, { yPercent: 0 })
+    const stop = () => {
+      if (timer === null) return
+      window.clearInterval(timer)
+      timer = null
+    }
 
     const io = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting ? tl.play() : tl.pause()),
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
       { threshold: 0 }
     )
     io.observe(mask)
 
     return () => {
       io.disconnect()
-      tl.kill()
+      stop()
     }
   }, [words, hold])
 
@@ -69,8 +71,11 @@ export function RollingWord({
       className="inline-block overflow-hidden align-bottom"
       style={{ height: "1.22em", marginBottom: "-0.2em" }}
     >
-      <span ref={colRef} className="flex flex-col">
-        {[...words, words[0]].map((word, i) => (
+      <span
+        className="flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{ transform: `translateY(-${index * 1.22}em)` }}
+      >
+        {words.map((word, i) => (
           <span
             key={`${word}-${i}`}
             aria-hidden={i > 0 || undefined}

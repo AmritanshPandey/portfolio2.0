@@ -41,10 +41,10 @@
   --surface-2: oklch(0.98 0 0);
 
   --border: oklch(0.9 0 0);
-  --ring: oklch(0.6 0.22 17);
-  /* Rose brand accent. Light: deepened just past rose-600 so it clears AA
-     4.5:1 as text on the near-white canvas, not only as a fill. Dark: rose-400. */
-  --accent: oklch(0.558 0.232 16);
+  --ring: oklch(0.609 0.152 161);
+  /* Emerald accent. Light: emerald-600 — clears AA 4.5:1 on the near-white canvas.
+     Dark: emerald-400. */
+  --accent: oklch(0.609 0.152 161);
 
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -69,8 +69,8 @@
   --surface-2: oklch(0.14 0 0);
 
   --border: oklch(1 0 0 / 10%);
-  --ring: oklch(0.72 0.19 13);
-  --accent: oklch(0.712 0.194 13.428);
+  --ring: oklch(0.765 0.163 163);
+  --accent: oklch(0.765 0.163 163);
 
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
@@ -339,6 +339,12 @@
     text-wrap: balance;
   }
 
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .type-display-hero {
+      font-size: clamp(2.4rem, 5.6vw, 3.6rem);
+    }
+  }
+
   @media (min-width: 1024px) {
     .type-display-hero {
       font-size: clamp(3.1rem, 6.5vw, 5.25rem);
@@ -364,10 +370,10 @@
   }
 
   .type-section-title {
-    font-size: 30px;
-    line-height: 1.16;
-    font-weight: 600;
-    letter-spacing: 0;
+    font-size: 36px;
+    line-height: 1.10;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -477,8 +483,8 @@
     }
 
     .type-section-title {
-      font-size: 38px;
-      line-height: 1.14;
+      font-size: 54px;
+      line-height: 1.07;
     }
 
     .type-section-intro {
@@ -505,7 +511,8 @@
     }
 
     .type-section-title {
-      font-size: 44px;
+      font-size: 68px;
+      line-height: 1.04;
     }
   }
 
@@ -603,6 +610,55 @@
   animation: fadeUp 0.5s ease forwards;
 }
 
+@keyframes hero-line-rise {
+  from { transform: translateY(135%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes hero-soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-atmosphere-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+[data-hero-atmosphere] {
+  animation: hero-atmosphere-in 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-hero-line] {
+  animation: hero-line-rise 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-hero-line="2"] {
+  animation-delay: 100ms;
+}
+
+[data-hero-line="3"] {
+  animation-delay: 200ms;
+}
+
+[data-hero-fade] {
+  animation: hero-soft-in 700ms cubic-bezier(0.22, 1, 0.36, 1) 450ms both;
+}
+
+[data-hero-card] {
+  animation: hero-soft-in 1s cubic-bezier(0.22, 1, 0.36, 1) 550ms both;
+}
+
+[data-hero-proof] {
+  animation: hero-soft-in 550ms cubic-bezier(0.22, 1, 0.36, 1) 850ms both;
+}
+
 @keyframes sheen {
   0% { background-position: 200% center; }
   100% { background-position: -200% center; }
@@ -631,14 +687,14 @@
 }
 
 .shimmer-accent {
-  /* light mode — deep rose → rose → deep rose; every stop holds ≥3:1 on white */
+  /* light mode — deep emerald → emerald → deep emerald */
   background: linear-gradient(
     90deg,
-    #be123c 0%,
-    #e11d48 30%,
-    #f43f5e 50%,
-    #e11d48 70%,
-    #be123c 100%
+    #047857 0%,
+    #059669 30%,
+    #10b981 50%,
+    #059669 70%,
+    #047857 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -648,14 +704,14 @@
 }
 
 .dark .shimmer-accent {
-  /* dark mode — slightly lighter range */
+  /* dark mode — lighter emerald range */
   background: linear-gradient(
     90deg,
-    #fb7185 0%,
-    #fda4af 35%,
-    #fecdd3 50%,
-    #fda4af 65%,
-    #fb7185 100%
+    #34d399 0%,
+    #6ee7b7 35%,
+    #a7f3d0 50%,
+    #6ee7b7 65%,
+    #34d399 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -671,8 +727,8 @@
 ───────────────────────── */
 
 .hero-vh {
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 70vh;
+  min-height: 70svh;
 }
 
 /* ─────────────────────────
@@ -693,7 +749,43 @@
 
 .work-row {
   /* Long exponential ease-out — rows breathe rather than snap */
-  transition: opacity 650ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 900ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.work-title-hover {
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
+    color 420ms ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-row:hover .work-title-hover,
+  .work-row:focus-visible .work-title-hover {
+    transform: translate3d(8px, 0, 0);
+  }
+}
+
+.work-index[data-work-animate] .work-row {
+  animation: work-row-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.work-index[data-work-animate] .work-row:nth-child(1) { animation-delay: 40ms; }
+.work-index[data-work-animate] .work-row:nth-child(2) { animation-delay: 90ms; }
+.work-index[data-work-animate] .work-row:nth-child(3) { animation-delay: 140ms; }
+.work-index[data-work-animate] .work-row:nth-child(4) { animation-delay: 190ms; }
+.work-index[data-work-animate] .work-row:nth-child(n + 5) { animation-delay: 240ms; }
+
+@keyframes work-row-enter {
+  from {
+    opacity: 0.01;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ─────────────────────────
@@ -825,7 +917,12 @@
 
   /* Entrance reveals must never leave content hidden */
   .animate-fade-up,
-  .navbar-enter {
+  .navbar-enter,
+  [data-hero-atmosphere],
+  [data-hero-line],
+  [data-hero-fade],
+  [data-hero-card],
+  [data-hero-proof] {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -846,8 +943,31 @@
     opacity: 1;
   }
 
+  .work-index[data-work-animate] .work-row {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   /* The burger ⇄ cross morph snaps instantly — no staged delays */
   .menu-morph span {
     transition-delay: 0ms !important;
   }
+}
+
+/* ─────────────────────────
+   NO-JS / HYDRATION SAFETY NET
+   Framer Motion renders its `initial` (opacity:0 + transform) into the SSR
+   HTML. If JS never runs — scripting disabled, hydration failure, an engine
+   that can't run the bundle — that content would stay invisible forever.
+   The inline <head> script adds `.js` to <html> before first paint, so this
+   override only applies when scripting is genuinely unavailable. Scoped to
+   `main` so it reveals page content without touching the off-screen custom
+   cursor (which also starts at opacity:0 but lives outside <main>).
+   When JS runs, nothing here applies and every animation plays normally.
+───────────────────────── */
+html:not(.js) main [style*="opacity:0"],
+html:not(.js) main [style*="opacity: 0"] {
+  opacity: 1 !important;
+  transform: none !important;
 }

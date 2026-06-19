@@ -1,20 +1,14 @@
-"use client"
-
 import {
-  useEffect,
-  useRef,
   createElement,
   type ElementType,
   type ReactNode,
 } from "react"
-import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap"
 
 /* ─────────────────────────────────────────────────────────────────────────
    Reveal — scroll-entry rise for blocks.
 
-   Content is fully visible by default (no-JS, crawlers, reduced motion);
-   gsap.from() only hides it for the duration of the entrance. With
-   `stagger`, direct children animate as a sequence instead of the wrapper.
+   Content renders immediately. These props are kept for call-site
+   compatibility after removing the old JS animation runtime.
 ───────────────────────────────────────────────────────────────────────── */
 
 interface RevealProps {
@@ -27,7 +21,7 @@ interface RevealProps {
   duration?: number
   /** Stagger (s) between direct children. 0 = animate the wrapper whole. */
   stagger?: number
-  /** ScrollTrigger start position. */
+  /** Kept for call-site compatibility. */
   start?: string
   /** Anything else (aria-*, role, id, …) is forwarded to the rendered element. */
   [key: string]: unknown
@@ -44,39 +38,17 @@ export function Reveal({
   start = "top 86%",
   ...rest
 }: RevealProps) {
-  const ref = useRef<HTMLElement>(null)
+  void y
+  void delay
+  void duration
+  void stagger
+  void start
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el || prefersReducedMotion()) return
-
-    const targets: Element[] | Element = stagger > 0 ? Array.from(el.children) : el
-    const tween = gsap.from(targets, {
-      y,
-      autoAlpha: 0,
-      duration,
-      delay,
-      stagger,
-      clearProps: "transform,opacity,visibility",
-      scrollTrigger: { trigger: el, start, once: true },
-    })
-
-    return () => {
-      tween.scrollTrigger?.kill()
-      tween.kill()
-    }
-  }, [y, delay, duration, stagger, start])
-
-  return createElement(as, { ref, className, ...rest }, children)
+  return createElement(as, { className, ...rest }, children)
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   TextReveal — masked line reveal for headings.
-
-   SplitText slices the heading into lines, wraps each in an overflow
-   mask, and rolls them up on scroll entry. autoSplit re-splits on resize
-   and after webfonts load so line breaks stay true. Reduced motion or
-   no JS: the heading simply renders.
+   TextReveal — static heading renderer kept for call-site compatibility.
 ───────────────────────────────────────────────────────────────────────── */
 
 interface TextRevealProps {
@@ -100,42 +72,11 @@ export function TextReveal({
   stagger = 0.09,
   ...rest
 }: TextRevealProps) {
-  const ref = useRef<HTMLElement>(null)
+  void delay
+  void start
+  void stagger
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el || prefersReducedMotion()) return
-
-    let split: SplitText | null = null
-    let cancelled = false
-
-    // Splitting before webfonts settle produces wrong line breaks; autoSplit
-    // also re-splits on resize, keeping masks honest at every viewport.
-    document.fonts.ready.then(() => {
-      if (cancelled || !ref.current) return
-      split = SplitText.create(el, {
-        type: "lines",
-        mask: "lines",
-        autoSplit: true,
-        onSplit: (self) =>
-          gsap.from(self.lines, {
-            yPercent: 112,
-            duration: 1.05,
-            ease: "power4.out",
-            stagger,
-            delay,
-            scrollTrigger: { trigger: el, start, once: true },
-          }),
-      })
-    })
-
-    return () => {
-      cancelled = true
-      split?.revert()
-    }
-  }, [delay, start, stagger])
-
-  return createElement(as, { ref, className, ...rest }, children)
+  return createElement(as, { className, ...rest }, children)
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

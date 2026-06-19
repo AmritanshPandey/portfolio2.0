@@ -6,6 +6,8 @@ import {
 } from "@/components/articles/article-ui"
 import { ReadingProgress } from "@/components/shared/reading-progress"
 import { Reveal } from "@/components/shared/motion"
+import { ImageLayout } from "@/components/shared/image-layout"
+import { FullBleedBlock } from "@/components/shared/full-bleed-block"
 import { articleItems } from "@/lib/data"
 import type { ArticleSection } from "@/lib/types/content"
 
@@ -13,6 +15,22 @@ import type { ArticleSection } from "@/lib/types/content"
 
 function getArticle(slug: string) {
   return articleItems.find(a => a.href === `/articles/${slug}`) ?? null
+}
+
+type ImageLayoutAspect = "auto" | "16/10" | "16/9" | "4/3" | "3/2" | "1/1"
+type FullBleedAspect = "screen" | "16/9" | "16/10" | "4/3"
+
+function getImageLayoutAspect(aspect: ArticleSection["aspect"]): ImageLayoutAspect | undefined {
+  if (!aspect || aspect === "screen") return undefined
+  return aspect
+}
+
+function getFullBleedAspect(aspect: ArticleSection["aspect"]): FullBleedAspect | undefined {
+  if (aspect === "screen" || aspect === "16/9" || aspect === "16/10" || aspect === "4/3") {
+    return aspect
+  }
+
+  return undefined
 }
 
 // ─── Section renderers ────────────────────────────────────────────────────────
@@ -344,6 +362,29 @@ function ImageDevice({ section }: { section: ArticleSection }) {
   )
 }
 
+function FullBleedSection({ section }: { section: ArticleSection }) {
+  return (
+    <FullBleedBlock
+      src={section.src ?? ""}
+      alt={section.alt ?? ""}
+      caption={section.caption}
+      source={section.source}
+      eyebrow={section.eyebrow}
+      title={section.title ?? section.heading}
+      subtitle={section.subtitle}
+      body={section.body}
+      copyMode={section.copyMode}
+      copyPlacement={section.copyPlacement}
+      typography={section.typography ?? "article"}
+      aspect={getFullBleedAspect(section.aspect)}
+      fit={section.fit}
+      align={section.align}
+      priority={section.priority}
+      className="-mx-6 md:-mx-20 lg:-mx-36"
+    />
+  )
+}
+
 // ─── Section dispatcher ───────────────────────────────────────────────────────
 
 function ArticleSection({ section }: { section: ArticleSection }) {
@@ -355,6 +396,17 @@ function ArticleSection({ section }: { section: ArticleSection }) {
   if (section.type === "image-grid")     return <ImageGrid     section={section} />
   if (section.type === "image-float")    return <ImageFloat    section={section} />
   if (section.type === "image-device")   return <ImageDevice   section={section} />
+  if (section.type === "full-bleed")     return <FullBleedSection section={section} />
+  if (section.type === "image-layout")   return (
+    <ImageLayout
+      layout={section.layout ?? "single"}
+      images={section.images ?? []}
+      gap={section.gap}
+      fit={section.fit}
+      aspect={getImageLayoutAspect(section.aspect)}
+      caption={section.caption}
+    />
+  )
   return <ProseSection section={section} />
 }
 

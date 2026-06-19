@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import clsx from "clsx"
 import type { ReactNode } from "react"
+import { EASE, DURATION, RISE } from "@/lib/motion"
 
 type Variant = "default" | "muted" | "dark"
 
@@ -24,8 +25,8 @@ const BG: Record<Variant, string> = {
   dark:    "bg-[oklch(0.925_0_0)] dark:bg-[oklch(0.12_0_0)] text-foreground",
 }
 
-const EDGE_LINE = "bg-border/70 dark:bg-white/[0.08]"
-const EDGE_HIGHLIGHT = "bg-white/70 dark:bg-white/[0.03]"
+const EDGE_LINE = "bg-black/[0.05] dark:bg-white/[0.06]"
+const EDGE_HIGHLIGHT = "bg-white/30 dark:bg-white/[0.02]"
 
 export function CsSection({ children, variant = "default", id }: Props) {
   return (
@@ -38,10 +39,10 @@ export function CsSection({ children, variant = "default", id }: Props) {
 
         {/* Content */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: RISE }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: DURATION.base, ease: EASE }}
           className="min-w-0"
         >
           {children}

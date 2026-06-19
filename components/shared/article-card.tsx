@@ -45,7 +45,7 @@ export function ArticleCard({
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
-          style={{ background: "radial-gradient(260px 160px at 50% 0%, rgba(244,63,94,0.08), transparent 70%)" }}
+          style={{ background: "radial-gradient(260px 160px at 50% 0%, rgba(16,185,129,0.08), transparent 70%)" }}
         />
 
         <div className="relative flex flex-1 flex-col gap-4 px-5 pb-5 pt-5">

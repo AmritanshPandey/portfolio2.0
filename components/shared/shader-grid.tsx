@@ -48,10 +48,12 @@ interface ShaderGridProps {
   darkColor?: RGBA
   /** soft tint that bleeds in near the cursor */
   tintColor?: RGB
+  /** Opacity used only for the static fallback grid. */
+  fallbackOpacity?: number
 }
 
-// Brand rose (#f43f5e) — warm tint that bleeds in near the cursor.
-const DEFAULT_TINT: RGB = [0.957, 0.247, 0.369]
+// Brand emerald (#10b981) — warm tint that bleeds in near the cursor.
+const DEFAULT_TINT: RGB = [0.063, 0.725, 0.506]
 
 const VERT_SRC = `
 attribute vec2 a_pos;
@@ -185,10 +187,12 @@ export function ShaderGrid({
   lightColor = [0, 0, 0, 0.42],
   darkColor = [1, 1, 1, 0.5],
   tintColor = DEFAULT_TINT,
+  fallbackOpacity = 1,
 }: ShaderGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [webglActive, setWebglActive] = useState(false)
+  const [fallbackVisible, setFallbackVisible] = useState(false)
   const [contextVersion, setContextVersion] = useState(0)
 
   const { isHigh, isBalanced } = usePerformanceMode()
@@ -201,14 +205,21 @@ export function ShaderGrid({
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
+    setFallbackVisible(false)
 
     // ── Guard: honour reduced motion (keep the static CSS dot grid) ───────
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setFallbackVisible(true)
+      return
+    }
 
     // ── Guard: touch-primary devices (phones / tablets) keep the static grid.
     // The pointer glow + drag reads as oversized, rose-tinted dots under a
     // finger and muddies readability, so skip the interactive WebGL entirely.
-    if (window.matchMedia("(pointer: coarse)").matches) return
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setFallbackVisible(true)
+      return
+    }
 
     const gl = (canvas.getContext("webgl", {
       alpha: true,
@@ -227,18 +238,30 @@ export function ShaderGrid({
         premultipliedAlpha: false,
         preserveDrawingBuffer: false,
       })) as WebGLRenderingContext | null
-    if (!gl) return
+    if (!gl) {
+      setFallbackVisible(true)
+      return
+    }
 
     const vert = compile(gl, gl.VERTEX_SHADER, VERT_SRC)
     const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG_SRC)
-    if (!vert || !frag) return
+    if (!vert || !frag) {
+      setFallbackVisible(true)
+      return
+    }
 
     const program = gl.createProgram()
-    if (!program) return
+    if (!program) {
+      setFallbackVisible(true)
+      return
+    }
     gl.attachShader(program, vert)
     gl.attachShader(program, frag)
     gl.linkProgram(program)
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      setFallbackVisible(true)
+      return
+    }
     gl.useProgram(program)
 
     // Full-screen triangle.
@@ -517,6 +540,7 @@ export function ShaderGrid({
       raf = 0
       resizeRaf = 0
       setWebglActive(false)
+      setFallbackVisible(true)
     }
     const onContextRestored = () => {
       setContextVersion((version) => version + 1)
@@ -581,7 +605,7 @@ export function ShaderGrid({
           when WebGL is unavailable / reduced motion (webglActive never flips). */}
       <div
         className={`absolute inset-0 transition-opacity duration-300 ease-out ${fallbackClassName ?? ""}`}
-        style={{ opacity: webglActive ? 0 : 1 }}
+        style={{ opacity: !webglActive && fallbackVisible ? fallbackOpacity : 0 }}
       >
         <div
           className="absolute inset-0 dark:hidden"

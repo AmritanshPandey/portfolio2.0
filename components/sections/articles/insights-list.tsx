@@ -1,10 +1,6 @@
-"use client"
-
-import { useEffect, useRef } from "react"
 import Link from "next/link"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
-import { gsap, prefersReducedMotion } from "@/lib/gsap"
 import type { ArticleItem } from "@/lib/types/content"
 
 /**
@@ -12,28 +8,8 @@ import type { ArticleItem } from "@/lib/types/content"
  * row grammar (hairlines, recede-on-hover), smaller voice.
  */
 export function InsightsList({ items }: { items: ArticleItem[] }) {
-  const rootRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const root = rootRef.current
-    if (!root || prefersReducedMotion()) return
-
-    const tween = gsap.from(root.querySelectorAll(".work-row"), {
-      y: 26,
-      autoAlpha: 0,
-      duration: 0.75,
-      stagger: 0.07,
-      clearProps: "transform,opacity,visibility",
-      scrollTrigger: { trigger: root, start: "top 84%", once: true },
-    })
-    return () => {
-      tween.scrollTrigger?.kill()
-      tween.kill()
-    }
-  }, [])
-
   return (
-    <div ref={rootRef} className="work-index">
+    <div className="work-index" data-work-animate>
       {items.map((item, i) => (
         <Link
           key={item.href}

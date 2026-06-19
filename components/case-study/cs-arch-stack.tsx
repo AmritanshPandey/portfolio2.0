@@ -17,73 +17,93 @@ export interface CsArchStackProps {
 
 export function CsArchStack({ layers }: CsArchStackProps) {
   return (
-    <div className="flex flex-col gap-4">
-      {layers.map((layer, i) => (
-        <div key={layer.num}>
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.45, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-            className={clsx(
-              "relative overflow-hidden rounded-2xl border p-6",
-              "grid gap-4 md:grid-cols-[72px_1fr_160px] md:items-center",
-              "transition-all duration-300",
-              "shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_10px_28px_-26px_rgba(0,0,0,0.32)]",
-              "dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_24px_70px_-48px_rgba(0,0,0,0.9)]",
-              layer.isCore
-                ? [
-                    "border-accent/50 bg-[linear-gradient(180deg,oklch(0.985_0.022_55),oklch(0.955_0.018_48))]",
-                    "dark:border-accent/40 dark:bg-gradient-to-b dark:from-accent/[0.14] dark:to-accent/[0.04]",
-                  ]
-                : [
-                    "border-black/[0.08] bg-[linear-gradient(180deg,oklch(1_0_0),oklch(0.975_0_0))]",
-                    "dark:border-white/[0.09] dark:bg-[linear-gradient(180deg,oklch(0.18_0_0),oklch(0.145_0_0))]",
-                  ]
-            )}
-          >
-            <div
-              aria-hidden
-              className={clsx(
-                "pointer-events-none absolute inset-x-0 top-0 h-px",
-                layer.isCore ? "bg-accent/45" : "bg-black/[0.06] dark:bg-white/[0.08]"
-              )}
-            />
-            {/* Layer number */}
-            <p className={`text-[11px] font-mono tracking-[0.08em] ${layer.isCore ? "text-accent" : "text-muted-foreground"}`}>
-              {layer.num}
-            </p>
+    <div className="relative">
+      {/* Vertical spine — runs through the centre of the node column */}
+      <div
+        aria-hidden
+        className="absolute top-5 bottom-5 w-px bg-border/50 dark:bg-white/[0.07]"
+        style={{ left: 19 }}
+      />
 
-            {/* Title + body */}
-            <div>
-              <p className="text-[17px] font-medium text-foreground leading-snug mb-1.5">
-                {layer.title}
-              </p>
-              <p className="text-[13px] text-muted-foreground leading-relaxed max-w-lg">
+      <div className="flex flex-col gap-3">
+        {layers.map((layer, i) => (
+          <motion.div
+            key={layer.num}
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-start gap-4"
+          >
+            {/* Node — accent for key layer, neutral otherwise */}
+            <div
+              className={clsx(
+                "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border",
+                "font-mono text-[10.5px] font-semibold tracking-[0.04em]",
+                layer.isCore
+                  ? "border-accent bg-accent text-white shadow-[0_0_18px_rgba(16,185,129,0.35)] dark:text-black"
+                  : "border-border/60 bg-background text-muted-foreground dark:bg-[oklch(0.18_0_0)]"
+              )}
+            >
+              {layer.num}
+            </div>
+
+            {/* Card */}
+            <div
+              className={clsx(
+                "mb-1 flex-1 min-w-0 rounded-2xl border p-5 md:p-6",
+                layer.isCore
+                  ? [
+                      "border-accent/35 bg-accent/[0.04] dark:bg-accent/[0.07]",
+                      "shadow-[0_0_0_1px_rgba(16,185,129,0.08),0_8px_24px_-16px_rgba(16,185,129,0.15)]",
+                    ]
+                  : [
+                      "border-border/55 bg-card/60 dark:bg-white/[0.025]",
+                      "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_4px_14px_-10px_rgba(0,0,0,0.12)]",
+                      "dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_4px_14px_-10px_rgba(0,0,0,0.5)]",
+                    ]
+              )}
+            >
+              {/* Header row: title + key-layer badge + meta pills */}
+              <div className="mb-3 flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <h3 className="text-[15.5px] font-semibold leading-snug text-foreground">
+                    {layer.title}
+                  </h3>
+                  {layer.isCore && (
+                    <span className="shrink-0 rounded-full border border-accent/35 bg-accent/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
+                      Key layer
+                    </span>
+                  )}
+                </div>
+
+                {/* Meta pills */}
+                {layer.meta && layer.meta.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {layer.meta.map((m) => (
+                      <span
+                        key={m}
+                        className={clsx(
+                          "rounded-full border px-2.5 py-0.5 font-mono text-[10.5px]",
+                          layer.isCore
+                            ? "border-accent/30 bg-accent/[0.07] text-accent/80"
+                            : "border-border/55 bg-muted/50 text-muted-foreground"
+                        )}
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <p className="text-[13.5px] leading-relaxed text-muted-foreground">
                 {layer.body}
               </p>
             </div>
-
-            {/* Meta tags */}
-            {layer.meta && (
-              <div className="hidden md:flex flex-col gap-1 text-right">
-                {layer.meta.map(m => (
-                  <span key={m} className="text-[11px] font-mono text-muted-foreground tracking-[0.06em]">
-                    {m}
-                  </span>
-                ))}
-              </div>
-            )}
           </motion.div>
-
-          {/* Connector arrow between layers */}
-          {i < layers.length - 1 && (
-            <div className="flex justify-center my-1">
-              <div className="w-px h-6 bg-gradient-to-b from-foreground/20 via-foreground/10 to-transparent" />
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }

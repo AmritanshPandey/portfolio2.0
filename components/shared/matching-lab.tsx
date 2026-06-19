@@ -216,7 +216,7 @@ export function DiscoveryVsAllocation() {
             <span
               key={i}
               className="w-4 h-4 rounded-[3px]"
-              style={{ background: i < 3 ? "#f43f5e" : i < 7 ? "rgba(244,63,94,0.35)" : "rgba(120,120,120,0.12)" }}
+              style={{ background: i < 3 ? "#10b981" : i < 7 ? "rgba(16,185,129,0.35)" : "rgba(120,120,120,0.12)" }}
             />
           ))}
         </div>
@@ -262,7 +262,7 @@ export function ConcentrationDemo() {
             <motion.div
               key={i}
               className="flex-1 rounded-t-[2px]"
-              style={{ background: fair ? "#f43f5e" : i < 3 ? "#f43f5e" : "rgba(120,120,120,0.3)" }}
+              style={{ background: fair ? "#10b981" : i < 3 ? "#10b981" : "rgba(120,120,120,0.3)" }}
               animate={{ height: `${(a / max) * 100}%` }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
@@ -362,8 +362,8 @@ export function TradeoffFrontier() {
               <circle key={i} cx={sx(p.total)} cy={sy(p.quiet)} r={2.6} className="fill-muted-foreground/60" />
             ))}
             {/* current */}
-            <circle cx={sx(cur.total)} cy={sy(cur.quiet)} r={7} fill="#f43f5e" stroke="white" strokeWidth={1.5} />
-            <text x={sx(cur.total)} y={sy(cur.quiet) - 13} textAnchor="middle" fill="#f43f5e" style={{ fontSize: 12, fontFamily: "monospace", fontWeight: 600 }}>
+            <circle cx={sx(cur.total)} cy={sy(cur.quiet)} r={7} fill="#10b981" stroke="white" strokeWidth={1.5} />
+            <text x={sx(cur.total)} y={sy(cur.quiet) - 13} textAnchor="middle" fill="#10b981" style={{ fontSize: 12, fontFamily: "monospace", fontWeight: 600 }}>
               λ={lam.toFixed(2)}
             </text>
           </svg>
@@ -424,7 +424,7 @@ function BarGroup({ title, rows, pick, denom }: {
               <div className="h-7 rounded-md bg-foreground/[0.05] overflow-hidden">
                 <motion.div
                   className="h-full rounded-md flex items-center justify-end pr-2 font-mono text-[11px] text-white"
-                  style={{ background: r.color, boxShadow: r.hi ? "0 0 14px rgba(244,63,94,0.4)" : undefined }}
+                  style={{ background: r.color, boxShadow: r.hi ? "0 0 14px rgba(16,185,129,0.4)" : undefined }}
                   initial={{ width: 0 }}
                   whileInView={{ width: `${Math.max(8, Math.min(100, (val / denom) * 100))}%` }}
                   viewport={{ once: true }}
@@ -450,7 +450,7 @@ export function EngineComparison() {
   const rows: EngineRow[] = [
     { name: "Gale–Shapley", m: gs, color: "rgba(120,120,120,0.55)" },
     { name: "Irving's", m: irv, color: "rgba(180,140,70,0.7)" },
-    { name: "FairMatch", m: fm, color: "#f43f5e", hi: true },
+    { name: "FairMatch", m: fm, color: "#10b981", hi: true },
   ]
 
   return (

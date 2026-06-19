@@ -70,8 +70,8 @@ export default function AboutSection() {
     >
 
       {/* ENGRAVED SEAM, matches the band rhythm of <Section> above. */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-black/[0.07] dark:bg-white/[0.08]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px z-[1] h-px bg-white/70 dark:bg-white/[0.03]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-px bg-black/[0.05] dark:bg-white/[0.06]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px z-[1] h-px bg-white/30 dark:bg-white/[0.02]" />
 
       {/* ── BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -150,7 +150,7 @@ export default function AboutSection() {
           style={{
             opacity: "var(--about-grid-alpha)",
             background:
-              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(12,12,12,0.075), rgba(244,63,94,0.05) 28%, transparent 68%)",
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(12,12,12,0.075), rgba(16,185,129,0.05) 28%, transparent 68%)",
           }}
         />
         <div
@@ -159,13 +159,13 @@ export default function AboutSection() {
           style={{
             opacity: "var(--about-grid-alpha)",
             background:
-              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(255,255,255,0.105), rgba(244,63,94,0.045) 28%, transparent 68%)",
+              "radial-gradient(circle 280px at var(--about-grid-x) var(--about-grid-y), rgba(255,255,255,0.105), rgba(16,185,129,0.045) 28%, transparent 68%)",
           }}
         />
 
         {/* GLOW, faint ambient bloom for depth behind the glass card. Ember stays
             subtle (One Voice Rule); a neutral lift adds dimension, no 2nd accent. */}
-        <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(244,63,94,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(244,63,94,0.17),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(640px_340px_at_86%_88%,rgba(16,185,129,0.07),transparent_66%)] dark:bg-[radial-gradient(560px_300px_at_86%_88%,rgba(16,185,129,0.17),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(520px_320px_at_12%_6%,rgba(0,0,0,0.04),transparent_60%)] dark:bg-[radial-gradient(560px_340px_at_12%_6%,rgba(255,255,255,0.05),transparent_62%)]" />
       </div>
 
@@ -177,7 +177,7 @@ export default function AboutSection() {
           <SectionHeader
             eyebrow="About"
             title="Who I am"
-            description="The person behind the work: curious, hands-on, and drawn to systems that reveal how people make decisions."
+            description="Curious, hands-on, drawn to systems."
           />
         </div>
 
@@ -200,13 +200,10 @@ export default function AboutSection() {
             {/* TEXT */}
             <div className="space-y-5">
               <p className="type-prose text-foreground/82">
-                I like figuring out how things work. That shows up in the job, but also in the rest of my life: long routes, unfamiliar cities, cooking, Lego, and small collections that reward patience.
+                I like figuring out how things work. That shows up in the job, but also in the rest of life: long routes, unfamiliar cities, cooking, Lego, and small collections that reward patience.
               </p>
               <p className="type-prose text-foreground/80">
-                The same values keep coming back in my design work: clarity, systems, learning, craft, and making decisions visible enough for other people to build from.
-              </p>
-              <p className="type-prose text-foreground/80">
-                Teaching is the part I return to most. Mentoring designers, helping someone get unstuck, and watching an idea click still feels closely connected to the work itself.
+                The same values keep coming back in my design work: clarity, systems, craft, and making decisions visible enough for others to build from. Teaching is the part I return to most — mentoring designers and watching ideas click.
               </p>
             </div>
 

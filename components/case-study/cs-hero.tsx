@@ -43,12 +43,12 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
       <div className="pointer-events-none absolute inset-0">
         <div className="
           absolute inset-0
-          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(244,63,94,0.05),transparent_60%)]
+          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(16,185,129,0.05),transparent_60%)]
           opacity-70 dark:hidden
         " />
         <div className="
           hidden dark:block absolute inset-0
-          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(244,63,94,0.08),transparent_60%)]
+          bg-[radial-gradient(900px_400px_at_20%_0%,rgba(16,185,129,0.08),transparent_60%)]
         " />
       </div>
 

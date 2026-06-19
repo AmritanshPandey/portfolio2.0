@@ -38,7 +38,7 @@ function ScaleRow({
               key={s.stop}
               onClick={() => onCopy(s.hex, key)}
               className="group relative flex flex-col text-left focus-visible:z-10"
-              style={s.anchor ? { outline: "2px solid #f43f5e", outlineOffset: "-2px", zIndex: 1 } : undefined}
+              style={s.anchor ? { outline: "2px solid #10b981", outlineOffset: "-2px", zIndex: 1 } : undefined}
               title={`Copy ${s.hex}`}
             >
               <div className="h-16 md:h-20 flex flex-col justify-between p-1.5" style={{ background: s.hex }}>

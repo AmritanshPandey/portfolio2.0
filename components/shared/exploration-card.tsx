@@ -77,7 +77,7 @@ export function ExplorationCard({
         absolute inset-0 pointer-events-none
         opacity-0 group-hover:opacity-100
         transition-opacity duration-500
-        bg-[radial-gradient(260px_150px_at_0%_100%,rgba(225,29,72,0.10),transparent_60%)]
+        bg-[radial-gradient(260px_150px_at_0%_100%,rgba(16,185,129,0.10),transparent_60%)]
       " />
 
       {/* HOVER VIGNETTE */}

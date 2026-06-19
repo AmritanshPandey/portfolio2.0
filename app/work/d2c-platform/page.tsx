@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import {
   CsHeroShell,
   CsSection,
@@ -14,6 +13,7 @@ import {
   CsTimeline,
   CsNextStudies,
 } from "@/components/case-study"
+import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── BRAND COLORS ─────────────────────────────────────────────────────────────
 // The real storefront accents — this is the token layer that varies per brand.
@@ -22,24 +22,6 @@ const BRAND = {
   dermaco: "#217A6E",
   aqualogica: "#0066CC",
 } as const
-
-// ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
-
-function FadeIn({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
 
 // ─── TIMELINE DATA ──────────────────────────────────────────────────────────
 
@@ -107,6 +89,7 @@ function Hero() {
   return (
     <CsHeroShell
       breadcrumb={{ kind: "Case Study", category: "D2C Commerce", client: "Honasa Consumer" }}
+      keywords={["First In-House UX Designer", "0→1 Commerce Foundations", "Multi-Brand Scale"]}
       title={
         <>
           One System.{" "}
@@ -116,12 +99,23 @@ function Hero() {
       }
       lede={
         <>
-          Built and scaled first-party commerce experiences across Mamaearth,
-          The Derma Co., and Aqualogica by establishing a shared component
-          backbone with brand-level token overrides, shipping all three
-          storefronts on a hard 8-week deadline.
+          Built and scaled first-party commerce experiences across Mamaearth,{" "}
+          <strong className="font-medium text-foreground">The Derma Co., and Aqualogica</strong>{" "}
+          by establishing <strong className="font-medium text-foreground">reusable UX foundations</strong>,{" "}
+          shared commerce patterns, and{" "}
+          <strong className="font-medium text-foreground">scalable product systems</strong>{" "}
+          under rapid growth constraints.
         </>
       }
+      meta={{
+        role:         "First In-House UX Designer",
+        platform:     "Web + Mobile",
+        scope:        "Multi-Brand Commerce",
+        organisation: "Honasa Consumer Limited",
+      }}
+      readTime="12 min read"
+      publishedDate="June 2022"
+      topics={["Systems", "Process", "Outcome"]}
       asideLabel="Multi-brand model"
       asideCol="340px"
       aside={<HeroAside />}
@@ -525,11 +519,11 @@ export default function Page() {
       {/* System architecture (dark) */}
       <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start mb-2">
             <h2 className="type-case-title text-foreground">
               A shared backbone, a configurable surface.
             </h2>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-[15px] text-muted-foreground leading-relaxed pt-1">
               Commerce logic is stable and shared. Brand identity is a token layer
               above it. Decoupling these two is what made three brands buildable
               by two designers in eight weeks.

@@ -2,32 +2,13 @@
 
 import { motion } from "framer-motion"
 import {
-  IconClock,
-  IconPackages,
   IconCode,
   IconTarget,
   IconBulb,
   IconPresentation,
 } from "@tabler/icons-react"
 import { CsHeroShell, CsSection, CsDecision, CsInfoBar, CsAreaChart, CsDualLineChart, CsNextStudies } from "@/components/case-study"
-
-// ─── fade-in wrapper ────────────────────────────────────────────────────────
-
-function FadeIn({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
+import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── HERO ──────────────────────────────────────────────────────────────────
 
@@ -132,15 +113,25 @@ function Hero() {
   return (
     <CsHeroShell
       breadcrumb={{ kind: "Case Study", category: "Product · 0→1 + Pivot", client: "Dror · 2020–2021" }}
+      keywords={["Sole PM + Designer", "0→1 Product", "B2C → B2B Pivot"]}
       title="Two products, one pivot, eleven months"
       lede={
         <>
           Sole PM and designer at Dror, through{" "}
-          <strong className="text-foreground font-medium">a full product lifecycle</strong>: a 0→1 consumer launch, a{" "}
-          <strong className="text-foreground font-medium">COVID-forced B2B pivot</strong>, and a lesson about{" "}
-          <strong className="text-foreground font-medium">what PMF looks like when it&apos;s rented from an external event</strong>.
+          <strong className="font-medium text-foreground">a full product lifecycle</strong>: a 0→1 consumer launch, a{" "}
+          <strong className="font-medium text-foreground">COVID-forced B2B pivot</strong>, and a lesson about{" "}
+          <strong className="font-medium text-foreground">what PMF looks like when it&apos;s rented from an external event</strong>.
         </>
       }
+      meta={{
+        role:         "Sole PM + Designer",
+        platform:     "iOS + Android",
+        scope:        "Consumer + Enterprise",
+        organisation: "Dror · Lythouse",
+      }}
+      readTime="15 min read"
+      publishedDate="2020–2021"
+      topics={["Startup", "Pivot", "0→1", "PMF"]}
       asideCol="380px"
       aside={
         <div className="rounded-2xl border border-border/60 bg-muted/20 dark:bg-white/[0.02] p-6 backdrop-blur-sm">
@@ -150,26 +141,7 @@ function Hero() {
           <HeroVisual />
         </div>
       }
-    >
-      <p className="text-sm leading-relaxed text-muted-foreground max-w-xl mb-6">
-        Dror was the flagship product at Lythouse, the company was originally Dror Labs.
-      </p>
-      <div className="flex flex-wrap items-center gap-5 text-[11px] text-muted-foreground pt-6 border-t border-border/60">
-        <span className="flex items-center gap-1.5">
-          <IconClock size={13} strokeWidth={1.75} />
-          15 min read
-        </span>
-        <span className="flex items-center gap-1.5">
-          <IconPackages size={13} strokeWidth={1.75} />
-          2 products shipped
-        </span>
-        <div className="flex gap-2">
-          {["Startup", "Pivot", "0→1", "PMF"].map(t => (
-            <span key={t} className="px-2 py-0.5 rounded-full border border-border/60 bg-muted/40 text-[10px]">{t}</span>
-          ))}
-        </div>
-      </div>
-    </CsHeroShell>
+    />
   )
 }
 

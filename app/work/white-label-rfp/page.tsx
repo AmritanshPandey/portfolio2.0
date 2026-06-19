@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import {
   CsHeroShell,
   CsSection,
@@ -13,24 +12,7 @@ import {
   CsMetricBars,
   CsNextStudies,
 } from "@/components/case-study"
-
-// ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
-
-function FadeIn({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
+import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 
@@ -82,6 +64,7 @@ function Hero() {
   return (
     <CsHeroShell
       breadcrumb={{ kind: "Case Study", category: "Enterprise Systems", client: "Mastercard · PartnerBank" }}
+      keywords={["Enterprise Systems", "RFP Enablement", "Design Lead"]}
       title={
         <>
           Modular Systems for{" "}
@@ -92,11 +75,22 @@ function Hero() {
       lede={
         <>
           Decoupled core UX from brand and visual layers across PartnerBank,
-          Mastercard&apos;s white-label digital banking platform. A rigid template
-          system became a configurable architecture for faster demo turnaround
-          during high-stakes RFP cycles.
+          Mastercard&apos;s white-label digital banking platform. A{" "}
+          <strong className="font-medium text-foreground">rigid template system</strong>{" "}
+          became a{" "}
+          <strong className="font-medium text-foreground">configurable architecture</strong>{" "}
+          for faster demo turnaround during high-stakes RFP cycles.
         </>
       }
+      meta={{
+        role:         "Design Lead",
+        platform:     "Web · Banking Platform",
+        scope:        "White-label RFP System",
+        organisation: "Mastercard",
+      }}
+      readTime="10 min read"
+      publishedDate="2023–2024"
+      topics={["Enterprise", "Systems", "RFP", "Scale"]}
       asideLabel="System model"
       asideCol="320px"
       aside={<HeroAside />}
@@ -221,9 +215,9 @@ export default function Page() {
       </CsSection>
 
       {/* Architecture */}
-      <CsSection id="architecture" label="System Architecture" variant="dark">
+      <CsSection id="architecture" label="System Architecture" variant="muted">
         <div className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start mb-2">
             <h2 className="type-case-title text-foreground">
               A four-layer architecture.
             </h2>
@@ -242,7 +236,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key Decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="default">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -410,7 +404,7 @@ export default function Page() {
       {/* Token demo */}
       <CsSection id="tokens" label="Tokens in Action" variant="muted">
         <div className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-6 items-end">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
             <h2 className="type-case-title text-foreground">
               Same component. Three brand skins.
             </h2>
@@ -534,7 +528,7 @@ export default function Page() {
       {/* Outcomes */}
       <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
-          <div className="grid md:grid-cols-2 gap-8 items-end">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
             <h2 className="type-case-title text-foreground">
               A system built for sales velocity.
             </h2>

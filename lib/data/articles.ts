@@ -82,6 +82,13 @@ export const articleItems: ArticleItem[] = [
         body: "The answer I pushed for, and eventually got alignment on, was the silent guardian framework.\n\nMastercard is present throughout the agentic payment journey, processing and routing and protecting. But it's only visible at three moments: payment confirmation, identity verification, and transaction completion. Not a logo, a trust signal. Subtle. Unmistakable when it appears.\n\nThe rest of the time: invisible. The AI acts fluidly. Mastercard is there, working in the background, but not interrupting the experience the user delegated to the AI.\n\nThe visual metaphor that made this land in stakeholder conversations: a bodyguard you don't notice until you need them.",
       },
       {
+        type: "image-layout",
+        layout: "single",
+        images: [
+          { src: "/assets/images/work/agent-commerce.jpg", alt: "Agent-led payment flow", caption: "The three guardian moments across the agentic flow." },
+        ],
+      },
+      {
         body: "In ambient computing, trust is earned by appearing at the right moment, not by being everywhere. Presence everywhere is wallpaper. Presence at the right moment is a signal.",
         type: "callout",
       },
@@ -133,6 +140,14 @@ export const articleItems: ArticleItem[] = [
         body: "Start by asking: what does this product reward? What behavior does it encourage, and who benefits from that behavior? A food delivery app that rewards reordering is fine. But one that penalizes cancellations, even justified ones, has a misaligned incentive that quietly erodes trust.\n\nMap every major user action against who benefits from it. If the answer is consistently 'the company, not the user,' you've found your problem. The product is extracting value rather than creating it.",
       },
       {
+        type: "image-layout",
+        layout: "2-col",
+        images: [
+          { src: "/assets/images/work/commerce-platform.jpg", alt: "Extractive commerce model", caption: "Extractive model — value flows to the company." },
+          { src: "/assets/images/work/fintech-ai-system.jpg", alt: "Aligned commerce model", caption: "Aligned model — value flows to the user." },
+        ],
+      },
+      {
         heading: "Designing for Alignment",
         body: "Realigning incentives isn't always a redesign, sometimes it's a business model question. But where it is a design problem, the fix usually involves two moves: increase transparency about what the product is optimizing for, and build in friction at the points where misalignment hurts users most.\n\nA lending product shouldn't make it easy to borrow more than a user needs. A streaming platform shouldn't autoplay the next episode without a deliberate pause. These aren't anti-features, they're trust-building mechanics that pay off in long-term retention.",
       },
@@ -175,6 +190,16 @@ export const articleItems: ArticleItem[] = [
         body: "Over-engineered UX creates three compounding problems. First, it slows down first-time users who can't find the core value. Second, it bloats maintenance costs, every additional state is a potential failure mode. Third, it obscures the product's actual promise behind configuration noise.\n\nI've seen products where the onboarding flow had seventeen steps before a user could do anything meaningful. The engineering team was proud of the flexibility. The conversion numbers told a different story.",
       },
       {
+        type: "image-layout",
+        layout: "3-featured",
+        caption: "The seventeen-step onboarding flow, mapped.",
+        images: [
+          { src: "/assets/images/work/design-tokens.jpg", alt: "Onboarding flow overview" },
+          { src: "/assets/images/work/ai-decision-engine.jpg", alt: "Configuration detail" },
+          { src: "/assets/images/work/execution-system.jpg", alt: "Step sequence detail" },
+        ],
+      },
+      {
         heading: "The Subtraction Test",
         body: "Before adding anything, ask: what happens if we remove it? If the answer is 'most users won't notice,' reconsider the addition. Build the minimal version, observe behaviour, add only what friction demands.\n\nThe best products feel inevitable, like every feature is exactly where it should be and nothing is missing. That feeling is the result of relentless subtraction, not addition. It's harder to achieve than it looks.",
       },
@@ -211,6 +236,19 @@ export const articleItems: ArticleItem[] = [
       {
         heading: "Friction as a Feature",
         body: "In most contexts, friction is the enemy. In high-stakes contexts, it's intentional design. Banks add confirmation steps on large transfers not to frustrate users, but to reduce the cost of accidental, irreversible actions. Good fintech design knows when to make things fast and when to make them deliberate.\n\nRemoving all friction isn't good UX, it's risk that hasn't been considered. The user who sends money to the wrong account in three taps isn't impressed by the streamlined flow.",
+      },
+      {
+        type: "image-layout",
+        layout: "bento",
+        gap: "sm",
+        caption: "The risk surface across a transfer flow.",
+        images: [
+          { src: "/assets/images/work/fintech-ai-system.jpg", alt: "Transfer confirmation", colSpan: 2 },
+          { src: "/assets/images/work/white-label-platform.jpg", alt: "Risk states", rowSpan: 2 },
+          { src: "/assets/images/work/agent-commerce.jpg", alt: "Verification step" },
+          { src: "/assets/images/work/commerce-platform.jpg", alt: "Error recovery" },
+          { src: "/assets/images/work/design-tokens.jpg", alt: "Confidence cues", colSpan: 3 },
+        ],
       },
       {
         body: "The goal isn't a frictionless experience. It's a confident one. Users should understand what's about to happen, feel sure it's correct, and know what to do if something goes wrong.",

@@ -56,6 +56,19 @@ export default function RootLayout({
       suppressHydrationWarning
       className={clsx(caveat.variable)}
     >
+      <head>
+        {/* Progressive enhancement: mark that scripting is available BEFORE
+            first paint. Framer Motion writes its `initial` opacity:0 into the
+            SSR HTML; if JS never runs (disabled / hydration failure) the CSS
+            rule `html:not(.js) main [style*="opacity:0"]` (globals.css) forces
+            that content visible. Adding `.js` here keeps the animation intact
+            whenever JS does run — no flash, nothing disabled. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
       <body
         className={clsx(
           montserrat.className,

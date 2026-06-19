@@ -1,12 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { useRef, useCallback, useEffect } from "react"
+import { useRef, useCallback } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { ShaderGrid } from "@/components/shared/shader-grid"
 import { Pill } from "@/components/shared/pill"
-import { gsap, prefersReducedMotion } from "@/lib/gsap"
 
 /* Short, checkable proof — the strip under the hero leads with shipped
    outcomes, not adjectives. */
@@ -21,65 +20,6 @@ export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
   const tiltRaf = useRef(0)
-
-  /* ── Entrance choreography — one orchestrated page-load ─────────────── */
-  useEffect(() => {
-    const root = rootRef.current
-    if (!root || prefersReducedMotion()) return
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power4.out" } })
-
-      // 135% (not ~110) because the reveal masks carry extra descender
-      // slack below the line box — the line must clear that window too.
-      tl.from("[data-hero-line]", {
-        yPercent: 135,
-        duration: 1.05,
-        stagger: 0.1,
-      })
-        .from(
-          "[data-hero-fade]",
-          {
-            y: 18,
-            autoAlpha: 0,
-            duration: 0.7,
-            stagger: 0.07,
-            ease: "power3.out",
-            clearProps: "transform,opacity,visibility",
-          },
-          0.45
-        )
-        .from(
-          "[data-hero-card]",
-          {
-            y: 28,
-            rotate: -3,
-            scale: 0.97,
-            autoAlpha: 0,
-            duration: 1.0,
-            ease: "power3.out",
-            // rotate/scale must clear, or the tilt handler's perspective
-            // transform fights a leftover gsap transform.
-            clearProps: "all",
-          },
-          0.55
-        )
-        .from(
-          "[data-hero-proof]",
-          {
-            y: 12,
-            autoAlpha: 0,
-            duration: 0.55,
-            stagger: 0.06,
-            ease: "power3.out",
-            clearProps: "transform,opacity,visibility",
-          },
-          0.85
-        )
-    }, root)
-
-    return () => ctx.revert()
-  }, [])
 
   /* ── Cursor tilt on the photo card (unchanged mechanics) ────────────── */
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -131,12 +71,14 @@ export default function Hero() {
           radius={0.13}
           drag={1.35}
           maxDrag={0.01}
+          fallbackOpacity={0.28}
           fallbackClassName="hidden lg:block"
         />
       </div>
 
       {/* Ground the section into the page bg, top and bottom */}
       <div
+        data-hero-atmosphere
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{ background: "linear-gradient(to bottom, var(--background) 0%, transparent 18%, transparent 78%, var(--background) 100%)" }}
@@ -145,6 +87,7 @@ export default function Hero() {
       {/* Stage vignette — eases the haze off at the edges so the light
           reads as pooled on the work, not wallpapered across the section */}
       <div
+        data-hero-atmosphere
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{ background: "radial-gradient(120% 90% at 50% 42%, transparent 52%, color-mix(in srgb, var(--background) 72%, transparent) 100%)" }}
@@ -153,21 +96,22 @@ export default function Hero() {
       {/* Low warm pool anchoring the proof strip — the second, quieter
           light of the studio scene */}
       <div
+        data-hero-atmosphere
         aria-hidden
         className="pointer-events-none absolute -bottom-32 left-[-8%] h-[420px] w-[640px] rounded-full opacity-60 dark:opacity-100"
-        style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.07), transparent 70%)" }}
+        style={{ background: "radial-gradient(closest-side, rgba(16,185,129,0.07), transparent 70%)" }}
       />
 
       <div className="hero-vh relative z-10 mx-auto flex w-full max-w-6xl flex-col px-5 sm:px-6 pt-28 md:pt-32">
-        <div className="relative flex flex-1 flex-col justify-center pb-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-x-14">
+        <div className="relative flex flex-1 flex-col justify-center pb-10 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-x-10 lg:gap-x-14">
 
           {/* ── Left column: statement + supporting row ─────────────── */}
           <div className="flex min-w-0 flex-col">
             <p
               data-hero-fade
-              className="mb-6 flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
+              className="mb-6 flex flex-wrap items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
             >
-              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
+              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
               Product Thinker · Mastercard · 7 yrs in product
             </p>
 
@@ -176,15 +120,15 @@ export default function Hero() {
                 cropped by the overflow clip at tight line-height. */}
             <h1 className="type-display-hero relative z-10 max-w-[14ch]">
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line className="block">Designing fintech</span>
+                <span data-hero-line="1" className="block">Designing fintech</span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line className="block">
+                <span data-hero-line="2" className="block">
                   <RollingWord className="shimmer-accent" />
                 </span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line className="block">that scale globally.</span>
+                <span data-hero-line="3" className="block">that scale globally.</span>
               </span>
             </h1>
 
@@ -196,11 +140,7 @@ export default function Hero() {
                 <span className="font-medium text-foreground">
                   At Mastercard&apos;s Creative Studio,
                 </span>{" "}
-                designing systems and platforms that power global banking
-                partnerships
-                <span className="font-medium text-foreground">
-                  {" "}from early demos to production-ready experiences.
-                </span>
+                designing systems and platforms that power global banking partnerships.
               </p>
 
               <div
@@ -216,7 +156,7 @@ export default function Hero() {
           {/* ── Right column: the tilted polaroid, in its own lane ──── */}
           <div
             data-hero-card
-            className="relative mx-auto mt-12 w-[240px] rotate-[-2deg] lg:mx-0 lg:mt-0 lg:w-[clamp(216px,19vw,280px)] lg:justify-self-end lg:rotate-[2.5deg]"
+            className="relative mx-auto mt-12 w-[220px] rotate-[-2deg] md:mx-0 md:mt-0 md:w-[200px] md:justify-self-end md:rotate-[2.5deg] lg:w-[clamp(216px,19vw,280px)]"
           >
             <div
               ref={cardRef}

@@ -6,8 +6,10 @@ const RING_SIZE = 36
 const DOT_SIZE  = 5
 const IBEAM_W   = 12
 const IBEAM_H   = 24
+const IMG_W     = 300
+const IMG_H     = 210
 
-type CursorState = "default" | "link" | "card" | "text"
+type CursorState = "default" | "link" | "card" | "text" | "image"
 
 /** True when the element directly contains selectable, non-whitespace text. */
 function hasDirectText(el: Element | null): boolean {
@@ -23,54 +25,71 @@ function hasDirectText(el: Element | null): boolean {
 const RING_SCALE: Record<CursorState, number> = {
   default: 1,
   link:    1.5,
-  card:    1,   // ring hidden in card state
-  text:    1,   // ring hidden in text state (I-beam shown instead)
+  card:    1,
+  text:    1,
+  image:   0,
 }
 
 const LERP     = 0.20
 const SCALE_LR = 0.16
+const LERP_IMG = 0.30
 
 export function FancyCursor() {
   const dotRef   = useRef<HTMLDivElement>(null)
   const ringRef  = useRef<HTMLDivElement>(null)
   // Pill refs
-  const pillRef      = useRef<HTMLDivElement>(null)  // position anchor
-  const pillCardRef  = useRef<HTMLDivElement>(null)  // visible pill shell
-  const labelSpanRef = useRef<HTMLSpanElement>(null) // text inside pill
-  const ibeamRef     = useRef<SVGSVGElement>(null)   // custom I-beam for text
+  const pillRef      = useRef<HTMLDivElement>(null)
+  const pillCardRef  = useRef<HTMLDivElement>(null)
+  const labelSpanRef = useRef<HTMLSpanElement>(null)
+  const ibeamRef     = useRef<SVGSVGElement>(null)
+  // Image preview refs
+  const imgPosRef  = useRef<HTMLDivElement>(null)
+  const imgCardRef = useRef<HTMLDivElement>(null)
+  const imgElRef   = useRef<HTMLImageElement>(null)
 
   const rafRef = useRef(0)
 
   const mx = useRef(-400);  const my = useRef(-400)
   const rx = useRef(-400);  const ry = useRef(-400)
+  const irx = useRef(-400); const iry = useRef(-400)
   const currentScale = useRef(RING_SCALE.default)
   const targetScale  = useRef(RING_SCALE.default)
   const activeState  = useRef<CursorState>("default")
 
-  const applyState = useCallback((state: CursorState, label?: string) => {
+  const applyState = useCallback((state: CursorState, labelOrSrc?: string) => {
     const ring     = ringRef.current
     const dot      = dotRef.current
     const pillCard = pillCardRef.current
     const labelEl  = labelSpanRef.current
     const ibeam    = ibeamRef.current
-    if (!ring || !dot || !pillCard || !labelEl || !ibeam) return
+    const imgCard  = imgCardRef.current
+    const imgEl    = imgElRef.current
+    if (!ring || !dot || !pillCard || !labelEl || !ibeam || !imgCard || !imgEl) return
 
     activeState.current = state
     targetScale.current = RING_SCALE[state]
 
-    const showPill  = state === "card"
-    const showIbeam = state === "text"
+    const showPill    = state === "card"
+    const showIbeam   = state === "text"
     const showDotRing = state === "default" || state === "link"
+    const showImage   = state === "image"
 
-    ring.style.opacity     = showDotRing ? "1" : "0"
-    dot.style.opacity      = showDotRing ? "1" : "0"
-    ibeam.style.opacity    = showIbeam ? "1" : "0"
-    pillCard.style.opacity = showPill ? "1" : "0"
+    ring.style.opacity      = showDotRing ? "1" : "0"
+    dot.style.opacity       = showDotRing ? "1" : "0"
+    ibeam.style.opacity     = showIbeam   ? "1" : "0"
+    pillCard.style.opacity  = showPill    ? "1" : "0"
     pillCard.style.transform = showPill
       ? "translateX(-50%) translateY(-50%) scale(1)"
       : "translateX(-50%) translateY(-50%) scale(0.7)"
+    imgCard.style.opacity   = showImage   ? "1" : "0"
+    imgCard.style.transform = showImage   ? "scale(1)" : "scale(0.88)"
 
-    if (state === "card" && label) labelEl.textContent = label
+    if (state === "card"  && labelOrSrc) labelEl.textContent = labelOrSrc
+    if (state === "image" && labelOrSrc && imgEl.getAttribute("data-src") !== labelOrSrc) {
+      imgEl.setAttribute("data-src", labelOrSrc)
+      imgEl.src = labelOrSrc
+    }
+
     ring.style.background  = "transparent"
     ring.style.borderColor = state === "link" ? "rgba(180,180,180,0.55)" : "rgba(130,130,130,0.35)"
   }, [])
@@ -82,20 +101,19 @@ export function FancyCursor() {
     const ring     = ringRef.current
     const pillCard = pillCardRef.current
     const ibeam    = ibeamRef.current
-    if (!dot || !ring || !pillCard || !ibeam) return
+    const imgCard  = imgCardRef.current
+    if (!dot || !ring || !pillCard || !ibeam || !imgCard) return
 
     // Hide the native cursor only while the custom cursor is mounted and active.
-    // (The CSS rule is scoped to html.custom-cursor, so every other page keeps
-    // its normal cursor.)
     const root = document.documentElement
     root.classList.add("custom-cursor")
 
     let visible = false
-    dot.style.opacity    = "0"
-    ring.style.opacity   = "0"
+    dot.style.opacity     = "0"
+    ring.style.opacity    = "0"
     pillCard.style.opacity = "0"
+    imgCard.style.opacity  = "0"
 
-    // Show dot + ring only when we're actually in a dot/ring state.
     const revealIfNeeded = () => {
       if (visible) return
       const s = activeState.current
@@ -104,6 +122,8 @@ export function FancyCursor() {
         ring.style.opacity = "1"
       } else if (s === "text") {
         ibeam.style.opacity = "1"
+      } else if (s === "image") {
+        imgCard.style.opacity = "1"
       }
       visible = true
     }
@@ -115,10 +135,14 @@ export function FancyCursor() {
     }
 
     const onOver = (e: PointerEvent) => {
-      const el   = e.target as HTMLElement
-      const card = el.closest("[data-cursor-card]")
-      const link = el.closest("a,button,[role='button'],input,textarea,select,label")
-      if (card) {
+      const el      = e.target as HTMLElement
+      const imgEl   = el.closest("[data-cursor-image]")
+      const card    = el.closest("[data-cursor-card]")
+      const link    = el.closest("a,button,[role='button'],input,textarea,select,label")
+      if (imgEl) {
+        const src = imgEl.getAttribute("data-cursor-image") || ""
+        applyState("image", src)
+      } else if (card) {
         const label = card.getAttribute("data-cursor-label") || "View"
         applyState("card", label)
       } else if (link) {
@@ -135,26 +159,30 @@ export function FancyCursor() {
       ring.style.opacity     = "0"
       pillCard.style.opacity = "0"
       ibeam.style.opacity    = "0"
+      imgCard.style.opacity  = "0"
+      imgCard.style.transform = "scale(0.88)"
       visible = false
     }
     const onEnter = () => revealIfNeeded()
 
     const tick = () => {
-      rx.current += (mx.current - rx.current) * LERP
-      ry.current += (my.current - ry.current) * LERP
+      rx.current  += (mx.current - rx.current)  * LERP
+      ry.current  += (my.current - ry.current)  * LERP
+      irx.current += (mx.current - irx.current) * LERP_IMG
+      iry.current += (my.current - iry.current) * LERP_IMG
 
       currentScale.current += (targetScale.current - currentScale.current) * SCALE_LR
 
-      const pill = pillRef.current
-      const half = RING_SIZE / 2
+      const pill   = pillRef.current
+      const imgPos = imgPosRef.current
+      const half   = RING_SIZE / 2
 
-      ring.style.transform = `translate3d(${rx.current - half}px,${ry.current - half}px,0) scale(${currentScale.current})`
-      dot.style.transform = `translate3d(${mx.current - DOT_SIZE / 2}px,${my.current - DOT_SIZE / 2}px,0)`
+      ring.style.transform  = `translate3d(${rx.current - half}px,${ry.current - half}px,0) scale(${currentScale.current})`
+      dot.style.transform   = `translate3d(${mx.current - DOT_SIZE / 2}px,${my.current - DOT_SIZE / 2}px,0)`
       ibeam.style.transform = `translate3d(${mx.current - IBEAM_W / 2}px,${my.current - IBEAM_H / 2}px,0)`
 
-      if (pill) {
-        pill.style.transform = `translate3d(${rx.current}px,${ry.current}px,0)`
-      }
+      if (pill)   pill.style.transform   = `translate3d(${rx.current}px,${ry.current}px,0)`
+      if (imgPos) imgPos.style.transform = `translate3d(${irx.current}px,${iry.current}px,0)`
 
       rafRef.current = requestAnimationFrame(tick)
     }
@@ -275,6 +303,38 @@ export function FancyCursor() {
           >
             View
           </span>
+        </div>
+      </div>
+
+      {/* Image preview position anchor — faster lerp, sits above cursor */}
+      <div
+        ref={imgPosRef}
+        className="pointer-events-none fixed top-0 left-0 z-[1003]"
+        style={{ willChange: "transform", transform: "translate3d(-400px,-400px,0)" }}
+      >
+        <div
+          ref={imgCardRef}
+          style={{
+            position:     "absolute",
+            bottom:       20,
+            left:         -(IMG_W / 2),
+            width:        IMG_W,
+            height:       IMG_H,
+            borderRadius: 16,
+            overflow:     "hidden",
+            border:       "1px solid rgba(255,255,255,0.10)",
+            boxShadow:    "0 24px 64px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.2)",
+            opacity:      0,
+            transform:    "scale(0.88)",
+            transition:   "opacity 0.22s ease, transform 0.30s cubic-bezier(0.22,1,0.36,1)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={imgElRef}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
         </div>
       </div>
     </>

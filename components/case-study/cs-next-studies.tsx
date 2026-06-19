@@ -15,8 +15,8 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
 
   return (
     <section className="relative overflow-hidden bg-[oklch(0.985_0_0)] text-foreground transition-colors duration-500 dark:bg-[oklch(0.105_0_0)]">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.07] dark:bg-white/[0.08]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/70 dark:bg-white/[0.03]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.05] dark:bg-white/[0.06]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/30 dark:bg-white/[0.02]" />
 
       <div className="relative mx-auto max-w-6xl px-5 py-16 md:px-6 md:py-24">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between md:mb-10">
@@ -46,7 +46,7 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
               key={item.href}
               href={item.href}
               title={item.title}
-              category={item.metadata ?? item.category}
+              category={item.category}
               metric={item.metric}
               ctaLabel="View case study"
               index={index + 1}

@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import {
   CsHeroShell,
   CsSection,
@@ -8,24 +7,7 @@ import {
   CsInfoBar,
   CsNextStudies,
 } from "@/components/case-study"
-
-// ─── FADE-IN WRAPPER ─────────────────────────────────────────────────────────
-
-function FadeIn({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
+import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -215,12 +197,6 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
 }
 
 function Hero() {
-  const proof = [
-    { label: "Direction", value: "Silent guardian adopted" },
-    { label: "Demo", value: "Used by CPO + SVPs" },
-    { label: "Research", value: "6 flows · 3 regions" },
-  ]
-
   return (
     <CsHeroShell
       className="
@@ -234,6 +210,7 @@ function Hero() {
         lg:[&_[data-cs-hero-aside]]:pt-12
       "
       breadcrumb={{ kind: "Case Study", category: "Agentic Commerce", client: "Mastercard · Creative Studio" }}
+      keywords={["Agentic Commerce", "Trust UX", "Flagship · Ongoing"]}
       badge="Flagship · Ongoing"
       title={
         <>
@@ -249,31 +226,18 @@ function Hero() {
           show Google and ChatGPT where Mastercard fits.
         </>
       }
+      meta={{
+        role:         "Lead · Creative Studio",
+        platform:     "React · Figma · Claude AI",
+        scope:        "Agentic Commerce · Trust UX",
+        organisation: "Mastercard",
+      }}
+      readTime="15 min read"
+      publishedDate="2024"
+      topics={["Trust", "AI Payments", "Prototype", "Money20/20"]}
       asideCol="260px"
       aside={<PhoneVisual />}
-    >
-      <div className="grid max-w-2xl gap-2 border-y border-border/60 py-4 sm:grid-cols-3">
-        {proof.map((item) => (
-          <div key={item.label} className="min-w-0">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              {item.label}
-            </p>
-            <p className="mt-1 text-sm font-medium leading-snug text-foreground">
-              {item.value}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-5 flex max-w-2xl flex-wrap items-center gap-2">
-        <span className="mr-1 text-[11px] text-muted-foreground">Presented at</span>
-        {["Money20/20", "Mastercard Connections", "Innovate at McLaren HQ"].map(e => (
-          <span key={e} className="rounded-full border border-border px-3 py-1 text-[11px] font-medium text-muted-foreground">
-            {e}
-          </span>
-        ))}
-      </div>
-    </CsHeroShell>
+    />
   )
 }
 

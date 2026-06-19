@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import Lenis from "@studio-freight/lenis"
-import { gsap, ScrollTrigger } from "@/lib/gsap"
 
 declare global {
   interface Window {
@@ -14,6 +13,7 @@ declare global {
 
 export function SmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null)
+  const rafRef = useRef<number | null>(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -30,17 +30,17 @@ export function SmoothScroll() {
     lenisRef.current = lenis
     window.__lenis = lenis
 
-    // Keep ScrollTrigger in lockstep with the virtual scroll position and
-    // drive Lenis from GSAP's ticker so there's exactly one rAF loop.
-    lenis.on("scroll", ScrollTrigger.update)
-    const tick = (time: number) => lenis.raf(time * 1000)
-    gsap.ticker.add(tick)
-    gsap.ticker.lagSmoothing(0)
+    const tick = (time: number) => {
+      lenis.raf(time)
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
 
     return () => {
-      gsap.ticker.remove(tick)
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
       lenis.destroy()
       lenisRef.current = null
+      rafRef.current = null
       window.__lenis = null
     }
   }, [])
@@ -58,8 +58,6 @@ export function SmoothScroll() {
       window.scrollTo(0, 0)
     }
 
-    // New page, new layout — measured trigger positions are stale.
-    requestAnimationFrame(() => ScrollTrigger.refresh())
   }, [pathname])
 
   return null

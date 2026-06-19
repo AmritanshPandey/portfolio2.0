@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import {
   CsHeroShell,
   CsSection,
@@ -10,24 +9,7 @@ import {
   CsMetricBars,
   CsNextStudies,
 } from "@/components/case-study"
-
-// ─── FADE-IN WRAPPER ────────────────────────────────────────────────────────
-
-function FadeIn({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  )
-}
+import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── EMAIL CLIENT COMPAT DATA ────────────────────────────────────────────────
 
@@ -119,6 +101,7 @@ function Hero() {
   return (
     <CsHeroShell
       breadcrumb={{ kind: "Case Study", category: "Design Systems", client: "Mastercard · Creative Studio" }}
+      keywords={["Design System Lead", "Email Infrastructure", "No-Code Tooling"]}
       title={
         <>
           From{" "}
@@ -129,10 +112,21 @@ function Hero() {
       lede={
         <>
           Owned the component architecture and design system for Mastercard&apos;s
-          global email builder, defining what got built, why, and in what order.
-          The constraint wasn&apos;t brand. It was Outlook.
+          global email builder — defining{" "}
+          <strong className="font-medium text-foreground">what got built, why, and in what order</strong>.
+          The constraint wasn&apos;t brand. It was{" "}
+          <strong className="font-medium text-foreground">Outlook</strong>.
         </>
       }
+      meta={{
+        role:         "Design System Lead",
+        platform:     "Email · Multi-client",
+        scope:        "50+ Components · 28 Templates",
+        organisation: "Mastercard",
+      }}
+      readTime="12 min read"
+      publishedDate="2023"
+      topics={["Design Systems", "Infrastructure", "Email", "Scale"]}
       asideLabel="The real constraint — client compatibility"
       asideCol="340px"
       aside={<HeroAside />}
@@ -316,7 +310,7 @@ export default function Page() {
       {/* System Architecture */}
       <CsSection id="architecture" label="System Architecture" variant="dark">
         <div className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-8 items-end mb-2">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start mb-2">
             <h2 className="type-case-title text-foreground">
               Four levels. One coherent system.
             </h2>
@@ -407,7 +401,7 @@ export default function Page() {
       {/* Template library */}
       <CsSection id="template-library" label="Template Library" variant="muted">
         <div className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-8 items-end">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
             <h2 className="type-case-title text-foreground">
               28 templates. 9 categories. All Outlook-safe.
             </h2>
@@ -548,7 +542,7 @@ export default function Page() {
       {/* Impact */}
       <CsSection id="what-changed" label="What Changed" variant="dark">
         <div className="space-y-10">
-          <div className="grid md:grid-cols-2 gap-8 items-end">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
             <h2 className="type-case-title text-foreground">
               A system the whole organisation adopted.
             </h2>

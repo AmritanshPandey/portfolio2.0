@@ -37,7 +37,7 @@ export default function ContentPage({
       <header className="relative overflow-hidden border-b border-border/45 bg-background">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(720px_380px_at_14%_-10%,rgba(244,63,94,0.06),transparent_62%)] dark:bg-[radial-gradient(720px_380px_at_14%_-10%,rgba(244,63,94,0.10),transparent_62%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(720px_380px_at_14%_-10%,rgba(16,185,129,0.06),transparent_62%)] dark:bg-[radial-gradient(720px_380px_at_14%_-10%,rgba(16,185,129,0.10),transparent_62%)]"
         />
 
         <div className="relative mx-auto max-w-3xl px-6 pb-12 pt-28 md:pt-32 md:pb-14">

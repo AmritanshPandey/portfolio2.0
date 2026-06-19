@@ -36,7 +36,7 @@ export function ArticlesIndex({ articles }: { articles: ArticleItem[] }) {
         />
         <div
           className="absolute -top-44 right-[-10%] h-[520px] w-[700px]"
-          style={{ background: "radial-gradient(closest-side, rgba(244,63,94,0.05), transparent 72%)" }}
+          style={{ background: "radial-gradient(closest-side, rgba(16,185,129,0.05), transparent 72%)" }}
         />
       </div>
 
