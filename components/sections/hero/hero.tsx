@@ -16,7 +16,29 @@ const PROOF = [
   "7 years building fintech end to end",
 ]
 
-export default function Hero() {
+/* Optional per-mode copy. When omitted (the homepage), every value falls back
+   to the original literals below, so `/` renders byte-identically. The other
+   profiles pass their own copy while reusing this exact background + motion. */
+export interface HeroContent {
+  eyebrow: string
+  lines: [string, string, string]
+  introLead: string
+  intro: string
+  primaryCta: { label: string; href: string }
+  secondaryCta: { label: string; href: string }
+  proof: string[]
+  tags: string[]
+}
+
+export default function Hero({ content }: { content?: HeroContent }) {
+  const eyebrow      = content?.eyebrow ?? "Product Thinker · Mastercard · 7 yrs in product"
+  const line0        = content?.lines[0] ?? "Designing fintech"
+  const line2        = content?.lines[2] ?? "that scale globally."
+  const primaryCta   = content?.primaryCta ?? { label: "View work", href: "#work" }
+  const secondaryCta = content?.secondaryCta ?? { label: "Resume", href: "/resume.pdf" }
+  const proof        = content?.proof ?? PROOF
+  const tags         = content?.tags ?? ["Fintech", "Systems Builder"]
+
   const rootRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const glareRef = useRef<HTMLDivElement>(null)
@@ -168,7 +190,7 @@ export default function Hero() {
               className="mb-6 flex items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
             >
               <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
-              Product Thinker · Mastercard · 7 yrs in product
+              {eyebrow}
             </p>
 
             {/* Each reveal mask carries 0.22em of bottom slack (pulled back
@@ -176,15 +198,19 @@ export default function Hero() {
                 cropped by the overflow clip at tight line-height. */}
             <h1 className="type-display-hero relative z-10 max-w-[14ch]">
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line className="block">Designing fintech</span>
+                <span data-hero-line className="block">{line0}</span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
                 <span data-hero-line className="block">
-                  <RollingWord className="shimmer-accent" />
+                  {content ? (
+                    <span className="shimmer-accent">{content.lines[1]}</span>
+                  ) : (
+                    <RollingWord className="shimmer-accent" />
+                  )}
                 </span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line className="block">that scale globally.</span>
+                <span data-hero-line className="block">{line2}</span>
               </span>
             </h1>
 
@@ -193,22 +219,31 @@ export default function Hero() {
                 data-hero-fade
                 className="type-section-intro text-muted-foreground"
               >
-                <span className="font-medium text-foreground">
-                  At Mastercard&apos;s Creative Studio,
-                </span>{" "}
-                designing systems and platforms that power global banking
-                partnerships
-                <span className="font-medium text-foreground">
-                  {" "}from early demos to production-ready experiences.
-                </span>
+                {content ? (
+                  <>
+                    <span className="font-medium text-foreground">{content.introLead}</span>{" "}
+                    {content.intro}
+                  </>
+                ) : (
+                  <>
+                    <span className="font-medium text-foreground">
+                      At Mastercard&apos;s Creative Studio,
+                    </span>{" "}
+                    designing systems and platforms that power global banking
+                    partnerships
+                    <span className="font-medium text-foreground">
+                      {" "}from early demos to production-ready experiences.
+                    </span>
+                  </>
+                )}
               </p>
 
               <div
                 data-hero-fade
                 className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4"
               >
-                <CTA label="View work" href="#work" className="sm:w-auto sm:px-7 shadow-[0_6px_18px_rgba(0,0,0,0.08)]" />
-                <CTA label="Resume" href="/resume.pdf" variant="secondary" className="sm:w-auto sm:px-7" />
+                <CTA label={primaryCta.label} href={primaryCta.href} className="sm:w-auto sm:px-7 shadow-[0_6px_18px_rgba(0,0,0,0.08)]" />
+                <CTA label={secondaryCta.label} href={secondaryCta.href} variant="secondary" className="sm:w-auto sm:px-7" />
               </div>
             </div>
           </div>
@@ -238,7 +273,7 @@ export default function Hero() {
               <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
               <div className="absolute bottom-0 space-y-2.5 p-4">
                 <div className="flex flex-wrap gap-1.5">
-                  {["Fintech", "Systems Builder"].map(tag => (
+                  {tags.map(tag => (
                     <Pill key={tag}>{tag}</Pill>
                   ))}
                 </div>
@@ -265,7 +300,7 @@ export default function Hero() {
         {/* ── Proof strip — outcomes first, then the scroll cue ───────── */}
         <div className="relative mt-14 flex items-center justify-between gap-6 border-t border-border/60 py-6 md:py-7">
           <ul className="flex flex-wrap items-center gap-x-8 gap-y-2">
-            {PROOF.map((item) => (
+            {proof.map((item) => (
               <li
                 key={item}
                 data-hero-proof

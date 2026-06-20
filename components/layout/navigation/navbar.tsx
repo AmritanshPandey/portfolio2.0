@@ -1,40 +1,30 @@
 "use client"
 
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useState, useEffect, useRef, useSyncExternalStore } from "react"
 import clsx from "clsx"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
-import {
-  IconHome,
-  IconDownload,
-  IconArrowLeft,
-} from "@tabler/icons-react"
+import { IconHome, IconDownload, IconArrowLeft } from "@tabler/icons-react"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { WorkMegaMenu } from "@/components/portfolio/WorkMegaMenu"
 import { scrollToSection } from "@/lib/scroll"
+import { getModeConfig } from "@/data/portfolio/helpers"
+import type { PortfolioMode } from "@/data/portfolio/types"
 
 // ─────────────────────────
-// CONSTANTS
+// MODE ROUTES — the three engine pages share one mode-aware nav.
 // ─────────────────────────
 
-const NAV_LINKS = [
-  { label: "Home",     href: "#hero",        icon: true },
-  { label: "Work",     href: "#work" },
-  { label: "Exploration", href: "#explorations" },
-  { label: "Insights", href: "#insights" },
-  { label: "About",    href: "#about" },
-]
+const MODE_BY_PATH: Record<string, PortfolioMode> = {
+  "/": "general",
+  "/design-lead": "designLead",
+  "/pm": "pm",
+}
 
-const SECTION_IDS = [
-  "hero",
-  "work",
-  "explorations",
-  "approach",
-  "insights",
-  "leadership",
-  "advisory",
-  "about",
-]
+// ─────────────────────────
+// DETAIL ROUTES (case studies, articles, systems) — unchanged.
+// ─────────────────────────
 
 const DETAIL_ROUTES: Record<string, { section: string; label: string; href: string }> = {
   "/work":         { section: "work",        label: "Work",     href: "/#work" },
@@ -44,11 +34,11 @@ const DETAIL_ROUTES: Record<string, { section: string; label: string; href: stri
 }
 
 const DETAIL_NAV_LINKS = [
-  { label: "Home",     href: "/",             section: "hero",        icon: IconHome },
-  { label: "Work",     href: "/#work",        section: "work",        icon: undefined },
-  { label: "Exploration", href: "/#explorations", section: "explorations", icon: undefined },
-  { label: "Insights", href: "/#insights",    section: "insights",    icon: undefined },
-  { label: "About",    href: "/#about",       section: "about",       icon: undefined },
+  { label: "Home",     href: "/",             section: "hero",     icon: IconHome },
+  { label: "Work",     href: "/#work",        section: "work",     icon: undefined },
+  { label: "Built",    href: "/#built",       section: "built",    icon: undefined },
+  { label: "Insights", href: "/#insights",    section: "insights", icon: undefined },
+  { label: "About",    href: "/#about",       section: "about",    icon: undefined },
 ]
 
 function getDetailRoute(pathname: string) {
@@ -58,17 +48,13 @@ function getDetailRoute(pathname: string) {
   return null
 }
 
-// Section ids that actually have a nav entry.
-const NAV_IDS = NAV_LINKS.map((l) => l.href.replace("#", ""))
-
-// Map the currently-tracked section to the nearest preceding nav entry, so the
-// active pill stays anchored while scrolling through sections that aren't in the
-// nav (e.g. Approach, Advisory) instead of blinking out and back.
-function navSectionFor(activeId: string) {
-  const idx = SECTION_IDS.indexOf(activeId)
+// Map a tracked section to the nearest preceding nav entry, so the active pill
+// stays anchored while scrolling through sections that aren't in the nav.
+function navSectionFor(activeId: string, trackIds: string[], navIds: string[]) {
+  const idx = trackIds.indexOf(activeId)
   if (idx === -1) return activeId
   for (let i = idx; i >= 0; i--) {
-    if (NAV_IDS.includes(SECTION_IDS[i])) return SECTION_IDS[i]
+    if (navIds.includes(trackIds[i])) return trackIds[i]
   }
   return activeId
 }
@@ -88,7 +74,6 @@ function useScrolled(threshold = 40) {
   )
 }
 
-// Progress bar is driven by direct DOM mutation — no React re-render per frame.
 function useProgressBar(enabled: boolean) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -106,10 +91,6 @@ function useProgressBar(enabled: boolean) {
   return ref
 }
 
-// ─────────────────────────
-// ACTIVE SECTION (home only)
-// ─────────────────────────
-
 function useActiveSection(ids: string[], enabled: boolean) {
   const [active, setActive] = useState(ids[0])
 
@@ -124,7 +105,7 @@ function useActiveSection(ids: string[], enabled: boolean) {
         const el = document.getElementById(id)
         if (el && mid >= el.offsetTop) current = id
       }
-      setActive(prev => (prev === current ? prev : current))
+      setActive((prev) => (prev === current ? prev : current))
       ticking = false
     }
 
@@ -141,44 +122,33 @@ function useActiveSection(ids: string[], enabled: boolean) {
 }
 
 // ─────────────────────────
-// NAV ITEM
+// NAV ITEMS
 // ─────────────────────────
 
-function NavItem({
-  href, label, icon, isActive, setActiveImmediate, closeMenu,
+/** Mode page in-section link — always scrolls within the current page. */
+function ModeNavItem({
+  href, label, isActive, onActivate, closeMenu,
 }: {
-  href: string; label: string; icon?: boolean
-  isActive: boolean; setActiveImmediate: (id: string) => void; closeMenu?: () => void
+  href: string; label: string; isActive: boolean
+  onActivate: (id: string) => void; closeMenu?: () => void
 }) {
-  const router   = useRouter()
-  const pathname = usePathname()
   const id = href.replace("#", "")
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    setActiveImmediate(id)
-
-    if (id === "hero") {
-      if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" })
-      else router.push("/")
-      closeMenu?.()
-      return
-    }
-
-    if (pathname === "/") { scrollToSection(id); closeMenu?.(); return }
-    router.push(`/#${id}`)
+    onActivate(id)
+    if (id === "hero") window.scrollTo({ top: 0, behavior: "smooth" })
+    else scrollToSection(id)
     closeMenu?.()
   }
 
   return (
     <a
-      href={pathname === "/" ? href : `/${href}`}
+      href={href}
       onClick={handleClick}
       aria-current={isActive ? "true" : undefined}
-      aria-label={icon ? label : undefined}
       className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[14px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      {/* Sliding pill — layoutId moves it between active items via spring transform */}
       {isActive && (
         <motion.span
           layoutId="nav-active-pill"
@@ -188,26 +158,18 @@ function NavItem({
       )}
       <span className={clsx(
         "relative z-10 flex items-center gap-1.5 transition-colors duration-150",
-        isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+        isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
       )}>
-        {icon ? <IconHome size={16} className="opacity-70" /> : label}
+        {label}
       </span>
     </a>
   )
 }
 
 function DetailNavItem({
-  href,
-  label,
-  icon: Icon,
-  active,
-  onClick,
+  href, label, icon: Icon, active, onClick,
 }: {
-  href: string
-  label: string
-  icon?: typeof IconHome
-  active?: boolean
-  onClick?: () => void
+  href: string; label: string; icon?: typeof IconHome; active?: boolean; onClick?: () => void
 }) {
   return (
     <Link
@@ -220,7 +182,7 @@ function DetailNavItem({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? "bg-black/[0.05] text-foreground dark:bg-white/[0.09]"
-          : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]"
+          : "text-muted-foreground hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/[0.06]",
       )}
     >
       {Icon ? <Icon size={15} className="opacity-75" /> : null}
@@ -231,7 +193,6 @@ function DetailNavItem({
 
 // ─────────────────────────
 // NAV PILL SHELL
-// shared glass/border styles
 // ─────────────────────────
 
 function NavShell({ scrolled, children, className }: {
@@ -248,13 +209,9 @@ function NavShell({ scrolled, children, className }: {
         scrolled
           ? "bg-white/[0.92] dark:bg-neutral-900/[0.92] backdrop-blur-md border border-black/[0.08] dark:border-white/[0.10] shadow-[0_8px_28px_rgba(0,0,0,0.12)]"
           : "bg-white/[0.80] dark:bg-neutral-900/[0.80] backdrop-blur-sm border border-black/[0.06] dark:border-white/[0.08] shadow-[0_4px_16px_rgba(0,0,0,0.07)]",
-        className
+        className,
       )}
-      style={{
-        // Safari requires the -webkit- prefix for backdrop-filter
-        WebkitBackdropFilter: blurValue,
-        backdropFilter:       blurValue,
-      }}
+      style={{ WebkitBackdropFilter: blurValue, backdropFilter: blurValue }}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-full bg-gradient-to-r from-transparent via-black/[0.08] to-transparent dark:via-white/[0.15]" />
       {children}
@@ -268,26 +225,36 @@ function NavShell({ scrolled, children, className }: {
 
 export default function Navbar() {
   const pathname    = usePathname()
-  const isHome      = pathname === "/"
   const detailRoute = getDetailRoute(pathname)
   const isDetail    = !!detailRoute
 
-  const [active, setActive] = useActiveSection(SECTION_IDS, isHome)
+  // Every non-detail top-level page is an engine mode page (general by default).
+  const mode: PortfolioMode = MODE_BY_PATH[pathname] ?? "general"
+  const config = getModeConfig(mode)
+  const isMode = !isDetail
+
+  // Scroll-spy tracks hero + every section band on the mode page (the contact
+  // band's real DOM id is "about", from the shared AboutSection).
+  const trackIds = [
+    "hero",
+    ...config.sections.map((s) => (s.id === "contact" ? "about" : s.id)),
+  ]
+  const navIds = config.nav.map((l) => l.href.replace("#", ""))
+
+  const [active, setActive] = useActiveSection(trackIds, isMode)
   const [open, setOpen]     = useState(false)
-  const scrolled             = useScrolled()
-  const progressBarRef       = useProgressBar(isDetail)
+  const scrolled            = useScrolled()
+  const progressBarRef      = useProgressBar(isDetail)
 
   const menuRef = useRef<HTMLDivElement>(null)
   const btnRef  = useRef<HTMLButtonElement>(null)
 
-  // Close on resize
   useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 768) setOpen(false) }
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false) }
     window.addEventListener("resize", onResize)
     return () => window.removeEventListener("resize", onResize)
   }, [])
 
-  // Outside click closes menu
   useEffect(() => {
     if (!open) return
     const onDown = (e: MouseEvent) => {
@@ -298,15 +265,12 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", onDown)
   }, [open])
 
-  const effectiveActive = detailRoute?.section ?? (isHome ? active : "hero")
-  // Keep the highlight on the nearest nav entry for unlinked sections (Approach, Advisory).
-  const activeNavSection = navSectionFor(effectiveActive)
+  const effectiveActive  = detailRoute?.section ?? active
+  const activeNavSection = navSectionFor(effectiveActive, trackIds, navIds)
 
   return (
     <>
-      {/* ══════════════════════════════════════════════
-          READING PROGRESS BAR — detail pages only
-      ══════════════════════════════════════════════ */}
+      {/* READING PROGRESS BAR — detail pages only */}
       {isDetail && (
         <div
           ref={progressBarRef}
@@ -315,14 +279,10 @@ export default function Navbar() {
         />
       )}
 
-      {/* ══════════════════════════════════════════════
-          DESKTOP
-      ══════════════════════════════════════════════ */}
-      <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+      {/* DESKTOP */}
+      <header className="fixed top-7 left-1/2 -translate-x-1/2 z-50 hidden lg:block">
         {isDetail ? (
-          /* ── DETAIL: compact home-section nav ─────── */
           <NavShell scrolled={scrolled}>
-            {/* Back-to-section affordance */}
             <Link
               href={detailRoute!.href}
               aria-label={`Back to ${detailRoute!.label}`}
@@ -331,9 +291,7 @@ export default function Navbar() {
               <IconArrowLeft size={15} stroke={2} />
               <span className="hidden lg:inline">Back to {detailRoute!.label}</span>
             </Link>
-
             <div className="w-px h-4 bg-border/60 mx-1" />
-
             <div className="flex items-center gap-1">
               {DETAIL_NAV_LINKS.map((link) => (
                 <DetailNavItem
@@ -345,33 +303,30 @@ export default function Navbar() {
                 />
               ))}
             </div>
-
             <div className="w-px h-4 bg-border/60 mx-1" />
-
             <ThemeToggle />
           </NavShell>
         ) : (
-          /* ── HOME / SECTIONS: full pill ──────────── */
+          /* ── MODE PAGE: Work mega-menu + section links ── */
           <NavShell scrolled={scrolled}>
             <div className="flex items-center gap-1 relative">
-              {NAV_LINKS.map(({ label, href, icon }) => (
-                <NavItem
+              <WorkMegaMenu columns={config.megaMenu} />
+              {/* The first nav entry (featured work) is represented by the Work
+                  dropdown; the rest scroll to their bands. */}
+              {config.nav.slice(1).map(({ label, href }) => (
+                <ModeNavItem
                   key={href}
                   href={href}
                   label={label}
-                  icon={icon}
                   isActive={activeNavSection === href.replace("#", "")}
-                  setActiveImmediate={setActive}
+                  onActivate={setActive}
                 />
               ))}
             </div>
-
             <div className="w-px h-4 bg-border/60 mx-1" />
-
             <ThemeToggle />
-
             <Link
-              href="/resume.pdf"
+              href={config.resumeHref}
               target="_blank"
               className="ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/70 text-sm text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/40 transition"
             >
@@ -382,17 +337,15 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* ══════════════════════════════════════════════
-          MOBILE — FAB + MENU
-      ══════════════════════════════════════════════ */}
+      {/* MOBILE — FAB + MENU */}
       <button
         ref={btnRef}
-        onClick={() => setOpen(v => !v)}
+        onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={open}
         data-menu-open={open}
         className="
-          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 md:hidden
+          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 lg:hidden
           w-14 h-14 rounded-full flex items-center justify-center
           bg-white dark:bg-neutral-900
           border border-black/[0.06] dark:border-white/[0.08]
@@ -400,8 +353,6 @@ export default function Navbar() {
           active:scale-[0.92] transition
         "
       >
-        {/* Morphing burger — bars gather, then twist into the X (see
-            .menu-morph in globals.css for the two-phase choreography) */}
         <span aria-hidden className="menu-morph">
           <span />
           <span />
@@ -418,7 +369,7 @@ export default function Navbar() {
             exit={{    opacity: 0, y: 8  }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="
-              fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 md:hidden w-64
+              fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 lg:hidden w-64
               rounded-2xl overflow-hidden
               bg-white dark:bg-neutral-900
               border border-black/[0.06] dark:border-white/[0.08]
@@ -426,9 +377,7 @@ export default function Navbar() {
             "
           >
             <div className="p-3 flex flex-col gap-1">
-
               {isDetail ? (
-                /* ── DETAIL: section return nav ─────── */
                 <>
                   <Link
                     href={detailRoute!.href}
@@ -438,9 +387,7 @@ export default function Navbar() {
                     <IconArrowLeft size={16} stroke={2} />
                     Back to {detailRoute!.label}
                   </Link>
-
                   <div className="h-px bg-border/50 my-0.5" />
-
                   {DETAIL_NAV_LINKS.map((link) => (
                     <DetailNavItem
                       key={link.href}
@@ -451,37 +398,31 @@ export default function Navbar() {
                       onClick={() => setOpen(false)}
                     />
                   ))}
-
                   <div className="h-px bg-border/50 my-0.5" />
-
                   <div className="flex items-center justify-between px-1 py-1">
                     <span className="text-xs text-muted-foreground pl-2">Theme</span>
                     <ThemeToggle />
                   </div>
                 </>
               ) : (
-                /* ── HOME: full menu ────────────────── */
                 <>
-                  {NAV_LINKS.map(({ label, href, icon }) => (
-                    <NavItem
+                  {config.nav.map(({ label, href }) => (
+                    <ModeNavItem
                       key={href}
                       href={href}
                       label={label}
-                      icon={icon}
                       isActive={activeNavSection === href.replace("#", "")}
-                      setActiveImmediate={(id) => { setActive(id); setOpen(false) }}
+                      onActivate={(id) => { setActive(id); setOpen(false) }}
                       closeMenu={() => setOpen(false)}
                     />
                   ))}
-
                   <div className="h-px bg-border/50 my-1" />
-
                   <div className="flex items-center gap-2">
                     <div className="flex items-center justify-center rounded-xl bg-muted/40 border border-border/60">
                       <ThemeToggle />
                     </div>
                     <Link
-                      href="/resume.pdf"
+                      href={config.resumeHref}
                       target="_blank"
                       onClick={() => setOpen(false)}
                       className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl px-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition"
@@ -491,7 +432,6 @@ export default function Navbar() {
                   </div>
                 </>
               )}
-
             </div>
           </motion.div>
         )}
