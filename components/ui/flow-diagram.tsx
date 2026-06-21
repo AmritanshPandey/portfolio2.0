@@ -32,10 +32,10 @@ export interface FlowDiagramProps {
   root: FlowNode
   /** Additional non-tree edges (cross-links), any id → any id. */
   links?: FlowEdge[]
-  /** Horizontal px between sibling subtrees. */
-  siblingGap?: number
-  /** Vertical px between a node and its children row. */
-  levelGap?: number
+  /** Horizontal px between columns. */
+  columnGap?: number
+  /** Vertical px between stacked nodes in a column. */
+  rowGap?: number
   className?: string
 }
 
@@ -45,6 +45,16 @@ const STATUS_DOT: Record<FlowStatus, string> = {
   ok: "bg-emerald-500",
   warn: "bg-amber-500",
   new: "bg-sky-400",
+}
+
+/** A column's descendants, depth-first, in vertical-stack order. */
+function flattenColumn(node: FlowNode): FlowNode[] {
+  const out: FlowNode[] = []
+  for (const child of node.children ?? []) {
+    out.push(child)
+    out.push(...flattenColumn(child))
+  }
+  return out
 }
 
 /**
@@ -60,8 +70,8 @@ const STATUS_DOT: Record<FlowStatus, string> = {
 export function FlowDiagram({
   root,
   links,
-  siblingGap = 48,
-  levelGap = 64,
+  columnGap = 24,
+  rowGap = 28,
   className,
 }: FlowDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -76,19 +86,23 @@ export function FlowDiagram({
     else nodeEls.current.delete(id)
   }, [])
 
-  // Derive the full edge list: every node → each of its children, plus links.
+  const columns = useMemo(() => root.children ?? [], [root])
+
+  // Edges: root → each column header, then a vertical chain down each column,
+  // plus any cross-links. The chain keeps each column a clean straight line.
   const edges = useMemo<FlowEdge[]>(() => {
     const out: FlowEdge[] = []
-    const walk = (node: FlowNode) => {
-      for (const child of node.children ?? []) {
-        out.push([node.id, child.id])
-        walk(child)
+    for (const col of columns) {
+      out.push([root.id, col.id])
+      let prev = col.id
+      for (const node of flattenColumn(col)) {
+        out.push([prev, node.id])
+        prev = node.id
       }
     }
-    walk(root)
     if (links) out.push(...links)
     return out
-  }, [root, links])
+  }, [root.id, columns, links])
 
   const incoming = useMemo(() => new Set(edges.map(([, b]) => b)), [edges])
 
@@ -119,6 +133,7 @@ export function FlowDiagram({
   useLayoutEffect(() => {
     // Measuring laid-out DOM into state is the intended use here (positions for
     // the SVG connectors).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     measure()
     const ro = new ResizeObserver(() => measure())
     if (containerRef.current) ro.observe(containerRef.current)
@@ -135,6 +150,7 @@ export function FlowDiagram({
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     if (reduced) {
       // Show connectors immediately, no draw-in animation.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAnimate(false)
       setDrawn(true)
       return
@@ -293,28 +309,18 @@ export function FlowDiagram({
         })}
       </svg>
 
-      {/* Nodes — recursive org-chart tree */}
-      <div className="relative z-10 flex justify-center">
-        {renderSubtree(root)}
+      {/* Nodes — root over a row of vertical-chain columns */}
+      <div className="relative z-10 flex flex-col items-center">
+        {renderCard(root, "root")}
+        <div className="flex items-start justify-center" style={{ marginTop: 40, columnGap: columnGap }}>
+          {columns.map((col) => (
+            <div key={col.id} className="flex flex-col items-center" style={{ rowGap: rowGap }}>
+              {renderCard(col, "header")}
+              {flattenColumn(col).map((node) => renderCard(node, "node"))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
-
-  function renderSubtree(node: FlowNode) {
-    const variant: "root" | "header" | "node" =
-      node.id === root.id ? "root" : node.children?.length ? "header" : "node"
-    return (
-      <div key={node.id} className="flex flex-col items-center">
-        {renderCard(node, variant)}
-        {node.children?.length ? (
-          <div
-            className="flex items-start"
-            style={{ marginTop: levelGap, columnGap: siblingGap }}
-          >
-            {node.children.map((child) => renderSubtree(child))}
-          </div>
-        ) : null}
-      </div>
-    )
-  }
 }
