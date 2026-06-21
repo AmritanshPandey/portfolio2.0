@@ -16,7 +16,7 @@ export function PrimaryControls() {
     <div className="rounded-2xl border border-rose-500/30 bg-rose-500/[0.03] overflow-hidden">
       <div className="px-5 md:px-6 py-3 border-b border-rose-500/20 flex items-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-        <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
+        <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400">
           Your primary — drives every tool below
         </span>
       </div>
@@ -58,7 +58,7 @@ export function PrimaryControls() {
           {FEELS.map(f => (
             <button key={f.key} onClick={() => setFeelKey(f.key)} title={f.desc} aria-pressed={feelKey === f.key}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
-                feelKey === f.key ? "border-rose-500/50 bg-rose-500/10 text-accent"
+                feelKey === f.key ? "border-rose-500/50 bg-rose-500/10 text-rose-600 dark:text-rose-400"
                   : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
               {f.label}
             </button>

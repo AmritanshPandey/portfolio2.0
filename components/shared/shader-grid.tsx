@@ -50,6 +50,12 @@ interface ShaderGridProps {
   tintColor?: RGB
   /** Opacity used only for the static fallback grid. */
   fallbackOpacity?: number
+  /**
+   * Autonomous twinkle strength, independent of the cursor. 1 = the restrained
+   * hero breathe (~14% brightness). Raise it (e.g. 3–4) for a card-sized field
+   * that visibly pulses on its own.
+   */
+  shimmer?: number
 }
 
 // Brand emerald (#10b981) — warm tint that bleeds in near the cursor.
@@ -79,6 +85,7 @@ uniform vec2  u_velocity;   // cursor drag vector (normalized UV / frame, gained
 uniform vec4  u_baseColor;  // base dot rgba
 uniform vec3  u_tintColor;  // tint near cursor
 uniform float u_time;       // seconds — drives the ambient shimmer
+uniform float u_shimmer;    // autonomous twinkle strength (1 = restrained)
 uniform vec4  u_ripple;     // xy: click centre (0..1, y-up) · z: age s · w: 1 while live
 
 float hash(vec2 p) {
@@ -137,7 +144,8 @@ void main() {
   //    and the whole field breathes on a long phase offset per dot.
   float seed      = hash(cellId);
   float character = 0.72 + 0.55 * seed;
-  float breathe   = 0.86 + 0.14 * sin(u_time * 0.55 + seed * 6.2831);
+  float amp       = 0.14 * u_shimmer;
+  float breathe   = (1.0 - amp) + amp * sin(u_time * (0.55 + 0.4 * (u_shimmer - 1.0)) + seed * 6.2831);
 
   // ── Color + subtle falloff / vignette for depth ────────────────────────
   float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
@@ -188,6 +196,7 @@ export function ShaderGrid({
   darkColor = [1, 1, 1, 0.5],
   tintColor = DEFAULT_TINT,
   fallbackOpacity = 1,
+  shimmer = 1,
 }: ShaderGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -291,6 +300,7 @@ export function ShaderGrid({
       tintColor: gl.getUniformLocation(program, "u_tintColor"),
       time: gl.getUniformLocation(program, "u_time"),
       ripple: gl.getUniformLocation(program, "u_ripple"),
+      shimmer: gl.getUniformLocation(program, "u_shimmer"),
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -400,6 +410,7 @@ export function ShaderGrid({
       gl.uniform3f(u.tintColor, tintColor[0], tintColor[1], tintColor[2])
       // Wrap the clock hourly to keep float precision healthy in the shader.
       gl.uniform1f(u.time, (now / 1000) % 3600)
+      gl.uniform1f(u.shimmer, shimmer)
       const rippleAge = (now - rippleStart) / 1000
       gl.uniform4f(
         u.ripple,
@@ -571,7 +582,7 @@ export function ShaderGrid({
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, colorKey, contextVersion])
+  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, shimmer, colorKey, contextVersion])
 
   // Static CSS fallback — matches the resting WebGL dot field, per theme. The
   // soft edge is centered on the true dot radius (instead of starting there and

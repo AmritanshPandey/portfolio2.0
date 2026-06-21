@@ -29,7 +29,7 @@ export function Seg<T extends string>({
           aria-pressed={value === o.key}
           className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
             value === o.key
-              ? "border-rose-500/50 bg-rose-500/10 text-accent"
+              ? "border-rose-500/50 bg-rose-500/10 text-rose-600 dark:text-rose-400"
               : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
           }`}
         >

@@ -168,7 +168,7 @@ export function NeutralTemperature() {
           {TEMP_PRESETS.map(p => (
             <button key={p.key} onClick={() => { setH(p.h); setS(p.s) }}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
-                h === p.h && s === p.s ? "border-rose-500/50 bg-rose-500/10 text-accent"
+                h === p.h && s === p.s ? "border-rose-500/50 bg-rose-500/10 text-rose-600 dark:text-rose-400"
                   : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
               {p.label}
             </button>

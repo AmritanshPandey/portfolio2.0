@@ -60,7 +60,7 @@ export function TokenTaxonomy() {
             {COMPONENT.map(c => (
               <button key={c.tok} onClick={() => setSel(c.tok)}
                 className={`text-left font-mono text-[11px] px-2.5 py-1.5 rounded-md transition-colors ${
-                  sel === c.tok ? "bg-rose-500/10 text-accent" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
+                  sel === c.tok ? "bg-rose-500/10 text-rose-600 dark:text-rose-400" : "text-foreground/70 hover:bg-foreground/[0.04]"}`}>
                 {c.tok}
               </button>
             ))}

@@ -27,6 +27,8 @@ export interface FullBleedBlockProps {
   fit?: FullBleedFit
   align?: FullBleedAlign
   priority?: boolean
+  /** Drop the rounded corners + border — for true edge-to-edge viewport bleed. */
+  flush?: boolean
   className?: string
 }
 
@@ -157,6 +159,7 @@ export function FullBleedBlock({
   fit = "cover",
   align = "left",
   priority = false,
+  flush = false,
   className,
 }: FullBleedBlockProps) {
   if (!src) return null
@@ -185,7 +188,8 @@ export function FullBleedBlock({
 
       <div
         className={clsx(
-          "relative isolate w-full overflow-hidden rounded-2xl border border-border/30 bg-muted/20 dark:bg-white/[0.03]",
+          "relative isolate w-full overflow-hidden bg-muted/20 dark:bg-white/[0.03]",
+          flush ? "rounded-none border-0" : "rounded-2xl border border-border/30",
           ASPECT_CLASS[aspect]
         )}
       >

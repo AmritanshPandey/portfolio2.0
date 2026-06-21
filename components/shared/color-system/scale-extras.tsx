@@ -178,7 +178,7 @@ export function DarkModeMapper({ accent, neutral }: { accent: Stop[]; neutral: S
         {(["light", "dark"] as const).map(m => (
           <button key={m} onClick={() => setMode(m)} aria-pressed={mode === m}
             className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors capitalize ${
-              mode === m ? "border-rose-500/50 bg-rose-500/10 text-accent"
+              mode === m ? "border-rose-500/50 bg-rose-500/10 text-rose-600 dark:text-rose-400"
                 : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"}`}>
             {m}
           </button>

@@ -100,7 +100,7 @@ export default function RootLayout({
             <Navbar />
 
             {/* Content */}
-            <main className="relative [transform:translateZ(0)]">
+            <main className="relative overflow-x-clip [transform:translateZ(0)]">
               {children}
             </main>
 
