@@ -775,24 +775,13 @@ export default function ShowcasePage() {
             </div>
           </div>
 
-          {/* Cursor gravity — dots get pulled toward the pointer */}
+          {/* Cursor gravity — the WebGL shader's standing gravity well (dots
+              lean in and stick to a resting pointer; click drops a ripple). */}
           <GlowBand
             label="DottedGravityBackground · cursor gravity"
             title="Cursor gravity field"
-            sub="Move the cursor — the dots are pulled toward it"
-            bg={
-              <DottedGravityBackground
-                opacity={1}
-                gap={14}
-                radius={0.9}
-                pullRadius={190}
-                pullStrength={0.5}
-                colorLightVar="--color-neutral-400"
-                glowColorLightVar="--accent"
-                colorDarkVar="--color-neutral-600"
-                glowColorDarkVar="--accent"
-              />
-            }
+            sub="Hold the cursor still — the dots lean in and stick · click to ripple"
+            bg={<DottedGravityBackground spacing={16} dotSize={0.08} radius={0.2} drag={0.7} maxDrag={0.01} />}
           />
 
           {/* Constellation network */}
