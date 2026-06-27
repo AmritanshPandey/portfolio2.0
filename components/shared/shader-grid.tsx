@@ -20,7 +20,7 @@ import { usePerformanceMode } from "@/hooks/use-performance-mode"
  * Input: fine pointers only — mouse, trackpad, pen. Touch-primary devices
  * (phones / tablets) should not display the interactive grid by default; the
  * parent container can hide the `ShaderGrid` on small viewports to avoid the
- * oversized, rose-tinted interaction that appears under a finger. When the
+ * oversized, emerald-tinted interaction that appears under a finger. When the
  * component is mounted it still falls back to a static CSS grid if WebGL is
  * unavailable or reduced-motion is requested. Retina-safe — the canvas scales
  * with DPR while the shader math stays resolution-independent.
@@ -150,16 +150,16 @@ void main() {
   // ── Color + subtle falloff / vignette for depth ────────────────────────
   float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
 
-  // The cursor is a glow pocket. The hue goes (near) fully rose within the
-  // pocket so it reads as rose in BOTH themes — in light mode the base dots
-  // are black, so a weak mix would just look dark, not rose. The ripple ring
-  // borrows the same rose as it passes through.
+  // The cursor is a glow pocket. The hue goes (near) fully emerald within the
+  // pocket so it reads as emerald in BOTH themes — in light mode the base dots
+  // are black, so a weak mix would just look dark, not emerald. The ripple ring
+  // borrows the same emerald as it passes through.
   float motion = length(vel) * force;
   float warm   = clamp(force * 2.2 + motion * 6.0 + wave * 1.6, 0.0, 1.0);
 
   vec3  color = mix(u_baseColor.rgb, u_tintColor, warm);
   // Brighten near the cursor; the glow sidesteps most of the vignette so it
-  // stays rose even toward the edges, while the resting grid fades for depth.
+  // stays emerald even toward the edges, while the resting grid fades for depth.
   float alpha = (u_baseColor.a * vignette * character * breathe +
                  force * 0.35 + motion * 3.0 + wave * 0.6) * disc;
 
@@ -223,7 +223,7 @@ export function ShaderGrid({
     }
 
     // ── Guard: touch-primary devices (phones / tablets) keep the static grid.
-    // The pointer glow + drag reads as oversized, rose-tinted dots under a
+    // The pointer glow + drag reads as oversized, emerald-tinted dots under a
     // finger and muddies readability, so skip the interactive WebGL entirely.
     if (window.matchMedia("(pointer: coarse)").matches) {
       setFallbackVisible(true)
@@ -468,7 +468,7 @@ export function ShaderGrid({
     }
 
     // Mouse / trackpad / pen only — never react to touch (it produces the
-    // oversized, rose-tinted "blob under the finger" the design is avoiding).
+    // oversized, emerald-tinted "blob under the finger" the design is avoiding).
     const onPointerMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return
       setTarget(e.clientX, e.clientY)

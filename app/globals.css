@@ -23,6 +23,13 @@
   --color-border: var(--border);
   --color-ring: var(--ring);
   --color-accent: var(--accent);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-input: var(--input);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --radius-lg: var(--radius);
 }
@@ -45,6 +52,13 @@
   /* Emerald accent. Light: emerald-600 — clears AA 4.5:1 on the near-white canvas.
      Dark: emerald-400. */
   --accent: oklch(0.609 0.152 161);
+  --primary: var(--accent);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.93 0 0);
+  --secondary-foreground: var(--foreground);
+  --input: oklch(0.96 0 0);
+  --destructive: oklch(0.58 0.2 27);
+  --destructive-foreground: oklch(0.99 0 0);
 
   --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -71,6 +85,13 @@
   --border: oklch(1 0 0 / 10%);
   --ring: oklch(0.765 0.163 163);
   --accent: oklch(0.765 0.163 163);
+  --primary: var(--accent);
+  --primary-foreground: oklch(0.11 0 0);
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: var(--foreground);
+  --input: oklch(0.22 0 0);
+  --destructive: oklch(0.72 0.19 24);
+  --destructive-foreground: oklch(0.11 0 0);
 
   --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
@@ -675,6 +696,31 @@
 }
 
 /* ─────────────────────────
+   GRADIENT SHINE BACKGROUND
+   Ported from the older portfolio hero: a banded spectrum settles in, a
+   grain layer drifts, and a diagonal shine fades in once. Used by
+   <GradientShineBackground>. Reduced motion is honoured by the global
+   prefers-reduced-motion block below (animations collapse to their end state).
+───────────────────────── */
+
+@keyframes gradient-settle {
+  from { background-position: 10% 50%; }
+  to   { background-position: 55% 50%; }
+}
+
+@keyframes noise-drift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2%, 1%); }
+  50%  { transform: translate(1%, -2%); }
+  75%  { transform: translate(-1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes shine-fade-in {
+  to { opacity: var(--shine-to, 0.35); }
+}
+
+/* ─────────────────────────
    SHIMMER ACCENT
    Safari-safe: uses -webkit-background-clip + -webkit-text-fill-color
    which are Apple's own prefixes — works since Safari 4.
@@ -881,7 +927,7 @@
 
 /* ─────────────────────────
    READING PROGRESS
-   2px rose bar pinned to the very top of article / case-study pages.
+   2px emerald accent bar pinned to the very top of article / case-study pages.
    Driven by transform only — compositor-cheap, Safari-safe.
 ───────────────────────── */
 

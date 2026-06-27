@@ -59,28 +59,28 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
       onPointerLeave={prefersReduced ? undefined : resetSpotlight}
       className="group/card block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <div className="flex flex-col overflow-hidden rounded-2xl border border-border/65 bg-card [transform:translateZ(0)] transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[3px] hover:border-foreground/18 md:flex-row dark:hover:border-white/[0.18]">
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-border/65 bg-card [transform:translateZ(0)] transition-[transform,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[3px] hover:border-foreground/18 lg:flex-row dark:hover:border-white/[0.18]">
 
         {/* ── Image pane ── */}
-        <div className="relative aspect-[16/10] shrink-0 overflow-hidden md:aspect-auto md:w-[42%]">
+        <div className="relative aspect-[16/10] shrink-0 overflow-hidden sm:aspect-[21/10] lg:aspect-auto lg:w-[42%]">
           <Image
             src={card.image}
             alt={card.title}
             fill
-            sizes="(max-width: 768px) 100vw, 42vw"
+            sizes="(max-width: 1023px) 100vw, 42vw"
             className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/card:scale-[1.04]"
           />
           {/* Gradient fade into card bg on mobile (content follows below) */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-card/70 to-transparent md:hidden"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-card/70 to-transparent lg:hidden"
           />
         </div>
 
         {/* ── Content pane ── */}
-        <div ref={contentRef} className="relative flex flex-1 flex-col p-6 md:p-7">
+        <div ref={contentRef} className="relative flex min-w-0 flex-1 flex-col p-5 sm:p-6 lg:p-7">
 
-          {/* Rose cursor spotlight — scoped to content half */}
+          {/* Emerald cursor spotlight — scoped to content half */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
@@ -108,13 +108,13 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
             </h3>
 
             {/* Description */}
-            <p className="mt-3 text-[13.5px] leading-relaxed text-foreground/60">
+            <p className="mt-3 max-w-[64ch] text-[13.5px] leading-relaxed text-foreground/60 lg:max-w-none">
               {card.description}
             </p>
 
             {/* Learned insight — pull-quote style, only for explorations */}
             {card.learned && (
-              <p className="mt-4 border-l-[2px] border-accent/30 pl-3.5 text-[12.5px] italic leading-relaxed text-foreground/45">
+              <p className="mt-4 max-w-[68ch] border-l-[2px] border-accent/30 pl-3.5 text-[12.5px] italic leading-relaxed text-foreground/45 lg:max-w-none">
                 {card.learned}
               </p>
             )}

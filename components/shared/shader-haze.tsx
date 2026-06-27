@@ -35,7 +35,7 @@ interface ShaderHazeProps {
   speed?: number
 }
 
-// Brand rose (#fb7185-ish) — warm light, not a hard red.
+// Brand emerald (#34d399-ish) — warm light, not a hard green.
 const DEFAULT_TINT: RGB = [0.204, 0.827, 0.600]
 
 const VERT_SRC = `

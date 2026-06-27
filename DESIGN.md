@@ -1,16 +1,16 @@
 ---
 name: Amritansh Pandey — Portfolio
-description: A dark-default, warm-editorial portfolio with a single rose accent and confident, tactile interaction.
+description: A dark-default, warm-editorial portfolio with a single emerald accent and confident, tactile interaction.
 colors:
-  rose: "#e11d48"
-  rose-deep: "#be123c"
-  rose-soft: "#fb7185"
+  emerald: "#059669"
+  emerald-deep: "#047857"
+  emerald-soft: "#34d399"
   bg: "oklch(0.14 0 0)"
   surface: "oklch(0.18 0 0)"
   ink: "oklch(0.96 0 0)"
   muted: "oklch(0.60 0 0)"
   border: "oklch(1 0 0 / 0.10)"
-  focus-ring: "oklch(0.72 0.19 13)"
+  focus-ring: "oklch(0.765 0.163 163)"
 typography:
   display:
     fontFamily: "Montserrat, system-ui, sans-serif"
@@ -57,13 +57,13 @@ spacing:
   section: "5rem"
 components:
   button-primary:
-    backgroundColor: "{colors.rose}"
+    backgroundColor: "{colors.emerald}"
     textColor: "#ffffff"
     rounded: "{rounded.pill}"
     padding: "0 1rem"
     height: "2.5rem"
   button-primary-hover:
-    backgroundColor: "{colors.rose-deep}"
+    backgroundColor: "{colors.emerald-deep}"
     textColor: "#ffffff"
   button-ghost:
     backgroundColor: "transparent"
@@ -87,27 +87,27 @@ components:
 
 **Creative North Star: "The Warm Studio"**
 
-This is a senior practitioner's workspace after hours: the room is dark, the focus is total, and one warm light pools on the work. The system defaults to a near-black canvas (`oklch(0.14 0 0)`) so the content, case studies, writing, and demos, reads as the lit subject, never the decoration. A single rose accent carries every moment of intent; everything else is a disciplined neutral ramp. The voice is confident and human at once: assured enough to stay quiet, warm enough to feel like a person and not a vendor.
+This is a senior practitioner's workspace after hours: the room is dark, the focus is total, and one steady light pools on the work. The system defaults to a near-black canvas (`oklch(0.14 0 0)`) so the content, case studies, writing, and demos, reads as the lit subject, never the decoration. A single emerald accent carries every moment of intent; everything else is a disciplined neutral ramp. The voice is confident and human at once: assured enough to stay quiet, warm enough to feel like a person and not a vendor.
 
-Warmth here is carried by the accent, the generous type, and the tactile interaction, not by a beige body background. The neutrals are true grays (chroma 0); the heat comes from the rose and from how things respond to you. Motion is restrained and intentional: a slide-in navbar, fade-up reveals on a single confident easing curve, a magnetic pull on the primary CTA, and a bespoke cursor that replaces the system one on fine-pointer devices. Nothing bounces, nothing loops for attention.
+Warmth here is carried by the generous type and the tactile interaction, not by a beige body background. The neutrals are true grays (chroma 0); the one emerald signal and the way things respond to you do the rest. Motion is restrained and intentional: a slide-in navbar, fade-up reveals on a single confident easing curve, a magnetic pull on the primary CTA, and a bespoke cursor that replaces the system one on fine-pointer devices. Nothing bounces, nothing loops for attention.
 
 The system explicitly rejects the four things the brand must never be: the generic AI-template look (display-serif headings, a tiny uppercase eyebrow on every section, identical icon-card grids, gradient text), corporate-enterprise stiffness (safe navy-and-gray, stock photography, vendor-deck soullessness), the flashy dev-portfolio (particle fields, neon, gratuitous animation), and minimal-to-the-point-of-bland (restraint with no point of view).
 
 **Key Characteristics:**
 - Dark-default canvas with a fully supported light mode; both built from the same OKLCH neutral ramp.
-- One accent only: rose. Used on ≤10% of any screen.
+- One accent only: emerald. Used on ≤10% of any screen.
 - Montserrat throughout, hierarchy from weight and scale; monospace reserved for small labels.
 - Confident, tactile interaction: magnetic CTA, custom cursor, soft lift on hover.
 - Motion is intentional and accessible; every animation has a reduced-motion fallback.
 
 ## 2. Colors
 
-A monochrome neutral ramp lit by a single warm accent. Values are dark-mode canonical (the default theme); the light-mode equivalents are noted where they differ.
+A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode canonical (the default theme); the light-mode equivalents are noted where they differ.
 
 ### Primary
-- **Rose** (`#e11d48` light / `#fb7185` dark): The one raised voice. Primary CTAs, active navigation, links, focus accents, hero gradient anchors. The color the visitor learns to read as "act here." Light mode uses rose-600 so white labels hold ≥4.5:1; dark mode uses rose-400 so the accent holds ≥4.5:1 on the near-black canvas.
-- **Rose Deep** (`#be123c`): Hover and pressed states of any rose surface; the darker anchor in gradients (paired down to `#881337`).
-- **Rose Soft** (`#fb7185`): The highlight mid-point in the shimmer accent and warm gradient sweeps. A grace note, never a second accent.
+- **Emerald** (`#059669` light / `#34d399` dark): The one raised voice. Primary CTAs, active navigation, links, focus accents, hero gradient anchors. The color the visitor learns to read as "act here." Light mode uses emerald-600 so white labels hold ≥4.5:1; dark mode uses emerald-400 so the accent holds ≥4.5:1 on the near-black canvas.
+- **Emerald Deep** (`#047857`): Hover and pressed states of any emerald surface; the darker anchor in gradients (paired down to `#064e3b`).
+- **Emerald Soft** (`#34d399`): The highlight mid-point in the shimmer accent and accent gradient sweeps. A grace note, never a second accent.
 
 ### Neutral
 - **Ink** (`oklch(0.96 0 0)`, dark / `oklch(0.18 0 0)`, light): Primary text and high-contrast foreground.
@@ -115,12 +115,12 @@ A monochrome neutral ramp lit by a single warm accent. Values are dark-mode cano
 - **Surface** (`oklch(0.18 0 0)`, dark / `oklch(1 0 0)`, light): Cards, panels, raised containers, one step off the canvas.
 - **Background** (`oklch(0.14 0 0)`, dark / `oklch(0.98 0 0)`, light): The page canvas. The lit room.
 - **Border** (`oklch(1 0 0 / 0.10)`, dark / `oklch(0.90 0 0)`, light): Hairline structure. Borders do the dividing; shadows are kept quiet.
-- **Focus Ring** (`oklch(0.72 0.19 13)`, dark / `oklch(0.6 0.22 17)`, light): A warm ring at the rose hue, sibling to the accent. 2px, 3px offset.
+- **Focus Ring** (`oklch(0.765 0.163 163)`, dark / `oklch(0.609 0.152 161)`, light): A ring at the emerald hue, sibling to the accent. 2px, 3px offset.
 
 ### Named Rules
-**The One Voice Rule.** Rose is the only accent in the system. It appears on roughly 10% of any screen, the CTA, the active state, the one link that matters. Its rarity is the point. A second accent hue is forbidden; reach for weight, size, or a neutral step instead.
+**The One Voice Rule.** Emerald is the only accent in the system. It appears on roughly 10% of any screen, the CTA, the active state, the one link that matters. Its rarity is the point. A second accent hue is forbidden; reach for weight, size, or a neutral step instead.
 
-**The True-Gray Rule.** Neutrals stay at chroma 0. Warmth comes from rose, type, and interaction, never from a warm-tinted "cream" background. If a surface starts to read as beige, it has drifted off-system.
+**The True-Gray Rule.** Neutrals stay at chroma 0. Warmth comes from type and interaction, never from a warm-tinted "cream" background; the accent stays emerald. If a surface starts to read as beige, it has drifted off-system.
 
 ## 3. Typography
 
@@ -158,8 +158,8 @@ Flat by default, lifted only on intent. Depth comes first from the one-step tona
 
 ### Buttons
 - **Shape:** Full pill (`rounded-4xl`, effectively `9999px`).
-- **Primary:** Rose fill (`#e11d48` light / `#fb7185` dark), white label, magnetic hover (the CTA pulls slightly toward the cursor), `active:translate-y-px`. Used for the single most important action on a surface.
-- **Hover / Focus:** Hover deepens toward Rose Deep (`#be123c`) / `bg-primary/80`; focus shows the warm 2px ring at 3px offset.
+- **Primary:** Emerald fill (`#059669` light / `#34d399` dark), white label, magnetic hover (the CTA pulls slightly toward the cursor), `active:translate-y-px`. Used for the single most important action on a surface.
+- **Hover / Focus:** Hover deepens toward Emerald Deep (`#047857`) / `bg-primary/80`; focus shows the emerald 2px ring at 3px offset.
 - **Ghost / Outline:** Transparent or hairline-bordered, ink label, neutral fill on hover. For secondary and tertiary actions.
 
 ### Cards / Containers
@@ -171,7 +171,7 @@ Flat by default, lifted only on intent. Depth comes first from the one-step tona
 
 ### Inputs / Fields
 - **Style:** Background drops to the canvas color inside a surface, hairline border, `rounded-md` (12px).
-- **Focus:** Border shifts to rose; the global warm focus ring applies.
+- **Focus:** Border shifts to emerald; the global emerald focus ring applies.
 - **Label / Hint:** Label 12–13px medium; hint 11px muted.
 
 ### Navigation
@@ -184,10 +184,10 @@ On fine-pointer devices the native cursor is hidden and replaced by a bespoke cu
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** keep rose to ~10% of any screen, one CTA, one active state, one link that matters (The One Voice Rule).
+- **Do** keep emerald to ~10% of any screen, one CTA, one active state, one link that matters (The One Voice Rule).
 - **Do** build hierarchy from Montserrat weight + scale; one family only.
-- **Do** keep neutrals at chroma 0; let warmth come from rose, type, and interaction.
-- **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, the warm 2px focus ring on every interactive element, and a `prefers-reduced-motion` fallback for every animation.
+- **Do** keep neutrals at chroma 0; let warmth come from type and interaction, and keep the accent emerald.
+- **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, the emerald 2px focus ring on every interactive element, and a `prefers-reduced-motion` fallback for every animation.
 - **Do** keep surfaces flat at rest and lift on state with a neutral fill and a small translate.
 - **Do** verify both themes: every choice must read in dark (default) and light.
 
