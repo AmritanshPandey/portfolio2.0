@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
+import { ReadingProgress } from "@/components/shared/reading-progress"
 
 const HREF = "/articles/typography-system"
 
@@ -101,7 +102,7 @@ function Section({ id, children, muted }: {
 }) {
   return (
     <section id={id} className={`border-b border-border/40 ${muted ? "bg-muted/30" : "bg-background"}`}>
-      <div className="max-w-4xl mx-auto py-14 md:py-18">{children}</div>
+      <div className="max-w-4xl mx-auto px-5 py-12 sm:px-6 md:py-18">{children}</div>
     </section>
   )
 }
@@ -155,7 +156,7 @@ function CopyButton({ text, className = "" }: { text: string; className?: string
 
 function ToolHead({ children }: { children: React.ReactNode }) {
   return (
-    <div className="px-5 py-4 border-b border-border/60 flex flex-wrap items-center gap-x-8 gap-y-4">
+    <div className="flex flex-col items-stretch gap-4 border-b border-border/60 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:px-5">
       {children}
     </div>
   )
@@ -172,7 +173,7 @@ function Chip({ active, onClick, children }: {
     <button
       type="button"
       onClick={onClick}
-      className={`font-mono text-[11px] rounded-lg border px-3 py-1.5 transition-colors ${
+      className={`shrink-0 font-mono text-[11px] rounded-lg border px-3 py-1.5 transition-colors ${
         active
           ? "border-accent text-accent bg-accent/[0.08]"
           : "border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground/60"
@@ -231,7 +232,7 @@ function ModularScaleTool() {
             <input
               type="range" min={1.1} max={1.7} step={0.001} value={ratio}
               onChange={e => setRatio(Number(e.target.value))}
-              className="w-36 accent-rose-500"
+              className="w-full max-w-36 accent-rose-500"
             />
             <span className="font-mono text-[13px] text-accent w-12">{ratio.toFixed(3)}</span>
           </div>
@@ -253,13 +254,13 @@ function ModularScaleTool() {
           {SCALE_ROLES.map(r => {
             const px = sizeFor(r.exp)
             return (
-              <div key={r.key} className="flex items-baseline gap-5 py-2.5 border-b border-border/40 last:border-0">
-                <div className="font-mono text-[10px] text-muted-foreground w-[120px] flex-shrink-0 leading-[1.6]">
+              <div key={r.key} className="flex flex-col items-start gap-2 border-b border-border/40 py-3 last:border-0 sm:flex-row sm:items-baseline sm:gap-5 sm:py-2.5">
+                <div className="w-full flex-shrink-0 font-mono text-[10px] leading-[1.6] text-muted-foreground sm:w-[120px]">
                   <span className="block text-[10px] uppercase tracking-[0.06em] text-accent">{r.name}</span>
                   {Math.round(px)}px · {r.lh}
                 </div>
                 <div
-                  className="text-foreground overflow-hidden text-ellipsis whitespace-nowrap"
+                  className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-foreground"
                   style={{
                     fontSize: Math.min(px, 60),
                     lineHeight: r.lh,
@@ -285,7 +286,7 @@ function ModularScaleTool() {
           </div>
           <CopyButton text={tokens} />
         </div>
-        <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{tokens}</pre>
+        <pre className="max-w-full overflow-x-auto rounded-lg border border-border bg-background px-4 py-4 font-mono text-[11px] leading-[1.7] text-foreground/65">{tokens}</pre>
       </div>
     </>
   )
@@ -306,8 +307,8 @@ function FontPairingExplorer() {
       <div className="px-6 py-8 md:px-8">
         <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-4">{p.note}</div>
         <div
-          className="text-foreground mb-5 leading-[1.1] tracking-[-0.01em]"
-          style={{ fontFamily: p.h, fontWeight: p.hw, fontStyle: p.hs, fontSize: 36 }}
+          className="mb-5 text-[28px] leading-[1.1] tracking-[-0.01em] text-foreground sm:text-[36px]"
+          style={{ fontFamily: p.h, fontWeight: p.hw, fontStyle: p.hs }}
         >
           The grand tour of modern typography
         </div>
@@ -333,7 +334,7 @@ function ReadingSimulator() {
           <CtlLabel>Line length</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={30} max={100} step={1} value={width}
-              onChange={e => setWidth(Number(e.target.value))} className="w-36 accent-rose-500" />
+              onChange={e => setWidth(Number(e.target.value))} className="w-full max-w-36 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{width}ch</span>
           </div>
         </div>
@@ -341,7 +342,7 @@ function ReadingSimulator() {
           <CtlLabel>Line height</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={1} max={2.2} step={0.01} value={lh}
-              onChange={e => setLh(Number(e.target.value))} className="w-36 accent-rose-500" />
+              onChange={e => setLh(Number(e.target.value))} className="w-full max-w-36 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{lh.toFixed(2)}</span>
           </div>
         </div>
@@ -461,9 +462,9 @@ function ResponsiveClampPreview() {
       <div className="px-5 py-7 bg-background/40">
         <div
           className="mx-auto rounded-xl border border-border bg-card p-7 overflow-hidden transition-[max-width] duration-300"
-          style={{ maxWidth: vw }}
+          style={{ maxWidth: `min(${vw}px, 100%)` }}
         >
-          <div className="leading-[1.1] text-foreground tracking-[-0.02em]" style={{ fontSize: rendered.toFixed(1) + "px", fontFamily: F.serif }}>
+          <div className="break-words leading-[1.1] tracking-[-0.02em] text-foreground" style={{ fontSize: rendered.toFixed(1) + "px", fontFamily: F.serif }}>
             Typography that scales
           </div>
           <p className="font-mono text-[11px] text-muted-foreground mt-3">
@@ -472,11 +473,11 @@ function ResponsiveClampPreview() {
         </div>
       </div>
       <div className="px-5 py-4 border-t border-border/60">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <CtlLabel>Generated CSS</CtlLabel>
           <CopyButton text={code} />
         </div>
-        <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 bg-background border border-border rounded-lg px-4 py-4 overflow-x-auto">{code}</pre>
+        <pre className="max-w-full overflow-x-auto rounded-lg border border-border bg-background px-4 py-4 font-mono text-[11px] leading-[1.7] text-foreground/65">{code}</pre>
       </div>
     </>
   )
@@ -521,7 +522,7 @@ function A11yChecker() {
           <CtlLabel>Size</CtlLabel>
           <div className="flex items-center gap-3">
             <input type="range" min={11} max={32} step={1} value={size}
-              onChange={e => setSize(Number(e.target.value))} className="w-32 accent-rose-500" />
+              onChange={e => setSize(Number(e.target.value))} className="w-full max-w-32 accent-rose-500" />
             <span className="font-mono text-[13px] text-accent w-12">{size}px</span>
           </div>
         </div>
@@ -543,7 +544,7 @@ function A11yChecker() {
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-3 mt-4">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {LEGIBILITY.map(l => (
             <div key={l.name} className="rounded-xl border border-border/60 p-4 text-center bg-card">
               <div className="text-[26px] text-foreground mb-1.5" style={{ fontFamily: l.font }}>Il1 O0 rn</div>
@@ -577,13 +578,13 @@ function TypographyLab() {
   return (
     <div className="rounded-2xl border border-border bg-card overflow-hidden">
       {/* Tab bar — all tools mount immediately to preserve state when switching */}
-      <div className="flex flex-wrap border-b border-border bg-muted/30">
+      <div className="flex flex-nowrap overflow-x-auto border-b border-border bg-muted/30 [-webkit-overflow-scrolling:touch]">
         {LAB_TABS.map(t => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`px-4 py-3 text-[12px] font-medium transition-colors duration-150 border-r border-border/40 last:border-r-0 ${
+            className={`shrink-0 border-r border-border/40 px-4 py-3 text-[12px] font-medium transition-colors duration-150 last:border-r-0 ${
               tab === t.id
                 ? "bg-card text-foreground"
                 : "text-muted-foreground hover:text-foreground hover:bg-card/50"
@@ -611,6 +612,7 @@ export default function Page() {
   const article = articleItems.find(x => x.href === HREF)!
   return (
     <main>
+      <ReadingProgress />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       {/* eslint-disable-next-line @next/next/no-page-custom-font */}
@@ -630,7 +632,7 @@ export default function Page() {
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {TYPE_SHOW.map(c => (
             <div key={c.word} className="rounded-xl border border-border/60 bg-card p-6 hover:border-border transition-colors">
-              <div className="mb-3 leading-[1.05] tracking-[-0.01em] text-foreground" style={{ fontFamily: c.font, fontWeight: c.weight, fontStyle: c.style, fontSize: 40 }}>
+              <div className="mb-3 text-[34px] leading-[1.05] tracking-[-0.01em] text-foreground sm:text-[40px]" style={{ fontFamily: c.font, fontWeight: c.weight, fontStyle: c.style }}>
                 {c.word}
               </div>
               <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-1">{c.lbl}</p>
@@ -649,7 +651,7 @@ export default function Page() {
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {CLASSES.map(c => (
             <div key={c.name} className="rounded-xl border border-border/60 bg-card overflow-hidden hover:border-border transition-colors">
-              <div className="px-6 pt-7 pb-4 text-foreground border-b border-border/60 leading-none" style={{ fontFamily: c.spec, fontSize: c.size }}>
+              <div className="border-b border-border/60 px-6 pb-4 pt-7 text-[42px] leading-none text-foreground sm:text-[52px]" style={{ fontFamily: c.spec }}>
                 Ag
               </div>
               <div className="px-6 py-5">
@@ -701,30 +703,32 @@ export default function Page() {
 
           <div className="rounded-xl border border-border/60 bg-card p-6">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Data tables</h4>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  {["Plan", "Seats", "MRR"].map((h, i) => (
-                    <th key={h} className={`font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground font-normal py-2 border-b border-border ${i === 2 ? "text-right" : "text-left"}`}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {[["Starter", "3", "$87"], ["Growth", "12", "$1,240"], ["Scale", "48", "$9,600"]].map(([p, s, m]) => (
-                  <tr key={p}>
-                    <td className="text-[13px] text-foreground/75 py-2 border-b border-border/60">{p}</td>
-                    <td className="font-mono text-[13px] text-foreground py-2 border-b border-border/60" style={{ fontVariantNumeric: "tabular-nums" }}>{s}</td>
-                    <td className="font-mono text-[13px] text-foreground py-2 border-b border-border/60 text-right" style={{ fontVariantNumeric: "tabular-nums" }}>{m}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[280px] border-collapse">
+                <thead>
+                  <tr>
+                    {["Plan", "Seats", "MRR"].map((h, i) => (
+                      <th key={h} className={`font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground font-normal py-2 border-b border-border ${i === 2 ? "text-right" : "text-left"}`}>{h}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {[["Starter", "3", "$87"], ["Growth", "12", "$1,240"], ["Scale", "48", "$9,600"]].map(([p, s, m]) => (
+                    <tr key={p}>
+                      <td className="text-[13px] text-foreground/75 py-2 border-b border-border/60">{p}</td>
+                      <td className="font-mono text-[13px] text-foreground py-2 border-b border-border/60" style={{ fontVariantNumeric: "tabular-nums" }}>{s}</td>
+                      <td className="font-mono text-[13px] text-foreground py-2 border-b border-border/60 text-right" style={{ fontVariantNumeric: "tabular-nums" }}>{m}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <p className="text-[11px] text-muted-foreground mt-3 leading-[1.6]">Tabular-figure numerals so digits align. Labels uppercase mono; values regular.</p>
           </div>
 
           <div className="rounded-xl border border-border/60 bg-card p-6">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Navigation</h4>
-            <div className="flex gap-5 items-center">
+            <div className="flex items-center gap-5 overflow-x-auto">
               <span className="text-[13px] text-foreground font-medium">Overview</span>
               {["Projects", "Members", "Settings"].map(n => (
                 <span key={n} className="text-[13px] text-muted-foreground">{n}</span>
@@ -751,7 +755,7 @@ export default function Page() {
             <div key={t.lbl}>
               <div className="rounded-xl border border-border/60 bg-card px-5 py-4">
                 <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent mb-2">{t.lbl}</p>
-                <code className="font-mono text-[12px] text-foreground/70">{t.code}</code>
+                <code className="block max-w-full overflow-x-auto font-mono text-[12px] text-foreground/70">{t.code}</code>
               </div>
               {i < 2 && <p className="text-center text-muted-foreground text-[12px] py-1">↓</p>}
             </div>
@@ -764,7 +768,7 @@ export default function Page() {
             <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">Token reference</span>
             <CopyButton text={TOKEN_CODE} />
           </div>
-          <pre className="font-mono text-[11px] leading-[1.7] text-foreground/65 px-5 py-4 overflow-x-auto">{TOKEN_CODE}</pre>
+          <pre className="max-w-full overflow-x-auto px-5 py-4 font-mono text-[11px] leading-[1.7] text-foreground/65">{TOKEN_CODE}</pre>
         </FadeIn>
 
         {/* Principles */}

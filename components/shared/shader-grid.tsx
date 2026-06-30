@@ -56,10 +56,65 @@ interface ShaderGridProps {
    * that visibly pulses on its own.
    */
   shimmer?: number
+  /**
+   * Cursor reactivity. `true` (default) wires the pointer drag / hover glow /
+   * click ripples. Set `false` for a calm, autonomous shimmer-only field that
+   * ignores the cursor entirely (the breathe/twinkle keeps running).
+   */
+  interactive?: boolean
 }
 
 // Brand emerald (#10b981) — warm tint that bleeds in near the cursor.
 const DEFAULT_TINT: RGB = [0.063, 0.725, 0.506]
+
+/* ── Interaction tuning ───────────────────────────────────────────────────
+   The four motion layers of the "magnetic liquid" surface. All values live in
+   normalized, aspect-corrected UV space; the *_RADIUS values are multiples of
+   the `radius` prop so every behaviour scales with the field and the subtle
+   hero stays subtle. Tuned toward an expressive — but still tasteful — feel. */
+
+// 1 · Hover — gravity well. The pointer attracts nearby dots: they are pulled
+//    inward with a squared falloff (strongest at the centre), the pull bounded
+//    so the field gathers toward the cursor without collapsing into a cluster.
+const MAGNET_RADIUS = 1.9 // × u_radius — reach of the gravity well
+const MAGNET_ATTRACTION_STRENGTH = 0.9 // inward pull gain
+const MAX_DOT_DISPLACEMENT = 0.016 // hard clamp on hover displacement (UV)
+const HOVER_BASE = 0.034 // absolute UV scale the strength multiplies
+const MAGNET_GLOW_RADIUS = 2.7 // × u_radius — soft colour-only halo around the well
+
+// 2 · Drag — directional liquid wake (stronger behind, slight compression ahead)
+const WAKE_RADIUS = 2.2 // × u_radius
+const WAKE_STRENGTH = 0.05 // overall wake displacement gain
+const FORWARD_COMPRESSION = 0.5 // slight compression of dots ahead of travel
+const TRAIL_STRETCH = 1.0 // dots trail behind the pointer (the wake)
+
+// 3 · Settling after movement stops (JS-driven damped oscillation)
+const SETTLE_RADIUS = 2.0 // × u_radius — local area that springs back
+const SETTLE_STRENGTH = 0.5 // gain on the captured stop energy
+const SETTLE_FREQUENCY = 6.0 // Hz — ~1–2 visible oscillations
+const SETTLE_DECAY = 0.09 // s — exp time-constant (settles in ~250–450ms)
+const SETTLE_MIN_SPEED = 0.004 // speed below which movement counts as "stopped"
+const SETTLE_MAX_ENERGY = 0.06 // clamp on captured energy → bounded overshoot
+
+// 4 · Click — layered double ripple (shared centre + age)
+const PRIMARY_RIPPLE_SPEED = 1.5 // ring radius / s — fast
+const PRIMARY_RIPPLE_DURATION = 0.7 // s — short, bright
+const PRIMARY_RIPPLE_BAND = 18.0 // higher = thinner ring
+const PRIMARY_RIPPLE_PUSH = 0.012 // outward displacement gain
+const PRIMARY_RIPPLE_BRIGHT = 2.2 // brightness gain (the brightest moment)
+const SECONDARY_RIPPLE_SPEED = 0.7 // slower
+const SECONDARY_RIPPLE_DURATION = 1.5 // s — soft, lingering
+const SECONDARY_RIPPLE_BAND = 7.0 // lower = wider / softer
+const SECONDARY_RIPPLE_PUSH = 0.028 // more displacement than the primary
+const SECONDARY_RIPPLE_BRIGHT = 0.8 // less brightness than the primary
+const RIPPLE_LIFE = 1.8 // s — u_ripple.w stays live until the secondary fades
+
+// Format a JS number as a GLSL float literal (always with a decimal point) so a
+// single set of constants can be inlined into the shader source.
+const glf = (n: number) => {
+  const s = String(n)
+  return s.includes(".") || s.includes("e") ? s : `${s}.0`
+}
 
 const VERT_SRC = `
 attribute vec2 a_pos;
@@ -87,6 +142,9 @@ uniform vec3  u_tintColor;  // tint near cursor
 uniform float u_time;       // seconds — drives the ambient shimmer
 uniform float u_shimmer;    // autonomous twinkle strength (1 = restrained)
 uniform vec4  u_ripple;     // xy: click centre (0..1, y-up) · z: age s · w: 1 while live
+uniform vec2  u_heading;    // persistent normalized cursor direction (UV)
+uniform float u_speed;      // eased cursor speed magnitude (UV / frame)
+uniform vec4  u_settle;     // xy: settle centre (0..1) · zw: damped settle offset (UV)
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -101,34 +159,71 @@ void main() {
   vec2 auv    = vec2(uv.x * aspect, uv.y);
   vec2 amouse = vec2(u_mouse.x * aspect, u_mouse.y);
 
-  // ── Cursor drag — advect the dots along the pointer's motion, like water ─
+  // Aspect-space cursor heading (unit) — shared by the magnet bias + the wake.
+  vec2  hv    = vec2(u_heading.x * aspect, u_heading.y);
+  float hlen  = length(hv);
+  vec2  headA = hlen > 0.0001 ? hv / hlen : vec2(0.0);
+
+  // Base watery advection — drag the field upstream of the pointer's motion.
   vec2  vel   = vec2(u_velocity.x * aspect, u_velocity.y);
   vec2  dir   = auv - amouse;
   float dist  = length(dir);
+  vec2  dirN  = dist > 0.0001 ? dir / dist : vec2(0.0);
   float force = smoothstep(u_radius, 0.0, dist) * u_intensity;
+  float align = dot(dirN, headA); // -1 behind … +1 ahead of the travel axis
 
-  // ── Gravity well — a standing pull toward the pointer while it rests.
-  //    Sampling away from the cursor renders the field displaced toward it,
-  //    so dots lean in and stick; squared falloff keeps the centre strongest.
-  vec2  dirN = dist > 0.0001 ? dir / dist : vec2(0.0);
-  float well = smoothstep(u_radius * 1.9, 0.0, dist) * u_intensity;
-  vec2  grav = dirN * well * well * 0.016;
+  // ── 1 · Hover gravity well — dots are pulled toward the cursor ──────────
+  //    (+dirN samples the field further from the cursor, which renders that
+  //    dot displaced inward toward the pointer.) Squared falloff keeps the
+  //    centre strongest; the pull is clamped so the field gathers without
+  //    collapsing into a single cluster.
+  float well = smoothstep(u_radius * ${glf(MAGNET_RADIUS)}, 0.0, dist);
+  well       *= well;
+  vec2  hover = dirN * (${glf(HOVER_BASE)} * ${glf(MAGNET_ATTRACTION_STRENGTH)}) * well * u_intensity;
 
-  // ── Click ripple — one ring that pushes dots outward and lights them up,
-  //    expanding from the press point and decaying over ~1.5s.
+  float hoverLen = length(hover);
+  if (hoverLen > ${glf(MAX_DOT_DISPLACEMENT)}) {
+    hover *= ${glf(MAX_DOT_DISPLACEMENT)} / hoverLen;
+  }
+
+  // ── 2 · Directional liquid wake — slight compression ahead, trail behind ─
+  //    Aligned with the cursor velocity; fades the instant u_speed drops.
+  float wakeFall = smoothstep(u_radius * ${glf(WAKE_RADIUS)}, 0.0, dist);
+  float wakeAmt  = ${glf(FORWARD_COMPRESSION)} * max(align, 0.0)
+                 - ${glf(TRAIL_STRETCH)} * max(-align, 0.0);
+  vec2  wake     = headA * wakeFall * u_speed * wakeAmt * ${glf(WAKE_STRENGTH)};
+
+  // ── 3 · Settling — local damped overshoot once the cursor stops ─────────
+  //    The damped sinusoid is computed in JS; here we just place it locally.
+  vec2  sc         = vec2(u_settle.x * aspect, u_settle.y);
+  float settleFall = smoothstep(u_radius * ${glf(SETTLE_RADIUS)}, 0.0, length(auv - sc));
+  vec2  settle     = vec2(u_settle.z * aspect, u_settle.w) * settleFall;
+
+  // ── 4 · Click — layered double ripple from one shared centre + age ──────
+  //    exp(-x²) is written out by hand: pow() is undefined for negative bases
+  //    in GLSL ES, and (rdist - ring) swings negative inside each ring.
   vec2  rc    = vec2(u_ripple.x * aspect, u_ripple.y);
   vec2  rdir  = auv - rc;
   float rdist = length(rdir);
-  float ringR = u_ripple.z * 0.85;
-  // exp(-x²) written out by hand: pow() is undefined for negative bases in
-  // GLSL ES, and (rdist - ringR) swings negative inside the ring.
-  float band  = (rdist - ringR) * 16.0;
-  float wave  = exp(-band * band) * exp(-u_ripple.z * 2.4) * u_ripple.w;
-  vec2  rip   = (rdist > 0.0001 ? rdir / rdist : vec2(0.0)) * wave * 0.02;
+  vec2  rdirN = rdist > 0.0001 ? rdir / rdist : vec2(0.0);
+  float age   = u_ripple.z;
+  float live  = u_ripple.w;
 
-  // Velocity drag samples upstream of the motion; the well pulls inward; the
-  // ripple pushes outward. No displacement at rest, so the field stays calm.
-  vec2  warped = auv - vel * force + grav - rip;
+  // Primary: a thin, bright, fast ring with a short life.
+  float r1 = age * ${glf(PRIMARY_RIPPLE_SPEED)};
+  float b1 = (rdist - r1) * ${glf(PRIMARY_RIPPLE_BAND)};
+  float w1 = exp(-b1 * b1) * exp(-age / ${glf(PRIMARY_RIPPLE_DURATION)}) * live;
+
+  // Secondary: a wider, softer, slower wave that pushes more than it glows.
+  float r2 = age * ${glf(SECONDARY_RIPPLE_SPEED)};
+  float b2 = (rdist - r2) * ${glf(SECONDARY_RIPPLE_BAND)};
+  float w2 = exp(-b2 * b2) * exp(-age / ${glf(SECONDARY_RIPPLE_DURATION)}) * live;
+
+  vec2  ripple = rdirN * (w1 * ${glf(PRIMARY_RIPPLE_PUSH)} + w2 * ${glf(SECONDARY_RIPPLE_PUSH)});
+
+  // Advection upstream · hover gravity-well pull · wake along travel · settle
+  // local overshoot · ripples push outward. No displacement at rest → calm.
+  vec2  warped = auv - vel * force + hover + wake + settle - ripple;
 
   // ── Procedural dot grid (no textures) ──────────────────────────────────
   vec2  cellId = floor(warped * u_density);
@@ -150,18 +245,29 @@ void main() {
   // ── Color + subtle falloff / vignette for depth ────────────────────────
   float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
 
-  // The cursor is a glow pocket. The hue goes (near) fully emerald within the
-  // pocket so it reads as emerald in BOTH themes — in light mode the base dots
-  // are black, so a weak mix would just look dark, not emerald. The ripple ring
-  // borrows the same emerald as it passes through.
-  float motion = length(vel) * force;
-  float warm   = clamp(force * 2.2 + motion * 6.0 + wave * 1.6, 0.0, 1.0);
+  // A soft emerald halo (colour only, no displacement), centred on the pointer
+  // so the gravity well reads as a bright pocket where the dots gather.
+  float glow = smoothstep(u_radius * ${glf(MAGNET_GLOW_RADIUS)}, 0.0, dist) * u_intensity;
+
+  // The cursor is an emerald energy pocket. The hue goes (near) fully emerald
+  // within it so it reads as emerald in BOTH themes — in light mode the base
+  // dots are black, so a weak mix would just look dark, not emerald. Emerald
+  // rises with proximity, cursor speed, and the ripple wavefronts.
+  float warm = clamp(force * 0.9
+                   + glow * 0.6
+                   + u_speed * 7.0 * glow
+                   + w1 * ${glf(PRIMARY_RIPPLE_BRIGHT)}
+                   + w2 * ${glf(SECONDARY_RIPPLE_BRIGHT)}, 0.0, 1.0);
 
   vec3  color = mix(u_baseColor.rgb, u_tintColor, warm);
-  // Brighten near the cursor; the glow sidesteps most of the vignette so it
-  // stays emerald even toward the edges, while the resting grid fades for depth.
-  float alpha = (u_baseColor.a * vignette * character * breathe +
-                 force * 0.35 + motion * 3.0 + wave * 0.6) * disc;
+  // Interaction brightness is added OUTSIDE the vignette multiply, so the glow
+  // stays emerald even toward the edges while the resting grid fades for depth.
+  float alpha = (u_baseColor.a * vignette * character * breathe
+               + force * 0.30
+               + glow * 0.16
+               + u_speed * 2.6 * glow
+               + w1 * ${glf(PRIMARY_RIPPLE_BRIGHT)}
+               + w2 * ${glf(SECONDARY_RIPPLE_BRIGHT)}) * disc;
 
   gl_FragColor = vec4(color, alpha);
 }
@@ -197,6 +303,7 @@ export function ShaderGrid({
   tintColor = DEFAULT_TINT,
   fallbackOpacity = 1,
   shimmer = 1,
+  interactive = true,
 }: ShaderGridProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -301,6 +408,9 @@ export function ShaderGrid({
       time: gl.getUniformLocation(program, "u_time"),
       ripple: gl.getUniformLocation(program, "u_ripple"),
       shimmer: gl.getUniformLocation(program, "u_shimmer"),
+      heading: gl.getUniformLocation(program, "u_heading"),
+      speed: gl.getUniformLocation(program, "u_speed"),
+      settle: gl.getUniformLocation(program, "u_settle"),
     }
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -321,6 +431,19 @@ export function ShaderGrid({
     let velY = 0
     let intensity = 0
     let targetIntensity = 0
+    // Persistent travel heading (unit) + eased speed — feed the magnet bias,
+    // the directional wake, and the velocity-driven glow.
+    let headingX = 0
+    let headingY = 0
+    let speed = 0
+    // Settling: capture the burst's peak energy + stop location, then play a
+    // short JS-computed damped oscillation back toward rest.
+    let movePeak = 0
+    let lastSpeed = 0
+    let settleCenterX = 0.5
+    let settleCenterY = 0.5
+    let settleStart = -1e9
+    let settleEnergy = 0
     // Click ripple — centre in normalized UV, age derived per frame.
     let rippleX = 0.5
     let rippleY = 0.5
@@ -376,10 +499,12 @@ export function ShaderGrid({
         : 1 / 60
       lastTime = now
 
-      // Smooth interpolation — soft, never snapping (time-based).
-      mx = approach(mx, targetX, 5.0, dt)
-      my = approach(my, targetY, 5.0, dt)
-      intensity = approach(intensity, targetIntensity, 3.7, dt)
+      // Smooth interpolation — soft, never snapping (time-based). Tracks the
+      // cursor briskly so the field feels reactive, still eased enough to stay
+      // liquid rather than rigid.
+      mx = approach(mx, targetX, 7.5, dt)
+      my = approach(my, targetY, 7.5, dt)
+      intensity = approach(intensity, targetIntensity, 5.5, dt)
 
       // Watery drag: cursor velocity normalized to a 60fps frame so the drag
       // amount matches on 60Hz and 120Hz, eased for inertia so the dots keep
@@ -399,6 +524,46 @@ export function ShaderGrid({
         dragY = (dragY / dmag) * maxDrag
       }
 
+      // Eased cursor speed (decoupled from the clamped drag) → wake + glow gain.
+      const instSpeed = Math.hypot(instX, instY)
+      speed = approach(speed, instSpeed, 12.0, dt)
+
+      // Persistent travel heading — updated only while genuinely moving, so the
+      // magnet keeps a faint directional lean for a beat after the cursor stops.
+      if (instSpeed > SETTLE_MIN_SPEED) {
+        const inv = 1 / instSpeed
+        headingX = approach(headingX, instX * inv, 10.0, dt)
+        headingY = approach(headingY, instY * inv, 10.0, dt)
+      }
+
+      // Settling — capture the burst's peak energy + freeze the spot when the
+      // motion ends; a damped sinusoid (real-time t → fps-independent) then
+      // plays a brief local overshoot back to rest over ~250–450ms.
+      let settleX = 0
+      let settleY = 0
+      if (speed > SETTLE_MIN_SPEED) {
+        movePeak = Math.max(movePeak, speed)
+      } else if (lastSpeed > SETTLE_MIN_SPEED) {
+        settleStart = now
+        settleEnergy = Math.min(movePeak, SETTLE_MAX_ENERGY)
+        settleCenterX = mx
+        settleCenterY = my
+        movePeak = 0
+      }
+      lastSpeed = speed
+      if (settleEnergy > 0) {
+        const st = (now - settleStart) / 1000
+        if (st > 0.6) {
+          settleEnergy = 0
+        } else {
+          const osc =
+            Math.exp(-st / SETTLE_DECAY) * Math.sin(2 * Math.PI * SETTLE_FREQUENCY * st)
+          const mag = settleEnergy * osc * SETTLE_STRENGTH
+          settleX = headingX * mag
+          settleY = headingY * mag
+        }
+      }
+
       gl.uniform2f(u.resolution, width, height)
       gl.uniform2f(u.mouse, mx, my)
       gl.uniform1f(u.intensity, intensity)
@@ -411,13 +576,16 @@ export function ShaderGrid({
       // Wrap the clock hourly to keep float precision healthy in the shader.
       gl.uniform1f(u.time, (now / 1000) % 3600)
       gl.uniform1f(u.shimmer, shimmer)
+      gl.uniform2f(u.heading, headingX, headingY)
+      gl.uniform1f(u.speed, speed)
+      gl.uniform4f(u.settle, settleCenterX, settleCenterY, settleX, settleY)
       const rippleAge = (now - rippleStart) / 1000
       gl.uniform4f(
         u.ripple,
         rippleX,
         rippleY,
         Math.min(rippleAge, 10),
-        rippleAge < 1.8 ? 1 : 0
+        rippleAge < RIPPLE_LIFE ? 1 : 0
       )
 
       gl.clearColor(0, 0, 0, 0)
@@ -491,14 +659,19 @@ export function ShaderGrid({
       kick()
     }
 
-    window.addEventListener("pointermove", onPointerMove, { passive: true })
-    window.addEventListener("pointerdown", onPointerDown, { passive: true })
-    window.addEventListener("blur", release)
+    // Cursor reactivity is opt-out: when interactive=false we never attach the
+    // pointer handlers, so intensity/velocity stay 0 and only the autonomous
+    // shimmer animates. Resize / visibility / observers stay wired regardless.
+    if (interactive) {
+      window.addEventListener("pointermove", onPointerMove, { passive: true })
+      window.addEventListener("pointerdown", onPointerDown, { passive: true })
+      window.addEventListener("blur", release)
+      document.addEventListener("pointerleave", release)
+    }
     window.addEventListener("resize", scheduleResize, { passive: true })
     window.addEventListener("orientationchange", scheduleResize)
     window.visualViewport?.addEventListener("resize", scheduleResize, { passive: true })
     window.visualViewport?.addEventListener("scroll", scheduleResize, { passive: true })
-    document.addEventListener("pointerleave", release)
     const onVisibilityChange = () => {
       visible = document.visibilityState === "visible"
       if (visible) {
@@ -582,7 +755,7 @@ export function ShaderGrid({
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, shimmer, colorKey, contextVersion])
+  }, [maxDpr, spacing, dotSize, radius, drag, maxDrag, shimmer, interactive, colorKey, contextVersion])
 
   // Static CSS fallback — matches the resting WebGL dot field, per theme. The
   // soft edge is centered on the true dot radius (instead of starting there and

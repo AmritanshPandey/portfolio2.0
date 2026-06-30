@@ -479,7 +479,7 @@ export function SystemLayout({ slug, children }: { slug: string; children?: Reac
 
             <div className="mt-10 text-center">
               <Link
-                href="/work"
+                href="/#work"
                 className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
               >
                 All work

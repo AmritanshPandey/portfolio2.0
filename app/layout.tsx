@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FancyCursor } from "@/components/shared/cursor"
+import { ThemeFab } from "@/components/shared/theme-fab"
+import { SiteBackground } from "@/components/shared/site-background"
 import { Grain } from "@/components/shared/motion"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { ScrollToHash } from "@/app/scroll-to-hash"
@@ -93,11 +95,19 @@ export default function RootLayout({
 
             <FancyCursor />
 
+            {/* Interactive dot field — a standalone, full-viewport background
+                layer (independent of the hero). Sits behind all content; the
+                opaque section bands scroll over it. */}
+            <SiteBackground />
+
             {/* Film grain — one quiet texture across every page */}
             <Grain />
 
             {/* Navbar */}
             <Navbar />
+
+            {/* Floating theme toggle — bottom-right, site-wide */}
+            <ThemeFab />
 
             {/* Content */}
             <main className="relative overflow-x-clip [transform:translateZ(0)]">

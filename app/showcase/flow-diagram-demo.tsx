@@ -24,6 +24,7 @@ const ROOT: FlowNode = {
       subtitle: "Landing",
       icon: IconHome2,
       status: "ok",
+      href: "/",
       children: [
         { id: "home-hero", title: "Hero", subtitle: "Intro", status: "ok" },
         { id: "home-work", title: "Work index", subtitle: "Featured" },
@@ -37,7 +38,17 @@ const ROOT: FlowNode = {
       icon: IconBriefcase,
       status: "ok",
       children: [
-        { id: "work-agent", title: "Agent Pay", subtitle: "Money20/20", status: "new" },
+        {
+          id: "work-agent",
+          title: "Agent Pay",
+          subtitle: "Money20/20",
+          status: "new",
+          edgeLabel: "featured",
+          children: [
+            { id: "work-agent-flow", title: "Checkout flow", subtitle: "Primary" },
+            { id: "work-agent-metrics", title: "Outcomes", subtitle: "Impact", status: "ok" },
+          ],
+        },
         { id: "work-bank", title: "PartnerBank", subtitle: "Platform" },
         { id: "work-safety", title: "Citizen Safety", subtitle: "Civic" },
       ],
@@ -62,7 +73,7 @@ const ROOT: FlowNode = {
       status: "ok",
       children: [
         { id: "sys-fintech", title: "Fintech AI", subtitle: "Interface" },
-        { id: "sys-components", title: "Components", subtitle: "Showcase", status: "new" },
+        { id: "sys-components", title: "Components", subtitle: "Showcase", status: "new", href: "/showcase" },
       ],
     },
     {
@@ -79,16 +90,34 @@ const ROOT: FlowNode = {
   ],
 }
 
-// Cross-links — any node to any node, beyond the tree edges.
+// Cross-links — any node to any node, beyond the tree edges (labels optional).
 const LINKS: FlowEdge[] = [
-  ["art-color", "sys-components"],
+  { from: "art-color", to: "sys-components", label: "tokens" },
   ["work-agent", "sys-fintech"],
 ]
 
 export function FlowDiagramDemo() {
   return (
-    <div className="overflow-x-auto pb-4">
-      <FlowDiagram className="mx-auto w-max py-4" root={ROOT} links={LINKS} />
+    // Break out of the page's centered max-w-5xl column to the full viewport
+    // width, so the diagram has room to breathe on desktop.
+    <div className="relative left-1/2 w-screen -translate-x-1/2">
+      {/* Static dot-grid background (pure CSS, no animation) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 text-foreground/[0.08] [background-image:radial-gradient(currentColor_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_100%)]"
+      />
+      <div className="relative overflow-x-auto px-6 py-6 md:px-10 md:py-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <FlowDiagram
+          className="mx-auto w-max"
+          root={ROOT}
+          links={LINKS}
+          columnGap={56}
+          rowGap={44}
+          indentStep={20}
+          draggable
+          showHelp
+        />
+      </div>
     </div>
   )
 }

@@ -36,9 +36,13 @@
 
 /* ─────────────────────────
    LIGHT
+
+   Also exposed as a `.light` class so a subtree can be force-lit even inside a
+   dark page (used by <BeforeAfter> for the live light↔dark theme split).
 ───────────────────────── */
 
-:root {
+:root,
+.light {
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.18 0 0);
 

@@ -28,7 +28,7 @@ interface Breadcrumb {
   client?: string
 }
 
-interface Props {
+export interface CsHeroShellProps {
   // Navigation context (backwards-compat)
   breadcrumb: Breadcrumb
   // Copy
@@ -122,7 +122,7 @@ export function CsHeroShell({
   readTime,
   publishedDate,
   topics,
-}: Props) {
+}: CsHeroShellProps) {
   const hasAside   = Boolean(aside)
   const metaEntries = meta ? Object.entries(meta).filter(([, v]) => Boolean(v)) : []
   const hasMeta    = metaEntries.length > 0

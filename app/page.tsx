@@ -36,12 +36,8 @@ export default function Page() {
       </Section>
 
       {/* ───────────────── APPROACH ───────────────── */}
-      <Section
-        id="approach"
-        bg="default"
-        title="Approach"
-        description="A practical operating model for moving from ambiguity to a decision teams can build from."
-      >
+      {/* Heading + intro live inside the deck (two-column), so no Section header here. */}
+      <Section id="approach" bg="default">
         <ProductDesignApproachSection />
       </Section>
 

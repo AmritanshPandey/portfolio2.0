@@ -12,12 +12,8 @@ import {
   type MouseEvent,
   type ReactNode,
 } from "react"
-import {
-  IconDownload,
-  IconHome,
-} from "@tabler/icons-react"
+import { IconHome } from "@tabler/icons-react"
 
-import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { scrollToSection } from "@/lib/scroll"
 
 type NavLink = {
@@ -27,13 +23,19 @@ type NavLink = {
   icon?: typeof IconHome
 }
 
-const NAV_LINKS: NavLink[] = [
+// Home + in-page sections (left group). These scroll to home sections.
+const SECTION_LINKS: NavLink[] = [
   { label: "Home", href: "/", section: "hero", icon: IconHome },
   { label: "Work", href: "/#work", section: "work" },
   { label: "Exploration", href: "/#explorations", section: "explorations" },
-  { label: "Gallery", href: "/gallery", section: "gallery" },
   { label: "Insights", href: "/#insights", section: "insights" },
   { label: "About", href: "/#about", section: "about" },
+]
+
+// Standalone pages (right group). These are real routes.
+const PAGE_LINKS: NavLink[] = [
+  { label: "Gallery", href: "/gallery", section: "gallery" },
+  { label: "Playground", href: "/showcase", section: "playground" },
 ]
 
 const SECTION_IDS = [
@@ -52,10 +54,11 @@ const DETAIL_ROUTES: Record<string, { section: string; label: string; href: stri
   "/systems": { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/explorations": { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/articles": { section: "insights", label: "Insights", href: "/#insights" },
-  "/gallery": { section: "gallery", label: "Work", href: "/#work" },
+  "/gallery": { section: "gallery", label: "Gallery", href: "/gallery" },
+  "/showcase": { section: "playground", label: "Playground", href: "/showcase" },
 }
 
-const NAV_IDS = NAV_LINKS.map((link) => link.section)
+const NAV_IDS = SECTION_LINKS.map((link) => link.section)
 const PENDING_HOME_SECTION_KEY = "portfolio:pending-home-section"
 
 function getDetailRoute(pathname: string) {
@@ -320,8 +323,9 @@ export default function Navbar() {
 
       <header className="fixed left-1/2 top-5 z-50 hidden w-[calc(100vw-2rem)] -translate-x-1/2 justify-center md:flex lg:top-7 lg:w-auto">
         <NavShell scrolled={scrolled}>
+          {/* Left: home + in-page sections */}
           <div className="relative flex items-center gap-1">
-            {NAV_LINKS.map((item) => (
+            {SECTION_LINKS.map((item) => (
               <PrimaryNavItem
                 key={item.href}
                 item={item}
@@ -333,16 +337,17 @@ export default function Navbar() {
 
           <Divider />
 
-          <ThemeToggle />
-
-          <Link
-            href="/resume.pdf"
-            target="_blank"
-            className="group/resume relative ml-1 flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border/70 px-3 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:border-accent/35 hover:bg-accent/[0.08] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            <span className="hidden lg:inline">Resume</span>
-            <IconDownload size={16} className="transition-transform duration-200 group-hover/resume:translate-y-0.5" />
-          </Link>
+          {/* Right: standalone pages */}
+          <div className="relative flex items-center gap-1">
+            {PAGE_LINKS.map((item) => (
+              <PrimaryNavItem
+                key={item.href}
+                item={item}
+                isActive={activeNavSection === item.section}
+                setActiveImmediate={setActive}
+              />
+            ))}
+          </div>
         </NavShell>
       </header>
 
@@ -406,7 +411,7 @@ export default function Navbar() {
               </div>
 
               <div className="flex flex-col gap-1 p-3">
-                {NAV_LINKS.map((item) => (
+                {SECTION_LINKS.map((item) => (
                   <PrimaryNavItem
                     key={item.href}
                     item={item}
@@ -422,19 +427,19 @@ export default function Navbar() {
 
                 <div className="my-1 h-px bg-border/55" />
 
-                <div className="flex items-center gap-2 px-1 py-1">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 bg-muted/35">
-                    <ThemeToggle />
-                  </div>
-                  <Link
-                    href="/resume.pdf"
-                    target="_blank"
-                    onClick={() => setOpen(false)}
-                    className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-medium text-muted-foreground transition hover:bg-muted/45 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    Resume <IconDownload size={16} />
-                  </Link>
-                </div>
+                {PAGE_LINKS.map((item) => (
+                  <PrimaryNavItem
+                    key={item.href}
+                    item={item}
+                    isActive={activeNavSection === item.section}
+                    setActiveImmediate={(id) => {
+                      setActive(id)
+                      setOpen(false)
+                    }}
+                    closeMenu={() => setOpen(false)}
+                    className="h-11 w-full justify-start rounded-2xl px-3 text-sm"
+                  />
+                ))}
               </div>
             </motion.div>
           </>

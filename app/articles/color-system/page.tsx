@@ -3,6 +3,7 @@
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
+import { ReadingProgress } from "@/components/shared/reading-progress"
 import { ColorScaleTool } from "@/components/shared/color-scale-tool"
 import { ColorSystemProvider } from "@/components/shared/color-system/context"
 import { PrimaryControls } from "@/components/shared/color-system/primary-controls"
@@ -255,6 +256,7 @@ function Hero() {
 export default function Page() {
   return (
     <main>
+      <ReadingProgress />
       <Hero />
 
       {/* 01 FOUNDATIONS */}

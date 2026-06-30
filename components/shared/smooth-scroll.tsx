@@ -51,6 +51,15 @@ export function SmoothScroll() {
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) return
 
+    // The navbar's home-section handoff (e.g. /gallery → "/#about") navigates to
+    // "/" without a hash and stashes the target in sessionStorage; ScrollToHash
+    // performs one controlled scroll to it. Don't fight that by snapping to top.
+    if (
+      typeof window !== "undefined" &&
+      window.sessionStorage.getItem("portfolio:pending-home-section")
+    )
+      return
+
     const lenis = lenisRef.current
     if (lenis) {
       lenis.scrollTo(0, { immediate: true })

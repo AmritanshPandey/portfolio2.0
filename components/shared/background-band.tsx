@@ -6,7 +6,7 @@ const GROUND_GRADIENT =
   "linear-gradient(to bottom, var(--background) 0%, transparent 22%, transparent 78%, var(--background) 100%)"
 
 export interface BackgroundBandProps {
-  /** The background layer, e.g. <AuroraGradientMesh />. Rendered behind content,
+  /** The background layer, e.g. <ConstellationNetwork />. Rendered behind content,
    *  non-interactive, filling the band. */
   bg: ReactNode
   /** Foreground content, centred and above the background. */
@@ -29,7 +29,7 @@ export interface BackgroundBandProps {
  * passed as `bg` is the only client part.
  *
  * @example
- * <BackgroundBand bg={<AuroraGradientMesh />}>
+ * <BackgroundBand bg={<ConstellationNetwork />}>
  *   <h2>Section title</h2>
  * </BackgroundBand>
  */

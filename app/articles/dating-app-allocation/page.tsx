@@ -3,6 +3,7 @@
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
+import { ReadingProgress } from "@/components/shared/reading-progress"
 import {
   LineageStrip,
   DiscoveryVsAllocation,
@@ -95,6 +96,7 @@ function Takeaways({ items }: { items: string[] }) {
 export default function Page() {
   return (
     <main>
+      <ReadingProgress />
       <Hero />
 
       {/* intro */}

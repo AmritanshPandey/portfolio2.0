@@ -49,7 +49,6 @@ void main() {
   float curtainMix = smoothstep(0.25, 0.48, uProgress) * (1.0 - smoothstep(0.64, 0.76, uProgress));
   float gridMix = smoothstep(0.50, 0.72, uProgress) * (1.0 - smoothstep(0.82, 0.94, uProgress));
   float collapseMix = smoothstep(0.74, 0.98, uProgress);
-  float stage = smoothstep(0.02, 0.92, uProgress);
   float pulse = sin(uProgress * 3.14159265);
   float layerOffset = uLayer * 0.42;
 
@@ -60,7 +59,7 @@ void main() {
 
   vec3 ribbon = vec3(
     aPosition.x * (3.2 + uLayer * 0.42),
-    aPosition.y * 0.42 + energy * (0.32 + uLayer * 0.08),
+    aPosition.y * 0.42 + energy * (0.18 + uLayer * 0.05),
     aPosition.z * 0.22
   );
   vec3 curtain = vec3(
@@ -86,31 +85,32 @@ void main() {
   p = mix(p, curtain, curtainMix);
   p = mix(p, grid, gridMix);
   p = mix(p, collapsed, collapseMix);
-  p += normalize(aPosition) * energy * (0.06 + pulse * 0.18) * (1.0 - collapseMix * 0.62);
+  p += normalize(aPosition) * energy * (0.035 + pulse * 0.085) * (1.0 - collapseMix * 0.62);
   p *= (1.15 + pulse * 0.16) * uLayerScale;
   p = rotateY(uTime * (0.14 - uLayer * 0.035) + ribbonMix * 0.8 + curtainMix * 0.25 - gridMix * 0.34 + uLayer * 0.18) * rotateX(-0.28 + ribbonMix * 0.24 + curtainMix * 0.44 - gridMix * 0.22 - uLayer * 0.08) * p;
 
   float cameraZ = 4.2;
   float perspective = 2.18 / (cameraZ - p.z);
   vec2 screen = vec2((p.x * perspective) / uAspect, p.y * perspective) + uOffset;
+  // ── Cursor: repel the field, parting a soft round pocket around the pointer.
+  // Presence-based (uCursorActive), so it reacts on hover, not only fast moves.
   vec2 fromCursor = screen - uCursor;
-  float cursorDistance = length(fromCursor);
-  float cursorGlow = smoothstep(0.56 + uLayer * 0.08, 0.0, cursorDistance) * uCursorActive;
+  float dist = length(fromCursor * vec2(uAspect, 1.0));
+  float radius = 0.62 + uLayer * 0.1;
+  float field = smoothstep(radius, 0.0, dist) * uCursorActive;
   float velocityBoost = clamp(uCursorVelocity * 4.5, 0.0, 1.0);
-  float vortex = cursorGlow * (0.22 + velocityBoost * 0.34) * (1.0 + stage * 0.36);
-  float angle = vortex * (2.35 + uLayer * 1.15);
-  float s = sin(angle);
-  float c = cos(angle);
-  mat2 vortexRotate = mat2(c, -s, s, c);
-  vec2 swirled = uCursor + vortexRotate * fromCursor;
-  vec2 tangent = normalize(vec2(-fromCursor.y, fromCursor.x) + vec2(0.0001)) * cursorGlow * velocityBoost * 0.08;
-  screen = mix(screen, swirled, cursorGlow * (0.55 + uLayer * 0.18)) + tangent;
-  p.z += cursorGlow * (0.48 + velocityBoost * 0.42 + uLayer * 0.18);
+  vec2 dir = fromCursor / max(length(fromCursor), 0.0008);
+  // Push outward, strongest near the cursor, so lines bend away and clear a pocket.
+  float push = field * field * (0.16 + uLayer * 0.04) * (1.0 + velocityBoost * 0.6);
+  screen += dir * push;
+  // Lift the parted lines toward the viewer so the rim catches light.
+  p.z += field * (0.42 + uLayer * 0.16);
   gl_Position = vec4(screen, 0.0, 1.0);
 
   vEnergy = energy * 0.5 + 0.5;
   vDepth = smoothstep(-1.6, 1.6, p.z);
-  vCursorGlow = cursorGlow * (0.7 + velocityBoost * 0.45);
+  // Lines piling at the pocket edge glow brightest; the center opens up.
+  vCursorGlow = field * (0.55 + 0.45 * field) + velocityBoost * field * 0.35;
 }
 `
 
@@ -124,14 +124,25 @@ varying float vEnergy;
 varying float vDepth;
 varying float vCursorGlow;
 
+// Smooth cyclic palette (Inigo Quilez cosine form) — sweeps the full hue
+// circle, so a single phase value reads as many colours.
+vec3 palette(float t) {
+  vec3 a = vec3(0.50, 0.50, 0.50);
+  vec3 b = vec3(0.50, 0.50, 0.50);
+  vec3 c = vec3(1.00, 1.00, 1.00);
+  vec3 d = vec3(0.00, 0.33, 0.67);
+  return a + b * cos(6.28318530718 * (c * t + d));
+}
+
 void main() {
-  vec3 deepEmerald = vec3(0.04, 0.42, 0.30);
-  vec3 hotEmerald = vec3(0.07, 0.82, 0.58);
-  vec3 paleMint = vec3(0.80, 0.98, 0.90);
-  vec3 ember = mix(deepEmerald, hotEmerald, vEnergy);
-  vec3 layerTint = mix(ember, vec3(0.10, 0.70, 0.50), uLayer * 0.42);
-  vec3 color = mix(layerTint, paleMint, smoothstep(0.45, 1.0, uProgress) * vDepth);
-  color = mix(color, vec3(0.90, 1.0, 0.96), vCursorGlow);
+  // Spread the hue across the mesh by energy, depth and layer (plus a slow
+  // scroll drift) so the field reads multi-colour rather than one emerald wash.
+  float hue = vEnergy * 0.58 + vDepth * 0.34 + uLayer * 0.20 + uProgress * 0.22;
+  vec3 color = palette(hue);
+  // Keep saturation lively but lift the mid-tones so lines stay luminous.
+  color = mix(color, vec3(0.92, 1.0, 0.97), vDepth * 0.18);
+  // Bright emerald rim where the lines part around the cursor.
+  color = mix(color, vec3(0.50, 1.0, 0.78), clamp(vCursorGlow, 0.0, 1.0));
   float collapseGlow = smoothstep(0.75, 1.0, uProgress);
   float alpha = (0.21 + vEnergy * 0.36 + uProgress * 0.08 + collapseGlow * 0.16 + vCursorGlow * 0.5) * uLayerOpacity;
   gl_FragColor = vec4(color, alpha);
@@ -271,7 +282,7 @@ export function WebglScrollShaderDemo() {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     const program = createProgram(gl)
-    const vertices = buildSphereLineMesh(60, 104)
+    const vertices = buildSphereLineMesh(80, 140)
     const buffer = gl.createBuffer()
     if (!buffer) return
 
@@ -386,7 +397,7 @@ export function WebglScrollShaderDemo() {
         : currentProgress + (targetProgress - currentProgress) * 0.075
       currentCursorX += (targetCursorX - currentCursorX) * 0.12
       currentCursorY += (targetCursorY - currentCursorY) * 0.12
-      currentCursorActive += (targetCursorActive - currentCursorActive) * 0.1
+      currentCursorActive += (targetCursorActive - currentCursorActive) * 0.14
       currentCursorVelocity += (targetCursorVelocity - currentCursorVelocity) * 0.16
       targetCursorVelocity *= 0.86
 
@@ -541,17 +552,17 @@ export function WebglScrollShaderDemo() {
           >
             <div
               className={[
-                "max-w-sm [text-shadow:0_2px_24px_rgba(8,10,9,0.95)]",
-                index % 2 === 1 ? "ml-auto text-right" : "",
+                "max-w-sm rounded-2xl border border-white/12 bg-neutral-950/55 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl",
+                index % 2 === 1 ? "ml-auto" : "",
               ].join(" ")}
             >
               <span className="block text-sm font-semibold tabular-nums text-emerald-400">
                 {String(index + 1).padStart(2, "0")} / 05
               </span>
-              <h2 className="mt-2 text-2xl font-semibold leading-tight text-white">
+              <h2 className="mt-2 text-xl font-semibold leading-tight text-white">
                 {stage.title}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-white/75">{stage.text}</p>
+              <p className="mt-3 text-sm leading-6 text-white/70">{stage.text}</p>
             </div>
           </div>
         ))}

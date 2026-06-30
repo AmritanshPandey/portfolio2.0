@@ -9,11 +9,9 @@
  */
 
 export { DottedGlowBackground, type DottedGlowBackgroundProps } from "./dotted-glow-background"
-export { DottedGravityBackground, type DottedGravityBackgroundProps } from "./dotted-gravity-background"
+export { AsciiFlowBackground, type AsciiFlowBackgroundProps } from "./ascii-flow-background"
 export { ConstellationNetwork, type ConstellationNetworkProps } from "./constellation-network"
-export { FlowFieldParticles, type FlowFieldParticlesProps } from "./flow-field-particles"
-export { AuroraGradientMesh, type AuroraGradientMeshProps } from "./aurora-gradient-mesh"
-export { MagneticLineField, type MagneticLineFieldProps } from "./magnetic-line-field"
+export { GradientShineBackground, type GradientShineBackgroundProps } from "./gradient-shine-background"
 
 export { ShaderGrid } from "@/components/shared/shader-grid"
 export { ShaderHaze } from "@/components/shared/shader-haze"

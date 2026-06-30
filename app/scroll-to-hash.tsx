@@ -15,6 +15,13 @@ const HOME_SECTION_IDS = new Set([
   "about",
 ])
 
+const PENDING_HOME_SECTION_KEY = "portfolio:pending-home-section"
+
+function getPendingHomeSection() {
+  const id = window.sessionStorage.getItem(PENDING_HOME_SECTION_KEY)
+  return id && HOME_SECTION_IDS.has(id) ? id : null
+}
+
 function resetPageScroll() {
   window.scrollTo({ top: 0, left: 0, behavior: "auto" })
   document.documentElement.scrollTop = 0
@@ -37,11 +44,13 @@ export function ScrollToHash() {
 
   useLayoutEffect(() => {
     if (window.location.hash) return
+    if (pathname === "/" && getPendingHomeSection()) return
     resetPageScroll()
   }, [pathname])
 
   useEffect(() => {
     const hash = window.location.hash
+    const pendingHomeSection = pathname === "/" ? getPendingHomeSection() : null
 
     let attempts = 0
     const maxAttempts = 12
@@ -75,6 +84,38 @@ export function ScrollToHash() {
       }
     }
 
+    // Scroll to a section, then re-settle. When arriving from another route the
+    // home page is still growing (images loading) so a single scroll can clamp
+    // short of far sections. We scroll immediately for instant motion, watch the
+    // target's absolute offset until layout stops shifting, then issue one final
+    // corrective scroll so far sections always land.
+    let settleRaf = 0
+    const settleToSection = (id: string) => {
+      scrollToSection(id)
+      let lastTop: number | null = null
+      let stable = 0
+      let frames = 0
+      const tick = () => {
+        const el = document.getElementById(id)
+        if (!el) return
+        const absTop = Math.round(el.getBoundingClientRect().top + window.scrollY)
+        if (absTop === lastTop) stable++
+        else {
+          stable = 0
+          lastTop = absTop
+        }
+        frames++
+        // Layout has held for a few frames (or we've waited ~1.2s) → final scroll.
+        if (stable >= 3 || frames > 72) {
+          scrollToSection(id)
+          setTimeout(updateCursorZone, 120)
+          return
+        }
+        settleRaf = requestAnimationFrame(tick)
+      }
+      settleRaf = requestAnimationFrame(tick)
+    }
+
     // ── Try scroll logic
     const tryScroll = () => {
       // 1. HASH priority
@@ -83,10 +124,7 @@ export function ScrollToHash() {
         const el = document.getElementById(id)
 
         if (el) {
-          scrollToSection(id)
-
-          // sync zone after scroll settles
-          setTimeout(updateCursorZone, 120)
+          settleToSection(id)
           if (pathname === "/" && HOME_SECTION_IDS.has(id)) {
             cleanHashTimer = setTimeout(() => {
               window.history.replaceState(window.history.state, "", "/")
@@ -96,14 +134,26 @@ export function ScrollToHash() {
         }
       }
 
-      // 2. Default page navigation should always start from the top.
-      if (!hash) {
+      // 2. Internal-page navbar handoff to a home section. This avoids Next
+      // hash navigation and lets Lenis perform a single controlled scroll.
+      if (pendingHomeSection) {
+        const el = document.getElementById(pendingHomeSection)
+
+        if (el) {
+          window.sessionStorage.removeItem(PENDING_HOME_SECTION_KEY)
+          settleToSection(pendingHomeSection)
+          return
+        }
+      }
+
+      // 3. Default page navigation should always start from the top.
+      if (!hash && !pendingHomeSection) {
         resetPageScroll()
         setTimeout(updateCursorZone, 120)
         return
       }
 
-      // 3. retry until DOM ready
+      // 4. retry until DOM ready
       if (attempts < maxAttempts) {
         attempts++
         requestAnimationFrame(tryScroll)
@@ -130,6 +180,7 @@ export function ScrollToHash() {
     return () => {
       clearTimeout(t)
       if (cleanHashTimer) clearTimeout(cleanHashTimer)
+      if (settleRaf) cancelAnimationFrame(settleRaf)
       window.removeEventListener("scroll", onScroll)
     }
   }, [pathname])

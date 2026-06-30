@@ -6,7 +6,6 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  ReferenceLine,
   ReferenceDot,
 } from "recharts"
 import {

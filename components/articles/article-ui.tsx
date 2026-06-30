@@ -25,40 +25,6 @@ export function CategoryPill({
   )
 }
 
-function ArticleMetaStack({ article }: { article: ArticleItem }) {
-  return (
-    <dl className="grid gap-4 text-[12px] leading-5 text-muted-foreground">
-      {article.category ? (
-        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
-          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Category</dt>
-          <dd className="mt-2 font-medium text-foreground">{article.category}</dd>
-        </div>
-      ) : null}
-      {article.date || article.readTime ? (
-        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
-          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Reading</dt>
-          <dd className="mt-2 space-y-1 font-medium text-foreground/78">
-            {article.date ? <p>{article.date}</p> : null}
-            {article.readTime ? <p>{article.readTime}</p> : null}
-          </dd>
-        </div>
-      ) : null}
-      {article.tags && article.tags.length > 0 ? (
-        <div className="rounded-xl border border-border/55 bg-background/55 p-3">
-          <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Topics</dt>
-          <dd className="mt-2 flex flex-wrap gap-1.5">
-            {article.tags.slice(0, 4).map((tag) => (
-              <span key={tag} className="rounded-full border border-border/60 bg-foreground/[0.03] px-2 py-1 text-[11px] text-foreground/68">
-                {tag}
-              </span>
-            ))}
-          </dd>
-        </div>
-      ) : null}
-    </dl>
-  )
-}
-
 export function ReadingMeta({
   date,
   readTime,

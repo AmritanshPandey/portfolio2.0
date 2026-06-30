@@ -12,10 +12,10 @@ export interface DottedGlowBackgroundProps {
   gap?: number
   /** Dot radius, in px. */
   radius?: number
-  /** CSS variable names for the base dot colour. */
+  /** CSS variable names or CSS colour values for the base dot colour. */
   colorLightVar?: string
   colorDarkVar?: string
-  /** CSS variable names for the glow colour the dots twinkle towards. */
+  /** CSS variable names or CSS colour values for the glow colour the dots twinkle towards. */
   glowColorLightVar?: string
   glowColorDarkVar?: string
   /** Opacity of a solid background fill drawn behind the dots (0–1). */
@@ -78,10 +78,10 @@ export function DottedGlowBackground({
       const [r, g, b, a] = pctx.getImageData(0, 0, 1, 1).data
       return `rgba(${r}, ${g}, ${b}, ${a / 255})`
     }
-    const resolve = (name: string | undefined, fallback: string) => {
-      const raw = name
-        ? getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-        : ""
+    const resolve = (nameOrColor: string | undefined, fallback: string) => {
+      const raw = nameOrColor?.startsWith("--")
+        ? getComputedStyle(document.documentElement).getPropertyValue(nameOrColor).trim()
+        : nameOrColor ?? ""
       return toRGBA(raw || fallback)
     }
 
@@ -137,21 +137,23 @@ export function DottedGlowBackground({
         ctx.arc(d.x, d.y, radius, 0, TAU)
         ctx.fill()
 
-        // flowing glow field — overlapping low-frequency waves drift soft
-        // clusters of brightness across the grid (rather than uniform twinkle)
+        // Shimmer field — low-frequency waves drift brightness across the
+        // grid. Dot radius stays fixed; only colour/alpha changes.
         const wave =
-          (Math.sin(d.x * 0.018 + time * 0.7) +
-            Math.sin(d.y * 0.022 - time * 0.5) +
-            Math.sin((d.x + d.y) * 0.013 + d.phase + time * 0.6 * d.speed)) /
-          3 // −1..1
+          (Math.sin(d.x * 0.032 + time * 0.85) +
+            Math.sin(d.y * 0.028 - time * 0.65) +
+            Math.sin((d.x - d.y) * 0.018 + d.phase + time * 0.75 * d.speed)) /
+          3 // -1..1
+        const scan = Math.sin((d.x + d.y) * 0.012 - time * 1.15 + d.phase * 0.35)
         let glow = wave * 0.5 + 0.5 // 0..1
-        glow = glow * glow * glow * d.bright // gamma → sparse, punchy clusters
+        glow = Math.max(glow, scan * 0.5 + 0.5)
+        glow = glow * glow * glow * d.bright // gamma -> sparse shimmer clusters
 
         if (glow > 0.015) {
-          ctx.globalAlpha = opacity * glow
+          ctx.globalAlpha = opacity * Math.min(glow * 0.92, 1)
           ctx.fillStyle = colors.glow
           ctx.beginPath()
-          ctx.arc(d.x, d.y, radius * (1 + glow * 0.9), 0, TAU)
+          ctx.arc(d.x, d.y, radius, 0, TAU)
           ctx.fill()
         }
       }
@@ -159,9 +161,14 @@ export function DottedGlowBackground({
     }
 
     let raf = 0
+    let visible = true
     const loop = (t: number) => {
       draw(t)
-      raf = requestAnimationFrame(loop)
+      if (visible) raf = requestAnimationFrame(loop)
+      else raf = 0
+    }
+    const kick = () => {
+      if (!raf && visible && !reduced) raf = requestAnimationFrame(loop)
     }
 
     refreshColors()
@@ -170,8 +177,24 @@ export function DottedGlowBackground({
     if (reduced) {
       draw(0)
     } else {
-      raf = requestAnimationFrame(loop)
+      kick()
     }
+
+    // Pause the per-frame full-grid redraw while the canvas is scrolled
+    // off-screen — it's purely decorative, so there's nothing to animate then.
+    // (rAF already pauses on a hidden tab; this also covers off-screen.)
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting
+        if (visible) kick()
+        else if (raf) {
+          cancelAnimationFrame(raf)
+          raf = 0
+        }
+      },
+      { threshold: 0 }
+    )
+    io.observe(canvas)
 
     const ro = new ResizeObserver(() => build())
     ro.observe(canvas)
@@ -184,6 +207,7 @@ export function DottedGlowBackground({
 
     return () => {
       cancelAnimationFrame(raf)
+      io.disconnect()
       ro.disconnect()
       mo.disconnect()
     }

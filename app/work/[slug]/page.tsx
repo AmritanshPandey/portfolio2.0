@@ -4,6 +4,14 @@ import path from "path"
 import type { CaseStudy } from "@/lib/types/case-study"
 import { CaseStudyRenderer } from "@/components/case-study/case-study-renderer"
 
+const EXPLICIT_WORK_ROUTES = new Set([
+  "agent-commerce",
+  "citizen-safety",
+  "d2c-platform",
+  "email-builder",
+  "white-label-rfp",
+])
+
 // ── Data loader ────────────────────────────────────────────────
 function getCaseStudy(slug: string): CaseStudy | null {
   try {
@@ -21,7 +29,9 @@ export function generateStaticParams() {
     const dir = path.join(process.cwd(), "data", "case-studies")
     return readdirSync(dir)
       .filter((f) => f.endsWith(".json"))
-      .map((f) => ({ slug: f.replace(".json", "") }))
+      .map((f) => f.replace(".json", ""))
+      .filter((slug) => !EXPLICIT_WORK_ROUTES.has(slug))
+      .map((slug) => ({ slug }))
   } catch {
     return []
   }

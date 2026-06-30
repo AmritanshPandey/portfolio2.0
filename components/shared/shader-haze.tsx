@@ -46,7 +46,11 @@ void main() {
 `
 
 const FRAG_SRC = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform vec2  u_resolution;
 uniform float u_time;
@@ -144,6 +148,8 @@ export function ShaderHaze({
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [webglActive, setWebglActive] = useState(false)
+  // Bumped when a lost WebGL context is restored, to re-run the setup effect.
+  const [contextVersion, setContextVersion] = useState(0)
 
   const { isHigh, isBalanced } = usePerformanceMode()
   // The haze is soft, so a small buffer is indistinguishable — keep it cheap.
@@ -159,14 +165,28 @@ export function ShaderHaze({
     // Honour reduced motion — keep the static CSS gradient fallback.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
+    // Touch-primary devices (phones / tablets) keep the static CSS gradient too:
+    // the drift is near-imperceptible there, and skipping it avoids spinning up a
+    // full-screen WebGL context per page — lighter on battery and on iOS Safari's
+    // limited pool of live contexts. Matches the hero ShaderGrid's behaviour.
+    if (window.matchMedia("(pointer: coarse)").matches) return
+
     const gl = (canvas.getContext("webgl", {
       alpha: true,
       premultipliedAlpha: false,
-      antialias: true,
+      // A full-screen quad has no geometry edges, so MSAA does nothing visible
+      // here — it only costs GPU. Depth / stencil buffers are unused too.
+      antialias: false,
+      depth: false,
+      stencil: false,
+      powerPreference: "high-performance",
     }) ||
       canvas.getContext("experimental-webgl", {
         alpha: true,
         premultipliedAlpha: false,
+        antialias: false,
+        depth: false,
+        stencil: false,
       })) as WebGLRenderingContext | null
     if (!gl) return
 
@@ -221,6 +241,7 @@ export function ShaderHaze({
     let visible = true
     let painted = false
     let lastTime = 0
+    let contextLost = false
 
     const approach = (cur: number, target: number, rate: number, dt: number) =>
       cur + (target - cur) * (1 - Math.exp(-rate * dt))
@@ -229,6 +250,7 @@ export function ShaderHaze({
     let alpha = isDark() ? darkAlpha : lightAlpha
 
     const resize = () => {
+      if (contextLost) return
       dpr = Math.min(window.devicePixelRatio || 1, maxDpr)
       const rect = wrap.getBoundingClientRect()
       width = Math.max(1, Math.round(rect.width * dpr))
@@ -240,6 +262,7 @@ export function ShaderHaze({
     resize()
 
     const render = (now = performance.now()) => {
+      if (contextLost) return
       const dt = lastTime
         ? Math.min(Math.max((now - lastTime) / 1000, 1 / 240), 1 / 30)
         : 1 / 60
@@ -275,7 +298,7 @@ export function ShaderHaze({
     }
 
     const kick = () => {
-      if (!raf && visible) raf = requestAnimationFrame(render)
+      if (!raf && visible && !contextLost) raf = requestAnimationFrame(render)
     }
 
     const setTarget = (clientX: number, clientY: number) => {
@@ -322,6 +345,21 @@ export function ShaderHaze({
       attributeFilter: ["class"],
     })
 
+    // Safari (esp. iOS) drops WebGL contexts under memory pressure. Without
+    // this, render() would keep poking a dead context and the canvas would go
+    // blank; preventDefault keeps the context restorable, and restoring it
+    // re-runs the setup effect via contextVersion.
+    const onContextLost = (event: Event) => {
+      event.preventDefault()
+      contextLost = true
+      if (raf) cancelAnimationFrame(raf)
+      raf = 0
+      setWebglActive(false)
+    }
+    const onContextRestored = () => setContextVersion((v) => v + 1)
+    canvas.addEventListener("webglcontextlost", onContextLost)
+    canvas.addEventListener("webglcontextrestored", onContextRestored)
+
     kick()
 
     return () => {
@@ -329,14 +367,16 @@ export function ShaderHaze({
       window.removeEventListener("pointermove", onPointerMove)
       window.removeEventListener("blur", release)
       document.removeEventListener("pointerleave", release)
+      canvas.removeEventListener("webglcontextlost", onContextLost)
+      canvas.removeEventListener("webglcontextrestored", onContextRestored)
       ro.disconnect()
       io.disconnect()
       mo.disconnect()
-      gl.getExtension("WEBGL_lose_context")?.loseContext()
+      if (!contextLost) gl.getExtension("WEBGL_lose_context")?.loseContext()
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxDpr, key])
+  }, [maxDpr, key, contextVersion])
 
   // Static CSS fallback — a soft warm bloom that matches the haze at rest, so
   // the swap (or a no-WebGL / reduced-motion render) is seamless.

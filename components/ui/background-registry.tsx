@@ -2,11 +2,8 @@ import type { ComponentType } from "react"
 
 import {
   DottedGlowBackground,
-  DottedGravityBackground,
   ConstellationNetwork,
-  FlowFieldParticles,
-  AuroraGradientMesh,
-  MagneticLineField,
+  GradientShineBackground,
   ShaderGrid,
 } from "./backgrounds"
 
@@ -17,11 +14,8 @@ import {
  */
 export const BACKGROUNDS = {
   "dotted-glow": DottedGlowBackground,
-  "dotted-gravity": DottedGravityBackground,
   constellation: ConstellationNetwork,
-  "flow-field": FlowFieldParticles,
-  aurora: AuroraGradientMesh,
-  magnetic: MagneticLineField,
+  "gradient-shine": GradientShineBackground,
   "shader-grid": ShaderGrid,
 } as const
 

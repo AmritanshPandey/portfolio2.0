@@ -31,17 +31,17 @@ export function CsImage({ src, alt, caption, aspectRatio = "16/9", dark = false,
       className={clsx("w-full", className)}
     >
       <div className={clsx(
-        "relative w-full rounded-xl overflow-hidden",
+        "group relative w-full rounded-xl overflow-hidden transition-[border-color,transform] duration-500 ease-out motion-safe:hover:-translate-y-0.5",
         dark
-          ? "bg-neutral-900 border border-white/[0.06]"
-          : "bg-muted border border-border/40",
+          ? "bg-neutral-900 border border-white/[0.06] hover:border-white/[0.12]"
+          : "bg-muted border border-border/40 hover:border-border/60",
         ASPECT[aspectRatio]
       )}>
         <Image
           src={src}
           alt={alt}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-safe:group-hover:scale-[1.045]"
           sizes="(max-width: 768px) 100vw, 1000px"
         />
       </div>

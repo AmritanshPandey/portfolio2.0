@@ -4,7 +4,6 @@ import Image from "next/image"
 import { useRef, useCallback } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
-import { ShaderGrid } from "@/components/shared/shader-grid"
 import { Pill } from "@/components/shared/pill"
 
 /* Short, checkable proof — the strip under the hero leads with shipped
@@ -59,22 +58,12 @@ export default function Hero() {
     <section
       id="hero"
       ref={rootRef}
-      className="relative overflow-hidden bg-background text-foreground"
+      className="relative overflow-hidden text-foreground"
     >
-      {/* Cursor-reactive dot field — the pointer drags the dots like water
-          and pools an ember glow around itself. Fine-pointer desktops only;
-          the static-grid fallback + reduced-motion handling live inside. */}
-      <div className="hidden lg:block">
-        <ShaderGrid
-          spacing={18}
-          dotSize={0.07}
-          radius={0.13}
-          drag={1.35}
-          maxDrag={0.01}
-          fallbackOpacity={0.28}
-          fallbackClassName="hidden lg:block"
-        />
-      </div>
+      {/* The cursor-reactive dot field is no longer part of the hero — it's a
+          standalone, full-viewport layer (see <SiteBackground/> in the root
+          layout) that shows through this transparent section. The atmosphere
+          overlays below still ground that field at the section's edges. */}
 
       {/* Ground the section into the page bg, top and bottom */}
       <div
