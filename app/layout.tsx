@@ -11,6 +11,7 @@ import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { MotionConfig } from "framer-motion"
+import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx"
 
 const montserrat = Montserrat({
@@ -116,6 +117,8 @@ export default function RootLayout({
 
             {/* Footer */}
             <Footer />
+
+            <Analytics />
           </MotionConfig>
         </ThemeProvider>
       </body>
