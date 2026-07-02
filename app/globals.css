@@ -1100,3 +1100,29 @@ html:not(.js) main [style*="opacity: 0"] {
   opacity: 1 !important;
   transform: none !important;
 }
+
+/* ─────────────────────────
+   CHROMATIC LENS  (showcase/chromatic-lens)
+   The effect itself is drawn in WebGL (see chromatic-lens-hero.tsx): the
+   headline is rasterised to a texture and a fragment shader adds the
+   refracted, chromatically-aberrated, halftone, magenta lens inside a
+   cursor-following disc. These rules only style the DOM <h1> that sits under
+   the canvas as the no-JS / no-WebGL fallback (and the crawler-visible
+   heading), so the type reads correctly even when the shader never runs.
+───────────────────────── */
+
+.clens {
+  position: relative;
+}
+
+.clens__type {
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-align: center;
+  font-size: clamp(2.4rem, 10vw, 9.4rem);
+}
+.clens__type > span {
+  display: block;
+  white-space: nowrap;
+}
