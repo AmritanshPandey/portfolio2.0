@@ -23,6 +23,19 @@ import { IconArrowLeft } from "@tabler/icons-react"
 
 const LINES = ["Product design", "for fintech", "that can't", "afford to miss"]
 
+/** The headline lines, shared by the base heading and the aberrated ghost so
+ *  the two copies stay identical. Hoisted to module scope (not defined in
+ *  render) so its identity is stable — satisfies react-hooks/static-components. */
+function TypeLines() {
+  return (
+    <>
+      {LINES.map((line) => (
+        <span key={line}>{line}</span>
+      ))}
+    </>
+  )
+}
+
 export function ChromaticLensHero() {
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -51,11 +64,15 @@ export function ChromaticLensHero() {
     let running = true
     let last = performance.now()
 
+    const clamp = (v: number) => (v < 0 ? 0 : v > 100 ? 100 : v)
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return
       const r = root.getBoundingClientRect()
-      tx = ((e.clientX - r.left) / r.width) * 100
-      ty = ((e.clientY - r.top) / r.height) * 100
+      // Clamp to the hero box — the listener is global so the lens keeps
+      // following from anywhere, but the target never runs past the edges
+      // (which would otherwise send the disc off-screen and snap on re-entry).
+      tx = clamp(((e.clientX - r.left) / r.width) * 100)
+      ty = clamp(((e.clientY - r.top) / r.height) * 100)
     }
 
     const loop = (now: number) => {
@@ -103,14 +120,6 @@ export function ChromaticLensHero() {
     }
   }, [])
 
-  const Type = () => (
-    <div className="clens__type text-foreground">
-      {LINES.map((line) => (
-        <span key={line}>{line}</span>
-      ))}
-    </div>
-  )
-
   return (
     <main className="relative min-h-[100svh] bg-background text-foreground">
       {/* Halftone base grid — the light dotted field behind the type */}
@@ -150,8 +159,11 @@ export function ChromaticLensHero() {
         ref={rootRef}
         className="clens flex min-h-[100svh] flex-col justify-center px-5 md:px-8"
       >
-        {/* 1 — base type, always legible */}
-        <Type />
+        {/* 1 — base type, always legible. The page's primary content, so it's
+            the document's <h1>; the ghost copy below is aria-hidden. */}
+        <h1 className="clens__type text-foreground">
+          <TypeLines />
+        </h1>
 
         {/* 2 — accent bloom (unmasked halo) */}
         <div aria-hidden className="clens__layer clens__glow" />
@@ -160,9 +172,7 @@ export function ChromaticLensHero() {
         <div aria-hidden className="clens__layer clens__reveal">
           <div className="clens__halftone absolute inset-0" />
           <div className="clens__type clens__ghost">
-            {LINES.map((line) => (
-              <span key={line}>{line}</span>
-            ))}
+            <TypeLines />
           </div>
         </div>
 
