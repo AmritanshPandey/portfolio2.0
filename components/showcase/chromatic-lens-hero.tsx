@@ -7,25 +7,26 @@ import { IconArrowLeft } from "@tabler/icons-react"
 /**
  * Chromatic-lens hero — a WebGL recreation of the incredibles.dev hero.
  *
- * The giant headline is rasterised to a texture on an offscreen 2D canvas, then
- * a single full-screen fragment shader draws everything: the off-white canvas
- * with a faint square-dot halftone, the near-black type, and — inside a disc
- * that follows the cursor — a magnified, refracted, per-channel
- * chromatically-aberrated, halftone-screened, magenta-tinted copy of the
- * letters with a soft bloom.
+ * The centred headline is rasterised to a texture on an offscreen 2D canvas,
+ * then a single full-screen fragment shader draws everything: the light-gray
+ * canvas with a fine dark dot-grid, the near-black type, and — inside a disc
+ * that lags behind the cursor with inertia (leaving a comet stretch) — an
+ * authentic halftone where each pink dot's size grows with the darkness of the
+ * letter beneath it, plus a solid pink centre dot, a soft magenta bloom, and a
+ * subtle chromatic aberration.
  *
- * Progressive enhancement: a real, styled <h1> sits under the canvas. The
- * canvas is transparent until it has painted a frame, so if WebGL is missing,
- * JS is disabled, or the shader fails to compile, the headline still renders
- * and reads normally (and stays the document's <h1> for crawlers). Reduced
- * motion parks the lens and skips the rAF loop; touch devices get a slow
- * autonomous drift; fine pointers follow the cursor.
+ * Progressive enhancement: a real, styled <h1> sits under the canvas, so if
+ * WebGL is missing, JS is disabled, or the shader fails, the headline still
+ * renders and stays the document's crawler-visible heading. The canvas is
+ * transparent until it has painted a frame. Reduced motion parks the lens and
+ * skips the rAF loop; touch devices get a slow autonomous drift; fine pointers
+ * follow the cursor.
  */
 
-const LINES = ["Product design", "for fintech", "that can't", "afford to miss"]
+const LINES = ["Product design", "for fintech that", "can't afford", "to miss"]
 
-/** Reference magenta (the incredibles.dev lens hue). */
-const TINT: [number, number, number] = [1.0, 0.18, 0.49]
+/** Hot magenta — the incredibles.dev lens hue. */
+const TINT: [number, number, number] = [1.0, 0.12, 0.42]
 
 const VERT = `
 attribute vec2 a_pos;
@@ -36,7 +37,8 @@ const FRAG = `
 precision highp float;
 
 uniform vec2  u_res;       // drawing-buffer px
-uniform vec2  u_mouse;     // px, y-up (gl_FragCoord space)
+uniform vec2  u_mouse;     // px, y-up (lagged lens centre)
+uniform vec2  u_vel;       // px, lens velocity (for the comet stretch)
 uniform float u_intensity; // 0..1 ease in/out
 uniform float u_radius;    // lens radius, px
 uniform float u_dpr;
@@ -45,57 +47,64 @@ uniform vec3  u_bg;
 uniform vec3  u_ink;
 uniform vec3  u_tint;
 
-float textAt(vec2 fragUp) {
-  return texture2D(u_text, fragUp / u_res).r;
-}
+float txt(vec2 fragUp) { return texture2D(u_text, fragUp / u_res).r; }
 
 void main() {
-  vec2 frag = gl_FragCoord.xy;          // y-up
+  vec2 frag = gl_FragCoord.xy;   // y-up
   vec2 uv   = frag / u_res;
 
-  // ── Base: off-white canvas + faint square-dot halftone + near-black type ──
-  float cell   = 16.0 * u_dpr;
-  vec2  gpos   = mod(frag, cell) - cell * 0.5;
-  float bgDot  = 1.0 - smoothstep(0.6 * u_dpr, 1.4 * u_dpr, length(gpos));
-  vec3  col    = mix(u_bg, mix(u_bg, u_ink, 0.14), bgDot * 0.5);
+  // ── Base: light-gray canvas + fine dark dot-grid + near-black type ───────
+  float cell  = 9.0 * u_dpr;
+  vec2  gp    = mod(frag, cell) - cell * 0.5;
+  float bgDot = 1.0 - smoothstep(0.5 * u_dpr, 1.15 * u_dpr, length(gp));
+  vec3  col   = mix(u_bg, mix(u_bg, u_ink, 0.16), bgDot * 0.55);
+  col = mix(col, u_ink, txt(frag));
 
-  float baseTxt = textAt(frag);
-  col = mix(col, u_ink, baseTxt);
+  // ── Comet-stretched falloff: reach further on the trailing side ──────────
+  vec2  toC   = frag - u_mouse;
+  vec2  vdir  = length(u_vel) > 1.0 ? normalize(u_vel) : vec2(0.0);
+  float along = dot(toC, vdir);                       // >0 ahead, <0 behind
+  vec2  d     = toC - vdir * clamp(-along, 0.0, u_radius) * 0.55;
+  float dist  = length(d);
+  float fo    = smoothstep(u_radius, 0.0, dist) * u_intensity;
 
-  // ── Lens ─────────────────────────────────────────────────────────────────
-  float dist = distance(frag, u_mouse);
-  float fo   = smoothstep(u_radius, 0.0, dist) * u_intensity; // 1 centre → 0 rim
+  // Soft magenta bloom — always present under the pointer, spills past the disc.
+  float halo  = smoothstep(u_radius * 1.7, 0.0, length(toC)) * u_intensity;
+  col += u_tint * halo * halo * 0.14;
 
   if (fo > 0.001) {
     vec2  dir  = frag - u_mouse;
-    float rn   = clamp(dist / u_radius, 0.0, 1.0);
-    vec2  ndir = dir / max(dist, 1.0);
+    vec2  ndir = dir / max(length(dir), 1.0);
 
     // Refraction: magnify toward the centre, bulge near the rim.
-    vec2 lensFrag = u_mouse + dir * (1.0 - 0.34 * fo);
-    lensFrag += ndir * sin(rn * 3.14159) * 10.0 * u_dpr * fo;
+    vec2 lf = u_mouse + dir * (1.0 - 0.26 * fo);
+    lf += ndir * sin(clamp(length(dir) / u_radius, 0.0, 1.0) * 3.14159) * 7.0 * u_dpr * fo;
 
-    // Per-channel chromatic aberration along the radial direction.
-    vec2 ca = ndir * (7.0 * u_dpr) * fo;
-    float tr = textAt(lensFrag + ca);
-    float tg = textAt(lensFrag);
-    float tb = textAt(lensFrag - ca);
-    float txt = max(max(tr, tg), tb);
+    // Subtle per-channel chromatic aberration.
+    vec2 ca = ndir * 4.0 * u_dpr * fo;
+    float tr = txt(lf + ca);
+    float tg = txt(lf);
+    float tb = txt(lf - ca);
+    float cov = max(max(tr, tg), tb);
 
-    // Dense halftone dot-screen inside the disc.
-    float hcell = 6.0 * u_dpr;
-    vec2  hp    = mod(frag, hcell) - hcell * 0.5;
-    float dot   = 1.0 - smoothstep(1.6 * u_dpr, 2.6 * u_dpr, length(hp));
+    // Authentic halftone: each cell's dot RADIUS grows with letter darkness.
+    float hcell = 7.0 * u_dpr;
+    vec2  hc    = mod(frag, hcell) - hcell * 0.5;
+    float dotR  = sqrt(cov) * hcell * 0.66;
+    float dot   = 1.0 - smoothstep(dotR - 1.0 * u_dpr, dotR + 1.0 * u_dpr, length(hc));
 
-    // Magenta type with the RGB split showing cyan / red fringes.
-    vec3 lensCol = mix(u_bg, u_tint, txt);
-    lensCol += vec3(tr - tg, (tg - tr) * 0.5 + (tg - tb) * 0.5, tb - tg) * 0.9;
-    // Screen the letters through the halftone (darker between dots).
-    lensCol = mix(lensCol, lensCol * 0.5, (1.0 - dot) * txt * 0.7);
-    // Soft magenta bloom.
-    lensCol += u_tint * fo * (0.12 + txt * 0.10);
+    vec3 lensCol = u_bg;
+    lensCol = mix(lensCol, u_tint, dot);                 // pink halftone letters
+    lensCol += vec3(tr - tg, 0.0, tb - tg) * 0.5 * dot;  // cyan / red fringe
 
-    col = mix(col, lensCol, fo);
+    // Solid pink centre dot — the lagging "cursor".
+    float core = 1.0 - smoothstep(5.0 * u_dpr, 8.5 * u_dpr, dist);
+    lensCol = mix(lensCol, u_tint, core);
+
+    // Inner bloom lift.
+    lensCol += u_tint * fo * fo * 0.22;
+
+    col = mix(col, lensCol, clamp(fo * 1.25, 0.0, 1.0));
   }
 
   gl_FragColor = vec4(col, 1.0);
@@ -112,24 +121,6 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
     return null
   }
   return sh
-}
-
-function readVar(name: string, fallback: string) {
-  if (typeof window === "undefined") return fallback
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-  return v || fallback
-}
-
-/** Resolve a CSS color string to 0..1 rgb via a scratch canvas. */
-function toRGB(css: string): [number, number, number] {
-  const c = document.createElement("canvas")
-  c.width = c.height = 1
-  const ctx = c.getContext("2d")!
-  ctx.fillStyle = "#000"
-  ctx.fillStyle = css
-  ctx.fillRect(0, 0, 1, 1)
-  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data
-  return [r / 255, g / 255, b / 255]
 }
 
 export function ChromaticLensHero() {
@@ -168,6 +159,7 @@ export function ChromaticLensHero() {
     const u = {
       res: gl.getUniformLocation(prog, "u_res"),
       mouse: gl.getUniformLocation(prog, "u_mouse"),
+      vel: gl.getUniformLocation(prog, "u_vel"),
       intensity: gl.getUniformLocation(prog, "u_intensity"),
       radius: gl.getUniformLocation(prog, "u_radius"),
       dpr: gl.getUniformLocation(prog, "u_dpr"),
@@ -177,7 +169,7 @@ export function ChromaticLensHero() {
       tint: gl.getUniformLocation(prog, "u_tint"),
     }
 
-    // ── Text texture — rasterise the headline on an offscreen 2D canvas ──────
+    // ── Text texture — rasterise the centred headline offscreen ──────────────
     const tex = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_2D, tex)
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
@@ -188,7 +180,6 @@ export function ChromaticLensHero() {
 
     const textCanvas = document.createElement("canvas")
     const tctx = textCanvas.getContext("2d")!
-    // The real family that next/font applied to <body> (a hashed name).
     const family = getComputedStyle(document.body).fontFamily || "sans-serif"
 
     let dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -209,19 +200,18 @@ export function ChromaticLensHero() {
       textCanvas.height = H
       gl.viewport(0, 0, W, H)
 
-      const fs = Math.min(Math.max(cssW * 0.135, 44), 200) * dpr
-      const lh = fs * 0.92
-      const padX = 20 * dpr
+      const fs = Math.min(Math.max(cssW * 0.1, 40), 150) * dpr
+      const lh = fs * 0.98
       const blockH = lh * LINES.length
       let y = (H - blockH) / 2
 
       tctx.clearRect(0, 0, W, H)
       tctx.fillStyle = "#fff"
       tctx.textBaseline = "top"
-      tctx.textAlign = "left"
+      tctx.textAlign = "center"
       tctx.font = `700 ${fs}px ${family}`
       for (const line of LINES) {
-        tctx.fillText(line, padX, y)
+        tctx.fillText(line, W / 2, y)
         y += lh
       }
 
@@ -229,27 +219,39 @@ export function ChromaticLensHero() {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas)
     }
 
-    // ── Colours (theme-aware base; magenta lens matches the reference) ───────
-    let bg = toRGB(readVar("--background", "#fafafa"))
-    let ink = toRGB(readVar("--foreground", "#2b2b2b"))
+    // ── Palette — reference light gray / dark, switched on the .dark class ───
+    const isDark = () => document.documentElement.classList.contains("dark")
+    let bg: [number, number, number] = [0.922, 0.918, 0.91]
+    let ink: [number, number, number] = [0.09, 0.09, 0.09]
     const refreshColors = () => {
-      bg = toRGB(readVar("--background", "#fafafa"))
-      ink = toRGB(readVar("--foreground", "#2b2b2b"))
+      if (isDark()) {
+        bg = [0.055, 0.055, 0.055]
+        ink = [0.96, 0.96, 0.96]
+      } else {
+        bg = [0.922, 0.918, 0.91]
+        ink = [0.09, 0.09, 0.09]
+      }
     }
+    refreshColors()
 
     // ── Lens state ───────────────────────────────────────────────────────────
-    let mx = 0.42
-    let my = 0.52 // normalized (0..1), y-up
+    let mx = 0.5
+    let my = 0.52
     let tx = mx
     let ty = my
+    let pmx = mx
+    let pmy = my
+    let velX = 0
+    let velY = 0
     let intensity = reduce ? 1 : 0
     let targetIntensity = reduce ? 1 : coarse ? 1 : 0
-    const radius = () => Math.min(W, H) * (coarse ? 0.26 : 0.22)
+    const radius = () => Math.min(W, H) * (coarse ? 0.2 : 0.17)
 
     const draw = () => {
       gl.uniform2f(u.res, W, H)
       gl.uniform1f(u.dpr, dpr)
       gl.uniform2f(u.mouse, mx * W, my * H)
+      gl.uniform2f(u.vel, velX * W, velY * H)
       gl.uniform1f(u.intensity, intensity)
       gl.uniform1f(u.radius, radius())
       gl.uniform3f(u.bg, bg[0], bg[1], bg[2])
@@ -268,7 +270,6 @@ export function ChromaticLensHero() {
       canvas.style.opacity = "1"
     }
 
-    // Fonts settle before rasterising, or the texture uses a fallback face.
     let ready = false
     document.fonts.ready.then(() => {
       renderText()
@@ -277,7 +278,6 @@ export function ChromaticLensHero() {
       reveal()
     })
 
-    // ── Reduced motion: one static frame, no loop, no listeners ──────────────
     if (reduce) {
       return () => {
         gl.getExtension("WEBGL_lose_context")?.loseContext()
@@ -292,7 +292,7 @@ export function ChromaticLensHero() {
       if (e.pointerType === "touch") return
       const rect = root.getBoundingClientRect()
       tx = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
-      ty = Math.min(1, Math.max(0, 1 - (e.clientY - rect.top) / rect.height)) // flip to y-up
+      ty = Math.min(1, Math.max(0, 1 - (e.clientY - rect.top) / rect.height)) // y-up
       targetIntensity = 1
     }
     const onLeave = () => { targetIntensity = coarse ? 1 : 0 }
@@ -303,13 +303,19 @@ export function ChromaticLensHero() {
 
       if (coarse) {
         const s = now / 1000
-        tx = 0.5 + Math.sin(s * 0.55) * 0.24
-        ty = 0.5 + Math.sin(s * 0.9 + 1.1) * 0.16
+        tx = 0.5 + Math.sin(s * 0.5) * 0.26
+        ty = 0.5 + Math.sin(s * 0.85 + 1.1) * 0.17
       }
 
-      const k = 1 - Math.exp(-9 * dt)
+      // Lag the lens behind the pointer for inertia; derive velocity for the tail.
+      const k = 1 - Math.exp(-7 * dt)
       mx += (tx - mx) * k
       my += (ty - my) * k
+      const iv = 1 - Math.exp(-14 * dt)
+      velX += ((mx - pmx) - velX) * iv
+      velY += ((my - pmy) - velY) * iv
+      pmx = mx
+      pmy = my
       intensity += (targetIntensity - intensity) * (1 - Math.exp(-6 * dt))
 
       if (ready) {
@@ -370,12 +376,12 @@ export function ChromaticLensHero() {
   return (
     <main
       ref={rootRef}
-      className="clens relative min-h-[100svh] overflow-hidden bg-background text-foreground"
+      className="clens relative min-h-[100svh] overflow-hidden bg-[#ebeae7] text-[#171717] dark:bg-[#0e0e0e] dark:text-[#f4f4f4]"
     >
-      {/* Fallback + SEO: the real headline, styled like the hero. Sits under the
-          canvas, so it shows whenever WebGL / JS is unavailable. */}
-      <div className="clens absolute inset-0 z-0 flex flex-col justify-center px-5 md:px-8">
-        <h1 className="clens__type text-foreground">
+      {/* Fallback + SEO: the real, centred headline. Sits under the canvas, so
+          it shows whenever WebGL / JS is unavailable. */}
+      <div className="clens absolute inset-0 z-0 flex flex-col items-center justify-center px-5 text-center">
+        <h1 className="clens__type">
           {LINES.map((line) => (
             <span key={line}>{line}</span>
           ))}
@@ -394,23 +400,23 @@ export function ChromaticLensHero() {
         <div className="pointer-events-auto absolute left-5 top-24 flex flex-wrap items-center gap-2 md:left-8">
           <Link
             href="/showcase"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1.5 text-[12px] font-medium text-muted-foreground backdrop-blur-md transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45"
+            className="inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white/70 px-3 py-1.5 text-[12px] font-medium text-black/70 backdrop-blur-md transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff1e6b]/50 dark:border-white/15 dark:bg-white/[0.06] dark:text-white/70 dark:hover:text-white"
           >
             <IconArrowLeft size={14} stroke={2} />
             Showcase
           </Link>
-          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground backdrop-blur-md">
-            <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "#ff2e7e" }} />
+          <span className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white/70 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-black/60 backdrop-blur-md dark:border-white/15 dark:bg-white/[0.06] dark:text-white/60">
+            <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "#ff1e6b" }} />
             Kinetic type · Chromatic lens
           </span>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-8 md:pb-12">
-          <p className="max-w-[46ch] text-[15px] leading-relaxed text-foreground/75 md:text-[17px]">
+          <p className="max-w-[46ch] text-[15px] leading-relaxed text-black/70 dark:text-white/75 md:text-[17px]">
             Seven years shipping payments, platforms, and AI commerce, from the
             first demo to the CPO&apos;s Money20/20 stage.
           </p>
-          <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground/70">
+          <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-black/45 dark:text-white/50">
             Move your cursor
           </p>
         </div>
