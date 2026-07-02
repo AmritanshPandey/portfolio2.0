@@ -475,6 +475,16 @@ const BEHIND_SCENES_ITEMS = [
  */
 const CATALOG: { group: string; href: string; items: string[] }[] = [
   {
+    group: "Standalone experiments",
+    href: "/showcase/chromatic-lens",
+    items: ["ChromaticLensHero", "cursor lens", "chromatic aberration", "halftone", "kinetic type"],
+  },
+  {
+    group: "WebGL scroll shader",
+    href: "/showcase/webgl-scroll-shader",
+    items: ["Hand-written GLSL", "scroll-driven line mesh", "cursor swirl + heat"],
+  },
+  {
     group: "Home sections",
     href: "/",
     items: ["Hero", "RollingWord / TypingWord", "WorkIndex", "Insights", "ProductThinking"],
