@@ -20,8 +20,10 @@ export function SmoothScroll() {
     // Respect the OS reduced-motion preference — skip JS smooth scroll entirely.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
-    // Coarse-pointer devices keep native momentum scrolling (Lenis stays off
-    // for touch by default; this also sidesteps iOS Safari rubber-banding).
+    // Coarse-pointer devices keep native momentum scrolling. This avoids a
+    // global RAF loop on iPhone/iPad and sidesteps iOS Safari rubber-banding.
+    if (window.matchMedia("(pointer: coarse)").matches) return
+
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -36,8 +38,20 @@ export function SmoothScroll() {
     }
     rafRef.current = requestAnimationFrame(tick)
 
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      } else if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(tick)
+      }
+    }
+
+    document.addEventListener("visibilitychange", onVisibilityChange)
+
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
       lenis.destroy()
       lenisRef.current = null
       rafRef.current = null

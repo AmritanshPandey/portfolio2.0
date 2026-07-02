@@ -192,14 +192,27 @@ export function ShaderHaze({
 
     const vert = compile(gl, gl.VERTEX_SHADER, VERT_SRC)
     const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG_SRC)
-    if (!vert || !frag) return
+    if (!vert || !frag) {
+      if (vert) gl.deleteShader(vert)
+      if (frag) gl.deleteShader(frag)
+      return
+    }
 
     const program = gl.createProgram()
-    if (!program) return
+    if (!program) {
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
+      return
+    }
     gl.attachShader(program, vert)
     gl.attachShader(program, frag)
     gl.linkProgram(program)
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      gl.deleteProgram(program)
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
+      return
+    }
     gl.useProgram(program)
 
     const buffer = gl.createBuffer()
@@ -372,6 +385,10 @@ export function ShaderHaze({
       ro.disconnect()
       io.disconnect()
       mo.disconnect()
+      gl.deleteBuffer(buffer)
+      gl.deleteProgram(program)
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
       if (!contextLost) gl.getExtension("WEBGL_lose_context")?.loseContext()
       setWebglActive(false)
     }

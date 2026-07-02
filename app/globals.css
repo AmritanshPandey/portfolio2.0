@@ -103,6 +103,85 @@
   --surface-hover: oklch(0.215 0 0);
 }
 
+.bg-canvas-default {
+  background-color: oklch(0.98 0 0);
+}
+
+.dark .bg-canvas-default {
+  background-color: oklch(0.14 0 0);
+}
+
+.bg-canvas-muted {
+  background-color: oklch(0.965 0 0);
+}
+
+.dark .bg-canvas-muted {
+  background-color: oklch(0.105 0 0);
+}
+
+.bg-canvas-accent {
+  background-color: oklch(0.925 0 0);
+}
+
+.dark .bg-canvas-accent {
+  background-color: oklch(0.12 0 0);
+}
+
+.bg-canvas-raised {
+  background-color: oklch(0.985 0 0);
+}
+
+.dark .bg-canvas-raised {
+  background-color: oklch(0.14 0 0);
+}
+
+.bg-canvas-gallery {
+  background-color: oklch(0.98 0 0);
+}
+
+.dark .bg-canvas-gallery {
+  background-color: oklch(0.105 0 0);
+}
+
+.bg-canvas-subtle {
+  background-color: oklch(0.945 0 0);
+}
+
+.dark .bg-canvas-subtle,
+.dark .bg-canvas-raised-muted {
+  background-color: oklch(0.105 0 0);
+}
+
+.bg-canvas-raised-muted {
+  background-color: oklch(0.985 0 0);
+}
+
+.dark .dark-bg-surface-18 {
+  background-color: oklch(0.18 0 0);
+}
+
+.bg-accent-wash {
+  background-color: color-mix(in srgb, var(--accent) 18%, white);
+}
+
+.dark .bg-accent-wash {
+  background-color: color-mix(in srgb, var(--accent) 22%, black);
+}
+
+.bg-fin-surface-78 {
+  background-color: color-mix(in srgb, var(--fin-surface) 78%, transparent);
+}
+
+.bg-fin-surface-84 {
+  background-color: color-mix(in srgb, var(--fin-surface) 84%, transparent);
+}
+
+@media (width >= 48rem) {
+  .md-phone-offset-margin {
+    margin-top: var(--phone-offset);
+  }
+}
+
 .footer-social-link:hover,
 .footer-social-link:focus-visible {
   border-color: color-mix(in srgb, var(--footer-link-brand) 42%, transparent);
@@ -357,10 +436,10 @@
      row with the photo column, so the scale steps down to keep each
      line unbroken beside it (no text ever runs under the card). */
   .type-display-hero {
-    font-size: clamp(2.7rem, 7.2vw, 6rem);
-    line-height: 1.02;
+    font-size: clamp(2.35rem, 10vw, 3.35rem);
+    line-height: 1.04;
     font-weight: 700;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.026em;
     text-wrap: balance;
   }
 

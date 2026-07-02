@@ -35,7 +35,7 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
   const metaEntries = Object.entries(meta).filter(([, v]) => Boolean(v))
 
   return (
-    <div className="relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]">
+    <div className="bg-canvas-raised relative overflow-hidden">
 
       <ReadingProgress />
 

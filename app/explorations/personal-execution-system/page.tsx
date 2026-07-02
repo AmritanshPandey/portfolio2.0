@@ -141,7 +141,7 @@ function PlanrSectionHeader({
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--background),transparent_42%,var(--background))]" />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-28 md:grid-cols-[minmax(0,1fr)_420px] md:px-6 md:pb-24 md:pt-32">
@@ -199,7 +199,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="border-b border-border/60 bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.105_0_0)]">
+      <section className="bg-canvas-subtle border-b border-border/60">
         <div className="mx-auto max-w-6xl px-5 py-16 md:px-6 md:py-20">
           <div className="grid gap-3 sm:grid-cols-3">
             {metrics.map((item) => (
@@ -376,7 +376,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
 

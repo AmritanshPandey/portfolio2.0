@@ -30,7 +30,7 @@ export default function ContentPage({
   const sc = status ? statusConfig[status] : null
 
   return (
-    <main className="relative">
+    <div className="relative">
       <ReadingProgress />
 
       {/* ── Header band — the exploration's own hero ─────────────────── */}
@@ -99,6 +99,6 @@ export default function ContentPage({
           {children}
         </div>
       </div>
-    </main>
+    </div>
   )
 }

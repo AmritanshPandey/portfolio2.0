@@ -35,7 +35,7 @@ const SECTION_LINKS: NavLink[] = [
 // Standalone pages (right group). These are real routes.
 const PAGE_LINKS: NavLink[] = [
   { label: "Gallery", href: "/gallery", section: "gallery" },
-  { label: "Playground", href: "/showcase", section: "playground" },
+  { label: "Playground", href: "/playground", section: "playground" },
 ]
 
 const SECTION_IDS = [
@@ -55,6 +55,7 @@ const DETAIL_ROUTES: Record<string, { section: string; label: string; href: stri
   "/explorations": { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/articles": { section: "insights", label: "Insights", href: "/#insights" },
   "/gallery": { section: "gallery", label: "Gallery", href: "/gallery" },
+  "/playground": { section: "playground", label: "Playground", href: "/playground" },
   "/showcase": { section: "playground", label: "Playground", href: "/showcase" },
 }
 
@@ -219,7 +220,6 @@ function PrimaryNavItem({
         )}
       >
         {Icon ? <Icon size={16} strokeWidth={2} className="opacity-75" /> : item.label}
-        {isActive && !Icon ? <span aria-hidden className="h-1 w-1 rounded-full bg-accent" /> : null}
       </span>
     </Link>
   )
@@ -284,6 +284,20 @@ export default function Navbar() {
     window.addEventListener("resize", onResize)
     return () => window.removeEventListener("resize", onResize)
   }, [])
+
+  useEffect(() => {
+    if (!open) return
+
+    const previousBodyOverflow = document.body.style.overflow
+    const previousRootOverflow = document.documentElement.style.overflow
+    document.body.style.overflow = "hidden"
+    document.documentElement.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow
+      document.documentElement.style.overflow = previousRootOverflow
+    }
+  }, [open])
 
   useEffect(() => {
     if (!open) return

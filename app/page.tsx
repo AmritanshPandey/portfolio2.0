@@ -9,7 +9,7 @@ import { Section } from "@/components/shared/section"
 
 export default function Page() {
   return (
-    <main>
+    <>
 
       {/* ───────────────── HERO ───────────────── */}
       <Hero />
@@ -37,7 +37,7 @@ export default function Page() {
 
       {/* ───────────────── APPROACH ───────────────── */}
       {/* Heading + intro live inside the deck (two-column), so no Section header here. */}
-      <Section id="approach" bg="default">
+      <Section id="approach" bg="approach">
         <ProductDesignApproachSection />
       </Section>
 
@@ -79,6 +79,6 @@ export default function Page() {
         
       <AboutSection />
 
-    </main>
+    </>
   )
 }

@@ -140,7 +140,7 @@ export function CsPhoneShowcase({
             style={offsetStyle}
             className={cn(
               "flex flex-col",
-              item.offsetY && "md:mt-[var(--phone-offset)]",
+              item.offsetY && "md-phone-offset-margin",
               align === "center" && "items-center text-center",
               showCard
                 ? cn(

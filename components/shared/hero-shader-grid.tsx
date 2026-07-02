@@ -371,12 +371,16 @@ export function HeroShaderGrid({
     const vert = compile(gl, gl.VERTEX_SHADER, VERT_SRC)
     const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG_SRC)
     if (!vert || !frag) {
+      if (vert) gl.deleteShader(vert)
+      if (frag) gl.deleteShader(frag)
       setFallbackVisible(true)
       return
     }
 
     const program = gl.createProgram()
     if (!program) {
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
       setFallbackVisible(true)
       return
     }
@@ -384,6 +388,9 @@ export function HeroShaderGrid({
     gl.attachShader(program, frag)
     gl.linkProgram(program)
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      gl.deleteProgram(program)
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
       setFallbackVisible(true)
       return
     }
@@ -752,6 +759,11 @@ export function HeroShaderGrid({
       mo.disconnect()
       canvas.removeEventListener("webglcontextlost", onContextLost)
       canvas.removeEventListener("webglcontextrestored", onContextRestored)
+      gl.deleteBuffer(buffer)
+      gl.deleteProgram(program)
+      gl.deleteShader(vert)
+      gl.deleteShader(frag)
+      if (!contextLost) gl.getExtension("WEBGL_lose_context")?.loseContext()
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

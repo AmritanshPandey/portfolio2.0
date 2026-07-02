@@ -27,7 +27,7 @@ export function ArticlesIndex({ articles }: { articles: ArticleItem[] }) {
   const rest = active ? filtered : filtered.slice(1)
 
   return (
-    <main className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
       {/* Studio light — same quiet key light the home bands carry */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[520px] overflow-hidden">
         <div
@@ -100,6 +100,6 @@ export function ArticlesIndex({ articles }: { articles: ArticleItem[] }) {
       <section className="mx-auto max-w-6xl px-6 pb-28" aria-label="All articles">
         <BlogGrid articles={rest} />
       </section>
-    </main>
+    </div>
   )
 }

@@ -1,5 +1,3 @@
-"use client"
-
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
@@ -255,7 +253,7 @@ function Hero() {
 
 export default function Page() {
   return (
-    <main>
+    <div>
       <ReadingProgress />
       <Hero />
 
@@ -751,6 +749,6 @@ export default function Page() {
       </ColorSystemProvider>
 
       <RelatedArticles currentHref={HREF} />
-    </main>
+    </div>
   )
 }

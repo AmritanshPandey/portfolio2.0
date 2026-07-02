@@ -96,6 +96,7 @@ export function FancyCursor() {
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
     const dot      = dotRef.current
     const ring     = ringRef.current
@@ -184,22 +185,45 @@ export function FancyCursor() {
       if (pill)   pill.style.transform   = `translate3d(${rx.current}px,${ry.current}px,0)`
       if (imgPos) imgPos.style.transform = `translate3d(${irx.current}px,${iry.current}px,0)`
 
-      rafRef.current = requestAnimationFrame(tick)
+      if (document.visibilityState === "visible") {
+        rafRef.current = requestAnimationFrame(tick)
+      } else {
+        rafRef.current = 0
+      }
     }
 
-    rafRef.current = requestAnimationFrame(tick)
+    const startLoop = () => {
+      if (!rafRef.current && document.visibilityState === "visible") {
+        rafRef.current = requestAnimationFrame(tick)
+      }
+    }
+
+    const stopLoop = () => {
+      if (!rafRef.current) return
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+    }
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") stopLoop()
+      else startLoop()
+    }
+
+    startLoop()
     window.addEventListener("mousemove",     onMove,  { passive: true })
     document.addEventListener("pointerover", onOver)
     document.addEventListener("mouseleave",  onLeave)
     document.addEventListener("mouseenter",  onEnter)
+    document.addEventListener("visibilitychange", onVisibilityChange)
 
     return () => {
       root.classList.remove("custom-cursor")
-      cancelAnimationFrame(rafRef.current)
+      stopLoop()
       window.removeEventListener("mousemove",     onMove)
       document.removeEventListener("pointerover", onOver)
       document.removeEventListener("mouseleave",  onLeave)
       document.removeEventListener("mouseenter",  onEnter)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
     }
   }, [applyState])
 

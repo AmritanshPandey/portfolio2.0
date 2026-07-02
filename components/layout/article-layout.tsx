@@ -444,7 +444,7 @@ export function ArticleLayout({ slug }: { slug: string }) {
   if (!article) notFound()
 
   return (
-    <main>
+    <div>
       <ReadingProgress />
       <ArticleHeader article={article} />
 
@@ -475,6 +475,6 @@ export function ArticleLayout({ slug }: { slug: string }) {
       </div>
 
       <RelatedArticles currentHref={article.href} />
-    </main>
+    </div>
   )
 }

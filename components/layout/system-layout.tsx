@@ -393,7 +393,7 @@ export function SystemLayout({ slug, children }: { slug: string; children?: Reac
   const related = systemItems.filter(s => s.href !== system.href)
 
   return (
-    <main>
+    <div>
       {/* Hero */}
       <SystemHero
         title={system.title}
@@ -489,6 +489,6 @@ export function SystemLayout({ slug, children }: { slug: string; children?: Reac
           </div>
         </div>
       )}
-    </main>
+    </div>
   )
 }

@@ -19,10 +19,10 @@ interface Props {
 }
 
 const BG: Record<Variant, string> = {
-  default: "bg-[oklch(0.98_0_0)] dark:bg-[oklch(0.14_0_0)] text-foreground",
-  muted:   "bg-[oklch(0.965_0_0)] dark:bg-[oklch(0.105_0_0)] text-foreground",
+  default: "bg-canvas-default text-foreground",
+  muted:   "bg-canvas-muted text-foreground",
   // "dark" is a contrast/accent band: a deeper neutral in light mode, near-black in dark mode.
-  dark:    "bg-[oklch(0.925_0_0)] dark:bg-[oklch(0.12_0_0)] text-foreground",
+  dark:    "bg-canvas-accent text-foreground",
 }
 
 const EDGE_LINE = "bg-black/[0.05] dark:bg-white/[0.06]"

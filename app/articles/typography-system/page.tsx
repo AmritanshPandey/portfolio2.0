@@ -611,7 +611,7 @@ function TypographyLab() {
 export default function Page() {
   const article = articleItems.find(x => x.href === HREF)!
   return (
-    <main>
+    <div>
       <ReadingProgress />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -784,7 +784,7 @@ export default function Page() {
       </Section>
 
       <RelatedArticles currentHref={HREF} />
-    </main>
+    </div>
   )
 }
 

@@ -1568,7 +1568,7 @@ function ScreenFrame({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[24px] border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_84%,transparent)] p-3 shadow-[var(--fin-shadow-raised)] backdrop-blur-xl",
+        "bg-fin-surface-84 relative overflow-hidden rounded-[24px] border border-[var(--fin-border)] p-3 shadow-[var(--fin-shadow-raised)] backdrop-blur-xl",
         className
       )}
     >

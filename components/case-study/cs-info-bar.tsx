@@ -9,7 +9,7 @@ export interface CsInfoBarCell {
 
 export function CsInfoBar({ cells }: { cells: CsInfoBarCell[] }) {
   return (
-    <div className="border-y border-border bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]">
+    <div className="bg-canvas-raised border-y border-border">
       <div className="max-w-[1000px] mx-auto px-6">
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(var(--cs-info-cols),minmax(0,1fr))]"

@@ -135,7 +135,7 @@ export function CaseStudyPage({
         </aside>
 
         {/* ── Reading column ────────────────────────── */}
-        <main className="min-w-0">
+        <div className="min-w-0">
           {brand && (
             <motion.div
               initial={{ opacity: 0, y: RISE }}
@@ -199,7 +199,7 @@ export function CaseStudyPage({
               </motion.section>
             ))}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   )

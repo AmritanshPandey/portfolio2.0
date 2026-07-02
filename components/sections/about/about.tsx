@@ -59,7 +59,7 @@ export default function AboutSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative overflow-hidden bg-[oklch(0.98_0_0)] text-foreground dark:bg-[oklch(0.14_0_0)]"
+      className="bg-canvas-default relative overflow-hidden text-foreground"
       onPointerMove={moveGridLight}
       onPointerLeave={releaseGridLight}
       style={{

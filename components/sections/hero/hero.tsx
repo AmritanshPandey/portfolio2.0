@@ -6,14 +6,6 @@ import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { Pill } from "@/components/shared/pill"
 
-/* Short, checkable proof — the strip under the hero leads with shipped
-   outcomes, not adjectives. */
-const PROOF = [
-  "Agent Pay — demoed at Money20/20",
-  "PartnerBank — same-day RFP demos",
-  "7 years building fintech end to end",
-]
-
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -82,8 +74,7 @@ export default function Hero() {
         style={{ background: "radial-gradient(120% 90% at 50% 42%, transparent 52%, color-mix(in srgb, var(--background) 72%, transparent) 100%)" }}
       />
 
-      {/* Low warm pool anchoring the proof strip — the second, quieter
-          light of the studio scene */}
+      {/* Low warm pool anchoring the studio scene */}
       <div
         data-hero-atmosphere
         aria-hidden
@@ -96,18 +87,22 @@ export default function Hero() {
 
           {/* ── Left column: statement + supporting row ─────────────── */}
           <div className="flex min-w-0 flex-col">
-            <p
+            <div
               data-hero-fade
-              className="mb-6 flex flex-wrap items-center gap-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground md:mb-8"
+              className="mb-6 flex max-w-[34rem] items-start gap-3 md:mb-8"
             >
-              <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-              Product Thinker · Mastercard · 7 yrs in product
-            </p>
+              <span className="mt-[0.45rem] h-2.5 w-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_14px_rgba(16,185,129,0.5)]" />
+              <p className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium leading-6 tracking-normal text-muted-foreground/72 sm:text-[13px]">
+                <span className="text-foreground/74">Product thinker at Mastercard</span>
+                <span aria-hidden className="hidden h-3 w-px bg-border sm:inline-block" />
+                <span>7 yrs in product</span>
+              </p>
+            </div>
 
             {/* Each reveal mask carries 0.22em of bottom slack (pulled back
                 with a negative margin) so descenders — g, y, p — never get
                 cropped by the overflow clip at tight line-height. */}
-            <h1 className="type-display-hero relative z-10 max-w-[14ch]">
+            <h1 className="type-display-hero relative z-10 max-w-[16ch] md:max-w-[14ch]">
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
                 <span data-hero-line="1" className="block">Designing fintech</span>
               </span>
@@ -145,7 +140,7 @@ export default function Hero() {
           {/* ── Right column: the tilted polaroid, in its own lane ──── */}
           <div
             data-hero-card
-            className="relative mx-auto mt-12 w-[220px] rotate-[-2deg] md:mx-0 md:mt-0 md:w-[200px] md:justify-self-end md:rotate-[2.5deg] lg:w-[clamp(216px,19vw,280px)]"
+            className="relative mx-auto mt-12 w-[270px] rotate-[-2deg] md:mx-0 md:mt-0 md:w-[200px] md:justify-self-end md:rotate-[2.5deg] lg:w-[clamp(216px,19vw,280px)]"
           >
             <div
               ref={cardRef}
@@ -160,7 +155,7 @@ export default function Hero() {
                   alt="Amritansh Pandey"
                   fill
                   priority
-                  sizes="(max-width: 1024px) 240px, 290px"
+                  sizes="(max-width: 767px) 270px, (max-width: 1023px) 200px, 280px"
                   className="object-cover"
                 />
               </div>
@@ -189,22 +184,6 @@ export default function Hero() {
               usually mid-demo
             </p>
           </div>
-        </div>
-
-        {/* ── Proof strip — outcomes first, then the scroll cue ───────── */}
-        <div className="relative mt-14 flex items-center justify-between gap-6 border-t border-border/60 py-6 md:py-7">
-          <ul className="flex flex-wrap items-center gap-x-8 gap-y-2">
-            {PROOF.map((item) => (
-              <li
-                key={item}
-                data-hero-proof
-                className="font-mono text-[11px] tracking-[0.04em] text-muted-foreground"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-          <div data-hero-proof className="scroll-cue hidden h-9 w-px shrink-0 sm:block" aria-hidden />
         </div>
       </div>
     </section>

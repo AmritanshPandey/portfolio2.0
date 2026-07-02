@@ -1,7 +1,53 @@
 import type { Metadata } from "next"
 import { IconCoins } from "@tabler/icons-react"
 
+import { CsBehindScenes } from "@/components/case-study/cs-behind-scenes"
 import { CaseStudyPage } from "@/components/case-study/case-study-page"
+
+const LEARN_MORE_ITEMS = [
+  {
+    index: "01",
+    title: "Interactive Prototype",
+    description: "Explore the pickup experience end-to-end, built with Cursor and deployed on Vercel.",
+    image: {
+      src: "/assets/images/work/skincare-planner.jpg",
+      alt: "Mobile prototype preview",
+    },
+    cta: {
+      label: "Link to Prototype",
+      href: "/showcase/case-study",
+    },
+    rotation: -5,
+  },
+  {
+    index: "02",
+    title: "Process Book",
+    description: "See the entire process of research, synthesis, iterations, and design rationale.",
+    image: {
+      src: "/assets/images/work/white-label-platform.jpg",
+      alt: "Process book cover preview",
+    },
+    cta: {
+      label: "Link to Process Book",
+      href: "/assets/images/Wednesday.pdf",
+    },
+    rotation: -4,
+  },
+  {
+    index: "03",
+    title: "Video",
+    description: "A 2-minute walkthrough of how the designs work in real environments.",
+    image: {
+      src: "/assets/images/work/commerce-platform.jpg",
+      alt: "Video walkthrough preview",
+    },
+    cta: {
+      label: "Link to Video",
+      href: "/showcase",
+    },
+    rotation: 3,
+  },
+]
 
 export const metadata: Metadata = {
   title: "Case Study Template",
@@ -119,6 +165,18 @@ export default function CaseStudyTemplatePage() {
               Shipping a 0→1 surface taught me that the highest-leverage design move was upstream:
               naming the real problem before drawing a single screen.
             </p>
+          ),
+        },
+        {
+          id: "learn-more",
+          label: "Learn More",
+          content: (
+            <CsBehindScenes
+              eyebrow=""
+              heading="There's so much more behind the scene!"
+              items={LEARN_MORE_ITEMS}
+              className="pt-0"
+            />
           ),
         },
       ]}

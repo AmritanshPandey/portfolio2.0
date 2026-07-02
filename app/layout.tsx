@@ -2,6 +2,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
+import { FooterGate } from "@/components/layout/footer/footer-gate"
 import { FancyCursor } from "@/components/shared/cursor"
 import { ThemeFab } from "@/components/shared/theme-fab"
 import { SiteBackground } from "@/components/shared/site-background"
@@ -24,6 +25,8 @@ const caveat = Caveat({
   weight: ["400", "500"],
   variable: "--font-caveat",
 })
+
+const analyticsEnabled = process.env.VERCEL === "1"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio2-0-beta-one.vercel.app"),
@@ -116,9 +119,11 @@ export default function RootLayout({
             </main>
 
             {/* Footer */}
-            <Footer />
+            <FooterGate>
+              <Footer />
+            </FooterGate>
 
-            <Analytics />
+            {analyticsEnabled && <Analytics />}
           </MotionConfig>
         </ThemeProvider>
       </body>

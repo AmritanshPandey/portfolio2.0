@@ -14,7 +14,7 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
   if (nextStudies.length === 0) return null
 
   return (
-    <section className="relative overflow-hidden bg-[oklch(0.985_0_0)] text-foreground transition-colors duration-500 dark:bg-[oklch(0.105_0_0)]">
+    <section className="bg-canvas-raised-muted relative overflow-hidden text-foreground transition-colors duration-500">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.05] dark:bg-white/[0.06]" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/30 dark:bg-white/[0.02]" />
 

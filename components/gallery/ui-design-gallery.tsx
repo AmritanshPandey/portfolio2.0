@@ -221,33 +221,29 @@ export function UiDesignGallery() {
     }
 
     document.addEventListener("keydown", onKeyDown)
+    const previousBodyOverflow = document.body.style.overflow
+    const previousRootOverflow = document.documentElement.style.overflow
     document.body.style.overflow = "hidden"
+    document.documentElement.style.overflow = "hidden"
 
     return () => {
       document.removeEventListener("keydown", onKeyDown)
-      document.body.style.overflow = ""
+      document.body.style.overflow = previousBodyOverflow
+      document.documentElement.style.overflow = previousRootOverflow
     }
   }, [selectedShot])
 
   return (
     <div className="bg-background text-foreground">
-      <section className="relative overflow-hidden border-b border-border bg-[oklch(0.98_0_0)] pt-32 dark:bg-[oklch(0.105_0_0)] md:pt-36">
+      <section className="bg-canvas-gallery relative overflow-hidden border-b border-border pt-32 md:pt-36">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          {/* Animated ASCII flow field — the live hero backdrop. Denser +
-              brighter so there's real texture for the glass panel to refract. */}
           <AsciiFlowBackground opacity={0.85} cellSize={10} speed={0.8} />
-          {/* Fade the field out at the bottom so it grounds into the page */}
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-5 pb-10 md:px-6 md:pb-14">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,0.78fr)] lg:items-start">
-            {/* Liquid-glass panel — heavy blur + saturation, a specular top
-                sheen, and inset edge highlights so it reads as real glass. The
-                tint adapts per theme so the copy stays legible in light & dark
-                over the live ASCII field blurring through behind. */}
-            <div className="relative isolate overflow-hidden rounded-3xl border border-white/40 bg-white/25 p-6 backdrop-blur-xl backdrop-saturate-150 md:p-8 lg:max-w-sm lg:justify-self-start shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25),inset_0_1px_0_0_rgba(255,255,255,0.7),inset_0_0_0_1px_rgba(255,255,255,0.12)] dark:border-white/15 dark:bg-white/[0.07] dark:shadow-[0_14px_44px_-10px_rgba(0,0,0,0.65),inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_0_0_1px_rgba(255,255,255,0.06)]">
-              {/* Specular sheen — a soft diagonal highlight across the surface */}
+            <div className="relative isolate overflow-hidden rounded-3xl border border-white/40 bg-white/25 p-6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25),inset_0_1px_0_0_rgba(255,255,255,0.7),inset_0_0_0_1px_rgba(255,255,255,0.12)] backdrop-blur-xl backdrop-saturate-150 md:p-8 lg:max-w-sm lg:justify-self-start dark:border-white/15 dark:bg-white/[0.07] dark:shadow-[0_14px_44px_-10px_rgba(0,0,0,0.65),inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_0_0_1px_rgba(255,255,255,0.06)]">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/30 via-white/5 to-transparent opacity-80 dark:from-white/12 dark:via-transparent dark:opacity-70"
@@ -336,11 +332,10 @@ export function UiDesignGallery() {
         </div>
 
         <div className="grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
-          {filteredShots.map((shot, index) => (
+          {filteredShots.map((shot) => (
             <ShotCard
               key={shot.title}
               shot={shot}
-              priority={index < 2}
               onOpen={setSelectedShot}
             />
           ))}

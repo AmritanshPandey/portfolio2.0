@@ -630,7 +630,7 @@ function AccessibilitySection() {
 
 export function FintechSystemCatalogPage() {
   return (
-    <main className="fintech-system min-h-screen bg-[var(--fin-bg)] text-[var(--fin-text-primary)] selection:bg-emerald-400/20">
+    <div className="fintech-system min-h-screen bg-[var(--fin-bg)] text-[var(--fin-text-primary)] selection:bg-emerald-400/20">
       <section id="overview" className="relative overflow-hidden border-b border-[var(--fin-border)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(0,230,118,0.11),transparent_32%),linear-gradient(180deg,rgba(0,200,83,0.04),transparent_38%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--fin-brand)] to-transparent" />
@@ -693,7 +693,7 @@ export function FintechSystemCatalogPage() {
               ["10", "component families"],
               ["17", "money flows"],
             ].map(([value, label]) => (
-              <div key={label} className="rounded-2xl border border-[var(--fin-border)] bg-[color-mix(in_srgb,var(--fin-surface)_78%,transparent)] p-5 shadow-[var(--fin-shadow-flat)] backdrop-blur">
+              <div key={label} className="bg-fin-surface-78 rounded-2xl border border-[var(--fin-border)] p-5 shadow-[var(--fin-shadow-flat)] backdrop-blur">
                 <p className="text-[30px] font-semibold leading-none tracking-[-0.02em] text-[var(--fin-text-primary)] tabular-nums">{value}</p>
                 <p className="fin-eyebrow mt-2 text-[var(--fin-text-secondary)]">{label}</p>
               </div>
@@ -775,6 +775,6 @@ export function FintechSystemCatalogPage() {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

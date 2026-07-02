@@ -17,9 +17,8 @@ interface ServiceSheetCardProps {
 
 /**
  * Light, editorial "paper sheet" service card. An image fills the tile; a
- * rounded sheet sits at the bottom carrying the title, with a mint pill badge
- * (index · category) straddling its top edge. Hovering, focusing or passing
- * `active` raises the sheet to reveal the description and a VIEW button — the
+ * rounded sheet sits at the bottom carrying the meta and title. Hovering,
+ * focusing or passing `active` raises the sheet to reveal the description and a VIEW button — the
  * sheet grows upward (grid-rows 0fr→1fr) and covers more of the image.
  *
  * Reveal is keyed on hover, focus-within and `data-active`, so the open state
@@ -31,9 +30,7 @@ export function ServiceSheetCard({ item, active, className }: ServiceSheetCardPr
     <div
       data-active={active ? true : undefined}
       className={cn(
-        "group relative h-[26rem] overflow-hidden rounded-[1.75rem] bg-card lg:h-[28rem]",
-        "ring-1 ring-foreground/[0.08] dark:ring-white/[0.08]",
-        "shadow-[0_18px_44px_-24px_rgba(0,0,0,0.35)]",
+        "group relative h-[26rem] overflow-hidden rounded-[1.75rem] border border-foreground/[0.08] bg-card lg:h-[28rem] dark:border-white/[0.08]",
         className
       )}
     >
@@ -48,14 +45,13 @@ export function ServiceSheetCard({ item, active, className }: ServiceSheetCardPr
 
       {/* Sheet — anchored to the bottom, inset so the image frames it. */}
       <div className="absolute inset-x-4 bottom-4">
-        {/* Pill badge — straddles the sheet's top edge. */}
-        <span className="absolute -top-3 left-5 z-10 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_18%,white)] px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-accent ring-1 ring-accent/20 dark:bg-[color-mix(in_srgb,var(--accent)_22%,black)]">
-          <span>{item.index}</span>
-          <span aria-hidden className="opacity-40">/</span>
-          <span>{item.category}</span>
-        </span>
+        <div className="relative overflow-hidden rounded-[1.25rem] bg-background px-5 pb-5 pt-5 ring-1 ring-foreground/[0.08] dark:ring-white/[0.06]">
+          <p className="mb-3 flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/62">
+            <span>{item.index}</span>
+            <span aria-hidden className="h-px w-4 bg-border" />
+            <span className="truncate">{item.category}</span>
+          </p>
 
-        <div className="relative overflow-hidden rounded-[1.25rem] bg-background px-5 pb-5 pt-7 ring-1 ring-foreground/[0.08] dark:ring-white/[0.06]">
           <h3 className="max-w-[20ch] text-pretty text-lg font-semibold leading-snug tracking-tight text-foreground md:text-xl">
             {item.title}
           </h3>

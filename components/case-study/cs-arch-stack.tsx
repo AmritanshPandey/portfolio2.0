@@ -42,7 +42,7 @@ export function CsArchStack({ layers }: CsArchStackProps) {
                 "font-mono text-[10.5px] font-semibold tracking-[0.04em]",
                 layer.isCore
                   ? "border-accent bg-accent text-white shadow-[0_0_18px_rgba(16,185,129,0.35)] dark:text-black"
-                  : "border-border/60 bg-background text-muted-foreground dark:bg-[oklch(0.18_0_0)]"
+                  : "dark-bg-surface-18 border-border/60 bg-background text-muted-foreground"
               )}
             >
               {layer.num}

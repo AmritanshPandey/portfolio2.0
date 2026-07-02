@@ -56,8 +56,13 @@ import { ImageLayout, type ImageItem } from "@/components/shared/image-layout"
 import { FullBleedBlock } from "@/components/shared/full-bleed-block"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { CsImage } from "@/components/case-study/cs-image"
+import {
+  CsMediaTextSection,
+  type CsMediaTextSectionProps,
+} from "@/components/case-study/cs-media-text-section"
 import { CsOutcomes } from "@/components/case-study/cs-outcomes"
 import { CsResults } from "@/components/case-study/cs-results"
+import { CsBehindScenes } from "@/components/case-study/cs-behind-scenes"
 import { CsPhoneShowcase } from "@/components/case-study/cs-phone-showcase"
 import { CsPhoneFeatures } from "@/components/case-study/cs-phone-features"
 import { CsScreenWall } from "@/components/case-study/cs-screen-wall"
@@ -80,7 +85,6 @@ import {
   GradientShineBackground,
   ShaderGrid,
 } from "@/components/ui/backgrounds"
-import { BackgroundBand } from "@/components/shared/background-band"
 import { HeroShaderGrid } from "@/components/shared/hero-shader-grid"
 import { POOL_MASK } from "@/components/shared/site-background"
 import { FlowDiagramDemo } from "./flow-diagram-demo"
@@ -161,7 +165,7 @@ function GlowBand({
     <div>
       <Eyebrow className="mb-3">{label}</Eyebrow>
       <div className="relative left-1/2 w-screen -translate-x-1/2">
-        <div className="relative isolate flex h-72 items-center justify-center overflow-hidden bg-[oklch(0.98_0_0)] dark:bg-[oklch(0.14_0_0)] md:h-96">
+        <div className="bg-canvas-default relative isolate flex h-72 items-center justify-center overflow-hidden md:h-96">
           {/* The actual full-bleed background being demoed */}
           <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             {bg}
@@ -335,6 +339,68 @@ const BENTO_IMAGES: ImageItem[] = [
   },
 ]
 
+const MEDIA_TEXT_SECTIONS = [
+  {
+    eyebrow: "Narrative section",
+    heading: "A full-width visual can sit under focused case-study copy.",
+    body: [
+      "Use this when the writing needs to set up the artifact before the reader studies the image.",
+      "The media payload stays JSON-shaped, while the component handles section spacing, reveal motion, and the case-study surface.",
+    ],
+    placement: "below",
+    variant: "default",
+    media: {
+      layout: "single",
+      images: [
+        {
+          src: "/assets/images/work/white-label-platform.jpg",
+          alt: "White label platform interface shown as a case-study artifact",
+          caption: "Single full-width artifact below the narrative.",
+        },
+      ],
+      aspect: "16/9",
+    },
+  },
+  {
+    eyebrow: "Process detail",
+    heading: "Stacked evidence can sit beside the strategic read.",
+    body: "Use a left media placement when the images are the proof and the copy acts as interpretation. On smaller screens the copy stays first, then the media follows.",
+    placement: "left",
+    variant: "muted",
+    media: {
+      layout: "2-row",
+      images: [
+        {
+          src: "/assets/images/work/agent-commerce.jpg",
+          alt: "Agent commerce work sample",
+          caption: "Research prototype",
+        },
+        {
+          src: "/assets/images/work/design-tokens.jpg",
+          alt: "Design token system work sample",
+          caption: "System foundations",
+        },
+      ],
+      aspect: "16/9",
+    },
+  },
+  {
+    eyebrow: "System view",
+    heading: "Bento layouts work when the case study needs a compact visual system.",
+    body: [
+      "This arrangement is useful for showing one hero screen, supporting artifacts, and a text cell without turning the section into a separate gallery.",
+      "The dark variant uses the same case-study band treatment as the rest of the system.",
+    ],
+    placement: "right",
+    variant: "dark",
+    media: {
+      layout: "bento",
+      images: BENTO_IMAGES,
+      gap: "md",
+    },
+  },
+] satisfies CsMediaTextSectionProps[]
+
 /* Screen wall — real work images, assorted aspects + crops, randomly drawn.
    Built once at module load (server) so the arrangement is stable per deploy. */
 const WORK_IMAGES = [
@@ -356,6 +422,51 @@ const WALL_ITEMS = Array.from({ length: 30 }, () => ({
   alt: "Case-study screen",
   aspect: "9/19.5",
 }))
+
+const BEHIND_SCENES_ITEMS = [
+  {
+    index: "01",
+    title: "Interactive Prototype",
+    description: "Explore the pickup experience end-to-end, built with Cursor and deployed on Vercel.",
+    image: {
+      src: "/assets/images/work/skincare-planner.jpg",
+      alt: "Mobile prototype preview",
+    },
+    cta: {
+      label: "Link to Prototype",
+      href: "/showcase/case-study",
+    },
+    rotation: -5,
+  },
+  {
+    index: "02",
+    title: "Process Book",
+    description: "See the entire process of research, synthesis, iterations, and design rationale.",
+    image: {
+      src: "/assets/images/work/white-label-platform.jpg",
+      alt: "Process book cover preview",
+    },
+    cta: {
+      label: "Link to Process Book",
+      href: "/assets/images/Wednesday.pdf",
+    },
+    rotation: -4,
+  },
+  {
+    index: "03",
+    title: "Video",
+    description: "A 2-minute walkthrough of how the designs work in real environments.",
+    image: {
+      src: "/assets/images/work/commerce-platform.jpg",
+      alt: "Video walkthrough preview",
+    },
+    cta: {
+      label: "Link to Video",
+      href: "/showcase",
+    },
+    rotation: 3,
+  },
+]
 
 /**
  * The larger composite + section components don't live well out of context —
@@ -790,7 +901,7 @@ export default function ShowcasePage() {
       <Lab
         id="service-sheet-card"
         title="ServiceSheetCard"
-        note="Light editorial service card: an image tile with a mint pill badge (index · category) straddling a paper sheet. Hover or focus a card to raise the sheet and reveal the description + VIEW button. As a carousel: prev/next arrows (top-right) step through and raise the active card."
+        note="Light editorial service card: an image tile with a mint pill badge (index · category) straddling a paper sheet. Cards stay collapsed by default; hover, focus, or carousel arrows raise a sheet and reveal the description + VIEW button."
       >
         <ServiceSheetCarousel
           items={SERVICES}
@@ -878,6 +989,17 @@ export default function ShowcasePage() {
               CsImage
             </Eyebrow>
             <CsImage src="/assets/images/work/white-label-platform.jpg" alt="Case study figure" caption="A single case-study figure with caption." />
+          </div>
+
+          <div>
+            <Eyebrow className="mb-3">
+              CsMediaTextSection
+            </Eyebrow>
+            <div className="relative left-1/2 w-screen -translate-x-1/2">
+              {MEDIA_TEXT_SECTIONS.map((section) => (
+                <CsMediaTextSection key={section.heading} {...section} />
+              ))}
+            </div>
           </div>
 
           <div>
@@ -1000,7 +1122,7 @@ export default function ShowcasePage() {
               About background · grid + ambient bloom
             </Eyebrow>
             <div className="relative left-1/2 w-screen -translate-x-1/2">
-              <div className="relative isolate flex h-72 items-center justify-center overflow-hidden bg-[oklch(0.98_0_0)] dark:bg-[oklch(0.14_0_0)] md:h-96">
+              <div className="bg-canvas-default relative isolate flex h-72 items-center justify-center overflow-hidden md:h-96">
                 <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
                   {/* fine 24px grid */}
                   <div
@@ -1371,6 +1493,15 @@ export default function ShowcasePage() {
             },
           ]}
         />
+      </Lab>
+
+      {/* Behind-the-scenes cards */}
+      <Lab
+        id="cs-behind-scenes"
+        title="CsBehindScenes"
+        note="An editorial learn-more section for case-study resource links: tilted pinned cards with preview media, copy, and keyboard-focusable CTA pills. Rotations reduce on smaller screens to prevent overflow."
+      >
+        <CsBehindScenes items={BEHIND_SCENES_ITEMS} />
       </Lab>
 
       {/* Results / proof block */}

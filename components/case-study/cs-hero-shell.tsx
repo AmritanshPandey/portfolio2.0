@@ -129,7 +129,7 @@ export function CsHeroShell({
   const hasFooter  = Boolean(readTime || publishedDate || (topics && topics.length > 0))
 
   return (
-    <div className={clsx("relative overflow-hidden bg-[oklch(0.985_0_0)] dark:bg-[oklch(0.14_0_0)]", className)}>
+    <div className={clsx("bg-canvas-raised relative overflow-hidden", className)}>
 
       <ReadingProgress />
 
