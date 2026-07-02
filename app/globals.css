@@ -1103,109 +1103,25 @@ html:not(.js) main [style*="opacity: 0"] {
 
 /* ─────────────────────────
    CHROMATIC LENS  (showcase/chromatic-lens)
-   A cursor-following disc that reveals a tinted, chromatically-aberrated,
-   halftone copy of the giant type beneath it. The base type is always fully
-   visible on its own — the lens only ADDS the distortion inside the circle,
-   so legibility never depends on the effect (no-JS, reduced motion, crawlers
-   all still read the headline). Lens position rides on --lx / --ly (set by
-   JS in %); radius on --lr. Safari-safe: every mask carries the -webkit-
-   prefix; blend modes are avoided so the tint holds in both themes.
+   The effect itself is drawn in WebGL (see chromatic-lens-hero.tsx): the
+   headline is rasterised to a texture and a fragment shader adds the
+   refracted, chromatically-aberrated, halftone, magenta lens inside a
+   cursor-following disc. These rules only style the DOM <h1> that sits under
+   the canvas as the no-JS / no-WebGL fallback (and the crawler-visible
+   heading), so the type reads correctly even when the shader never runs.
 ───────────────────────── */
 
 .clens {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  --lr: clamp(120px, 15vmax, 260px);
 }
 
-/* Smaller disc on phones so it doesn't swallow several lines at once. */
-@media (max-width: 640px) {
-  .clens {
-    --lr: 96px;
-  }
-}
-
-/* Shared type block — base + lens layers render identical markup so the
-   distorted copy lands pixel-exact over the original. */
 .clens__type {
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 0.92;
   letter-spacing: -0.035em;
   font-size: clamp(2.9rem, 13.5vw, 12rem);
 }
 .clens__type > span {
   display: block;
   white-space: nowrap;
-}
-
-/* The absolutely-stacked overlay layers share the base layer's centering. */
-.clens__layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  pointer-events: none;
-}
-
-/* Soft accent bloom around the lens — sits under the reveal, unmasked so the
-   glow can spill past the disc edge like the reference's halo. */
-.clens__glow {
-  background: radial-gradient(
-    circle calc(var(--lr) * 1.5) at var(--lx, 50%) var(--ly, 50%),
-    color-mix(in srgb, var(--accent) 42%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 12%, transparent) 42%,
-    transparent 66%
-  );
-  opacity: 0.9;
-}
-
-/* Everything inside the disc — clipped to the moving circle. */
-.clens__reveal {
-  -webkit-mask-image: radial-gradient(
-    circle var(--lr) at var(--lx, 50%) var(--ly, 50%),
-    #000 0 54%, rgba(0, 0, 0, 0.45) 72%, transparent 82%
-  );
-  mask-image: radial-gradient(
-    circle var(--lr) at var(--lx, 50%) var(--ly, 50%),
-    #000 0 54%, rgba(0, 0, 0, 0.45) 72%, transparent 82%
-  );
-}
-
-/* Halftone dot field — accent dots, no blend mode so it reads in both themes. */
-.clens__halftone {
-  background-image: radial-gradient(var(--accent) 30%, transparent 32%);
-  background-size: 7px 7px;
-  opacity: 0.5;
-}
-
-/* The aberrated copy of the type: accent core with a red / cyan channel split
-   and a faint accent bloom. Locally magnified around the lens centre. */
-.clens__ghost {
-  color: var(--accent);
-  transform: scale(1.05);
-  transform-origin: var(--lx, 50%) var(--ly, 50%);
-  text-shadow:
-    0.05em 0.008em 0 rgba(255, 42, 96, 0.6),
-    -0.05em -0.008em 0 rgba(0, 214, 255, 0.6),
-    0 0 0.5em color-mix(in srgb, var(--accent) 55%, transparent);
-}
-
-/* A hairline ring around the disc edge — the "lens rim". */
-.clens__rim {
-  border-radius: 9999px;
-  position: absolute;
-  width: calc(var(--lr) * 2);
-  height: calc(var(--lr) * 2);
-  left: var(--lx, 50%);
-  top: var(--ly, 50%);
-  translate: -50% -50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow: 0 0 40px color-mix(in srgb, var(--accent) 18%, transparent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* No cursor follow — the lens parks over one word, statically. */
-  .clens__ghost { transform: none; }
 }
