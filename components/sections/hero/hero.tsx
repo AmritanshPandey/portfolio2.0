@@ -102,17 +102,17 @@ export default function Hero() {
             {/* Each reveal mask carries 0.22em of bottom slack (pulled back
                 with a negative margin) so descenders — g, y, p — never get
                 cropped by the overflow clip at tight line-height. */}
-            <h1 className="type-display-hero relative z-10 max-w-[16ch] md:max-w-[14ch]">
+            <h1 className="type-display-hero relative z-10 w-max max-w-none">
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line="1" className="block">Designing fintech</span>
+                <span data-hero-line="1" className="block whitespace-nowrap">Designing fintech</span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line="2" className="block">
+                <span data-hero-line="2" className="block whitespace-nowrap">
                   <RollingWord className="shimmer-accent" />
                 </span>
               </span>
               <span className="block overflow-hidden pt-[0.08em] -mt-[0.08em] pb-[0.22em] -mb-[0.22em]">
-                <span data-hero-line="3" className="block">that scale globally.</span>
+                <span data-hero-line="3" className="block whitespace-nowrap">that scale globally.</span>
               </span>
             </h1>
 
