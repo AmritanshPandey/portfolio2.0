@@ -1117,10 +1117,10 @@ html:not(.js) main [style*="opacity: 0"] {
 
 .clens__type {
   font-weight: 700;
-  line-height: 0.98;
+  line-height: 1.02;
   letter-spacing: -0.03em;
   text-align: center;
-  font-size: clamp(2.4rem, 10vw, 9.4rem);
+  font-size: clamp(2rem, 7.8vw, 7rem);
 }
 .clens__type > span {
   display: block;
