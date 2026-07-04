@@ -84,24 +84,17 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
                 <div className="my-4 border-t border-dashed border-border/65" />
 
                 <dl className="grid gap-2.5 text-[12px] leading-snug">
-                  <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Type</dt>
-                    <dd className="text-foreground/72">{category.type}</dd>
-                  </div>
-                  <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Role</dt>
-                    <dd className="text-foreground/72">{role}</dd>
-                  </div>
-                  <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Team</dt>
-                    <dd className="text-foreground/72">{category.client}</dd>
-                  </div>
-                  {item.metric && (
-                    <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
-                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Impact</dt>
-                      <dd className="text-foreground/72">{item.metric}</dd>
+                  {[
+                    { label: "Type", value: category.type },
+                    { label: "Role", value: role },
+                    { label: "Team", value: category.client },
+                    ...(item.metric ? [{ label: "Impact", value: item.metric }] : []),
+                  ].map(({ label, value }) => (
+                    <div key={label} className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
+                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">{label}</dt>
+                      <dd className="text-foreground/72">{value}</dd>
                     </div>
-                  )}
+                  ))}
                 </dl>
               </div>
             </article>

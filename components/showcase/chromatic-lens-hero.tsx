@@ -314,20 +314,36 @@ export function ChromaticLensHero() {
       canvas.style.opacity = "1"
     }
 
+    // Free the GL objects this effect allocated. getContext returns the same
+    // context for a canvas, so without this they'd accumulate across remounts
+    // (StrictMode double-mount, client navigations back to this page).
+    const disposeGL = () => {
+      gl.deleteTexture(tex)
+      gl.deleteBuffer(buf)
+      gl.deleteProgram(prog)
+      gl.deleteShader(vs)
+      gl.deleteShader(fs)
+    }
+
     // Paint immediately with whatever font is available so the canvas never
     // depends on document.fonts.ready resolving (which can race the mount).
-    const ready = true
+    let disposed = false
     renderText()
     draw()
     reveal()
-    // Re-rasterise once the real webfont settles, so the texture isn't a fallback.
+    // Re-rasterise once the real webfont settles, so the texture isn't a
+    // fallback face — guarded so it can't run after unmount (StrictMode remount).
     document.fonts.ready.then(() => {
+      if (disposed) return
       renderText()
       draw()
     })
 
     if (reduce) {
-      return () => {}
+      return () => {
+        disposed = true
+        disposeGL()
+      }
     }
 
     let raf = 0
@@ -364,10 +380,8 @@ export function ChromaticLensHero() {
       pmy = my
       intensity += (targetIntensity - intensity) * (1 - Math.exp(-6 * dt))
 
-      if (ready) {
-        draw()
-        reveal()
-      }
+      draw()
+      reveal()
       raf = running ? requestAnimationFrame(loop) : 0
     }
 
@@ -379,7 +393,7 @@ export function ChromaticLensHero() {
 
     const ro = new ResizeObserver(() => {
       renderText()
-      if (ready) draw()
+      draw()
     })
     ro.observe(root)
 
@@ -400,13 +414,14 @@ export function ChromaticLensHero() {
 
     const mo = new MutationObserver(() => {
       refreshColors()
-      if (ready) draw()
+      draw()
     })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
 
     raf = requestAnimationFrame(loop)
 
     return () => {
+      disposed = true
       running = false
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener("pointermove", onMove)
@@ -415,6 +430,7 @@ export function ChromaticLensHero() {
       ro.disconnect()
       io.disconnect()
       mo.disconnect()
+      disposeGL()
     }
   }, [])
 
