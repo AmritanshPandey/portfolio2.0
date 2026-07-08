@@ -8,6 +8,7 @@ import { ThemeFab } from "@/components/shared/theme-fab"
 import { SiteBackground } from "@/components/shared/site-background"
 import { Grain } from "@/components/shared/motion"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
+import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
@@ -96,6 +97,9 @@ export default function RootLayout({
 
             {/* Scroll restore */}
             <ScrollToHash />
+
+            {/* Reveal failsafe — forces stalled entrance reveals visible */}
+            <SettleGuard />
 
             <FancyCursor />
 

@@ -5,6 +5,7 @@ import Hero from "@/components/sections/hero/hero"
 import ProductDesignApproachSection from "@/components/sections/thinking/product-design"
 import CaseStudy from "@/components/sections/work/case-study"
 import ExplorationsSection from "@/components/sections/work/exploration"
+import { ClosingCta } from "@/components/sections/closing/closing-cta"
 import { Section } from "@/components/shared/section"
 
 export default function Page() {
@@ -76,8 +77,11 @@ export default function Page() {
       </Section>
 
       {/* ───────────────── ABOUT ───────────────── */}
-        
+
       <AboutSection />
+
+      {/* ───────────────── CLOSING / CONTACT ───────────────── */}
+      <ClosingCta />
 
     </>
   )
