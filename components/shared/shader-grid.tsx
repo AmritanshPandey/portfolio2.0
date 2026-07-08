@@ -51,9 +51,9 @@ interface ShaderGridProps {
   /** Opacity used only for the static fallback grid. */
   fallbackOpacity?: number
   /**
-   * Autonomous twinkle strength, independent of the cursor. 1 = the restrained
-   * hero breathe (~14% brightness). Raise it (e.g. 3–4) for a card-sized field
-   * that visibly pulses on its own.
+   * Autonomous twinkle strength, independent of the cursor. 1 = a restrained
+   * breathe. Raise it (e.g. 3–4) for a card-sized field that visibly pulses on
+   * its own.
    */
   shimmer?: number
   /**
@@ -234,13 +234,16 @@ void main() {
   float aa   = u_density / u_resolution.y;
   float disc = 1.0 - smoothstep(u_dotSize - aa, u_dotSize + aa, d);
 
-  // ── A living field: per-dot character + a slow breathing shimmer ───────
-  //    Some dots sit brighter than others (organic, not a perfect raster),
-  //    and the whole field breathes on a long phase offset per dot.
+  // ── A living field: per-dot character + autonomous twinkle ─────────────
+  //    Some dots sit brighter than others, and each cell has its own phase
+  //    and tempo. Higher shimmer values create visible bright peaks instead
+  //    of merely dimming the base grid.
   float seed      = hash(cellId);
   float character = 0.72 + 0.55 * seed;
-  float amp       = 0.14 * u_shimmer;
-  float breathe   = (1.0 - amp) + amp * sin(u_time * (0.55 + 0.4 * (u_shimmer - 1.0)) + seed * 6.2831);
+  float shimmerK  = clamp(u_shimmer, 0.0, 6.0);
+  float wave      = 0.5 + 0.5 * sin(u_time * (0.62 + 0.28 * shimmerK + seed * 0.42) + seed * 6.2831);
+  float sparkle   = pow(wave, 4.0);
+  float breathe   = mix(1.0, 0.72 + 0.48 * wave + 0.56 * sparkle, clamp(shimmerK / 4.0, 0.0, 1.0));
 
   // ── Color + subtle falloff / vignette for depth ────────────────────────
   float vignette = smoothstep(1.15, 0.35, length(uv - 0.5));
@@ -763,7 +766,6 @@ export function ShaderGrid({
       gl.deleteProgram(program)
       gl.deleteShader(vert)
       gl.deleteShader(frag)
-      if (!contextLost) gl.getExtension("WEBGL_lose_context")?.loseContext()
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

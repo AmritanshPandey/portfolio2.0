@@ -389,7 +389,6 @@ export function ShaderHaze({
       gl.deleteProgram(program)
       gl.deleteShader(vert)
       gl.deleteShader(frag)
-      if (!contextLost) gl.getExtension("WEBGL_lose_context")?.loseContext()
       setWebglActive(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

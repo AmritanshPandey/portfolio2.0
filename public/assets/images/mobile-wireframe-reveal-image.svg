@@ -1,0 +1,171 @@
+<svg width="2048" height="1246" viewBox="0 0 2048 1246" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="backgroundGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1360 508) rotate(128) scale(870 700)">
+      <stop stop-color="#12231d" stop-opacity="0.48"/>
+      <stop offset="0.52" stop-color="#0a0d0b" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#060706"/>
+    </radialGradient>
+    <linearGradient id="screenGradient" x1="1122" y1="104" x2="1568" y2="1128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081712"/>
+      <stop offset="0.48" stop-color="#0d1e18"/>
+      <stop offset="1" stop-color="#07100d"/>
+    </linearGradient>
+    <linearGradient id="accentTile" x1="1184" y1="452" x2="1378" y2="612" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#65f0bc"/>
+      <stop offset="1" stop-color="#45e4aa"/>
+    </linearGradient>
+    <filter id="phoneShadow" x="1030" y="52" width="720" height="1220" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="28"/>
+      <feGaussianBlur stdDeviation="34"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.46 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+    <filter id="cardShadow" x="1128" y="213" width="526" height="470" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.28 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+    <filter id="lensGlow" x="1126" y="550" width="318" height="318" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="BackgroundImageFix" stdDeviation="10"/>
+      <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1_3"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset/>
+      <feGaussianBlur stdDeviation="24"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.254902 0 0 0 0 0.913725 0 0 0 0 0.670588 0 0 0 0.34 0"/>
+      <feBlend mode="normal" in2="effect1_backgroundBlur_1_3" result="effect2_dropShadow_1_3"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_1_3" result="shape"/>
+    </filter>
+    <clipPath id="phoneScreenClip">
+      <rect x="1117" y="111" width="548" height="1096" rx="48"/>
+    </clipPath>
+    <clipPath id="lensClip">
+      <circle cx="1285" cy="709" r="126"/>
+    </clipPath>
+  </defs>
+
+  <rect width="2048" height="1246" fill="url(#backgroundGlow)"/>
+  <rect width="2048" height="1246" fill="#050606" opacity="0.36"/>
+
+  <g opacity="0.22">
+    <path d="M0 1H2048" stroke="#E7ECE8" stroke-width="0.5"/>
+    <path d="M0 1245H2048" stroke="#E7ECE8" stroke-width="0.5"/>
+    <path d="M1 0V1246" stroke="#E7ECE8" stroke-width="0.5"/>
+    <path d="M2047 0V1246" stroke="#E7ECE8" stroke-width="0.5"/>
+  </g>
+
+  <text x="80" y="48" fill="#C8CBC8" fill-opacity="0.56" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="25" font-weight="700" letter-spacing="8">MOBILE UI + WIREFRAME LENS</text>
+
+  <g opacity="0.45">
+    <line x1="119" y1="437" x2="119" y2="480" stroke="#F4F5F1" stroke-width="4" stroke-linecap="round"/>
+    <line x1="107" y1="450" x2="131" y2="450" stroke="#F4F5F1" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text x="80" y="462" fill="#C8CBC8" fill-opacity="0.66" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="24" font-weight="700" letter-spacing="7">INTERACTION DETAIL</text>
+  <text fill="#F7F7F2" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="78" font-weight="700" letter-spacing="0">
+    <tspan x="80" y="570">Reveal the</tspan>
+    <tspan x="80" y="652">structure</tspan>
+    <tspan x="80" y="734">behind the</tspan>
+    <tspan x="80" y="816">finished screen</tspan>
+  </text>
+  <text fill="#A5A8A4" fill-opacity="0.72" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="28" font-weight="400" letter-spacing="0">
+    <tspan x="80" y="895">A finished screen stays readable while the drafting layer</tspan>
+    <tspan x="80" y="940">exposes layout hierarchy, spacing, and interaction</tspan>
+    <tspan x="80" y="985">structure underneath.</tspan>
+  </text>
+
+  <g filter="url(#phoneShadow)">
+    <rect x="1094" y="94" width="594" height="1176" rx="58" fill="#1A1D1B"/>
+    <rect x="1110" y="110" width="562" height="1144" rx="48" fill="#0B0D0C"/>
+    <rect x="1117" y="111" width="548" height="1096" rx="48" fill="url(#screenGradient)"/>
+    <rect x="1095.5" y="95.5" width="591" height="1173" rx="56.5" stroke="#2C2F2D" stroke-width="3"/>
+  </g>
+
+  <g clip-path="url(#phoneScreenClip)">
+    <rect x="1117" y="111" width="548" height="1096" fill="url(#screenGradient)"/>
+    <circle cx="1454" cy="117" r="360" fill="#0F241D" fill-opacity="0.32"/>
+
+    <text x="1152" y="171" fill="#F4F6F1" fill-opacity="0.58" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="500">9:41</text>
+    <rect x="1575" y="161" width="32" height="11" rx="5.5" fill="#E9EEE8" fill-opacity="0.62"/>
+    <circle cx="1624" cy="166.5" r="6.5" fill="#67F0BD"/>
+
+    <g filter="url(#cardShadow)">
+      <rect x="1152" y="230" width="478" height="414" rx="40" fill="#FFFFFF" fill-opacity="0.062"/>
+      <rect x="1153.25" y="231.25" width="475.5" height="411.5" rx="38.75" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="2.5"/>
+    </g>
+    <text x="1185" y="284" fill="#62E8B2" fill-opacity="0.86" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" font-weight="700" letter-spacing="7">TODAY</text>
+    <text fill="#FAFAF5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="50" font-weight="700" letter-spacing="0">
+      <tspan x="1185" y="348">Morning</tspan>
+      <tspan x="1185" y="402">skin plan</tspan>
+    </text>
+    <rect x="1184" y="449" width="195" height="161" rx="28" fill="url(#accentTile)"/>
+    <text x="1208" y="496" fill="#07110E" fill-opacity="0.68" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="23" font-weight="500">UV index</text>
+    <text x="1208" y="566" fill="#07110E" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="49" font-weight="700">05</text>
+
+    <rect x="1402" y="449" width="195" height="161" rx="28" fill="#FFFFFF" fill-opacity="0.072"/>
+    <rect x="1403.25" y="450.25" width="192.5" height="158.5" rx="26.75" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+    <text x="1426" y="496" fill="#F0F3EF" fill-opacity="0.55" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="23" font-weight="400">Hydration</text>
+    <text x="1426" y="570" fill="#FAFAF5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="49" font-weight="700">82%</text>
+
+    <g>
+      <rect x="1152" y="683" width="478" height="121" rx="28" fill="#FFFFFF" fill-opacity="0.055"/>
+      <rect x="1153.25" y="684.25" width="475.5" height="118.5" rx="26.75" stroke="#FFFFFF" stroke-opacity="0.11" stroke-width="2.5"/>
+      <rect x="1176" y="707" width="69" height="69" rx="18" fill="#FFFFFF" fill-opacity="0.08"/>
+      <circle cx="1210.5" cy="741.5" r="8" fill="#65EDB8"/>
+      <text x="1269" y="737" fill="#FAFAF5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="600">Cleanser</text>
+      <text x="1269" y="770" fill="#E7ECE8" fill-opacity="0.47" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="400">Gentle foam - 2 min</text>
+    </g>
+    <g>
+      <rect x="1152" y="828" width="478" height="121" rx="28" fill="#FFFFFF" fill-opacity="0.055"/>
+      <rect x="1153.25" y="829.25" width="475.5" height="118.5" rx="26.75" stroke="#FFFFFF" stroke-opacity="0.11" stroke-width="2.5"/>
+      <rect x="1176" y="852" width="69" height="69" rx="18" fill="#FFFFFF" fill-opacity="0.08"/>
+      <circle cx="1210.5" cy="886.5" r="8" fill="#65EDB8"/>
+      <text x="1269" y="882" fill="#FAFAF5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="600">Vitamin C</text>
+      <text x="1269" y="915" fill="#E7ECE8" fill-opacity="0.47" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="400">Brightening serum</text>
+    </g>
+    <g>
+      <rect x="1152" y="973" width="478" height="121" rx="28" fill="#FFFFFF" fill-opacity="0.055"/>
+      <rect x="1153.25" y="974.25" width="475.5" height="118.5" rx="26.75" stroke="#FFFFFF" stroke-opacity="0.11" stroke-width="2.5"/>
+      <rect x="1176" y="997" width="69" height="69" rx="18" fill="#FFFFFF" fill-opacity="0.08"/>
+      <circle cx="1210.5" cy="1031.5" r="8" fill="#65EDB8"/>
+      <text x="1269" y="1027" fill="#FAFAF5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="26" font-weight="600">SPF 50</text>
+      <text x="1269" y="1060" fill="#E7ECE8" fill-opacity="0.47" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="400">Reapply at 1:30 PM</text>
+    </g>
+
+    <rect x="1151" y="1180" width="480" height="93" rx="28" fill="#020302" fill-opacity="0.28"/>
+    <rect x="1152.25" y="1181.25" width="477.5" height="90.5" rx="26.75" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="2.5"/>
+    <rect x="1168" y="1198" width="98" height="57" rx="18" fill="#5FEAB3"/>
+    <text x="1211" y="1234" fill="#06100C" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">H</text>
+    <text x="1326" y="1234" fill="#F7FAF5" fill-opacity="0.38" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">P</text>
+    <text x="1445" y="1234" fill="#F7FAF5" fill-opacity="0.38" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">L</text>
+    <text x="1567" y="1234" fill="#F7FAF5" fill-opacity="0.38" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="700">M</text>
+  </g>
+
+  <g clip-path="url(#lensClip)" filter="url(#lensGlow)">
+    <rect x="1117" y="111" width="548" height="1096" fill="#F4F2EA"/>
+    <rect x="1165" y="594" width="116" height="12" rx="6" stroke="#08110E" stroke-opacity="0.32" stroke-width="2"/>
+    <rect x="1556" y="590" width="44" height="44" rx="22" stroke="#08110E" stroke-opacity="0.32" stroke-width="2"/>
+    <rect x="1157" y="653" width="190" height="52" rx="14" stroke="#08110E" stroke-opacity="0.26" stroke-width="2.5"/>
+    <rect x="1157" y="733" width="206" height="92" rx="22" stroke="#08110E" stroke-opacity="0.27" stroke-width="2.5"/>
+    <rect x="1388" y="733" width="206" height="92" rx="22" stroke="#08110E" stroke-opacity="0.27" stroke-width="2.5"/>
+    <rect x="1152" y="684" width="478" height="121" rx="28" stroke="#08110E" stroke-opacity="0.34" stroke-width="3"/>
+    <rect x="1176" y="707" width="69" height="69" rx="18" stroke="#08110E" stroke-opacity="0.24" stroke-width="2.5"/>
+    <circle cx="1210.5" cy="741.5" r="8" fill="#0D1C17" fill-opacity="0.5"/>
+    <rect x="1269" y="719" width="136" height="13" rx="6.5" fill="#0D1C17" fill-opacity="0.28"/>
+    <rect x="1269" y="753" width="176" height="10" rx="5" fill="#0D1C17" fill-opacity="0.18"/>
+    <rect x="1152" y="828" width="478" height="121" rx="28" stroke="#08110E" stroke-opacity="0.34" stroke-width="3"/>
+  </g>
+  <circle cx="1285" cy="709" r="126" stroke="#63ECB7" stroke-opacity="0.78" stroke-width="2.5"/>
+  <circle cx="1285" cy="709" r="147" stroke="#63ECB7" stroke-opacity="0.18" stroke-width="1.5"/>
+
+  <rect x="1094" y="94" width="594" height="1176" rx="58" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="2"/>
+</svg>

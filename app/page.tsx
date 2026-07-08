@@ -80,8 +80,6 @@ export default function Page() {
 
       <AboutSection />
 
-      {/* ───────────────── CLOSING / CONTACT ───────────────── */}
-      <ClosingCta />
 
     </>
   )
