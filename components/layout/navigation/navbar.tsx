@@ -45,6 +45,7 @@ const SECTION_IDS = [
   "approach",
   "insights",
   "leadership",
+  "trajectory",
   "advisory",
   "about",
 ]

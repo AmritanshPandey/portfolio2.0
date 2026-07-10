@@ -1,11 +1,11 @@
 import AboutSection from "@/components/sections/about/about"
+import { TrajectorySection } from "@/components/sections/about/trajectory"
 import AdvisorySection from "@/components/sections/about/mentorship"
 import InsightsSection from "@/components/sections/articles/insights"
 import Hero from "@/components/sections/hero/hero"
 import ProductDesignApproachSection from "@/components/sections/thinking/product-design"
 import CaseStudy from "@/components/sections/work/case-study"
 import ExplorationsSection from "@/components/sections/work/exploration"
-import { ClosingCta } from "@/components/sections/closing/closing-cta"
 import { Section } from "@/components/shared/section"
 
 export default function Page() {
@@ -66,10 +66,20 @@ export default function Page() {
         <LeadershipSection />
       </Section> */}
 
+      {/* ───────────────── TRAJECTORY ───────────────── */}
+      <Section
+        id="trajectory"
+        bg="default"
+        title="Trajectory"
+        description="From 0→1 startup product to global enterprise fintech, and where the work is heading next."
+      >
+        <TrajectorySection />
+      </Section>
+
       {/* ───────────────── ADVISORY ───────────────── */}
       <Section
         id="advisory"
-        bg="default"
+        bg="muted"
         title="Advisory"
         description="Teams, founders, and designers I've advised on product direction, UX critique, and portfolio growth."
       >
