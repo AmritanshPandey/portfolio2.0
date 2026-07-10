@@ -106,15 +106,19 @@ export default function Hero() {
                 mask, so the headline is legible even if the entrance animation
                 is throttled or never plays (backgrounded-tab load, low-power
                 webview). Content-visible-by-default; the motion is enhancement. */}
-            <h1 className="type-display-hero relative z-10 w-max max-w-none">
-              <span data-hero-line="1" className="block whitespace-nowrap">Product design for</span>
+            {/* Full-width so lines can wrap on narrow phones (the section is
+                overflow-clipped); from md the block hugs its content for the
+                staged look. Only the RollingWord line stays nowrap so its
+                mask width animates cleanly. */}
+            <h1 className="type-display-hero relative z-10 w-full max-w-none md:w-max">
+              <span data-hero-line="1" className="block whitespace-normal md:whitespace-nowrap">Product design for</span>
               <span data-hero-line="2" className="block whitespace-nowrap">
                 <RollingWord
                   className="shimmer-accent"
                   words={["complex systems", "fintech", "AI agents", "payments", "enterprise"]}
                 />
               </span>
-              <span data-hero-line="3" className="block whitespace-nowrap">people can trust.</span>
+              <span data-hero-line="3" className="block whitespace-normal md:whitespace-nowrap">people can trust.</span>
             </h1>
 
             <div className="mt-8 flex max-w-[560px] flex-col items-start gap-6 md:mt-10">

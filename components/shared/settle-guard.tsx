@@ -43,19 +43,20 @@ export function SettleGuard() {
 
     // Two sweeps a beat apart catch the steady-state stall without racing
     // legitimate entrances; visibility-restore covers background-tab loads.
-    const t1 = window.setTimeout(sweep, 3500)
-    const t2 = window.setTimeout(sweep, 6000)
+    // All scheduled sweeps are tracked so none fire after unmount.
+    const timers: number[] = [
+      window.setTimeout(sweep, 3500),
+      window.setTimeout(sweep, 6000),
+    ]
     const onVisible = () => {
       if (document.visibilityState === "visible") {
-        window.setTimeout(sweep, 1200)
-        window.setTimeout(sweep, 3000)
+        timers.push(window.setTimeout(sweep, 1200), window.setTimeout(sweep, 3000))
       }
     }
     document.addEventListener("visibilitychange", onVisible)
 
     return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
+      timers.forEach(clearTimeout)
       document.removeEventListener("visibilitychange", onVisible)
     }
   }, [])

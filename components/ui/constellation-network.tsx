@@ -311,13 +311,20 @@ export function ConstellationNetwork({
       })
 
       // ── Links via spatial grid, capped per node for a clean mesh ──────────
+      // Eligibility + fade use the RENDER-space distance (the displaced sx/sy
+      // the line is actually drawn between), so cursor/ripple lensing can't
+      // leave visually distant links bright or draw them past linkDistance.
       const linkCount = new Int16Array(nodes.length)
-      linkNeighbors((i, j, d2) => {
+      linkNeighbors((i, j) => {
+        const a = renderNodes[i]
+        const b = renderNodes[j]
+        const dx = a.sx - b.sx
+        const dy = a.sy - b.sy
+        const d2 = dx * dx + dy * dy
+        if (d2 > link2) return
         if (linkCount[i] >= maxLinksPerNode || linkCount[j] >= maxLinksPerNode) return
         linkCount[i]++
         linkCount[j]++
-        const a = renderNodes[i]
-        const b = renderNodes[j]
         const fade = 1 - d2 / link2
         const f2 = fade * fade // faster far-fade = cleaner
         const depth = (a.z + b.z) * 0.5

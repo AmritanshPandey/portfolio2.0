@@ -86,8 +86,10 @@ void main() {
       vec2  center = (cid + 0.5) * cell;
       float w      = field(center / cell, u_time) + curRip * 2.1;
       vec2  disp   = vec2(sin(w * 3.14159), cos(w * 3.14159)) * 5.2 * u_dpr;
-      // A pool of enlarged dots gathers under the pointer.
-      float prox   = smoothstep(u_radius * 2.0, 0.0, length(center - u_mouse)) * u_intensity;
+      // A pool of enlarged dots gathers under the pointer. (Inverse falloff
+      // written with increasing edges — reversed smoothstep edges are
+      // undefined in GLSL and vary by driver.)
+      float prox   = (1.0 - smoothstep(0.0, u_radius * 2.0, length(center - u_mouse))) * u_intensity;
       float r      = baseR * (0.55 + 0.78 * (w * 0.5 + 0.5) + prox * prox * 1.9);
       float dd     = length(frag - (center + disp));
       dotCov = max(dotCov, 1.0 - smoothstep(r - aa, r + aa, dd));
@@ -95,7 +97,7 @@ void main() {
   }
 
   // Dots read as a faint gray field, warming to magenta near the cursor.
-  float mtint = smoothstep(u_radius * 1.9, 0.0, md) * u_intensity;
+  float mtint = (1.0 - smoothstep(0.0, u_radius * 1.9, md)) * u_intensity;
   vec3  dotCol = mix(mix(u_bg, u_ink, 0.17), u_tint, mtint * 0.7);
   vec3  col    = mix(u_bg, dotCol, dotCov * 0.66);
 
@@ -108,10 +110,10 @@ void main() {
   float along = dot(toC, vdir);                       // >0 ahead, <0 behind
   vec2  d     = toC - vdir * clamp(-along, 0.0, u_radius) * 0.55;
   float dist  = length(d);
-  float fo    = smoothstep(u_radius, 0.0, dist) * u_intensity;
+  float fo    = (1.0 - smoothstep(0.0, u_radius, dist)) * u_intensity;
 
   // Soft magenta bloom — always present under the pointer, spills past the disc.
-  float halo  = smoothstep(u_radius * 1.7, 0.0, length(toC)) * u_intensity;
+  float halo  = (1.0 - smoothstep(0.0, u_radius * 1.7, length(toC))) * u_intensity;
   col += u_tint * halo * halo * 0.14;
 
   if (fo > 0.001) {
@@ -339,9 +341,27 @@ export function ChromaticLensHero() {
       draw()
     })
 
+    // Static redraw observers — needed in every mode (including reduced motion),
+    // so the canvas re-rasterises on resize / orientation and repaints on a
+    // theme toggle instead of showing a stale frame.
+    const ro = new ResizeObserver(() => {
+      renderText()
+      draw()
+    })
+    ro.observe(root)
+
+    const mo = new MutationObserver(() => {
+      refreshColors()
+      draw()
+    })
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+
     if (reduce) {
+      // No cursor-driven animation loop, but keep resize/theme redraws live.
       return () => {
         disposed = true
+        ro.disconnect()
+        mo.disconnect()
         disposeGL()
       }
     }
@@ -391,12 +411,6 @@ export function ChromaticLensHero() {
       window.addEventListener("blur", onLeave)
     }
 
-    const ro = new ResizeObserver(() => {
-      renderText()
-      draw()
-    })
-    ro.observe(root)
-
     const io = new IntersectionObserver(
       ([entry]) => {
         running = entry.isIntersecting
@@ -411,12 +425,6 @@ export function ChromaticLensHero() {
       { threshold: 0 }
     )
     io.observe(root)
-
-    const mo = new MutationObserver(() => {
-      refreshColors()
-      draw()
-    })
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
 
     raf = requestAnimationFrame(loop)
 
