@@ -54,7 +54,7 @@ Nav links and scroll-spy are defined in `components/layout/navigation/navbar.tsx
 - **Reduced motion** has an alternative for every animation (`<MotionConfig reducedMotion="user">` for Framer, plus CSS `@media (prefers-reduced-motion: reduce)` collapses and JS early-returns).
 - **WebGL/Canvas effects** must ship a static fallback, cap DPR, and pause off-screen (IntersectionObserver). Verify shader falloffs use increasing `smoothstep` edges (reversed edges are undefined in GLSL).
 - **Safari/iOS:** use `svh` with a `vh` fallback for full-height, `-webkit-` prefixes on masks/backdrop-filter, and transform-only progress bars.
-- Run `npm run build` before pushing; it catches type errors and confirms every route prerenders.
+- Run `npm run build` before pushing; it type-checks and validates the production build. It does not by itself guarantee a route is static — if a page must prerender, check its entry in the build output's route table (`○` static vs `ƒ` dynamic).
 
 ## Confidential content — review before publishing
 
