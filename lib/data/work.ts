@@ -5,7 +5,6 @@ import type { WorkItem } from "@/lib/types/content"
 // Positions 0-1 → featured (larger title in WorkIndex).
 
 const SEQUENCE: string[] = [
-  "agent-commerce",
   "white-label-rfp",
   "d2c-platform",
   "citizen-safety",
@@ -15,17 +14,6 @@ const SEQUENCE: string[] = [
 // ─── CASE STUDY DEFINITIONS ──────────────────────────────────────────────────
 
 const ITEMS: Omit<WorkItem, "order">[] = [
-  {
-    category: "AI Commerce / Mastercard",
-    title: "Agent Pay: Designing trust for AI-led payments",
-    description:
-      "Built the trust framework and React demo used in a CPO-led Money20/20 showcase.",
-    image: "/assets/images/work/agent-commerce.jpg",
-    href: "/work/agent-commerce",
-    metric: "CPO-led Money20/20 demo for AI-led payments.",
-    tags: ["Trust UX", "AI Payments", "Prototype"],
-    featured: true,
-  },
   {
     category: "Demo Systems / Mastercard",
     title: "PartnerBank: A demo system for global RFPs",

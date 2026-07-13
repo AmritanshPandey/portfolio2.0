@@ -36,14 +36,14 @@ export const metadata: Metadata = {
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Amritansh Pandey, Product Thinker at Mastercard. 7 years building fintech end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
+    "Amritansh Pandey, Senior UX Designer at Mastercard. 7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
     url: "https://portfolio2-0-beta-one.vercel.app",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
-      "7 years building fintech end to end, from early demo to CPO stage. Agent Pay, PartnerBank, agentic commerce, and the demo the CPO used at Money20/20.",
+      "7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   },
   twitter: {
     card: "summary_large_image",

@@ -32,17 +32,6 @@ const CATEGORIES: ShotCategory[] = ["All", "Web App", "Systems", "Mobile"]
 
 const SHOTS: Shot[] = [
   {
-    title: "Agent Pay Trust Console",
-    category: "Web App",
-    description: "Approval states, risk cues, and merchant review flows for AI-led payments.",
-    image: "/assets/images/work/agent-commerce.jpg",
-    href: "/work/agent-commerce",
-    format: "Desktop",
-    year: "2025",
-    tags: ["AI payments", "Trust", "Prototype"],
-    featured: true,
-  },
-  {
     title: "PartnerBank Demo Builder",
     category: "Systems",
     description: "A configurable demo surface for assembling bank narratives without rebuilds.",
