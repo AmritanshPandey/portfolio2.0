@@ -29,68 +29,72 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
             className={clsx(
               "work-row group relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border/60 py-6 md:py-8",
               "md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_auto] md:gap-x-10",
-              "max-md:block max-md:overflow-hidden max-md:rounded-lg max-md:border max-md:border-border/70 max-md:bg-card/88 max-md:p-3 max-md:text-foreground max-md:shadow-[var(--shadow-md)] max-md:backdrop-blur dark:max-md:bg-card/90 dark:max-md:shadow-[0_22px_52px_rgba(0,0,0,0.42)]",
+              "max-md:isolate max-md:block max-md:overflow-hidden max-md:rounded-lg max-md:border max-md:border-border/70 max-md:bg-card/92 max-md:p-3.5 max-md:text-foreground max-md:shadow-[0_18px_54px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.56)] max-md:backdrop-blur dark:max-md:border-white/[0.11] dark:max-md:bg-card/88 dark:max-md:shadow-[0_22px_58px_rgba(0,0,0,0.46),inset_0_1px_0_rgba(255,255,255,0.06)]",
               i === items.length - 1 && "border-b",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-4 focus-visible:ring-offset-background rounded-sm"
             )}
           >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 hidden h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent max-md:block"
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(100%_58%_at_50%_0%,color-mix(in_srgb,var(--foreground)_5%,transparent),transparent_68%)] max-md:block dark:bg-[radial-gradient(100%_58%_at_50%_0%,rgba(255,255,255,0.055),transparent_68%)]"
+            />
             <article className="md:hidden">
-              <div className="mb-2 flex items-center justify-between font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                <span className="h-3 w-3 rounded-full border border-border/70 bg-background" />
+              <div className="relative mb-3 flex items-center justify-between font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                <span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-border/70 bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.035]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent/80" />
+                </span>
                 <span>No. {String(i + 1).padStart(2, "0")}</span>
               </div>
 
-              <div className="relative overflow-hidden rounded-md border border-border/60 bg-muted/30">
-                <div className="relative aspect-[1.28/1]">
+              <div className="relative overflow-hidden rounded-lg border border-border/55 bg-muted/30 shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_14px_34px_rgba(0,0,0,0.24)]">
+                <div className="relative aspect-[1.22/1]">
                   <Image
                     src={item.image}
                     alt=""
                     fill
                     sizes="(max-width: 767px) calc(100vw - 64px), 1px"
-                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-active:scale-[1.025]"
+                    className="object-cover saturate-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-active:scale-[1.025]"
                   />
                   <div className="absolute inset-0 bg-[radial-gradient(85%_65%_at_50%_0%,rgba(255,255,255,0.28),transparent_62%)] dark:bg-[radial-gradient(85%_65%_at_50%_0%,rgba(255,255,255,0.14),transparent_62%)]" />
-                  <span className="absolute bottom-3 right-3 flex h-11 w-11 items-center justify-center rounded-full border border-border/65 bg-background/72 text-foreground shadow-[0_12px_28px_rgba(0,0,0,0.20)] backdrop-blur-md dark:bg-neutral-950/72 dark:shadow-[0_14px_34px_rgba(0,0,0,0.38)]">
+                  <div className="absolute inset-0 ring-1 ring-inset ring-white/28 dark:ring-white/[0.08]" />
+                  <span className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/78 text-foreground shadow-[0_12px_28px_rgba(0,0,0,0.20)] backdrop-blur-md transition-transform duration-500 group-active:scale-95 dark:bg-neutral-950/76 dark:shadow-[0_14px_34px_rgba(0,0,0,0.38)]">
                     <IconArrowUpRight size={18} stroke={2} />
                   </span>
                 </div>
               </div>
 
-              <div className="pt-3">
+              <div className="relative pt-3.5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="min-w-0 text-[21px] font-medium leading-tight tracking-[-0.01em] text-foreground">
                     {name}
                   </h3>
-                  <span className="shrink-0 rounded border border-border/45 bg-muted/60 px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  <span className="shrink-0 rounded-md border border-border/50 bg-muted/50 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] dark:bg-white/[0.035]">
                     Case Study
                   </span>
                 </div>
 
-                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                <p className="mt-2.5 text-[13px] leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
 
-                <div className="my-4 border-t border-dashed border-border/70" />
+                <div className="my-4 border-t border-dashed border-border/65" />
 
-                <dl className="space-y-2.5 text-[12px] leading-snug">
-                  <div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Type</dt>
-                    <dd className="text-foreground/72">{category.type}</dd>
-                  </div>
-                  <div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Role</dt>
-                    <dd className="text-foreground/72">{role}</dd>
-                  </div>
-                  <div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3">
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Team</dt>
-                    <dd className="text-foreground/72">{category.client}</dd>
-                  </div>
-                  {item.metric && (
-                    <div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3">
-                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">Impact</dt>
-                      <dd className="text-foreground/72">{item.metric}</dd>
+                <dl className="grid gap-2.5 text-[12px] leading-snug">
+                  {[
+                    { label: "Type", value: category.type },
+                    { label: "Role", value: role },
+                    { label: "Team", value: category.client },
+                    ...(item.metric ? [{ label: "Impact", value: item.metric }] : []),
+                  ].map(({ label, value }) => (
+                    <div key={label} className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
+                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">{label}</dt>
+                      <dd className="text-foreground/72">{value}</dd>
                     </div>
-                  )}
+                  ))}
                 </dl>
               </div>
             </article>

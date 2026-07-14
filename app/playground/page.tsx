@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { PlaygroundWall } from "./playground-wall"
 
 export const metadata: Metadata = {
-  title: "Playground",
+  title: "Lab",
   description: "An experimental multidirectional wall of interface images and component tiles.",
 }
 

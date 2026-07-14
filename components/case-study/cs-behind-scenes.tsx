@@ -30,7 +30,8 @@ export type CsBehindScenesProps = {
   className?: string
 }
 
-const DEFAULT_ROTATIONS = [-5, -4, 3]
+const DEFAULT_ROTATIONS = [-1.5, 0.75, 1.5]
+const clampRotation = (rotation: number) => Math.max(-1.5, Math.min(rotation, 1.5))
 
 export function CsBehindScenes({
   eyebrow = "Learn More",
@@ -43,7 +44,7 @@ export function CsBehindScenes({
   if (cards.length === 0) return null
 
   return (
-    <section className={clsx("w-full overflow-hidden py-2", className)}>
+    <section className={clsx("w-full overflow-visible pt-2 pb-6", className)}>
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -66,7 +67,7 @@ export function CsBehindScenes({
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-7 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-9">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5 lg:px-2">
         {cards.map((item, index) => (
           <motion.div
             key={`${item.index}-${item.title}`}
@@ -79,9 +80,9 @@ export function CsBehindScenes({
               ease: [0.22, 1, 0.36, 1],
             }}
             className={clsx(
-              "mx-auto w-full max-w-[22rem]",
-              index === 1 && "lg:mt-16",
-              index === 2 && "md:col-span-2 md:max-w-[22rem] lg:col-span-1 lg:mt-2"
+              "mx-auto h-full w-full max-w-[18.5rem]",
+              index === 1 && "lg:mt-5",
+              index === 2 && "sm:col-span-2 sm:max-w-[18.5rem] lg:col-span-1 lg:mt-1"
             )}
           >
             <BehindScenesCard
@@ -102,46 +103,48 @@ function BehindScenesCard({
   item: CsBehindScenesItem
   rotation: number
 }) {
-  const style = { "--card-rotation": `${rotation}deg` } as CSSProperties
+  const style = { "--card-rotation": `${clampRotation(rotation)}deg` } as CSSProperties
 
   return (
     <article
       style={style}
       className={clsx(
-        "group relative flex min-h-[31rem] flex-col rounded-[1.5rem] border border-black/[0.06] bg-white p-5 text-neutral-950",
-        "shadow-[0_18px_50px_rgba(15,23,42,0.13)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        "dark:border-white/[0.08] dark:bg-white dark:text-neutral-950",
+        "group relative flex h-full min-h-[25rem] flex-col rounded-[1.25rem] border border-border/70 bg-card p-4 text-foreground",
+        "shadow-[0_14px_34px_rgba(15,23,42,0.08)] ring-1 ring-foreground/[0.03] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "dark:shadow-[0_18px_44px_rgba(0,0,0,0.34)] dark:ring-white/[0.04]",
         "lg:[transform:rotate(var(--card-rotation))] lg:hover:[transform:rotate(var(--card-rotation))_translateY(-0.35rem)]"
       )}
     >
       <span
         aria-hidden="true"
-        className="absolute left-1/2 top-0 z-20 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[linear-gradient(135deg,#d6d6d6,#8f8f8f_56%,#eeeeee)] shadow-[0_8px_14px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.8)] after:absolute after:left-1/2 after:top-[72%] after:h-9 after:w-4 after:-translate-x-1/2 after:rotate-[28deg] after:rounded-full after:bg-black/20 after:blur-md"
+        className="absolute left-1/2 top-0 z-20 size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-[linear-gradient(135deg,var(--accent),color-mix(in_srgb,var(--accent)_48%,var(--foreground)))] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.35)] after:absolute after:left-1/2 after:top-[72%] after:h-7 after:w-3 after:-translate-x-1/2 after:rotate-[24deg] after:rounded-full after:bg-foreground/15 after:blur-md"
       />
 
       <div className="relative z-10 flex flex-1 flex-col">
-        <p className="font-mono text-[17px] font-semibold leading-none tracking-tight text-neutral-500">
+        <p className="font-mono text-[12px] font-semibold leading-none tracking-[0.02em] text-muted-foreground">
           {item.index}
         </p>
 
-        <h3 className="mt-6 text-[20px] font-semibold leading-tight tracking-[-0.01em] md:text-[21px]">
+        <h3 className="mt-5 text-[16px] font-semibold leading-tight text-foreground">
           {item.title}
         </h3>
-        <p className="mt-4 text-[15px] leading-snug text-neutral-600 md:text-[16px]">
+        <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
           {item.description}
         </p>
 
-        <div className="relative mt-5 aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
-          <Image
-            src={item.image.src}
-            alt={item.image.alt}
-            fill
-            sizes="(min-width: 1024px) 320px, (min-width: 768px) 44vw, 86vw"
-            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
-          />
-        </div>
+        <div className="mt-auto pt-5">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border/50 bg-muted">
+            <Image
+              src={item.image.src}
+              alt={item.image.alt}
+              fill
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 42vw, 86vw"
+              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            />
+          </div>
 
-        <CtaLink item={item} />
+          <CtaLink item={item} />
+        </div>
       </div>
     </article>
   )
@@ -149,16 +152,16 @@ function BehindScenesCard({
 
 function CtaLink({ item }: { item: CsBehindScenesItem }) {
   const className = clsx(
-    "mt-5 inline-flex min-h-12 w-fit items-center gap-3 whitespace-nowrap rounded-full border border-neutral-200 bg-white px-4 text-[15px] font-medium text-neutral-800 md:text-[16px]",
-    "shadow-[0_10px_24px_rgba(15,23,42,0.09)] transition-[border-color,box-shadow,transform] duration-300",
-    "hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-[0_14px_30px_rgba(15,23,42,0.12)]",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+    "mt-4 inline-flex min-h-10 w-fit items-center gap-2.5 whitespace-nowrap rounded-full border border-border bg-muted/45 px-3.5 text-[13px] font-medium text-foreground",
+    "shadow-[0_8px_18px_rgba(15,23,42,0.06)] transition-[border-color,box-shadow,transform,background-color] duration-300",
+    "hover:-translate-y-0.5 hover:border-accent/40 hover:bg-muted hover:shadow-[0_12px_24px_rgba(15,23,42,0.09)]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
   )
   const content = (
     <>
       {item.cta.label}
       <IconArrowRight
-        size={22}
+        size={18}
         stroke={1.8}
         className="transition-transform duration-300 group-hover:translate-x-0.5"
         aria-hidden="true"

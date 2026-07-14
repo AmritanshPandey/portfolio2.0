@@ -8,6 +8,7 @@ import { ThemeFab } from "@/components/shared/theme-fab"
 import { SiteBackground } from "@/components/shared/site-background"
 import { Grain } from "@/components/shared/motion"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
+import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Montserrat, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
@@ -35,14 +36,14 @@ export const metadata: Metadata = {
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Amritansh Pandey, Product Thinker at Mastercard. 7 years building fintech end to end. Agent Pay, PartnerBank, agentic commerce, and the React demo the CPO used at Money20/20.",
+    "Amritansh Pandey, Senior UX Designer at Mastercard. 7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
     url: "https://portfolio2-0-beta-one.vercel.app",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
-      "7 years building fintech end to end, from early demo to CPO stage. Agent Pay, PartnerBank, agentic commerce, and the demo the CPO used at Money20/20.",
+      "7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   },
   twitter: {
     card: "summary_large_image",
@@ -96,6 +97,9 @@ export default function RootLayout({
 
             {/* Scroll restore */}
             <ScrollToHash />
+
+            {/* Reveal failsafe — forces stalled entrance reveals visible */}
+            <SettleGuard />
 
             <FancyCursor />
 

@@ -1,4 +1,5 @@
 import AboutSection from "@/components/sections/about/about"
+import { TrajectorySection } from "@/components/sections/about/trajectory"
 import AdvisorySection from "@/components/sections/about/mentorship"
 import InsightsSection from "@/components/sections/articles/insights"
 import Hero from "@/components/sections/hero/hero"
@@ -65,10 +66,20 @@ export default function Page() {
         <LeadershipSection />
       </Section> */}
 
+      {/* ───────────────── TRAJECTORY ───────────────── */}
+      <Section
+        id="trajectory"
+        bg="default"
+        title="Trajectory"
+        description="From 0→1 startup product to global enterprise fintech, and where the work is heading next."
+      >
+        <TrajectorySection />
+      </Section>
+
       {/* ───────────────── ADVISORY ───────────────── */}
       <Section
         id="advisory"
-        bg="default"
+        bg="muted"
         title="Advisory"
         description="Teams, founders, and designers I've advised on product direction, UX critique, and portfolio growth."
       >
@@ -76,8 +87,9 @@ export default function Page() {
       </Section>
 
       {/* ───────────────── ABOUT ───────────────── */}
-        
+
       <AboutSection />
+
 
     </>
   )

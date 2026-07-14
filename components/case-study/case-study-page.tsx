@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type ReactNode } from "react"
+import { Fragment, useEffect, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { IconArrowLeft } from "@tabler/icons-react"
 import { motion } from "framer-motion"
@@ -194,7 +194,7 @@ export function CaseStudyPage({
                   <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
                     {s.label}
                   </p>
-                  {s.content}
+                  <Fragment key={`${s.id}-content`}>{s.content}</Fragment>
                 </div>
               </motion.section>
             ))}

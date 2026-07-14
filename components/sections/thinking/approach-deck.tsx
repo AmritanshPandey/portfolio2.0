@@ -1,9 +1,10 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   animate,
   motion,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -70,6 +71,8 @@ const STEPS: Step[] = [
 const COUNT = STEPS.length
 const THRESHOLD = 110 // px of horizontal offset to commit a cycle
 const V_THRESHOLD = 500 // px/s flick velocity to commit
+const AUTO_SWIPE_INTERVAL = 4200
+const MANUAL_PAUSE_MS = 8000
 
 /** Per-slot transform for the cards behind the front one. */
 const SLOTS = [
@@ -139,6 +142,11 @@ function StepCard({ step, faded }: { step: Step; faded?: boolean }) {
 export function ApproachDeck() {
   const [index, setIndex] = useState(0)
   const [outgoing, setOutgoing] = useState<OutgoingCard | null>(null)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [isDocumentVisible, setIsDocumentVisible] = useState(true)
+  const [manualPauseUntil, setManualPauseUntil] = useState(0)
   const prefersReduced = useReducedMotion()
 
   const x = useMotionValue(0)
@@ -146,13 +154,30 @@ export function ApproachDeck() {
 
   // Guards a click from firing after a real drag (framer fires a click on release).
   const draggedRef = useRef(false)
+  const pointerFocusRef = useRef(false)
   const outgoingIdRef = useRef(0)
   const deckRef = useRef<HTMLDivElement>(null)
+  const isDeckInView = useInView(deckRef, { amount: 0.35 })
+
+  useEffect(() => {
+    const updateVisibility = () => {
+      setIsDocumentVisible(document.visibilityState === "visible")
+    }
+
+    updateVisibility()
+    document.addEventListener("visibilitychange", updateVisibility)
+
+    return () => document.removeEventListener("visibilitychange", updateVisibility)
+  }, [])
 
   const resetDrag = useCallback(() => {
     x.stop()
     x.set(0)
   }, [x])
+
+  const markManualInteraction = useCallback(() => {
+    setManualPauseUntil(performance.now() + MANUAL_PAUSE_MS)
+  }, [])
 
   const goTo = useCallback((i: number) => {
     setIndex(((i % COUNT) + COUNT) % COUNT)
@@ -172,8 +197,98 @@ export function ApproachDeck() {
     resetDrag()
   }, [resetDrag])
 
+  const commitOutgoing = useCallback(
+    ({
+      dir,
+      x: releaseX,
+      targetX,
+      rotate: releaseRotate,
+    }: Omit<OutgoingCard, "id" | "step">) => {
+      setOutgoing({
+        id: outgoingIdRef.current + 1,
+        step: STEPS[index],
+        dir,
+        x: releaseX,
+        targetX,
+        rotate: releaseRotate,
+      })
+      outgoingIdRef.current += 1
+      advance({ keepOutgoing: true })
+    },
+    [advance, index]
+  )
+
+  const cycleForward = useCallback(
+    (options?: { auto?: boolean }) => {
+      if (!options?.auto) {
+        markManualInteraction()
+      }
+
+      if (outgoing) return
+
+      if (prefersReduced) {
+        advance()
+        return
+      }
+
+      const dir = -1
+      const deckRect = deckRef.current?.getBoundingClientRect()
+      const minSafeX = deckRect ? -deckRect.left + 2 : -170
+      const maxSafeX = deckRect ? window.innerWidth - deckRect.right - 2 : 170
+      const releaseX = clamp(
+        dir * THRESHOLD,
+        Math.max(-170, minSafeX),
+        Math.min(170, maxSafeX)
+      )
+      const targetX = clamp(dir * 34, minSafeX, maxSafeX)
+      const releaseRotate = clamp((releaseX / 200) * 14, -14, 14)
+
+      commitOutgoing({
+        dir,
+        x: releaseX,
+        targetX,
+        rotate: releaseRotate,
+      })
+    },
+    [advance, commitOutgoing, markManualInteraction, outgoing, prefersReduced]
+  )
+
+  useEffect(() => {
+    if (
+      prefersReduced ||
+      !isDeckInView ||
+      !isDocumentVisible ||
+      isHovered ||
+      isFocused ||
+      isDragging ||
+      outgoing
+    ) {
+      return
+    }
+
+    const pauseRemaining = Math.max(0, manualPauseUntil - performance.now())
+    const timeout = window.setTimeout(
+      () => cycleForward({ auto: true }),
+      pauseRemaining > 0 ? pauseRemaining : AUTO_SWIPE_INTERVAL
+    )
+
+    return () => window.clearTimeout(timeout)
+  }, [
+    cycleForward,
+    isDeckInView,
+    isDocumentVisible,
+    isDragging,
+    isFocused,
+    isHovered,
+    manualPauseUntil,
+    outgoing,
+    prefersReduced,
+  ])
+
   const handleDragEnd = useCallback(
     (_e: unknown, info: PanInfo) => {
+      setIsDragging(false)
+
       const offX = info.offset.x
       const velX = info.velocity.x
       const committed = Math.abs(offX) > THRESHOLD || Math.abs(velX) > V_THRESHOLD
@@ -195,18 +310,14 @@ export function ApproachDeck() {
       const targetX = clamp(dir * 34, minSafeX, maxSafeX)
       const releaseRotate = clamp((releaseX / 200) * 14, -14, 14)
 
-      setOutgoing({
-        id: outgoingIdRef.current + 1,
-        step: STEPS[index],
+      commitOutgoing({
         dir,
         x: releaseX,
         targetX,
         rotate: releaseRotate,
       })
-      outgoingIdRef.current += 1
-      advance({ keepOutgoing: true })
     },
-    [advance, index, x]
+    [commitOutgoing, x]
   )
 
   const onKeyDown = useCallback(
@@ -217,20 +328,22 @@ export function ApproachDeck() {
         case " ":
         case "Enter":
           e.preventDefault()
-          advance()
+          cycleForward()
           break
         case "ArrowLeft":
         case "ArrowUp":
           e.preventDefault()
+          markManualInteraction()
           prev()
           break
         case "Home":
           e.preventDefault()
+          markManualInteraction()
           goTo(0)
           break
       }
     },
-    [advance, prev, goTo]
+    [cycleForward, markManualInteraction, prev, goTo]
   )
 
   const active = STEPS[index]
@@ -256,12 +369,34 @@ export function ApproachDeck() {
             aria-roledescription="Card deck"
             aria-label="Approach steps — use the left and right arrow keys to browse"
             onKeyDown={onKeyDown}
+            onPointerDown={() => {
+              pointerFocusRef.current = true
+              window.setTimeout(() => {
+                pointerFocusRef.current = false
+              }, 0)
+            }}
+            onPointerEnter={() => setIsHovered(true)}
+            onPointerLeave={() => setIsHovered(false)}
+            onFocus={() => {
+              if (pointerFocusRef.current) {
+                pointerFocusRef.current = false
+                return
+              }
+
+              setIsFocused(true)
+            }}
+            onBlur={(event) => {
+              const nextTarget = event.relatedTarget
+              if (!nextTarget || !event.currentTarget.contains(nextTarget)) {
+                setIsFocused(false)
+              }
+            }}
             onClick={() => {
               if (draggedRef.current) {
                 draggedRef.current = false
                 return
               }
-              advance()
+              cycleForward()
             }}
             className="relative h-[320px] w-full max-w-[382px] cursor-pointer rounded-[1.5rem] outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:h-[330px] md:h-[340px]"
           >
@@ -286,6 +421,8 @@ export function ApproachDeck() {
                     dragDirectionLock
                     onDragStart={() => {
                       draggedRef.current = true
+                      setIsDragging(true)
+                      markManualInteraction()
                     }}
                     onDragEnd={handleDragEnd}
                     style={{ x, rotate, zIndex: slot.z }}
@@ -351,7 +488,7 @@ export function ApproachDeck() {
 
           {/* Hint */}
           <p className="type-caption select-none text-muted-foreground">
-            {prefersReduced ? "Tap or use arrow keys to browse" : "Drag card to browse 👆"}
+            Tap, drag, or use arrow keys to browse
           </p>
 
           {/* Dot indicators */}
@@ -360,7 +497,10 @@ export function ApproachDeck() {
               <button
                 key={step.num}
                 type="button"
-                onClick={() => goTo(i)}
+                onClick={() => {
+                  markManualInteraction()
+                  goTo(i)
+                }}
                 aria-label={`Go to step ${i + 1}: ${step.q}`}
                 aria-current={i === index ? "true" : undefined}
                 className={cn(

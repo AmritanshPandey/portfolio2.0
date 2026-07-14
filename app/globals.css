@@ -119,6 +119,39 @@
   background-color: oklch(0.105 0 0);
 }
 
+.chart-container .recharts-cartesian-axis-tick text {
+  fill: var(--text-muted);
+}
+
+.chart-container .recharts-cartesian-grid line[stroke="#ccc"] {
+  stroke: color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.chart-container .recharts-curve.recharts-tooltip-cursor {
+  stroke: var(--border);
+}
+
+.chart-container .recharts-dot[stroke="#fff"],
+.chart-container .recharts-sector[stroke="#fff"] {
+  stroke: transparent;
+}
+
+.chart-container .recharts-layer,
+.chart-container .recharts-sector,
+.chart-container .recharts-surface {
+  outline: none;
+}
+
+.chart-container .recharts-polar-grid [stroke="#ccc"],
+.chart-container .recharts-reference-line [stroke="#ccc"] {
+  stroke: var(--border);
+}
+
+.chart-container .recharts-radial-bar-background-sector,
+.chart-container .recharts-rectangle.recharts-tooltip-cursor {
+  fill: var(--surface-2);
+}
+
 .bg-canvas-accent {
   background-color: oklch(0.925 0 0);
 }
@@ -715,19 +748,18 @@
 }
 
 @keyframes hero-line-rise {
-  from { transform: translateY(135%); }
+  from { transform: translateY(0.32em); }
   to { transform: translateY(0); }
 }
 
+/* Transform-only so the elements are ALWAYS legible (opacity stays 1). If the
+   animation is throttled or paused — a backgrounded tab on load, a low-power
+   webview — content is still fully readable, just briefly offset, instead of
+   invisible. Only the pure-transform headline reveal and this share that
+   guarantee; nothing in the hero gates visibility on an animation completing. */
 @keyframes hero-soft-in {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { transform: translateY(18px); }
+  to { transform: translateY(0); }
 }
 
 @keyframes hero-atmosphere-in {
@@ -1117,10 +1149,10 @@ html:not(.js) main [style*="opacity: 0"] {
 
 .clens__type {
   font-weight: 700;
-  line-height: 0.98;
+  line-height: 1.02;
   letter-spacing: -0.03em;
   text-align: center;
-  font-size: clamp(2.4rem, 10vw, 9.4rem);
+  font-size: clamp(2rem, 7.8vw, 7rem);
 }
 .clens__type > span {
   display: block;

@@ -35,7 +35,7 @@ const SECTION_LINKS: NavLink[] = [
 // Standalone pages (right group). These are real routes.
 const PAGE_LINKS: NavLink[] = [
   { label: "Gallery", href: "/gallery", section: "gallery" },
-  { label: "Playground", href: "/playground", section: "playground" },
+  { label: "Lab", href: "/playground", section: "playground" },
 ]
 
 const SECTION_IDS = [
@@ -45,6 +45,7 @@ const SECTION_IDS = [
   "approach",
   "insights",
   "leadership",
+  "trajectory",
   "advisory",
   "about",
 ]
@@ -55,8 +56,8 @@ const DETAIL_ROUTES: Record<string, { section: string; label: string; href: stri
   "/explorations": { section: "explorations", label: "Exploration", href: "/#explorations" },
   "/articles": { section: "insights", label: "Insights", href: "/#insights" },
   "/gallery": { section: "gallery", label: "Gallery", href: "/gallery" },
-  "/playground": { section: "playground", label: "Playground", href: "/playground" },
-  "/showcase": { section: "playground", label: "Playground", href: "/showcase" },
+  "/playground": { section: "playground", label: "Lab", href: "/playground" },
+  "/showcase": { section: "playground", label: "Lab", href: "/showcase" },
 }
 
 const NAV_IDS = SECTION_LINKS.map((link) => link.section)
@@ -120,12 +121,17 @@ function useActiveSection(ids: string[], enabled: boolean) {
 
     let ticking = false
     const update = () => {
+      // Near the top, the answer is always the first section — this also
+      // sidesteps mis-measurement before layout settles (all offsetTops 0
+      // during hydration made the last section win on load).
       const mid = window.scrollY + window.innerHeight * 0.45
       let current = ids[0]
 
-      for (const id of ids) {
-        const el = document.getElementById(id)
-        if (el && mid >= el.offsetTop) current = id
+      if (window.scrollY > 80) {
+        for (const id of ids) {
+          const el = document.getElementById(id)
+          if (el && el.offsetTop > 0 && mid >= el.offsetTop) current = id
+        }
       }
 
       setActive((prev) => (prev === current ? prev : current))
@@ -139,8 +145,17 @@ function useActiveSection(ids: string[], enabled: boolean) {
     }
 
     window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll, { passive: true })
     update()
-    return () => window.removeEventListener("scroll", onScroll)
+    // Section offsets move as images/fonts settle — re-measure after load.
+    const settle = window.setTimeout(update, 1200)
+    window.addEventListener("load", onScroll)
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+      window.removeEventListener("load", onScroll)
+      clearTimeout(settle)
+    }
   }, [ids, enabled])
 
   return [active, setActive] as const

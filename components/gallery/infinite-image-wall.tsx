@@ -1,7 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import { type KeyboardEvent, type PointerEvent, type WheelEvent, useRef } from "react"
+import {
+  type KeyboardEvent,
+  type PointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react"
 import {
   motion,
   useAnimationFrame,
@@ -139,6 +145,7 @@ export function InfiniteImageWall({
   const transform = useMotionTemplate`translate3d(${x}px, ${y}px, 0)`
   const velocity = useRef({ x: 0, y: 0 })
   const drag = useRef({ active: false, x: 0, y: 0, time: 0, moved: false })
+  const wallRef = useRef<HTMLDivElement | null>(null)
 
   useAnimationFrame((_, delta) => {
     const seconds = delta / 1000
@@ -155,10 +162,34 @@ export function InfiniteImageWall({
     velocity.current.y *= decay
   })
 
-  function moveBy(deltaX: number, deltaY: number) {
+  const moveBy = useCallback((deltaX: number, deltaY: number) => {
     x.set(wrap(x.get() + deltaX, cellWidth))
     y.set(wrap(y.get() + deltaY, cellHeight))
-  }
+  }, [cellHeight, cellWidth, x, y])
+
+  useEffect(() => {
+    const wall = wallRef.current
+    if (!wall) return
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) return
+
+      event.preventDefault()
+
+      const multiplier = event.deltaMode === 1 ? 16 : 1
+      const deltaX = -event.deltaX * multiplier
+      const deltaY = -event.deltaY * multiplier
+
+      moveBy(deltaX, deltaY)
+      velocity.current = {
+        x: deltaX * 10,
+        y: deltaY * 10,
+      }
+    }
+
+    wall.addEventListener("wheel", onWheel, { passive: false })
+    return () => wall.removeEventListener("wheel", onWheel)
+  }, [moveBy])
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
     const target = event.target instanceof Element ? event.target : null
@@ -207,18 +238,6 @@ export function InfiniteImageWall({
     }
   }
 
-  function onWheel(event: WheelEvent<HTMLDivElement>) {
-    const multiplier = event.deltaMode === 1 ? 16 : 1
-    const deltaX = -event.deltaX * multiplier
-    const deltaY = -event.deltaY * multiplier
-
-    moveBy(deltaX, deltaY)
-    velocity.current = {
-      x: deltaX * 10,
-      y: deltaY * 10,
-    }
-  }
-
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     const amount = event.shiftKey ? 120 : 56
 
@@ -248,18 +267,18 @@ export function InfiniteImageWall({
 
   return (
     <div
+      ref={wallRef}
       role="application"
       aria-label="Infinite interface image wall"
       tabIndex={0}
       className={cn(
-        "relative h-full min-h-[680px] w-full overflow-hidden bg-black text-white outline-none touch-pan-y",
+        "relative h-full min-h-[680px] w-full overflow-hidden overscroll-none bg-black text-white outline-none touch-pan-y [overscroll-behavior:none]",
         className
       )}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endPointer}
       onPointerCancel={endPointer}
-      onWheel={onWheel}
       onKeyDown={onKeyDown}
     >
       <div

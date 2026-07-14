@@ -1,14 +1,19 @@
 "use client"
 
 import Image from "next/image"
-import { type PointerEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react"
+import { useEffect, useState } from "react"
 
 import {
   InfiniteImageWall,
   type InfiniteWallItem,
 } from "@/components/gallery/infinite-image-wall"
-import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 const WALL_CELL_WIDTH = 1680
 const WALL_CELL_HEIGHT = 1000
@@ -66,73 +71,6 @@ const PLACEHOLDER_IMAGES = [
 
 type PlaygroundImage = (typeof PLACEHOLDER_IMAGES)[number]
 
-const CAROUSEL_SLOTS = [
-  {
-    offset: -2,
-    x: "clamp(-50rem, -52vw, -25rem)",
-    y: "0rem",
-    z: "-220px",
-    width: "clamp(11rem, 18vw, 18rem)",
-    rotateY: 34,
-    rotateZ: -11,
-    scale: 0.78,
-    opacity: 0.48,
-    zIndex: 6,
-  },
-  {
-    offset: -1,
-    x: "clamp(-25rem, -26vw, -14rem)",
-    y: "0.25rem",
-    z: "-80px",
-    width: "clamp(16rem, 24vw, 23rem)",
-    rotateY: 17,
-    rotateZ: 12,
-    scale: 0.94,
-    opacity: 0.92,
-    zIndex: 14,
-  },
-  {
-    offset: 0,
-    x: "0rem",
-    y: "0rem",
-    z: "0px",
-    width: "clamp(15rem, 23vw, 19rem)",
-    rotateY: 0,
-    rotateZ: 0,
-    scale: 1,
-    opacity: 1,
-    zIndex: 22,
-  },
-  {
-    offset: 1,
-    x: "clamp(14rem, 26vw, 25rem)",
-    y: "0.4rem",
-    z: "-80px",
-    width: "clamp(16rem, 24vw, 23rem)",
-    rotateY: -17,
-    rotateZ: -12,
-    scale: 0.94,
-    opacity: 0.92,
-    zIndex: 14,
-  },
-  {
-    offset: 2,
-    x: "clamp(25rem, 52vw, 50rem)",
-    y: "0rem",
-    z: "-220px",
-    width: "clamp(11rem, 18vw, 18rem)",
-    rotateY: -34,
-    rotateZ: 11,
-    scale: 0.78,
-    opacity: 0.48,
-    zIndex: 6,
-  },
-] as const
-
-function wrapIndex(index: number, length: number) {
-  return (index + length) % length
-}
-
 function grid(row: number, col: number) {
   return {
     x: GRID_X[col] - TILE_SIZE / 2,
@@ -160,238 +98,166 @@ const WALL_ITEMS: InfiniteWallItem[] = Array.from(
   }
 )
 
-function relatedItems(startIndex: number) {
-  const active = PLACEHOLDER_IMAGES[startIndex]
-  return PLACEHOLDER_IMAGES.filter((image) => image.group === active.group)
-}
+function formatGroup(group?: PlaygroundImage["group"]) {
+  if (!group) return "Playground"
 
-function relatedIndex(items: readonly PlaygroundImage[], sourceIndex: number) {
-  const source = PLACEHOLDER_IMAGES[sourceIndex]
-  return Math.max(0, items.findIndex((item) => item.src === source.src))
-}
-
-function GridViewButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onPointerDown={(event) => event.stopPropagation()}
-      className="fixed bottom-8 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-3 rounded-xl border border-white/10 bg-white/18 px-5 py-3 text-sm font-semibold uppercase tracking-normal text-white backdrop-blur transition-colors hover:bg-white/24 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-    >
-      <span className="grid size-7 grid-cols-2 gap-1" aria-hidden="true">
-        <span className="rounded-[3px] border border-white/40 bg-white/18" />
-        <span className="rounded-[3px] border border-white/40 bg-white/18" />
-        <span className="rounded-[3px] border border-white/40 bg-white/18" />
-        <span className="rounded-[3px] border border-white/40 bg-white/18" />
-      </span>
-      Grid view
-    </button>
-  )
-}
-
-function CarouselNavButton({
-  direction,
-  onClick,
-  disabled,
-}: {
-  direction: "previous" | "next"
-  onClick: () => void
-  disabled?: boolean
-}) {
-  const Icon = direction === "previous" ? IconArrowLeft : IconArrowRight
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onPointerDown={(event) => event.stopPropagation()}
-      disabled={disabled}
-      aria-label={direction === "previous" ? "Previous related image" : "Next related image"}
-      className={cn(
-        "flex size-12 items-center justify-center rounded-full border border-white/12 bg-white/[0.05] text-white/80 backdrop-blur-md transition-colors",
-        "hover:border-white/24 hover:bg-white/[0.12] hover:text-white",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
-        "disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-white/12 disabled:hover:bg-white/[0.05]"
-      )}
-    >
-      <Icon className="size-5" stroke={1.8} aria-hidden />
-    </button>
-  )
+  return group
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
 }
 
 export function PlaygroundWall() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [carouselIndex, setCarouselIndex] = useState(0)
-  const dragStart = useRef<number | null>(null)
-  const dragged = useRef(false)
-  const carouselItems = useMemo(
-    () => relatedItems(activeIndex ?? 0),
-    [activeIndex]
-  )
-  const carouselStageItems = useMemo(
-    () =>
-      CAROUSEL_SLOTS.map((slot) => {
-        const itemIndex = wrapIndex(carouselIndex + slot.offset, carouselItems.length)
-        return {
-          slot,
-          item: carouselItems[itemIndex],
-          itemIndex,
-        }
-      }),
-    [carouselIndex, carouselItems]
-  )
-  const canNavigate = carouselItems.length > 1
-
-  const goToCarouselIndex = useCallback((nextIndex: number) => {
-    if (carouselItems.length === 0) return
-
-    setCarouselIndex(wrapIndex(nextIndex, carouselItems.length))
-  }, [carouselItems.length])
-
-  const previous = useCallback(() => {
-    goToCarouselIndex(carouselIndex - 1)
-  }, [carouselIndex, goToCarouselIndex])
-
-  const next = useCallback(() => {
-    goToCarouselIndex(carouselIndex + 1)
-  }, [carouselIndex, goToCarouselIndex])
+  const [activeItem, setActiveItem] = useState<InfiniteWallItem | null>(null)
+  const activeImage = activeItem
+    ? PLACEHOLDER_IMAGES.find((image) => image.src === activeItem.src)
+    : null
 
   useEffect(() => {
-    if (activeIndex === null) return
+    const root = document.documentElement
+    const body = document.body
+    const previousRootOverscroll = root.style.overscrollBehavior
+    const previousRootOverscrollX = root.style.overscrollBehaviorX
+    const previousBodyOverscroll = body.style.overscrollBehavior
+    const previousBodyOverscrollX = body.style.overscrollBehaviorX
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveIndex(null)
-      } else if (event.key === "ArrowLeft") {
-        event.preventDefault()
-        previous()
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault()
-        next()
+    root.style.overscrollBehavior = "none"
+    root.style.overscrollBehaviorX = "none"
+    body.style.overscrollBehavior = "none"
+    body.style.overscrollBehaviorX = "none"
+
+    let historyGuardArmed = false
+    let lastTrackpadSwipeAt = 0
+
+    const guardedHistoryState = () => {
+      const currentState = window.history.state
+      const state =
+        currentState && typeof currentState === "object" ? currentState : {}
+
+      return {
+        ...state,
+        __playgroundBackGestureGuard: true,
       }
     }
 
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [activeIndex, next, previous])
+    const armHistoryGuard = () => {
+      if (historyGuardArmed) return
 
-  function openCarousel(item: InfiniteWallItem) {
-    const index = PLACEHOLDER_IMAGES.findIndex((image) => image.src === item.src)
-    const nextActiveIndex = index >= 0 ? index : 0
-    const nextItems = relatedItems(nextActiveIndex)
-
-    setActiveIndex(nextActiveIndex)
-    setCarouselIndex(relatedIndex(nextItems, nextActiveIndex))
-  }
-
-  function onCarouselPointerDown(event: PointerEvent<HTMLDivElement>) {
-    dragStart.current = event.clientX
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }
-
-  function onCarouselPointerUp(event: PointerEvent<HTMLDivElement>) {
-    const start = dragStart.current
-    dragStart.current = null
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId)
+      window.history.pushState(guardedHistoryState(), "", window.location.href)
+      historyGuardArmed = true
     }
 
-    if (start === null || !canNavigate) return
+    const onPopState = () => {
+      const isRecentTrackpadSwipe = performance.now() - lastTrackpadSwipeAt < 1600
 
-    const delta = event.clientX - start
-    if (Math.abs(delta) < 42) return
+      if (isRecentTrackpadSwipe) {
+        window.history.pushState(guardedHistoryState(), "", window.location.href)
+        historyGuardArmed = true
+        return
+      }
 
-    dragged.current = true
-    if (delta > 0) previous()
-    else next()
-  }
+      historyGuardArmed = false
+      window.removeEventListener("popstate", onPopState)
+      window.history.back()
+    }
 
-  if (activeIndex !== null) {
-    return (
-      <div
-        className="relative h-full min-h-full overflow-hidden bg-black text-white"
-        onPointerDown={onCarouselPointerDown}
-        onPointerUp={onCarouselPointerUp}
-        onPointerCancel={() => {
-          dragStart.current = null
-        }}
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,0.055),transparent_26%),linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,0.72)_82%)]"
-        />
-        <div aria-hidden className="absolute left-1/2 top-[14%] z-20 size-6 -translate-x-1/2 rounded-full bg-white/90" />
+    const stopTrackpadHistorySwipe = (event: WheelEvent) => {
+      if (event.ctrlKey || !event.cancelable) return
 
-        <div className="absolute inset-x-0 top-[24%] h-[46vh] min-h-[22rem] [perspective:1400px] sm:top-[23%] lg:top-[21%]">
-          {carouselStageItems.map(({ item, itemIndex, slot }) => {
-            const isActive = slot.offset === 0
-            return (
-              <button
-                key={`${slot.offset}-${item.src}`}
-                type="button"
-                onClick={() => {
-                  if (dragged.current) {
-                    dragged.current = false
-                    return
-                  }
+      if (Math.abs(event.deltaX) > 12 && Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
+        lastTrackpadSwipeAt = performance.now()
+        armHistoryGuard()
+      }
 
-                  setCarouselIndex(itemIndex)
-                }}
-                aria-label={`View ${item.title}`}
-                aria-current={isActive ? "true" : undefined}
-                className={cn(
-                  "absolute left-1/2 top-1/2 aspect-[4/3] -translate-x-1/2 -translate-y-1/2 overflow-hidden border bg-white/[0.08] transition-[opacity,transform,border-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
-                  isActive ? "rounded-[1.4rem] border-white/24" : "rounded-[1.25rem] border-white/10 hover:border-white/22"
-                )}
-                style={{
-                  width: slot.width,
-                  opacity: slot.opacity,
-                  transform: [
-                    `translate3d(calc(-50% + ${slot.x}), calc(-50% + ${slot.y}), ${slot.z})`,
-                    `rotateY(${slot.rotateY}deg)`,
-                    `rotateZ(${slot.rotateZ}deg)`,
-                    `scale(${slot.scale})`,
-                  ].join(" "),
-                  zIndex: slot.zIndex,
-                }}
-              >
-                <Image
-                  src={item.src}
-                  alt={item.title}
-                  fill
-                  draggable={false}
-                  sizes="(min-width: 1280px) 24vw, (min-width: 768px) 34vw, 62vw"
-                  className="object-cover"
-                  priority={Math.abs(slot.offset) <= 1}
-                />
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.28),transparent_46%)]"
-                />
-              </button>
-            )
-          })}
-        </div>
+      event.preventDefault()
+    }
 
-        <div className="fixed inset-x-0 bottom-24 z-30 flex items-center justify-center gap-3 px-5 md:top-1/2 md:bottom-auto md:-translate-y-1/2 md:justify-between md:gap-0 md:px-6">
-          <CarouselNavButton direction="previous" onClick={previous} disabled={!canNavigate} />
-          <CarouselNavButton direction="next" onClick={next} disabled={!canNavigate} />
-        </div>
+    window.addEventListener("popstate", onPopState)
+    window.addEventListener("wheel", stopTrackpadHistorySwipe, {
+      capture: true,
+      passive: false,
+    })
 
-        <GridViewButton onClick={() => setActiveIndex(null)} />
-      </div>
-    )
-  }
+    return () => {
+      window.removeEventListener("wheel", stopTrackpadHistorySwipe, {
+        capture: true,
+      })
+      window.removeEventListener("popstate", onPopState)
+      root.style.overscrollBehavior = previousRootOverscroll
+      root.style.overscrollBehaviorX = previousRootOverscrollX
+      body.style.overscrollBehavior = previousBodyOverscroll
+      body.style.overscrollBehaviorX = previousBodyOverscrollX
+    }
+  }, [])
 
   return (
-    <InfiniteImageWall
-      items={WALL_ITEMS}
-      onOpen={openCarousel}
-      cellWidth={WALL_CELL_WIDTH}
-      cellHeight={WALL_CELL_HEIGHT}
-      showCaptions={false}
-      className="h-full min-h-full"
-    />
+    <Dialog
+      open={Boolean(activeItem)}
+      onOpenChange={(open) => {
+        if (!open) {
+          setActiveItem(null)
+        }
+      }}
+    >
+      <InfiniteImageWall
+        items={WALL_ITEMS}
+        onOpen={setActiveItem}
+        cellWidth={WALL_CELL_WIDTH}
+        cellHeight={WALL_CELL_HEIGHT}
+        showCaptions={false}
+        className="h-full min-h-full"
+      />
+
+      {activeItem && (
+        <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[min(92vw,56rem)] gap-0 overflow-hidden rounded-[2rem] border border-white/12 bg-[#050505] p-0 text-white ring-1 ring-white/10 sm:max-w-[min(92vw,56rem)]">
+          <div className="grid overflow-hidden md:grid-cols-[minmax(0,34rem)_20rem]">
+            <div className="relative aspect-square overflow-hidden bg-white/[0.06]">
+              <Image
+                src={activeItem.src}
+                alt={activeItem.title}
+                fill
+                draggable={false}
+                sizes="(min-width: 1024px) 64vw, 92vw"
+                className="object-cover"
+                priority
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.22),transparent_42%)]"
+              />
+            </div>
+
+            <div className="flex min-h-0 flex-col justify-between gap-8 border-t border-white/10 p-6 md:border-l md:border-t-0 md:p-8">
+              <DialogHeader className="gap-4">
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300/80">
+                  {formatGroup(activeImage?.group)}
+                </p>
+                <DialogTitle className="max-w-[11ch] text-[clamp(28px,4vw,46px)] font-semibold leading-[0.98] tracking-tight text-white">
+                  {activeItem.title}
+                </DialogTitle>
+                <DialogDescription className="max-w-[24ch] text-sm leading-relaxed text-white/58">
+                  Component preview from the playground wall.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+                    Format
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-white/78">Image card</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+                    Source
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-white/78">Work archive</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      )}
+    </Dialog>
   )
 }

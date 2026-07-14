@@ -42,6 +42,7 @@ uniform vec2  u_vel;       // px, lens velocity (for the comet stretch)
 uniform float u_intensity; // 0..1 ease in/out
 uniform float u_radius;    // lens radius, px
 uniform float u_dpr;
+uniform float u_time;      // seconds — drives the ripple shimmer
 uniform sampler2D u_text;  // white type on transparent (FLIP_Y on upload)
 uniform vec3  u_bg;
 uniform vec3  u_ink;
@@ -49,15 +50,58 @@ uniform vec3  u_tint;
 
 float txt(vec2 fragUp) { return texture2D(u_text, fragUp / u_res).r; }
 
+// Layered sine field in grid-cell units → soft shimmering ripple bands.
+// Returns roughly -1..1.
+float field(vec2 p, float t) {
+  float w = 0.0;
+  w += sin(p.x * 0.85 + t * 0.65);
+  w += sin(p.y * 1.05 - t * 0.5);
+  w += sin((p.x + p.y) * 0.6 + t * 0.9);
+  w += sin((p.x - p.y) * 0.45 - t * 0.4);
+  return w * 0.25;
+}
+
 void main() {
   vec2 frag = gl_FragCoord.xy;   // y-up
   vec2 uv   = frag / u_res;
 
-  // ── Base: light-gray canvas + fine dark dot-grid + near-black type ───────
-  float cell  = 9.0 * u_dpr;
-  vec2  gp    = mod(frag, cell) - cell * 0.5;
-  float bgDot = 1.0 - smoothstep(0.5 * u_dpr, 1.15 * u_dpr, length(gp));
-  vec3  col   = mix(u_bg, mix(u_bg, u_ink, 0.16), bgDot * 0.55);
+  // ── Living dot field ─────────────────────────────────────────────────────
+  // A procedural grid whose dots are displaced + scaled by the layered field
+  // (shimmering ripple bands drift across) and by an expanding ring emanating
+  // from the cursor. Each dot can wander into a neighbouring cell, so we test
+  // the 3x3 block and keep the strongest coverage.
+  float cell  = 22.0 * u_dpr;
+  float aa    = 1.0 * u_dpr;
+  float baseR = 1.4 * u_dpr;
+
+  float md     = length(frag - u_mouse);
+  // Expanding ripple rings around the pointer — the "magical" push. Wider reach
+  // and stronger amplitude so the rings clearly ride out through the field.
+  float curRip = sin(md * 0.028 / u_dpr - u_time * 3.6) * exp(-md * 0.0014 / u_dpr) * u_intensity;
+
+  float dotCov = 0.0;
+  for (int j = -1; j <= 1; j++) {
+    for (int i = -1; i <= 1; i++) {
+      vec2  cid    = floor(frag / cell) + vec2(float(i), float(j));
+      vec2  center = (cid + 0.5) * cell;
+      float w      = field(center / cell, u_time) + curRip * 2.1;
+      vec2  disp   = vec2(sin(w * 3.14159), cos(w * 3.14159)) * 5.2 * u_dpr;
+      // A pool of enlarged dots gathers under the pointer. (Inverse falloff
+      // written with increasing edges — reversed smoothstep edges are
+      // undefined in GLSL and vary by driver.)
+      float prox   = (1.0 - smoothstep(0.0, u_radius * 2.0, length(center - u_mouse))) * u_intensity;
+      float r      = baseR * (0.55 + 0.78 * (w * 0.5 + 0.5) + prox * prox * 1.9);
+      float dd     = length(frag - (center + disp));
+      dotCov = max(dotCov, 1.0 - smoothstep(r - aa, r + aa, dd));
+    }
+  }
+
+  // Dots read as a faint gray field, warming to magenta near the cursor.
+  float mtint = (1.0 - smoothstep(0.0, u_radius * 1.9, md)) * u_intensity;
+  vec3  dotCol = mix(mix(u_bg, u_ink, 0.17), u_tint, mtint * 0.7);
+  vec3  col    = mix(u_bg, dotCol, dotCov * 0.66);
+
+  // Near-black type sits on top of the field.
   col = mix(col, u_ink, txt(frag));
 
   // ── Comet-stretched falloff: reach further on the trailing side ──────────
@@ -66,10 +110,10 @@ void main() {
   float along = dot(toC, vdir);                       // >0 ahead, <0 behind
   vec2  d     = toC - vdir * clamp(-along, 0.0, u_radius) * 0.55;
   float dist  = length(d);
-  float fo    = smoothstep(u_radius, 0.0, dist) * u_intensity;
+  float fo    = (1.0 - smoothstep(0.0, u_radius, dist)) * u_intensity;
 
   // Soft magenta bloom — always present under the pointer, spills past the disc.
-  float halo  = smoothstep(u_radius * 1.7, 0.0, length(toC)) * u_intensity;
+  float halo  = (1.0 - smoothstep(0.0, u_radius * 1.7, length(toC))) * u_intensity;
   col += u_tint * halo * halo * 0.14;
 
   if (fo > 0.001) {
@@ -163,6 +207,7 @@ export function ChromaticLensHero() {
       intensity: gl.getUniformLocation(prog, "u_intensity"),
       radius: gl.getUniformLocation(prog, "u_radius"),
       dpr: gl.getUniformLocation(prog, "u_dpr"),
+      time: gl.getUniformLocation(prog, "u_time"),
       text: gl.getUniformLocation(prog, "u_text"),
       bg: gl.getUniformLocation(prog, "u_bg"),
       ink: gl.getUniformLocation(prog, "u_ink"),
@@ -200,8 +245,8 @@ export function ChromaticLensHero() {
       textCanvas.height = H
       gl.viewport(0, 0, W, H)
 
-      const fs = Math.min(Math.max(cssW * 0.1, 40), 150) * dpr
-      const lh = fs * 0.98
+      const fs = Math.min(Math.max(cssW * 0.078, 32), 112) * dpr
+      const lh = fs * 1.02
       const blockH = lh * LINES.length
       let y = (H - blockH) / 2
 
@@ -254,6 +299,7 @@ export function ChromaticLensHero() {
       gl.uniform2f(u.vel, velX * W, velY * H)
       gl.uniform1f(u.intensity, intensity)
       gl.uniform1f(u.radius, radius())
+      gl.uniform1f(u.time, (performance.now() / 1000) % 3600)
       gl.uniform3f(u.bg, bg[0], bg[1], bg[2])
       gl.uniform3f(u.ink, ink[0], ink[1], ink[2])
       gl.uniform3f(u.tint, TINT[0], TINT[1], TINT[2])
@@ -270,17 +316,53 @@ export function ChromaticLensHero() {
       canvas.style.opacity = "1"
     }
 
-    let ready = false
+    // Free the GL objects this effect allocated. getContext returns the same
+    // context for a canvas, so without this they'd accumulate across remounts
+    // (StrictMode double-mount, client navigations back to this page).
+    const disposeGL = () => {
+      gl.deleteTexture(tex)
+      gl.deleteBuffer(buf)
+      gl.deleteProgram(prog)
+      gl.deleteShader(vs)
+      gl.deleteShader(fs)
+    }
+
+    // Paint immediately with whatever font is available so the canvas never
+    // depends on document.fonts.ready resolving (which can race the mount).
+    let disposed = false
+    renderText()
+    draw()
+    reveal()
+    // Re-rasterise once the real webfont settles, so the texture isn't a
+    // fallback face — guarded so it can't run after unmount (StrictMode remount).
     document.fonts.ready.then(() => {
+      if (disposed) return
       renderText()
-      ready = true
       draw()
-      reveal()
     })
 
+    // Static redraw observers — needed in every mode (including reduced motion),
+    // so the canvas re-rasterises on resize / orientation and repaints on a
+    // theme toggle instead of showing a stale frame.
+    const ro = new ResizeObserver(() => {
+      renderText()
+      draw()
+    })
+    ro.observe(root)
+
+    const mo = new MutationObserver(() => {
+      refreshColors()
+      draw()
+    })
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+
     if (reduce) {
+      // No cursor-driven animation loop, but keep resize/theme redraws live.
       return () => {
-        gl.getExtension("WEBGL_lose_context")?.loseContext()
+        disposed = true
+        ro.disconnect()
+        mo.disconnect()
+        disposeGL()
       }
     }
 
@@ -318,10 +400,8 @@ export function ChromaticLensHero() {
       pmy = my
       intensity += (targetIntensity - intensity) * (1 - Math.exp(-6 * dt))
 
-      if (ready) {
-        draw()
-        reveal()
-      }
+      draw()
+      reveal()
       raf = running ? requestAnimationFrame(loop) : 0
     }
 
@@ -330,12 +410,6 @@ export function ChromaticLensHero() {
       document.addEventListener("pointerleave", onLeave)
       window.addEventListener("blur", onLeave)
     }
-
-    const ro = new ResizeObserver(() => {
-      renderText()
-      if (ready) draw()
-    })
-    ro.observe(root)
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -352,15 +426,10 @@ export function ChromaticLensHero() {
     )
     io.observe(root)
 
-    const mo = new MutationObserver(() => {
-      refreshColors()
-      if (ready) draw()
-    })
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
-
     raf = requestAnimationFrame(loop)
 
     return () => {
+      disposed = true
       running = false
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener("pointermove", onMove)
@@ -369,7 +438,7 @@ export function ChromaticLensHero() {
       ro.disconnect()
       io.disconnect()
       mo.disconnect()
-      gl.getExtension("WEBGL_lose_context")?.loseContext()
+      disposeGL()
     }
   }, [])
 
@@ -379,8 +448,9 @@ export function ChromaticLensHero() {
       className="clens relative min-h-[100svh] overflow-hidden bg-[#ebeae7] text-[#171717] dark:bg-[#0e0e0e] dark:text-[#f4f4f4]"
     >
       {/* Fallback + SEO: the real, centred headline. Sits under the canvas, so
-          it shows whenever WebGL / JS is unavailable. */}
-      <div className="clens absolute inset-0 z-0 flex flex-col items-center justify-center px-5 text-center">
+          it shows whenever WebGL / JS is unavailable. (No `clens` class here —
+          it would override Tailwind's `absolute` with position:relative.) */}
+      <div className="absolute inset-0 z-0 flex flex-col items-center justify-center px-5 text-center">
         <h1 className="clens__type">
           {LINES.map((line) => (
             <span key={line}>{line}</span>

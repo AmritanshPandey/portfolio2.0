@@ -65,6 +65,7 @@ import { CsResults } from "@/components/case-study/cs-results"
 import { CsBehindScenes } from "@/components/case-study/cs-behind-scenes"
 import { CsPhoneShowcase } from "@/components/case-study/cs-phone-showcase"
 import { CsPhoneFeatures } from "@/components/case-study/cs-phone-features"
+import { CsMobileWireframeReveal } from "@/components/case-study/cs-mobile-wireframe-reveal"
 import { CsScreenWall } from "@/components/case-study/cs-screen-wall"
 import { IphoneFrame } from "@/components/shared/iphone-frame"
 import { BentoGrid, BentoCard } from "@/components/shared/bento-grid"
@@ -1430,6 +1431,106 @@ export default function ShowcasePage() {
                 },
               ]}
             />
+          </div>
+
+          <div>
+            <Eyebrow className="mb-5">Mobile UI + wireframe lens</Eyebrow>
+            <CsMobileWireframeReveal
+              eyebrow="Interaction Detail"
+              title="Reveal the structure behind the finished screen"
+              description="A finished screen stays readable while the drafting layer exposes layout hierarchy, spacing, and interaction structure underneath."
+              ui={{
+                children: (
+                  <div className="flex h-full w-full flex-col bg-[#09110f] p-5 text-white">
+                    <div className="mb-6 flex items-center justify-between text-[11px] text-white/58">
+                      <span>9:41</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-1.5 w-4 rounded-full bg-white/50" />
+                        <span className="size-1.5 rounded-full bg-emerald-300" />
+                      </div>
+                    </div>
+                    <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.34)]">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-300/80">
+                        Today
+                      </p>
+                      <h4 className="mt-2 text-[25px] font-semibold leading-[1.05] tracking-tight">
+                        Morning skin plan
+                      </h4>
+                      <div className="mt-5 grid grid-cols-2 gap-3">
+                        <div className="rounded-2xl bg-emerald-300 p-3 text-[#07100d]">
+                          <p className="text-[11px] font-medium opacity-70">UV index</p>
+                          <p className="mt-2 text-2xl font-semibold">05</p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.08] p-3">
+                          <p className="text-[11px] text-white/55">Hydration</p>
+                          <p className="mt-2 text-2xl font-semibold">82%</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5 space-y-3">
+                      {[
+                        ["Cleanser", "Gentle foam · 2 min"],
+                        ["Vitamin C", "Brightening serum"],
+                        ["SPF 50", "Reapply at 1:30 PM"],
+                      ].map(([name, detail]) => (
+                        <div
+                          key={name}
+                          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] p-3"
+                        >
+                          <span className="grid size-9 place-items-center rounded-xl bg-white/[0.08]">
+                            <span className="size-2 rounded-full bg-emerald-300" />
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block text-[13px] font-medium">{name}</span>
+                            <span className="block text-[11px] text-white/48">{detail}</span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-auto grid grid-cols-4 gap-2 rounded-2xl border border-white/10 bg-black/24 p-2">
+                      {["H", "P", "L", "M"].map((item, index) => (
+                        <div
+                          key={item}
+                          className={cn(
+                            "grid h-9 place-items-center rounded-xl text-[11px] font-semibold",
+                            index === 0 ? "bg-emerald-300 text-[#07100d]" : "text-white/42"
+                          )}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+              }}
+              wireframe={{
+                children: (
+                  <div className="flex h-full w-full flex-col bg-background p-5 text-foreground">
+                    <div className="mb-5 flex items-center justify-between">
+                      <div className="h-3 w-20 rounded-full border border-foreground/25" />
+                      <div className="size-8 rounded-full border border-foreground/25" />
+                    </div>
+                    <div className="mb-4 h-9 rounded-xl border border-foreground/20" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="aspect-square rounded-2xl border border-foreground/20" />
+                      <div className="aspect-square rounded-2xl border border-foreground/20" />
+                    </div>
+                    <div className="mt-5 space-y-3">
+                      <div className="h-16 rounded-2xl border border-foreground/20" />
+                      <div className="h-16 rounded-2xl border border-foreground/20" />
+                      <div className="h-16 rounded-2xl border border-foreground/20" />
+                    </div>
+                    <div className="mt-auto grid grid-cols-4 gap-2">
+                      {["nav-1", "nav-2", "nav-3", "nav-4"].map((item) => (
+                        <div key={item} className="h-8 rounded-xl border border-foreground/18" />
+                      ))}
+                    </div>
+                  </div>
+                ),
+                className: "bg-background",
+              }}
+            />
+           
           </div>
 
         </div>
