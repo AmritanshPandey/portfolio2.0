@@ -56,6 +56,11 @@ import { ImageLayout, type ImageItem } from "@/components/shared/image-layout"
 import { FullBleedBlock } from "@/components/shared/full-bleed-block"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { CsImage } from "@/components/case-study/cs-image"
+import { CsSummary } from "@/components/case-study/cs-summary"
+import { CsPrinciples } from "@/components/case-study/cs-principles"
+import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
+import { CsQuote } from "@/components/case-study/cs-quote"
+import { CsReflection } from "@/components/case-study/cs-reflection"
 import {
   CsMediaTextSection,
   type CsMediaTextSectionProps,
@@ -1305,6 +1310,100 @@ export default function ShowcasePage() {
         </ShowcaseTabPanel>
 
         <ShowcaseTabPanel>
+      {/* Executive summary */}
+      <Lab
+        id="cs-summary"
+        title="CsSummary"
+        note="The 30-second read, sits directly under the hero. Problem / My role / The outcome — so a recruiter who never scrolls further still leaves knowing the story. Complements the hero meta cards: those carry facts, this carries the narrative."
+      >
+        <CsSummary
+          problem="Four teams were each designing their own agentic payment flows. The patterns drifted, and every new demo re-litigated the same trust questions."
+          role="Led the UX research toolkit and the trust framework. Defined the interaction model, prototyped it in React, and aligned Brand, Product, and Engineering on one direction."
+          outcome="One shared toolkit replaced the duplicated flows. The direction was adopted company-wide and now backs executive demos without a designer in the room."
+        />
+      </Lab>
+
+      {/* Design principles */}
+      <Lab
+        id="cs-principles"
+        title="CsPrinciples"
+        note="The signature block. Numbered editorial list rather than an icon-card grid, so the rule carries the weight — with an optional 'in practice' line tying each principle to something real in the product. Best at 3–5."
+      >
+        <CsPrinciples
+          intro="Five rules that decided every trade-off in the flow. When a decision was contested, we went back to these rather than to opinion."
+          principles={[
+            {
+              title: "Make the agent's intent visible before it acts",
+              body: "Automation is only trustworthy if the user can see what is about to happen while there is still time to stop it.",
+              applied: "The review step shows the agent's plan as a sentence, not a spinner.",
+            },
+            {
+              title: "Keep control recoverable, not just available",
+              body: "An undo that arrives after the money moves is theatre. Control has to exist at the moment the stakes change.",
+              applied: "Approval is required at the value threshold, not at the end.",
+            },
+            {
+              title: "Signal security before asking for trust",
+              body: "Users extend trust to systems that have already demonstrated care. Reassurance after the ask reads as defensive.",
+            },
+            {
+              title: "Explain complexity progressively",
+              body: "The full model is legible on demand, never as a wall. Depth is earned by curiosity, not forced on everyone.",
+              applied: "Risk rationale sits one tap under the decision, not inside it.",
+            },
+            {
+              title: "Make automation accountable",
+              body: "Every autonomous action leaves a record a human can read, question, and reverse.",
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Annotated image */}
+      <Lab
+        id="cs-annotated-image"
+        title="CsAnnotatedImage"
+        note="The interface-storytelling workhorse: numbered hotspots on a screenshot with a linked legend. Hover or focus a marker to highlight its row and vice-versa. Markers are real buttons in the tab order, and the legend reads completely on its own — nothing is conveyed by position alone."
+      >
+        <CsAnnotatedImage
+          src="/assets/images/work/fintech-ai-system.jpg"
+          alt="Risk console showing agent intent, approval controls, and audit trail"
+          caption="Anonymised. The same three moments recur across every agent-led flow."
+          annotations={[
+            { x: 22, y: 28, title: "Intent line", text: "States what the agent is about to do in one plain sentence, before any action." },
+            { x: 68, y: 34, title: "Risk tier", text: "Colour plus label — never colour alone — so the tier survives a screenshot and a colourblind reader." },
+            { x: 40, y: 72, title: "Approval gate", text: "Appears at the value threshold, where control actually matters." },
+            { x: 82, y: 78, title: "Audit trail", text: "Every autonomous step is recorded and reversible from here." },
+          ]}
+        />
+      </Lab>
+
+      {/* Pull quote */}
+      <Lab
+        id="cs-quote"
+        title="CsQuote"
+        note="Stakeholder feedback as evidence. Sized to punctuate a section, not to become a testimonial card. Uses an oversized accent quote mark instead of a left border stripe, and keeps attribution plain so an anonymised source reads as deliberate."
+      >
+        <CsQuote
+          quote="This is the first time we've been able to show where we fit in agentic commerce without three slides of explanation first."
+          attribution="Product Director"
+          role="Issuing partner, anonymised"
+        />
+      </Lab>
+
+      {/* Reflection */}
+      <Lab
+        id="cs-reflection"
+        title="CsReflection"
+        note="The closing maturity signal — what changed in your thinking, what you'd do differently, what still needs proving. Deliberately plain passages: this is the one place the writing should carry it, and a grid of tiles would make honesty look like a template."
+      >
+        <CsReflection
+          learned="I used to treat trust as a visual layer — badges, locks, reassurance copy. This work convinced me trust is an architecture decision: it lives in where you put the control, not in what you say around it."
+          next="I'd run the multi-sensory research before the interaction model, not after. The findings would have changed the typology, and we rebuilt work we could have avoided."
+          validate="Whether the assisted/autonomous split holds outside payments. It has only been tested where the stakes are financial and immediate."
+        />
+      </Lab>
+
       {/* Flow diagram */}
       <Lab
         id="flow-diagram"
