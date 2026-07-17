@@ -61,6 +61,10 @@ import { CsPrinciples } from "@/components/case-study/cs-principles"
 import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
 import { CsQuote } from "@/components/case-study/cs-quote"
 import { CsReflection } from "@/components/case-study/cs-reflection"
+import { CsProvenance } from "@/components/case-study/cs-provenance"
+import { CsOptions } from "@/components/case-study/cs-options"
+import { CsComparisonTable } from "@/components/case-study/cs-comparison-table"
+import { BrowserFrame } from "@/components/case-study/browser-frame"
 import {
   CsMediaTextSection,
   type CsMediaTextSectionProps,
@@ -1402,6 +1406,102 @@ export default function ShowcasePage() {
           next="I'd run the multi-sensory research before the interaction model, not after. The findings would have changed the typology, and we rebuilt work we could have avoided."
           validate="Whether the assisted/autonomous split holds outside payments. It has only been tested where the stakes are financial and immediate."
         />
+      </Lab>
+
+      {/* Provenance label */}
+      <Lab
+        id="cs-provenance"
+        title="CsProvenance"
+        note="States what a piece of work actually is before the reader assumes. Anything not live in production carries one of these. Only 'shipped' uses the accent — the rest stay neutral on purpose, so a concept can never be dressed up to look like a result."
+      >
+        <div className="flex flex-wrap gap-2.5">
+          <CsProvenance kind="shipped" />
+          <CsProvenance kind="internal" />
+          <CsProvenance kind="conceptual" />
+          <CsProvenance kind="anonymised" />
+          <CsProvenance kind="exploration" />
+          <CsProvenance kind="conceptual" label="Conceptual, not a Mastercard product" />
+        </div>
+      </Lab>
+
+      {/* Options considered */}
+      <Lab
+        id="cs-options"
+        title="CsOptions"
+        note="The alternatives that were real, and why one won. A case study that only shows the final answer reads as luck. Rejected options stay at full readability rather than greyed into decoration, because the rejected reasoning does as much work as the chosen one. Best at 3."
+      >
+        <CsOptions
+          question="How much authority should the agent hold before a human sees the transaction?"
+          options={[
+            {
+              title: "Full autonomy with an audit trail",
+              body: "The agent completes the purchase end to end. The user reviews what happened afterwards in a log.",
+              verdict:
+                "Recovery arrives after the money moves. The audit trail explains a loss rather than preventing one.",
+            },
+            {
+              title: "Approval at a value threshold",
+              body: "The agent acts freely under a limit the user sets, and stops for confirmation above it.",
+              verdict:
+                "Control lands at the moment the stakes change, and routine purchases stay unblocked. It survived every stakeholder objection without special-casing.",
+              chosen: true,
+            },
+            {
+              title: "Confirm every action",
+              body: "Nothing executes without an explicit tap, regardless of amount.",
+              verdict:
+                "Safe, and pointless. It removes the reason to delegate to an agent at all.",
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Comparison table */}
+      <Lab
+        id="cs-comparison-table"
+        title="CsComparisonTable"
+        note="For when a trade-off is dense enough that prose stops being readable and the reader needs to scan one criterion across every column. A real table with scope'd headers, scrolling inside its own container so the page body never moves sideways. The chosen column is marked in its header text, not by tint alone."
+      >
+        <CsComparisonTable
+          columns={["Full autonomy", "Threshold approval", "Confirm everything"]}
+          highlight={1}
+          caption="Anonymised. Qualitative on purpose: these were the arguments, not a benchmark."
+          rows={[
+            {
+              criterion: "Where control sits",
+              values: ["After the fact", "At the value threshold", "At every step"],
+            },
+            {
+              criterion: "Reason to delegate",
+              values: ["Strong", "Preserved under the limit", "Removed"],
+            },
+            {
+              criterion: "Failure mode",
+              values: ["Explains a loss", "Interrupts a routine buy", "Abandoned flow"],
+            },
+            {
+              criterion: "Stakeholder objection",
+              values: ["Risk and Legal", "None that required special-casing", "Product"],
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Browser frame */}
+      <Lab
+        id="browser-frame"
+        title="BrowserFrame"
+        note="Chrome around a screenshot or clip, so a bare image reads as something that ran in a browser. Purely decorative, so the chrome is aria-hidden and only the wrapped content carries meaning. The address bar is a label, not a claim: pass the product name rather than a fabricated internal URL. Pairs with VideoLoop, which is built but has no clip to demo yet."
+      >
+        <BrowserFrame url="Design tokens — internal tool">
+          <Image
+            src="/assets/images/work/design-tokens.jpg"
+            alt="Token library shown in an internal web tool"
+            width={1200}
+            height={750}
+            className="h-auto w-full"
+          />
+        </BrowserFrame>
       </Lab>
 
       {/* Flow diagram */}
