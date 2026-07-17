@@ -92,9 +92,12 @@ export function CsComparisonTable({
                 >
                   {r.criterion}
                 </th>
-                {r.values.map((v, i) => (
+                {/* Driven by `columns`, not `values`: types can't enforce equal
+                    lengths, and a short row must not silently shift every cell
+                    under the wrong header. */}
+                {columns.map((column, i) => (
                   <td
-                    key={`${r.criterion}-${columns[i] ?? i}`}
+                    key={`${r.criterion}-${column}`}
                     className={clsx(
                       "px-5 py-4 align-top text-[13px] leading-relaxed",
                       i === highlight
@@ -102,7 +105,7 @@ export function CsComparisonTable({
                         : "text-muted-foreground"
                     )}
                   >
-                    {v}
+                    {r.values[i] ?? "Not assessed"}
                   </td>
                 ))}
               </tr>

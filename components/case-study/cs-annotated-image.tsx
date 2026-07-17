@@ -44,7 +44,12 @@ export function CsAnnotatedImage({
   aspect = "16/10",
   className,
 }: CsAnnotatedImageProps) {
-  const [active, setActive] = useState<number | null>(null)
+  // Hover and focus are tracked apart, then merged. Sharing one value loses the
+  // keyboard highlight: mousing over a focused marker and away again would
+  // clear it while the marker still holds focus.
+  const [hovered, setHovered] = useState<number | null>(null)
+  const [focused, setFocused] = useState<number | null>(null)
+  const active = hovered ?? focused
 
   return (
     <motion.figure
@@ -78,10 +83,10 @@ export function CsAnnotatedImage({
             <button
               key={a.title}
               type="button"
-              onMouseEnter={() => setActive(i)}
-              onMouseLeave={() => setActive(null)}
-              onFocus={() => setActive(i)}
-              onBlur={() => setActive(null)}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              onFocus={() => setFocused(i)}
+              onBlur={() => setFocused(null)}
               aria-label={`${i + 1}. ${a.title}`}
               className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full focus-visible:outline-none"
               style={{ left: `${a.x}%`, top: `${a.y}%` }}
@@ -108,8 +113,8 @@ export function CsAnnotatedImage({
           return (
             <li
               key={a.title}
-              onMouseEnter={() => setActive(i)}
-              onMouseLeave={() => setActive(null)}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
               className={clsx(
                 "grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-lg px-2 py-1.5 transition-colors duration-200",
                 isActive && "bg-accent/[0.06]"

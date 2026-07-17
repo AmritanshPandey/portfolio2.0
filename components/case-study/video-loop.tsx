@@ -39,19 +39,25 @@ export function VideoLoop({
   const reduce = useReducedMotion()
   const [playing, setPlaying] = useState(false)
 
-  // Only play while actually on screen, and never on first paint if the reader
-  // asked for less motion.
+  // A pause the reader asked for has to survive scrolling away and back.
+  // Without this the observer would resume on re-entry and quietly defeat the
+  // pause control.
+  const userPaused = useRef(false)
+
+  // The observer is attached unconditionally so a clip always pauses off
+  // screen, including one played deliberately under reduced motion. Only the
+  // resume is conditional.
   useEffect(() => {
     const el = ref.current
-    if (!el || reduce) return
+    if (!el) return
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (!entry.isIntersecting) {
+          el.pause()
+        } else if (!reduce && !userPaused.current) {
           // Autoplay can still be refused (low power mode); that's a no-op.
           void el.play().catch(() => {})
-        } else {
-          el.pause()
         }
       },
       { threshold: 0.25 }
@@ -64,8 +70,13 @@ export function VideoLoop({
   const toggle = () => {
     const el = ref.current
     if (!el) return
-    if (el.paused) void el.play().catch(() => {})
-    else el.pause()
+    if (el.paused) {
+      userPaused.current = false
+      void el.play().catch(() => {})
+    } else {
+      userPaused.current = true
+      el.pause()
+    }
   }
 
   return (
