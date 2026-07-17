@@ -47,7 +47,12 @@ export function CsOptions({ options, question, className }: CsOptionsProps) {
         </motion.p>
       )}
 
-      <ul className="grid gap-4 md:grid-cols-3">
+      <ul
+        className={clsx(
+          "grid gap-4",
+          options.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
+        )}
+      >
         {options.map((o, i) => (
           <motion.li
             key={o.title}
