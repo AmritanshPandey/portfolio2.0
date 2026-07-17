@@ -726,7 +726,7 @@ export default function Page() {
           <CsProvenance kind="internal" label="Company later wound down" />
         </div>
         <CsSummary
-          problem="A 10-person startup built a consumer safety app, then COVID lockdowns erased the use case six months in. The team needed a commercially viable product before the runway did what runways do."
+          problem="A 10-person startup built a consumer safety app for people moving through cities, and COVID lockdowns kept the use case frozen before it could monetise. The team needed a commercially viable product before the runway did what runways do."
           role="Sole PM and designer, plus React frontend when it was needed. Wrote PRDs at noon, designed at night, coded the factory manager dashboard in the afternoons."
           outcome="The B2B pivot shipped in six weeks and grew to ₹1.98Cr lifetime revenue. When restrictions lifted the market dissolved, and the honest lesson survived the company: we proved we could sell, not that the market would last."
         />

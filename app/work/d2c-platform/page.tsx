@@ -768,15 +768,20 @@ export default function Page() {
             </div>
           </FadeIn>
 
-          <BrowserFrame url="Storefront · representative placeholder" tone="light">
-            <Image
-              src="/assets/images/work/skincare-planner.jpg"
-              alt="A product detail page assembled from the shared commerce system"
-              width={1400}
-              height={875}
-              className="h-auto w-full"
-            />
-          </BrowserFrame>
+          <figure>
+            <BrowserFrame url="Storefront · representative placeholder" tone="light">
+              <Image
+                src="/assets/images/work/skincare-planner.jpg"
+                alt="A product detail page assembled from the shared commerce system"
+                width={1400}
+                height={875}
+                className="h-auto w-full"
+              />
+            </BrowserFrame>
+            <figcaption className="mt-3 text-[12.5px] leading-relaxed text-muted-foreground">
+              Representative placeholder illustrating the shared commerce system. Not a production screenshot.
+            </figcaption>
+          </figure>
         </div>
       </CsSection>
 
