@@ -19,8 +19,8 @@ export default function Page() {
       <Section
         id="work"
         bg="default"
-        title="Selected Work"
-        description="Case studies across AI payments, enterprise systems, D2C commerce, and early-stage product work."
+        title="Systems that shipped."
+        description="Four case studies across AI payments, enterprise systems, D2C commerce, and early-stage product work. Each one names the options considered and what actually changed."
         headerAnimated={false}
       >
         <CaseStudy />
@@ -31,7 +31,7 @@ export default function Page() {
         id="explorations"
         bg="muted"
         title="Explorations"
-        description="Self-directed work outside client constraints — testing product ideas and building reusable system foundations."
+        description="Self-directed work outside client constraints, testing product ideas and building reusable system foundations."
       >
         <ExplorationsSection />
       </Section>
@@ -72,6 +72,7 @@ export default function Page() {
         bg="default"
         title="Trajectory"
         description="From 0→1 startup product to global enterprise fintech, and where the work is heading next."
+        headerVariant="quiet"
       >
         <TrajectorySection />
       </Section>
@@ -80,8 +81,9 @@ export default function Page() {
       <Section
         id="advisory"
         bg="muted"
-        title="Advisory"
-        description="Teams, founders, and designers I've advised on product direction, UX critique, and portfolio growth."
+        title="Advisory, on the side"
+        description="Product direction, UX critique, and mentoring for a small number of teams and designers."
+        headerVariant="quiet"
       >
         <AdvisorySection />
       </Section>

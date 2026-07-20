@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { Reveal, TextReveal } from "@/components/shared/motion"
 
-type Variant = "default" | "compact" | "hero"
+type Variant = "default" | "compact" | "hero" | "quiet"
 type HeadingLevel = "h1" | "h2" | "h3"
 
 interface SectionHeaderProps {
@@ -29,6 +29,12 @@ export function SectionHeader({
     default: { container: "max-w-[700px] space-y-4", title: "type-section-title" },
     compact: { container: "max-w-2xl space-y-4", title: "type-section-title" },
     hero: { container: "mb-10 md:mb-12 max-w-3xl space-y-5", title: "type-page-title" },
+    // One step down from the display size. Used so the page has sections that
+    // whisper: not every band gets the same 68px drum hit.
+    quiet: {
+      container: "max-w-[640px] space-y-3",
+      title: "text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold tracking-[-0.015em] leading-tight",
+    },
   }
 
   const styles = variants[variant]

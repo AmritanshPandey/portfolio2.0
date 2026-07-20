@@ -1,118 +1,84 @@
 "use client"
 
-import { SectionSubgroup } from "@/components/shared/section-subgroup"
-import { AdvisoryItem } from "@/components/shared/advisory-item"
-import { IconBrandLinkedin } from "@tabler/icons-react"
+import { IconArrowUpRight } from "@tabler/icons-react"
 import { advisoryItems, teachingItems, menteeItems } from "@/lib/data"
 
+const EMAIL = "amritansh.pandey6@gmail.com"
+
+/**
+ * Advisory, compressed to its evidence.
+ *
+ * This is a side door for a "maybe" audience, so it stays a third of its old
+ * height: one proof line a visitor can actually check (the mentees and where
+ * they landed), one row of engagements, one ask. The Section header carries
+ * the framing; nothing here repeats it.
+ */
 export default function AdvisorySection() {
+  const engagements = [...advisoryItems, ...teachingItems]
+
   return (
-    <SectionSubgroup
-      label="Advisory"
-      description="Product guidance, UX critique, portfolio mentoring, and early roadmap support for founders, institutions, and designers."
-      variant="spacious"
-    >
-      <div className="space-y-14">
+    <div className="max-w-3xl space-y-10">
 
-        {/* PRODUCT ADVISORY */}
-        <div className="space-y-5">
-          <p className="type-meta">
-            Product Advisory
-          </p>
-          <div className="space-y-2">
-            {advisoryItems.map((item, i) => (
-              <AdvisoryItem key={i} {...item} />
-            ))}
-          </div>
-        </div>
-
-        {/* MENTORSHIP */}
-        <div className="space-y-5 pt-6 border-t border-border/60">
-          <p className="type-meta">
-            Mentorship
-          </p>
-
-          {/* STAT CALLOUT */}
-          <div className="
-            inline-flex items-baseline gap-2
-            px-4 py-2.5 rounded-xl
-            bg-accent/[0.08] dark:bg-accent/[0.10]
-            border border-accent/20 dark:border-accent/20
-          ">
-            <span className="text-2xl font-semibold text-accent leading-none">
-              4
-            </span>
-            <span className="text-sm text-foreground/70 leading-snug">
-              mentees now at{" "}
-              <span className="font-medium text-foreground">Microsoft, Zomato, Aleph Alpha,</span>
-              {" "}and{" "}
-              <span className="font-medium text-foreground">Mastercard</span>
-            </span>
-          </div>
-
-          <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-4">
-            {menteeItems.map((item, i) => (
-              <li key={i}>
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="
-                    group flex items-start gap-3 py-2
-                    transition-colors duration-300
-                  "
-                >
-                  {/* DOT */}
-                  <div className="
-                    mt-[6px] w-1.5 h-1.5 rounded-full
-                    bg-foreground/30
-                    transition-all duration-300
-                    group-hover:bg-accent dark:group-hover:bg-accent
-                    group-hover:scale-125
-                  " />
-
-                  {/* TEXT */}
-                  <div className="flex flex-col leading-tight">
-                    <span className="text-sm font-medium text-foreground">
-                      {item.name}
-                    </span>
-                    <div className="
-                      flex items-center gap-2
-                      text-sm text-foreground/60
-                      transition-colors duration-200
-                      group-hover:text-foreground/80
-                    ">
-                      <span>{item.company}</span>
-                      <IconBrandLinkedin
-                        size={16}
-                        className="
-                          opacity-40 transition-all duration-300
-                          group-hover:opacity-100 group-hover:text-[#0A66C2]
-                        "
-                      />
-                    </div>
-                  </div>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* TEACHING */}
-        <div className="space-y-5 pt-6 border-t border-border/60">
-          <p className="type-meta">
-            Teaching & Workshops
-          </p>
-          <div className="space-y-2">
-            {teachingItems.map((item, i) => (
-              <AdvisoryItem key={i} {...item} />
-            ))}
-          </div>
-        </div>
-
+      {/* The proof: checkable people, not a stat chip. */}
+      <div className="space-y-3">
+        <p className="text-[17px] leading-relaxed text-foreground/85">
+          Designers I&apos;ve mentored now work at Microsoft, Zomato, Aleph
+          Alpha, and Mastercard.
+        </p>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          {menteeItems.map((m) => (
+            <li key={m.name}>
+              <a
+                href={m.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-baseline gap-1.5 rounded-sm text-[13.5px] text-foreground/60 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              >
+                <span className="underline decoration-border underline-offset-4 transition-colors group-hover:decoration-accent">
+                  {m.name}
+                </span>
+                <span className="text-foreground/40">
+                  {m.company.split("•")[1]?.trim() ?? m.company}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div className="h-px w-full bg-border/60 mt-12" />
-    </SectionSubgroup>
+      {/* The engagements: one line each, no cards. */}
+      <ul className="space-y-2 border-t border-border/60 pt-6">
+        {engagements.map((item) => (
+          <li key={item.title}>
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 rounded-sm text-[14.5px] leading-relaxed text-foreground/70 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            >
+              {item.title}
+              <IconArrowUpRight
+                size={14}
+                stroke={2}
+                className="text-foreground/30 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {/* The ask: also the page's closing call, so a scroll-through doesn't
+          end without a next step. */}
+      <div className="flex flex-wrap items-center gap-4 border-t border-border/60 pt-6">
+        <a
+          href={`mailto:${EMAIL}?subject=Let%27s%20talk`}
+          className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[14px] font-medium text-white transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:text-neutral-950"
+        >
+          Start a conversation
+          <IconArrowUpRight size={16} stroke={2} />
+        </a>
+        <span className="text-[13px] text-muted-foreground">{EMAIL}</span>
+      </div>
+    </div>
   )
 }

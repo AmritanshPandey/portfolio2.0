@@ -19,7 +19,6 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
       {items.map((item, i) => {
         const category = splitCategory(item.category)
         const name = projectName(item.title)
-        const role = item.tags?.slice(0, 2).join(", ") ?? "Product strategy, Interface design"
 
         return (
           <Link
@@ -43,13 +42,6 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
               className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(100%_58%_at_50%_0%,color-mix(in_srgb,var(--foreground)_5%,transparent),transparent_68%)] max-md:block dark:bg-[radial-gradient(100%_58%_at_50%_0%,rgba(255,255,255,0.055),transparent_68%)]"
             />
             <article className="md:hidden">
-              <div className="relative mb-3 flex items-center justify-between font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                <span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-border/70 bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.035]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent/80" />
-                </span>
-                <span>No. {String(i + 1).padStart(2, "0")}</span>
-              </div>
-
               <div className="relative overflow-hidden rounded-lg border border-border/55 bg-muted/30 shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_14px_34px_rgba(0,0,0,0.24)]">
                 <div className="relative aspect-[1.22/1]">
                   <Image
@@ -68,34 +60,18 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
               </div>
 
               <div className="relative pt-3.5">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="min-w-0 text-[21px] font-medium leading-tight tracking-[-0.01em] text-foreground">
-                    {name}
-                  </h3>
-                  <span className="shrink-0 rounded-md border border-border/50 bg-muted/50 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] dark:bg-white/[0.035]">
-                    Case Study
-                  </span>
-                </div>
+                <h3 className="min-w-0 text-[21px] font-medium leading-tight tracking-[-0.01em] text-foreground">
+                  {name}
+                </h3>
 
                 <p className="mt-2.5 text-[13px] leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
 
-                <div className="my-4 border-t border-dashed border-border/65" />
-
-                <dl className="grid gap-2.5 text-[12px] leading-snug">
-                  {[
-                    { label: "Type", value: category.type },
-                    { label: "Role", value: role },
-                    { label: "Team", value: category.client },
-                    ...(item.metric ? [{ label: "Impact", value: item.metric }] : []),
-                  ].map(({ label, value }) => (
-                    <div key={label} className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3">
-                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70">{label}</dt>
-                      <dd className="text-foreground/72">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <p className="mt-3.5 text-[12.5px] leading-snug text-foreground/60">
+                  {category.type} · {category.client}
+                  {item.metric ? <> · {item.metric}</> : null}
+                </p>
               </div>
             </article>
 
