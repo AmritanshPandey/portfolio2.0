@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
 import { ImageResponse } from "next/og"
 
 export const size = { width: 1200, height: 630 }
@@ -11,26 +13,18 @@ export const alt =
  * A portfolio spreads by being pasted into LinkedIn, Slack, and DMs; without
  * this the link rendered as a bare text row. Rebuilds the hero's composition
  * rather than inventing a second identity: dark canvas, emerald accent on the
- * middle line, the same positioning statement, and the proof strip in mono.
+ * middle line, and the same positioning statement.
  *
- * Bricolage Grotesque is fetched at build time. If that fetch fails the card
- * still renders in the default face rather than failing the build, because a
- * plain card beats no card.
+ * The display font is read from the repo rather than fetched from Google at
+ * build time. A network call here would fail silently — the card would just
+ * render in a default face and nothing would flag it — and the preview
+ * deployments sit behind Vercel SSO, so that regression would be invisible
+ * from outside. 82 KB in the repo, never shipped to a browser, always correct.
  */
-async function loadFont(): Promise<ArrayBuffer | null> {
-  try {
-    const css = await fetch(
-      "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700&display=swap",
-      { headers: { "User-Agent": "Mozilla/5.0" } }
-    ).then((r) => r.text())
-
-    const url = css.match(/src:\s*url\(([^)]+)\)\s*format\('(?:truetype|opentype)'\)/)?.[1]
-    if (!url) return null
-
-    return await fetch(url).then((r) => r.arrayBuffer())
-  } catch {
-    return null
-  }
+async function loadFont(): Promise<Buffer> {
+  return readFile(
+    join(process.cwd(), "assets", "fonts", "bricolage-grotesque-700.ttf")
+  )
 }
 
 export default async function Image() {
@@ -108,9 +102,12 @@ export default async function Image() {
     ),
     {
       ...size,
-      fonts: font
-        ? [{ name: "Bricolage Grotesque", data: font, style: "normal", weight: 700 }]
-        : [],
+      // No conditional fallback: the file is in the repo, so a missing font is
+      // a build error worth surfacing rather than a card that quietly ships in
+      // the wrong typeface.
+      fonts: [
+        { name: "Bricolage Grotesque", data: font, style: "normal", weight: 700 },
+      ],
     }
   )
 }
