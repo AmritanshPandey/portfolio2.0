@@ -51,7 +51,10 @@ const caveat = Caveat({
 const analyticsEnabled = process.env.VERCEL === "1"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio2-0-beta-one.vercel.app"),
+  // The live domain. Previously a Vercel preview hostname, which meant every
+  // canonical URL, OG tag, and social card was attributed to
+  // portfolio2-0-beta-one.vercel.app instead of the real site.
+  metadataBase: new URL("https://www.amritansh.cc"),
   title: {
     default: "Amritansh Pandey | Product Thinker | Mastercard",
     template: "%s | Amritansh Pandey",
@@ -61,7 +64,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
-    url: "https://portfolio2-0-beta-one.vercel.app",
+    url: "https://www.amritansh.cc",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
       "7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
