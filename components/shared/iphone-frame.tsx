@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils"
  */
 
 const FRAME = {
-  black: "/assets/images/iphone.png",
-  white: "/assets/images/iphone-white.png",
+  black: "/assets/images/iphone.webp",
+  white: "/assets/images/iphone-white.webp",
 } as const
 
 const SCREEN_INSET = { top: "2.5%", bottom: "2.5%", left: "5.333%", right: "5.333%" } as const

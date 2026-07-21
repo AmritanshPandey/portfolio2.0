@@ -162,6 +162,10 @@ export interface ArticleItem {
   accent?: string
   /** true = show in the homepage Insights section (capped at 4) */
   featured: boolean
+  /** true = keep the route resolving but drop it from every listing, the
+   *  homepage, and the sitemap. Used to retire content without deleting it.
+   *  Pair with `robots: { index: false }` on the route's layout. */
+  hidden?: boolean
   // Full article content, optional and used by detail pages.
   intro?: string
   sections?: ArticleSection[]

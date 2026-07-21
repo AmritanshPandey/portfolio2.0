@@ -175,7 +175,6 @@ export default function AboutSection() {
         {/* HEADER */}
         <div className="max-w-2xl mb-12 md:mb-14">
           <SectionHeader
-            eyebrow="About"
             title="Who I am"
             description="Curious, hands-on, drawn to systems."
           />
@@ -203,7 +202,7 @@ export default function AboutSection() {
                 I like figuring out how things work. That shows up in the job, but also in the rest of life: long routes, unfamiliar cities, cooking, Lego, and small collections that reward patience.
               </p>
               <p className="type-prose text-foreground/80">
-                The same values keep coming back in my design work: clarity, systems, craft, and making decisions visible enough for others to build from. Teaching is the part I return to most — mentoring designers and watching ideas click.
+                The same values keep coming back in my design work: clarity, systems, craft, and making decisions visible enough for others to build from. Teaching is the part I return to most, mentoring designers and watching ideas click.
               </p>
             </div>
 

@@ -12,7 +12,7 @@ interface SectionProps {
   eyebrow?: string
   title?: string
   description?: string
-  headerVariant?: "default" | "compact" | "hero"
+  headerVariant?: "default" | "compact" | "hero" | "quiet"
   headerAnimated?: boolean
   transition?: string
   transitionEyebrow?: string

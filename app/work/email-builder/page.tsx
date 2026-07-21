@@ -6,8 +6,32 @@ import {
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
+  CsChapterNav,
+  CsProvenance,
+  CsSummary,
+  CsPrinciples,
+  CsOptions,
+  CsComparisonTable,
+  CsAnnotatedImage,
+  CsQuote,
+  CsReflection,
 } from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+
+// ─── CHAPTERS ────────────────────────────────────────────────────────────────
+
+const CHAPTERS = [
+  { id: "problem",          label: "Problem" },
+  { id: "my-role",          label: "My role" },
+  { id: "principles",       label: "Principles" },
+  { id: "key-decisions",    label: "Decisions" },
+  { id: "architecture",     label: "Architecture" },
+  { id: "outlook-problem",  label: "The Outlook problem" },
+  { id: "template-library", label: "Template library" },
+  { id: "the-shift",        label: "The shift" },
+  { id: "what-changed",     label: "What changed" },
+  { id: "reflection",       label: "Reflection" },
+]
 
 // ─── EMAIL CLIENT COMPAT DATA ────────────────────────────────────────────────
 
@@ -38,36 +62,54 @@ const STATUS_TEXT: Record<string, string> = {
 
 // ─── CONSTRAINT TABLE DATA ───────────────────────────────────────────────────
 
-const CONSTRAINTS = [
+const CONSTRAINT_ROWS = [
   {
-    wanted:  "CSS div-based flexible layouts",
-    limit:   "No div support, breaks entirely in Outlook Desktop",
-    built:   "Table-based layouts, rigid but universal and reliable",
+    criterion: "Layout",
+    values: [
+      "CSS div-based flexible layouts",
+      "No div support, breaks entirely in Outlook Desktop",
+      "Table-based layouts, rigid but universal and reliable",
+    ],
   },
   {
-    wanted:  "CSS-styled dynamic buttons",
-    limit:   "CSS buttons partially ignored, inconsistent borders and padding",
-    built:   "VML-backed buttons, renders consistently across all versions",
+    criterion: "Buttons",
+    values: [
+      "CSS-styled dynamic buttons",
+      "CSS buttons partially ignored, inconsistent borders and padding",
+      "VML-backed buttons, renders consistently across all versions",
+    ],
   },
   {
-    wanted:  "Web fonts (brand typeface)",
-    limit:   "Web fonts not supported, fallback to system fonts only",
-    built:   "Email-safe font stack with brand-aligned fallbacks",
+    criterion: "Typography",
+    values: [
+      "Web fonts (brand typeface)",
+      "Web fonts not supported, fallback to system fonts only",
+      "Email-safe font stack with brand-aligned fallbacks",
+    ],
   },
   {
-    wanted:  "Dark mode-aware design",
-    limit:   "Outlook inverts colours unpredictably in dark mode",
-    built:   "Tested colour pairs that remain legible in both modes",
+    criterion: "Dark mode",
+    values: [
+      "Dark mode-aware design",
+      "Outlook inverts colours unpredictably in dark mode",
+      "Tested colour pairs that remain legible in both modes",
+    ],
   },
   {
-    wanted:  "Responsive fluid layouts",
-    limit:   "Max-width and media queries inconsistently applied",
-    built:   "Fixed-width core (600px) with mobile-only breakpoint handling",
+    criterion: "Responsive",
+    values: [
+      "Responsive fluid layouts",
+      "Max-width and media queries inconsistently applied",
+      "Fixed-width core (600px) with mobile-only breakpoint handling",
+    ],
   },
   {
-    wanted:  "HTML5 video embeds",
-    limit:   "Not supported, blank space or broken placeholder",
-    built:   "Animated GIF with static fallback image, works everywhere",
+    criterion: "Motion",
+    values: [
+      "HTML5 video embeds",
+      "Not supported, blank space or broken placeholder",
+      "Animated GIF with static fallback image, works everywhere",
+    ],
   },
 ]
 
@@ -110,7 +152,7 @@ function Hero() {
       lede={
         <>
           Owned the component architecture and design system for Mastercard&apos;s
-          global email builder — defining{" "}
+          global email builder, defining{" "}
           <strong className="font-medium text-foreground">what got built, why, and in what order</strong>.
           The constraint wasn&apos;t brand. It was{" "}
           <strong className="font-medium text-foreground">Outlook</strong>.
@@ -125,7 +167,7 @@ function Hero() {
       readTime="12 min read"
       publishedDate="2023"
       topics={["Design Systems", "Infrastructure", "Email", "Scale"]}
-      asideLabel="The real constraint — client compatibility"
+      asideLabel="The real constraint, client compatibility"
       asideCol="340px"
       aside={<HeroAside />}
     />
@@ -138,6 +180,8 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
+      <CsChapterNav chapters={CHAPTERS} />
+
       <Hero />
 
       <CsInfoBar cells={[
@@ -148,6 +192,19 @@ export default function Page() {
         { label: "Constraint", value: "Outlook Desktop",     sub: "Drove every design decision" },
         { label: "Adoption",   value: "Mastercard-wide",     sub: "Backed by Global Brand team" },
       ]} />
+
+      {/* 30-second read */}
+      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
+        <div className="mb-5 flex flex-wrap gap-2">
+          <CsProvenance kind="shipped" label="In production, Mastercard-wide" />
+          <CsProvenance kind="anonymised" label="Visuals anonymised" />
+        </div>
+        <CsSummary
+          problem="Custom emails needed HTML knowledge, so teams either waited on agencies or fell back to outdated generic templates. After the rebrand, the gap between the new identity and email communication was visible to everyone."
+          role="Owned the component architecture, design standards, governance model, and roadmap. A senior engineer owned the HTML and builder code; another designer owned the builder dashboard UX."
+          outcome="A no-code builder on 50+ Outlook-safe components and 28 templates, adopted Mastercard-wide with Global Brand's backing. Teams that avoided custom emails now build them without touching HTML."
+        />
+      </div>
 
       {/* Problem */}
       <CsSection id="problem" label="The Problem" withDivider={false}>
@@ -275,19 +332,71 @@ export default function Page() {
         </div>
       </CsSection>
 
+      {/* Principles */}
+      <CsSection id="principles" label="Design Principles">
+        <div className="space-y-8">
+          <h2 className="type-case-title text-foreground">
+            Four rules that settled every argument.
+          </h2>
+          <CsPrinciples
+            intro="When a stakeholder pushed for more and the engineering said less, these were the rules we went back to instead of opinion."
+            principles={[
+              {
+                title: "Outlook Desktop is the floor, not an edge case",
+                body: "The dominant enterprise client gets designed for first. Anything that breaks there does not ship, however good it looks everywhere else.",
+                applied: "Every component in the library renders in Outlook Desktop before it earns a place in the system.",
+              },
+              {
+                title: "Components, not templates",
+                body: "A template is a dead end: every brand update means re-editing it. A component propagates. The effort compounds instead of repeating.",
+                applied: "A brand update touches one component and flows through all 28 templates.",
+              },
+              {
+                title: "Simple enough for anyone beats powerful for a few",
+                body: "The adoption problem was intimidation, not capability. A tool that solves for power users and scares everyone else has failed at its actual job.",
+                applied: "Select a component, fill in content, ship. No code, no design tool, no vendor.",
+              },
+              {
+                title: "Governance only works with authority behind it",
+                body: "A design system without organisational backing erodes one exception at a time. The standards held because Global Brand endorsed them, not because they were well documented.",
+                applied: "Requests to break the system went to the governance model, not to whoever asked loudest.",
+              },
+            ]}
+          />
+        </div>
+      </CsSection>
+
       {/* Key Decisions */}
       <CsSection id="key-decisions" label="Key Decisions" variant="dark">
         <div className="space-y-5">
+          <div className="pb-6">
+            <CsOptions
+              question="The first call shaped everything after it: what should the system actually be made of?"
+              options={[
+                {
+                  title: "Keep the agency model",
+                  body: "Teams keep commissioning custom emails from external agencies whenever they need something branded.",
+                  verdict:
+                    "Slow, expensive, and inconsistent. It was the status quo that created the problem, and it kept HTML as a gate in front of every send.",
+                },
+                {
+                  title: "Build 28 bespoke templates",
+                  body: "Hand-build each template the categories needed. Fastest path to a visible launch.",
+                  verdict:
+                    "Every future brand update would mean manual edits across all 28. The effort repeats forever instead of compounding.",
+                },
+                {
+                  title: "Build a component library",
+                  body: "50+ modular pieces that teams assemble into any email. Started as a Figma library concept, evolved into the no-code builder.",
+                  verdict:
+                    "More upfront architecture work, invisible to stakeholders at first. But a brand update now touches one component and propagates through every template.",
+                  chosen: true,
+                },
+              ]}
+            />
+          </div>
           <CsDecision
             index={0}
-            title="Modular reusable components, or bespoke one-off templates?"
-            problem="There was pressure to build 28 individual templates. That would have been faster for launch, but every future brand update would need manual edits across all templates."
-            decision="Fought for a component library that teams assemble into any email layout. Started as a Figma library concept, designers create layouts themselves, then hand off for HTML build. Evolved into the no-code builder."
-            tradeoff="Required more upfront investment in architecture that wasn&apos;t immediately visible to stakeholders. The compounding benefit only became clear over time, when a brand update touched one component, not 28 templates."
-            impact="A brand update now propagates through every template by changing a single component. New email types are assembled from existing pieces, not built from scratch. The system scales without the effort scaling with it."
-          />
-          <CsDecision
-            index={1}
             title="Push for design ambition, or design within the Outlook constraint?"
             problem="Stakeholders wanted richer, more visual emails, multi-column layouts, custom fonts, dynamic CTAs. Outlook Desktop couldn&apos;t render any of it reliably without complex, brittle workarounds."
             decision="Every time a stakeholder pushed for more visual complexity, the answer was to simplify the design rather than push for complex engineering workarounds. Outlook Desktop is the floor, not an edge case to hack around."
@@ -295,7 +404,7 @@ export default function Page() {
             impact="The constraint produced more durable design. The emails that perform best in enterprise environments are rarely the most visually complex. Simplicity wasn&apos;t a compromise, it was the correct answer."
           />
           <CsDecision
-            index={2}
+            index={1}
             title="Build a powerful feature-rich tool, or keep it simple enough for anyone to use?"
             problem="The biggest adoption problem wasn&apos;t technical capability, it was intimidation. Teams avoided custom emails because HTML felt too risky. A more powerful tool with a high capability ceiling would solve for power users and fail for everyone else."
             decision="Radical simplicity: any non-HTML person should be able to build a branded email. Select a component. Fill in content. Ship it. No code, no design tool, no external vendor required."
@@ -361,38 +470,12 @@ export default function Page() {
             </p>
           </div>
 
-          <FadeIn>
-            <div className="rounded-2xl border border-border overflow-hidden">
-              {/* Header row */}
-              <div className="grid grid-cols-3 border-b border-border">
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent bg-accent/5">
-                  What we wanted
-                </div>
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-red-700 dark:text-red-400 bg-red-500/5 border-x border-border">
-                  What Outlook could handle
-                </div>
-                <div className="px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent bg-accent/5">
-                  What we actually built
-                </div>
-              </div>
-              {CONSTRAINTS.map((row, i) => (
-                <div
-                  key={i}
-                  className={`grid grid-cols-3 ${i < CONSTRAINTS.length - 1 ? "border-b border-border" : ""}`}
-                >
-                  <div className="px-6 py-4 text-[13px] text-accent/80 leading-relaxed bg-accent/[0.03]">
-                    {row.wanted}
-                  </div>
-                  <div className="px-6 py-4 text-[13px] text-red-800 dark:text-red-300/80 leading-relaxed bg-red-500/[0.03] border-x border-border">
-                    {row.limit}
-                  </div>
-                  <div className="px-6 py-4 text-[13px] text-accent/80 leading-relaxed bg-accent/[0.03]">
-                    {row.built}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
+          <CsComparisonTable
+            columns={["What we wanted", "What Outlook allowed", "What we built"]}
+            highlight={2}
+            rows={CONSTRAINT_ROWS}
+            caption="Six times the modern answer lost to the one that renders everywhere."
+          />
         </div>
       </CsSection>
 
@@ -522,6 +605,25 @@ export default function Page() {
             </div>
           </FadeIn>
 
+          {/* Anatomy of a built email */}
+          <CsAnnotatedImage
+            src="/assets/images/work/execution-system.jpg"
+            alt="Anatomy of an email assembled from the component library"
+            caption="Representative visual with placeholder imagery. The builder itself is an internal Mastercard tool."
+            annotations={[
+              { x: 24, y: 18, title: "Component picker", text: "Every block comes from the 50+ piece library. Nothing on the canvas can go off-brand, because off-brand is not on the menu." },
+              { x: 70, y: 32, title: "Composition, not code", text: "An email is a stack of components in an order. The system owns the HTML underneath, including the Outlook workarounds." },
+              { x: 38, y: 62, title: "Email-safe by construction", text: "Table layout, VML buttons, tested colour pairs. The constraint work is baked into the pieces so authors never see it." },
+              { x: 78, y: 82, title: "Governed footer", text: "Legal and unsubscribe blocks are locked components. The parts that carry risk are the parts nobody can improvise." },
+            ]}
+          />
+
+          <CsQuote
+            quote="Will this render in Outlook Desktop?"
+            attribution="The filter on every design decision"
+            role="Asked before anything entered the library"
+          />
+
           <FadeIn>
             <div className="rounded-2xl bg-muted/40 border border-border p-7 max-w-3xl">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">The organisational shift</p>
@@ -591,36 +693,11 @@ export default function Page() {
             </p>
           </blockquote>
 
-          <FadeIn>
-            <div className="grid md:grid-cols-2 gap-4">
-              {[
-                {
-                  label: "The governance lesson",
-                  body: "I faced significant stakeholder pushback on the governance model, people wanted more flexibility, more exceptions. Global Brand&apos;s endorsement was what held the line. Design systems need political backing, not just design quality. The best-designed system gets ignored without organisational authority behind it.",
-                },
-                {
-                  label: "Adoption is a design problem",
-                  body: "Building 50+ components and 28 templates was the visible work. The less visible work, training, feedback loops, iterating on friction, making the system feel safe to use, was equally important. Systems that don&apos;t get used don&apos;t exist, no matter how well-designed they are.",
-                },
-                {
-                  label: "Constraint as creative direction",
-                  body: "Outlook Desktop forced every design to be simpler than I wanted. In retrospect, that constraint made the system more durable. The emails that perform best in enterprise environments are rarely the most visually complex. The constraint was frustrating in the moment and correct in the long run.",
-                },
-                {
-                  label: "What I&apos;d do differently",
-                  body: "I&apos;d have instrumented usage from launch, tracking which templates got used most, which components got customised, which categories drove the most adoption. That data would have accelerated the feedback loop and made the prioritisation conversations much sharper.",
-                },
-              ].map((card, i) => (
-                <FadeIn key={card.label} delay={i * 0.06}>
-                  <div className="rounded-2xl border border-border bg-card p-7">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">{card.label}</p>
-                    <p className="text-[14px] text-muted-foreground leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: card.body }} />
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </FadeIn>
+          <CsReflection
+            learned="Design systems need political backing, not just design quality. I faced real pushback on the governance model, people wanted more flexibility and more exceptions, and Global Brand's endorsement was what held the line. The other surprise was the constraint itself: Outlook forced every design to be simpler than I wanted, and in retrospect that simplicity is why the system endured."
+            next="Instrument usage from launch. Knowing which templates got used most, which components got customised, and which categories drove adoption would have accelerated the feedback loop and made every prioritisation conversation sharper."
+            validate="Whether radical simplicity keeps holding as power users grow. The 80% case was the right first bet, but the underserved 20% will eventually push for pixel-level control, and the system has not yet had to absorb that pressure."
+          />
         </div>
       </CsSection>
 

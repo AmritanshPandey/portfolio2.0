@@ -2,13 +2,35 @@
 
 import { motion } from "framer-motion"
 import {
-  IconCode,
-  IconTarget,
-  IconBulb,
-  IconPresentation,
-} from "@tabler/icons-react"
-import { CsHeroShell, CsSection, CsDecision, CsInfoBar, CsAreaChart, CsDualLineChart, CsNextStudies } from "@/components/case-study"
+  CsHeroShell,
+  CsSection,
+  CsDecision,
+  CsInfoBar,
+  CsAreaChart,
+  CsDualLineChart,
+  CsNextStudies,
+  CsChapterNav,
+  CsProvenance,
+  CsSummary,
+  CsOptions,
+  CsQuote,
+  CsReflection,
+} from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+
+// ─── CHAPTERS ────────────────────────────────────────────────────────────────
+
+const CHAPTERS = [
+  { id: "story",           label: "The story" },
+  { id: "context",         label: "Context" },
+  { id: "role-reality",    label: "Role reality" },
+  { id: "act-1",           label: "Act 1, consumer" },
+  { id: "act-1-decisions", label: "Act 1 decisions" },
+  { id: "pivot",           label: "The pivot" },
+  { id: "act-3",           label: "Act 3, B2B" },
+  { id: "impact",          label: "Impact" },
+  { id: "reflection",      label: "Reflection" },
+]
 
 // ─── HERO ──────────────────────────────────────────────────────────────────
 
@@ -679,37 +701,13 @@ const COVID_DUAL_DATA = [
   { label: "Q1'23",  revenue: 6,  covid: 5  },
 ]
 
-// ─── REFLECTION CARDS ───────────────────────────────────────────────────────
-
-function ReflectionCards() {
-  const cards = [
-    { icon: <IconBulb size={16} strokeWidth={1.75} />, label: "What I&apos;d do differently", body: "Build for the post-COVID use case in parallel. Workplace safety as a category doesn&apos;t require a pandemic, but we never found the non-emergency version of our product. If we&apos;d started that search in early 2021, we might have had something before the urgency disappeared." },
-    { icon: <IconTarget size={16} strokeWidth={1.75} />, label: "The PMF lesson", body: "PMF tied to an external forcing function is not durable PMF. Our retention was high, our NPS was strong, clients were happy. But none of that mattered when the underlying reason to buy disappeared. True PMF survives when the conditions that created it change." },
-    { icon: <IconPresentation size={16} strokeWidth={1.75} />, label: "What this changed in how I work", body: "I now ask &lsquo;what happens to this product when the forcing function goes away?&rsquo; before committing to any product direction. It&apos;s the question we never asked at Dror, because the forcing function felt permanent at the time." },
-    { icon: <IconCode size={16} strokeWidth={1.75} />, label: "The operational learning", body: "Designing nights, writing PRDs at noon, coding afternoons, that rhythm worked because I refused to be a bottleneck. But it&apos;s not scalable. In a lean team, the PM has to be willing to do whatever the product needs, not just what&apos;s in their job description." },
-  ]
-  return (
-    <div className="grid sm:grid-cols-2 gap-4">
-      {cards.map((c, i) => (
-        <FadeIn key={c.label} delay={i * 0.07}>
-          <div className="rounded-2xl border border-border bg-card p-6 h-full">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center mb-4 text-accent/80 dark:text-accent/70">
-              {c.icon}
-            </div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3" dangerouslySetInnerHTML={{ __html: c.label }} />
-            <p className="text-[13px] leading-[1.7] text-foreground/70" dangerouslySetInnerHTML={{ __html: c.body }} />
-          </div>
-        </FadeIn>
-      ))}
-    </div>
-  )
-}
-
 // ─── PAGE ────────────────────────────────────────────────────────────────────
 
 export default function Page() {
   return (
     <div className="min-h-screen">
+
+      <CsChapterNav chapters={CHAPTERS} />
 
       <Hero />
 
@@ -720,6 +718,19 @@ export default function Page() {
         { label: "Duration", value: "11 months",             sub: "2020 – 2021" },
         { label: "Revenue",  value: "₹1.98Cr lifetime",      sub: "$494K raised" },
       ]} />
+
+      {/* 30-second read */}
+      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
+        <div className="mb-5 flex flex-wrap gap-2">
+          <CsProvenance kind="shipped" label="Shipped to real users, 2020–2021" />
+          <CsProvenance kind="internal" label="Company later wound down" />
+        </div>
+        <CsSummary
+          problem="A 10-person startup built a consumer safety app for people moving through cities, and COVID lockdowns kept the use case frozen before it could monetise. The team needed a commercially viable product before the runway did what runways do."
+          role="Sole PM and designer, plus React frontend when it was needed. Wrote PRDs at noon, designed at night, coded the factory manager dashboard in the afternoons."
+          outcome="The B2B pivot shipped in six weeks and grew to ₹1.98Cr lifetime revenue. When restrictions lifted the market dissolved, and the honest lesson survived the company: we proved we could sell, not that the market would last."
+        />
+      </div>
 
       <CsSection id="story" label="The Story">
         <div className="space-y-6">
@@ -801,13 +812,23 @@ export default function Page() {
               Dhiraj was in conversations with enterprises about employee safety. The signal was clear: companies with essential workers needed exactly what we&apos;d built, but packaged for B2B. We validated fast.
             </p>
           </div>
-          <CsDecision
-            index={0}
-            title="Rebuild for B2B or Keep Iterating on Consumer?"
-            problem="COVID lockdowns made our core use-case irrelevant indefinitely. The B2C freemium model had near-zero revenue. The team needed a path to commercial viability or it would run out of runway."
-            decision="Pivoted to B2B. Rebuilt for enterprise workplace safety with Bluetooth proximity detection and a management dashboard. Kept the consumer app live but stopped investing in it."
-            tradeoff="6 months of consumer work became a foundation we weren't building on anymore. Required a full product rebuild with the same team, no extra resources, in 6 weeks."
-            impact="First enterprise contracts signed within the pivot window. Revenue went from near-zero to real recurring contracts in a quarter."
+          <CsOptions
+            question="Six months of consumer work, near-zero revenue, and a use case the lockdowns had erased. Which product was the company going to be?"
+            options={[
+              {
+                title: "Keep iterating on consumer",
+                body: "Hold the B2C course, keep improving the safety app, and wait for cities to start moving again.",
+                verdict:
+                  "Nobody could say when movement would return, and freemium revenue was near zero. Waiting was spending runway on a use case that no longer existed.",
+              },
+              {
+                title: "Pivot to B2B workplace safety",
+                body: "Rebuild for enterprises: Bluetooth proximity detection, smart cards, and a manager dashboard. Keep the consumer app alive but stop investing.",
+                verdict:
+                  "Six months of consumer work stopped being the foundation, and the rebuild had to happen in six weeks with the same team. But enterprise inbound was real, and the first contracts signed inside the pivot window.",
+                chosen: true,
+              },
+            ]}
           />
           <PivotValidation />
         </div>
@@ -859,11 +880,11 @@ export default function Page() {
 
       <CsSection id="reflection" label="Reflection">
         <div className="space-y-10">
-          <blockquote className="pl-6 max-w-2xl">
-            <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-              &ldquo;We didn&apos;t fail because we built the wrong product. We built the right product for a temporary world. The lesson isn&apos;t &lsquo;don&apos;t pivot.&rsquo; It&apos;s &lsquo;understand what your market is made of, and whether it exists without the forcing function that created it.&rsquo;&rdquo;
-            </p>
-          </blockquote>
+          <CsQuote
+            quote="We didn't fail because we built the wrong product. We built the right product for a temporary world."
+            attribution="Looking back at Dror"
+            role="Sole PM and designer, 2020 to 2021"
+          />
           <FadeIn>
             <CsDualLineChart
               title="The correlation that ended us"
@@ -876,7 +897,11 @@ export default function Page() {
               annotations={[{ x: "Q4'21", label: "COVID easing begins" }]}
             />
           </FadeIn>
-          <ReflectionCards />
+          <CsReflection
+            learned="PMF tied to an external forcing function is not durable PMF. Retention was high, NPS was strong, clients were happy, and none of it mattered once the reason to buy disappeared. I now ask what happens to a product when its forcing function goes away before committing to any direction. It's the question we never asked, because the forcing function felt permanent at the time."
+            next="Build for the post-COVID use case in parallel. Workplace safety as a category doesn't require a pandemic, but we never went looking for the non-emergency version of the product. Starting that search in early 2021 might have left us holding something when the urgency ended."
+            validate="Whether the do-everything operating rhythm translates. Designing nights and coding afternoons worked because I refused to be a bottleneck in a 10-person team, but that's a survival posture, not a scalable one, and leading the same outcomes through other people is a different skill."
+          />
         </div>
       </CsSection>
 

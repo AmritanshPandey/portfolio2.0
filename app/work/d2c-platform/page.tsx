@@ -1,3 +1,4 @@
+import Image from "next/image"
 import {
   CsHeroShell,
   CsSection,
@@ -10,8 +11,33 @@ import {
   CsMetricBars,
   CsTimeline,
   CsNextStudies,
+  CsChapterNav,
+  CsProvenance,
+  CsSummary,
+  CsPrinciples,
+  CsOptions,
+  CsQuote,
+  CsReflection,
+  BrowserFrame,
 } from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+
+// ─── CHAPTERS ────────────────────────────────────────────────────────────────
+
+const CHAPTERS = [
+  { id: "situation",        label: "Situation" },
+  { id: "problem",          label: "Problem" },
+  { id: "what-i-led",       label: "What I led" },
+  { id: "principles",       label: "Principles" },
+  { id: "architecture",     label: "Architecture" },
+  { id: "key-decisions",    label: "Decisions" },
+  { id: "core-flows",       label: "Core flows" },
+  { id: "tokens",           label: "Tokens in action" },
+  { id: "the-shift",        label: "The shift" },
+  { id: "what-changed",     label: "What changed" },
+  { id: "how-we-got-there", label: "Timeline" },
+  { id: "reflection",       label: "Reflection" },
+]
 
 // ─── BRAND COLORS ─────────────────────────────────────────────────────────────
 // The real storefront accents — this is the token layer that varies per brand.
@@ -398,6 +424,8 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
+      <CsChapterNav chapters={CHAPTERS} />
+
       <Hero />
 
       {/* Project info bar */}
@@ -408,6 +436,18 @@ export default function Page() {
         { label: "Platform",     value: "Web + Mobile",      sub: "All three brands" },
         { label: "Scope",        value: "Multi-Brand D2C",   sub: "PDP · Cart · Checkout" },
       ]} />
+
+      {/* 30-second read */}
+      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
+        <div className="mb-5 flex flex-wrap gap-2">
+          <CsProvenance kind="shipped" label="Shipped to production, 2022" />
+        </div>
+        <CsSummary
+          problem="Three brands sold almost entirely through Amazon and Nykaa: their commissions, their customer data, their algorithms. Honasa needed owned storefronts before the next seasonal sale, with no design system, no process, and eight weeks."
+          role="First in-house UX designer. Ran the compressed research sprint, defined the shared architecture and token schema, designed PDP, cart, and checkout across all three brands in parallel, and owned the engineering handoff."
+          outcome="All three storefronts shipped inside the window with no post-launch critical bugs. The next brand onboarded in three weeks instead of eight, and the system documentation became the onboarding material for the designers who followed."
+        />
+      </div>
 
       {/* Situation */}
       <CsSection id="situation" label="The Situation" withDivider={false}>
@@ -473,19 +513,30 @@ export default function Page() {
             </div>
           </FadeIn>
 
-          {/* Research insight */}
-          <FadeIn>
-            <div className="pt-8 border-t border-border grid md:grid-cols-[200px_1fr] gap-6 items-start">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mt-1">Key Insight</p>
-              <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
-                All three brands shared identical commerce logic, they diverged
-                only in visual language. That meant a{" "}
-                <em className="not-italic text-accent">single shared backbone</em>{" "}
-                with a brand token layer was the only architecture that could
-                ship three storefronts in eight weeks.
-              </p>
-            </div>
-          </FadeIn>
+          <CsQuote
+            quote="All three brands shared identical commerce logic. They diverged only in visual language."
+            attribution="The insight that unlocked the architecture"
+            role="From the five-day research sprint"
+          />
+
+          <CsOptions
+            question="Two designers, four engineers, three brands, eight weeks. The math only worked one way."
+            options={[
+              {
+                title: "Three independent storefronts",
+                body: "Give each brand its own build, its own components, and full freedom over layout and behaviour.",
+                verdict:
+                  "Three times the design and engineering effort, and every future improvement replicated three times. Impossible inside the seasonal window, and a maintenance trap after it.",
+              },
+              {
+                title: "One backbone, three token skins",
+                body: "Shared commerce logic and components, with brand identity applied as a token layer above them.",
+                verdict:
+                  "Brand teams gave up bespoke layouts in v1, which caused real friction. But it was the only architecture two designers could ship in eight weeks, and improvements now compound across all three brands.",
+                chosen: true,
+              },
+            ]}
+          />
         </div>
       </CsSection>
 
@@ -511,6 +562,40 @@ export default function Page() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </CsSection>
+
+      {/* Principles */}
+      <CsSection id="principles" label="Operating Principles" variant="muted">
+        <div className="space-y-8">
+          <h2 className="type-case-title text-foreground">
+            The rules that made eight weeks possible.
+          </h2>
+          <CsPrinciples
+            intro="With no precedent and no slack in the schedule, these were the calls that decided what got built and what got cut."
+            principles={[
+              {
+                title: "Separate what varies from what doesn't",
+                body: "The three brands differed in visual language and nothing else. Everything stable went into the shared backbone; everything that varied became a token.",
+                applied: "Commerce logic shipped once. Brand identity became a configuration.",
+              },
+              {
+                title: "Ship the revenue-critical flows, defer the rest",
+                body: "Every requested feature was mapped against its revenue contribution. If it did not move a purchase forward, it moved to v2.",
+                applied: "V1 was PDP, cart, checkout, and order confirmation. Wishlists and loyalty waited a quarter.",
+              },
+              {
+                title: "Make trust a system component, not a brand one-off",
+                body: "Ingredient transparency drove purchases, so it could not live as a hardcoded special case that only one brand got right.",
+                applied: "Trust badges, ingredient highlights, and certifications shipped as shared PDP components.",
+              },
+              {
+                title: "Document every deferral",
+                body: "Cutting scope without a written rationale reads as neglect. Cutting it with one reads as a roadmap.",
+                applied: "The deferred list became the v2 roadmap, funded off the back of v1 results.",
+              },
+            ]}
+          />
         </div>
       </CsSection>
 
@@ -562,14 +647,6 @@ export default function Page() {
         <div className="space-y-5">
           <CsDecision
             index={0}
-            title="Shared Commerce Backbone with Brand Token Overrides"
-            problem="Building separate commerce experiences per brand would mean 3x the design and engineering effort. Any future improvement would need to be replicated three times, creating compounding maintenance cost."
-            decision="Designed a single component library where all commerce logic, PDP, cart, checkout, post-purchase, lives in shared components. Brand identity is applied through a token layer covering colors, typography, and imagery only."
-            tradeoff="Reduced flexibility in early stages. Brand teams couldn&apos;t request bespoke layouts. This created friction initially but was essential for long-term maintainability and the only way the 8-week deadline was achievable."
-            impact="All three storefronts shipped in 8 weeks with one designer and two engineers per brand sprint. Changes to core flows now propagate to all brands simultaneously."
-          />
-          <CsDecision
-            index={1}
             title="MVP Scoping: Revenue-Critical Flows Only"
             problem="Stakeholders wanted wishlists, product recommendations, loyalty programs, and bundle offers in v1. Delivering all of this would push the launch past the sale window."
             decision="Mapped every requested feature against its estimated revenue contribution. Kept only PDP, cart, checkout, and order confirmation. Documented the rationale for every deferral explicitly."
@@ -577,7 +654,7 @@ export default function Page() {
             impact="On-time launch across all three brands. The deferred feature list became the v2 roadmap, funded directly off the back of v1 results."
           />
           <CsDecision
-            index={2}
+            index={1}
             title="Trust Signals as System-Level Components"
             problem="Research showed ingredient transparency was a primary purchase driver for Mamaearth customers. Other brands hadn&apos;t thought about this systematically, risking inconsistent trust signals across the portfolio."
             decision="Built ingredient highlights, trust badges, and certification displays as reusable PDP components available to all brands, not hardcoded per brand as one-offs."
@@ -690,6 +767,21 @@ export default function Page() {
               ))}
             </div>
           </FadeIn>
+
+          <figure>
+            <BrowserFrame url="Storefront · representative placeholder" tone="light">
+              <Image
+                src="/assets/images/work/skincare-planner.jpg"
+                alt="A product detail page assembled from the shared commerce system"
+                width={1400}
+                height={875}
+                className="h-auto w-full"
+              />
+            </BrowserFrame>
+            <figcaption className="mt-3 text-[12.5px] leading-relaxed text-muted-foreground">
+              Representative placeholder illustrating the shared commerce system. Not a production screenshot.
+            </figcaption>
+          </figure>
         </div>
       </CsSection>
 
@@ -817,15 +909,23 @@ export default function Page() {
 
       {/* Reflection */}
       <CsSection id="reflection" label="Key Reflection">
-        <blockquote className="pl-6 max-w-2xl">
-          <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-            Scalable systems aren&apos;t built by adding features, they&apos;re built by ruthlessly
-            separating{" "}
-            <em className="not-italic text-accent">what varies</em>{" "}
-            from what doesn&apos;t, and making that separation{" "}
-            <em className="not-italic text-accent">explicit at the very start</em>.
-          </p>
-        </blockquote>
+        <div className="space-y-12">
+          <blockquote className="pl-6 max-w-2xl">
+            <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
+              Scalable systems aren&apos;t built by adding features, they&apos;re built by ruthlessly
+              separating{" "}
+              <em className="not-italic text-accent">what varies</em>{" "}
+              from what doesn&apos;t, and making that separation{" "}
+              <em className="not-italic text-accent">explicit at the very start</em>.
+            </p>
+          </blockquote>
+
+          <CsReflection
+            learned="Scalable systems are built by separating what varies from what doesn't, and making that separation explicit on day one. Every hard call in this project, the shared backbone, the token layer, the deferred features, was that one principle applied under pressure."
+            next="Set up Storybook and the final token architecture before launch instead of after it. The post-launch refactor cost a cycle that a week of upfront infrastructure work would have avoided."
+            validate="How long the no-bespoke-layouts rule survives. The friction with brand teams was manageable during the deadline, but the system has not yet weathered a brand team with time, budget, and a strong opinion."
+          />
+        </div>
       </CsSection>
 
       <CsNextStudies currentHref="/work/d2c-platform" />

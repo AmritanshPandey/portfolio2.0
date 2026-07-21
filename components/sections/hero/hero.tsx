@@ -149,11 +149,11 @@ export default function Hero() {
               >
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-                  PartnerBank — same-day RFP demos
+                  PartnerBank · same-day RFP demos
                 </li>
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-                  Email Builder — 50+ modular components
+                  Email Builder · 50+ modular components
                 </li>
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
@@ -177,7 +177,7 @@ export default function Hero() {
             >
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src="/assets/images/pic.png"
+                  src="/assets/images/pic.webp"
                   alt="Amritansh Pandey"
                   fill
                   priority

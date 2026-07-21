@@ -58,7 +58,12 @@ export const articleItems: ArticleItem[] = [
     href:        "/articles/silent-guardian-agentic-trust",
     image:       "/article.png",
     accent:      "linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #134e4a 100%)",
-    featured:    true,
+    // Retired alongside the Agent Pay case study: this covers the same work in
+    // more strategic detail (the internal brand-visibility disagreement and the
+    // framework that resolved it). Unlisted everywhere and kept out of search;
+    // the route still resolves so it can be restored by flipping these two.
+    featured:    false,
+    hidden:      true,
     readTime:    "6 min read",
     date:        "Jun 2026",
     category:    "AI Commerce",
@@ -245,7 +250,7 @@ export const articleItems: ArticleItem[] = [
         images: [
           { src: "/assets/images/work/fintech-ai-system.jpg", alt: "Transfer confirmation", colSpan: 2 },
           { src: "/assets/images/work/white-label-platform.jpg", alt: "Risk states", rowSpan: 2 },
-          { src: "/assets/images/work/agent-commerce.jpg", alt: "Verification step" },
+          { src: "/assets/images/work/ai-decision-engine.jpg", alt: "Verification step" },
           { src: "/assets/images/work/commerce-platform.jpg", alt: "Error recovery" },
           { src: "/assets/images/work/design-tokens.jpg", alt: "Confidence cues", colSpan: 3 },
         ],

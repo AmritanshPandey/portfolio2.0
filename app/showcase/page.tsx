@@ -56,6 +56,15 @@ import { ImageLayout, type ImageItem } from "@/components/shared/image-layout"
 import { FullBleedBlock } from "@/components/shared/full-bleed-block"
 import PhotoCarousel from "@/components/shared/photo-carousel"
 import { CsImage } from "@/components/case-study/cs-image"
+import { CsSummary } from "@/components/case-study/cs-summary"
+import { CsPrinciples } from "@/components/case-study/cs-principles"
+import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
+import { CsQuote } from "@/components/case-study/cs-quote"
+import { CsReflection } from "@/components/case-study/cs-reflection"
+import { CsProvenance } from "@/components/case-study/cs-provenance"
+import { CsOptions } from "@/components/case-study/cs-options"
+import { CsComparisonTable } from "@/components/case-study/cs-comparison-table"
+import { BrowserFrame } from "@/components/case-study/browser-frame"
 import {
   CsMediaTextSection,
   type CsMediaTextSectionProps,
@@ -688,7 +697,7 @@ export default function ShowcasePage() {
           </Row>
           <Row label="Image + badge">
             <Avatar size="lg">
-              <AvatarImage src="/assets/images/pic.png" alt="Amritansh Pandey" />
+              <AvatarImage src="/assets/images/pic.webp" alt="Amritansh Pandey" />
               <AvatarFallback>AP</AvatarFallback>
               <AvatarBadge />
             </Avatar>
@@ -835,7 +844,7 @@ export default function ShowcasePage() {
         note="A premium editorial card with image, status pill, testimonial, and metric overlay."
       >
         <ImpactStoryCard
-          image="/assets/images/1.png"
+          image="/assets/images/1.webp"
           alt="Workspace detail used as an editorial story card sample"
           label="Thinking growth"
           quote="ScaleUnion did not just advise - they restructured how we operate. Within weeks, decision-making was clearer and execution stopped stalling."
@@ -1305,6 +1314,196 @@ export default function ShowcasePage() {
         </ShowcaseTabPanel>
 
         <ShowcaseTabPanel>
+      {/* Executive summary */}
+      <Lab
+        id="cs-summary"
+        title="CsSummary"
+        note="The 30-second read, sits directly under the hero. Problem / My role / The outcome — so a recruiter who never scrolls further still leaves knowing the story. Complements the hero meta cards: those carry facts, this carries the narrative."
+      >
+        <CsSummary
+          problem="Four teams were each designing their own agentic payment flows. The patterns drifted, and every new demo re-litigated the same trust questions."
+          role="Led the UX research toolkit and the trust framework. Defined the interaction model, prototyped it in React, and aligned Brand, Product, and Engineering on one direction."
+          outcome="One shared toolkit replaced the duplicated flows. The direction was adopted company-wide and now backs executive demos without a designer in the room."
+        />
+      </Lab>
+
+      {/* Design principles */}
+      <Lab
+        id="cs-principles"
+        title="CsPrinciples"
+        note="The signature block. Numbered editorial list rather than an icon-card grid, so the rule carries the weight — with an optional 'in practice' line tying each principle to something real in the product. Best at 3–5."
+      >
+        <CsPrinciples
+          intro="Five rules that decided every trade-off in the flow. When a decision was contested, we went back to these rather than to opinion."
+          principles={[
+            {
+              title: "Make the agent's intent visible before it acts",
+              body: "Automation is only trustworthy if the user can see what is about to happen while there is still time to stop it.",
+              applied: "The review step shows the agent's plan as a sentence, not a spinner.",
+            },
+            {
+              title: "Keep control recoverable, not just available",
+              body: "An undo that arrives after the money moves is theatre. Control has to exist at the moment the stakes change.",
+              applied: "Approval is required at the value threshold, not at the end.",
+            },
+            {
+              title: "Signal security before asking for trust",
+              body: "Users extend trust to systems that have already demonstrated care. Reassurance after the ask reads as defensive.",
+            },
+            {
+              title: "Explain complexity progressively",
+              body: "The full model is legible on demand, never as a wall. Depth is earned by curiosity, not forced on everyone.",
+              applied: "Risk rationale sits one tap under the decision, not inside it.",
+            },
+            {
+              title: "Make automation accountable",
+              body: "Every autonomous action leaves a record a human can read, question, and reverse.",
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Annotated image */}
+      <Lab
+        id="cs-annotated-image"
+        title="CsAnnotatedImage"
+        note="The interface-storytelling workhorse: numbered hotspots on a screenshot with a linked legend. Hover or focus a marker to highlight its row and vice-versa. Markers are real buttons in the tab order, and the legend reads completely on its own — nothing is conveyed by position alone."
+      >
+        <CsAnnotatedImage
+          src="/assets/images/work/fintech-ai-system.jpg"
+          alt="Risk console showing agent intent, approval controls, and audit trail"
+          caption="Anonymised. The same three moments recur across every agent-led flow."
+          annotations={[
+            { x: 22, y: 28, title: "Intent line", text: "States what the agent is about to do in one plain sentence, before any action." },
+            { x: 68, y: 34, title: "Risk tier", text: "Colour plus label — never colour alone — so the tier survives a screenshot and a colourblind reader." },
+            { x: 40, y: 72, title: "Approval gate", text: "Appears at the value threshold, where control actually matters." },
+            { x: 82, y: 78, title: "Audit trail", text: "Every autonomous step is recorded and reversible from here." },
+          ]}
+        />
+      </Lab>
+
+      {/* Pull quote */}
+      <Lab
+        id="cs-quote"
+        title="CsQuote"
+        note="Stakeholder feedback as evidence. Sized to punctuate a section, not to become a testimonial card. Uses an oversized accent quote mark instead of a left border stripe, and keeps attribution plain so an anonymised source reads as deliberate."
+      >
+        <CsQuote
+          quote="This is the first time we've been able to show where we fit in agentic commerce without three slides of explanation first."
+          attribution="Product Director"
+          role="Issuing partner, anonymised"
+        />
+      </Lab>
+
+      {/* Reflection */}
+      <Lab
+        id="cs-reflection"
+        title="CsReflection"
+        note="The closing maturity signal — what changed in your thinking, what you'd do differently, what still needs proving. Deliberately plain passages: this is the one place the writing should carry it, and a grid of tiles would make honesty look like a template."
+      >
+        <CsReflection
+          learned="I used to treat trust as a visual layer — badges, locks, reassurance copy. This work convinced me trust is an architecture decision: it lives in where you put the control, not in what you say around it."
+          next="I'd run the multi-sensory research before the interaction model, not after. The findings would have changed the typology, and we rebuilt work we could have avoided."
+          validate="Whether the assisted/autonomous split holds outside payments. It has only been tested where the stakes are financial and immediate."
+        />
+      </Lab>
+
+      {/* Provenance label */}
+      <Lab
+        id="cs-provenance"
+        title="CsProvenance"
+        note="States what a piece of work actually is before the reader assumes. Anything not live in production carries one of these. Only 'shipped' uses the accent — the rest stay neutral on purpose, so a concept can never be dressed up to look like a result."
+      >
+        <div className="flex flex-wrap gap-2.5">
+          <CsProvenance kind="shipped" />
+          <CsProvenance kind="internal" />
+          <CsProvenance kind="conceptual" />
+          <CsProvenance kind="anonymised" />
+          <CsProvenance kind="exploration" />
+          <CsProvenance kind="conceptual" label="Conceptual, not a Mastercard product" />
+        </div>
+      </Lab>
+
+      {/* Options considered */}
+      <Lab
+        id="cs-options"
+        title="CsOptions"
+        note="The alternatives that were real, and why one won. A case study that only shows the final answer reads as luck. Rejected options stay at full readability rather than greyed into decoration, because the rejected reasoning does as much work as the chosen one. Best at 3."
+      >
+        <CsOptions
+          question="How much authority should the agent hold before a human sees the transaction?"
+          options={[
+            {
+              title: "Full autonomy with an audit trail",
+              body: "The agent completes the purchase end to end. The user reviews what happened afterwards in a log.",
+              verdict:
+                "Recovery arrives after the money moves. The audit trail explains a loss rather than preventing one.",
+            },
+            {
+              title: "Approval at a value threshold",
+              body: "The agent acts freely under a limit the user sets, and stops for confirmation above it.",
+              verdict:
+                "Control lands at the moment the stakes change, and routine purchases stay unblocked. It survived every stakeholder objection without special-casing.",
+              chosen: true,
+            },
+            {
+              title: "Confirm every action",
+              body: "Nothing executes without an explicit tap, regardless of amount.",
+              verdict:
+                "Safe, and pointless. It removes the reason to delegate to an agent at all.",
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Comparison table */}
+      <Lab
+        id="cs-comparison-table"
+        title="CsComparisonTable"
+        note="For when a trade-off is dense enough that prose stops being readable and the reader needs to scan one criterion across every column. A real table with scope'd headers, scrolling inside its own container so the page body never moves sideways. The chosen column is marked in its header text, not by tint alone."
+      >
+        <CsComparisonTable
+          columns={["Full autonomy", "Threshold approval", "Confirm everything"]}
+          highlight={1}
+          caption="Anonymised. Qualitative on purpose: these were the arguments, not a benchmark."
+          rows={[
+            {
+              criterion: "Where control sits",
+              values: ["After the fact", "At the value threshold", "At every step"],
+            },
+            {
+              criterion: "Reason to delegate",
+              values: ["Strong", "Preserved under the limit", "Removed"],
+            },
+            {
+              criterion: "Failure mode",
+              values: ["Explains a loss", "Interrupts a routine buy", "Abandoned flow"],
+            },
+            {
+              criterion: "Stakeholder objection",
+              values: ["Risk and Legal", "None that required special-casing", "Product"],
+            },
+          ]}
+        />
+      </Lab>
+
+      {/* Browser frame */}
+      <Lab
+        id="browser-frame"
+        title="BrowserFrame"
+        note="Chrome around a screenshot or clip, so a bare image reads as something that ran in a browser. Purely decorative, so the chrome is aria-hidden and only the wrapped content carries meaning. The address bar is a label, not a claim: pass the product name rather than a fabricated internal URL. Pairs with VideoLoop, which is built but has no clip to demo yet."
+      >
+        <BrowserFrame url="Design tokens — internal tool">
+          <Image
+            src="/assets/images/work/design-tokens.jpg"
+            alt="Token library shown in an internal web tool"
+            width={1200}
+            height={750}
+            className="h-auto w-full"
+          />
+        </BrowserFrame>
+      </Lab>
+
       {/* Flow diagram */}
       <Lab
         id="flow-diagram"

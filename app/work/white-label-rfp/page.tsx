@@ -9,8 +9,30 @@ import {
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
+  CsChapterNav,
+  CsProvenance,
+  CsSummary,
+  CsOptions,
+  CsAnnotatedImage,
+  CsQuote,
+  CsReflection,
 } from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+
+// ─── CHAPTERS ────────────────────────────────────────────────────────────────
+
+const CHAPTERS = [
+  { id: "problem",           label: "Problem" },
+  { id: "stakes",            label: "The stakes" },
+  { id: "what-i-led",        label: "What I led" },
+  { id: "architecture",      label: "Architecture" },
+  { id: "key-decisions",     label: "Decisions" },
+  { id: "inside-the-system", label: "Inside the system" },
+  { id: "tokens",            label: "Tokens in action" },
+  { id: "the-shift",         label: "The shift" },
+  { id: "what-changed",      label: "What changed" },
+  { id: "reflection",        label: "Reflection" },
+]
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 
@@ -102,6 +124,8 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
+      <CsChapterNav chapters={CHAPTERS} />
+
       <Hero />
 
       {/* Project info bar */}
@@ -112,6 +136,19 @@ export default function Page() {
         { label: "Cross-functional", value: "Product · Eng · Sales", sub: "Enterprise alignment" },
         { label: "Scope",         value: "White-label DBP",  sub: "RFP enablement" },
       ]} />
+
+      {/* 30-second read */}
+      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
+        <div className="mb-5 flex flex-wrap gap-2">
+          <CsProvenance kind="shipped" label="In production, live RFP cycles" />
+          <CsProvenance kind="anonymised" label="Bank brands anonymised" />
+        </div>
+        <CsSummary
+          problem="PartnerBank demos win or lose enterprise RFPs, but the platform was built for visual consistency, not customization. Every prospect needed manual visual work, so design effort scaled one-for-one with deal volume at exactly the moments speed mattered most."
+          role="Led the design side of the shift: audited the structural constraints, decoupled core UX from brand, standardised the modular component library, and introduced the token-based theming that made re-skins a configuration pass."
+          outcome="A four-layer configurable architecture. Prospect onboarding went from a multi-day design effort to a config swap, roughly 70% less per-RFP design work, and sales cited the faster demos as a differentiator in competitive cycles."
+        />
+      </div>
 
       {/* Context */}
       <CsSection id="problem" label="The Problem" withDivider={false}>
@@ -155,35 +192,30 @@ export default function Page() {
             </p>
           </div>
 
-          {/* Tradeoff cards */}
-          <FadeIn>
-            <div className="grid md:grid-cols-[1fr_56px_1fr] gap-0 rounded-2xl overflow-hidden">
-              <div className="p-7 bg-card border border-border flex flex-col gap-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Option A · Status Quo</p>
-                <p className="text-[18px] font-medium text-foreground leading-snug">Preserve rigidity for system simplicity.</p>
-                <p className="text-[13px] text-muted-foreground leading-relaxed">Keep the template model. Accept the linear cost of manual personalization on every RFP.</p>
-              </div>
-              <div className="flex items-center justify-center bg-muted border-y border-border text-muted-foreground text-[20px] italic font-serif">vs</div>
-              <div className="p-7 bg-accent flex flex-col gap-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-background/60">Option B · Evolve</p>
-                <p className="text-[18px] font-medium text-background leading-snug">Introduce modular customization to support revenue velocity.</p>
-                <p className="text-[13px] text-background/70 leading-relaxed">Decouple brand from architecture. Make personalization configurable. Compound effort across deals.</p>
-              </div>
-            </div>
-          </FadeIn>
+          <CsOptions
+            question="The platform could stay simple or get fast. The team had to pick which one it was optimising for."
+            options={[
+              {
+                title: "Preserve rigidity for system simplicity",
+                body: "Keep the template model exactly as it was. One codebase, one look, no configuration surface to maintain.",
+                verdict:
+                  "Simplicity here was a false economy: the cost did not disappear, it moved into manual personalization on every single RFP, at the worst possible moment in the deal.",
+              },
+              {
+                title: "Introduce modular customization",
+                body: "Decouple brand from architecture, make personalization configurable, and let the effort compound across deals.",
+                verdict:
+                  "Customization at the brand layer did not compromise system integrity once properly modularized, and it materially improved sales responsiveness.",
+                chosen: true,
+              },
+            ]}
+          />
 
-          {/* Position */}
-          <FadeIn>
-            <div className="pt-8 border-t border-border grid md:grid-cols-[200px_1fr] gap-6 items-start">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mt-1">My Position</p>
-              <p className="text-[22px] font-medium text-foreground leading-[1.35] tracking-tight">
-                Customization at the brand layer would not compromise system integrity, if properly
-                modularized, and would{" "}
-                <em className="not-italic text-accent">materially improve</em>{" "}
-                enterprise sales responsiveness.
-              </p>
-            </div>
-          </FadeIn>
+          <CsQuote
+            quote="Customization at the brand layer would not compromise system integrity, if properly modularized, and would materially improve enterprise sales responsiveness."
+            attribution="My position going in"
+            role="Design Lead, arguing for the evolution"
+          />
         </div>
       </CsSection>
 
@@ -451,6 +483,18 @@ export default function Page() {
               ))}
             </div>
           </FadeIn>
+
+          <CsAnnotatedImage
+            src="/assets/images/work/white-label-platform.jpg"
+            alt="A configured PartnerBank demo with the system layers called out"
+            caption="Representative visual, anonymised placeholder. Real prospect demos are confidential."
+            annotations={[
+              { x: 20, y: 22, title: "Brand token skin", text: "Colour, type, radius, and elevation come from one config file. Swapping it re-skins every component in a single pass." },
+              { x: 66, y: 30, title: "Stable core UX", text: "Accounts, transactions, transfers, and statements never change across deals. Prospects evaluate a proven flow, not a prototype." },
+              { x: 34, y: 64, title: "Swappable modules", text: "Screens are compositions of banking primitives with variants and props, so a new prospect composes instead of rebuilding." },
+              { x: 80, y: 80, title: "Deal-ready output", text: "The configuration engine assembles tokens and components into a demo sales can show without a design cycle." },
+            ]}
+          />
         </div>
       </CsSection>
 
@@ -565,15 +609,23 @@ export default function Page() {
 
       {/* Reflection */}
       <CsSection id="reflection" label="Key Reflection">
-        <blockquote className="border-l-2 border-accent/60 pl-6 max-w-2xl">
-          <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
-            Customization and consistency aren&apos;t a trade-off, they&apos;re a{" "}
-            <em className="not-italic text-accent">layering problem</em>. The system became fast
-            the moment we stopped treating{" "}
-            <em className="not-italic text-accent">brand</em> as a property of components and
-            started treating it as a layer above them.
-          </p>
-        </blockquote>
+        <div className="space-y-12">
+          <blockquote className="border-l-2 border-accent/60 pl-6 max-w-2xl">
+            <p className="text-xl md:text-2xl font-medium text-foreground leading-[1.5]">
+              Customization and consistency aren&apos;t a trade-off, they&apos;re a{" "}
+              <em className="not-italic text-accent">layering problem</em>. The system became fast
+              the moment we stopped treating{" "}
+              <em className="not-italic text-accent">brand</em> as a property of components and
+              started treating it as a layer above them.
+            </p>
+          </blockquote>
+
+          <CsReflection
+            learned="I stopped treating brand as a property of components and started treating it as a layer above them. Once that layering clicked, the customization-versus-consistency argument dissolved: each layer got one job, and the system got fast without getting fragile."
+            next="Scope the token schema with engineering before promising it to stakeholders. Making it comprehensive enough to cover every component took more upfront definition work than anyone expected, and that surprise cost credibility the architecture then had to win back."
+            validate="How far tokenization stretches. Some bespoke brand requests still fall outside the schema and need manual overrides, and the model only holds if those stay the exception rather than quietly becoming the norm."
+          />
+        </div>
       </CsSection>
 
       <CsNextStudies currentHref="/work/white-label-rfp" />
