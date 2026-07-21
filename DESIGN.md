@@ -13,29 +13,29 @@ colors:
   focus-ring: "oklch(0.765 0.163 163)"
 typography:
   display:
-    fontFamily: "Montserrat, system-ui, sans-serif"
+    fontFamily: "Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(2rem, 5vw, 3.5rem)"
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: "-0.02em"
   headline:
-    fontFamily: "Montserrat, system-ui, sans-serif"
+    fontFamily: "Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(1.75rem, 4vw, 2.1rem)"
     fontWeight: 700
     lineHeight: 1.12
     letterSpacing: "-0.015em"
   title:
-    fontFamily: "Montserrat, system-ui, sans-serif"
+    fontFamily: "Onest, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 600
     lineHeight: 1.2
   body:
-    fontFamily: "Montserrat, system-ui, sans-serif"
+    fontFamily: "Onest, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.7
   label:
-    fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace"
+    fontFamily: "JetBrains Mono, ui-monospace, Menlo, monospace"
     fontSize: "0.6875rem"
     fontWeight: 600
     lineHeight: 1.4
@@ -96,7 +96,7 @@ The system explicitly rejects the four things the brand must never be: the gener
 **Key Characteristics:**
 - Dark-default canvas with a fully supported light mode; both built from the same OKLCH neutral ramp.
 - One accent only: emerald. Used on ≤10% of any screen.
-- Montserrat throughout, hierarchy from weight and scale; monospace reserved for small labels.
+- Two families on a contrast axis. Bricolage Grotesque (variable, `opsz` on) carries every heading above ~22px; Onest carries body and UI below it. JetBrains Mono is reserved for small data labels, Caveat for the occasional handwritten aside.
 - Confident, tactile interaction: magnetic CTA, custom cursor, soft lift on hover.
 - Motion is intentional and accessible; every animation has a reduced-motion fallback.
 

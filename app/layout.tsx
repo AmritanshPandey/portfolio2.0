@@ -10,15 +10,36 @@ import { Grain } from "@/components/shared/motion"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
-import { Montserrat, Caveat } from "next/font/google"
+import { Bricolage_Grotesque, Onest, JetBrains_Mono, Caveat } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { MotionConfig } from "framer-motion"
 import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx"
 
-const montserrat = Montserrat({
+// Display: carries every heading. The `opsz` axis is requested so the browser
+// applies optical sizing automatically — letterforms open up at 15px and tighten
+// at 80px, which is the whole reason to pick a face with that axis.
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  axes: ["opsz"],
+  variable: "--ff-display",
+  display: "swap",
+})
+
+// Body + UI. Deliberately quiet so it never competes with the display face.
+const sans = Onest({
+  subsets: ["latin"],
+  variable: "--ff-sans",
+  display: "swap",
+})
+
+// Real mono for the surviving data labels. Previously `--font-mono` was never
+// defined, so those labels fell through to whatever system mono the visitor
+// happened to have — different on every OS.
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--ff-mono",
+  display: "swap",
 })
 
 const caveat = Caveat({
@@ -61,7 +82,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={clsx(caveat.variable)}
+      className={clsx(
+        display.variable,
+        sans.variable,
+        mono.variable,
+        caveat.variable
+      )}
     >
       <head>
         {/* Progressive enhancement: mark that scripting is available BEFORE
@@ -78,7 +104,6 @@ export default function RootLayout({
       </head>
       <body
         className={clsx(
-          montserrat.className,
           "bg-background text-foreground",
           "antialiased",
           "[text-rendering:optimizeLegibility]"
