@@ -697,7 +697,7 @@ export default function ShowcasePage() {
           </Row>
           <Row label="Image + badge">
             <Avatar size="lg">
-              <AvatarImage src="/assets/images/pic.png" alt="Amritansh Pandey" />
+              <AvatarImage src="/assets/images/pic.webp" alt="Amritansh Pandey" />
               <AvatarFallback>AP</AvatarFallback>
               <AvatarBadge />
             </Avatar>
@@ -844,7 +844,7 @@ export default function ShowcasePage() {
         note="A premium editorial card with image, status pill, testimonial, and metric overlay."
       >
         <ImpactStoryCard
-          image="/assets/images/1.png"
+          image="/assets/images/1.webp"
           alt="Workspace detail used as an editorial story card sample"
           label="Thinking growth"
           quote="ScaleUnion did not just advise - they restructured how we operate. Within weeks, decision-making was clearer and execution stopped stalling."

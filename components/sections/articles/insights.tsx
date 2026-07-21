@@ -5,7 +5,7 @@ import { articleItems } from "@/lib/data"
 import { InsightsList } from "./insights-list"
 
 export default function InsightsSection() {
-  const featured = articleItems.filter((a) => a.featured).slice(0, 5)
+  const featured = articleItems.filter((a) => a.featured && !a.hidden).slice(0, 5)
 
   return (
     <SectionSubgroup variant="spacious">

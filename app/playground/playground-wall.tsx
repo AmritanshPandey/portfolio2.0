@@ -23,11 +23,6 @@ const GRID_Y = [130, 380, 630, 880] as const
 
 const PLACEHOLDER_IMAGES = [
   {
-    title: "Agent commerce",
-    src: "/assets/images/work/agent-commerce.jpg",
-    group: "client-work",
-  },
-  {
     title: "White label platform",
     src: "/assets/images/work/white-label-platform.jpg",
     group: "client-work",

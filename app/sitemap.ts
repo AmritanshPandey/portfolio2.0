@@ -4,21 +4,21 @@ import { articleItems, explorationItems, systemItems, workItems } from "@/lib/da
 
 const SITE_URL = "https://portfolio2-0-beta-one.vercel.app"
 
+// Public surfaces only. /showcase and its children are the internal component
+// kitchen-sink ("INTERNAL, NOT LINKED IN NAV"), so they are neither submitted
+// here nor indexable — see app/showcase/layout.tsx.
 const staticRoutes = [
   "/",
   "/articles",
   "/gallery",
   "/playground",
-  "/showcase",
-  "/showcase/case-study",
-  "/showcase/webgl-scroll-shader",
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date()
   const paths = new Set([
     ...staticRoutes,
-    ...articleItems.map((item) => item.href),
+    ...articleItems.filter((item) => !item.hidden).map((item) => item.href),
     ...explorationItems.map((item) => item.href),
     ...systemItems.map((item) => item.href),
     ...workItems.map((item) => item.href),

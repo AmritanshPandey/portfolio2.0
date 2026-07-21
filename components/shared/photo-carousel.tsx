@@ -5,11 +5,11 @@ import Image from "next/image"
 import clsx from "clsx"
 
 const DEFAULT_PHOTOS = [
-  "/assets/images/2.png",
-  "/assets/images/4.png",
-  "/assets/images/3.png",
-  "/assets/images/5.png",
-  "/assets/images/1.png",
+  "/assets/images/2.webp",
+  "/assets/images/4.webp",
+  "/assets/images/3.webp",
+  "/assets/images/5.webp",
+  "/assets/images/1.webp",
 ]
 
 const DEFAULT_CAPTIONS = [
