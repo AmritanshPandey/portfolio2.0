@@ -2,7 +2,10 @@ import type { MetadataRoute } from "next"
 
 import { articleItems, explorationItems, systemItems, workItems } from "@/lib/data"
 
-const SITE_URL = "https://portfolio2-0-beta-one.vercel.app"
+// Must match `metadataBase` in app/layout.tsx. Submitting a Vercel preview
+// hostname here split search signal across two domains serving identical
+// content.
+const SITE_URL = "https://www.amritansh.cc"
 
 // Public surfaces only. /showcase and its children are the internal component
 // kitchen-sink ("INTERNAL, NOT LINKED IN NAV"), so they are neither submitted

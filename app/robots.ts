@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 
-const SITE_URL = "https://portfolio2-0-beta-one.vercel.app"
+// Must match `metadataBase` in app/layout.tsx and SITE_URL in app/sitemap.ts.
+const SITE_URL = "https://www.amritansh.cc"
 
 export default function robots(): MetadataRoute.Robots {
   return {
