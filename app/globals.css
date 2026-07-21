@@ -23,7 +23,7 @@
      exactly what the single-Montserrat setup failed at. */
   --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--ff-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: var(--ff-mono), ui-monospace, "SF Mono", "Menlo", monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -417,7 +417,7 @@
   letter-spacing: 0;
 }
 .fintech-system .fin-mono {
-  font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  font-family: var(--font-mono, ui-monospace, "SF Mono", "Menlo", monospace);
   font-size: 11px;
   line-height: 1.4;
   letter-spacing: 0;

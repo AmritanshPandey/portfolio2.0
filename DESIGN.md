@@ -124,12 +124,12 @@ A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode c
 
 ## 3. Typography
 
-**Display Font:** Montserrat (with system-ui, sans-serif)
-**Body Font:** Montserrat (with system-ui, sans-serif)
-**Label/Mono Font:** monospace stack (ui-monospace, SF Mono, Menlo)
+**Display Font:** Bricolage Grotesque (variable, `opsz` axis on; with ui-sans-serif, system-ui, sans-serif)
+**Body Font:** Onest (with ui-sans-serif, system-ui, sans-serif)
+**Label/Mono Font:** JetBrains Mono (with ui-monospace, "SF Mono", "Menlo")
 **Accent Font:** Caveat (handwriting, for sparing personal marks)
 
-**Character:** One geometric-humanist sans, worked hard across weights, carries the whole system. Confidence comes from scale and weight contrast, not from a second display face. Monospace appears only at small sizes for technical labels and metadata, which gives those moments a precise, engineered edge against the warm body.
+**Character:** Two families on a contrast axis. Bricolage Grotesque carries the headings: a variable grotesque with slightly irregular terminals, engineered but warm, and an optical-size axis so letterforms open up small and tighten at display sizes. Onest carries body and UI, and is deliberately quiet so it never competes. Monospace appears only at small sizes for technical labels and metadata, which gives those moments a precise, engineered edge against the warm body.
 
 ### Hierarchy
 - **Display** (700, `clamp(2rem, 5vw, 3.5rem)`, line-height 1.1, `-0.02em`): Hero and page titles. `text-wrap: balance` so headings never orphan a word.
@@ -139,7 +139,7 @@ A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode c
 - **Label** (600, 0.6875rem, `0.16em`, UPPERCASE, monospace): Eyebrows, metadata, tags, control labels. Short only (≤4 words).
 
 ### Named Rules
-**The One Family Rule.** Montserrat does the work alone. Hierarchy is weight + scale, never a second sans paired with it. (Per-article showcase faces, e.g. the typography essay, are page-scoped specimens and are not part of the system.)
+**The Role-Split Rule.** The display face is reserved for *structural headings* — prose hierarchy, h1 through h3, the `type-*-title` tiers. Labels that sit on a container (card titles, list titles, subgroup labels) stay in the body face, so a grid of cards never becomes a wall of display type. The split is by role, not by pixel size. (Per-article showcase faces, e.g. the typography essay, are page-scoped specimens and are not part of the system.)
 
 **The Caveat-Sparingly Rule.** The handwriting accent is a personal grace note for at most one moment per surface. It is never a heading, never body, never a label.
 
@@ -185,7 +185,7 @@ On fine-pointer devices the native cursor is hidden and replaced by a bespoke cu
 
 ### Do:
 - **Do** keep emerald to ~10% of any screen, one CTA, one active state, one link that matters (The One Voice Rule).
-- **Do** build hierarchy from Montserrat weight + scale; one family only.
+- **Do** build hierarchy from Bricolage Grotesque on structural headings and Onest on body, UI, and card labels; never apply the display face as a general texture.
 - **Do** keep neutrals at chroma 0; let warmth come from type and interaction, and keep the accent emerald.
 - **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, the emerald 2px focus ring on every interactive element, and a `prefers-reduced-motion` fallback for every animation.
 - **Do** keep surfaces flat at rest and lift on state with a neutral fill and a small translate.
