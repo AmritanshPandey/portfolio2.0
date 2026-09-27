@@ -8,6 +8,9 @@ export interface WorkItem {
   featured?: boolean
   /** Short outcome / impact line shown on the "More case studies" cards. */
   metric?: string
+  /** A real, anonymised screenshot of the shipped work. When set, the home
+   *  page work index shows it instead of the drawn mechanism specimen. */
+  cover?: string
   order: number
 }
 
