@@ -73,7 +73,7 @@ All tokens live in `app/globals.css`. Existing names are kept so components upda
 |---|---|---|
 | `--background` | `#F1EDE4` | Editorial canvas ("paper") |
 | `--foreground` | `#141414` | Ink |
-| `--text-muted` | `#6E685C` | Metadata, captions (must clear 4.5:1 on paper) |
+| `--text-muted` | `#6A6458` | Metadata, captions. Clears 4.5:1 on paper, `--surface-1`, and `--surface-2` (the first proposal, `#6E685C`, failed on `--surface-2` at 4.40:1) |
 | `--surface-1` | `#FAF8F3` | **Elevated**: interface artefacts, the few cards that remain |
 | `--surface-2` | `#EAE5DA` | Deeper paper behind artefact stages |
 | `--surface-inverse` *(new)* | `oklch(0.15 0.005 80)` (= dark `--background`) | The inverse colour, for small unscoped uses (an inverse chip or tooltip). Emphasis bands use scope swapping instead, see 4.3 |
@@ -109,17 +109,25 @@ All tokens live in `app/globals.css`. Existing names are kept so components upda
 | `--primary-foreground` | `oklch(0.11 0 0)` |
 | `--surface-hover` | `oklch(0.215 0.005 80)` |
 
-### 4.3 Emphasis bands use theme-scope swapping
+### 4.3 Emphasis bands swap the token scope, in CSS only
 
-An emphasis band does not restyle its children. It **swaps the token scope**: in light mode the band carries `.dark`; in dark mode it carries `.light`. Everything inside then renders with the opposite theme's tokens, accent included.
-
-So that `dark:` utilities respect the nearest scope, the custom variant changes from `&:is(.dark *)` to:
+An emphasis band does not restyle its children. It **swaps the token scope**, so everything inside renders with the opposite theme's tokens, accent included. The swap is done entirely in CSS with one class, `.band-inverse`, so it never depends on JavaScript knowing the current theme (no hydration flash):
 
 ```css
-@custom-variant dark (&:where(.dark, .dark *):not(:where(.dark .light, .dark .light *)));
+:root, .light, .dark .band-inverse { /* light tokens */ }
+.dark, :root:not(.dark) .band-inverse { /* dark tokens */ }
+.band-inverse { background: var(--background); color: var(--foreground); }
 ```
 
-The band paints itself with **`bg-background text-foreground`**, which resolve inside the swapped scope, so a light-mode band is near-black and a dark-mode band is paper. It must **not** use `--surface-inverse`: on an element that also carries the scope class, that token resolves to the *opposite* of the intended colour. The `Section` variant that renders bands (sub-project 2) owns choosing `.dark` or `.light` from the current theme. Foundations provides the scope mechanism and a `.band` utility (`background: var(--background); color: var(--foreground)`) for the showcase reference.
+The band paints itself with `--background` / `--foreground`, which resolve inside the swapped scope: near-black on a light page, paper on a dark page. It must **not** use `--surface-inverse`, which on a swapped element resolves to the opposite of the intended colour. Nested bands are not supported.
+
+So that `dark:` utilities respect the nearest scope, the custom variant becomes:
+
+```css
+@custom-variant dark (&:where(.dark, .dark *, :root:not(.dark) .band-inverse, :root:not(.dark) .band-inverse *):not(:where(.dark .light, .dark .light *, .dark .band-inverse, .dark .band-inverse *)));
+```
+
+The `.light` / `.dark` subtree classes keep working (the light↔dark split demo uses them). Sub-project 2's `Section` variant renders bands by adding `.band-inverse`.
 
 ### 4.4 Surface rules
 - Four surface kinds only: **editorial** (`--background`), **elevated** (`--surface-1` + hairline, no resting shadow), **inverse** (emphasis), **glass** (`--surface-glass`).
@@ -201,16 +209,19 @@ Rules, not boxes: lists and indexes are rows separated by `--border` hairlines. 
 
 Tokens in `globals.css`, mirrored in a new `lib/motion.ts` for Framer Motion:
 
+`lib/motion.ts` already exists with 17 consumers, so its export names are kept and only values change; new exports are added.
+
 | CSS | `lib/motion.ts` | Value | Use |
 |---|---|---|---|
-| `--dur-1` | `DUR.feedback` | 200ms | Hover, focus, press |
-| `--dur-2` | `DUR.ui` | 400ms | Nav opacity, dialogs, tabs |
-| `--dur-3` | `DUR.reveal` | 600ms | Text, image, and layer reveals |
-| `--dur-4` | `DUR.hero` | 900ms | Hero entrance only |
-| `--ease-out` | `EASE.out` | `cubic-bezier(0.22, 1, 0.36, 1)` | Entrances |
-| `--ease-move` | `EASE.move` | `cubic-bezier(0.65, 0, 0.35, 1)` | Layers changing position |
-| — | `STAGGER` | 0.06s, max 6 items | Staggered reveals |
-| — | `REVEAL_Y` | 12px | Max reveal travel (was 16) |
+| `--dur-1` | `DURATION.feedback` *(new)* | 200ms | Hover, focus, press |
+| `--dur-2` | `DURATION.fast` | 400ms (was 350) | Nav opacity, dialogs, tabs |
+| `--dur-3` | `DURATION.base` | 600ms (was 500) | Text, image, and layer reveals |
+| `--dur-4` | `DURATION.slow` | 900ms (was 700) | Hero entrance only |
+| `--ease-out` | `EASE` | `cubic-bezier(0.22, 1, 0.36, 1)` (unchanged) | Entrances |
+| `--ease-move` | `EASE_MOVE` *(new)* | `cubic-bezier(0.65, 0, 0.35, 1)` | Layers changing position |
+| — | `STAGGER` / `STAGGER_MAX` *(new)* | 0.06s / 6 items | Staggered reveals |
+| — | `RISE` | 8px (unchanged; the rule is ≤12px) | Reveal travel |
+| — | `PARALLAX_MAX` *(new)* | 16px | Artefact-layer parallax ceiling |
 
 **Rules**
 - No springs, no bounce, no scroll-jacking.
@@ -270,7 +281,7 @@ There is no test runner in the repo. Verification is:
    - `on-inverse` on `surface-inverse` — 4.5
    - the opposite theme's `accent` on this theme's `surface-inverse` (the accent inside an emphasis band) — 4.5
    - `primary-foreground` on `primary` — 4.5
-   - `border` on `background` — reported only (hairlines are decorative)
+   - Hairline `border` tokens are deliberately not checked: they are decorative, not text.
 2. `npx tsc --noEmit`, `npm run lint`, and `npm run build` pass.
 3. Browser check on `/showcase` (Foundations tab), `/`, and `/work/white-label-rfp`, at 375, 768, 1280, and 1440px, in light, dark, and reduced motion: no console errors, no horizontal scroll, and emphasis bands invert correctly. Screenshots attached to the PR.
 
