@@ -17,9 +17,9 @@ The redesign is too large for one spec, so it is split into seven sub-projects, 
 | # | Sub-project | Depends on |
 |---|---|---|
 | **1** | **Foundations** — tokens, type, grid, surfaces, motion, layer language, docs *(this spec)* | — |
-| 2 | Chrome — navigation, footer, section scaffolding, theme toggle in nav | 1 |
-| 3 | Hero — built around the positioning line | 1, 2 |
-| 4 | Home IA — the ten-section narrative order | 1, 2 |
+| 2 | Chrome — navigation (Work / Systems / Thinking / Explorations / About, plus Gallery and Lab), footer, section scaffolding, theme toggle in nav | 1 |
+| 3 | Hero — built around the positioning line; years claim made computed (see decision log) | 1, 2 |
+| 4 | Home IA — the ten-section narrative order; Trajectory removed, its career facts folded into About | 1, 2 |
 | 5 | Case-study template — Context → Constraint → Decision → System → Outcome, `LayeredArtefact` | 1 |
 | 6 | Secondary pages — articles, explorations, systems, Gallery, Lab | 1, 2 |
 | 7 | Responsive, motion, and accessibility pass, plus dead-code removal | all |
@@ -40,6 +40,11 @@ Sub-projects 1–4 merge to `main` together, so the live site never shows a half
 | Signature interactions | Custom cursor, magnetic CTA, Lenis smooth scroll, WebGL hero retired | Brief bans cursor gimmicks, scroll-jacking, unnecessary WebGL |
 | Buttons | Pill shape retired; the primary CTA becomes an underlined text link with an arrow | |
 | Accent | Emerald stays the single accent | |
+| Years of experience | **"6+ years"**, counting full-time post-degree work from **April 2020**. Computed at build time from a `CAREER_START = "2020-04"` constant in `lib/site.ts`, so it becomes "7+" in April 2027 without an edit | Part-time and freelance work before 2020 is shown as a separate fact (e.g. "plus startup and freelance work during my degree, from 2016"), never folded into the headline number |
+| Career dates | All dates across the site must agree with an April 2020 full-time start. Today they conflict: Trajectory says DROR 2016–2019, Honasa 2019–2021, Mastercard 2021–now; the Dror case study says 2020–2021; metadata and the hero say "7 years" | Owner supplies the correct dates; applied in sub-projects 3–5 |
+| Nav | Brief's five items **plus Gallery and Lab** | Sub-project 2 |
+| Trajectory section | **Removed as a section.** Its career arc is carried by the Work case studies, "where I'm heading" moves to Hero/About, and its process list duplicates Approach. A compact, rule-separated career list (org · dates · role) moves into About | Sub-project 4; the nav's `trajectory` section id is removed there too |
+| Placeholder imagery | **Kept** until real screenshots exist. Every artefact showing a placeholder carries a "Representative visual" caption; replacing one is an image-path change in page data, never a component change | Sub-projects 5–6 |
 
 ## 3. Goals and non-goals
 
@@ -275,7 +280,4 @@ Expected and accepted on this branch: components with hard-coded dark colours wi
 
 | Item | Owner |
 |---|---|
-| Years of experience: the brief says `6 YEARS`, the site says 7 (layout metadata, hero) | Owner to confirm; applied in sub-project 3 |
-| Whether Gallery and Lab stay in the nav (the brief's nav is Work / Systems / Thinking / Explorations / About) | Sub-project 2 |
-| Where Trajectory sits in the ten-section order (it is not in the brief) | Sub-project 4 |
-| Placeholder gradients in `public/assets/images/work/` stand in for real screenshots; the layer language needs real interface fragments to land | Owner; needed by sub-project 5 |
+| Correct career dates (DROR, Honasa, Mastercard, and what was part-time / during the degree) | Owner, before sub-project 3 |
