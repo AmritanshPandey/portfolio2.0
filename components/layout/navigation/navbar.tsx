@@ -15,6 +15,7 @@ import {
 import { IconHome } from "@tabler/icons-react"
 
 import { scrollToSection } from "@/lib/scroll"
+import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 
 type NavLink = {
   label: string
@@ -274,6 +275,55 @@ function NavShell({
   )
 }
 
+/**
+ * The two things a recruiter comes for, reachable from any page: the resume
+ * (a file, so a plain link in a new tab rather than a prefetched route) and a
+ * direct email. "Email me" is the only filled button in the nav, so it reads
+ * as the one action rather than another destination.
+ */
+function ContactActions({
+  onNavigate,
+  layout = "inline",
+}: {
+  onNavigate?: () => void
+  layout?: "inline" | "menu"
+}) {
+  const menu = layout === "menu"
+  const focus =
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+
+  return (
+    <div className={clsx(menu ? "grid grid-cols-2 gap-2" : "flex items-center gap-1")}>
+      <a
+        href={RESUME_HREF}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className={clsx(
+          "flex shrink-0 items-center justify-center rounded-full font-medium transition-colors duration-200",
+          menu
+            ? "h-11 border border-border/70 text-sm text-foreground"
+            : "h-10 px-3 text-[13px] text-muted-foreground hover:text-foreground md:px-2.5 lg:px-3 lg:text-sm",
+          focus
+        )}
+      >
+        Resume
+      </a>
+      <a
+        href={EMAIL_HREF}
+        onClick={onNavigate}
+        className={clsx(
+          "flex shrink-0 items-center justify-center rounded-full bg-accent font-medium text-white transition-[filter] duration-200 hover:brightness-110 dark:text-neutral-950",
+          menu ? "h-11 text-sm" : "h-10 px-4 text-[13px] lg:text-sm",
+          focus
+        )}
+      >
+        Email me
+      </a>
+    </div>
+  )
+}
+
 function Divider() {
   return <div className="mx-1 h-4 w-px shrink-0 bg-border/60" />
 }
@@ -350,7 +400,7 @@ export default function Navbar() {
         />
       )}
 
-      <header className="fixed left-1/2 top-5 z-50 hidden w-[calc(100vw-2rem)] -translate-x-1/2 justify-center md:flex lg:top-7 lg:w-auto">
+      <header className="fixed left-1/2 top-5 z-50 hidden w-[calc(100vw-2rem)] -translate-x-1/2 justify-center md:flex lg:top-7 lg:w-max">
         <NavShell scrolled={scrolled}>
           {/* Left: home + in-page sections */}
           <div className="relative flex items-center gap-1">
@@ -377,6 +427,10 @@ export default function Navbar() {
               />
             ))}
           </div>
+
+          <Divider />
+
+          <ContactActions />
         </NavShell>
       </header>
 
@@ -469,6 +523,10 @@ export default function Navbar() {
                     className="h-11 w-full justify-start rounded-2xl px-3 text-sm"
                   />
                 ))}
+              </div>
+
+              <div className="border-t border-border/60 p-3">
+                <ContactActions layout="menu" onNavigate={() => setOpen(false)} />
               </div>
             </motion.div>
           </>

@@ -3,7 +3,7 @@
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { advisoryItems, teachingItems, menteeItems } from "@/lib/data"
 
-const EMAIL = "amritansh.pandey6@gmail.com"
+import { EMAIL, EMAIL_HREF } from "@/lib/contact"
 
 /**
  * Advisory, compressed to its evidence.
@@ -71,7 +71,7 @@ export default function AdvisorySection() {
           end without a next step. */}
       <div className="flex flex-wrap items-center gap-4 border-t border-border/60 pt-6">
         <a
-          href={`mailto:${EMAIL}?subject=Let%27s%20talk`}
+          href={EMAIL_HREF}
           className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[14px] font-medium text-white transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:text-neutral-950"
         >
           Start a conversation
