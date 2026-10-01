@@ -483,7 +483,7 @@ export function ChromaticLensHero() {
 
         <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-8 md:pb-12">
           <p className="max-w-[46ch] text-[15px] leading-relaxed text-black/70 dark:text-white/75 md:text-[17px]">
-            Seven years shipping payments, platforms, and AI commerce, from the
+            Six-plus years shipping payments, platforms, and AI commerce, from the
             first demo to the CPO&apos;s Money20/20 stage.
           </p>
           <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-black/45 dark:text-white/50">

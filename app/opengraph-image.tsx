@@ -95,7 +95,7 @@ export default async function Image() {
           </div>
           <div style={{ width: 1, height: 26, background: "#3f3f46", display: "flex" }} />
           <div style={{ color: "#71717a", fontSize: 22 }}>
-            7 years · fintech, commerce, 0→1
+            6+ years · fintech, commerce, 0→1
           </div>
         </div>
       </div>

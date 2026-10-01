@@ -149,7 +149,7 @@ function Hero() {
         role:         "Sole PM + Designer",
         platform:     "iOS + Android",
         scope:        "Consumer + Enterprise",
-        organisation: "Dror · Lythouse",
+        organisation: "DROR Labs (later Lythouse)",
       }}
       readTime="15 min read"
       publishedDate="2020–2021"
@@ -712,7 +712,7 @@ export default function Page() {
       <Hero />
 
       <CsInfoBar cells={[
-        { label: "Company",  value: "Dror · Lythouse",       sub: "Gurugram · Seed" },
+        { label: "Company",  value: "DROR Labs",             sub: "Later Lythouse · Gurugram · Seed" },
         { label: "Role",     value: "Designer · PM",         sub: "+ Frontend (React)" },
         { label: "Team",     value: "10 people",             sub: "Sole product owner" },
         { label: "Duration", value: "11 months",             sub: "2020 – 2021" },
