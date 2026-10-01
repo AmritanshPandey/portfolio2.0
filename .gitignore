@@ -48,3 +48,6 @@ next-env.d.ts
 /.next-preview/
 /tmp/
 *.swp
+
+# Brainstorming companion mockups
+.superpowers/
