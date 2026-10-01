@@ -6,6 +6,7 @@ import {
   CsInfoBar,
   CsFeature,
   CsBeforeAfter,
+  CsBrandSkinCompare,
   CsArchStack,
   CsMetricBars,
   CsNextStudies,
@@ -18,6 +19,15 @@ import {
   CsReflection,
 } from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+import type { BrandSkin } from "@/components/case-study"
+
+// ─── BRAND SKINS ─────────────────────────────────────────────────────────────
+
+const BRAND_SKINS: BrandSkin[] = [
+  { id: "north",    bank: "North Bank",     primary: "#E11D48", deep: "#9F1239", radius: "12px", fontLabel: "Onest",       fontStack: "var(--ff-sans), ui-sans-serif, system-ui, sans-serif" },
+  { id: "heritage", bank: "Heritage Trust", primary: "#B8862F", deep: "#6E4E12", radius: "4px",  fontLabel: "Serif",       fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
+  { id: "verde",    bank: "Verde Bank",     primary: "#2F8F6F", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
+]
 
 // ─── CHAPTERS ────────────────────────────────────────────────────────────────
 
@@ -439,49 +449,13 @@ export default function Page() {
               Same component. Three brand skins.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              A single banking card component, themed through three different token configurations.
-              No structural change. No new design work. Just configuration.
+              One banking screen, themed through three token configurations. Drag the divider:
+              colour, radius, and type change. Structure doesn&apos;t. No new design work, just configuration.
             </p>
           </div>
 
           <FadeIn>
-            <div className="grid md:grid-cols-3 gap-5">
-              {[
-                { brand: "Brand · A", primary: "#F43F5E", gradient: "from-accent to-rose-700", bank: "North Bank", num: "•••• 4287", type: "Premier · Debit", radius: "12px", font: "Inter" },
-                { brand: "Brand · B", primary: "#D4A24C", gradient: "from-[#D4A24C] to-[#8B6508]", bank: "Heritage Trust", num: "•••• 9120", type: "Private · Credit", radius: "8px", font: "Instrument" },
-                { brand: "Brand · C", primary: "#4DA88A", gradient: "from-[#4DA88A] to-[#2F6F5A]", bank: "Verde Bank", num: "•••• 7503", type: "Everyday · Debit", radius: "14px", font: "Inter" },
-              ].map((t) => (
-                <div key={t.brand} className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-5 hover:-translate-y-0.5 transition-transform duration-300">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">{t.brand}</p>
-                    <div className="w-7 h-7 rounded-lg border border-border" style={{ background: t.primary }} />
-                  </div>
-
-                  {/* Mini card */}
-                  <div className={`bg-gradient-to-br ${t.gradient} rounded-xl p-4 flex flex-col justify-between h-24 relative overflow-hidden`}>
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
-                    <div className="flex justify-between items-start relative">
-                      <span className="text-[10px] font-medium text-white/85 uppercase tracking-[0.14em]">{t.bank}</span>
-                      <div className="w-6 h-4 bg-white/25 rounded-[3px]" />
-                    </div>
-                    <div className="relative">
-                      <p className="font-mono text-[13px] text-white tracking-[0.08em] mb-1">{t.num}</p>
-                      <p className="text-[9px] text-white/80 uppercase tracking-[0.16em]">{t.type}</p>
-                    </div>
-                  </div>
-
-                  {/* Token list */}
-                  <div className="rounded-lg bg-muted/60 border border-border/50 p-3 font-mono text-[11px] flex flex-col gap-2">
-                    {[["primary", t.primary], ["radius", t.radius], ["font", t.font]].map(([k, v]) => (
-                      <div key={k} className="flex justify-between">
-                        <span className="text-muted-foreground">{k}</span>
-                        <span className="text-foreground">{v}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <CsBrandSkinCompare base={BRAND_SKINS[0]} alternates={BRAND_SKINS.slice(1)} />
           </FadeIn>
 
           <CsAnnotatedImage

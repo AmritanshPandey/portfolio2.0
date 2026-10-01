@@ -121,10 +121,10 @@ const DOWN: IaNode = {
   ],
 }
 
-export function InfoArchitectureDemo() {
+export function InfoArchitectureDemo({ bleed = true }: { bleed?: boolean } = {}) {
   return (
     // Break out of the page's centered column to the full viewport width.
-    <div className="relative left-1/2 w-screen -translate-x-1/2">
+    <div className={bleed ? "relative left-1/2 w-screen -translate-x-1/2" : "relative"}>
       {/* Static dot-grid background (pure CSS, no animation) */}
       <div
         aria-hidden

@@ -4,6 +4,7 @@ import Image from "next/image"
 import {
   type KeyboardEvent,
   type PointerEvent,
+  type ReactNode,
   useCallback,
   useEffect,
   useRef,
@@ -26,7 +27,10 @@ export type InfiniteWallItem = {
   id: string
   title: string
   meta?: string
-  src: string
+  /** Image for the tile. Ignored when `cover` is given. */
+  src?: string
+  /** Custom tile artwork (a lightweight poster), rendered instead of `src`. */
+  cover?: ReactNode
   alt?: string
   href?: string
   x: number
@@ -68,15 +72,17 @@ function WallTile({
 
   const content = (
     <>
-      <Image
-        src={item.src}
-        alt={item.alt ?? ""}
-        fill
-        priority={item.priority}
-        draggable={false}
-        sizes="(min-width: 1280px) 18vw, (min-width: 768px) 28vw, 54vw"
-        className={cn("object-cover", item.imageClassName)}
-      />
+      {item.cover ?? (item.src && (
+        <Image
+          src={item.src}
+          alt={item.alt ?? ""}
+          fill
+          priority={item.priority}
+          draggable={false}
+          sizes="(min-width: 1280px) 18vw, (min-width: 768px) 28vw, 54vw"
+          className={cn("object-cover", item.imageClassName)}
+        />
+      ))}
 
       {isInteractive && showCaption && (
         <>
@@ -306,7 +312,7 @@ export function InfiniteImageWall({
                 <WallTile
                   key={item.id}
                   item={item}
-                  onOpen={item.src ? openTile : undefined}
+                  onOpen={item.src || item.cover ? openTile : undefined}
                   showCaption={showCaptions}
                 />
               ))}

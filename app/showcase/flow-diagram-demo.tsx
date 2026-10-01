@@ -96,11 +96,11 @@ const LINKS: FlowEdge[] = [
   ["work-agent", "sys-fintech"],
 ]
 
-export function FlowDiagramDemo() {
+export function FlowDiagramDemo({ bleed = true }: { bleed?: boolean } = {}) {
   return (
     // Break out of the page's centered max-w-5xl column to the full viewport
     // width, so the diagram has room to breathe on desktop.
-    <div className="relative left-1/2 w-screen -translate-x-1/2">
+    <div className={bleed ? "relative left-1/2 w-screen -translate-x-1/2" : "relative"}>
       {/* Static dot-grid background (pure CSS, no animation) */}
       <div
         aria-hidden

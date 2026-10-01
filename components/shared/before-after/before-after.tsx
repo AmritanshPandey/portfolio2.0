@@ -29,6 +29,8 @@ export interface BeforeAfterProps {
   afterLabel?: string
   /** Starting divider position, 0–100. */
   initial?: number
+  /** Accessible name for the slider handle. */
+  ariaLabel?: string
   className?: string
 }
 
@@ -38,6 +40,7 @@ export function BeforeAfter({
   beforeLabel,
   afterLabel,
   initial = 50,
+  ariaLabel = "Reveal before versus after",
   className,
 }: BeforeAfterProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -129,7 +132,7 @@ export function BeforeAfter({
           type="button"
           role="slider"
           tabIndex={0}
-          aria-label="Reveal before versus after"
+          aria-label={ariaLabel}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pos)}

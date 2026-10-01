@@ -13,6 +13,8 @@ import {
 } from "@tabler/icons-react"
 import clsx from "clsx"
 import { AsciiFlowBackground } from "@/components/ui/backgrounds"
+import { BrowserFrame } from "@/components/case-study/browser-frame"
+import { IphoneFrame } from "@/components/shared/iphone-frame"
 
 type ShotCategory = "All" | "Web App" | "Systems" | "Mobile"
 
@@ -114,6 +116,57 @@ function FormatIcon({ format }: { format: Shot["format"] }) {
   }
 
   return <IconDeviceDesktop size={13} strokeWidth={1.8} aria-hidden="true" />
+}
+
+/**
+ * The preview stage frames each shot by what it is: mobile work sits in a
+ * device, desktop work in browser chrome, and systems stay unframed so
+ * dense boards get the full canvas.
+ */
+function ShotPreview({ shot }: { shot: Shot }) {
+  if (shot.format === "Mobile") {
+    return (
+      <div className="relative flex min-h-[52vh] items-center justify-center bg-black py-8 lg:min-h-[78vh]">
+        <IphoneFrame
+          src={shot.image}
+          alt={shot.title}
+          priority
+          className="h-[44vh] w-auto lg:h-[68vh]"
+        />
+      </div>
+    )
+  }
+
+  if (shot.format === "Desktop") {
+    return (
+      <div className="relative flex min-h-[52vh] items-center justify-center bg-black p-4 sm:p-8 lg:min-h-[78vh]">
+        <BrowserFrame url={shot.title} className="w-full max-w-4xl">
+          <Image
+            src={shot.image}
+            alt={shot.title}
+            width={1800}
+            height={1125}
+            priority
+            sizes="(min-width: 1024px) 60vw, 100vw"
+            className="h-auto w-full"
+          />
+        </BrowserFrame>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative min-h-[52vh] bg-black lg:min-h-[78vh]">
+      <Image
+        src={shot.image}
+        alt={shot.title}
+        fill
+        priority
+        sizes="(min-width: 1024px) 70vw, 100vw"
+        className="object-contain"
+      />
+    </div>
+  )
 }
 
 function ShotCard({
@@ -346,16 +399,7 @@ export function UiDesignGallery() {
           />
 
           <div className="relative grid max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 shadow-[0_32px_120px_rgba(0,0,0,0.72)] lg:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="relative min-h-[52vh] bg-black lg:min-h-[78vh]">
-              <Image
-                src={selectedShot.image}
-                alt=""
-                fill
-                priority
-                sizes="(min-width: 1024px) 70vw, 100vw"
-                className="object-contain"
-              />
-            </div>
+            <ShotPreview shot={selectedShot} />
 
             <aside className="border-t border-white/10 bg-neutral-950 p-5 text-white lg:border-l lg:border-t-0 lg:p-6">
               <div className="mb-5 flex items-start justify-between gap-4">

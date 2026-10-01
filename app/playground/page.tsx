@@ -4,7 +4,7 @@ import { PlaygroundWall } from "./playground-wall"
 
 export const metadata: Metadata = {
   title: "Lab",
-  description: "An experimental multidirectional wall of interface images and component tiles.",
+  description: "Working experiments — interactive components, diagrams, and models you can open and use.",
 }
 
 export default function PlaygroundPage() {
