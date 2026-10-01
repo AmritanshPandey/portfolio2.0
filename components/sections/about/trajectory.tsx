@@ -9,21 +9,21 @@ import { FadeIn } from "@/components/shared/fade-in"
 
 const STAGES = [
   {
-    period: "2016–2019",
-    org: "DROR Labs",
+    period: "2020–2021",
+    org: "DROR Labs (later Lythouse)",
     role: "0→1 product design",
     line: "Built an early-stage citizen-safety product from ambiguity to real-world use: startup constraints, rapid iteration, product strategy under pressure.",
     tag: "Startup · 0→1",
   },
   {
-    period: "2019–2021",
+    period: "2021–2022",
     org: "Mamaearth · Honasa",
     role: "Consumer & commerce UX",
     line: "Designed multi-brand D2C commerce experiences that balance consistency with distinct consumer identities across a fast-scaling platform.",
     tag: "Consumer · Commerce",
   },
   {
-    period: "2021–now",
+    period: "2022–now",
     org: "Mastercard · Creative Studio",
     role: "Senior UX Designer",
     line: "Enterprise fintech, payments, and agentic commerce: product systems, demos, and RFP experiences, built with product, brand, engineering, and senior VP/SVP stakeholders.",

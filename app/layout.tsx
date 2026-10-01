@@ -58,19 +58,19 @@ export const metadata: Metadata = {
     template: "%s | Amritansh Pandey",
   },
   description:
-    "Amritansh Pandey, Senior UX Designer at Mastercard. 7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
+    "Amritansh Pandey, Senior UX Designer at Mastercard. 6+ years building products end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
     url: SITE_URL,
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
-      "7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
+      "6+ years building products end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Amritansh Pandey | Product Thinker | Mastercard",
-    description: "7 years building fintech end to end, from early demo to CPO stage.",
+    description: "6+ years building products end to end, from early demo to CPO stage.",
   },
 }
 

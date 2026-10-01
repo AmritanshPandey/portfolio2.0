@@ -157,7 +157,7 @@ export default function Hero() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-                  7 years · fintech, commerce, 0→1
+                  6+ years · fintech, commerce, 0→1
                 </li>
               </ul>
             </div>
