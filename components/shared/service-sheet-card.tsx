@@ -80,6 +80,8 @@ export function ServiceSheetCard({ item, active, className }: ServiceSheetCardPr
 }
 
 function ViewButton({ href, title }: { href?: string; title: string }) {
+  if (!href) return null
+
   const className = cn(
     "mt-5 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5",
     "text-[11px] font-semibold uppercase tracking-[0.16em] text-background",
@@ -93,14 +95,6 @@ function ViewButton({ href, title }: { href?: string; title: string }) {
       <IconArrowRight className="size-3.5" stroke={2.5} />
     </>
   )
-
-  if (!href) {
-    return (
-      <button type="button" aria-label={`View ${title}`} className={className}>
-        {inner}
-      </button>
-    )
-  }
 
   return (
     <a href={href} aria-label={`View ${title}`} className={className}>

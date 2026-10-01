@@ -15,6 +15,7 @@ import { ThemeProvider } from "next-themes"
 import { MotionConfig } from "framer-motion"
 import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx"
+import { SITE_URL } from "@/lib/site"
 
 // Display: carries every heading. The `opsz` axis is requested so the browser
 // applies optical sizing automatically — letterforms open up at 15px and tighten
@@ -51,7 +52,7 @@ const caveat = Caveat({
 const analyticsEnabled = process.env.VERCEL === "1"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio2-0-beta-one.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Amritansh Pandey | Product Thinker | Mastercard",
     template: "%s | Amritansh Pandey",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Amritansh Pandey",
-    url: "https://portfolio2-0-beta-one.vercel.app",
+    url: SITE_URL,
     title: "Amritansh Pandey | Product Thinker | Mastercard",
     description:
       "7 years building fintech end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",

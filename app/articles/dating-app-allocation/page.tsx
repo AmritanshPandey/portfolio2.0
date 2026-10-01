@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
@@ -12,7 +13,12 @@ import {
 } from "@/components/shared/matching-lab"
 
 const HREF = "/articles/dating-app-allocation"
-const article = articleItems.find(a => a.href === HREF)!
+
+function getArticle() {
+  const article = articleItems.find((item) => item.href === HREF)
+  if (!article) notFound()
+  return article
+}
 
 function Section({ children }: { children: React.ReactNode; muted?: boolean }) {
   return (
@@ -65,7 +71,7 @@ function Figure({ children, caption }: { children: React.ReactNode; caption?: st
 // ─── hero ────────────────────────────────────────────────────────────────────
 
 function Hero() {
-  return <ArticleHeader article={article} />
+  return <ArticleHeader article={getArticle()} />
 }
 
 // ─── takeaways + related ───────────────────────────────────────────────────────
@@ -92,6 +98,8 @@ function Takeaways({ items }: { items: string[] }) {
 // ─── page ──────────────────────────────────────────────────────────────────────
 
 export default function Page() {
+  const article = getArticle()
+
   return (
     <div>
       <ReadingProgress />

@@ -121,14 +121,16 @@ export function ServiceCard({ item, active, onActivate, ref, className }: Servic
           <p className="mt-3 max-w-[42ch] text-pretty text-sm leading-relaxed text-white/65">
             {item.description}
           </p>
-          <ViewLink href={item.href} title={item.title} />
+          <ViewLink href={item.href} title={item.title} active={active} />
         </div>
       </div>
     </div>
   )
 }
 
-function ViewLink({ href, title }: { href?: string; title: string }) {
+function ViewLink({ href, title, active }: { href?: string; title: string; active: boolean }) {
+  if (!href) return null
+
   const className =
     "mt-5 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/[0.04] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition-colors duration-300 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black"
 
@@ -143,16 +145,14 @@ function ViewLink({ href, title }: { href?: string; title: string }) {
   // isn't shadowed by a state change.
   const stop = (e: React.MouseEvent) => e.stopPropagation()
 
-  if (!href) {
-    return (
-      <button type="button" onClick={stop} aria-label={`View ${title}`} className={className}>
-        {inner}
-      </button>
-    )
-  }
-
   return (
-    <a href={href} onClick={stop} aria-label={`View ${title}`} className={className}>
+    <a
+      href={href}
+      onClick={stop}
+      tabIndex={active ? 0 : -1}
+      aria-label={`View ${title}`}
+      className={className}
+    >
       {inner}
     </a>
   )

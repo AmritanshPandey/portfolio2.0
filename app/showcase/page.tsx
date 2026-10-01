@@ -288,7 +288,6 @@ const SERVICES: ServiceCardItem[] = [
     description:
       "Interviews, jobs-to-be-done and opportunity mapping that turn a vague ask into a sharp, testable problem statement the whole team can rally behind.",
     image: "/assets/images/work/fintech-ai-system.jpg",
-    href: "#",
   },
   {
     id: "strategy",
@@ -298,7 +297,6 @@ const SERVICES: ServiceCardItem[] = [
     description:
       "Sequencing the bets — what to build now, next and never — against constraints, so each release compounds into a coherent platform instead of scattered features.",
     image: "/assets/images/work/execution-system.jpg",
-    href: "#",
   },
   {
     id: "design",
@@ -308,7 +306,6 @@ const SERVICES: ServiceCardItem[] = [
     description:
       "High-craft flows and screens with the motion, states and edge cases worked through — the kind of detail that makes a product feel considered rather than assembled.",
     image: "/assets/images/work/commerce-platform.jpg",
-    href: "#",
   },
   {
     id: "systems",
@@ -318,7 +315,6 @@ const SERVICES: ServiceCardItem[] = [
     description:
       "Tokens, components and the documentation around them, built so engineering ships consistent UI fast and the system holds together as the surface area grows.",
     image: "/assets/images/work/design-tokens.jpg",
-    href: "#",
   },
 ]
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import Image from "next/image"
 import {
   ArticleHeader,
   ArticleProse,
@@ -92,14 +93,15 @@ function ImageFull({ section }: { section: ArticleSection }) {
   return (
     <figure className="my-12">
       <div className="-mx-6 md:-mx-20 lg:-mx-36 overflow-hidden rounded-xl border border-border/30">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <div className="relative aspect-[16/10] bg-muted/20">
+          <Image
           src={section.src ?? ""}
-          alt={section.alt ?? ""}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-auto block"
-        />
+            alt={section.alt ?? "Article illustration"}
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            className="object-contain"
+          />
+        </div>
       </div>
       {(section.caption || section.source) && (
         <figcaption className="mt-3 text-center text-[12px] text-muted-foreground px-6">
@@ -122,14 +124,15 @@ function ImageCaptioned({ section }: { section: ArticleSection }) {
   return (
     <figure className="my-10">
       <div className="overflow-hidden rounded-xl border border-border/30 bg-muted/20">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <div className="relative aspect-[4/3]">
+          <Image
           src={section.src ?? ""}
-          alt={section.alt ?? ""}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-auto block"
-        />
+            alt={section.alt ?? "Article illustration"}
+            fill
+            sizes="(max-width: 768px) 100vw, 760px"
+            className="object-contain"
+          />
+        </div>
       </div>
       {(section.caption || section.source) && (
         <figcaption className="mt-3 flex gap-2 items-start">
@@ -161,8 +164,9 @@ function ImageCompare({ section }: { section: ArticleSection }) {
         {b && (
           <div className="space-y-2">
             <div className="relative overflow-hidden rounded-xl border border-border/30 bg-muted/20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={b.src} alt={b.alt ?? ""} loading="lazy" decoding="async" className="w-full h-auto block" />
+              <div className="relative aspect-[16/10]">
+                <Image src={b.src} alt={b.alt ?? "Before comparison image"} fill sizes="(max-width: 768px) 50vw, 380px" className="object-contain" />
+              </div>
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 text-[10px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm">
                 {b.label ?? "Before"}
               </span>
@@ -172,8 +176,9 @@ function ImageCompare({ section }: { section: ArticleSection }) {
         {a && (
           <div className="space-y-2">
             <div className="relative overflow-hidden rounded-xl border border-accent/25 bg-muted/20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={a.src} alt={a.alt ?? ""} loading="lazy" decoding="async" className="w-full h-auto block" />
+              <div className="relative aspect-[16/10]">
+                <Image src={a.src} alt={a.alt ?? "After comparison image"} fill sizes="(max-width: 768px) 50vw, 380px" className="object-contain" />
+              </div>
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[10px] font-bold uppercase tracking-wider text-background backdrop-blur-sm">
                 {a.label ?? "After"}
               </span>
@@ -208,14 +213,15 @@ function ImageGrid({ section }: { section: ArticleSection }) {
         {images.map((img, i) => (
           <div key={i} className="space-y-1.5">
             <div className="overflow-hidden rounded-xl border border-border/30 bg-muted/20">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+                <div className="relative aspect-[4/3]">
+                  <Image
                 src={img.src}
-                alt={img.alt ?? ""}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-auto block object-cover"
-              />
+                    alt={img.alt ?? `Article image ${i + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 380px"
+                    className="object-contain"
+                  />
+                </div>
             </div>
             {img.caption && (
               <p className="text-[11px] text-muted-foreground text-center leading-snug">
@@ -252,14 +258,15 @@ function ImageFloat({ section }: { section: ArticleSection }) {
       {/* Image column */}
       <figure className="w-full md:w-[42%] flex-shrink-0 space-y-2">
         <div className="overflow-hidden rounded-xl border border-border/30 bg-muted/20">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <div className="relative aspect-[4/3]">
+            <Image
             src={section.src ?? ""}
-            alt={section.alt ?? ""}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-auto block"
-          />
+              alt={section.alt ?? "Article illustration"}
+              fill
+              sizes="(max-width: 768px) 100vw, 320px"
+              className="object-contain"
+            />
+          </div>
         </div>
         {section.caption && (
           <figcaption className="text-[11px] text-muted-foreground leading-relaxed">
@@ -312,8 +319,9 @@ function BrowserFrame({
         <div className="w-[52px] flex-shrink-0" />
       </div>
       {/* Screenshot */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} loading="lazy" decoding="async" className="w-full h-auto block" />
+      <div className="relative aspect-[16/10] bg-background">
+        <Image src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 760px" className="object-contain" />
+      </div>
     </div>
   )
 }
@@ -327,8 +335,9 @@ function PhoneFrame({ src, alt }: { src: string; alt: string }) {
           <div className="w-24 h-6 bg-black rounded-full border border-white/10" />
         </div>
         {/* Screen content */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} loading="lazy" decoding="async" className="w-full h-auto block" />
+        <div className="relative aspect-[9/16]">
+          <Image src={src} alt={alt} fill sizes="270px" className="object-contain" />
+        </div>
         {/* Home indicator */}
         <div className="bg-black flex justify-center py-2.5">
           <div className="w-24 h-[4px] rounded-full bg-white/25" />

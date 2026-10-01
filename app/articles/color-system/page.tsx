@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation"
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
@@ -242,10 +243,16 @@ const BADGE: Record<string, string> = {
   warn: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
 }
 
+function getArticle() {
+  const article = articleItems.find((item) => item.href === HREF)
+  if (!article) notFound()
+  return article
+}
+
 // ─── HERO ─────────────────────────────────────────────────────────────────, 
 
 function Hero() {
-  const a = articleItems.find(x => x.href === HREF)!
+  const a = getArticle()
   return <ArticleHeader article={a} />
 }
 

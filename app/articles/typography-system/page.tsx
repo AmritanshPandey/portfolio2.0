@@ -1,12 +1,19 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { notFound } from "next/navigation"
 import { articleItems } from "@/lib/data"
 import { ArticleHeader, RelatedArticles } from "@/components/articles/article-ui"
 import { FadeIn } from "@/components/shared/fade-in"
 import { ReadingProgress } from "@/components/shared/reading-progress"
 
 const HREF = "/articles/typography-system"
+
+function getArticle() {
+  const article = articleItems.find((item) => item.href === HREF)
+  if (!article) notFound()
+  return article
+}
 
 const F = {
   serif:    "'Playfair Display', Georgia, serif",
@@ -609,7 +616,7 @@ function TypographyLab() {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function Page() {
-  const article = articleItems.find(x => x.href === HREF)!
+  const article = getArticle()
   return (
     <div>
       <ReadingProgress />
