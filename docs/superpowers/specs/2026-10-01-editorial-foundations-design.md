@@ -40,8 +40,8 @@ Sub-projects 1–4 merge to `main` together, so the live site never shows a half
 | Signature interactions | Custom cursor, magnetic CTA, Lenis smooth scroll, WebGL hero retired | Brief bans cursor gimmicks, scroll-jacking, unnecessary WebGL |
 | Buttons | Pill shape retired; the primary CTA becomes an underlined text link with an arrow | |
 | Accent | Emerald stays the single accent | |
-| Years of experience | **"6+ years"**, counting full-time post-degree work from **April 2020**. Computed at build time from a `CAREER_START = "2020-04"` constant in `lib/site.ts`, so it becomes "7+" in April 2027 without an edit | Part-time and freelance work before 2020 is shown as a separate fact (e.g. "plus startup and freelance work during my degree, from 2016"), never folded into the headline number |
-| Career dates | All dates across the site must agree with an April 2020 full-time start. Today they conflict: Trajectory says DROR 2016–2019, Honasa 2019–2021, Mastercard 2021–now; the Dror case study says 2020–2021; metadata and the hero say "7 years" | Owner supplies the correct dates; applied in sub-projects 3–5 |
+| Years of experience | **"6+ years"**, counting full-time work from **May 2020** (Lythouse), matching the LinkedIn summary. Computed at build time from a `CAREER_START = "2020-05"` constant in `lib/site.ts`, so it becomes "7+" in May 2027 without an edit | Pre-2020 work during the degree (DUIT, Pick My Work) is credited as a separate, checkable fact, "designing products since 2018", never folded into the headline number |
+| Career dates | **The LinkedIn profile export (October 2026) is the source of truth.** Full-time: Lythouse / Dror, Product Manager · UX Designer, May 2020 – Apr 2021 → Mamaearth · Honasa, UI/UX Designer, Apr 2021 – May 2022 → Mastercard, UI/UX Designer · Front-end Developer, Jun 2022 – Mar 2025 → Mastercard, Senior UX Designer · Front-end Developer, Mar 2025 – present. During the degree: DUIT, Product Designer, May 2018 – Nov 2019; Pick My Work, UI/UX Designer, Nov 2019 – Apr 2020 | The Dror case study already matches. Wrong today: Trajectory (DROR 2016–2019, Honasa 2019–2021, Mastercard 2021–now; removed in sub-project 4) and "7 years" in metadata and the hero (sub-project 3). The About career list uses this table |
 | Nav | Brief's five items **plus Gallery and Lab** | Sub-project 2 |
 | Trajectory section | **Removed as a section.** Its career arc is carried by the Work case studies, "where I'm heading" moves to Hero/About, and its process list duplicates Approach. A compact, rule-separated career list (org · dates · role) moves into About | Sub-project 4; the nav's `trajectory` section id is removed there too |
 | Placeholder imagery | **Kept** until real screenshots exist. Every artefact showing a placeholder carries a "Representative visual" caption; replacing one is an image-path change in page data, never a component change | Sub-projects 5–6 |
@@ -278,6 +278,4 @@ Expected and accepted on this branch: components with hard-coded dark colours wi
 
 ## 13. Open items
 
-| Item | Owner |
-|---|---|
-| Correct career dates (DROR, Honasa, Mastercard, and what was part-time / during the degree) | Owner, before sub-project 3 |
+None. Career dates were resolved from the LinkedIn export (see the decision log).
