@@ -20,7 +20,7 @@ export default function Page() {
         id="work"
         bg="default"
         title="Systems that shipped."
-        description="Four case studies across AI payments, enterprise systems, D2C commerce, and early-stage product work. Each one names the options considered and what actually changed."
+        description="Four case studies across enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
         headerAnimated={false}
       >
         <CaseStudy />
