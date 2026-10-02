@@ -6,7 +6,10 @@
    DARK MODE
 ───────────────────────── */
 
-@custom-variant dark (&:is(.dark *));
+/* `dark:` follows the nearest theme scope: the page theme, a forced `.light` /
+   `.dark` subtree, or an emphasis band (`.band-inverse` swaps to the opposite
+   theme). */
+@custom-variant dark (&:where(.dark, .dark *, :root:not(.dark) .band-inverse, :root:not(.dark) .band-inverse *):not(:where(.dark .light, .dark .light *, .dark .band-inverse, .dark .band-inverse *)));
 
 /* ─────────────────────────
    DESIGN TOKENS
@@ -42,93 +45,115 @@
   --color-input: var(--input);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-on-inverse: var(--on-inverse);
+  --color-surface-glass: var(--surface-glass);
+  --color-rule-strong: var(--rule-strong);
 
   --radius-lg: var(--radius);
 }
 
 /* ─────────────────────────
-   LIGHT
+   LIGHT: the editorial default ("paper")
 
-   Also exposed as a `.light` class so a subtree can be force-lit even inside a
-   dark page (used by <BeforeAfter> for the live light↔dark theme split).
+   Also applied by `.light` (force a subtree light, e.g. <BeforeAfter>'s
+   theme split) and by `.band-inverse` on a dark page: emphasis bands swap
+   the token scope (spec §4.3).
 ───────────────────────── */
 
 :root,
-.light {
-  --background: oklch(0.98 0 0);
-  --foreground: oklch(0.18 0 0);
+.light,
+.dark .band-inverse {
+  --background: #f1ede4;
+  --foreground: #141414;
 
-  --text-muted: oklch(0.55 0 0);
+  --text-muted: #6a6458;
 
-  --surface-1: oklch(1 0 0);
-  --surface-2: oklch(0.98 0 0);
+  --surface-1: #faf8f3;
+  --surface-2: #eae5da;
+  --surface-inverse: oklch(0.15 0.005 80);
+  --on-inverse: oklch(0.93 0.012 85);
+  --surface-glass: color-mix(in oklab, var(--background) 62%, transparent);
+  --glass-border: rgb(20 20 20 / 0.08);
 
-  --border: oklch(0.9 0 0);
-  --ring: oklch(0.609 0.152 161);
-  /* Emerald accent. Light: emerald-600 — clears AA 4.5:1 on the near-white canvas.
-     Dark: emerald-400. */
-  --accent: oklch(0.609 0.152 161);
+  --border: rgb(20 20 20 / 0.13);
+  --rule-strong: rgb(20 20 20 / 0.28);
+  --ring: #047857;
+  /* Emerald-700: clears AA on paper. Emerald-600 only reaches ~3.1:1 here. */
+  --accent: #047857;
   --primary: var(--accent);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.93 0 0);
+  --primary-foreground: #ffffff;
+  --secondary: #e4ded1;
   --secondary-foreground: var(--foreground);
-  --input: oklch(0.96 0 0);
+  --input: #faf8f3;
   --destructive: oklch(0.58 0.2 27);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
+  /* Flat at rest. Resting shadows are retired; only overlays lift. */
+  --shadow-sm: none;
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
 
   /* Standard interactive hover — neutral fill */
-  --surface-hover: oklch(0.95 0 0);
+  --surface-hover: #e9e4d8;
 
-  --radius: 0.75rem;
+  --radius: 6px;
 }
 
 /* ─────────────────────────
-   DARK
+   DARK (toggle). Also applied by `.band-inverse` on a light page.
 ───────────────────────── */
 
-.dark {
-  --background: oklch(0.14 0 0);
-  --foreground: oklch(0.96 0 0);
+.dark,
+:root:not(.dark) .band-inverse {
+  --background: oklch(0.15 0.005 80);
+  --foreground: oklch(0.93 0.012 85);
 
-  --text-muted: oklch(0.6 0 0);
+  --text-muted: oklch(0.7 0.012 85);
 
-  --surface-1: oklch(0.18 0 0);
-  --surface-2: oklch(0.14 0 0);
+  --surface-1: oklch(0.19 0.005 80);
+  --surface-2: oklch(0.12 0.004 80);
+  --surface-inverse: #f1ede4;
+  --on-inverse: #141414;
+  --surface-glass: color-mix(in oklab, var(--background) 62%, transparent);
+  --glass-border: oklch(0.93 0.012 85 / 0.1);
 
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(0.93 0.012 85 / 0.12);
+  --rule-strong: oklch(0.93 0.012 85 / 0.3);
   --ring: oklch(0.765 0.163 163);
   --accent: oklch(0.765 0.163 163);
   --primary: var(--accent);
   --primary-foreground: oklch(0.11 0 0);
-  --secondary: oklch(0.24 0 0);
+  --secondary: oklch(0.24 0.005 80);
   --secondary-foreground: var(--foreground);
-  --input: oklch(0.22 0 0);
+  --input: oklch(0.22 0.005 80);
   --destructive: oklch(0.72 0.19 24);
   --destructive-foreground: oklch(0.11 0 0);
 
-  --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
+  --shadow-sm: none;
   --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
 
-  --surface-hover: oklch(0.215 0 0);
+  --surface-hover: oklch(0.215 0.005 80);
+}
+
+/* An emphasis band paints itself from the swapped scope: near-black on a
+   light page, paper on a dark page. Never use --surface-inverse here; on a
+   swapped element it resolves to the opposite colour. */
+.band-inverse {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .bg-canvas-default {
-  background-color: oklch(0.98 0 0);
-}
-
-.dark .bg-canvas-default {
-  background-color: oklch(0.14 0 0);
+  background-color: var(--background);
 }
 
 .bg-canvas-muted {
-  background-color: oklch(0.965 0 0);
+  background-color: var(--surface-2);
 }
 
-.dark .bg-canvas-muted {
-  background-color: oklch(0.105 0 0);
+.bg-canvas-inverse {
+  background-color: var(--surface-inverse);
+  color: var(--on-inverse);
 }
 
 .chart-container .recharts-cartesian-axis-tick text {
@@ -164,41 +189,20 @@
   fill: var(--surface-2);
 }
 
-.bg-canvas-accent {
-  background-color: oklch(0.925 0 0);
+/* Legacy canvas aliases, mapped onto the three canvases until their last
+   consumer migrates (removed in sub-project 7). Themes come from the tokens. */
+.bg-canvas-accent,
+.bg-canvas-subtle {
+  background-color: var(--surface-2);
 }
 
-.dark .bg-canvas-accent {
-  background-color: oklch(0.12 0 0);
-}
-
-.bg-canvas-raised {
-  background-color: oklch(0.985 0 0);
-}
-
-.dark .bg-canvas-raised {
-  background-color: oklch(0.14 0 0);
+.bg-canvas-raised,
+.bg-canvas-raised-muted {
+  background-color: var(--surface-1);
 }
 
 .bg-canvas-gallery {
-  background-color: oklch(0.98 0 0);
-}
-
-.dark .bg-canvas-gallery {
-  background-color: oklch(0.105 0 0);
-}
-
-.bg-canvas-subtle {
-  background-color: oklch(0.945 0 0);
-}
-
-.dark .bg-canvas-subtle,
-.dark .bg-canvas-raised-muted {
-  background-color: oklch(0.105 0 0);
-}
-
-.bg-canvas-raised-muted {
-  background-color: oklch(0.985 0 0);
+  background-color: var(--background);
 }
 
 .dark .dark-bg-surface-18 {
@@ -713,16 +717,12 @@
 
 @layer utilities {
 
-  .surface {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-  }
-
+  /* Elevated surface: one tonal step off the canvas plus a hairline. Flat at
+     rest; only dialogs and popovers use --shadow-md. */
+  .surface,
   .surface-elevated {
     background: var(--surface-1);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
   }
 
   .text-muted {

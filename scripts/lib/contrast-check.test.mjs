@@ -35,7 +35,8 @@ test("a checked token it cannot evaluate fails instead of passing", () => {
 })
 
 test("a missing token fails", () => {
-  const { "on-inverse": _, ...withoutOnInverse } = DARK
+  const withoutOnInverse = { ...DARK }
+  delete withoutOnInverse["on-inverse"]
   assert.ok(names(checkContrast(css(LIGHT, withoutOnInverse))).includes("dark: on-inverse on surface-inverse"))
 })
 
