@@ -487,76 +487,52 @@
 }
 
 @layer utilities {
-  /* Hero display — the one place the site is allowed to be loud.
-     Below lg the statement owns the full width; from lg it shares the
-     row with the photo column, so the scale steps down to keep each
-     line unbroken beside it (no text ever runs under the card). */
-  /* Tracking is looser than the old Montserrat values across every display
-     tier. Montserrat is a wide geometric that needed pulling in; Bricolage is
-     narrower and already tightens itself through the opsz axis, so the old
-     -0.026em read as cramped. */
+  /* Editorial type scale (spec §5). Bricolage carries structural headings at
+     600; hierarchy comes from contrast with small, precise metadata, not sheer
+     size. Fluid sizes run linearly from the 375px value to the 1024px value. */
   .type-display-hero {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-size: clamp(2.35rem, 10vw, 3.35rem);
-    line-height: 1.05;
-    font-weight: 700;
-    letter-spacing: -0.018em;
+    font-size: clamp(2.5rem, 1.344rem + 4.93vw, 4.5rem);
+    line-height: 1.02;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .type-display-hero {
-      font-size: clamp(2.4rem, 5.6vw, 3.6rem);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .type-display-hero {
-      font-size: clamp(3.1rem, 6.5vw, 5.25rem);
-    }
-  }
-
-  /* Case-study / internal page hero — bigger than type-page-title,
-     calmer than the home hero. */
   .type-hero-internal {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    line-height: 1.07;
-    font-weight: 700;
-    letter-spacing: -0.018em;
+    font-size: clamp(2.25rem, 1.528rem + 3.08vw, 3.5rem);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
-
   .type-page-title {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-size: 34px;
-    line-height: 1.15;
+    font-size: clamp(2rem, 1.422rem + 2.47vw, 3rem);
+    line-height: 1.08;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
-
   .type-section-title {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-size: 36px;
-    line-height: 1.11;
-    font-weight: 700;
-    letter-spacing: -0.014em;
+    font-size: clamp(1.875rem, 1.369rem + 2.16vw, 2.75rem);
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: -0.018em;
     text-wrap: balance;
   }
-
   .type-section-intro {
-    max-width: 62ch;
-    font-size: 15px;
-    line-height: 1.7;
+    max-width: 56ch;
+    font-size: 16px;
+    line-height: 1.6;
     letter-spacing: 0;
     text-wrap: pretty;
   }
-
   .type-subtitle {
     font-family: var(--font-sans);
     font-size: 20px;
@@ -565,26 +541,15 @@
     letter-spacing: 0;
     text-wrap: balance;
   }
-
-  /* Case-study section headings — matches the ad-hoc text-2xl/3xl pattern used
-     across all case study pages, now named for consistency. */
   .type-case-title {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-size: 24px;
-    line-height: 1.3;
-    font-weight: 600;
-    letter-spacing: -0.008em;
+    font-size: clamp(1.5rem, 1.283rem + 0.92vw, 1.875rem);
+    line-height: 1.2;
+    font-weight: 560;
+    letter-spacing: -0.01em;
     text-wrap: balance;
   }
-
-  @media (min-width: 768px) {
-    .type-case-title {
-      font-size: 30px;
-      line-height: 1.25;
-    }
-  }
-
   /* The display/body split is by ROLE, not size. Structural headings (h1-h3,
      the type-*-title tiers) carry the display face because they are prose
      hierarchy. Labels sitting on a container — card titles, list titles,
@@ -598,7 +563,6 @@
     letter-spacing: 0;
     text-wrap: balance;
   }
-
   .type-list-title {
     font-family: var(--font-sans);
     font-size: 16px;
@@ -606,7 +570,6 @@
     font-weight: 600;
     letter-spacing: 0;
   }
-
   .type-card-title-featured {
     font-size: 22px;
     line-height: 1.3;
@@ -614,90 +577,68 @@
     letter-spacing: 0;
     text-wrap: balance;
   }
-
   .type-card-body {
-    font-size: 13px;
-    line-height: 1.85;
+    font-size: 14px;
+    line-height: 1.6;
     letter-spacing: 0;
     text-wrap: pretty;
   }
-
   .type-card-body-featured {
     font-size: 14px;
     line-height: 1.9;
     letter-spacing: 0;
     text-wrap: pretty;
   }
-
   .type-meta {
-    font-size: 12px;
-    line-height: 1.55;
+    font-size: 12.5px;
+    line-height: 1.5;
     font-weight: 500;
     letter-spacing: 0;
-    color: color-mix(in srgb, var(--foreground) 42%, transparent);
+    color: var(--text-muted);
   }
-
   .type-caption {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.45;
     font-weight: 500;
     letter-spacing: 0;
   }
-
   .type-cta {
     font-size: 13px;
     line-height: 1.55;
     font-weight: 500;
     letter-spacing: 0;
   }
-
   .type-prose {
+    max-width: 64ch;
     font-size: 16px;
-    line-height: 1.8;
+    line-height: 1.7;
     letter-spacing: 0;
     text-wrap: pretty;
   }
-
+  /* System notation and data labels only (↳ DECISION, SYSTEM 01). On the home
+     page notation stays quiet: no section numbering (spec decision log). */
+  .type-mono {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
   @media (min-width: 768px) {
-    .type-page-title {
-      font-size: 44px;
-      line-height: 1.12;
-    }
-
-    .type-section-title {
-      font-size: 54px;
-      line-height: 1.07;
-    }
-
-    .type-section-intro {
-      font-size: 16px;
-    }
-
     .type-subtitle {
       font-size: 22px;
-      line-height: 1.28;
     }
-
     .type-card-title-featured {
       font-size: 24px;
     }
-
     .type-prose {
       font-size: 17px;
     }
-  }
-
-  @media (min-width: 1024px) {
-    .type-page-title {
-      font-size: 52px;
-    }
-
-    .type-section-title {
-      font-size: 68px;
-      line-height: 1.04;
+    .type-mono {
+      font-size: 11px;
     }
   }
-
   /* Premium underline for inline body links — opt in with `link-underline`. */
   .link-underline {
     text-decoration: underline;
@@ -883,6 +824,8 @@
 ───────────────────────── */
 
 
+/* DEPRECATED (editorial redesign): gradient text is banned by the brief.
+   Kept only while the hero still uses it; removed in sub-project 3 (Hero). */
 @keyframes shimmer-sweep {
   0%   { background-position: 200% center; }
   100% { background-position: -200% center; }
