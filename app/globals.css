@@ -803,6 +803,59 @@
       padding-block: var(--space-11);
     }
   }
+
+  /* ─────────────────────────
+     LAYER LANGUAGE (spec §8). Fixed stacking order, bottom to top:
+     interface < system < annotation < context. Layers overlap by grid
+     offsets, at most three visible at once. Glass is the context layer only:
+     if a surface holds primary content, it is not glass.
+  ───────────────────────── */
+  .layer-interface {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  .layer-system {
+    background: color-mix(in oklab, var(--surface-1) 18%, transparent);
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius-md);
+  }
+  /* Solid-ish fallback first; real glass only where the browser supports it. */
+  .layer-glass {
+    background: color-mix(in oklab, var(--surface-1) 92%, transparent);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+  }
+  /* The accent marks the decision: the ↳ DECISION label and its marker. */
+  .marker {
+    display: inline-block;
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 9999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+  }
+  .marker-line {
+    height: 0;
+    border-top: 1px solid var(--accent);
+  }
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .layer-glass {
+    background: var(--surface-glass);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    backdrop-filter: blur(14px) saturate(1.1);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .layer-glass {
+    background: var(--surface-1);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 /* ─────────────────────────

@@ -61,3 +61,15 @@ test("layout: radius tokens are always emitted and placements exist", () => {
     assert.match(css, new RegExp(`\\${c}[\\s,{]`), c)
   }
 })
+test("layers: the four layer utilities exist", () => {
+  for (const c of [".layer-interface", ".layer-system", ".layer-glass", ".marker", ".marker-line"]) {
+    assert.match(css, new RegExp(`\\${c}\\s*\\{`), c)
+  }
+  assert.match(rule(".layer-system"), /border:\s*1px dashed var\(--rule-strong\)/)
+})
+
+test("layers: glass degrades without backdrop-filter and under reduced transparency", () => {
+  assert.match(rule(".layer-glass"), /background:\s*color-mix\(in oklab, var\(--surface-1\) 92%, transparent\)/)
+  assert.match(css, /@supports \(\(backdrop-filter: blur\(1px\)\) or \(-webkit-backdrop-filter: blur\(1px\)\)\)\s*\{\s*\.layer-glass/)
+  assert.match(css, /@media \(prefers-reduced-transparency: reduce\)\s*\{\s*\.layer-glass/)
+})
