@@ -172,6 +172,16 @@
   --space-9: 96px;
   --space-10: 128px;
   --space-11: 160px;
+
+  /* Motion (spec §7). Mirrored in lib/motion.ts; scripts/motion-tokens.test.mjs
+     fails if the two drift. Unlayered, so --ease-out also retunes Tailwind's
+     `ease-out` utility to the house curve. */
+  --dur-1: 200ms;
+  --dur-2: 400ms;
+  --dur-3: 600ms;
+  --dur-4: 900ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-move: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @media (min-width: 768px) {
