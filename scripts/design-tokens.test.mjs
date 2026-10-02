@@ -46,3 +46,18 @@ test("type: metadata uses the AA muted token, body measures are capped", () => {
   assert.match(rule(".type-card-body"), /font-size:\s*14px/)
   assert.match(rule(".type-mono"), /text-transform:\s*uppercase/)
 })
+test("layout: grid and spacing tokens, last breakpoint wins", () => {
+  assert.equal(light["page-max"], "1320px")
+  assert.equal(light["grid-cols"], "12")
+  assert.equal(light["page-margin"], "48px")
+  assert.equal(light["space-1"], "4px")
+  assert.equal(light["space-11"], "160px")
+})
+
+test("layout: radius tokens are always emitted and placements exist", () => {
+  assert.match(css, /@theme static \{[^}]*--radius-xs: 2px;[^}]*--radius-sm: 3px;[^}]*--radius-md: 6px;[^}]*--radius-lg: 10px;/)
+  assert.doesNotMatch(css, /--radius-lg: var\(--radius\)/)
+  for (const c of [".page-container", ".grid-page", ".place-full", ".place-wide", ".place-text", ".place-bleed", ".section-dense", ".section-quiet"]) {
+    assert.match(css, new RegExp(`\\${c}[\\s,{]`), c)
+  }
+})

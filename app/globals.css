@@ -50,7 +50,15 @@
   --color-surface-glass: var(--surface-glass);
   --color-rule-strong: var(--rule-strong);
 
-  --radius-lg: var(--radius);
+}
+
+/* Radius scale (spec §6.3). `static` makes Tailwind always emit these
+   variables, because the layer utilities below reference them with var(). */
+@theme static {
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 }
 
 /* ─────────────────────────
@@ -141,6 +149,51 @@
 .band-inverse {
   background-color: var(--background);
   color: var(--foreground);
+}
+
+/* ─────────────────────────
+   LAYOUT & SPACING TOKENS (theme-independent; spec §6)
+───────────────────────── */
+
+:root {
+  --page-max: 1320px;
+  --grid-cols: 4;
+  --grid-gutter: 16px;
+  --page-margin: 20px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --grid-cols: 8;
+    --grid-gutter: 20px;
+    --page-margin: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --grid-cols: 12;
+    --page-margin: 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --grid-gutter: 24px;
+    --page-margin: 48px;
+  }
 }
 
 .bg-canvas-default {
@@ -681,6 +734,64 @@
   }
   .card-surface:hover {
     background-color: var(--surface-hover);
+  }
+
+  /* ─────────────────────────
+     PAGE GRID (spec §6.1): 4 / 8 / 12 columns.
+     Placements keep composition consistent; section headers default to an
+     asymmetric title-left / intro-right split built from these.
+  ───────────────────────── */
+  .page-container {
+    width: 100%;
+    max-width: calc(var(--page-max) + 2 * var(--page-margin));
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+  }
+  .grid-page {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+    column-gap: var(--grid-gutter);
+  }
+  .place-full,
+  .place-wide,
+  .place-text {
+    grid-column: 1 / -1;
+  }
+  /* Breaks out of its container to the viewport edges. Relies on the
+     overflow-x: clip on <main> so 100vw never adds a horizontal scrollbar. */
+  .place-bleed {
+    grid-column: 1 / -1;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+  @media (min-width: 768px) {
+    .place-text {
+      grid-column: 2 / span 6;
+    }
+  }
+  @media (min-width: 1024px) {
+    .place-wide {
+      grid-column: 2 / -1;
+    }
+    .place-text {
+      grid-column: 4 / span 7;
+    }
+  }
+
+  /* Section densities: alternate dense and quiet for rhythm (spec §6.2). */
+  .section-dense {
+    padding-block: var(--space-8);
+  }
+  .section-quiet {
+    padding-block: var(--space-9);
+  }
+  @media (min-width: 1024px) {
+    .section-dense {
+      padding-block: var(--space-9);
+    }
+    .section-quiet {
+      padding-block: var(--space-11);
+    }
   }
 }
 
