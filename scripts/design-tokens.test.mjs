@@ -81,3 +81,13 @@ test("layers: layer classes sit in @layer components so Tailwind utilities (hidd
     assert.match(block[1], new RegExp(`\\${c}\\s*\\{`), c)
   }
 })
+
+test("colour: legacy canvas aliases map onto canvases, never the elevated surface", () => {
+  const canvases = new Set(["var(--background)", "var(--surface-2)", "var(--surface-inverse)"])
+  for (const name of ["accent", "raised", "gallery", "subtle", "raised-muted"]) {
+    const m = css.match(new RegExp(`(?:^|\\n)([^{}]*\\.bg-canvas-${name}(?![\\w-])[^{}]*)\\{([^}]*)\\}`))
+    assert.ok(m, name)
+    const bg = m[2].match(/background-color:\s*([^;]+);/)[1].trim()
+    assert.ok(canvases.has(bg), `.bg-canvas-${name} → ${bg}`)
+  }
+})

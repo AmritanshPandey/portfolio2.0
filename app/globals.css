@@ -259,11 +259,10 @@
   background-color: var(--surface-2);
 }
 
+/* raised and raised-muted were page-level canvases (≈ the background), not
+   elevated surfaces, so they map to the paper canvas, not --surface-1. */
 .bg-canvas-raised,
-.bg-canvas-raised-muted {
-  background-color: var(--surface-1);
-}
-
+.bg-canvas-raised-muted,
 .bg-canvas-gallery {
   background-color: var(--background);
 }
