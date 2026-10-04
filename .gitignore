@@ -48,3 +48,6 @@ next-env.d.ts
 /.next-preview/
 /tmp/
 *.swp
+
+# Spartan AI config (contains API keys)
+.spartan/ai.env
