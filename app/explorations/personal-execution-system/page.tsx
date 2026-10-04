@@ -132,7 +132,7 @@ function PlanrSectionHeader({
 }) {
   return (
     <div id={id} className="scroll-mt-28">
-      <p className="type-meta mb-3 text-foreground/42">{label}</p>
+      <p className="type-meta mb-3 text-muted-foreground">{label}</p>
       <h2 className="type-section-title max-w-3xl text-foreground">{title}</h2>
       <p className="type-section-intro mt-5 max-w-[68ch] text-muted-foreground">{description}</p>
     </div>
@@ -218,7 +218,7 @@ export default function Page() {
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:px-6 md:py-20 lg:grid-cols-[190px_1fr]">
           <aside className="hidden lg:block">
             <nav className="sticky top-28 space-y-1 border-l border-border pl-4" aria-label="PlanR page sections">
-              <p className="type-meta mb-4 text-foreground/42">On this page</p>
+              <p className="type-meta mb-4 text-muted-foreground">On this page</p>
               {sectionNav.map((item) => (
                 <a
                   key={item.id}
@@ -298,7 +298,7 @@ export default function Page() {
                 <div className="space-y-4">
                   {iterations.map((item) => (
                     <div key={item.phase} className="grid gap-3 rounded-xl border border-border/55 bg-background p-4 sm:grid-cols-[52px_1fr]">
-                      <span className="font-mono text-[13px] font-semibold leading-6 text-foreground/42">
+                      <span className="font-mono text-[13px] font-semibold leading-6 text-muted-foreground">
                         {item.phase}
                       </span>
                       <div>

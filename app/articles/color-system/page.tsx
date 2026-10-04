@@ -36,7 +36,7 @@ function Eyebrow({ num, tag }: { num: string; tag: string }) {
   // uppercase, wide-tracked eyebrow trope (per DESIGN.md / PRODUCT.md).
   return (
     <div className="mb-5 font-mono text-[12px] text-muted-foreground">
-      <span className="tabular-nums text-foreground/50">{num}</span>
+      <span className="tabular-nums text-muted-foreground">{num}</span>
       <span className="mx-2 text-border">/</span>
       {tag}
     </div>

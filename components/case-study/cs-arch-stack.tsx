@@ -71,7 +71,7 @@ export function CsArchStack({ layers }: CsArchStackProps) {
                     {layer.title}
                   </h3>
                   {layer.isCore && (
-                    <span className="shrink-0 rounded-full border border-accent/35 bg-accent/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
+                    <span className="shrink-0 rounded-full border border-accent/35 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-accent">
                       Key layer
                     </span>
                   )}
@@ -86,7 +86,7 @@ export function CsArchStack({ layers }: CsArchStackProps) {
                         className={clsx(
                           "rounded-full border px-2.5 py-0.5 font-mono text-[10.5px]",
                           layer.isCore
-                            ? "border-accent/30 bg-accent/[0.07] text-accent/80"
+                            ? "border-accent/30 text-accent"
                             : "border-border/55 bg-muted/50 text-muted-foreground"
                         )}
                       >

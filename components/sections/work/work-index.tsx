@@ -68,7 +68,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
                   {item.description}
                 </p>
 
-                <p className="mt-3.5 text-[12.5px] leading-snug text-foreground/60">
+                <p className="mt-3.5 text-[12.5px] leading-snug text-muted-foreground">
                   {category.type} · {category.client}
                   {item.metric ? <> · {item.metric}</> : null}
                 </p>
@@ -92,7 +92,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
             </div>
 
             <div className="hidden min-w-0 md:block">
-              <p className="max-w-[46ch] text-[13.5px] leading-relaxed text-foreground/55 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-foreground/80">
+              <p className="max-w-[46ch] text-[13.5px] leading-relaxed text-muted-foreground transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-foreground/80">
                 {item.description}
               </p>
             </div>

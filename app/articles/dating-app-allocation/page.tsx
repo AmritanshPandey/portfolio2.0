@@ -31,7 +31,7 @@ function Section({ children }: { children: React.ReactNode; muted?: boolean }) {
 function Eyebrow({ num, tag }: { num: string; tag: string }) {
   return (
     <div className="mb-4 font-mono text-[12px] text-muted-foreground">
-      <span className="tabular-nums text-foreground/50">{num}</span>
+      <span className="tabular-nums text-muted-foreground">{num}</span>
       <span className="mx-2 text-border">/</span>
       {tag}
     </div>
@@ -86,7 +86,7 @@ function Takeaways({ items }: { items: string[] }) {
       <div className="px-6 py-5 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-4 items-start">
-            <span className="text-[11px] font-mono font-bold text-accent/70 mt-1 w-5 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-[11px] font-mono font-bold text-accent mt-1 w-5 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
             <p className="text-[14px] md:text-[15px] leading-[1.65] text-foreground/75">{item}</p>
           </div>
         ))}

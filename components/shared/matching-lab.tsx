@@ -183,7 +183,7 @@ export function LineageStrip() {
             {l.tag}
           </span>
           {i < 3 && (
-            <span className="hidden lg:block absolute -right-[11px] top-1/2 -translate-y-1/2 text-muted-foreground/50 text-base z-10">→</span>
+            <span className="hidden lg:block absolute -right-[11px] top-1/2 -translate-y-1/2 text-muted-foreground text-base z-10">→</span>
           )}
         </motion.div>
       ))}
@@ -357,7 +357,7 @@ export function TradeoffFrontier() {
               under-served reach →
             </text>
             {/* frontier */}
-            <path d={path} fill="none" stroke="currentColor" className="text-muted-foreground/50" strokeWidth={2} />
+            <path d={path} fill="none" stroke="currentColor" className="text-muted-foreground" strokeWidth={2} />
             {sweep.map((p, i) => (
               <circle key={i} cx={sx(p.total)} cy={sy(p.quiet)} r={2.6} className="fill-muted-foreground/60" />
             ))}

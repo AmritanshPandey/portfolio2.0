@@ -96,7 +96,7 @@ export function HorizontalCard({
 
           {/* CTA — pinned to the bottom; mt-auto keeps spacing without forcing a fixed height */}
           <div className="mt-auto pt-5 border-t border-border/50 flex items-center justify-between">
-            <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
+            <span className="type-cta text-muted-foreground transition-colors duration-500 group-hover/card:text-foreground/82">
               {ctaLabel}
             </span>
             <IconArrowUpRight

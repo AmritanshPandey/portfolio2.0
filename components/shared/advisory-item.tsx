@@ -75,7 +75,7 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
               // 🔥 smoother motion
               "transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-out",
 
-              "group-hover:text-foreground/60",
+              "group-hover:text-muted-foreground",
               "group-hover:[transform:translate3d(1px,-1px,0)]"
             )}
           />
@@ -85,7 +85,7 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
         {/* DESCRIPTION */}
         <p className={clsx(
           "type-card-body",
-          "text-foreground/55",
+          "text-muted-foreground",
           "max-w-[520px]",
 
           "transition-colors duration-200",

@@ -21,7 +21,7 @@ export function ProcessStepsCard({ steps }: { steps: Step[] }) {
             <div className="relative pl-4">
               <div className="absolute left-0 top-[6px] bottom-[6px] w-px bg-border/70 transition-colors duration-200 group-hover:bg-accent/50 dark:group-hover:bg-accent/50" />
               <div className="flex items-baseline gap-3">
-                <span className="type-caption text-foreground/50 transition-colors duration-200 group-hover:text-accent">
+                <span className="type-caption text-muted-foreground transition-colors duration-200 group-hover:text-accent">
                   {step.number}
                 </span>
                 <h3 className="type-list-title text-foreground transition-colors duration-200 group-hover:text-accent">

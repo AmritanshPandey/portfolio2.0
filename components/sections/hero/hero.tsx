@@ -97,7 +97,7 @@ export default function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
               </span>
-              <p className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium leading-6 tracking-normal text-foreground/70 dark:text-muted-foreground/74 sm:text-[13px]">
+              <p className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium leading-6 tracking-normal text-foreground/70 dark:text-muted-foreground sm:text-[13px]">
                 <span className="text-foreground/90 dark:text-foreground/74">Senior UX Designer · Mastercard</span>
                 <span aria-hidden className="hidden h-3 w-px bg-foreground/16 dark:bg-border sm:inline-block" />
                 {/* Availability is only useful if it's also the way in. */}
@@ -155,7 +155,7 @@ export default function Hero() {
               {/* Proof strip — checkable evidence, not adjectives. */}
               <ul
                 data-hero-fade
-                className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 font-mono text-[11px] leading-5 tracking-tight text-muted-foreground/85"
+                className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 font-mono text-[11px] leading-5 tracking-tight text-muted-foreground"
               >
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />

@@ -117,7 +117,7 @@ function Section({ id, children, muted }: {
 function Eyebrow({ num, tag }: { num: string; tag: string }) {
   return (
     <div className="mb-4 font-mono text-[11px] text-muted-foreground">
-      <span className="tabular-nums text-foreground/40">{num}</span>
+      <span className="tabular-nums text-muted-foreground">{num}</span>
       <span className="mx-2 text-border">/</span>
       {tag}
     </div>

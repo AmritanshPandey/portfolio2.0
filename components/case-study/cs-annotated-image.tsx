@@ -124,7 +124,7 @@ export function CsAnnotatedImage({
                 aria-hidden
                 className={clsx(
                   "mt-[2px] font-mono text-[10px] font-bold tabular-nums transition-colors",
-                  isActive ? "text-accent" : "text-muted-foreground/70"
+                  isActive ? "text-accent" : "text-muted-foreground"
                 )}
               >
                 {String(i + 1).padStart(2, "0")}
@@ -139,7 +139,7 @@ export function CsAnnotatedImage({
       </ol>
 
       {caption && (
-        <figcaption className="mt-4 text-[12px] leading-relaxed text-muted-foreground/80">
+        <figcaption className="mt-4 text-[12px] leading-relaxed text-muted-foreground">
           {caption}
         </figcaption>
       )}

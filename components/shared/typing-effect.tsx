@@ -71,7 +71,7 @@ export function TypingWord({
       <span
         className={
           className ??
-          "text-accent/90 font-medium whitespace-nowrap"
+          "text-accent font-medium whitespace-nowrap"
         }
       >
         {displayed || " "}

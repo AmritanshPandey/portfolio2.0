@@ -25,7 +25,7 @@ export function InsightsList({ items }: { items: ArticleItem[] }) {
         >
           <p className="order-2 col-span-2 mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground md:order-none md:col-span-1 md:mt-0">
             {item.category}
-            {item.readTime ? <span className="text-foreground/30"> · {item.readTime}</span> : null}
+            {item.readTime ? <span className="text-muted-foreground"> · {item.readTime}</span> : null}
           </p>
 
           <h3

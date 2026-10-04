@@ -44,7 +44,7 @@ export default function LeadershipSection() {
             key={item.id}
             className="card-surface group bg-card p-6 flex flex-col gap-3"
           >
-            <p className="type-caption text-muted-foreground/70">
+            <p className="type-caption text-muted-foreground">
               {item.role}
             </p>
 
@@ -52,11 +52,11 @@ export default function LeadershipSection() {
               {item.title}
             </h3>
 
-            <p className="type-card-body flex-1 text-foreground/55">
+            <p className="type-card-body flex-1 text-muted-foreground">
               {item.desc}
             </p>
 
-            <p className="type-caption mt-1 text-foreground/30">
+            <p className="type-caption mt-1 text-muted-foreground">
               {item.tags.join(" · ")}
             </p>
           </div>

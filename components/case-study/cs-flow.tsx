@@ -47,7 +47,7 @@ export function CsFlow({ steps, dark = false }: Props) {
             <IconArrowRight
               size={14}
               strokeWidth={2}
-              className={dark ? "text-neutral-700 shrink-0" : "text-muted-foreground/40 shrink-0"}
+              className={dark ? "text-neutral-700 shrink-0" : "text-muted-foreground shrink-0"}
             />
           )}
 

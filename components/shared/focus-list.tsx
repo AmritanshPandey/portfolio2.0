@@ -22,7 +22,7 @@ export function FocusList({
   return (
     <div>
       {title && (
-        <p className="type-meta mb-6 text-foreground/45">
+        <p className="type-meta mb-6 text-muted-foreground">
           {title}
         </p>
       )}

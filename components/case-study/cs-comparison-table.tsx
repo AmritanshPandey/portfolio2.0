@@ -71,7 +71,7 @@ export function CsComparisonTable({
                 >
                   {c}
                   {i === highlight && (
-                    <span className="ml-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent/80">
+                    <span className="ml-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent">
                       chosen
                     </span>
                   )}

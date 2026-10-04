@@ -53,7 +53,7 @@ export function CsBeforeAfter({ before, after }: CsBeforeAfterProps) {
       >
         <div className="flex items-center gap-2.5">
           <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-          <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-accent/70">
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-accent">
             After
           </p>
         </div>

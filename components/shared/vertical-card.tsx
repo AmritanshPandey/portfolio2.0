@@ -108,9 +108,9 @@ export function VerticalCard({
         <div className="flex-1 min-w-0">
           {category && <p className="type-meta mb-0.5">{category}</p>}
           <h3 className="text-[14px] font-semibold leading-[1.35] text-foreground line-clamp-1">{title}</h3>
-          {metric && <p className="type-caption mt-0.5 line-clamp-1 text-accent/60">{metric}</p>}
+          {metric && <p className="type-caption mt-0.5 line-clamp-1 text-accent">{metric}</p>}
         </div>
-        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
+        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 group-hover/card:text-muted-foreground group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
       </Link>
     )
   }
@@ -236,7 +236,7 @@ export function VerticalCard({
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-foreground/42"
+                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -268,7 +268,7 @@ export function VerticalCard({
           {/* CTA row */}
           <div className="mt-auto pt-7">
             <div className="flex items-center justify-between border-t border-border/40 pt-6">
-              <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
+              <span className="type-cta text-muted-foreground transition-colors duration-500 group-hover/card:text-foreground/82">
                 {ctaLabel}
               </span>
               <IconArrowUpRight

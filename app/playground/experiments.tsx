@@ -34,8 +34,8 @@ const BrandSkins = dynamic(
     import("@/components/case-study/cs-brand-skin-compare").then((m) => {
       const skins = [
         { id: "north", bank: "North Bank", primary: "#E11D48", deep: "#9F1239", radius: "12px", fontLabel: "Onest", fontStack: "var(--ff-sans), ui-sans-serif, system-ui, sans-serif" },
-        { id: "heritage", bank: "Heritage Trust", primary: "#B8862F", deep: "#6E4E12", radius: "4px", fontLabel: "Serif", fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
-        { id: "verde", bank: "Verde Bank", primary: "#2F8F6F", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
+        { id: "heritage", bank: "Heritage Trust", primary: "#8A6420", deep: "#6E4E12", radius: "4px", fontLabel: "Serif", fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
+        { id: "verde", bank: "Verde Bank", primary: "#25785C", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
       ]
       return function BrandSkinsLive() {
         return <m.CsBrandSkinCompare base={skins[0]} alternates={skins.slice(1)} />
@@ -180,7 +180,7 @@ const posters = {
   brandSkins: (
     <Poster label="brand skins">
       <rect x="30" y="50" width="140" height="84" rx="10" fill="#E11D48" />
-      <rect x="100" y="50" width="70" height="84" fill="#B8862F" />
+      <rect x="100" y="50" width="70" height="84" fill="#8A6420" />
       <line x1="100" y1="40" x2="100" y2="144" stroke="#fff" strokeWidth="1.5" />
       <circle cx="100" cy="92" r="8" fill="#fff" />
       <rect x="42" y="112" width="44" height="6" rx="3" fill="rgba(255,255,255,0.7)" />

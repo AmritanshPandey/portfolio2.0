@@ -28,7 +28,7 @@ export function CsDecision({ title, problem, decision, tradeoff, impact, index =
       {/* Header */}
       <div className="px-6 py-5 border-b border-border flex items-start gap-5">
         <span className="
-          text-[10px] font-bold tabular-nums text-accent/80 dark:text-accent/70
+          text-[10px] font-bold tabular-nums text-accent
           shrink-0 mt-0.5
         ">
           {String(index + 1).padStart(2, "0")}

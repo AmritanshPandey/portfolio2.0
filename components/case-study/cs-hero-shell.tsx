@@ -92,7 +92,7 @@ function MetaCard({ metaKey, value }: { metaKey: string; value: string }) {
   const Icon = META_ICONS[metaKey] ?? IconBriefcase
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border/50 bg-foreground/[0.02] p-3.5 dark:bg-white/[0.025]">
-      <Icon size={16} stroke={1.75} className="text-accent/75" />
+      <Icon size={16} stroke={1.75} className="text-accent" />
       <div>
         <p className="mb-1 font-mono text-[10px] font-semibold tracking-[0.12em] uppercase text-muted-foreground">
           {toLabel(metaKey)}

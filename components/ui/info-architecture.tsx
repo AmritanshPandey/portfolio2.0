@@ -258,7 +258,7 @@ export function InfoArchitecture({
       >
         <span>{it.node.label}</span>
         {it.node.note && (
-          <span className="mt-0.5 block text-[10px] font-normal text-muted-foreground/80">
+          <span className="mt-0.5 block text-[10px] font-normal text-muted-foreground">
             {it.node.note}
           </span>
         )}

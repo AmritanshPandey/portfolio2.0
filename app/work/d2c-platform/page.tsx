@@ -79,7 +79,7 @@ function HeroAside() {
       </div>
 
       {/* Fan-out connector */}
-      <div className="flex justify-center text-muted-foreground/50">
+      <div className="flex justify-center text-muted-foreground">
         <svg width="100%" height="16" viewBox="0 0 220 16" className="max-w-[220px]" fill="none" stroke="currentColor" strokeWidth="1">
           <path d="M110 0 V6 M110 6 H40 V16 M110 6 H110 V16 M110 6 H180 V16" />
         </svg>
@@ -887,7 +887,7 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-muted-foreground/60 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium text-accent tracking-tight leading-none mb-4">{m.figure}</p>
                   <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>

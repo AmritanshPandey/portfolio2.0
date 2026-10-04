@@ -24,7 +24,7 @@ export function CoreBeliefCard({ eyebrow = "Core Belief", children, className }:
 
       <div className="relative max-w-3xl">
         {eyebrow && (
-          <p className="type-meta mb-4 text-foreground/60">
+          <p className="type-meta mb-4 text-muted-foreground">
             {eyebrow}
           </p>
         )}

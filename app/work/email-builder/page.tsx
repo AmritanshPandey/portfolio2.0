@@ -130,7 +130,7 @@ function HeroAside() {
           </div>
         ))}
       </div>
-      <p className="text-[10px] text-muted-foreground/80 mt-3 leading-relaxed">
+      <p className="text-[10px] text-muted-foreground mt-3 leading-relaxed">
         Every design decision was filtered through: &ldquo;Will this render in Outlook Desktop?&rdquo;
       </p>
     </div>
@@ -563,11 +563,11 @@ export default function Page() {
                 <div className="bg-neutral-950 p-6 font-mono text-[11px] leading-relaxed space-y-1">
                   <p className="text-red-400/80">&lt;table width=&quot;600&quot; border=&quot;0&quot; cellspacing=&quot;0&quot;&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&lt;tr&gt;&lt;td style=&quot;padding:0;margin:0;&quot;&gt;</p>
-                  <p className="text-accent/70">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
+                  <p className="text-accent">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--[if mso]&gt;&lt;v:rect...&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style=&quot;color:#000&quot;&gt; &lt;!-- breaks in OL --&gt;</p>
                   <p className="text-red-400/80">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p style=&quot;font-family:Arial;&quot;&gt;</p>
                   <p className="text-red-500">&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- font ignored in Outlook 2016 --&gt;</p>
-                  <p className="text-accent/70">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
+                  <p className="text-accent">&nbsp;&nbsp;&nbsp;&nbsp;Hello [FIRST_NAME],</p>
                   <p className="text-red-500">&nbsp;&nbsp;&lt;!-- spacing broken on mobile --&gt;</p>
                   <p className="text-red-400/80">&lt;/table&gt;</p>
                 </div>

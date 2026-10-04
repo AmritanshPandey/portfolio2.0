@@ -312,7 +312,7 @@ function BrowserFrame({
           <div className="w-[11px] h-[11px] rounded-full bg-green-400/80" />
         </div>
         {/* URL bar */}
-        <div className="flex-1 bg-background/70 rounded-md px-3 py-1 text-[11px] font-mono text-muted-foreground/70 text-center truncate min-w-0">
+        <div className="flex-1 bg-background/70 rounded-md px-3 py-1 text-[11px] font-mono text-muted-foreground text-center truncate min-w-0">
           {url ?? "example.com"}
         </div>
         {/* Spacer to visually balance traffic lights */}
@@ -433,7 +433,7 @@ function Takeaways({ items }: { items: string[] }) {
       <div className="px-6 py-5 space-y-3">
         {items.map((item, i) => (
           <div key={i} className="flex gap-4 items-start">
-            <span className="text-[11px] font-mono font-bold text-accent/70 mt-1 w-5 flex-shrink-0">
+            <span className="text-[11px] font-mono font-bold text-accent mt-1 w-5 flex-shrink-0">
               {String(i + 1).padStart(2, "0")}
             </span>
             <p className="text-[14px] md:text-[15px] leading-[1.65] text-foreground/75">

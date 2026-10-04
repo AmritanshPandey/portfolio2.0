@@ -99,7 +99,7 @@ function FooterLink({
         <IconArrowUpRight
           size={13}
           strokeWidth={2}
-          className="text-muted-foreground/60 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+          className="text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
           aria-hidden="true"
         />
       ) : null}

@@ -121,7 +121,7 @@ function Panel({
     >
       {/* Ordinal label — top, always present. */}
       <p className="absolute left-5 top-5 z-10 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        Service <span className="text-foreground/40">/ {item.index}</span>
+        Service <span className="text-muted-foreground">/ {item.index}</span>
       </p>
 
       {/* Collapsed: vertical title (md only), reading bottom-to-top. */}

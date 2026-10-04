@@ -80,7 +80,7 @@ export function TrajectorySection() {
                 <p className="mt-3 text-[13.5px] leading-relaxed text-muted-foreground">
                   {s.line}
                 </p>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                   {s.tag}
                 </p>
               </div>
@@ -100,7 +100,7 @@ export function TrajectorySection() {
               <li key={step} className="flex items-center gap-2">
                 <span>{step}</span>
                 {i < PROCESS.length - 1 && (
-                  <span aria-hidden className="text-accent/60">→</span>
+                  <span aria-hidden className="text-accent">→</span>
                 )}
               </li>
             ))}

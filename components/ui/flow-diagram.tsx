@@ -745,7 +745,7 @@ export function FlowDiagram({
         {/* Viewer hint — bottom-right corner */}
         {showHelp && (
           <div className="pointer-events-auto absolute bottom-2 right-2 z-30 select-none rounded-lg border border-border/60 bg-card/80 px-2.5 py-2 text-[10px] leading-relaxed text-muted-foreground shadow-sm backdrop-blur-sm">
-            <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+            <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               How to explore
             </p>
             <ul className="space-y-0.5">

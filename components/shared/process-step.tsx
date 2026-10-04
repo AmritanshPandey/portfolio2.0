@@ -108,7 +108,7 @@ export function ProcessStep({
 
               active
                 ? "text-muted-foreground"
-                : "text-muted-foreground/80",
+                : "text-muted-foreground",
 
               "transition-colors duration-200"
             )}

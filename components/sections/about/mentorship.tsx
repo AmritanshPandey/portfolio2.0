@@ -32,12 +32,12 @@ export default function AdvisorySection() {
                 href={m.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-baseline gap-1.5 rounded-sm text-[13.5px] text-foreground/60 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                className="group inline-flex items-baseline gap-1.5 rounded-sm text-[13.5px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
               >
                 <span className="underline decoration-border underline-offset-4 transition-colors group-hover:decoration-accent">
                   {m.name}
                 </span>
-                <span className="text-foreground/60">
+                <span className="text-muted-foreground">
                   {m.company.split("•")[1]?.trim() ?? m.company}
                 </span>
               </a>

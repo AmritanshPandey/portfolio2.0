@@ -62,7 +62,7 @@ export function CsSummary({
         <dl className="grid gap-5 sm:grid-cols-3 sm:gap-6">
           {ROWS.map(({ key, label: rowLabel }) => (
             <div key={key} className="min-w-0">
-              <dt className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-accent/85">
+              <dt className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-accent">
                 {rowLabel}
               </dt>
               <dd className="text-[13.5px] leading-relaxed text-foreground/75">

@@ -54,7 +54,7 @@ export function ArticleCard({
             {category && <p className="type-meta">{category}</p>}
             {readTime && (
               <>
-                <span className="text-foreground/20">/</span>
+                <span aria-hidden className="text-foreground/20">/</span>
                 <p className="type-meta">{readTime}</p>
               </>
             )}
@@ -70,7 +70,7 @@ export function ArticleCard({
             </p>
           )}
 
-          {date && <p className="type-caption text-foreground/42">{date}</p>}
+          {date && <p className="type-caption text-muted-foreground">{date}</p>}
 
           {/* CTA row */}
           <div className="mt-auto flex items-center justify-between border-t border-border/55 pt-4">

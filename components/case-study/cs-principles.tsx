@@ -55,7 +55,7 @@ export function CsPrinciples({ principles, intro, className }: CsPrinciplesProps
           >
             <span
               aria-hidden
-              className="mt-[3px] font-mono text-[11px] font-bold tabular-nums text-accent/70"
+              className="mt-[3px] font-mono text-[11px] font-bold tabular-nums text-accent"
             >
               {String(i + 1).padStart(2, "0")}
             </span>
@@ -77,7 +77,7 @@ export function CsPrinciples({ principles, intro, className }: CsPrinciplesProps
                     )}
                   />
                   <span>
-                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/80">
+                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                       In practice{" "}
                     </span>
                     {p.applied}

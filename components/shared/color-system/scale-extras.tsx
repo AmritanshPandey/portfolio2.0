@@ -131,7 +131,7 @@ export function TokenMapper({ scale, name }: { scale: Stop[]; name: string }) {
             <span className="w-6 h-6 rounded border border-border/60 shrink-0" style={{ background: r.hex }} />
             <span className="font-mono text-[12px] text-foreground">{name}-{r.role}</span>
             <span className="font-mono text-[11px] text-muted-foreground">{r.stop}</span>
-            <span className="text-[11px] text-muted-foreground/70 ml-auto hidden sm:block">{r.use}</span>
+            <span className="text-[11px] text-muted-foreground ml-auto hidden sm:block">{r.use}</span>
             <span className="font-mono text-[11px] text-muted-foreground">{r.hex}</span>
           </div>
         ))}
@@ -195,7 +195,7 @@ export function DarkModeMapper({ accent, neutral }: { accent: Stop[]; neutral: S
                 <span className="w-4 h-4 rounded border border-border/60 shrink-0" style={{ background: pick(r.src, active) }} />
                 <span className="font-mono text-foreground/80 w-24">{r.role}</span>
                 <span className="font-mono text-accent">{r.src === "n" ? "neutral" : "accent"}-{active}</span>
-                <span className="font-mono text-muted-foreground/50 ml-auto">{r.light}→{r.dark}</span>
+                <span className="font-mono text-muted-foreground ml-auto">{r.light}→{r.dark}</span>
               </div>
             )
           })}

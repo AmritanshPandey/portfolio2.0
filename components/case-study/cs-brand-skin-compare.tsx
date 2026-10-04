@@ -103,7 +103,7 @@ function BankScreen({ skin }: { skin: BrandSkin }) {
               <li key={t.name} className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-[12px] font-medium">{t.name}</p>
-                  <p className="text-[10px] text-[#80848a]">{t.date}</p>
+                  <p className="text-[10px] text-[#5d6166]">{t.date}</p>
                 </div>
                 <p
                   className={clsx(

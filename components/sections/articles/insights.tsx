@@ -15,7 +15,7 @@ export default function InsightsSection() {
         <div className="mt-8 md:mt-10">
           <Link
             href="/articles"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/60 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 rounded-sm"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 rounded-sm"
           >
             Browse all essays
             <IconArrowUpRight

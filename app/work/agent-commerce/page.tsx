@@ -97,7 +97,7 @@ function PhoneVisual() {
               <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
               <p className="text-[9px] font-medium text-accent">Transaction verified and protected</p>
             </div>
-            <p className="mt-2 text-right text-[8px] tracking-[0.04em] text-muted-foreground/70 dark:text-neutral-600">Secured by trusted payment network ✦</p>
+            <p className="mt-2 text-right text-[8px] tracking-[0.04em] text-muted-foreground dark:text-neutral-600">Secured by trusted payment network ✦</p>
           </div>
         </div>
       </div>
@@ -298,7 +298,7 @@ export default function Page() {
                 <div className={`p-6 border rounded-2xl ${layer.orange ? "bg-accent/[0.06] border-accent/25" : "bg-card border-border"}`}>
                   <p className="text-[11px] uppercase tracking-[0.08em] font-medium text-muted-foreground mb-2">{layer.num}</p>
                   <p className={`text-[17px] font-medium mb-3 leading-snug ${layer.orange ? "text-accent" : "text-foreground"}`}>{layer.title}</p>
-                  <p className={`text-[13px] leading-relaxed ${layer.orange ? "text-accent/75" : "text-muted-foreground"}`}>{layer.body}</p>
+                  <p className={`text-[13px] leading-relaxed ${layer.orange ? "text-accent" : "text-muted-foreground"}`}>{layer.body}</p>
                 </div>
               </FadeIn>
             ))}
@@ -464,7 +464,7 @@ export default function Page() {
                     }`}>
                       {node.active && <span className="text-[10px] text-black font-bold">✓</span>}
                     </div>
-                    <p className={`text-[10px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-foreground font-medium" : "text-muted-foreground/60"}`}>
+                    <p className={`text-[10px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-foreground font-medium" : "text-muted-foreground"}`}>
                       {node.label.map((line, j) => <span key={j} className="block">{line}</span>)}
                     </p>
                     <p className="text-[9px] text-center text-accent leading-[1.35] min-h-[24px]">
@@ -593,7 +593,7 @@ export default function Page() {
                     </div>
                     <p className="text-[15px] font-medium text-foreground mb-2">{s.name}</p>
                     <p className="text-[13px] text-muted-foreground leading-relaxed flex-1 mb-4">{s.desc}</p>
-                    <p className="text-[11px] text-muted-foreground/70">{s.collab}</p>
+                    <p className="text-[11px] text-muted-foreground">{s.collab}</p>
                   </div>
                 </FadeIn>
               ))}

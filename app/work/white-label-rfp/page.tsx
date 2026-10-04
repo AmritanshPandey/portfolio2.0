@@ -25,8 +25,8 @@ import type { BrandSkin } from "@/components/case-study"
 
 const BRAND_SKINS: BrandSkin[] = [
   { id: "north",    bank: "North Bank",     primary: "#E11D48", deep: "#9F1239", radius: "12px", fontLabel: "Onest",       fontStack: "var(--ff-sans), ui-sans-serif, system-ui, sans-serif" },
-  { id: "heritage", bank: "Heritage Trust", primary: "#B8862F", deep: "#6E4E12", radius: "4px",  fontLabel: "Serif",       fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
-  { id: "verde",    bank: "Verde Bank",     primary: "#2F8F6F", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
+  { id: "heritage", bank: "Heritage Trust", primary: "#8A6420", deep: "#6E4E12", radius: "4px",  fontLabel: "Serif",       fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
+  { id: "verde",    bank: "Verde Bank",     primary: "#25785C", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
 ]
 
 // ─── CHAPTERS ────────────────────────────────────────────────────────────────
@@ -571,7 +571,7 @@ export default function Page() {
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
-                  <p className="font-mono text-[11px] text-muted-foreground/60 tracking-[0.06em] mb-5">{m.num}</p>
+                  <p className="font-mono text-[11px] text-muted-foreground tracking-[0.06em] mb-5">{m.num}</p>
                   <p className="text-[clamp(28px,3vw,42px)] font-medium tracking-tight leading-none mb-4 text-accent">{m.figure}</p>
                   <p className="text-[14px] text-muted-foreground leading-relaxed max-w-[240px]">{m.label}</p>
                 </div>

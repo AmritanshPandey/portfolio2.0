@@ -40,12 +40,12 @@ function HeroVisual() {
 
       {/* Act 1 */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent/65 mb-2">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Act 1 · May–Oct 2020 · 6 months
         </p>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent/70">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
               <rect x="5" y="2" width="14" height="20" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </div>
@@ -64,7 +64,7 @@ function HeroVisual() {
           <div className="w-px flex-1 bg-accent/30" />
         </div>
         <div className="flex-1 rounded-xl border border-accent/20 bg-accent/[0.04] px-4 py-3 my-1">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-1">⚡ Forcing Function</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">⚡ Forcing Function</p>
           <p className="text-[12px] font-medium text-foreground/80">COVID-19 Lockdowns</p>
           <p className="text-[11px] text-muted-foreground">Citizens stop moving. B2C use-case evaporates.</p>
         </div>
@@ -72,12 +72,12 @@ function HeroVisual() {
 
       {/* Pivot */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.04] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent/65 mb-2">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Pivot · Oct–Nov 2020 · 6 weeks
         </p>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent/70">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
           </div>
@@ -98,12 +98,12 @@ function HeroVisual() {
 
       {/* Act 3 */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent/65 mb-2">
+        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Act 3 · Nov 2020–Apr 2021 · 5 months
         </p>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent/70">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
               <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
             </svg>
           </div>
@@ -173,7 +173,7 @@ function ActTimeline() {
   return (
     <div className="flex flex-col gap-0">
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-1">Act 1 · May–Oct 2020 · 6 months</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Built and launched a consumer citizen safety app from 0→1. B2C freemium. Real users, near-zero revenue.</p>
       </div>
@@ -182,12 +182,12 @@ function ActTimeline() {
           <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-accent/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
         <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent/70 mb-1">⚡ Forcing function · March 2020</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent mb-1">⚡ Forcing function · March 2020</p>
           <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. Citizens stop moving. Safety-while-moving use case evaporates. B2C growth stalls.</p>
         </div>
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
         <p className="text-[15px] font-medium text-foreground mb-1">The Pivot Decision</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">CEO identifies B2B inbound. We prototype a workplace safety product in days, validate with clients, commit.</p>
       </div>
@@ -195,7 +195,7 @@ function ActTimeline() {
         <div className="ml-[11px] w-px h-8 bg-border/50" />
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">B2B SaaS Rebuild</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity + smart cards + factory manager dashboard I designed nights and coded afternoons in React.</p>
       </div>
@@ -238,7 +238,7 @@ function ForcingFunctions() {
     <div className="grid sm:grid-cols-2 gap-4">
       {ffs.map(ff => (
         <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
-          <p className={`text-[9px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent/70" : "text-red-600/70 dark:text-red-400/60"}`}>
+          <p className={`text-[9px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-600/70 dark:text-red-400/60"}`}>
             Forcing function {ff.num} · {ff.date}
           </p>
           <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
@@ -263,19 +263,19 @@ function DailyRhythm() {
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
         <div className="flex h-8 rounded-full overflow-hidden border border-border/40 gap-px">
           <div className="bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-accent/80 tracking-wide">UX DESIGN</span>
+            <span className="text-[9px] font-semibold text-accent tracking-wide">UX DESIGN</span>
           </div>
           <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
             <span className="text-[9px] font-semibold text-muted-foreground tracking-wide">PRD</span>
           </div>
           <div className="bg-accent/10 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-accent/70 dark:text-accent/70 tracking-wide">REACT</span>
+            <span className="text-[9px] font-semibold text-accent tracking-wide">REACT</span>
           </div>
           <div className="bg-muted/40 flex items-center justify-center" style={{ width: "10%" }}>
             <span className="text-[9px] text-muted-foreground">…</span>
           </div>
         </div>
-        <div className="flex justify-between mt-1.5 text-[10px] text-muted-foreground/60">
+        <div className="flex justify-between mt-1.5 text-[10px] text-muted-foreground">
           <span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>12am</span>
         </div>
       </div>
@@ -293,7 +293,7 @@ function DailyRhythm() {
           <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise, a vague PRD meant broken builds by afternoon.</p>
         </div>
         <div className="p-6 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-2">Afternoon</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-2">Afternoon</p>
           <p className="text-[14px] font-medium text-foreground mb-2">React Frontend</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Coded the B2B dashboard frontend in React.js alongside the full-stack dev. Frontend would have blocked shipping without me.</p>
         </div>
@@ -374,7 +374,7 @@ function GapsGrid() {
               </div>
             </div>
             <div className="shrink-0 text-right">
-              <p className="text-[48px] font-bold text-accent/80 leading-none">68%</p>
+              <p className="text-[48px] font-bold text-accent leading-none">68%</p>
               <p className="text-[11px] text-muted-foreground">drop-off</p>
             </div>
           </div>
@@ -384,7 +384,7 @@ function GapsGrid() {
 
       {/* Commercial reality */}
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.04] p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-3">The commercial reality of Act 1</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-3">The commercial reality of Act 1</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
           The consumer app launched. We got real users. But the revenue model was broken from the start, B2C freemium in India in 2020 meant most users never paid. The product was validated socially, not commercially. Then COVID hit and citizens stopped moving. We had a live product, real users, and almost no revenue.
         </p>
@@ -411,8 +411,8 @@ function WhatWasCut() {
       <div className="divide-y divide-border">
         {cuts.map(c => (
           <div key={c.feature} className="px-6 py-4 grid grid-cols-[1fr_60px_1fr] gap-4 items-start">
-            <p className="text-[13px] line-through text-muted-foreground/70">{c.feature}</p>
-            <p className="text-[11px] text-muted-foreground/70 font-medium">{c.when}</p>
+            <p className="text-[13px] line-through text-muted-foreground">{c.feature}</p>
+            <p className="text-[11px] text-muted-foreground font-medium">{c.when}</p>
             <p className="text-[13px] text-muted-foreground">{c.why}</p>
           </div>
         ))}
@@ -438,7 +438,7 @@ function PivotValidation() {
           ].map((s, i) => (
             <div key={s.step} className="mb-3 last:mb-0">
               <div className="flex items-center gap-3 mb-1.5">
-                <span className="text-[9px] font-bold text-accent/80 dark:text-accent/70 w-5">{s.step}</span>
+                <span className="text-[9px] font-bold text-accent w-5">{s.step}</span>
                 <span className="text-[13px] font-semibold text-foreground">{s.label}</span>
                 <span className="text-[11px] text-muted-foreground">{s.sub}</span>
               </div>
@@ -476,11 +476,11 @@ function ProductComparison() {
     <div className="overflow-hidden rounded-2xl border border-border">
       <div className="grid grid-cols-[1fr_1fr] divide-x divide-border">
         <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-0.5">Act 1</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 1</p>
           <p className="text-[15px] font-medium text-foreground">Consumer Safety App</p>
         </div>
         <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70 mb-0.5">Act 3</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 3</p>
           <p className="text-[15px] font-medium text-foreground">B2B Workplace Safety SaaS</p>
         </div>
       </div>
@@ -489,11 +489,11 @@ function ProductComparison() {
           <div key={r.label} className="grid grid-cols-[1fr_1fr] divide-x divide-border">
             <div className="px-6 py-4 bg-accent/[0.02]">
               <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-accent/75 leading-relaxed">{r.act1}</p>
+              <p className="text-[13px] text-accent leading-relaxed">{r.act1}</p>
             </div>
             <div className="px-6 py-4 bg-accent/[0.02]">
               <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-accent/75 leading-relaxed">{r.act3}</p>
+              <p className="text-[13px] text-accent leading-relaxed">{r.act3}</p>
             </div>
           </div>
         ))}
@@ -574,7 +574,7 @@ function DashboardMockup() {
           </div>
         </div>
       </div>
-      <p className="text-[11px] text-muted-foreground/60 text-center mt-2">Factory manager dashboard, React.js, designed and coded by me</p>
+      <p className="text-[11px] text-muted-foreground text-center mt-2">Factory manager dashboard, React.js, designed and coded by me</p>
     </FadeIn>
   )
 }

@@ -116,7 +116,7 @@ export function CaseStudyPage({
                     "border-l-2 py-1 pl-3 text-[13px] transition-colors",
                     selected
                       ? "border-foreground font-medium text-foreground"
-                      : "border-transparent text-muted-foreground/70 hover:text-foreground"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {s.label}

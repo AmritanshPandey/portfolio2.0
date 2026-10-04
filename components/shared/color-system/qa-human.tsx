@@ -126,7 +126,7 @@ export function FigmaVariables() {
               <div key={p.name} className="flex items-center gap-2.5 text-[11px]">
                 <span className="w-4 h-4 rounded border border-border/60" style={{ background: p.hex }} />
                 <span className="font-mono text-foreground/80">{p.name}</span>
-                <span className="font-mono text-muted-foreground/60 ml-auto">{p.hex}</span>
+                <span className="font-mono text-muted-foreground ml-auto">{p.hex}</span>
               </div>
             ))}
           </div>
@@ -142,7 +142,7 @@ export function FigmaVariables() {
                 <span className="w-4 h-4 rounded border border-border/60" style={{ background: mode === "light" ? s.lh : s.dh }} />
                 <span className="font-mono text-foreground/80 w-16">{s.name}</span>
                 <span className="font-mono text-accent">→ {mode === "light" ? s.light : s.dark}</span>
-                <span className="text-muted-foreground/60 ml-auto text-[10px]">{s.scope}</span>
+                <span className="text-muted-foreground ml-auto text-[10px]">{s.scope}</span>
               </div>
             ))}
           </div>

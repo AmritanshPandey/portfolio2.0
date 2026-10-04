@@ -24,7 +24,7 @@ export function InProgressSections({
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             {heading}
           </h2>
-          <p className="text-[15px] text-foreground/45 leading-relaxed">
+          <p className="text-[15px] text-muted-foreground leading-relaxed">
             Details being documented. Check back soon.
           </p>
         </section>

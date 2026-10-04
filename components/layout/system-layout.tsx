@@ -240,7 +240,7 @@ function TypeScaleVisual({ title, steps }: Extract<SystemVisual, { kind: "type-s
               <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 {step.label}
               </p>
-              <p className="text-[10px] font-mono text-muted-foreground/60 mt-0.5">
+              <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
                 {step.size} / {step.weight}
               </p>
             </div>

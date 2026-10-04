@@ -92,7 +92,7 @@ export function CsGantt({
             {ticks.map((t, i) => (
               <span
                 key={i}
-                className="absolute -translate-x-1/2 whitespace-nowrap text-[11px] font-medium tabular-nums text-muted-foreground/70"
+                className="absolute -translate-x-1/2 whitespace-nowrap text-[11px] font-medium tabular-nums text-muted-foreground"
                 style={{ left: `${pct(t)}%` }}
               >
                 {fmt(t)}

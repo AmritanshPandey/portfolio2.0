@@ -93,7 +93,7 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
             <div className="flex items-center justify-between gap-3">
               <p className="type-meta">{card.eyebrow}</p>
               {statusCfg && (
-                <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/40 bg-muted/40 px-2.5 py-1 text-[10px] font-medium leading-none text-foreground/55">
+                <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/40 bg-muted/40 px-2.5 py-1 text-[10px] font-medium leading-none text-muted-foreground">
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${statusCfg.dot}${statusCfg.pulse ? " animate-pulse" : ""}`}
                   />
@@ -108,13 +108,13 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
             </h3>
 
             {/* Description */}
-            <p className="mt-3 max-w-[64ch] text-[13.5px] leading-relaxed text-foreground/60 lg:max-w-none">
+            <p className="mt-3 max-w-[64ch] text-[13.5px] leading-relaxed text-muted-foreground lg:max-w-none">
               {card.description}
             </p>
 
             {/* Learned insight — pull-quote style, only for explorations */}
             {card.learned && (
-              <p className="mt-4 max-w-[68ch] border-l-[2px] border-accent/30 pl-3.5 text-[12.5px] italic leading-relaxed text-foreground/45 lg:max-w-none">
+              <p className="mt-4 max-w-[68ch] border-l-[2px] border-accent/30 pl-3.5 text-[12.5px] italic leading-relaxed text-muted-foreground lg:max-w-none">
                 {card.learned}
               </p>
             )}
@@ -124,7 +124,7 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
               {card.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-foreground/42"
+                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -134,7 +134,7 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
             {/* CTA */}
             <div className="mt-auto pt-7">
               <div className="flex items-center justify-between border-t border-border/40 pt-5">
-                <span className="type-cta text-foreground/50 transition-colors duration-500 group-hover/card:text-foreground/82">
+                <span className="type-cta text-muted-foreground transition-colors duration-500 group-hover/card:text-foreground/82">
                   {card.ctaLabel}
                 </span>
                 <IconArrowUpRight
