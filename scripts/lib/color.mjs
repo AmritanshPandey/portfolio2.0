@@ -10,36 +10,61 @@ const encode = (c) => {
 const decode = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
 const isValid = (c) => [c.r, c.g, c.b, c.a].every((n) => Number.isFinite(n))
 
-function splitAlpha(inner) {
-  const [channels, alpha] = inner.includes("/") ? inner.split("/") : [inner, undefined]
-  return { channels: channels.trim(), alpha }
+// Strict CSS number grammar: parseFloat alone accepts "85deg0" or "13px" as
+// numbers, which would let typos the browser rejects pass the gate.
+const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i
+const number = (s) => (NUMBER.test(s) ? parseFloat(s) : NaN)
+const HUE_UNITS = { "": 1, deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }
+
+/** A number, or a percentage where 100% equals `scale`. */
+const channel = (s, scale) => (s.endsWith("%") ? (number(s.slice(0, -1)) / 100) * scale : number(s))
+
+function hue(s) {
+  const [, value, unit = ""] = s.match(/^(.*?)(deg|grad|rad|turn)?$/i)
+  return number(value) * HUE_UNITS[unit.toLowerCase()]
 }
 
+function splitAlpha(inner) {
+  const pieces = inner.split("/")
+  if (pieces.length > 2) return null
+  return { channels: pieces[0].trim(), alpha: pieces[1] }
+}
+
+/** Browsers clamp alpha into [0, 1]. */
 function parseAlpha(s) {
   if (s === undefined) return 1
-  const t = s.trim()
-  return t.endsWith("%") ? parseFloat(t) / 100 : parseFloat(t)
+  const a = channel(s.trim(), 1)
+  return Number.isNaN(a) ? NaN : clamp01(a)
 }
 
 function parseHex(v) {
+  if (!/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.test(v)) return null
   let h = v.slice(1)
-  if (h.length === 3 || h.length === 4) h = [...h].map((c) => c + c).join("")
-  if (h.length !== 6 && h.length !== 8) return null
+  if (h.length <= 4) h = [...h].map((c) => c + c).join("")
   const n = (i) => parseInt(h.slice(i, i + 2), 16) / 255
-  const c = { r: n(0), g: n(2), b: n(4), a: h.length === 8 ? n(6) : 1 }
-  return isValid(c) ? c : null
+  return { r: n(0), g: n(2), b: n(4), a: h.length === 8 ? n(6) : 1 }
 }
 
 function parseRgb(v) {
-  const m = v.match(/^rgba?\(([^)]+)\)$/)
+  const m = v.match(/^rgba?\(([^)]*)\)$/)
   if (!m) return null
-  const { channels, alpha } = splitAlpha(m[1])
-  const parts = channels.split(/[\s,]+/).filter(Boolean)
-  let a = alpha
-  if (parts.length === 4 && alpha === undefined) a = parts.pop() // rgba(r, g, b, a)
+  const inner = m[1].trim()
+  let parts
+  let alpha
+  if (inner.includes(",")) {
+    // Legacy syntax: commas throughout, optional fourth alpha, no slash.
+    if (inner.includes("/")) return null
+    parts = inner.split(",").map((p) => p.trim())
+    if (parts.length === 4) alpha = parts.pop()
+  } else {
+    const split = splitAlpha(inner)
+    if (!split) return null
+    parts = split.channels.split(/\s+/).filter(Boolean)
+    alpha = split.alpha
+  }
   if (parts.length !== 3) return null
-  const [r, g, b] = parts.map((p) => (p.endsWith("%") ? parseFloat(p) / 100 : parseFloat(p) / 255))
-  const c = { r, g, b, a: parseAlpha(a) }
+  const [r, g, b] = parts.map((p) => channel(p, 255) / 255)
+  const c = { r, g, b, a: parseAlpha(alpha) }
   return isValid(c) ? c : null
 }
 
@@ -58,16 +83,17 @@ export function oklchToSrgb(L, C, H) {
 }
 
 function parseOklch(v) {
-  const m = v.match(/^oklch\(([^)]+)\)$/)
-  if (!m) return null
-  const { channels, alpha } = splitAlpha(m[1])
-  const parts = channels.split(/\s+/)
+  const m = v.match(/^oklch\(([^)]*)\)$/)
+  if (!m || m[1].includes(",")) return null
+  const split = splitAlpha(m[1].trim())
+  if (!split) return null
+  const parts = split.channels.split(/\s+/)
   if (parts.length !== 3) return null
-  const L = parts[0].endsWith("%") ? parseFloat(parts[0]) / 100 : parseFloat(parts[0])
-  const C = parseFloat(parts[1])
-  const H = parseFloat(parts[2])
+  const L = channel(parts[0], 1)
+  const C = channel(parts[1], 0.4)
+  const H = hue(parts[2])
   if (![L, C, H].every(Number.isFinite)) return null
-  const c = { ...oklchToSrgb(L, C, H), a: parseAlpha(alpha) }
+  const c = { ...oklchToSrgb(L, C, H), a: parseAlpha(split.alpha) }
   return isValid(c) ? c : null
 }
 

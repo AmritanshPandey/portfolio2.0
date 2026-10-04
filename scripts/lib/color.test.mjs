@@ -53,3 +53,29 @@ test("composites a translucent foreground over the background", () => {
   const r = contrastRatio(parseColor("rgb(0 0 0 / 0.5)"), parseColor("#fff"))
   assert.ok(r > 3.9 && r < 4.05, String(r))
 })
+
+test("rejects malformed colours that browsers treat as invalid", () => {
+  for (const v of [
+    "#04785g",
+    "#12345",
+    "oklch(0.7, 0.012, 85)",
+    "oklch(0.93 0.012 85deg0)",
+    "oklch(abc 0 0)",
+    "rgb(20, 20 20)",
+    "rgb(20 20 20 0.5)",
+  ]) {
+    assert.equal(parseColor(v), null, v)
+  }
+})
+
+test("reads oklch hue units", () => {
+  const ref = to255(parseColor("oklch(0.6 0.15 180)"))
+  for (const v of ["oklch(0.6 0.15 180deg)", "oklch(0.6 0.15 0.5turn)", "oklch(0.6 0.15 200grad)", "oklch(0.6 0.15 3.14159265rad)"]) {
+    assert.deepEqual(to255(parseColor(v)), ref, v)
+  }
+})
+
+test("clamps alpha to [0, 1] like browsers do", () => {
+  assert.equal(parseColor("rgb(20 20 20 / 13)").a, 1)
+  assert.equal(parseColor("oklch(0.5 0 0 / -1)").a, 0)
+})
