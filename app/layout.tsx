@@ -3,11 +3,8 @@ import type { Metadata } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
-import { FancyCursor } from "@/components/shared/cursor"
 import { ThemeFab } from "@/components/shared/theme-fab"
-import { SiteBackground } from "@/components/shared/site-background"
-import { Grain } from "@/components/shared/motion"
-import { SmoothScroll } from "@/components/shared/smooth-scroll"
+import { GridOverlay } from "@/components/shared/grid-overlay"
 import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Bricolage_Grotesque, Onest, JetBrains_Mono, Caveat } from "next/font/google"
@@ -110,38 +107,31 @@ export default function RootLayout({
           "[text-rendering:optimizeLegibility]"
         )}
       >
+        {/* Editorial paper is the default for every first visit, whatever the
+            OS setting: it's a design decision, not a preference to follow.
+            A visitor's own toggle choice is still remembered. */}
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {/* Honour prefers-reduced-motion across all Framer Motion animations */}
           <MotionConfig reducedMotion="user">
-            {/* Lenis smooth scroll */}
-            <SmoothScroll />
-
             {/* Scroll restore */}
             <ScrollToHash />
 
             {/* Reveal failsafe — forces stalled entrance reveals visible */}
             <SettleGuard />
 
-            <FancyCursor />
-
-            {/* Interactive dot field — a standalone, full-viewport background
-                layer (independent of the hero). Sits behind all content; the
-                opaque section bands scroll over it. */}
-            <SiteBackground />
-
-            {/* Film grain — one quiet texture across every page */}
-            <Grain />
-
             {/* Navbar */}
             <Navbar />
 
             {/* Floating theme toggle — bottom-right, site-wide */}
             <ThemeFab />
+
+            {/* Grid overlay for alignment checks (?grid), development only */}
+            {process.env.NODE_ENV !== "production" && <GridOverlay />}
 
             {/* Content */}
             <main className="relative overflow-x-clip [transform:translateZ(0)]">

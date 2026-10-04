@@ -14,7 +14,6 @@
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.0.0",
     "@hugeicons/react": "^1.1.6",
-    "@studio-freight/lenis": "^1.0.42",
     "@tabler/icons-react": "^3.40.0",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",

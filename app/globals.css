@@ -1221,7 +1221,7 @@
    Honour the OS-level preference. Decorative motion collapses to a
    static end-state; all content stays fully visible and legible.
    (Framer Motion is handled via <MotionConfig reducedMotion="user">,
-   and Lenis smooth-scroll is skipped, in their respective files.)
+   and lib/scroll.ts jumps instead of smooth-scrolling.)
 ───────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
