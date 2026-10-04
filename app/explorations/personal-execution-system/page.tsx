@@ -19,15 +19,15 @@ export const metadata: Metadata = {
 const originNotes = [
   {
     title: "The problem was personal",
-    body: "I kept seeing the same gap in my own workflow. I could define the goal, but the plan would get messy once real life interrupted it. The missing piece was not another task list. It was a system that could keep the goal, the next action, and the review loop connected.",
+    body: "My goals were clear, but plans fell apart once life interrupted. I needed the goal, the next action, and the review kept connected.",
   },
   {
     title: "Existing tools felt split",
-    body: "Calendar apps handled time. Task apps handled lists. Notes apps held thinking. None of them gave me a clean way to move from a long-term goal to a weekly execution plan, then back into review without rebuilding context.",
+    body: "Calendars handle time, task apps handle lists, notes hold thinking. None moves a goal into a weekly plan and back into review.",
   },
   {
     title: "I wanted a product I would actually use",
-    body: "PlanR started as a practical tool for myself. The bar was simple: if I would not open it on a busy day, the design was too heavy. That pushed the product toward short loops, clear states, and fast capture.",
+    body: "Built for myself first. If I wouldn't open it on a busy day, it was too heavy.",
   },
 ]
 
@@ -38,7 +38,7 @@ const principles = [
   },
   {
     title: "Progress should be visible",
-    body: "The system keeps the next action, current streak, and blocked work close to the goal instead of hiding them in separate views.",
+    body: "The next action, streak, and blocked work sit beside the goal, not in separate views.",
   },
   {
     title: "Planning has to survive real life",
@@ -64,41 +64,41 @@ const iterations = [
   {
     phase: "01",
     title: "Task list",
-    body: "The first version was too close to a normal checklist. It helped capture work, but it did not explain why the work mattered or how it connected to the larger goal.",
+    body: "Too close to a checklist: it captured work but not why it mattered.",
   },
   {
     phase: "02",
     title: "Goal planner",
-    body: "The next version moved goals to the center. That made the product clearer, but it still needed a stronger weekly rhythm so users could decide what to do next.",
+    body: "Goals moved to the centre. Clearer, but it still lacked a weekly rhythm.",
   },
   {
     phase: "03",
     title: "Execution loop",
-    body: "The current direction connects goals, milestones, tasks, progress, and review. The product became less about storing plans and more about helping people keep promises to themselves.",
+    body: "Goals, milestones, tasks, progress, and review, connected. Less about storing plans, more about keeping promises to yourself.",
   },
   {
     phase: "04",
     title: "Live feedback",
-    body: "After releasing early builds, I used feedback to simplify flows, tighten the mobile experience, and remove anything that made planning feel like extra work.",
+    body: "Early-build feedback simplified flows and cut anything that made planning feel like work.",
   },
 ]
 
 const buildStack = [
   {
     title: "Firebase backend",
-    body: "Firebase let me move quickly without spending weeks on backend setup. I used it to handle the product foundation, including persistence, deployment, and the data model behind goals, tasks, progress, and reviews.",
+    body: "Persistence, deployment, and the data model, without weeks of backend setup.",
   },
   {
     title: "Claude Code for backend complexity",
-    body: "Claude Code helped me work through complex backend flows, especially where planning logic touched data structure. Rolling tasks forward, syncing progress, and keeping goal state predictable needed careful implementation.",
+    body: "Complex backend flows: rolling tasks forward, syncing progress, keeping goal state predictable.",
   },
   {
     title: "Codex for implementation passes",
-    body: "I used Codex to tighten React components, debug edge cases, refactor repeated UI patterns, and keep the product moving without getting stuck in small implementation loops.",
+    body: "Tightening React components, debugging edge cases, and refactoring repeated patterns.",
   },
   {
     title: "Fast release cycle",
-    body: "Instead of waiting for a polished launch, I shipped early versions and watched where users hesitated. The feedback helped me decide what to simplify, what to rename, and which flows needed stronger defaults.",
+    body: "Shipped early and watched where people hesitated, then simplified and renamed.",
   },
 ]
 
@@ -249,7 +249,7 @@ export default function Page() {
                 id="why"
                 label="Why I built it"
                 title="A planning system for the messy middle"
-                description="PlanR came from the space between ambition and follow-through. I did not want another place to store tasks. I wanted a product that could help turn a goal into a small set of decisions I could act on, review, and adjust without losing the thread."
+                description="Not another place to store tasks: a way to turn a goal into a few decisions to act on, review, and adjust."
               />
               <div className="grid gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-3">
                 {originNotes.map((item) => (
@@ -266,7 +266,7 @@ export default function Page() {
                 id="system"
                 label="Product model"
                 title="A loop for turning intention into execution"
-                description="The product is built around a weekly loop. The user starts with a goal, breaks it into clear work, schedules the next set of actions, then reviews what moved and what got stuck."
+                description="A weekly loop: set a goal, break it into work, schedule the next actions, review what moved."
               />
               <div className="rounded-2xl border border-border/65 bg-card p-5 md:p-6">
                 <div className="space-y-3">
@@ -292,7 +292,7 @@ export default function Page() {
                 id="iterations"
                 label="Iterations"
                 title="The product changed shape several times"
-                description="The early versions were useful but not sharp enough. Each iteration forced one question: does this make it easier to act, or is it only making the planning system look more complete?"
+                description="Each iteration asked one question: does this make it easier to act, or just look more complete?"
               />
               <div className="rounded-2xl border border-border/65 bg-card p-5 md:p-6">
                 <div className="space-y-4">
@@ -316,7 +316,7 @@ export default function Page() {
                 id="design"
                 label="Design decisions"
                 title="Keep it calm enough to use daily"
-                description="This is not a productivity toy. The interface needs to feel quiet, structured, and fast to scan because the user comes back when they are already trying to make decisions."
+                description="Quiet, structured, and fast to scan, because people open it mid-decision."
               />
               <div className="grid gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 md:grid-cols-3">
                 {principles.map((item) => (
@@ -333,7 +333,7 @@ export default function Page() {
                 id="build"
                 label="Build process"
                 title="Using AI tools to ship faster without lowering the bar"
-                description="PlanR became a good test for how I use AI in product work. I was not asking tools to invent the product. I used them to move through complex implementation work faster, then made the product decisions myself."
+                description="AI tools sped up implementation; the product decisions stayed mine."
               />
               <div className="grid gap-4 md:grid-cols-2">
                 {buildStack.map((item) => (
@@ -350,7 +350,7 @@ export default function Page() {
                 id="screens"
                 label="Live product"
                 title="The actual PlanR build, framed at iPhone 16 size"
-                description="This is the deployed product, not a recreated mockup. The frame uses the iPhone 16 viewport size so the mobile-first decisions can be reviewed in the shape they were designed for."
+                description="The deployed product, not a mockup, at iPhone 16 size."
               />
               <PlanrLiveFrame />
             </section>
@@ -360,7 +360,7 @@ export default function Page() {
                 id="shipped"
                 label="What shipped"
                 title="A working product surface, not only a concept"
-                description="The live build establishes the product shell, visual language, portrait-first behavior, theme support, and the core planning direction."
+                description="The product shell, visual language, themes, and core planning flow."
               />
               <div className="grid gap-3">
                 {buildNotes.map((note) => (

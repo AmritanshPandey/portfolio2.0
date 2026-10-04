@@ -17,6 +17,7 @@ import {
   CsReflection,
 } from "@/components/case-study"
 import { FadeIn } from "@/components/shared/fade-in"
+import { AddLater } from "@/components/shared/add-later"
 
 // ─── CHAPTERS ────────────────────────────────────────────────────────────────
 
@@ -139,10 +140,9 @@ function Hero() {
       title="Two products, one pivot, eleven months"
       lede={
         <>
-          Sole PM and designer at Dror, through{" "}
-          <strong className="font-medium text-foreground">a full product lifecycle</strong>: a 0→1 consumer launch, a{" "}
-          <strong className="font-medium text-foreground">COVID-forced B2B pivot</strong>, and a lesson about{" "}
-          <strong className="font-medium text-foreground">what PMF looks like when it&apos;s rented from an external event</strong>.
+          Sole PM and designer at Dror: a 0→1 consumer launch, a{" "}
+          <strong className="font-medium text-foreground">COVID-forced B2B pivot</strong>, and a lesson in{" "}
+          <strong className="font-medium text-foreground">rented product-market fit</strong>.
         </>
       }
       meta={{
@@ -151,7 +151,7 @@ function Hero() {
         scope:        "Consumer + Enterprise",
         organisation: "DROR Labs (later Lythouse)",
       }}
-      readTime="15 min read"
+      readTime="7 min read"
       publishedDate="2020–2021"
       topics={["Startup", "Pivot", "0→1", "PMF"]}
       asideCol="380px"
@@ -175,7 +175,7 @@ function ActTimeline() {
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">Built and launched a consumer citizen safety app from 0→1. B2C freemium. Real users, near-zero revenue.</p>
+        <p className="text-[13px] text-muted-foreground leading-relaxed">A consumer safety app, 0→1. Real users, near-zero revenue.</p>
       </div>
       <div className="flex items-start gap-3 px-4 py-4">
         <div className="flex flex-col items-center mt-1 shrink-0">
@@ -183,13 +183,14 @@ function ActTimeline() {
         </div>
         <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent mb-1">⚡ Forcing function · March 2020</p>
-          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. Citizens stop moving. Safety-while-moving use case evaporates. B2C growth stalls.</p>
+          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. People stop moving, and so does B2C growth.</p>
+          <AddLater note="the date. This sits after Act 1 (May–Oct 2020) but says March 2020, and the Context section says you were “6 months into building” by then." className="mt-2 inline-block" />
         </div>
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
         <p className="text-[15px] font-medium text-foreground mb-1">The Pivot Decision</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">CEO identifies B2B inbound. We prototype a workplace safety product in days, validate with clients, commit.</p>
+        <p className="text-[13px] text-muted-foreground leading-relaxed">Enterprise inbound appears. We prototype in days, validate, commit.</p>
       </div>
       <div className="flex items-center gap-3 px-4 py-2">
         <div className="ml-[11px] w-px h-8 bg-border/50" />
@@ -197,7 +198,7 @@ function ActTimeline() {
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.05] p-5">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">B2B SaaS Rebuild</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity + smart cards + factory manager dashboard I designed nights and coded afternoons in React.</p>
+        <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity, smart cards, and a dashboard I designed and partly coded.</p>
       </div>
       <div className="flex items-start gap-3 px-4 py-4">
         <div className="flex flex-col items-center mt-1 shrink-0">
@@ -205,13 +206,13 @@ function ActTimeline() {
         </div>
         <div className="flex-1 bg-red-500/[0.04] border border-red-500/15 rounded-xl px-4 py-3">
           <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-red-600/70 dark:text-red-400/60 mb-1">⚡ Forcing function · Late 2021</p>
-          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID gets controlled. Restrictions lift. Enterprise clients stop renewing. The urgency that created the market disappears.</p>
+          <p className="text-[13px] text-foreground/75 leading-relaxed">Restrictions lift. Clients stop renewing.</p>
         </div>
       </div>
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-5">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-1">Wind down · Post Apr 2021</p>
         <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">Company hits ₹1.98Cr lifetime revenue, eventually winds down. The market we&apos;d built for stopped existing.</p>
+        <p className="text-[13px] text-muted-foreground leading-relaxed">₹1.98Cr lifetime revenue, then a wind-down.</p>
       </div>
     </div>
   )
@@ -224,14 +225,14 @@ function ForcingFunctions() {
     {
       num: "#1", date: "March 2020", accent: "rose" as const,
       event: "COVID-19 locks everyone home",
-      before: "We were 6 months into building a citizen safety app, location sharing, SOS alerts, safety circles for people moving through cities.",
-      after: "Citizens stop moving. Our core use case, safety while in transit, becomes irrelevant indefinitely. B2C growth stalls. Revenue near zero.",
+      before: "We were building a safety app for people moving through cities: SOS alerts and safety circles.",
+      after: "People stop moving. The core use case disappears, and revenue stays near zero.",
     },
     {
       num: "#2", date: "Late 2021", accent: "red" as const,
       event: "COVID gets controlled. Restrictions lift.",
-      before: "We had pivoted to B2B workplace safety. Enterprises were paying for Bluetooth-based social distancing tools. Revenue was real. Contracts were signed.",
-      after: "The urgency disappears. Offices reopen fully. Clients stop renewing. The problem we solved no longer exists at the severity that made people pay.",
+      before: "We'd pivoted to B2B workplace safety. Enterprises were paying. Contracts were signed.",
+      after: "Offices reopen, the urgency goes, and clients stop renewing.",
     },
   ]
   return (
@@ -327,10 +328,10 @@ function DailyRhythm() {
 
 function GapsGrid() {
   const gaps = [
-    { num: "Gap 01", finding: "Connectivity assumption",         change: "Life360 required persistent internet. In tier 2/3 India, patchy connectivity made real-time sharing unreliable exactly when it mattered." },
-    { num: "Gap 02", finding: "English-first UI",                change: "Life360&apos;s onboarding was English-heavy and jargon-dense. Our primary users in smaller cities needed icon-first, low-literacy design." },
-    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "The &lsquo;track your family&rsquo; framing felt invasive in Indian social dynamics. We repositioned as a safety circle, opt-in, mutual, trust-first." },
-    { num: "Gap 04 · Research", finding: "68% drop-off in Life360 onboarding", change: "Ran Life360 with 15 Indian users. Primary drop-off: confusing permissions flow, English UI, assumption all members have active smartphones." },
+    { num: "Gap 01", finding: "Connectivity assumption",         change: "Life360 needed constant internet. Patchy connectivity in smaller cities broke it when it mattered." },
+    { num: "Gap 02", finding: "English-first UI",                change: "English-heavy onboarding. Our users needed icon-first, low-literacy design." },
+    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "&lsquo;Track your family&rsquo; felt invasive. We made it an opt-in, mutual safety circle." },
+    { num: "Gap 04 · Research", finding: "68% drop-off in Life360 onboarding", change: "Tested Life360 with 15 Indian users. They dropped off at permissions, the English UI, and the smartphone assumption." },
   ]
   return (
     <div className="space-y-8">
@@ -386,7 +387,7 @@ function GapsGrid() {
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.04] p-6">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-3">The commercial reality of Act 1</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
-          The consumer app launched. We got real users. But the revenue model was broken from the start, B2C freemium in India in 2020 meant most users never paid. The product was validated socially, not commercially. Then COVID hit and citizens stopped moving. We had a live product, real users, and almost no revenue.
+          Real users, but most never paid: B2C freemium in India in 2020 was validated socially, not commercially.
         </p>
       </div>
     </div>
@@ -677,7 +678,7 @@ function ImpactMetrics() {
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-6">
         <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-3">Honest assessment</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
-          ₹1.98Cr sounds like a success. In context it isn&apos;t. The company raised $494K (~₹4Cr) and generated ₹1.98Cr in lifetime revenue. The B2B pivot worked commercially, but only for as long as COVID made social distancing a compliance requirement. Once restrictions lifted, the problem we&apos;d built for stopped being urgent enough for enterprises to pay for. We proved we could sell. We didn&apos;t prove the market would last.
+          ₹1.98Cr sounds like a success. It isn&apos;t, against $494K (~₹4Cr) raised. The pivot sold only while distancing was a compliance requirement. We proved we could sell. We didn&apos;t prove the market would last.
         </p>
       </div>
     </div>
@@ -726,16 +727,16 @@ export default function Page() {
           <CsProvenance kind="internal" label="Company later wound down" />
         </div>
         <CsSummary
-          problem="A 10-person startup built a consumer safety app for people moving through cities, and COVID lockdowns kept the use case frozen before it could monetise. The team needed a commercially viable product before the runway did what runways do."
-          role="Sole PM and designer, plus React frontend when it was needed. Wrote PRDs at noon, designed at night, coded the factory manager dashboard in the afternoons."
-          outcome="The B2B pivot shipped in six weeks and grew to ₹1.98Cr lifetime revenue. When restrictions lifted the market dissolved, and the honest lesson survived the company: we proved we could sell, not that the market would last."
+          problem="A 10-person startup's consumer safety app lost its use case to COVID lockdowns before it could make money."
+          role="Sole PM and designer, plus React frontend: PRDs at noon, design at night, code in the afternoons."
+          outcome="The B2B pivot shipped in six weeks and reached ₹1.98Cr lifetime revenue, until restrictions lifted and the market went with them."
         />
       </div>
 
       <CsSection id="story" label="The Story">
         <div className="space-y-6">
           <p className="text-[15px] text-muted-foreground leading-relaxed max-w-2xl">
-            Three acts, two forcing functions, one lesson about building products whose market exists only because of the conditions that created them.
+            Three acts, two forcing functions, one lesson.
           </p>
           <ActTimeline />
         </div>
@@ -748,10 +749,11 @@ export default function Page() {
               The product didn&apos;t fail. The world changed, twice.
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Most startup failures are internal, wrong team, wrong execution, wrong market. Dror&apos;s story is different. We built the right product twice. Each time, an external event made our market disappear.
+              We built the right product twice. Both times, an outside event made the market disappear.
             </p>
           </div>
           <ForcingFunctions />
+          <AddLater block note="the timeline. Forcing function #1 is dated March 2020, but Act 1 ran May–Oct 2020 and your LinkedIn start is May 2020." />
         </div>
       </CsSection>
 
@@ -762,7 +764,7 @@ export default function Page() {
               There was no time to be a PM in the traditional sense
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              In a 10-person team under survival pressure, I collapsed the PM → Design → Dev handoff into a single person across three time blocks per day.
+              In a 10-person team, I was the PM, the designer, and part of the frontend, in three blocks a day.
             </p>
           </div>
           <DailyRhythm />
@@ -776,10 +778,11 @@ export default function Page() {
               Building India&apos;s Life360, from scratch
             </h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              The CEO had an early MVP and initial seed funding. Life360 existed but wasn&apos;t built for India.
+              Life360 existed, but it wasn&apos;t built for India.
             </p>
           </div>
           <GapsGrid />
+          <AddLater block note="confirm the 68% Life360 drop-off. The Honasa study also cites “68%” for a different finding, so a reader may question both." />
         </div>
       </CsSection>
 
@@ -788,17 +791,17 @@ export default function Page() {
           <CsDecision
             index={0}
             title="Full Safety Suite or Single Reliable Action?"
-            problem="We had requests for community reporting, live tracking, in-app emergency calls, and driving behaviour tools for V1. Shipping everything would delay launch and create a support surface we couldn't sustain."
-            decision="Shipped a single core action: one-tap SOS trigger + safety circle setup. Everything else deferred with documented rationale. In a trust-sensitive category, one failure destroys retention permanently."
-            tradeoff="A less feature-complete V1 than stakeholders expected, but zero post-launch critical failures in the category that mattered most: emergency response."
-            impact="SOS reliability became the product's trust foundation. Fewer features, rock-solid core, what early retention data confirmed."
+            problem="V1 requests included community reporting, live tracking, emergency calls, and driving tools."
+            decision="Ship one action: one-tap SOS plus safety-circle setup. In a trust product, one failure loses the user."
+            tradeoff="A thinner V1 than stakeholders expected."
+            impact="Zero critical failures in emergency response, and SOS reliability became the trust foundation."
           />
           <CsDecision
             index={1}
             title="No Confirmation Screen for SOS"
-            problem="A two-step confirmation would prevent accidental triggers. But usability testing showed it added 3× the completion time under simulated stress conditions. Those seconds aren't recoverable."
-            decision="One tap = SOS sent. Accepted false positives. Emergency use demands speed over precision. The confirmation step was removed entirely."
-            tradeoff="Higher rate of accidental triggers in calm conditions. Worth it for the seconds saved in genuine emergencies where confirmation adds nothing but friction."
+            problem="A confirmation step tripled completion time under simulated stress in usability tests."
+            decision="One tap sends the SOS. Speed over precision."
+            tradeoff="More accidental triggers, accepted for the seconds saved in real emergencies."
           />
           <WhatWasCut />
         </div>
@@ -809,23 +812,23 @@ export default function Page() {
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">The decision that changed everything</h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Dhiraj was in conversations with enterprises about employee safety. The signal was clear: companies with essential workers needed exactly what we&apos;d built, but packaged for B2B. We validated fast.
+              Enterprises with essential workers needed what we&apos;d built, packaged for B2B.
             </p>
           </div>
           <CsOptions
-            question="Six months of consumer work, near-zero revenue, and a use case the lockdowns had erased. Which product was the company going to be?"
+            question="Near-zero revenue and an erased use case. Which product would we be?"
             options={[
               {
                 title: "Keep iterating on consumer",
-                body: "Hold the B2C course, keep improving the safety app, and wait for cities to start moving again.",
+                body: "Keep improving the app and wait for cities to move again.",
                 verdict:
-                  "Nobody could say when movement would return, and freemium revenue was near zero. Waiting was spending runway on a use case that no longer existed.",
+                  "Nobody knew when that would be. Waiting spent runway on a use case that no longer existed.",
               },
               {
                 title: "Pivot to B2B workplace safety",
-                body: "Rebuild for enterprises: Bluetooth proximity detection, smart cards, and a manager dashboard. Keep the consumer app alive but stop investing.",
+                body: "Rebuild for enterprises: Bluetooth proximity, smart cards, a manager dashboard.",
                 verdict:
-                  "Six months of consumer work stopped being the foundation, and the rebuild had to happen in six weeks with the same team. But enterprise inbound was real, and the first contracts signed inside the pivot window.",
+                  "A six-week rebuild with the same team, but the demand was real and the first contracts signed in the window.",
                 chosen: true,
               },
             ]}
@@ -838,7 +841,7 @@ export default function Page() {
         <div className="space-y-8">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              Rebuilding for enterprise, Bluetooth, smart cards, and a React dashboard I partly coded myself
+              Rebuilding for enterprise, with a dashboard I partly coded
             </h2>
           </div>
           <ProductComparison />
@@ -871,7 +874,7 @@ export default function Page() {
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">What the numbers actually say</h2>
             <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              These are company lifetime numbers, not just my 11 months. The B2B pivot is what generated real revenue, the consumer app validated the concept but couldn&apos;t monetise it.
+              Company lifetime numbers, not just my 11 months. The B2B pivot made the revenue.
             </p>
           </div>
           <ImpactMetrics />
@@ -898,9 +901,9 @@ export default function Page() {
             />
           </FadeIn>
           <CsReflection
-            learned="PMF tied to an external forcing function is not durable PMF. Retention was high, NPS was strong, clients were happy, and none of it mattered once the reason to buy disappeared. I now ask what happens to a product when its forcing function goes away before committing to any direction. It's the question we never asked, because the forcing function felt permanent at the time."
-            next="Build for the post-COVID use case in parallel. Workplace safety as a category doesn't require a pandemic, but we never went looking for the non-emergency version of the product. Starting that search in early 2021 might have left us holding something when the urgency ended."
-            validate="Whether the do-everything operating rhythm translates. Designing nights and coding afternoons worked because I refused to be a bottleneck in a 10-person team, but that's a survival posture, not a scalable one, and leading the same outcomes through other people is a different skill."
+            learned="Product-market fit that depends on an outside event isn't durable. Happy clients didn't matter once the reason to buy was gone. Now I ask what happens when the forcing function goes away."
+            next="Look for the non-emergency version of the product in parallel, from early 2021."
+            validate="Whether the do-everything rhythm translates. It's a survival posture; leading through other people is a different skill."
           />
         </div>
       </CsSection>
