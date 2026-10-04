@@ -88,6 +88,7 @@ import {
   ShowcaseTabs,
   type ShowcaseTab,
 } from "@/components/showcase/showcase-tabs"
+import { FoundationsReference } from "@/components/showcase/foundations-reference"
 import {
   DottedGlowBackground,
   AsciiFlowBackground,
@@ -196,18 +197,6 @@ function GlowBand({
    Data
 ───────────────────────────────────────────── */
 
-const TOKENS: { name: string; cls: string; note: string }[] = [
-  { name: "background", cls: "bg-background", note: "page canvas" },
-  { name: "foreground", cls: "bg-foreground", note: "primary text" },
-  { name: "card", cls: "bg-card", note: "surface-1" },
-  { name: "muted", cls: "bg-muted", note: "surface-2" },
-  { name: "primary", cls: "bg-primary", note: "shadcn primary" },
-  { name: "secondary", cls: "bg-secondary", note: "shadcn secondary" },
-  { name: "accent", cls: "bg-accent", note: "emerald accent" },
-  { name: "destructive", cls: "bg-destructive", note: "error / danger" },
-  { name: "border", cls: "bg-border", note: "hairlines" },
-]
-
 const BUTTON_VARIANTS = [
   { label: "primary", variant: "default" },
   { label: "secondary", variant: "secondary" },
@@ -222,7 +211,8 @@ const SHOWCASE_TABS: ShowcaseTab[] = [
   {
     id: "foundations",
     label: "Foundations",
-    description: "Tokens, buttons, badges, and small tagging primitives.",
+    description:
+      "Editorial tokens, type, grid, surfaces, layers, and motion, plus buttons, badges, and pills.",
   },
   {
     id: "interface",
@@ -555,20 +545,8 @@ export default function ShowcasePage() {
 
       <ShowcaseTabs tabs={SHOWCASE_TABS}>
         <ShowcaseTabPanel>
-      {/* Color tokens */}
-      <Lab id="tokens" title="Design tokens" note="The semantic color surface every component is built on. Watch for any swatch that looks wrong in dark vs light.">
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-          {TOKENS.map((t) => (
-            <div key={t.name} className="flex flex-col gap-1.5">
-              <div className={`h-16 rounded-xl ring-1 ring-foreground/10 ${t.cls}`} />
-              <div className="leading-tight">
-                <p className="text-[12px] font-medium text-foreground">{t.name}</p>
-                <p className="text-[11px] text-muted-foreground">{t.note}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Lab>
+      {/* Editorial foundations: the living reference */}
+      <FoundationsReference />
 
       {/* Buttons */}
       <Lab id="buttons" title="Button" note="All variants across sizes, plus icon and disabled states.">
