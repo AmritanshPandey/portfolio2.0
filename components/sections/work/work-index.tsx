@@ -3,127 +3,107 @@ import Image from "next/image"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import type { WorkItem } from "@/lib/types/content"
+import { WorkSpecimen } from "./work-specimens"
 
-function splitCategory(category: string) {
+/** "Demo Systems / Mastercard" → "Demo systems at Mastercard". Sentence case
+ *  instead of a tracked mono label, so the context reads as a phrase. */
+function context(category: string) {
   const [type, client] = category.split("/").map((part) => part.trim())
-  return { type, client: client ?? "Portfolio" }
+  const sentence = type.charAt(0) + type.slice(1).toLowerCase()
+  return client ? `${sentence} at ${client}` : sentence
 }
 
-function projectName(title: string) {
-  return title.split(":")[0]?.trim() || title
-}
+const slugOf = (href: string) => href.replace(/^\/work\//, "")
 
+/**
+ * The work index: one row per case study, the story on the left and a picture
+ * of the work on the right (above it on phones).
+ *
+ * The picture is the row's real screenshot when `cover` is set; otherwise it's
+ * the drawn specimen of that project's core mechanism. Each row renders once
+ * for every breakpoint, so headings and links aren't duplicated in the DOM.
+ */
 export function WorkIndex({ items }: { items: WorkItem[] }) {
   return (
-    <div className="work-index relative max-md:space-y-4" data-work-animate>
+    <div className="work-index relative" data-work-animate>
       {items.map((item, i) => {
-        const category = splitCategory(item.category)
-        const name = projectName(item.title)
+        const slug = slugOf(item.href)
 
         return (
           <Link
             key={item.href}
             href={item.href}
-            data-cursor-image={item.image}
             className={clsx(
-              "work-row group relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border/60 py-6 md:py-8",
-              "md:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_auto] md:gap-x-10",
-              "max-md:isolate max-md:block max-md:overflow-hidden max-md:rounded-lg max-md:border max-md:border-border/70 max-md:bg-card/92 max-md:p-3.5 max-md:text-foreground max-md:shadow-[0_18px_54px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.56)] max-md:backdrop-blur dark:max-md:border-white/[0.11] dark:max-md:bg-card/88 dark:max-md:shadow-[0_22px_58px_rgba(0,0,0,0.46),inset_0_1px_0_rgba(255,255,255,0.06)]",
+              "work-row group relative grid gap-7 border-t border-border/60 py-10",
+              "md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-center md:gap-x-12 md:py-14 lg:gap-x-20",
               i === items.length - 1 && "border-b",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-4 focus-visible:ring-offset-background rounded-sm"
+              "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-8 focus-visible:ring-offset-background"
             )}
           >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 hidden h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent max-md:block"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(100%_58%_at_50%_0%,color-mix(in_srgb,var(--foreground)_5%,transparent),transparent_68%)] max-md:block dark:bg-[radial-gradient(100%_58%_at_50%_0%,rgba(255,255,255,0.055),transparent_68%)]"
-            />
-            <article className="md:hidden">
-              <div className="relative overflow-hidden rounded-lg border border-border/55 bg-muted/30 shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_14px_34px_rgba(0,0,0,0.24)]">
-                <div className="relative aspect-[1.22/1]">
-                  <Image
-                    src={item.image}
-                    alt=""
-                    fill
-                    sizes="(max-width: 767px) calc(100vw - 64px), 1px"
-                    className="object-cover saturate-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-active:scale-[1.025]"
-                  />
-                  <div className="absolute inset-0 bg-[radial-gradient(85%_65%_at_50%_0%,rgba(255,255,255,0.28),transparent_62%)] dark:bg-[radial-gradient(85%_65%_at_50%_0%,rgba(255,255,255,0.14),transparent_62%)]" />
-                  <div className="absolute inset-0 ring-1 ring-inset ring-white/28 dark:ring-white/[0.08]" />
-                  <span className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/78 text-foreground shadow-[0_12px_28px_rgba(0,0,0,0.20)] backdrop-blur-md transition-transform duration-500 group-active:scale-95 dark:bg-neutral-950/76 dark:shadow-[0_14px_34px_rgba(0,0,0,0.38)]">
-                    <IconArrowUpRight size={18} stroke={2} />
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative pt-3.5">
-                <h3 className="min-w-0 text-[21px] font-medium leading-tight tracking-[-0.01em] text-foreground">
-                  {name}
-                </h3>
-
-                <p className="mt-2.5 text-[13px] leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
-
-                <p className="mt-3.5 text-[12.5px] leading-snug text-foreground/60">
-                  {category.type} · {category.client}
-                  {item.metric ? <> · {item.metric}</> : null}
-                </p>
-              </div>
-            </article>
-
-            <div className="hidden min-w-0 md:block">
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                {item.category}
+            <div className="order-2 min-w-0 md:order-1">
+              <p className="text-[13.5px] leading-snug text-muted-foreground">
+                {context(item.category)}
               </p>
+
               <h3
                 className={clsx(
-                  "work-title-hover leading-[1.08] font-bold tracking-[-0.02em] text-foreground",
-                  item.featured
-                    ? "text-[clamp(1.3rem,2.2vw,1.9rem)]"
-                    : "text-[clamp(1.1rem,1.6vw,1.5rem)]"
+                  "work-title-hover mt-3 max-w-[22ch] font-bold leading-[1.1] tracking-[-0.015em] text-foreground",
+                  i === 0
+                    ? "text-[clamp(1.6rem,2.6vw,2.3rem)]"
+                    : "text-[clamp(1.4rem,2.1vw,1.85rem)]"
                 )}
               >
                 {item.title}
               </h3>
-            </div>
 
-            <div className="hidden min-w-0 md:block">
-              <p className="max-w-[46ch] text-[13.5px] leading-relaxed text-foreground/55 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-foreground/80">
+              <p className="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-foreground/65 transition-colors duration-700 group-hover:text-foreground/85">
                 {item.description}
               </p>
+
+              <span className="mt-7 inline-flex items-center gap-3 text-[14px] font-medium text-foreground/85">
+                Read the case study
+                <span
+                  aria-hidden
+                  className={clsx(
+                    "relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/70",
+                    "transition-[border-color,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                    "row-on:scale-105 row-on:border-accent/60"
+                  )}
+                >
+                  {/* Fill grows from the centre, no hard background swap */}
+                  <span className="absolute inset-0 scale-0 rounded-full bg-accent transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] row-on:scale-100" />
+                  {/* Arrow swap: one flies out top-right, its twin arrives from bottom-left */}
+                  <span className="relative z-10 grid place-items-center text-foreground row-on:text-white dark:row-on:text-neutral-950">
+                    <IconArrowUpRight
+                      size={16}
+                      stroke={2}
+                      className="col-start-1 row-start-1 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] row-on:-translate-y-[160%] row-on:translate-x-[160%]"
+                    />
+                    <IconArrowUpRight
+                      size={16}
+                      stroke={2}
+                      className="col-start-1 row-start-1 -translate-x-[160%] translate-y-[160%] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] row-on:translate-x-0 row-on:translate-y-0"
+                    />
+                  </span>
+                </span>
+              </span>
             </div>
 
-            <span
-              className={clsx(
-                "relative hidden h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/60 md:flex",
-                "transition-[border-color,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                "group-hover:scale-105 group-hover:border-accent/60"
+            <div className="order-1 min-w-0 md:order-2">
+              {item.cover ? (
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-card ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]">
+                  <Image
+                    src={item.cover}
+                    alt=""
+                    fill
+                    sizes="(max-width: 767px) 100vw, 640px"
+                    className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.19,1,0.22,1)] row-on:scale-[1.03] motion-reduce:transition-none"
+                  />
+                </div>
+              ) : (
+                <WorkSpecimen slug={slug} />
               )}
-            >
-              {/* Fill grows from the centre — no hard background swap */}
-              <span
-                aria-hidden
-                className="absolute inset-0 scale-0 rounded-full bg-accent transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
-              />
-              {/* Arrow swap: one flies out top-right, its twin arrives from bottom-left */}
-              <span className="relative z-10 grid place-items-center text-foreground group-hover:text-white dark:group-hover:text-neutral-950">
-                <IconArrowUpRight
-                  size={17}
-                  stroke={2}
-                  className="col-start-1 row-start-1 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[160%] group-hover:-translate-y-[160%]"
-                />
-                <IconArrowUpRight
-                  size={17}
-                  stroke={2}
-                  aria-hidden
-                  className="col-start-1 row-start-1 -translate-x-[160%] translate-y-[160%] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-hover:translate-y-0"
-                />
-              </span>
-            </span>
+            </div>
           </Link>
         )
       })}

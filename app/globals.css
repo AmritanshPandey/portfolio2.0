@@ -8,6 +8,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* A work-index row is "on" when a pointer hovers it or the keyboard focuses
+   it. The specimens in components/sections/work/work-specimens.tsx key every
+   mechanism off this, so keyboard users see exactly what mouse users see.
+   Hover is gated to real pointers so a tap on a phone never leaves a row
+   stuck in its active state. */
+@custom-variant row-on {
+  @media (hover: hover) and (pointer: fine) {
+    .work-row:hover & {
+      @slot;
+    }
+  }
+  .work-row:focus-visible & {
+    @slot;
+  }
+}
+
 /* ─────────────────────────
    DESIGN TOKENS
 ───────────────────────── */
@@ -940,8 +956,10 @@
 ───────────────────────── */
 
 @media (hover: hover) and (pointer: fine) {
+  /* Softer than it was (0.32): rows now carry pictures, and fading a picture
+     that far reads as disabled rather than receded. */
   .work-index:hover .work-row {
-    opacity: 0.32;
+    opacity: 0.45;
   }
   .work-index:hover .work-row:hover,
   .work-index .work-row:focus-visible {
@@ -979,14 +997,31 @@
 .work-index[data-work-animate] .work-row:nth-child(4) { animation-delay: 190ms; }
 .work-index[data-work-animate] .work-row:nth-child(n + 5) { animation-delay: 240ms; }
 
+/* Transform-only, like the hero lines: with a `both` fill, an opacity start
+   value freezes rows invisible whenever the animation is throttled (a
+   backgrounded tab, a low-power webview). A small slide can't hide anything. */
 @keyframes work-row-enter {
   from {
-    opacity: 0.01;
     transform: translateY(14px);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Redraws the Dror revenue line; pairs with pathLength={1} on the path. */
+@keyframes work-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-index[data-work-animate] .work-row {
+    animation: none;
   }
 }
 
