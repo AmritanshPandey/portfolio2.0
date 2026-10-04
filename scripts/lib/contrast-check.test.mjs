@@ -6,11 +6,13 @@ const LIGHT = {
   background: "#ffffff", foreground: "#000000", "surface-1": "#ffffff", "surface-2": "#ffffff",
   "text-muted": "#595959", accent: "#047857", primary: "var(--accent)", "primary-foreground": "#ffffff",
   "surface-inverse": "#000000", "on-inverse": "#ffffff",
+  "surface-hover": "#f0f0f0", secondary: "#eeeeee", destructive: "#b91c1c",
 }
 const DARK = {
   background: "#000000", foreground: "#ffffff", "surface-1": "#000000", "surface-2": "#000000",
   "text-muted": "#a6a6a6", accent: "#34d399", primary: "var(--accent)", "primary-foreground": "#000000",
   "surface-inverse": "#ffffff", "on-inverse": "#000000",
+  "surface-hover": "#1a1a1a", secondary: "#262626", destructive: "#f87171",
 }
 const block = (sel, map) => `${sel} { ${Object.entries(map).map(([k, v]) => `--${k}: ${v};`).join(" ")} }`
 const css = (light = LIGHT, dark = DARK) => block(":root", light) + "\n" + block(".dark", dark)
@@ -19,7 +21,7 @@ const names = (r) => r.failures.map((f) => f.name)
 test("a compliant palette passes every pair in both themes", () => {
   const r = checkContrast(css())
   assert.deepEqual(names(r), [])
-  assert.equal(r.results.length, 22)
+  assert.equal(r.results.length, 34)
 })
 
 test("low contrast fails and names the pair", () => {
@@ -48,4 +50,13 @@ test("a translucent background fails rather than guessing what is behind it", ()
 test("checks the other theme's accent on this theme's surface-inverse", () => {
   const r = checkContrast(css({ ...LIGHT, "surface-inverse": "#34d399" }))
   assert.ok(names(r).includes("light: accent (dark) on surface-inverse"), names(r).join("; "))
+})
+
+test("checks accent on the deeper surfaces, muted text on secondary, and destructive on paper", () => {
+  const r = checkContrast(css({ ...LIGHT, "surface-2": "#dddddd", secondary: "#bbbbbb", destructive: "#ff6666" }))
+  for (const n of ["light: accent on surface-2", "light: text-muted on secondary", "light: destructive on background"]) {
+    assert.ok(names(r).includes(n), `${n} — got: ${names(r).join("; ")}`)
+  }
+  const hover = checkContrast(css({ ...LIGHT, "surface-hover": "#dddddd" }))
+  assert.ok(names(hover).includes("light: accent on surface-hover"), names(hover).join("; "))
 })

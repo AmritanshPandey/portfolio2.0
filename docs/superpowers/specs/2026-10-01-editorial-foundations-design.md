@@ -82,13 +82,13 @@ All tokens live in `app/globals.css`. Existing names are kept so components upda
 | `--glass-border` *(new)* | `rgb(20 20 20 / 0.08)` | Glass edge |
 | `--border` | `rgb(20 20 20 / 0.13)` | Hairline rules |
 | `--rule-strong` *(new)* | `rgb(20 20 20 / 0.28)` | Dashed system-layer outline |
-| `--accent` / `--ring` | `#047857` (emerald-700) | The one accent; was emerald-600, which fails AA on paper |
+| `--accent` / `--ring` | `#037452` | The one accent: one notch deeper than emerald-700 (`#047857`, 4.37:1 on `--surface-2`) so accent text clears AA on every light surface; emerald-600 fails on paper |
 | `--primary` | `var(--accent)` | |
 | `--primary-foreground` | `#FFFFFF` | |
-| `--secondary` | `#E4DED1` | |
+| `--secondary` | `#E7E2D6` | Muted text on it clears AA (`#E4DED1` gave 4.38:1) |
 | `--input` | `#FAF8F3` | |
 | `--surface-hover` | `#E9E4D8` | Neutral hover fill |
-| `--destructive` | unchanged | |
+| `--destructive` | `oklch(0.55 0.2 27)` | Darkened from 0.58 so error text clears AA on paper (was 4.05:1) |
 
 ### 4.2 Dark (`.dark`)
 
@@ -281,6 +281,7 @@ There is no test runner in the repo. Verification is:
    - `on-inverse` on `surface-inverse` — 4.5
    - the opposite theme's `accent` on this theme's `surface-inverse` (the accent inside an emphasis band) — 4.5
    - `primary-foreground` on `primary` — 4.5
+   - `accent` on `surface-2` and `surface-hover`; `foreground` and `text-muted` on `secondary`; `destructive` on `background` and `surface-1` — 4.5 (added after the checkpoint review)
    - Hairline `border` tokens are deliberately not checked: they are decorative, not text.
 2. `npx tsc --noEmit`, `npm run lint`, and `npm run build` pass.
 3. Browser check on `/showcase` (Foundations tab), `/`, and `/work/white-label-rfp`, at 375, 768, 1280, and 1440px, in light, dark, and reduced motion: no console errors, no horizontal scroll, and emphasis bands invert correctly. Screenshots attached to the PR.

@@ -86,15 +86,17 @@
 
   --border: rgb(20 20 20 / 0.13);
   --rule-strong: rgb(20 20 20 / 0.28);
-  --ring: #047857;
-  /* Emerald-700: clears AA on paper. Emerald-600 only reaches ~3.1:1 here. */
-  --accent: #047857;
+  --ring: #037452;
+  /* One notch deeper than Tailwind's emerald-700 (#047857) so accent text
+     clears AA on every light surface it sits on, including --surface-2 and
+     the hover fill. Emerald-600 only reaches ~3:1 on paper. */
+  --accent: #037452;
   --primary: var(--accent);
   --primary-foreground: #ffffff;
-  --secondary: #e4ded1;
+  --secondary: #e7e2d6;
   --secondary-foreground: var(--foreground);
   --input: #faf8f3;
-  --destructive: oklch(0.58 0.2 27);
+  --destructive: oklch(0.55 0.2 27);
   --destructive-foreground: oklch(0.99 0 0);
 
   /* Flat at rest. Resting shadows are retired; only overlays lift. */

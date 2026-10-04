@@ -8,7 +8,7 @@ const { light, dark } = extractThemes(css)
 
 test("colour: paper canvas and the new surface tokens exist in both themes", () => {
   assert.equal(light.background.toLowerCase(), "#f1ede4")
-  assert.equal(light.accent.toLowerCase(), "#047857")
+  assert.equal(light.accent.toLowerCase(), "#037452")
   for (const t of ["surface-inverse", "on-inverse", "surface-glass", "glass-border", "rule-strong"]) {
     assert.ok(light[t], `light --${t}`)
     assert.ok(dark[t], `dark --${t}`)

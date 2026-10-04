@@ -8,7 +8,7 @@ colors:
   surface-elevated: "#FAF8F3"
   surface-stage: "#EAE5DA"
   night: "oklch(0.15 0.005 80)"
-  emerald: "#047857"
+  emerald: "#037452"
   emerald-on-dark: "oklch(0.765 0.163 163)"
   rule: "rgb(20 20 20 / 0.13)"
   rule-strong: "rgb(20 20 20 / 0.28)"
@@ -92,7 +92,7 @@ Source spec: `docs/superpowers/specs/2026-10-01-editorial-foundations-design.md`
 | `--text-muted` | `#6A6458` | `oklch(0.70 0.012 85)` | Metadata |
 | `--surface-1` | `#FAF8F3` | `oklch(0.19 0.005 80)` | Elevated artefacts |
 | `--surface-2` | `#EAE5DA` | `oklch(0.12 0.004 80)` | Artefact stages |
-| `--accent` | `#047857` | `oklch(0.765 0.163 163)` | The one accent |
+| `--accent` | `#037452` | `oklch(0.765 0.163 163)` | The one accent (one notch deeper than emerald-700 so it clears AA on every light surface) |
 | `--border` | ink at 13% | paper at 12% | Hairline rules |
 | `--rule-strong` | ink at 28% | paper at 30% | Dashed system layer |
 | `--surface-glass` | paper at 62% | night at 62% | Context layer only |

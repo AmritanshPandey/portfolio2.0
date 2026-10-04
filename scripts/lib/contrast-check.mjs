@@ -16,6 +16,14 @@ const PAIRS = [
   ["accent", "surface-1"],
   ["on-inverse", "surface-inverse"],
   ["primary-foreground", "primary"],
+  // Accent links and labels also sit on muted sections and hovered cards;
+  // secondary buttons carry body and muted text; errors sit on paper.
+  ["accent", "surface-2"],
+  ["accent", "surface-hover"],
+  ["foreground", "secondary"],
+  ["text-muted", "secondary"],
+  ["destructive", "background"],
+  ["destructive", "surface-1"],
 ]
 
 export function checkContrast(css) {
