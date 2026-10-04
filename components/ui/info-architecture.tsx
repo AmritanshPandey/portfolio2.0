@@ -241,7 +241,7 @@ export function InfoArchitecture({
             : undefined
         }
         className={cn(
-          "relative whitespace-nowrap rounded-md text-center leading-tight outline-none transition-all duration-200",
+          "relative whitespace-nowrap rounded-md text-center leading-tight outline-none transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200",
           "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           hasChildren && "cursor-pointer",
           role === "center" && "px-3 py-1.5 text-[13px] font-semibold text-white shadow-[var(--shadow-md)]",

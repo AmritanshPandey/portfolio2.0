@@ -81,7 +81,7 @@ export function ExpandingSwatches({
                 "pointer-events-none absolute left-2 top-2 flex items-center gap-1.5",
                 "rounded-full bg-neutral-900/90 px-2.5 py-1 text-white",
                 "text-[11px] font-medium tracking-tight",
-                "opacity-0 translate-y-0.5 transition-all duration-300 ease-out",
+                "opacity-0 translate-y-0.5 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-out",
                 "group-hover/strip:opacity-100 group-hover/strip:translate-y-0",
                 "group-focus-visible/strip:opacity-100 group-focus-visible/strip:translate-y-0"
               )}

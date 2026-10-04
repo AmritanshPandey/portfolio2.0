@@ -75,7 +75,7 @@ export function CsChapterNav({ chapters, className }: CsChapterNavProps) {
               >
                 <span
                   className={clsx(
-                    "whitespace-nowrap text-[11px] transition-all duration-300",
+                    "whitespace-nowrap text-[11px] transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
                     isActive
                       ? "text-foreground opacity-100"
                       : "text-muted-foreground opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
@@ -86,7 +86,7 @@ export function CsChapterNav({ chapters, className }: CsChapterNavProps) {
                 <span
                   aria-hidden
                   className={clsx(
-                    "h-px shrink-0 rounded-full transition-all duration-300",
+                    "h-px shrink-0 rounded-full transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
                     isActive
                       ? "w-6 bg-accent"
                       : "w-3 bg-border group-hover:w-5 group-hover:bg-foreground/40"

@@ -93,7 +93,7 @@ export function CsAnnotatedImage({
             >
               <span
                 className={clsx(
-                  "flex h-7 w-7 items-center justify-center rounded-full border font-mono text-[11px] font-bold tabular-nums backdrop-blur-md transition-all duration-300",
+                  "flex h-7 w-7 items-center justify-center rounded-full border font-mono text-[11px] font-bold tabular-nums backdrop-blur-md transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
                   isActive
                     ? "scale-110 border-accent bg-accent text-white shadow-[0_6px_20px_rgba(0,0,0,0.3)] dark:text-neutral-950"
                     : "border-white/40 bg-black/45 text-white hover:scale-105"

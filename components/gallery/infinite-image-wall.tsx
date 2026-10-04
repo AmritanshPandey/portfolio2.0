@@ -87,7 +87,7 @@ function WallTile({
       {isInteractive && showCaption && (
         <>
           <div className="absolute inset-0 bg-gradient-to-t from-black/64 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
-          <div className="absolute inset-x-0 bottom-0 translate-y-2 p-3 text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+          <div className="absolute inset-x-0 bottom-0 translate-y-2 p-3 text-white opacity-0 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
             <div className="flex items-end justify-between gap-3">
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold leading-5">{item.title}</p>
@@ -123,7 +123,7 @@ function WallTile({
         className={className}
         style={style}
         onClick={() => onOpen?.(item)}
-        aria-label={`Open ${item.title} preview`}
+        aria-label={showCaption ? undefined : `Open ${item.title} preview`}
       >
         {content}
       </button>

@@ -120,7 +120,7 @@ export function ExplorationCard({
           flex items-center justify-center
           opacity-0 scale-90
           group-hover:opacity-100 group-hover:scale-100
-          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
         ">
           <IconArrowUpRight
             size={16}
@@ -147,7 +147,7 @@ export function ExplorationCard({
           overflow-hidden
           max-h-0 opacity-0
           group-hover:max-h-[96px] group-hover:opacity-100
-          transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
+          transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
           mb-0 group-hover:mb-3
         ">
           <p className="type-card-body line-clamp-3 text-white/70">

@@ -440,7 +440,7 @@ export function FlowDiagram({
           // and the measured connector endpoints — track position instantly.
           dragEnabled
             ? "cursor-grab touch-none transition-[opacity,box-shadow] active:cursor-grabbing"
-            : "cursor-pointer transition-all",
+            : "cursor-pointer transition-[transform,opacity,color,background-color,border-color,box-shadow]",
           variant === "root"
             ? "bg-gradient-to-b from-accent to-accent/85 text-background shadow-[var(--shadow-md)] ring-1 ring-accent/40"
             : cn(

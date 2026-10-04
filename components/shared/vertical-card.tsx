@@ -110,7 +110,7 @@ export function VerticalCard({
           <h3 className="text-[14px] font-semibold leading-[1.35] text-foreground line-clamp-1">{title}</h3>
           {metric && <p className="type-caption mt-0.5 line-clamp-1 text-accent/60">{metric}</p>}
         </div>
-        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-all duration-500 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
+        <IconArrowUpRight size={14} stroke={2} className="shrink-0 text-foreground/20 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 group-hover/card:text-foreground/50 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
       </Link>
     )
   }
@@ -187,7 +187,7 @@ export function VerticalCard({
               "flex items-center justify-center",
               "opacity-0 scale-90",
               "group-hover/card:opacity-100 group-hover/card:scale-100",
-              "transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              "transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             )}>
               <IconArrowUpRight size={14} stroke={2} className="text-white transition-transform duration-500 group-hover/card:-translate-y-[1px] group-hover/card:translate-x-[1px]" />
             </span>
@@ -274,7 +274,7 @@ export function VerticalCard({
               <IconArrowUpRight
                 size={15}
                 stroke={2}
-                className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
+                className="text-foreground/32 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
               />
             </div>
           </div>

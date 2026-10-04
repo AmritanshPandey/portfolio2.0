@@ -29,14 +29,14 @@ export function PrimaryControls() {
             </label>
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Primary color</span>
-              <input value={text} onChange={e => applyHex(e.target.value)} spellCheck={false}
+              <input aria-label="Primary color hex" value={text} onChange={e => applyHex(e.target.value)} spellCheck={false}
                 className="w-28 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none" />
             </div>
           </div>
 
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Scale name</span>
-            <input value={name} onChange={e => setName(e.target.value.replace(/[^a-zA-Z0-9-]/g, "").toLowerCase() || "brand")} spellCheck={false}
+            <input aria-label="Scale name" value={name} onChange={e => setName(e.target.value.replace(/[^a-zA-Z0-9-]/g, "").toLowerCase() || "brand")} spellCheck={false}
               className="w-28 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none" />
           </div>
 

@@ -1,7 +1,14 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { HeroShaderGrid } from "@/components/shared/hero-shader-grid"
+import dynamic from "next/dynamic"
+
+// WebGL shader is decorative and below-the-fold-irrelevant for first paint, so
+// keep it out of the initial bundle and load it after hydration.
+const HeroShaderGrid = dynamic(
+  () => import("@/components/shared/hero-shader-grid").then((m) => m.HeroShaderGrid),
+  { ssr: false }
+)
 
 /**
  * Home-page interactive dot field — a standalone background layer that is

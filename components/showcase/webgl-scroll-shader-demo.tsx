@@ -530,7 +530,7 @@ export function WebglScrollShaderDemo() {
                 </span>
                 <span
                   className={[
-                    "h-px transition-all duration-500",
+                    "h-px transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500",
                     active ? "w-8 bg-emerald-400" : "w-4 bg-white/25",
                   ].join(" ")}
                 />

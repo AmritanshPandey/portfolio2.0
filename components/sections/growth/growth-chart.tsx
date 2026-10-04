@@ -84,7 +84,7 @@ export function GrowthChart({
 
           <a
             href={ctaHref}
-            className="group/cta mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-medium uppercase tracking-[0.14em] text-background transition-all hover:opacity-90 active:translate-y-px focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            className="group/cta mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-medium uppercase tracking-[0.14em] text-background transition-[transform,opacity,color,background-color,border-color,box-shadow] hover:opacity-90 active:translate-y-px focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
           >
             {ctaLabel}
             <IconArrowRight className="size-3.5 transition-transform duration-300 group-hover/cta:translate-x-0.5" />

@@ -212,7 +212,7 @@ function ShotCard({
             </span>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 translate-y-2 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute inset-x-0 bottom-0 translate-y-2 p-4 opacity-0 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <h2 className="text-base font-semibold leading-tight text-white">{shot.title}</h2>
             <p className="mt-1 line-clamp-2 max-w-[32ch] text-xs leading-5 text-white/72">
               {shot.description}
@@ -291,9 +291,9 @@ export function UiDesignGallery() {
                 className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/30 via-white/5 to-transparent opacity-80 dark:from-white/12 dark:via-transparent dark:opacity-70"
               />
               <div className="relative">
-                <h3 className="max-w-4xl text-balance text-2xl font-bold leading-[1.05] tracking-normal text-foreground md:text-4xl">
+                <h1 className="max-w-4xl text-balance text-2xl font-bold leading-[1.05] tracking-normal text-foreground md:text-4xl">
                   Browse the interface board.
-                </h3>
+                </h1>
                 <p className="mt-5 max-w-2xl text-[15px] leading-7 text-muted-foreground md:text-base">
                   A visual-first collection of app screens, systems, commerce flows, and mobile concepts.
                 </p>

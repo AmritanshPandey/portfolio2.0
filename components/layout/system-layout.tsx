@@ -354,7 +354,7 @@ function RelatedCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col rounded-xl overflow-hidden border border-border/40 hover:border-sky-500/25 transition-all duration-300 hover:-translate-y-1"
+      className="group flex flex-col rounded-xl overflow-hidden border border-border/40 hover:border-sky-500/25 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 hover:-translate-y-1"
     >
       <div
         className="relative h-28 flex-shrink-0"

@@ -54,8 +54,12 @@ export function TrajectorySection() {
       {/* ── Timeline ─────────────────────────────────────────────────────── */}
       <ol className="relative grid gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/40 sm:grid-cols-2 lg:grid-cols-4">
         {STAGES.map((s, i) => (
-          <FadeIn key={s.org} delay={i * 0.06} y={20} className="h-full">
-            <li className="group relative flex h-full flex-col gap-4 bg-background p-6 md:p-7">
+          <li key={s.org} className="h-full">
+            <FadeIn
+              delay={i * 0.06}
+              y={20}
+              className="group relative flex h-full flex-col gap-4 bg-background p-6 md:p-7"
+            >
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   {s.period}
@@ -80,8 +84,8 @@ export function TrajectorySection() {
                   {s.tag}
                 </p>
               </div>
-            </li>
-          </FadeIn>
+            </FadeIn>
+          </li>
         ))}
       </ol>
 

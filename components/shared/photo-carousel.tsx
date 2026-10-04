@@ -83,7 +83,7 @@ export default function PhotoCarousel({
           return (
             <div
               key={i}
-              className="absolute inset-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="absolute inset-0 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{ transform, zIndex, opacity }}
             >
               <div className={clsx(
@@ -138,7 +138,7 @@ export default function PhotoCarousel({
             onClick={() => setIndex(i)}
             aria-label={`Go to photo ${i + 1}`}
             className={clsx(
-              "rounded-full transition-all duration-300",
+              "rounded-full transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
               i === index
                 ? "w-4 h-1.5 bg-foreground/50"
                 : "w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/35"

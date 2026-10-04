@@ -80,7 +80,7 @@ export function ArticleCard({
             <IconArrowUpRight
               size={15}
               stroke={2}
-              className="text-foreground/32 transition-all duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
+              className="text-foreground/32 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 group-hover/card:text-foreground/80 group-hover/card:-translate-y-[2px] group-hover/card:translate-x-[2px]"
             />
           </div>
 

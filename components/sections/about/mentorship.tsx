@@ -37,7 +37,7 @@ export default function AdvisorySection() {
                 <span className="underline decoration-border underline-offset-4 transition-colors group-hover:decoration-accent">
                   {m.name}
                 </span>
-                <span className="text-foreground/40">
+                <span className="text-foreground/60">
                   {m.company.split("•")[1]?.trim() ?? m.company}
                 </span>
               </a>
@@ -60,7 +60,7 @@ export default function AdvisorySection() {
               <IconArrowUpRight
                 size={14}
                 stroke={2}
-                className="text-foreground/30 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+                className="text-foreground/30 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
               />
             </a>
           </li>

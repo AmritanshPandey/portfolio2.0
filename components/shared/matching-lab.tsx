@@ -375,7 +375,7 @@ export function TradeoffFrontier() {
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400">λ · fairness dial</span>
             <span className="font-semibold text-[26px] text-foreground tabular-nums">{lam.toFixed(2)}</span>
           </div>
-          <input type="range" min={0} max={2.5} step={0.05} value={lam} onChange={e => setLam(+e.target.value)} className="w-full accent-rose-500" />
+          <input type="range" aria-label="Fairness dial lambda" min={0} max={2.5} step={0.05} value={lam} onChange={e => setLam(+e.target.value)} className="w-full accent-rose-500" />
           <div className="flex justify-between font-mono text-[10px] text-muted-foreground mt-1 mb-5">
             <span>0 · compatibility</span><span>2.5 · fairness first</span>
           </div>

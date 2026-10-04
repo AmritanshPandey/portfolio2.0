@@ -44,7 +44,7 @@ export function Switch({ on, onClick, label }: { on: boolean; onClick: () => voi
   return (
     <button onClick={onClick} aria-pressed={on} className="flex items-center gap-2 text-[12px] text-muted-foreground hover:text-foreground transition-colors">
       <span className={`relative w-9 h-5 rounded-full transition-colors ${on ? "bg-rose-500" : "bg-foreground/15"}`}>
-        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${on ? "left-[18px]" : "left-0.5"}`} />
+        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-[transform,opacity,color,background-color,border-color,box-shadow] ${on ? "left-[18px]" : "left-0.5"}`} />
       </span>
       {label}
     </button>

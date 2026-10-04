@@ -73,7 +73,7 @@ export function AdvisoryItem({ title, desc, logo, link }: Props) {
               "text-foreground/25",
 
               // 🔥 smoother motion
-              "transition-all duration-300 ease-out",
+              "transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-out",
 
               "group-hover:text-foreground/60",
               "group-hover:[transform:translate3d(1px,-1px,0)]"

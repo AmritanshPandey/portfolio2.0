@@ -504,7 +504,7 @@ export function ApproachDeck() {
                 aria-label={`Go to step ${i + 1}: ${step.q}`}
                 aria-current={i === index ? "true" : undefined}
                 className={cn(
-                  "rounded-full transition-all duration-300",
+                  "rounded-full transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
                   i === index
                     ? "h-1.5 w-4 bg-accent/70"
                     : "h-1.5 w-1.5 bg-foreground/20 hover:bg-foreground/35"

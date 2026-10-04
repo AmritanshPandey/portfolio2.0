@@ -1,5 +1,5 @@
 import "./globals.css"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
@@ -74,6 +74,13 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f0f0f" },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -137,6 +144,13 @@ export default function RootLayout({
             {/* Film grain — one quiet texture across every page */}
             <Grain />
 
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:text-background"
+            >
+              Skip to content
+            </a>
+
             {/* Navbar */}
             <Navbar />
 
@@ -144,7 +158,7 @@ export default function RootLayout({
             <ThemeFab />
 
             {/* Content */}
-            <main className="relative overflow-x-clip [transform:translateZ(0)]">
+            <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
               {children}
             </main>
 

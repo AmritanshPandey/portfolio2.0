@@ -232,7 +232,7 @@ export function FancyCursor() {
       {/* Dot — zero lag */}
       <div
         ref={dotRef}
-        className="pointer-events-none fixed top-0 left-0 z-[1001]"
+        aria-hidden className="pointer-events-none fixed top-0 left-0 z-[1001]"
         style={{
           width:        DOT_SIZE,
           height:       DOT_SIZE,
@@ -250,8 +250,7 @@ export function FancyCursor() {
         ref={ibeamRef}
         width={IBEAM_W}
         height={IBEAM_H}
-        aria-hidden
-        className="pointer-events-none fixed top-0 left-0 z-[1001]"
+        aria-hidden className="pointer-events-none fixed top-0 left-0 z-[1001]"
         style={{
           mixBlendMode: "difference",
           willChange:   "transform",
@@ -273,7 +272,7 @@ export function FancyCursor() {
       {/* Ring — lerped */}
       <div
         ref={ringRef}
-        className="pointer-events-none fixed top-0 left-0 z-[1000]"
+        aria-hidden className="pointer-events-none fixed top-0 left-0 z-[1000]"
         style={{
           width:        RING_SIZE,
           height:       RING_SIZE,
@@ -288,7 +287,7 @@ export function FancyCursor() {
       {/* Pill position anchor — follows lerped ring position */}
       <div
         ref={pillRef}
-        className="pointer-events-none fixed top-0 left-0 z-[1002]"
+        aria-hidden className="pointer-events-none fixed top-0 left-0 z-[1002]"
         style={{ willChange: "transform", transform: "translate3d(-400px,-400px,0)" }}
       >
         {/* Pill — shown only in card state */}
@@ -333,7 +332,7 @@ export function FancyCursor() {
       {/* Image preview position anchor — faster lerp, sits above cursor */}
       <div
         ref={imgPosRef}
-        className="pointer-events-none fixed top-0 left-0 z-[1003]"
+        aria-hidden className="pointer-events-none fixed top-0 left-0 z-[1003]"
         style={{ willChange: "transform", transform: "translate3d(-400px,-400px,0)" }}
       >
         <div

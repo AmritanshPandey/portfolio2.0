@@ -73,7 +73,7 @@ export function CTA({
           "w-full px-5 py-3 rounded-full text-[15px] font-medium",
           "overflow-hidden",
           "active:scale-[0.97]",
-          "transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
 
           // PRIMARY — white text on accent in light mode, dark in dark mode.
           variant === "primary" && [
@@ -116,7 +116,7 @@ export function CTA({
           " />
 
           {/* INNER */}
-          <span className="relative flex items-center gap-2 transition-all duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]">
+          <span className="relative flex items-center gap-2 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]">
             {label}
 
             {Icon && (
@@ -125,7 +125,7 @@ export function CTA({
                 stroke={2}
                 className="
                   opacity-80
-                  transition-all duration-200
+                  transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200
                   group-hover/cta:translate-x-[1.5px]
                   group-hover/cta:-translate-y-[1.5px]
                 "
@@ -160,7 +160,7 @@ export function CTA({
         <span className="
           absolute left-0 -bottom-px h-px w-0
           bg-accent dark:bg-accent
-          transition-all duration-300 ease-out
+          transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-out
           group-hover/cta:w-full
         " />
       </span>
@@ -171,7 +171,7 @@ export function CTA({
           stroke={2}
           className="
             opacity-50
-            transition-all duration-200
+            transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200
             group-hover/cta:opacity-100
             group-hover/cta:translate-x-[1.5px]
             group-hover/cta:-translate-y-[1.5px]

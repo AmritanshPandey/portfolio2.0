@@ -192,7 +192,7 @@ function NavButton({
       disabled={disabled}
       aria-label={direction === "prev" ? "Previous service" : "Next service"}
       className={cn(
-        "flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-all duration-300",
+        "flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
         "hover:border-foreground/40 hover:bg-foreground/[0.04]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-border disabled:hover:bg-transparent"

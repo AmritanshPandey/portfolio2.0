@@ -81,7 +81,7 @@ function FooterLink({
   const className = `
     group ${isSocial ? "footer-social-link" : ""} inline-flex min-h-10 items-center gap-2 rounded-full border border-border/70
     bg-background/50 px-3.5 text-sm font-medium text-muted-foreground
-    backdrop-blur-sm transition-all duration-200
+    backdrop-blur-sm transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200
     hover:border-accent/40 hover:bg-background hover:text-foreground
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background
   `
