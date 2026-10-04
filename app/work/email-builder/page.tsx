@@ -164,7 +164,7 @@ function Hero() {
         scope:        "50+ Components · 28 Templates",
         organisation: "Mastercard",
       }}
-      readTime="12 min read"
+      readTime="7 min read"
       publishedDate="2023"
       topics={["Design Systems", "Infrastructure", "Email", "Scale"]}
       asideLabel="The real constraint, client compatibility"
@@ -200,9 +200,9 @@ export default function Page() {
           <CsProvenance kind="anonymised" label="Visuals anonymised" />
         </div>
         <CsSummary
-          problem="Custom emails needed HTML knowledge, so teams either waited on agencies or fell back to outdated generic templates. After the rebrand, the gap between the new identity and email communication was visible to everyone."
-          role="Owned the component architecture, design standards, governance model, and roadmap. A senior engineer owned the HTML and builder code; another designer owned the builder dashboard UX."
-          outcome="A no-code builder on 50+ Outlook-safe components and 28 templates, adopted Mastercard-wide with Global Brand's backing. Teams that avoided custom emails now build them without touching HTML."
+          problem="Custom emails needed HTML, so teams waited on agencies or fell back to outdated templates, and after the rebrand the gap showed."
+          role="Owned the component architecture, standards, governance, and roadmap. An engineer owned the HTML and builder; another designer owned the builder UI."
+          outcome="A no-code builder on 50+ Outlook-safe components and 28 templates, adopted Mastercard-wide. Teams build branded emails without HTML."
         />
       </div>
 
@@ -218,19 +218,15 @@ export default function Page() {
               <div className="rounded-2xl border border-border bg-card p-7">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Operational problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
-                  Custom emails required HTML knowledge. Teams either depended on agencies,
-                  which was slow, expensive, and inconsistent, or avoided custom emails altogether and defaulted
-                  to outdated generic templates. After the Mastercard.com rebrand, the gap between
-                  the updated digital identity and downstream email communication became immediately visible.
+                  Custom emails needed HTML. Teams relied on slow, costly agencies or
+                  skipped custom emails for outdated templates.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card p-7">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Technical problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
-                  Even when teams had HTML skills, Outlook Desktop&apos;s lack of modern CSS support
-                  meant hand-coded emails regularly broke. Div-based layouts failed. Dynamic buttons
-                  required workarounds. Font handling was inconsistent. No standard, no governance,
-                  and no system to prevent it from happening again.
+                  Even good HTML broke in Outlook Desktop, which ignores modern CSS. There
+                  was no standard to stop it happening again.
                 </p>
               </div>
             </div>
@@ -240,9 +236,8 @@ export default function Page() {
             <div className="rounded-2xl border border-border bg-muted/40 px-8 py-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">The central tension</p>
               <p className="text-[16px] text-foreground leading-relaxed max-w-2xl">
-                Teams wanted richer, more branded communication. Outlook Desktop, still dominant
-                across enterprise, couldn&apos;t render it. The design system had to make the best
-                possible email within the worst possible constraint.{" "}
+                Teams wanted richer emails; Outlook Desktop, still dominant in enterprise,
+                couldn&apos;t render them.{" "}
                 <em className="not-italic font-medium">Simplicity wasn&apos;t a design preference. It was an engineering requirement.</em>
               </p>
             </div>
@@ -258,9 +253,7 @@ export default function Page() {
               Three people. Three clear ownership boundaries.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-xl">
-              I didn&apos;t build the builder UI and I didn&apos;t write the HTML. I owned what went
-              inside both, the component architecture, design standards, governance model, and
-              prioritisation of what to build next.
+              I didn&apos;t build the builder or write the HTML. I owned what went inside both.
             </p>
           </div>
 
@@ -339,26 +332,26 @@ export default function Page() {
             Four rules that settled every argument.
           </h2>
           <CsPrinciples
-            intro="When a stakeholder pushed for more and the engineering said less, these were the rules we went back to instead of opinion."
+            intro="The rules we went back to whenever stakeholders pushed for more."
             principles={[
               {
                 title: "Outlook Desktop is the floor, not an edge case",
-                body: "The dominant enterprise client gets designed for first. Anything that breaks there does not ship, however good it looks everywhere else.",
+                body: "Design for the dominant enterprise client first. If it breaks there, it doesn't ship.",
                 applied: "Every component in the library renders in Outlook Desktop before it earns a place in the system.",
               },
               {
                 title: "Components, not templates",
-                body: "A template is a dead end: every brand update means re-editing it. A component propagates. The effort compounds instead of repeating.",
+                body: "A template needs re-editing on every brand update. A component propagates.",
                 applied: "A brand update touches one component and flows through all 28 templates.",
               },
               {
                 title: "Simple enough for anyone beats powerful for a few",
-                body: "The adoption problem was intimidation, not capability. A tool that solves for power users and scares everyone else has failed at its actual job.",
+                body: "The adoption problem was intimidation, not capability.",
                 applied: "Select a component, fill in content, ship. No code, no design tool, no vendor.",
               },
               {
                 title: "Governance only works with authority behind it",
-                body: "A design system without organisational backing erodes one exception at a time. The standards held because Global Brand endorsed them, not because they were well documented.",
+                body: "Without backing, a system erodes one exception at a time. Global Brand's endorsement is why the standards held.",
                 applied: "Requests to break the system went to the governance model, not to whoever asked loudest.",
               },
             ]}
@@ -371,25 +364,25 @@ export default function Page() {
         <div className="space-y-5">
           <div className="pb-6">
             <CsOptions
-              question="The first call shaped everything after it: what should the system actually be made of?"
+              question="What should the system be made of?"
               options={[
                 {
                   title: "Keep the agency model",
-                  body: "Teams keep commissioning custom emails from external agencies whenever they need something branded.",
+                  body: "Teams keep commissioning agencies for every branded email.",
                   verdict:
-                    "Slow, expensive, and inconsistent. It was the status quo that created the problem, and it kept HTML as a gate in front of every send.",
+                    "Slow, costly, inconsistent: the status quo that caused the problem.",
                 },
                 {
                   title: "Build 28 bespoke templates",
-                  body: "Hand-build each template the categories needed. Fastest path to a visible launch.",
+                  body: "Hand-build each template. The fastest visible launch.",
                   verdict:
-                    "Every future brand update would mean manual edits across all 28. The effort repeats forever instead of compounding.",
+                    "Every brand update would mean editing all 28 by hand.",
                 },
                 {
                   title: "Build a component library",
-                  body: "50+ modular pieces that teams assemble into any email. Started as a Figma library concept, evolved into the no-code builder.",
+                  body: "50+ modular pieces teams assemble into any email. A Figma library that became the no-code builder.",
                   verdict:
-                    "More upfront architecture work, invisible to stakeholders at first. But a brand update now touches one component and propagates through every template.",
+                    "More upfront work, but a brand update now changes one component and reaches every template.",
                   chosen: true,
                 },
               ]}
@@ -398,18 +391,18 @@ export default function Page() {
           <CsDecision
             index={0}
             title="Push for design ambition, or design within the Outlook constraint?"
-            problem="Stakeholders wanted richer, more visual emails, multi-column layouts, custom fonts, dynamic CTAs. Outlook Desktop couldn&apos;t render any of it reliably without complex, brittle workarounds."
-            decision="Every time a stakeholder pushed for more visual complexity, the answer was to simplify the design rather than push for complex engineering workarounds. Outlook Desktop is the floor, not an edge case to hack around."
-            tradeoff="Required repeatedly saying no to stakeholders who wanted more, and having Global Brand&apos;s endorsement to hold that line. Without organisational authority backing the governance model, it would have eroded on day one."
-            impact="The constraint produced more durable design. The emails that perform best in enterprise environments are rarely the most visually complex. Simplicity wasn&apos;t a compromise, it was the correct answer."
+            problem="Stakeholders wanted multi-column layouts, custom fonts, and dynamic CTAs that Outlook couldn&apos;t render reliably."
+            decision="Simplify the design instead of hacking around Outlook."
+            tradeoff="Saying no, repeatedly, with Global Brand backing the line."
+            impact="More durable emails. In enterprise inboxes, the simplest emails tend to perform best."
           />
           <CsDecision
             index={1}
             title="Build a powerful feature-rich tool, or keep it simple enough for anyone to use?"
-            problem="The biggest adoption problem wasn&apos;t technical capability, it was intimidation. Teams avoided custom emails because HTML felt too risky. A more powerful tool with a high capability ceiling would solve for power users and fail for everyone else."
-            decision="Radical simplicity: any non-HTML person should be able to build a branded email. Select a component. Fill in content. Ship it. No code, no design tool, no external vendor required."
-            tradeoff="Power users wanted advanced customisation, pixel-level control, export options. Those use cases were left underserved intentionally. The 80% case, any team, any region, on brand, mattered more than the 20%."
-            impact="Teams that previously avoided custom emails because HTML felt too risky began creating richer branded communication more frequently. Removing the HTML requirement changed the behaviour, not just the tooling."
+            problem="Teams avoided custom emails because HTML felt risky. A powerful tool would serve power users and lose everyone else."
+            decision="Anyone without HTML can build a branded email: pick components, fill content, ship."
+            tradeoff="Power users lost pixel-level control and export options, on purpose."
+            impact="Teams that had avoided custom emails started sending them more often."
           />
         </div>
       </CsSection>
@@ -422,35 +415,33 @@ export default function Page() {
               Four levels. One coherent system.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              Foundations are stable. Components are reusable. Patterns are assembled.
-              Templates are shipped. Each level builds on the one below, and a change
-              to any level propagates upward automatically.
+              Each level builds on the one below, and a change propagates upward.
             </p>
           </div>
           <CsArchStack layers={[
             {
               num: "L1",
               title: "Foundations",
-              body: "Spacing system, typography hierarchy, brand colour tokens, responsive grid, accessibility standards, and email-safe colour system. These never change.",
+              body: "Spacing, type, colour tokens, grid, and accessibility standards. These rarely change.",
               meta: ["spacing", "type", "colour"],
             },
             {
               num: "L2",
               title: "Components",
-              body: "50+ modular building blocks, hero banners, CTA modules, content cards, editorial blocks, product highlights, event modules, legal footers. All Outlook-safe.",
+              body: "50+ Outlook-safe blocks: heroes, CTAs, cards, editorial, events, legal footers.",
               meta: ["50+ components", "Outlook-safe"],
               isCore: true,
             },
             {
               num: "L3",
               title: "Patterns",
-              body: "Recurring email structures assembled from components, campaign layouts, launch announcements, newsletters, internal comms, event invitations.",
+              body: "Recurring structures: campaigns, launches, newsletters, invitations.",
               meta: ["campaigns", "newsletters", "events"],
             },
             {
               num: "L4",
               title: "Templates",
-              body: "28 best-practice templates across 9 communication categories. Mastercard-wide. Every template is a composition of L2 components, update a component, update every template.",
+              body: "28 templates across 9 categories, each built from L2 components.",
               meta: ["28 templates", "9 categories"],
             },
           ]} />
@@ -465,8 +456,7 @@ export default function Page() {
               What we wanted vs. what Outlook could handle.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-xl">
-              Every time we wanted to do something modern, Outlook Desktop said no.
-              Here&apos;s how every major design decision was reshaped by that constraint.
+              How Outlook Desktop reshaped every major decision.
             </p>
           </div>
 
@@ -487,8 +477,7 @@ export default function Page() {
               28 templates. 9 categories. All Outlook-safe.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              Every template is assembled from the component library, not built from scratch.
-              Updating a component updates every template that uses it.
+              Assembled from the library, so a component change updates every template.
             </p>
           </div>
 
@@ -522,8 +511,7 @@ export default function Page() {
                 Adoption strategy, the feedback loop
               </p>
               <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-                Building the system was half the job. Getting teams to actually use it was the other half.
-                Regular interviews with power users drove iteration on real workflow friction.
+                Getting teams to use it was half the job. Interviews with power users drove each iteration.
               </p>
               <div className="flex items-center flex-wrap gap-2 rounded-2xl bg-card border border-border p-5">
                 {["Training", "Adoption", "User feedback", "Iteration", "Improved usability", "Wider adoption"].map((step, i, arr) => (
@@ -628,10 +616,7 @@ export default function Page() {
             <div className="rounded-2xl bg-muted/40 border border-border p-7 max-w-3xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">The organisational shift</p>
               <p className="text-[15px] text-foreground leading-relaxed">
-                Teams that previously avoided custom emails, because HTML felt too risky or agency
-                turnaround was too slow, began creating richer branded communication more frequently.
-                The barrier wasn&apos;t capability. It was confidence. Removing the HTML requirement
-                changed the behaviour, not just the tooling.{" "}
+                The barrier wasn&apos;t capability. It was confidence.{" "}
                 <em className="not-italic font-medium text-foreground">That&apos;s what a well-designed system does: it changes what people feel able to do.</em>
               </p>
             </div>
@@ -647,8 +632,7 @@ export default function Page() {
               A system the whole organisation adopted.
             </h2>
             <p className="text-[15px] text-muted-foreground leading-relaxed">
-              Backed by Global Brand. Used Mastercard-wide. The number wasn&apos;t how many
-              components shipped, it was how many people stopped needing HTML to communicate.
+              The measure wasn&apos;t components shipped; it was how many people stopped needing HTML.
             </p>
           </div>
 
@@ -661,12 +645,11 @@ export default function Page() {
             ]}
           />
 
-          <div className="grid md:grid-cols-4 divide-x divide-border border-t border-b border-border">
+          <div className="grid md:grid-cols-3 divide-x divide-border border-t border-b border-border">
             {[
-              { num: "M.01", figure: "50+",      label: "Modular components, all Outlook-safe, all brand-compliant." },
-              { num: "M.02", figure: "28",        label: "Best-practice templates across 9 communication categories." },
-              { num: "M.03", figure: "9",         label: "Communication categories covering the full range of Mastercard messaging needs." },
-              { num: "M.04", figure: "Zero HTML", label: "Skill level required. Any team, any region can now build a branded email." },
+              { num: "M.01", figure: "50+",      label: "Outlook-safe, on-brand components." },
+              { num: "M.02", figure: "28",        label: "Templates across 9 categories." },
+              { num: "M.03", figure: "Zero HTML", label: "Needed to send a branded email." },
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-6 py-10">
@@ -689,14 +672,14 @@ export default function Page() {
               <em className="not-italic text-accent">constrained enough</em> to work in Outlook
               and{" "}
               <em className="not-italic text-accent">flexible enough</em> that any team would
-              actually want to use it. Governance only works if someone with authority backs it.
+              actually want to use it.
             </p>
           </blockquote>
 
           <CsReflection
-            learned="Design systems need political backing, not just design quality. I faced real pushback on the governance model, people wanted more flexibility and more exceptions, and Global Brand's endorsement was what held the line. The other surprise was the constraint itself: Outlook forced every design to be simpler than I wanted, and in retrospect that simplicity is why the system endured."
-            next="Instrument usage from launch. Knowing which templates got used most, which components got customised, and which categories drove adoption would have accelerated the feedback loop and made every prioritisation conversation sharper."
-            validate="Whether radical simplicity keeps holding as power users grow. The 80% case was the right first bet, but the underserved 20% will eventually push for pixel-level control, and the system has not yet had to absorb that pressure."
+            learned="Design systems need political backing, not just good design. And the Outlook constraint I fought at the time is why the system lasted."
+            next="Instrument usage from launch. Knowing which templates and components teams used would have sharpened every prioritisation call."
+            validate="Whether simplicity holds as power users push for pixel-level control."
           />
         </div>
       </CsSection>

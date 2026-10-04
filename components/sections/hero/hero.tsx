@@ -7,6 +7,7 @@ import { RollingWord } from "@/components/shared/rolling-word"
 import { Pill } from "@/components/shared/pill"
 import { IconMail } from "@tabler/icons-react"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
+import { AddLater } from "@/components/shared/add-later"
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null)
@@ -141,7 +142,7 @@ export default function Hero() {
                 </span>{" "}
                 I combine product thinking, visual systems, and front-end
                 prototyping to make fintech, AI, and enterprise workflows
-                clearer, more trustworthy, and easier to use.
+                clearer and more trustworthy.
               </p>
 
               <div
@@ -159,7 +160,8 @@ export default function Hero() {
               >
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
-                  PartnerBank · same-day RFP demos
+                  PartnerBank · configurable RFP demos{" "}
+                  <AddLater note="turnaround number, once confirmed" />
                 </li>
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
@@ -170,6 +172,11 @@ export default function Hero() {
                   6+ years · fintech, commerce, 0→1
                 </li>
               </ul>
+
+              <AddLater
+                block
+                note="the headline rotates “AI agents” and this intro says “AI”, but no case study shows AI work. Add the locked Agent Pay card, or drop AI from here."
+              />
             </div>
           </div>
 
