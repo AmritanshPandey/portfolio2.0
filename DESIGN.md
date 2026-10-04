@@ -1,201 +1,199 @@
 ---
 name: Amritansh Pandey — Portfolio
-description: A dark-default, warm-editorial portfolio with a single emerald accent and confident, tactile interaction.
+description: A warm-paper editorial publication about product systems. Swiss structure, a layered-product visual language, one emerald accent, dark mode by toggle.
 colors:
-  emerald: "#059669"
-  emerald-deep: "#047857"
-  emerald-soft: "#34d399"
-  bg: "oklch(0.14 0 0)"
-  surface: "oklch(0.18 0 0)"
-  ink: "oklch(0.96 0 0)"
-  muted: "oklch(0.60 0 0)"
-  border: "oklch(1 0 0 / 0.10)"
-  focus-ring: "oklch(0.765 0.163 163)"
+  paper: "#F1EDE4"
+  ink: "#141414"
+  muted: "#6A6458"
+  surface-elevated: "#FAF8F3"
+  surface-stage: "#EAE5DA"
+  night: "oklch(0.15 0.005 80)"
+  emerald: "#047857"
+  emerald-on-dark: "oklch(0.765 0.163 163)"
+  rule: "rgb(20 20 20 / 0.13)"
+  rule-strong: "rgb(20 20 20 / 0.28)"
 typography:
   display:
     fontFamily: "Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2rem, 5vw, 3.5rem)"
-    fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: "-0.02em"
+    fontSize: "clamp(2.5rem, 1.344rem + 4.93vw, 4.5rem)"
+    fontWeight: 600
+    lineHeight: 1.02
+    letterSpacing: "-0.025em"
   headline:
     fontFamily: "Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(1.75rem, 4vw, 2.1rem)"
-    fontWeight: 700
-    lineHeight: 1.12
-    letterSpacing: "-0.015em"
+    fontSize: "clamp(1.875rem, 1.369rem + 2.16vw, 2.75rem)"
+    fontWeight: 600
+    lineHeight: 1.06
+    letterSpacing: "-0.018em"
   title:
     fontFamily: "Onest, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.25rem"
     fontWeight: 600
-    lineHeight: 1.2
+    lineHeight: 1.28
   body:
     fontFamily: "Onest, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.7
-  label:
-    fontFamily: "JetBrains Mono, ui-monospace, Menlo, monospace"
-    fontSize: "0.6875rem"
-    fontWeight: 600
-    lineHeight: 1.4
-    letterSpacing: "0.16em"
-  accent-script:
-    fontFamily: "Caveat, cursive"
-    fontSize: "1.25rem"
+  meta:
+    fontFamily: "Onest, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.78125rem"
     fontWeight: 500
-    lineHeight: 1.2
+    lineHeight: 1.5
+  mono:
+    fontFamily: "JetBrains Mono, ui-monospace, Menlo, monospace"
+    fontSize: "0.65625rem"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.08em"
 rounded:
+  xs: "2px"
   sm: "3px"
-  md: "12px"
-  lg: "16px"
-  pill: "9999px"
+  md: "6px"
+  lg: "10px"
 spacing:
-  xs: "8px"
-  sm: "12px"
-  md: "24px"
-  section: "5rem"
-components:
-  button-primary:
-    backgroundColor: "{colors.emerald}"
-    textColor: "#ffffff"
-    rounded: "{rounded.pill}"
-    padding: "0 1rem"
-    height: "2.5rem"
-  button-primary-hover:
-    backgroundColor: "{colors.emerald-deep}"
-    textColor: "#ffffff"
-  button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.pill}"
-  card:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.lg}"
-    padding: "1.75rem"
-  input:
-    backgroundColor: "{colors.bg}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "0.5rem 0.75rem"
+  base: "4px"
+  scale: "4 8 12 16 24 32 48 64 96 128 160"
+grid:
+  desktop: "12 columns, 24px gutter, 48px margin, 1320px max"
+  laptop: "12 columns, 20px gutter, 40px margin"
+  tablet: "8 columns, 20px gutter, 32px margin"
+  mobile: "4 columns, 16px gutter, 20px margin"
+motion:
+  durations: "200ms feedback · 400ms UI · 600ms reveal · 900ms hero"
+  ease-out: "cubic-bezier(0.22, 1, 0.36, 1)"
+  ease-move: "cubic-bezier(0.65, 0, 0.35, 1)"
 ---
 
 # Design System: Amritansh Pandey — Portfolio
 
+Source spec: `docs/superpowers/specs/2026-10-01-editorial-foundations-design.md`. Living reference: the Foundations tab at `/showcase`.
+
 ## 1. Overview
 
-**Creative North Star: "The Warm Studio"**
+**Creative North Star: "A premium editorial publication about product systems."**
 
-This is a senior practitioner's workspace after hours: the room is dark, the focus is total, and one steady light pools on the work. The system defaults to a near-black canvas (`oklch(0.14 0 0)`) so the content, case studies, writing, and demos, reads as the lit subject, never the decoration. A single emerald accent carries every moment of intent; everything else is a disciplined neutral ramp. The voice is confident and human at once: assured enough to stay quiet, warm enough to feel like a person and not a vendor.
+**Clarity over decoration. Systems over screens. Decisions over UI.** The site reads like a design publication that happens to be interactive: Swiss structure underneath, a warm paper canvas, near-black ink, and one emerald accent. Depth comes from layers of information (interface, system, decision, outcome), not from shadows or effects. It should feel designed, never desperate to impress: quiet confidence, visual intelligence, strong art direction.
 
-Warmth here is carried by the generous type and the tactile interaction, not by a beige body background. The neutrals are true grays (chroma 0); the one emerald signal and the way things respond to you do the rest. Motion is restrained and intentional: a slide-in navbar, fade-up reveals on a single confident easing curve, a magnetic pull on the primary CTA, and a bespoke cursor that replaces the system one on fine-pointer devices. Nothing bounces, nothing loops for attention.
+**Key characteristics**
+- Warm paper (`#F1EDE4`) by default; dark mode by toggle, with the inversion rule.
+- One accent, emerald, on about 10% of any screen.
+- Bricolage Grotesque for structural headings at 600, Onest for everything else, JetBrains Mono for system notation only.
+- A 12 / 8 / 4-column grid with asymmetric, disciplined compositions.
+- The layer language: interface < system < annotation < context.
+- Slow, quiet motion; everything still reads with motion off.
 
-The system explicitly rejects the four things the brand must never be: the generic AI-template look (display-serif headings, a tiny uppercase eyebrow on every section, identical icon-card grids, gradient text), corporate-enterprise stiffness (safe navy-and-gray, stock photography, vendor-deck soullessness), the flashy dev-portfolio (particle fields, neon, gratuitous animation), and minimal-to-the-point-of-bland (restraint with no point of view).
+## 2. Colour
 
-**Key Characteristics:**
-- Dark-default canvas with a fully supported light mode; both built from the same OKLCH neutral ramp.
-- One accent only: emerald. Used on ≤10% of any screen.
-- Two families on a contrast axis. Bricolage Grotesque (variable, `opsz` on) carries every heading above ~22px; Onest carries body and UI below it. JetBrains Mono is reserved for small data labels, Caveat for the occasional handwritten aside.
-- Confident, tactile interaction: magnetic CTA, custom cursor, soft lift on hover.
-- Motion is intentional and accessible; every animation has a reduced-motion fallback.
+| Token | Light | Dark | Role |
+|---|---|---|---|
+| `--background` | `#F1EDE4` | `oklch(0.15 0.005 80)` | Canvas |
+| `--foreground` | `#141414` | `oklch(0.93 0.012 85)` | Ink |
+| `--text-muted` | `#6A6458` | `oklch(0.70 0.012 85)` | Metadata |
+| `--surface-1` | `#FAF8F3` | `oklch(0.19 0.005 80)` | Elevated artefacts |
+| `--surface-2` | `#EAE5DA` | `oklch(0.12 0.004 80)` | Artefact stages |
+| `--accent` | `#047857` | `oklch(0.765 0.163 163)` | The one accent |
+| `--border` | ink at 13% | paper at 12% | Hairline rules |
+| `--rule-strong` | ink at 28% | paper at 30% | Dashed system layer |
+| `--surface-glass` | paper at 62% | night at 62% | Context layer only |
 
-## 2. Colors
+**The One Voice Rule.** Emerald is the only accent: interactions, active states, the important metric's marker, system markers, the decision. Never a second hue; reach for weight, size, or a neutral step instead.
 
-A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode canonical (the default theme); the light-mode equivalents are noted where they differ.
+**The Paper Rule.** The canvas is warm paper, not white and not beige. Warmth lives in the neutrals; the accent stays emerald.
 
-### Primary
-- **Emerald** (`#059669` light / `#34d399` dark): The one raised voice. Primary CTAs, active navigation, links, focus accents, hero gradient anchors. The color the visitor learns to read as "act here." Light mode uses emerald-600 so white labels hold ≥4.5:1; dark mode uses emerald-400 so the accent holds ≥4.5:1 on the near-black canvas.
-- **Emerald Deep** (`#047857`): Hover and pressed states of any emerald surface; the darker anchor in gradients (paired down to `#064e3b`).
-- **Emerald Soft** (`#34d399`): The highlight mid-point in the shimmer accent and accent gradient sweeps. A grace note, never a second accent.
+**The Inversion Rule.** Dark emphasis sections (core beliefs, frameworks, high-emphasis transitions) use `.band-inverse`, which swaps the token scope in CSS. On a light page a band is near-black; on a dark page it is paper. Everything inside, accent included, renders from the swapped tokens. Bands never paint themselves with `--surface-inverse`.
 
-### Neutral
-- **Ink** (`oklch(0.96 0 0)`, dark / `oklch(0.18 0 0)`, light): Primary text and high-contrast foreground.
-- **Muted** (`oklch(0.60 0 0)`, dark / `oklch(0.55 0 0)`, light): Secondary text, metadata, captions. Must still clear 4.5:1.
-- **Surface** (`oklch(0.18 0 0)`, dark / `oklch(1 0 0)`, light): Cards, panels, raised containers, one step off the canvas.
-- **Background** (`oklch(0.14 0 0)`, dark / `oklch(0.98 0 0)`, light): The page canvas. The lit room.
-- **Border** (`oklch(1 0 0 / 0.10)`, dark / `oklch(0.90 0 0)`, light): Hairline structure. Borders do the dividing; shadows are kept quiet.
-- **Focus Ring** (`oklch(0.765 0.163 163)`, dark / `oklch(0.609 0.152 161)`, light): A ring at the emerald hue, sibling to the accent. 2px, 3px offset.
-
-### Named Rules
-**The One Voice Rule.** Emerald is the only accent in the system. It appears on roughly 10% of any screen, the CTA, the active state, the one link that matters. Its rarity is the point. A second accent hue is forbidden; reach for weight, size, or a neutral step instead.
-
-**The True-Gray Rule.** Neutrals stay at chroma 0. Warmth comes from type and interaction, never from a warm-tinted "cream" background; the accent stays emerald. If a surface starts to read as beige, it has drifted off-system.
+Every text/background pair is held to WCAG AA in both themes by `npm run check:contrast`.
 
 ## 3. Typography
 
-**Display Font:** Bricolage Grotesque (variable, `opsz` axis on; with ui-sans-serif, system-ui, sans-serif)
-**Body Font:** Onest (with ui-sans-serif, system-ui, sans-serif)
-**Label/Mono Font:** JetBrains Mono (with ui-monospace, "SF Mono", "Menlo")
-**Accent Font:** Caveat (handwriting, for sparing personal marks)
+| Class | Face · weight | Mobile → desktop |
+|---|---|---|
+| `type-display-hero` | Bricolage 600 | 40 → 72px |
+| `type-hero-internal` | Bricolage 600 | 36 → 56px |
+| `type-page-title` | Bricolage 600 | 32 → 48px |
+| `type-section-title` | Bricolage 600 | 30 → 44px |
+| `type-case-title` | Bricolage 560 | 24 → 30px |
+| `type-subtitle` | Onest 600 | 20 → 22px |
+| `type-prose` | Onest 400, lh 1.7, ≤64ch | 16 → 17px |
+| `type-card-body` | Onest 400, lh 1.6 | 14px |
+| `type-meta` | Onest 500, muted | 12.5px |
+| `type-mono` | JetBrains Mono 500, uppercase, 0.08em | 10.5 → 11px |
 
-**Character:** Two families on a contrast axis. Bricolage Grotesque carries the headings: a variable grotesque with slightly irregular terminals, engineered but warm, and an optical-size axis so letterforms open up small and tighten at display sizes. Onest carries body and UI, and is deliberately quiet so it never competes. Monospace appears only at small sizes for technical labels and metadata, which gives those moments a precise, engineered edge against the warm body.
+**The Role-Split Rule.** The display face is for structural headings only. Labels on containers (card titles, list titles) stay in Onest, so a grid never becomes a wall of display type.
+**The Restraint Rule.** Headlines are confident, not oversized. No gradient text, outlined text, or decorative type. `shimmer-accent` is deprecated and leaves with the hero redesign.
+**The Caveat-Sparingly Rule.** The handwriting accent appears at most once per surface.
 
-### Hierarchy
-- **Display** (700, `clamp(2rem, 5vw, 3.5rem)`, line-height 1.1, `-0.02em`): Hero and page titles. `text-wrap: balance` so headings never orphan a word.
-- **Headline** (700, `clamp(1.75rem, 4vw, 2.1rem)`, 1.12, `-0.015em`): Section titles within long articles and case studies.
-- **Title** (600, 1.25rem, 1.2): Card titles, sub-section heads.
-- **Body** (400, 1rem, 1.7): Reading text. Capped at 65–75ch; `text-wrap: pretty` for an even rag.
-- **Label** (600, 0.6875rem, `0.16em`, UPPERCASE, monospace): Eyebrows, metadata, tags, control labels. Short only (≤4 words).
+## 4. Layout
 
-### Named Rules
-**The Role-Split Rule.** The display face is reserved for *structural headings* — prose hierarchy, h1 through h3, the `type-*-title` tiers. Labels that sit on a container (card titles, list titles, subgroup labels) stay in the body face, so a grid of cards never becomes a wall of display type. The split is by role, not by pixel size. (Per-article showcase faces, e.g. the typography essay, are page-scoped specimens and are not part of the system.)
+- **Grid.** `.page-container` + `.grid-page`: 12 columns from 1024px, 8 from 768px, 4 below. Max content width 1320px.
+- **Placements.** `.place-full` (1–12), `.place-wide` (2–12), `.place-text` (4–10, the ≈64ch prose column), `.place-bleed` (viewport edge to edge).
+- **Asymmetry by default.** Section headers put the title in columns 1–7 and the intro in 8–12, aligned to the title's baseline. Not every section is symmetrical; tension comes from offset, discipline from the grid.
+- **Mobile is composed, not compressed.** Offsets become indent steps (metadata starts at column 2 or 3 of 4) instead of stacking flush.
+- **Rhythm.** Sections alternate `.section-dense` (64 → 96px) and `.section-quiet` (96 → 160px).
+- **Spacing.** A 4px base: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128 · 160 (`--space-1…11`).
 
-**The Caveat-Sparingly Rule.** The handwriting accent is a personal grace note for at most one moment per surface. It is never a heading, never body, never a label.
+## 5. Surfaces and elevation
 
-## 4. Elevation
+Four surfaces only:
+1. **Editorial**: the paper canvas.
+2. **Elevated**: `--surface-1` plus a hairline. Flat at rest; no resting shadows.
+3. **Inverse**: emphasis bands (`.band-inverse`).
+4. **Glass**: `.layer-glass`, for metadata, nav, overlays, and context layers. Subtle blur (14px), low opacity, a near-invisible border. Falls back to a solid surface without `backdrop-filter` and under `prefers-reduced-transparency`.
 
-Flat by default, lifted only on intent. Depth comes first from the one-step tonal jump between background and surface, and from hairline borders; shadows are soft and reserved for genuinely raised or hovered elements. The system never uses a hard 2014-style drop shadow.
+**The Glass Rule.** If a surface holds primary content, it is not glass. Glass must read editorial and architectural, never "Web3".
+**Rules, not boxes.** Lists and indexes are rows separated by hairlines. Bordered containers are reserved for artefacts.
+**Radius.** 2px tags, 3px buttons and inputs, 6px artefacts and media, 10px dialogs. Bands and full-bleed blocks are square. `rounded-full` only for dots, avatars, and slider handles.
 
-### Shadow Vocabulary
-- **Soft Low** (`box-shadow: 0 4px 10px rgba(0,0,0,0.06)` light / `0 6px 14px rgba(0,0,0,0.35)` dark): Resting cards and surfaces (`.surface`).
-- **Soft High** (`box-shadow: 0 12px 30px rgba(0,0,0,0.08)` light / `0 20px 40px rgba(0,0,0,0.45)` dark): Elevated panels, popovers (`.surface-elevated`).
+## 6. The layer language
 
-### Named Rules
-**The Lift-On-State Rule.** Content cards are flat at rest. They respond to the pointer with a neutral surface-fill (`--surface-hover`) and at most a 1–2px translate, not a heavier shadow. Movement signals interactivity; shadow weight is not the affordance.
+Product → System → Constraint → Decision → Outcome, expressed spatially:
 
-## 5. Components
+| Layer (bottom → top) | Class | Treatment |
+|---|---|---|
+| Interface | `.layer-interface` | Elevated surface, 6px radius |
+| System | `.layer-system` | Dashed strong rule, near-transparent, `↳ SYSTEM` label |
+| Annotation | `.marker`, `.marker-line` | Emerald dot and leader line, numbered |
+| Context | `.layer-glass` | The only glass |
 
-### Buttons
-- **Shape:** Full pill (`rounded-4xl`, effectively `9999px`).
-- **Primary:** Emerald fill (`#059669` light / `#34d399` dark), white label, magnetic hover (the CTA pulls slightly toward the cursor), `active:translate-y-px`. Used for the single most important action on a surface.
-- **Hover / Focus:** Hover deepens toward Emerald Deep (`#047857`) / `bg-primary/80`; focus shows the emerald 2px ring at 3px offset.
-- **Ghost / Outline:** Transparent or hairline-bordered, ink label, neutral fill on hover. For secondary and tertiary actions.
+The layer classes live in `@layer components`, so Tailwind utilities on the same element (`hidden`, `p-*`, `rounded-*`) always win.
 
-### Cards / Containers
-- **Corner Style:** `rounded-2xl` (16px) for content cards; `rounded-xl` (12px) for tighter UI blocks.
-- **Background:** Surface (`oklch(0.18 0 0)`) one step off the canvas.
-- **Shadow Strategy:** Flat at rest (see Elevation); neutral surface-fill on hover.
-- **Border:** Hairline `oklch(1 0 0 / 0.10)`, often softened further to `/40` opacity.
-- **Internal Padding:** 1.5–1.75rem.
+Layers overlap by grid offsets (for example +2 columns, +48px), never arbitrary positions. At most three are visible at once. On mobile they offset vertically and stay overlapped. The accent marks the decision.
 
-### Inputs / Fields
-- **Style:** Background drops to the canvas color inside a surface, hairline border, `rounded-md` (12px).
-- **Focus:** Border shifts to emerald; the global emerald focus ring applies.
-- **Label / Hint:** Label 12–13px medium; hint 11px muted.
+## 7. Notation
 
-### Navigation
-- **Style:** A floating pill nav that slides in on mount (`navbar-enter`, `cubic-bezier(0.22,1,0.36,1)`). Monospace/short labels.
-- **States:** Current item earns full ink + weight; the rest recede to muted. Hierarchy by state, not size.
+**The Quiet Rule.** No section numbering on the home page; hierarchy comes from type. Notation (`↳ CONSTRAINT`, `↳ DECISION`, `↳ OUTCOME`, `SYSTEM 01`) appears only in case studies and Systems, where it labels a real chain of cause and effect, set in `type-mono`.
 
-### Signature: Custom Cursor
-On fine-pointer devices the native cursor is hidden and replaced by a bespoke cursor (`FancyCursor`) that reacts to interactive targets (e.g. a "Read" label on article cards). It is a core part of the "confident & tactile" feel; touch and stylus keep their native cursors.
+## 8. Motion
 
-## 6. Do's and Don'ts
+| Token | Value | Use |
+|---|---|---|
+| `--dur-1` / `DURATION.feedback` | 200ms | Hover, focus, press |
+| `--dur-2` / `DURATION.fast` | 400ms | Nav opacity, dialogs, tabs |
+| `--dur-3` / `DURATION.base` | 600ms | Reveals |
+| `--dur-4` / `DURATION.slow` | 900ms | Hero entrance only |
+| `--ease-out` / `EASE` | `cubic-bezier(0.22, 1, 0.36, 1)` | Entrances |
+| `--ease-move` / `EASE_MOVE` | `cubic-bezier(0.65, 0, 0.35, 1)` | Layers changing position |
 
-### Do:
-- **Do** keep emerald to ~10% of any screen, one CTA, one active state, one link that matters (The One Voice Rule).
-- **Do** build hierarchy from Bricolage Grotesque on structural headings and Onest on body, UI, and card labels; never apply the display face as a general texture.
-- **Do** keep neutrals at chroma 0; let warmth come from type and interaction, and keep the accent emerald.
-- **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, the emerald 2px focus ring on every interactive element, and a `prefers-reduced-motion` fallback for every animation.
-- **Do** keep surfaces flat at rest and lift on state with a neutral fill and a small translate.
-- **Do** verify both themes: every choice must read in dark (default) and light.
+Staggers are 60ms apart, capped at 6 items. Reveals rise at most 12px (8px by default). Parallax only on layers inside an artefact, at most 16px. Hover reveals information; it never only scales. No springs, no bounce, no scroll-jacking. Reduced motion turns reveals into opacity-only fades or nothing, and every page must read completely that way.
 
-### Don't:
-- **Don't** ship the generic AI-template look: display-serif headings, a tiny uppercase tracked eyebrow above every section, identical icon-card grids, or gradient text. (The existing `shimmer-accent` is a deliberate, single-word exception, not a license to expand gradient text.)
-- **Don't** drift into corporate-enterprise stiffness: safe navy-and-gray, stock photography, vendor-deck layouts.
-- **Don't** build a flashy dev-portfolio: particle backgrounds, neon, looping motion that competes with the work.
-- **Don't** be minimal to the point of bland: restraint must still carry a point of view.
-- **Don't** introduce a second accent hue. Use weight, size, or a neutral step instead.
-- **Don't** warm-tint the background toward cream/beige; the canvas stays true gray.
-- **Don't** use heavy drop shadows as the affordance for interactivity; movement and fill signal it.
+## 9. Components
+
+- **Primary CTA.** An underlined text link with an arrow, not a pill. Buttons that remain use a 3px radius.
+- **Cards.** Flat; they respond to the pointer with a neutral fill (`--surface-hover`) and at most a 1–2px translate.
+- **Navigation.** A minimal, editorial bar on a translucent layer that becomes more opaque on scroll (built in the Chrome sub-project).
+- **Retired.** The custom cursor, the magnetic CTA, Lenis smooth scrolling, the WebGL hero dot field, and the grain overlay. Ambient backgrounds live only in the Lab.
+
+## 10. Do's and don'ts
+
+**Do**
+- Improve hierarchy, composition, storytelling, and systems before polish.
+- Use product artefacts as evidence: interface fragments, system diagrams, workflows, before/after, metrics, annotations, decision points. Every visual must communicate something.
+- Verify both themes, reduced motion, and 375 / 768 / 1280 / 1440px.
+
+**Don't**
+- Build a generic glassmorphism, bento-grid, Apple-clone, Linear-clone, or brutalist portfolio.
+- Use Web3 or neon aesthetics, excessive 3D, excessive gradients, excessive rounded cards, dashboard-like UI, or a Dribbble-style screen gallery.
+- Use display-serif headings, a tiny uppercase eyebrow on every section, identical icon-card grids, or gradient text.
+- Add a second accent hue, heavy blur, glowing glass, or resting shadows.
+- Animate because it's possible.
