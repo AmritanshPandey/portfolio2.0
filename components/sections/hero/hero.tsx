@@ -5,6 +5,8 @@ import { useRef, useCallback } from "react"
 import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { Pill } from "@/components/shared/pill"
+import { IconMail } from "@tabler/icons-react"
+import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null)
@@ -98,7 +100,15 @@ export default function Hero() {
               <p className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium leading-6 tracking-normal text-foreground/70 dark:text-muted-foreground/74 sm:text-[13px]">
                 <span className="text-foreground/90 dark:text-foreground/74">Senior UX Designer · Mastercard</span>
                 <span aria-hidden className="hidden h-3 w-px bg-foreground/16 dark:bg-border sm:inline-block" />
-                <span>Open to conversations</span>
+                {/* Availability is only useful if it's also the way in. */}
+                <a
+                  href={EMAIL_HREF}
+                  aria-label="Open to conversations. Email Amritansh"
+                  className="group/avail inline-flex items-center gap-1.5 rounded-sm underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                >
+                  Open to conversations
+                  <IconMail size={14} stroke={1.8} aria-hidden className="opacity-70 transition-opacity group-hover/avail:opacity-100" />
+                </a>
               </p>
             </div>
 
@@ -139,7 +149,7 @@ export default function Hero() {
                 className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4"
               >
                 <CTA label="View selected work" href="#work" className="sm:w-auto sm:px-7 shadow-[0_6px_18px_rgba(0,0,0,0.08)]" />
-                <CTA label="Explore the Lab" href="/playground" variant="secondary" className="sm:w-auto sm:px-7" />
+                <CTA label="View resume" href={RESUME_HREF} newTab variant="secondary" className="sm:w-auto sm:px-7" />
               </div>
 
               {/* Proof strip — checkable evidence, not adjectives. */}

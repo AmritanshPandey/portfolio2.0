@@ -15,6 +15,10 @@ type Props = {
   variant?: Variant
   icon?: "arrow" | "download" | "none"
   className?: string
+  /** Open in a new tab as a plain link. Use for files and other sites: a
+   *  Next.js <Link> prefetches its target as a route, and a file isn't one, so
+   *  every visit fetched a 404 page for /resume.pdf in the background. */
+  newTab?: boolean
 }
 
 export function CTA({
@@ -23,6 +27,7 @@ export function CTA({
   variant = "primary",
   icon = "arrow",
   className,
+  newTab = false,
 }: Props) {
   const router    = useRouter()
   const pathname  = usePathname()
@@ -54,11 +59,15 @@ export function CTA({
 
   // ───────── PRIMARY + SECONDARY ─────────
   if (variant !== "tertiary" && href) {
+    // Same props either way; only the element changes.
+    const Root = (newTab ? "a" : Link) as typeof Link
     return (
-      <Link
+      <Root
         ref={magnetRef}
         href={href}
         onClick={handleClick}
+        target={newTab ? "_blank" : undefined}
+        rel={newTab ? "noopener noreferrer" : undefined}
         className={clsx(
           "group/cta relative flex items-center justify-center",
           "w-full px-5 py-3 rounded-full text-[15px] font-medium",
@@ -123,7 +132,7 @@ export function CTA({
               />
             )}
           </span>
-      </Link>
+      </Root>
     )
   }
 

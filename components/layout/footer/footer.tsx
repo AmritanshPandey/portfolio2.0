@@ -12,7 +12,7 @@ import {
 import { ShaderHaze } from "@/components/shared/shader-haze"
 import { CopyEmail } from "./copy-email"
 
-const EMAIL = "amritansh.pandey6@gmail.com"
+import { EMAIL, LINKEDIN_HREF, RESUME_HREF } from "@/lib/contact"
 
 const FOOTER_LINKS = [
   {
@@ -23,13 +23,14 @@ const FOOTER_LINKS = [
   },
   {
     label: "Resume",
-    href: "/resume.pdf",
+    href: RESUME_HREF,
     icon: IconFileText,
-    external: false,
+    // A file, not a route: a plain link, so it isn't prefetched as a page.
+    external: true,
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/amritansh-pandey-bb5b3087",
+    href: LINKEDIN_HREF,
     icon: IconBrandLinkedin,
     external: true,
     brandColor: "#0A66C2",
@@ -114,7 +115,7 @@ function FooterLink({
   }
 
   return (
-    <Link href={href} className={className} style={style}  target="_blank">
+    <Link href={href} className={className} style={style}>
       {content}
     </Link>
   )

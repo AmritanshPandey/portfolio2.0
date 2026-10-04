@@ -1,7 +1,7 @@
 import { CTA } from "@/components/shared/section-cta"
 import { FadeIn } from "@/components/shared/fade-in"
 
-const EMAIL = "amritansh.pandey6@gmail.com"
+import { EMAIL_HREF } from "@/lib/contact"
 
 /**
  * Closing band — the site's one explicit conversion moment. A short trajectory
@@ -42,7 +42,7 @@ export function ClosingCta() {
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <CTA
                 label="Start a conversation"
-                href={`mailto:${EMAIL}?subject=Let%27s%20talk`}
+                href={EMAIL_HREF}
                 className="sm:px-7"
               />
               <CTA
