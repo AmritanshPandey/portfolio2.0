@@ -236,7 +236,7 @@ export function VerticalCard({
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-muted-foreground"
+                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[11px] font-medium leading-[1.45] text-muted-foreground"
                 >
                   {tag}
                 </span>

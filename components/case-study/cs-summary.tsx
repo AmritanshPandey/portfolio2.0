@@ -55,7 +55,7 @@ export function CsSummary({
       <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent/50 via-accent/20 to-transparent" />
 
       <div className="px-6 py-5 md:px-7 md:py-6">
-        <p className="mb-5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="mb-5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </p>
 

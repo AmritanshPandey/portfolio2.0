@@ -76,7 +76,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
             </article>
 
             <div className="hidden min-w-0 md:block">
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mb-2 font-mono text-[11px] tracking-normal text-muted-foreground">
                 {item.category}
               </p>
               <h3

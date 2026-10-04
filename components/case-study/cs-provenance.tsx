@@ -42,7 +42,7 @@ export function CsProvenance({ kind, label, className }: CsProvenanceProps) {
       data-kind={kind}
       className={clsx(
         "inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1",
-        "font-mono text-[10px] font-semibold uppercase tracking-[0.14em]",
+        "font-mono text-[11px] font-semibold uppercase tracking-[0.14em]",
         meta.accent
           ? "border-accent/30 bg-accent/[0.07] text-accent"
           : "border-border/70 bg-foreground/[0.03] text-muted-foreground dark:bg-white/[0.03]",

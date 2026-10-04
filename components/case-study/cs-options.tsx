@@ -76,7 +76,7 @@ export function CsOptions({ options, question, className }: CsOptionsProps) {
 
             <p
               className={clsx(
-                "mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em]",
+                "mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.14em]",
                 o.chosen ? "text-accent" : "text-muted-foreground"
               )}
             >

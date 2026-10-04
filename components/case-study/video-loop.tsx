@@ -105,7 +105,7 @@ export function VideoLoop({
           aria-label={playing ? "Pause clip" : "Play clip"}
           className={clsx(
             "absolute bottom-3 right-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5",
-            "font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm",
+            "font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm",
             "transition-colors hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
           )}
         >

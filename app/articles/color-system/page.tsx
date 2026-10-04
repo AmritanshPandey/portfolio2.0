@@ -92,7 +92,7 @@ function Code({ children }: { children: React.ReactNode }) {
 function ToolFrame({ label = "Interactive", children }: { label?: string; children: React.ReactNode }) {
   return (
     <div className="relative rounded-lg ring-1 ring-rose-500/20 bg-rose-500/[0.02] p-3 md:p-4 mt-2">
-      <span className="absolute -top-2.5 left-5 z-10 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-background border border-rose-500/40 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400">
+      <span className="absolute -top-2.5 left-5 z-10 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-background border border-rose-500/40 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400">
         <span className="w-1.5 h-1.5 rounded-full bg-rose-500 motion-safe:animate-pulse" />
         {label}
       </span>
@@ -274,7 +274,7 @@ export default function Page() {
           {FOUNDATIONS.map(s => (
             <div key={s.name} className="rounded-xl border border-border/60 overflow-hidden bg-card hover:border-border transition-colors">
               <div className="h-24 flex items-end p-3" style={{ background: s.bg }}>
-                <span className="font-mono text-[10px] text-black/40">{s.hex}</span>
+                <span className="font-mono text-[11px] text-black/40">{s.hex}</span>
               </div>
               <div className="p-4 border-t border-border/60">
                 <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground mb-1.5">{s.name}</p>
@@ -291,7 +291,7 @@ export default function Page() {
                 className="h-24 flex items-end p-3"
                 style={{ background: s.bg, boxShadow: s.shadow ? "inset 0 6px 24px rgba(0,0,0,0.12)" : undefined }}
               >
-                <span className="font-mono text-[10px]" style={{ color: s.shadow ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)" }}>{s.hex}</span>
+                <span className="font-mono text-[11px]" style={{ color: s.shadow ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)" }}>{s.hex}</span>
               </div>
               <div className="p-4 border-t border-border/60">
                 <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground mb-1.5">{s.name}</p>
@@ -313,7 +313,7 @@ export default function Page() {
             <thead>
               <tr className="bg-foreground/[0.03]">
                 {["Surface", "Role", "Usage", "Key property"].map(h => (
-                  <th key={h} className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-normal px-4 py-3 border-b border-border/60">{h}</th>
+                  <th key={h} className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground font-normal px-4 py-3 border-b border-border/60">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -347,7 +347,7 @@ export default function Page() {
           {TYPE_SCALE.map(t => (
             <div key={t.label} className="p-5" style={{ background: "#faf9f7" }}>
               <span className="block text-5xl font-semibold leading-none mb-5" style={{ color: t.glyph }}>Ag</span>
-              <p className="font-mono text-[10px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#8a8a82" }}>{t.label}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: "#8a8a82" }}>{t.label}</p>
               <p className="text-[11px] leading-[1.5]" style={{ color: "#6b6b63" }}>{t.note}</p>
             </div>
           ))}
@@ -369,7 +369,7 @@ export default function Page() {
                 <div className="h-[52px] rounded-md bg-foreground/[0.04]" style={{ border: b.style }} />
               </div>
               <div className="p-4 pt-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-foreground mb-1.5">{b.label}</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground mb-1.5">{b.label}</p>
                 <p className="text-[12px] text-muted-foreground leading-[1.6]">{b.desc}</p>
               </div>
             </div>
@@ -455,8 +455,8 @@ export default function Page() {
             >
               <div className="h-14" style={{ background: h.grad }} />
               <div className="p-2.5">
-                <span className="block font-mono text-[10px] uppercase tracking-[0.08em] text-foreground mb-1">{h.name}</span>
-                <span className="font-mono text-[9px] text-muted-foreground leading-snug block">{h.range} · {h.note}</span>
+                <span className="block font-mono text-[11px] uppercase tracking-[0.08em] text-foreground mb-1">{h.name}</span>
+                <span className="font-mono text-[11px] text-muted-foreground leading-snug block">{h.range} · {h.note}</span>
               </div>
             </div>
           ))}
@@ -486,11 +486,11 @@ export default function Page() {
             <div key={c.label} className="rounded-xl overflow-hidden border border-border/60">
               <div className="h-20 flex flex-col items-center justify-center gap-1 px-4" style={{ background: c.bg }}>
                 <span className="font-mono text-[20px] font-medium leading-none" style={{ color: c.ratioColor }}>{c.ratio}</span>
-                <span className="font-mono text-[10px] tracking-[0.1em]" style={{ color: c.ratioColor, opacity: 0.7 }}>{c.label}</span>
+                <span className="font-mono text-[11px] tracking-[0.1em]" style={{ color: c.ratioColor, opacity: 0.7 }}>{c.label}</span>
               </div>
               <div className="px-3.5 py-2.5 bg-card border-t border-border/60 flex justify-between items-center">
-                <span className="font-mono text-[10px] uppercase tracking-[0.06em] text-foreground/70">{c.ctx}</span>
-                <span className={`font-mono text-[10px] px-2 py-0.5 rounded ${BADGE[c.badgeKind]}`}>{c.badge}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-foreground/70">{c.ctx}</span>
+                <span className={`font-mono text-[11px] px-2 py-0.5 rounded ${BADGE[c.badgeKind]}`}>{c.badge}</span>
               </div>
             </div>
           ))}
@@ -562,15 +562,15 @@ export default function Page() {
         {/* full scale */}
         <FadeIn className="mt-8">
           <div className="flex justify-between items-center mb-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Complete scale, Blue · base #0066CC · HSL(210°)</span>
-            <span className="font-mono text-[10px] text-muted-foreground">★ = base stop</span>
+            <span className="font-mono text-[11px] tracking-normal text-muted-foreground">Complete scale, Blue · base #0066CC · HSL(210°)</span>
+            <span className="font-mono text-[11px] text-muted-foreground">★ = base stop</span>
           </div>
           <div className="grid grid-cols-6 md:grid-cols-11 rounded-xl overflow-hidden border border-border/60">
             {SCALE.map(s => (
               <div key={s.step} className="flex flex-col" style={s.base ? { outline: "2px solid #f43f5e", outlineOffset: "-2px", zIndex: 1 } : undefined}>
                 <div className="h-20" style={{ background: s.hex }} />
                 <div className="p-2 bg-card border-t border-border/60">
-                  <span className={`block font-mono text-[9px] mb-0.5 tracking-[0.04em] ${s.base ? "text-rose-600 dark:text-rose-400" : "text-rose-600/80 dark:text-rose-400/80"}`}>{s.step}{s.base ? " ★" : ""}</span>
+                  <span className={`block font-mono text-[11px] mb-0.5 tracking-[0.04em] ${s.base ? "text-rose-600 dark:text-rose-400" : "text-rose-600/80 dark:text-rose-400/80"}`}>{s.step}{s.base ? " ★" : ""}</span>
                   <span className="font-mono text-[8px] text-muted-foreground">{s.hex}</span>
                 </div>
               </div>
@@ -598,7 +598,7 @@ export default function Page() {
               <div className="flex gap-1 mb-3">
                 {z.chips.map((c, i) => <div key={i} className="h-6 flex-1 rounded" style={{ background: c }} />)}
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-rose-600 dark:text-rose-400 mb-1.5">{z.label}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-rose-600 dark:text-rose-400 mb-1.5">{z.label}</p>
               <p className="text-[13px] text-foreground mb-1.5">{z.title}</p>
               <p className="text-[12px] text-muted-foreground leading-[1.6]">{z.desc}</p>
             </div>

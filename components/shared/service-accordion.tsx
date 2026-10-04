@@ -72,7 +72,7 @@ export function ServiceAccordion({
       </div>
 
       {/* Panels */}
-      <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:snap-none md:gap-0 md:overflow-hidden md:rounded-[1.5rem] md:border md:border-border md:px-0 md:pb-0">
+      <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:snap-none md:gap-0 md:overflow-hidden md:rounded-3xl md:border md:border-border md:px-0 md:pb-0">
         {items.map((item, i) => (
           <Panel
             key={item.id}
@@ -111,7 +111,7 @@ function Panel({
       className={cn(
         "group relative h-[26rem] overflow-hidden bg-card outline-none lg:h-[30rem]",
         // Mobile: fixed-width snap panel with rounded corners + border.
-        "w-[80vw] max-w-[20rem] shrink-0 snap-center rounded-[1.5rem] ring-1 ring-border",
+        "w-[80vw] max-w-[20rem] shrink-0 snap-center rounded-3xl ring-1 ring-border",
         // md+: zero-basis accordion item inside a shared bordered rail. Active
         // grows; dividers between panels are the rail's inner borders.
         "md:w-auto md:max-w-none md:shrink md:basis-0 md:rounded-none md:ring-0 md:[flex-grow:1] md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:border-border md:data-[active=true]:[flex-grow:5]",
@@ -120,7 +120,7 @@ function Panel({
       )}
     >
       {/* Ordinal label — top, always present. */}
-      <p className="absolute left-5 top-5 z-10 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+      <p className="absolute left-5 top-5 z-10 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
         Service <span className="text-muted-foreground">/ {item.index}</span>
       </p>
 

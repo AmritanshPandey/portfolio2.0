@@ -69,13 +69,13 @@ function BankScreen({ skin }: { skin: BrandSkin }) {
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,255,255,0.18),transparent_55%)]" />
             <div className="relative flex items-start justify-between">
-              <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/85">
+              <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/85">
                 Current account
               </span>
               <span className="h-4 w-6 rounded-[3px] bg-white/25" />
             </div>
             <div className="relative">
-              <p className="text-[10px] text-white/75">Available balance</p>
+              <p className="text-[11px] text-white/75">Available balance</p>
               <p className="text-2xl font-semibold tracking-tight">£12,480.22</p>
             </div>
           </div>
@@ -103,7 +103,7 @@ function BankScreen({ skin }: { skin: BrandSkin }) {
               <li key={t.name} className="flex items-center justify-between py-2">
                 <div>
                   <p className="text-[12px] font-medium">{t.name}</p>
-                  <p className="text-[10px] text-[#5d6166]">{t.date}</p>
+                  <p className="text-[11px] text-[#5d6166]">{t.date}</p>
                 </div>
                 <p
                   className={clsx(

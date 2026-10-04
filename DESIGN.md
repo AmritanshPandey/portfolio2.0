@@ -8,7 +8,7 @@ colors:
   bg: "oklch(0.14 0 0)"
   surface: "oklch(0.18 0 0)"
   ink: "oklch(0.96 0 0)"
-  muted: "oklch(0.60 0 0)"
+  muted: "oklch(0.64 0 0)"
   border: "oklch(1 0 0 / 0.10)"
   focus-ring: "oklch(0.765 0.163 163)"
 typography:
@@ -105,17 +105,17 @@ The system explicitly rejects the four things the brand must never be: the gener
 A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode canonical (the default theme); the light-mode equivalents are noted where they differ.
 
 ### Primary
-- **Emerald** (`#059669` light / `#34d399` dark): The one raised voice. Primary CTAs, active navigation, links, focus accents, hero gradient anchors. The color the visitor learns to read as "act here." Light mode uses emerald-600 so white labels hold ≥4.5:1; dark mode uses emerald-400 so the accent holds ≥4.5:1 on the near-black canvas.
+- **Emerald** (`#047857` / emerald-700 light, `#34d399` dark): The one raised voice. Primary CTAs, active navigation, links, hero gradient anchors. The color the visitor learns to read as "act here." Light mode uses emerald-700 (emerald-600 measured only 3.3:1 on the canvas) so white labels hold ≥4.5:1; dark mode uses emerald-400 so the accent holds ≥4.5:1 on the near-black canvas.
 - **Emerald Deep** (`#047857`): Hover and pressed states of any emerald surface; the darker anchor in gradients (paired down to `#064e3b`).
 - **Emerald Soft** (`#34d399`): The highlight mid-point in the shimmer accent and accent gradient sweeps. A grace note, never a second accent.
 
 ### Neutral
 - **Ink** (`oklch(0.96 0 0)`, dark / `oklch(0.18 0 0)`, light): Primary text and high-contrast foreground.
-- **Muted** (`oklch(0.60 0 0)`, dark / `oklch(0.55 0 0)`, light): Secondary text, metadata, captions. Must still clear 4.5:1.
+- **Muted** (`oklch(0.64 0 0)`, dark / `oklch(0.51 0 0)`, light): Secondary text, metadata, captions. Must still clear 4.5:1.
 - **Surface** (`oklch(0.18 0 0)`, dark / `oklch(1 0 0)`, light): Cards, panels, raised containers, one step off the canvas.
 - **Background** (`oklch(0.14 0 0)`, dark / `oklch(0.98 0 0)`, light): The page canvas. The lit room.
 - **Border** (`oklch(1 0 0 / 0.10)`, dark / `oklch(0.90 0 0)`, light): Hairline structure. Borders do the dividing; shadows are kept quiet.
-- **Focus Ring** (`oklch(0.765 0.163 163)`, dark / `oklch(0.609 0.152 161)`, light): A ring at the emerald hue, sibling to the accent. 2px, 3px offset.
+- **Focus Ring** (`oklch(0.765 0.163 163)`, dark / `oklch(0.609 0.152 161)`, light): Defined for the few components that already use it. **Decision (2026-10):** do not add or extend keyboard focus-ring styling site-wide; visible rings on inputs hurt the aesthetic. Labels, names, landmarks and contrast carry the accessibility work instead.
 
 ### Named Rules
 **The One Voice Rule.** Emerald is the only accent in the system. It appears on roughly 10% of any screen, the CTA, the active state, the one link that matters. Its rarity is the point. A second accent hue is forbidden; reach for weight, size, or a neutral step instead.
@@ -136,9 +136,11 @@ A monochrome neutral ramp lit by a single emerald accent. Values are dark-mode c
 - **Headline** (700, `clamp(1.75rem, 4vw, 2.1rem)`, 1.12, `-0.015em`): Section titles within long articles and case studies.
 - **Title** (600, 1.25rem, 1.2): Card titles, sub-section heads.
 - **Body** (400, 1rem, 1.7): Reading text. Capped at 65–75ch; `text-wrap: pretty` for an even rag.
-- **Label** (600, 0.6875rem, `0.16em`, UPPERCASE, monospace): Eyebrows, metadata, tags, control labels. Short only (≤4 words).
+- **Label** (600, 0.6875rem, `0.16em`, UPPERCASE, monospace): Metadata, tags, control labels. Short only (≤4 words, ≤32 characters). Longer runs are sentence case with normal tracking.
 
 ### Named Rules
+**The Minimum-Size Rule.** No text below 11px (`text-[11px]`). 9px and 10px labels read as noise, especially in mono and uppercase. The only exception is the simulated product UI in `components/fintech-system`, which models someone else's interface. Run `npm run check:type` to enforce it.
+
 **The Role-Split Rule.** The display face is reserved for *structural headings* — prose hierarchy, h1 through h3, the `type-*-title` tiers. Labels that sit on a container (card titles, list titles, subgroup labels) stay in the body face, so a grid of cards never becomes a wall of display type. The split is by role, not by pixel size. (Per-article showcase faces, e.g. the typography essay, are page-scoped specimens and are not part of the system.)
 
 **The Caveat-Sparingly Rule.** The handwriting accent is a personal grace note for at most one moment per surface. It is never a heading, never body, never a label.
@@ -152,6 +154,10 @@ Flat by default, lifted only on intent. Depth comes first from the one-step tona
 - **Soft High** (`box-shadow: 0 12px 30px rgba(0,0,0,0.08)` light / `0 20px 40px rgba(0,0,0,0.45)` dark): Elevated panels, popovers (`.surface-elevated`).
 
 ### Named Rules
+**The Radius Scale.** Use the scale (`rounded-md`, `-lg`, `-xl` 12px, `-2xl` 16px, `-3xl` 24px, `-4xl` pill) rather than arbitrary `rounded-[Npx]`. Device-frame mockups and `components/fintech-system` are exempt.
+
+**The Colour-Literal Exception.** Hex literals belong only where CSS variables cannot reach: the OG image, WebGL/canvas constants, and demo or illustration palettes inside articles and mockups (colour-system article, matching lab, brand-skin demo). Everywhere else use tokens.
+
 **The Lift-On-State Rule.** Content cards are flat at rest. They respond to the pointer with a neutral surface-fill (`--surface-hover`) and at most a 1–2px translate, not a heavier shadow. Movement signals interactivity; shadow weight is not the affordance.
 
 ## 5. Components
@@ -159,7 +165,7 @@ Flat by default, lifted only on intent. Depth comes first from the one-step tona
 ### Buttons
 - **Shape:** Full pill (`rounded-4xl`, effectively `9999px`).
 - **Primary:** Emerald fill (`#059669` light / `#34d399` dark), white label, magnetic hover (the CTA pulls slightly toward the cursor), `active:translate-y-px`. Used for the single most important action on a surface.
-- **Hover / Focus:** Hover deepens toward Emerald Deep (`#047857`) / `bg-primary/80`; focus shows the emerald 2px ring at 3px offset.
+- **Hover:** Hover deepens toward Emerald Deep / `bg-primary/80`.
 - **Ghost / Outline:** Transparent or hairline-bordered, ink label, neutral fill on hover. For secondary and tertiary actions.
 
 ### Cards / Containers
@@ -171,7 +177,7 @@ Flat by default, lifted only on intent. Depth comes first from the one-step tona
 
 ### Inputs / Fields
 - **Style:** Background drops to the canvas color inside a surface, hairline border, `rounded-md` (12px).
-- **Focus:** Border shifts to emerald; the global emerald focus ring applies.
+- **Focus:** Border shifts to emerald. No extra ring.
 - **Label / Hint:** Label 12–13px medium; hint 11px muted.
 
 ### Navigation
@@ -187,7 +193,7 @@ On fine-pointer devices the native cursor is hidden and replaced by a bespoke cu
 - **Do** keep emerald to ~10% of any screen, one CTA, one active state, one link that matters (The One Voice Rule).
 - **Do** build hierarchy from Bricolage Grotesque on structural headings and Onest on body, UI, and card labels; never apply the display face as a general texture.
 - **Do** keep neutrals at chroma 0; let warmth come from type and interaction, and keep the accent emerald.
-- **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, the emerald 2px focus ring on every interactive element, and a `prefers-reduced-motion` fallback for every animation.
+- **Do** hold WCAG AA: body ≥4.5:1, large text ≥3:1, and a `prefers-reduced-motion` fallback for every animation.
 - **Do** keep surfaces flat at rest and lift on state with a neutral fill and a small translate.
 - **Do** verify both themes: every choice must read in dark (default) and light.
 

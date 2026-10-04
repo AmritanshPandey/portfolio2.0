@@ -56,7 +56,7 @@ export function ColorAudit() {
     <Panel>
       <div className="grid md:grid-cols-2">
         <div className="p-5 border-b md:border-b-0 md:border-r border-border/60">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2">Paste values from code / Figma</p>
+          <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-2">Paste values from code / Figma</p>
           <textarea value={raw} onChange={e => setRaw(e.target.value)} spellCheck={false} rows={9}
             className="w-full font-mono text-[12px] bg-background border border-border rounded-lg p-3 text-foreground focus:border-rose-500/60 outline-none resize-none" />
           <div className="flex gap-3 mt-3 text-[11px]">
@@ -68,7 +68,7 @@ export function ColorAudit() {
           </div>
         </div>
         <div className="p-5 max-h-[340px] overflow-y-auto">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Mapped to nearest token</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Mapped to nearest token</p>
           <div className="flex flex-col gap-1.5">
             {rows.map((r, i) => (
               <div key={i} className="flex items-center gap-2.5 text-[11px]">
@@ -77,7 +77,7 @@ export function ColorAudit() {
                 <span className="text-muted-foreground">→</span>
                 <span className="w-4 h-4 rounded border border-border/60 shrink-0" style={{ background: r.token.hex }} />
                 <span className="font-mono text-foreground/70">{r.token.name}</span>
-                <span className="ml-auto font-mono text-[10px] px-1.5 py-0.5 rounded text-white" style={{ background: STATUS[r.status].c }}>{STATUS[r.status].t}</span>
+                <span className="ml-auto font-mono text-[11px] px-1.5 py-0.5 rounded text-white" style={{ background: STATUS[r.status].c }}>{STATUS[r.status].t}</span>
               </div>
             ))}
           </div>
@@ -119,7 +119,7 @@ export function FigmaVariables() {
         <div className="p-5 border-b md:border-b-0 md:border-r border-border/60">
           <div className="flex items-center justify-between mb-3">
             <p className="text-[12px] font-semibold text-foreground">Primitives</p>
-            <span className="text-[10px] font-mono text-muted-foreground">1 collection · no modes</span>
+            <span className="text-[11px] font-mono text-muted-foreground">1 collection · no modes</span>
           </div>
           <div className="flex flex-col gap-1.5">
             {PRIMITIVES.map(p => (
@@ -134,7 +134,7 @@ export function FigmaVariables() {
         <div className="p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-[12px] font-semibold text-foreground">Semantic</p>
-            <span className="text-[10px] font-mono text-muted-foreground">1 collection · Light / Dark modes</span>
+            <span className="text-[11px] font-mono text-muted-foreground">1 collection · Light / Dark modes</span>
           </div>
           <div className="flex flex-col gap-1.5">
             {SEMANTIC.map(s => (
@@ -142,7 +142,7 @@ export function FigmaVariables() {
                 <span className="w-4 h-4 rounded border border-border/60" style={{ background: mode === "light" ? s.lh : s.dh }} />
                 <span className="font-mono text-foreground/80 w-16">{s.name}</span>
                 <span className="font-mono text-accent">→ {mode === "light" ? s.light : s.dark}</span>
-                <span className="text-muted-foreground ml-auto text-[10px]">{s.scope}</span>
+                <span className="text-muted-foreground ml-auto text-[11px]">{s.scope}</span>
               </div>
             ))}
           </div>

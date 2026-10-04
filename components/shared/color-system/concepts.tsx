@@ -23,13 +23,13 @@ function PuRow({ title, row, sub }: { title: string; row: string[]; sub: string 
   return (
     <div>
       <div className="flex items-baseline justify-between mb-1.5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-foreground/70">{title}</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground/70">{title}</span>
         <span className="text-[11px] text-muted-foreground">{sub} · luminance spread <strong className="text-foreground/80 font-medium">{spread(row)}%</strong></span>
       </div>
       <div className="grid grid-cols-6 rounded-lg overflow-hidden border border-border/60">
         {row.map((c, i) => (
           <div key={i} className="h-16 flex flex-col items-center justify-center" style={{ background: c }}>
-            <span className="font-mono text-[10px] font-semibold" style={{ color: lumPct(c) > 45 ? "#111" : "#fff" }}>{lumPct(c)}%</span>
+            <span className="font-mono text-[11px] font-semibold" style={{ color: lumPct(c) > 45 ? "#111" : "#fff" }}>{lumPct(c)}%</span>
           </div>
         ))}
       </div>
@@ -102,7 +102,7 @@ export function ColorblindSim() {
       <div className="p-6 flex flex-col gap-6">
         {/* categorical palette under simulation */}
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2">Categorical palette</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-2">Categorical palette</p>
           <div className="flex rounded-lg overflow-hidden border border-border/60">
             {CAT.map((c, i) => <div key={i} className="flex-1 h-12" style={{ background: sim(c) }} />)}
           </div>
@@ -117,7 +117,7 @@ export function ColorblindSim() {
               <div key={p.label} className="rounded-xl border border-border/60 p-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[12px] text-foreground/80">{p.label}</span>
-                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded text-white" style={{ background: safe ? "#16a34a" : "#dc2626" }}>
+                  <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded text-white" style={{ background: safe ? "#16a34a" : "#dc2626" }}>
                     {safe ? "DISTINCT" : "COLLAPSES"}
                   </span>
                 </div>

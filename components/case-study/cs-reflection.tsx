@@ -45,7 +45,7 @@ export function CsReflection({ learned, next, validate, className }: CsReflectio
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: DURATION.base, delay: i * 0.07, ease: EASE }}
           >
-            <p className="mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+            <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
               {r.label}
             </p>
             <p className="max-w-[64ch] text-[15px] leading-[1.75] text-foreground/75">

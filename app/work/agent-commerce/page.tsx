@@ -73,29 +73,29 @@ function PhoneVisual() {
         </div>
         {/* Header */}
         <div className="flex items-center gap-2 border-b border-black/[0.08] bg-white px-3.5 py-2.5 dark:border-white/[0.06] dark:bg-[#111]">
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-white dark:text-black">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-white dark:text-black">
             AI
           </div>
           <div>
             <p className="mb-0.5 text-[11px] font-medium leading-none text-foreground dark:text-white">ChatAI Agent</p>
-            <p className="text-[10px] text-accent">● Active, booking your trip</p>
+            <p className="text-[11px] text-accent">● Active, booking your trip</p>
           </div>
         </div>
         {/* Chat body */}
         <div className="flex flex-col gap-2 px-2.5 py-3">
           <div className="max-w-[85%] self-end rounded-[10px] rounded-br-[3px] bg-muted px-2.5 py-2 dark:bg-[#222]">
-            <p className="text-[10px] leading-[1.5] text-muted-foreground dark:text-white/70">Book me a flight to Tokyo, business class</p>
+            <p className="text-[11px] leading-[1.5] text-muted-foreground dark:text-white/70">Book me a flight to Tokyo, business class</p>
           </div>
           <div className="max-w-[85%] self-start rounded-[10px] rounded-bl-[3px] bg-card px-2.5 py-2 ring-1 ring-border/80 dark:bg-[#1a1a1a] dark:ring-0">
-            <p className="text-[10px] leading-[1.5] text-foreground/75 dark:text-white/80">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
+            <p className="text-[11px] leading-[1.5] text-foreground/75 dark:text-white/80">Found: ANA NH807, departs 22:15. Business, direct. ¥285,000. Booking now...</p>
           </div>
           {/* Trust moment */}
           <div className="mt-0.5 rounded-[10px] border border-accent/35 bg-accent/[0.07] p-2.5 dark:border-accent/25 dark:bg-accent/[0.08]">
-            <p className="text-[9px] uppercase tracking-[0.05em] font-semibold text-accent mb-1.5">Payment secured</p>
-            <p className="mb-2 text-[10px] leading-[1.4] text-muted-foreground dark:text-white/60">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
+            <p className="text-[11px] uppercase tracking-[0.05em] font-semibold text-accent mb-1.5">Payment secured</p>
+            <p className="mb-2 text-[11px] leading-[1.4] text-muted-foreground dark:text-white/60">ANA NH807 · Business · Tokyo<br />¥285,000 · Visa ···· 4821</p>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-              <p className="text-[9px] font-medium text-accent">Transaction verified and protected</p>
+              <p className="text-[11px] font-medium text-accent">Transaction verified and protected</p>
             </div>
             <p className="mt-2 text-right text-[8px] tracking-[0.04em] text-muted-foreground dark:text-neutral-600">Secured by trusted payment network ✦</p>
           </div>
@@ -462,12 +462,12 @@ export default function Page() {
                         ? "bg-accent shadow-[0_0_20px_rgba(244,63,94,0.45)]"
                         : "bg-muted border border-border"
                     }`}>
-                      {node.active && <span className="text-[10px] text-black font-bold">✓</span>}
+                      {node.active && <span className="text-[11px] text-black font-bold">✓</span>}
                     </div>
-                    <p className={`text-[10px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                    <p className={`text-[11px] text-center leading-[1.35] mb-1.5 ${node.active ? "text-foreground font-medium" : "text-muted-foreground"}`}>
                       {node.label.map((line, j) => <span key={j} className="block">{line}</span>)}
                     </p>
-                    <p className="text-[9px] text-center text-accent leading-[1.35] min-h-[24px]">
+                    <p className="text-[11px] text-center text-accent leading-[1.35] min-h-[24px]">
                       {node.role.map((line, j) => <span key={j} className="block">{line}</span>)}
                     </p>
                   </div>
@@ -538,7 +538,7 @@ export default function Page() {
                   },
                 ].map((col, ci) => (
                   <div key={ci} className={`p-5 ${ci === 0 ? "md:border-r border-border" : ""} border-b md:border-b-0 border-border last:border-b-0`}>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-4">{col.label}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-4">{col.label}</p>
                     <div className="flex flex-col gap-3">
                       {col.flows.map(f => (
                         <div key={f.num} className="flex gap-3 p-3 bg-muted rounded-lg">
@@ -714,7 +714,7 @@ export default function Page() {
                   <div key={col.version} className={`p-6 ${col.version === "Future" ? "bg-muted" : "bg-background"}`}>
                     <p className="text-[13px] font-semibold text-foreground mb-0.5">{col.version}</p>
                     <p className="text-[12px] text-muted-foreground mb-3">{col.date}</p>
-                    <span className={`inline-block text-[10px] font-medium px-2.5 py-1 rounded-full mb-4 ${col.badgeClass}`}>
+                    <span className={`inline-block text-[11px] font-medium px-2.5 py-1 rounded-full mb-4 ${col.badgeClass}`}>
                       {col.badge}
                     </span>
                     <ul className="flex flex-col gap-2">

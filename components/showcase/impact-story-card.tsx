@@ -57,7 +57,7 @@ export function ImpactStoryCard({
           {label}
         </figcaption>
 
-        <div className="absolute inset-x-3 bottom-3 z-20 overflow-hidden rounded-[16px] border border-white/12 bg-neutral-950/42 p-5 text-white shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:inset-x-5 sm:bottom-5 sm:grid sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center sm:gap-8 sm:p-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:p-7">
+        <div className="absolute inset-x-3 bottom-3 z-20 overflow-hidden rounded-2xl border border-white/12 bg-neutral-950/42 p-5 text-white shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:inset-x-5 sm:bottom-5 sm:grid sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center sm:gap-8 sm:p-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:p-7">
           <div className="max-w-md">
             <blockquote className="text-balance text-sm font-semibold leading-6 sm:text-base sm:leading-7">
               &ldquo;{quote}&rdquo;

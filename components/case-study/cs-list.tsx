@@ -32,7 +32,7 @@ export function CsList({ items, variant = "bullet" }: Props) {
           )}
           {variant === "numbered" && (
             <span className="
-              mt-0.5 text-[10px] font-bold tabular-nums
+              mt-0.5 text-[11px] font-bold tabular-nums
               text-accent
               w-5 shrink-0 text-right
             ">

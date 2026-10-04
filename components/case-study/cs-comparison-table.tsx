@@ -54,7 +54,7 @@ export function CsComparisonTable({
             <tr className="border-b border-border/70">
               <th
                 scope="col"
-                className="px-5 py-3.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
+                className="px-5 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground"
               >
                 Criterion
               </th>
@@ -71,7 +71,7 @@ export function CsComparisonTable({
                 >
                   {c}
                   {i === highlight && (
-                    <span className="ml-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent">
+                    <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.12em] text-accent">
                       chosen
                     </span>
                   )}

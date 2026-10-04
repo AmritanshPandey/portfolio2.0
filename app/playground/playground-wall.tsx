@@ -176,7 +176,7 @@ export function PlaygroundWall() {
 
               {experiment.usedIn && (
                 <div className="border-t border-white/10 pt-5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
                     Used in
                   </p>
                   <Link

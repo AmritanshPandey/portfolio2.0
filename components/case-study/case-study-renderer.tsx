@@ -56,7 +56,7 @@ export function CaseStudyRenderer({ data }: Props) {
         <div className="space-y-10">
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Ownership
@@ -65,7 +65,7 @@ export function CaseStudyRenderer({ data }: Props) {
           </div>
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Collaboration
@@ -80,7 +80,7 @@ export function CaseStudyRenderer({ data }: Props) {
         <div className="space-y-12">
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Research Inputs
@@ -89,7 +89,7 @@ export function CaseStudyRenderer({ data }: Props) {
           </div>
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Key Insights
@@ -98,7 +98,7 @@ export function CaseStudyRenderer({ data }: Props) {
           </div>
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Design Implications
@@ -142,7 +142,7 @@ export function CaseStudyRenderer({ data }: Props) {
         <div className="space-y-10">
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-6
             ">
               User Flow
@@ -151,7 +151,7 @@ export function CaseStudyRenderer({ data }: Props) {
           </div>
           <div>
             <p className="
-              text-[10px] font-semibold uppercase tracking-[0.18em]
+              text-[11px] font-semibold uppercase tracking-[0.18em]
               text-muted-foreground mb-5
             ">
               Design Highlights

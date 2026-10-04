@@ -46,7 +46,7 @@ export function DarkModeRemap() {
           </div>
         </div>
         <div className="p-5 border-t md:border-t-0 md:border-l border-border/60">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Token remap</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Token remap</p>
           <div className="flex flex-col gap-1.5">
             {TOKENS.map((t, i) => (
               <div key={t.role} className="flex items-center gap-2 text-[11px]">

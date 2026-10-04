@@ -31,7 +31,7 @@ export function CsTimeline({ items }: Props) {
             {/* Week label */}
             <div className="shrink-0 w-[65px] md:w-[73px] text-right pr-0 pt-0.5">
               <p className="
-                text-[10px] font-semibold leading-tight
+                text-[11px] font-semibold leading-tight
                 text-muted-foreground
               ">
                 {item.week}

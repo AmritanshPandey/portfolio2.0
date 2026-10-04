@@ -28,20 +28,20 @@ export function PrimaryControls() {
               <input type="color" value={hex} onChange={e => applyHex(e.target.value)} className="absolute inset-0 opacity-0 w-full h-full cursor-pointer" aria-label="Pick primary color" />
             </label>
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Primary color</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Primary color</span>
               <input aria-label="Primary color hex" value={text} onChange={e => applyHex(e.target.value)} spellCheck={false}
                 className="w-28 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none" />
             </div>
           </div>
 
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Scale name</span>
+            <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Scale name</span>
             <input aria-label="Scale name" value={name} onChange={e => setName(e.target.value.replace(/[^a-zA-Z0-9-]/g, "").toLowerCase() || "brand")} spellCheck={false}
               className="w-28 font-mono text-[13px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none" />
           </div>
 
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Base HSL</span>
+            <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Base HSL</span>
             <span className="font-mono text-[13px] text-foreground/70 py-1.5">
               {Math.round(baseHsl.h)}° {Math.round(baseHsl.s)}% {Math.round(baseHsl.l)}%
             </span>
@@ -54,7 +54,7 @@ export function PrimaryControls() {
 
         {/* feel */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Feel</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Feel</span>
           {FEELS.map(f => (
             <button key={f.key} onClick={() => setFeelKey(f.key)} title={f.desc} aria-pressed={feelKey === f.key}
               className={`text-[12px] font-medium px-3 py-1.5 rounded-lg border transition-colors ${
@@ -67,7 +67,7 @@ export function PrimaryControls() {
 
         {/* presets */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Presets</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Presets</span>
           {PRESETS.map(p => (
             <button key={p.name} onClick={() => applyHex(p.hex)} title={p.name} aria-label={`Use ${p.name} preset`}
               className={`w-6 h-6 rounded-full border transition-transform hover:scale-110 ${

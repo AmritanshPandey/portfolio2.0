@@ -49,7 +49,7 @@ export function ServiceCarousel({
       {/* Header */}
       <div className="mb-8 flex items-end justify-between gap-6">
         <div>
-          <p className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="mb-3 font-mono text-[11px] font-medium tracking-normal text-muted-foreground">
             {eyebrow}
           </p>
           <h2 className="max-w-[16ch] text-pretty text-3xl font-semibold leading-[1.1] tracking-[-0.02em] text-foreground md:text-4xl">

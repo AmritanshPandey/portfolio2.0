@@ -29,7 +29,7 @@ export function CsFlow({ steps, dark = false }: Props) {
               }
             `}>
               <p className={`
-                text-[10px] font-semibold uppercase tracking-[0.14em] mb-0.5
+                text-[11px] font-semibold uppercase tracking-[0.14em] mb-0.5
                 ${dark ? "text-neutral-600" : "text-muted-foreground"}
               `}>
                 {String(i + 1).padStart(2, "0")}

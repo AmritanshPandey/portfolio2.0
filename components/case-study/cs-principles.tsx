@@ -77,7 +77,7 @@ export function CsPrinciples({ principles, intro, className }: CsPrinciplesProps
                     )}
                   />
                   <span>
-                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                       In practice{" "}
                     </span>
                     {p.applied}

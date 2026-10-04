@@ -69,7 +69,7 @@ export function CsResults({ eyebrow, heading, cta, stats, className }: CsResults
           <div
             key={s.label}
             className={clsx(
-              "rounded-[1.5rem] p-6 ring-1",
+              "rounded-3xl p-6 ring-1",
               s.highlight
                 ? "bg-accent/10 ring-accent/25 dark:bg-accent/[0.16]"
                 : "bg-card ring-border/60"

@@ -110,7 +110,7 @@ function StepCard({ step, faded }: { step: Step; faded?: boolean }) {
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] bg-card p-5 md:p-6",
+        "flex h-full w-full flex-col overflow-hidden rounded-3xl bg-card p-5 md:p-6",
         "ring-1 ring-foreground/[0.08] dark:ring-white/[0.08]",
         "shadow-[0_18px_44px_-24px_rgba(0,0,0,0.35)] will-change-transform"
       )}
@@ -398,7 +398,7 @@ export function ApproachDeck() {
               }
               cycleForward()
             }}
-            className="relative h-[320px] w-full max-w-[382px] cursor-pointer rounded-[1.5rem] outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:h-[330px] md:h-[340px]"
+            className="relative h-[320px] w-full max-w-[382px] cursor-pointer rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background sm:h-[330px] md:h-[340px]"
           >
             {STEPS.map((step, i) => {
               const pos = (i - index + COUNT) % COUNT

@@ -488,7 +488,7 @@ export default function Navbar() {
               }}
             >
               <div className="border-b border-border/60 px-4 py-3">
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                   Menu
                 </p>
               </div>

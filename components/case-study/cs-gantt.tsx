@@ -101,7 +101,7 @@ export function CsGantt({
 
             {nowPct !== null && (
               <span
-                className="absolute top-0 z-20 -translate-x-1/2 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent-foreground shadow-[0_4px_12px_-2px_var(--accent)]"
+                className="absolute top-0 z-20 -translate-x-1/2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-accent-foreground shadow-[0_4px_12px_-2px_var(--accent)]"
                 style={{ left: `${nowPct}%` }}
               >
                 Now

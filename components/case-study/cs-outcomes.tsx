@@ -63,7 +63,7 @@ export function CsOutcomes({
           className="object-cover"
         />
         {tag && (
-          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-background/85 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground ring-1 ring-border/60 backdrop-blur">
+          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-background/85 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground ring-1 ring-border/60 backdrop-blur">
             {tag}
           </span>
         )}

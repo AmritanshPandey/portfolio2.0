@@ -56,7 +56,7 @@ export function ServiceCard({ item, active, onActivate, ref, className }: Servic
       onFocus={onActivate}
       onClick={onActivate}
       className={cn(
-        "group relative h-[24rem] overflow-hidden rounded-[1.5rem] md:h-[26rem] lg:h-[30rem]",
+        "group relative h-[24rem] overflow-hidden rounded-3xl md:h-[26rem] lg:h-[30rem]",
         "ring-1 ring-black/[0.06] dark:ring-white/[0.08]",
         // Mobile: fixed-width snap panel. md+: zero-basis accordion item that
         // grows when active. transition-[flex-grow] animates the expand.

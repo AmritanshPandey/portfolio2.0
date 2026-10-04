@@ -21,9 +21,9 @@ const COMPONENT = [
 function Tier({ n, name, val, mono = true, swatch }: { n: string; name: string; val: string; mono?: boolean; swatch?: string }) {
   return (
     <div className="flex items-center gap-3 rounded-lg border border-border/60 bg-card px-4 py-3">
-      <span className="font-mono text-[10px] text-rose-600 dark:text-rose-400 w-6 shrink-0">{n}</span>
+      <span className="font-mono text-[11px] text-rose-600 dark:text-rose-400 w-6 shrink-0">{n}</span>
       <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{name}</p>
+        <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{name}</p>
         <p className={`text-[13px] text-foreground truncate ${mono ? "font-mono" : ""}`}>{val}</p>
       </div>
       {swatch && <span className="ml-auto w-7 h-7 rounded-md border border-border shrink-0" style={{ background: swatch }} />}
@@ -55,7 +55,7 @@ export function TokenTaxonomy() {
     <Panel>
       <div className="grid md:grid-cols-[200px_1fr]">
         <div className="p-4 border-b md:border-b-0 md:border-r border-border/60">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Component tokens</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Component tokens</p>
           <div className="flex flex-col gap-1.5">
             {COMPONENT.map(c => (
               <button key={c.tok} onClick={() => setSel(c.tok)}
@@ -68,7 +68,7 @@ export function TokenTaxonomy() {
         </div>
 
         <div className="p-5 flex flex-col gap-2.5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Resolution chain</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Resolution chain</p>
           <Tier n="03" name="Component token" val={comp.tok} />
           <span className="text-muted-foreground text-center text-[11px] -my-1">↓ references</span>
           <Tier n="02" name="Alias token (semantic role)" val={comp.alias} />
@@ -118,7 +118,7 @@ export function BreakTheSystem() {
           </div>
         </div>
         <div className="p-6 md:border-l border-t md:border-t-0 border-border/60 flex flex-col justify-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400 mb-2">The policy</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-rose-600 dark:text-rose-400 mb-2">The policy</p>
           <p className="text-[14px] text-foreground/80 leading-relaxed">{ctx.rule}</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed mt-4">
             “Break the system” isn&apos;t a free pass — it&apos;s a documented exception with a boundary. Naming where off-system color is allowed is what stops every screen from becoming an exception.
@@ -153,7 +153,7 @@ export function ColorVersioning() {
       </div>
       <div className="grid md:grid-cols-2">
         <div className="p-6 flex flex-col gap-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Components (unchanged)</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Components (unchanged)</p>
           <button className="text-[13px] font-medium px-4 py-2 rounded-lg text-white self-start transition-colors duration-300" style={{ background: c.base }}>Primary CTA</button>
           <span className="text-[13px] font-medium self-start transition-colors duration-300" style={{ color: c.base }}>Inline link →</span>
           <span className="text-[12px] font-medium px-2.5 py-1 rounded-md self-start transition-colors duration-300" style={{ background: c.tint, color: c.base }}>Active nav item</span>
@@ -161,7 +161,7 @@ export function ColorVersioning() {
         </div>
 
         <div className="p-6 md:border-l border-t md:border-t-0 border-border/60">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">The only edit</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">The only edit</p>
           <pre className="font-mono text-[11px] leading-relaxed bg-foreground/[0.04] border border-border rounded-lg p-3 overflow-x-auto">
 <span className="text-muted-foreground">{`/* tokens.css */`}</span>{"\n"}
 <span className="text-foreground/80">--color-action: </span>

@@ -168,7 +168,7 @@ export function CaseStudyPage({
             >
               {meta.map((m) => (
                 <div key={m.label}>
-                  <dt className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
+                  <dt className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
                     {m.label}
                   </dt>
                   <dd className="text-[13.5px] leading-snug text-foreground">{m.value}</dd>
@@ -191,7 +191,7 @@ export function CaseStudyPage({
                 transition={{ duration: DURATION.base, delay: (i % 2) * 0.05, ease: EASE }}
               >
                 <div>
-                  <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+                  <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
                     {s.label}
                   </p>
                   <Fragment key={`${s.id}-content`}>{s.content}</Fragment>

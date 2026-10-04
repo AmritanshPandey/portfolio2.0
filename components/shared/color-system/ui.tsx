@@ -21,7 +21,7 @@ export function Seg<T extends string>({
 }) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      {label && <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">{label}</span>}
+      {label && <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">{label}</span>}
       {options.map(o => (
         <button
           key={o.key}

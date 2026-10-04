@@ -65,7 +65,7 @@ export function TrajectorySection() {
                   {s.period}
                 </span>
                 {s.current && (
-                  <span className="flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/[0.08] px-2 py-0.5 text-[10px] font-medium text-accent">
+                  <span className="flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/[0.08] px-2 py-0.5 text-[11px] font-medium text-accent">
                     <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                     Now
                   </span>
@@ -80,7 +80,7 @@ export function TrajectorySection() {
                 <p className="mt-3 text-[13.5px] leading-relaxed text-muted-foreground">
                   {s.line}
                 </p>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                   {s.tag}
                 </p>
               </div>

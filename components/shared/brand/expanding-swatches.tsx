@@ -100,7 +100,7 @@ export function ExpandingSwatches({
               )}
             >
               <span className="truncate text-[11px] font-semibold leading-none">{s.name}</span>
-              <span className="font-mono text-[10px] uppercase leading-none opacity-80">
+              <span className="font-mono text-[11px] uppercase leading-none opacity-80">
                 {s.hex}
               </span>
             </span>

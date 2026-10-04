@@ -78,7 +78,7 @@ export default function Page() {
             { label: "Category", value: "Privacy-first · Personal tools" },
           ].map(item => (
             <div key={item.label} className="p-4 rounded-xl border border-border bg-card">
-              <p className="text-[10px] uppercase tracking-[0.16em] font-semibold text-muted-foreground mb-1.5">{item.label}</p>
+              <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-muted-foreground mb-1.5">{item.label}</p>
               <p className="text-[13px] font-medium text-foreground">{item.value}</p>
             </div>
           ))}
