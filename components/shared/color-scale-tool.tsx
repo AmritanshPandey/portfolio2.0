@@ -26,7 +26,7 @@ function ScaleRow({
   return (
     <div>
       <div className="flex items-center gap-2 mb-1.5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-foreground/70">{label}</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-foreground/70">{label}</span>
       </div>
       <div className="grid grid-cols-6 md:grid-cols-11 rounded-xl overflow-hidden border border-border/60">
         {swatches.map(s => {
@@ -43,7 +43,7 @@ function ScaleRow({
             >
               <div className="h-16 md:h-20 flex flex-col justify-between p-1.5" style={{ background: s.hex }}>
                 <div className="flex items-start justify-between">
-                  <span className="font-mono text-[9px] font-semibold" style={{ color: ink, opacity: 0.85 }}>
+                  <span className="font-mono text-[11px] font-semibold" style={{ color: ink, opacity: 0.85 }}>
                     {s.stop}{s.anchor ? " ★" : ""}
                   </span>
                   <span style={{ color: ink }} className="opacity-0 group-hover:opacity-80 transition-opacity">
@@ -191,7 +191,7 @@ export function ColorScaleTool() {
       {/* ── what next: validate / map / dark ── */}
       <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-border/40 pt-5">
         <div className="flex items-center gap-2 flex-wrap mb-5">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Use this scale</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">Use this scale</span>
           {([
             ["contrast", "Contrast checker"],
             ["tokens", "Token map"],
@@ -213,14 +213,14 @@ export function ColorScaleTool() {
       {/* ── preview ── */}
       {preview && (
         <div className="px-5 md:px-6 pb-5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Live preview</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mb-3">Live preview</p>
           <Preview P={sys.primary} N={sys.neutral} sem={sys.semMap} />
         </div>
       )}
 
       {/* ── exports ── */}
       <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-border/40 pt-5 flex flex-wrap items-center gap-2.5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">
+        <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground mr-1">
           Copy as{showSystem ? " (full system)" : ""}
         </span>
         {FORMATS.map(fmt => (

@@ -205,14 +205,14 @@ function ArticleVisual({ article, featured = false }: { article: ArticleItem; fe
           {article.tags?.slice(0, featured ? 3 : 1).map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[10px] font-medium text-white/80"
+              className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[11px] font-medium text-white/80"
             >
               {tag}
             </span>
           ))}
         </div>
         {article.readTime ? (
-          <span className="font-mono text-[10px] tracking-[0.08em] text-white/45">
+          <span className="font-mono text-[11px] tracking-[0.08em] text-white/45">
             {article.readTime}
           </span>
         ) : null}

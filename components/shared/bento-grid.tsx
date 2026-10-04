@@ -107,7 +107,7 @@ export function BentoCard({
         )}
 
         {eyebrow && (
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
             {eyebrow}
           </p>
         )}

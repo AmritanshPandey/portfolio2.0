@@ -129,7 +129,7 @@ export function CsHero({ eyebrow, title, subtitle, meta }: Props) {
             {metaEntries.map(([key, value]) => (
               <div key={key} className="flex flex-col gap-1">
                 <p className="
-                  text-[10px] font-semibold uppercase tracking-[0.18em]
+                  text-[11px] font-semibold uppercase tracking-[0.18em]
                   text-muted-foreground
                 ">
                   {toLabel(key)}

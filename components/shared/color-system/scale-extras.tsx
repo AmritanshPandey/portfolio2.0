@@ -57,26 +57,26 @@ export function ContrastChecker({ scale }: { scale: Stop[] }) {
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-end gap-4">
         <label className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Foreground</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Foreground</span>
           <select value={fg} onChange={e => setFg(e.target.value)}
             className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none">
             {optionEls}
           </select>
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Background</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Background</span>
           <select value={bg} onChange={e => setBg(e.target.value)}
             className="font-mono text-[12px] bg-background border border-border rounded-md px-2.5 py-1.5 text-foreground focus:border-rose-500/60 outline-none">
             {optionEls}
           </select>
         </label>
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Ratio</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">Ratio</span>
           <span className="font-mono text-[20px] font-semibold text-foreground leading-none py-0.5">{ratio.toFixed(2)}:1</span>
         </div>
         <div className="flex gap-2">
           {badges.map(b => (
-            <span key={b.label} className="text-[10px] font-mono font-semibold px-2 py-1 rounded text-white" style={{ background: b.pass ? "#16a34a" : "#dc2626" }}>
+            <span key={b.label} className="text-[11px] font-mono font-semibold px-2 py-1 rounded text-white" style={{ background: b.pass ? "#16a34a" : "#dc2626" }}>
               {b.pass ? "✓" : "✕"} {b.label}
             </span>
           ))}

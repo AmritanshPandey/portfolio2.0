@@ -41,7 +41,7 @@ function HeroVisual() {
 
       {/* Act 1 */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Act 1 · May–Oct 2020 · 6 months
         </p>
         <div className="flex items-center gap-3">
@@ -65,7 +65,7 @@ function HeroVisual() {
           <div className="w-px flex-1 bg-accent/30" />
         </div>
         <div className="flex-1 rounded-xl border border-accent/20 bg-accent/[0.04] px-4 py-3 my-1">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">⚡ Forcing Function</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-1">⚡ Forcing Function</p>
           <p className="text-[12px] font-medium text-foreground/80">COVID-19 Lockdowns</p>
           <p className="text-[11px] text-muted-foreground">Citizens stop moving. B2C use-case evaporates.</p>
         </div>
@@ -73,7 +73,7 @@ function HeroVisual() {
 
       {/* Pivot */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.04] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Pivot · Oct–Nov 2020 · 6 weeks
         </p>
         <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ function HeroVisual() {
 
       {/* Act 3 */}
       <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
           Act 3 · Nov 2020–Apr 2021 · 5 months
         </p>
         <div className="flex items-center gap-3">
@@ -124,7 +124,7 @@ function HeroVisual() {
         ].map(s => (
           <div key={s.label} className="text-center rounded-xl border border-border/60 bg-muted/30 py-3">
             <p className="text-[14px] font-semibold text-foreground">{s.num}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{s.label}</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -157,7 +157,7 @@ function Hero() {
       asideCol="380px"
       aside={
         <div className="rounded-2xl border border-border/60 bg-muted/20 dark:bg-white/[0.02] p-6 backdrop-blur-sm">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
             Product Journey
           </p>
           <HeroVisual />
@@ -173,7 +173,7 @@ function ActTimeline() {
   return (
     <div className="flex flex-col gap-0">
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
+        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">A consumer safety app, 0→1. Real users, near-zero revenue.</p>
       </div>
@@ -182,13 +182,13 @@ function ActTimeline() {
           <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-accent/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
         <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-accent mb-1">⚡ Forcing function · March 2020</p>
+          <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">⚡ Forcing function · March 2020</p>
           <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. People stop moving, and so does B2C growth.</p>
           <AddLater note="the date. This sits after Act 1 (May–Oct 2020) but says March 2020, and the Context section says you were “6 months into building” by then." className="mt-2 inline-block" />
         </div>
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
+        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
         <p className="text-[15px] font-medium text-foreground mb-1">The Pivot Decision</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Enterprise inbound appears. We prototype in days, validate, commit.</p>
       </div>
@@ -196,7 +196,7 @@ function ActTimeline() {
         <div className="ml-[11px] w-px h-8 bg-border/50" />
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.05] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
+        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">B2B SaaS Rebuild</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity, smart cards, and a dashboard I designed and partly coded.</p>
       </div>
@@ -205,12 +205,12 @@ function ActTimeline() {
           <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-red-500/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
         <div className="flex-1 bg-red-500/[0.04] border border-red-500/15 rounded-xl px-4 py-3">
-          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-red-600/70 dark:text-red-400/60 mb-1">⚡ Forcing function · Late 2021</p>
+          <p className="text-[11px] font-semibold tracking-normal text-red-600/70 dark:text-red-400/60 mb-1">⚡ Forcing function · Late 2021</p>
           <p className="text-[13px] text-foreground/75 leading-relaxed">Restrictions lift. Clients stop renewing.</p>
         </div>
       </div>
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-1">Wind down · Post Apr 2021</p>
+        <p className="text-[11px] font-semibold tracking-normal text-red-600/70 dark:text-red-400/60 mb-1">Wind down · Post Apr 2021</p>
         <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">₹1.98Cr lifetime revenue, then a wind-down.</p>
       </div>
@@ -239,7 +239,7 @@ function ForcingFunctions() {
     <div className="grid sm:grid-cols-2 gap-4">
       {ffs.map(ff => (
         <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
-          <p className={`text-[9px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-600/70 dark:text-red-400/60"}`}>
+          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-600/70 dark:text-red-400/60"}`}>
             Forcing function {ff.num} · {ff.date}
           </p>
           <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
@@ -261,22 +261,22 @@ function DailyRhythm() {
     <div className="space-y-8">
       {/* 24h bar */}
       <div>
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
         <div className="flex h-8 rounded-full overflow-hidden border border-border/40 gap-px">
           <div className="bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-accent tracking-wide">UX DESIGN</span>
+            <span className="text-[11px] font-semibold text-accent tracking-wide">UX DESIGN</span>
           </div>
           <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
-            <span className="text-[9px] font-semibold text-muted-foreground tracking-wide">PRD</span>
+            <span className="text-[11px] font-semibold text-muted-foreground tracking-wide">PRD</span>
           </div>
           <div className="bg-accent/10 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[9px] font-semibold text-accent tracking-wide">REACT</span>
+            <span className="text-[11px] font-semibold text-accent tracking-wide">REACT</span>
           </div>
           <div className="bg-muted/40 flex items-center justify-center" style={{ width: "10%" }}>
-            <span className="text-[9px] text-muted-foreground">…</span>
+            <span className="text-[11px] text-muted-foreground">…</span>
           </div>
         </div>
-        <div className="flex justify-between mt-1.5 text-[10px] text-muted-foreground">
+        <div className="flex justify-between mt-1.5 text-[11px] text-muted-foreground">
           <span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>12am</span>
         </div>
       </div>
@@ -284,17 +284,17 @@ function DailyRhythm() {
       {/* Blocks */}
       <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/50 rounded-2xl border border-border overflow-hidden">
         <div className="p-6 bg-card">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">Night</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">Night</p>
           <p className="text-[14px] font-medium text-foreground mb-2">UX Design</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process, I was the handoff.</p>
         </div>
         <div className="p-6 bg-muted/40">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">12pm Standup</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">12pm Standup</p>
           <p className="text-[14px] font-medium text-foreground mb-2">PRD Delivery</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise, a vague PRD meant broken builds by afternoon.</p>
         </div>
         <div className="p-6 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-2">Afternoon</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-2">Afternoon</p>
           <p className="text-[14px] font-medium text-foreground mb-2">React Frontend</p>
           <p className="text-[12px] text-muted-foreground leading-relaxed">Coded the B2B dashboard frontend in React.js alongside the full-stack dev. Frontend would have blocked shipping without me.</p>
         </div>
@@ -302,7 +302,7 @@ function DailyRhythm() {
 
       {/* Team */}
       <div className="rounded-2xl border border-border bg-muted/30 p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Full team, 10 people</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Full team, 10 people</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
           {[
             { name: "Dhiraj Nauhbar", title: "Co-founder & CEO" },
@@ -336,12 +336,12 @@ function GapsGrid() {
   return (
     <div className="space-y-8">
       <div>
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-5">Why Life360 didn&apos;t work for India</p>
+        <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-5">Why Life360 didn&apos;t work for India</p>
         <div className="grid sm:grid-cols-2 gap-4">
           {gaps.map((g, i) => (
             <FadeIn key={g.num} delay={i * 0.06}>
               <div className="rounded-2xl border border-border bg-muted/30 p-5 h-full">
-                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-2">{g.num}</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-2">{g.num}</p>
                 <p className="text-[14px] font-medium text-foreground mb-2 leading-snug">{g.finding}</p>
                 <div className="flex gap-2.5 items-start">
                   <span className="text-muted-foreground mt-0.5 shrink-0">→</span>
@@ -356,7 +356,7 @@ function GapsGrid() {
       {/* Drop-off stat visual */}
       <FadeIn>
         <div className="rounded-2xl border border-border bg-card p-6">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Life360 onboarding drop-off rate · 15 Indian users</p>
+          <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-4">Life360 onboarding drop-off rate · 15 Indian users</p>
           <div className="flex items-end gap-4">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-2">
@@ -385,7 +385,7 @@ function GapsGrid() {
 
       {/* Commercial reality */}
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.04] p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-3">The commercial reality of Act 1</p>
+        <p className="text-[11px] font-semibold tracking-normal text-accent mb-3">The commercial reality of Act 1</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
           Real users, but most never paid: B2C freemium in India in 2020 was validated socially, not commercially.
         </p>
@@ -429,7 +429,7 @@ function PivotValidation() {
     <div className="space-y-4">
       {/* Funnel visual */}
       <div className="rounded-2xl border border-border bg-card p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-6">Validation pipeline before committing</p>
+        <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-6">Validation pipeline before committing</p>
         <div className="relative">
           {/* Funnel steps */}
           {[
@@ -439,7 +439,7 @@ function PivotValidation() {
           ].map((s, i) => (
             <div key={s.step} className="mb-3 last:mb-0">
               <div className="flex items-center gap-3 mb-1.5">
-                <span className="text-[9px] font-bold text-accent w-5">{s.step}</span>
+                <span className="text-[11px] font-bold text-accent w-5">{s.step}</span>
                 <span className="text-[13px] font-semibold text-foreground">{s.label}</span>
                 <span className="text-[11px] text-muted-foreground">{s.sub}</span>
               </div>
@@ -477,11 +477,11 @@ function ProductComparison() {
     <div className="overflow-hidden rounded-2xl border border-border">
       <div className="grid grid-cols-[1fr_1fr] divide-x divide-border">
         <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 1</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 1</p>
           <p className="text-[15px] font-medium text-foreground">Consumer Safety App</p>
         </div>
         <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 3</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 3</p>
           <p className="text-[15px] font-medium text-foreground">B2B Workplace Safety SaaS</p>
         </div>
       </div>
@@ -489,11 +489,11 @@ function ProductComparison() {
         {rows.map(r => (
           <div key={r.label} className="grid grid-cols-[1fr_1fr] divide-x divide-border">
             <div className="px-6 py-4 bg-accent/[0.02]">
-              <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
               <p className="text-[13px] text-accent leading-relaxed">{r.act1}</p>
             </div>
             <div className="px-6 py-4 bg-accent/[0.02]">
-              <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
               <p className="text-[13px] text-accent leading-relaxed">{r.act3}</p>
             </div>
           </div>
@@ -517,14 +517,14 @@ function DashboardMockup() {
             ))}
           </div>
           <div className="flex-1 mx-4 bg-white/[0.06] rounded-md h-5 flex items-center px-3">
-            <p className="text-[10px] text-neutral-500">drorapp.com/dashboard · Factory A</p>
+            <p className="text-[11px] text-neutral-500">drorapp.com/dashboard · Factory A</p>
           </div>
         </div>
         {/* Dashboard body */}
         <div className="bg-muted/20 p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-[12px] font-semibold text-foreground">Live safety overview, today</p>
-            <span className="text-[10px] text-accent bg-accent/10 border border-accent/20 rounded-full px-2 py-0.5">● Live</span>
+            <span className="text-[11px] text-accent bg-accent/10 border border-accent/20 rounded-full px-2 py-0.5">● Live</span>
           </div>
           {/* Metric cards row */}
           <div className="grid grid-cols-3 gap-3 mb-4">
@@ -535,7 +535,7 @@ function DashboardMockup() {
             ].map(m => (
               <div key={m.label} className="rounded-xl border border-border bg-card p-4">
                 <p className={`text-[22px] font-bold ${m.textColor} leading-none mb-1`}>{m.num}</p>
-                <p className="text-[10px] text-muted-foreground mb-2">{m.label}</p>
+                <p className="text-[11px] text-muted-foreground mb-2">{m.label}</p>
                 <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                   <motion.div
                     className={`h-full rounded-full ${m.barColor}`}
@@ -552,7 +552,7 @@ function DashboardMockup() {
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] font-medium text-foreground">Zone compliance heatmap</p>
-              <span className="text-[10px] text-muted-foreground">Factory floor A</span>
+              <span className="text-[11px] text-muted-foreground">Factory floor A</span>
             </div>
             <div className="grid grid-cols-8 gap-1">
               {[0.9,0.8,0.95,0.7,0.85,0.9,0.6,0.95,0.75,0.9,0.85,0.95,0.8,0.7,0.9,0.85,
@@ -568,7 +568,7 @@ function DashboardMockup() {
               {[{ c: "rgba(34,197,94,0.6)", l: "High compliance" }, { c: "rgba(244,63,94,0.6)", l: "At risk" }].map(l => (
                 <div key={l.l} className="flex items-center gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-sm" style={{ background: l.c }} />
-                  <span className="text-[10px] text-muted-foreground">{l.l}</span>
+                  <span className="text-[11px] text-muted-foreground">{l.l}</span>
                 </div>
               ))}
             </div>
@@ -621,7 +621,7 @@ function ImpactMetrics() {
         {metrics.map((m, i) => (
           <FadeIn key={m.label} delay={i * 0.05}>
             <div className="rounded-2xl border border-border bg-card p-4">
-              <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground mb-1.5">{m.label}</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1.5">{m.label}</p>
               <p className="text-[22px] font-bold text-foreground leading-none mb-1">{m.value}</p>
               <p className="text-[11px] text-muted-foreground">{m.sub}</p>
             </div>
@@ -634,7 +634,7 @@ function ImpactMetrics() {
         <div className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1">Market position</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1">Market position</p>
               <p className="text-[15px] font-medium text-foreground">23rd of 215 active competitors</p>
             </div>
             <div className="text-right">
@@ -655,8 +655,8 @@ function ImpactMetrics() {
             </div>
           </div>
           <div className="flex justify-between mt-1.5">
-            <span className="text-[10px] text-accent font-medium">#1</span>
-            <span className="text-[10px] text-muted-foreground">#215</span>
+            <span className="text-[11px] text-accent font-medium">#1</span>
+            <span className="text-[11px] text-muted-foreground">#215</span>
           </div>
         </div>
       </FadeIn>
@@ -676,7 +676,7 @@ function ImpactMetrics() {
 
       {/* Honest assessment */}
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-3">Honest assessment</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-3">Honest assessment</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
           ₹1.98Cr sounds like a success. It isn&apos;t, against $494K (~₹4Cr) raised. The pivot sold only while distancing was a compliance requirement. We proved we could sell. We didn&apos;t prove the market would last.
         </p>
@@ -846,7 +846,7 @@ export default function Page() {
           </div>
           <ProductComparison />
           <div>
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-5">How the product worked, 4 layers</p>
+            <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-5">How the product worked, 4 layers</p>
             <div className="grid sm:grid-cols-2 gap-4">
               {[
                 { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>, num: "Layer 01 · Hardware", title: "Smart cards for every worker", desc: "Each essential worker carried a Bluetooth-enabled smart card. Cards detected proximity to other cards. When two workers got too close for too long, both devices vibrated and logged the event." },
@@ -857,7 +857,7 @@ export default function Page() {
                 <FadeIn key={l.num}>
                   <div className="rounded-2xl border border-border bg-card p-5 h-full">
                     <div className="w-8 h-8 rounded-lg bg-muted/60 border border-border flex items-center justify-center mb-4 text-muted-foreground">{l.icon}</div>
-                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">{l.num}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">{l.num}</p>
                     <p className="text-[14px] font-medium text-foreground mb-2 leading-snug">{l.title}</p>
                     <p className="text-[13px] text-muted-foreground leading-relaxed">{l.desc}</p>
                   </div>

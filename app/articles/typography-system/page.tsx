@@ -150,7 +150,7 @@ function CopyButton({ text, className = "" }: { text: string; className?: string
         setDone(true)
         setTimeout(() => setDone(false), 1300)
       }}
-      className={`font-mono text-[10px] uppercase tracking-[0.08em] rounded-md border px-3 py-1.5 transition-colors ${
+      className={`font-mono text-[11px] uppercase tracking-[0.08em] rounded-md border px-3 py-1.5 transition-colors ${
         done
           ? "border-accent text-accent"
           : "border-border text-muted-foreground hover:border-accent hover:text-accent"
@@ -170,7 +170,7 @@ function ToolHead({ children }: { children: React.ReactNode }) {
 }
 
 function CtlLabel({ children }: { children: React.ReactNode }) {
-  return <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{children}</span>
+  return <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{children}</span>
 }
 
 function Chip({ active, onClick, children }: {
@@ -262,8 +262,8 @@ function ModularScaleTool() {
             const px = sizeFor(r.exp)
             return (
               <div key={r.key} className="flex flex-col items-start gap-2 border-b border-border/40 py-3 last:border-0 sm:flex-row sm:items-baseline sm:gap-5 sm:py-2.5">
-                <div className="w-full flex-shrink-0 font-mono text-[10px] leading-[1.6] text-muted-foreground sm:w-[120px]">
-                  <span className="block text-[10px] uppercase tracking-[0.06em] text-accent">{r.name}</span>
+                <div className="w-full flex-shrink-0 font-mono text-[11px] leading-[1.6] text-muted-foreground sm:w-[120px]">
+                  <span className="block text-[11px] uppercase tracking-[0.06em] text-accent">{r.name}</span>
                   {Math.round(px)}px · {r.lh}
                 </div>
                 <div
@@ -312,7 +312,7 @@ function FontPairingExplorer() {
         </div>
       </ToolHead>
       <div className="px-6 py-8 md:px-8">
-        <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-4">{p.note}</div>
+        <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground mb-4">{p.note}</div>
         <div
           className="mb-5 text-[28px] leading-[1.1] tracking-[-0.01em] text-foreground sm:text-[36px]"
           style={{ fontFamily: p.h, fontWeight: p.hw, fontStyle: p.hs }}
@@ -555,7 +555,7 @@ function A11yChecker() {
           {LEGIBILITY.map(l => (
             <div key={l.name} className="rounded-xl border border-border/60 p-4 text-center bg-card">
               <div className="text-[26px] text-foreground mb-1.5" style={{ fontFamily: l.font }}>Il1 O0 rn</div>
-              <div className="font-mono text-[10px] text-muted-foreground">{l.name}</div>
+              <div className="font-mono text-[11px] text-muted-foreground">{l.name}</div>
             </div>
           ))}
         </div>
@@ -642,7 +642,7 @@ export default function Page() {
               <div className="mb-3 text-[34px] leading-[1.05] tracking-[-0.01em] text-foreground sm:text-[40px]" style={{ fontFamily: c.font, fontWeight: c.weight, fontStyle: c.style }}>
                 {c.word}
               </div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-1">{c.lbl}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent mb-1">{c.lbl}</p>
               <p className="text-[13px] text-muted-foreground leading-[1.65]">{c.desc}</p>
             </div>
           ))}
@@ -663,11 +663,11 @@ export default function Page() {
               </div>
               <div className="px-6 py-5">
                 <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent mb-0.5">{c.name}</p>
-                <p className="font-mono text-[10px] text-muted-foreground mb-2.5">{c.font}</p>
+                <p className="font-mono text-[11px] text-muted-foreground mb-2.5">{c.font}</p>
                 <p className="text-[13px] text-foreground/75 leading-[1.65] mb-3">{c.desc}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {c.traits.map(t => (
-                    <span key={t} className="font-mono text-[9px] uppercase tracking-[0.06em] text-muted-foreground border border-border rounded-full px-2 py-0.5">{t}</span>
+                    <span key={t} className="font-mono text-[11px] uppercase tracking-[0.06em] text-muted-foreground border border-border rounded-full px-2 py-0.5">{t}</span>
                   ))}
                 </div>
               </div>
@@ -692,7 +692,7 @@ export default function Page() {
 
         <FadeIn className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="rounded-xl border border-border/60 bg-card p-6">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Buttons &amp; actions</h4>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent mb-4">Buttons &amp; actions</h4>
             <div className="flex flex-wrap items-center gap-2.5">
               {/* Demo buttons — intentionally showing raw colors as design examples */}
               <button type="button" className="rounded-lg bg-rose-600 text-white px-4 py-2 text-[14px] font-medium">Primary action</button>
@@ -702,20 +702,20 @@ export default function Page() {
           </div>
 
           <div className="rounded-xl border border-border/60 bg-card p-6">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Forms &amp; inputs</h4>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent mb-4">Forms &amp; inputs</h4>
             <label className="block text-[12px] font-medium text-foreground mb-1.5">Work email</label>
             <input readOnly value="ada@studio.com" className="w-full bg-background border border-border rounded-md px-3 py-2 text-foreground text-[14px]" />
             <p className="text-[11px] text-muted-foreground mt-2 leading-[1.6]">Label 12px medium · input 14–16px (≥16px on mobile) · hint 11–12px muted.</p>
           </div>
 
           <div className="rounded-xl border border-border/60 bg-card p-6">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Data tables</h4>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent mb-4">Data tables</h4>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[280px] border-collapse">
                 <thead>
                   <tr>
                     {["Plan", "Seats", "MRR"].map((h, i) => (
-                      <th key={h} className={`font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground font-normal py-2 border-b border-border ${i === 2 ? "text-right" : "text-left"}`}>{h}</th>
+                      <th key={h} className={`font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground font-normal py-2 border-b border-border ${i === 2 ? "text-right" : "text-left"}`}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -734,7 +734,7 @@ export default function Page() {
           </div>
 
           <div className="rounded-xl border border-border/60 bg-card p-6">
-            <h4 className="font-mono text-[10px] uppercase tracking-[0.12em] text-accent mb-4">Navigation</h4>
+            <h4 className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent mb-4">Navigation</h4>
             <div className="flex items-center gap-5 overflow-x-auto">
               <span className="text-[13px] text-foreground font-medium">Overview</span>
               {["Projects", "Members", "Settings"].map(n => (
@@ -761,7 +761,7 @@ export default function Page() {
           ].map((t, i) => (
             <div key={t.lbl}>
               <div className="rounded-xl border border-border/60 bg-card px-5 py-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-accent mb-2">{t.lbl}</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent mb-2">{t.lbl}</p>
                 <code className="block max-w-full overflow-x-auto font-mono text-[12px] text-foreground/70">{t.code}</code>
               </div>
               {i < 2 && <p className="text-center text-muted-foreground text-[12px] py-1">↓</p>}
@@ -772,7 +772,7 @@ export default function Page() {
         {/* Full token block */}
         <FadeIn className="rounded-2xl border border-border bg-card overflow-hidden mb-10">
           <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">Token reference</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Token reference</span>
             <CopyButton text={TOKEN_CODE} />
           </div>
           <pre className="max-w-full overflow-x-auto px-5 py-4 font-mono text-[11px] leading-[1.7] text-foreground/65">{TOKEN_CODE}</pre>

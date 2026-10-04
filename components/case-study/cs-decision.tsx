@@ -28,7 +28,7 @@ export function CsDecision({ title, problem, decision, tradeoff, impact, index =
       {/* Header */}
       <div className="px-6 py-5 border-b border-border flex items-start gap-5">
         <span className="
-          text-[10px] font-bold tabular-nums text-accent
+          text-[11px] font-bold tabular-nums text-accent
           shrink-0 mt-0.5
         ">
           {String(index + 1).padStart(2, "0")}
@@ -45,7 +45,7 @@ export function CsDecision({ title, problem, decision, tradeoff, impact, index =
       `}>
         {parts.map(({ label, value, accent }) => (
           <div key={label} className="px-6 py-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2.5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2.5">
               {label}
             </p>
             <p className={`text-sm leading-relaxed ${accent ? "text-foreground" : "text-muted-foreground"}`}>

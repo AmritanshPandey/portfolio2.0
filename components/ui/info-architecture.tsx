@@ -258,13 +258,13 @@ export function InfoArchitecture({
       >
         <span>{it.node.label}</span>
         {it.node.note && (
-          <span className="mt-0.5 block text-[10px] font-normal text-muted-foreground">
+          <span className="mt-0.5 block text-[11px] font-normal text-muted-foreground">
             {it.node.note}
           </span>
         )}
         {hasChildren && isCollapsed && (
           <span
-            className="ml-1 inline-block rounded-full px-1.5 text-[9px] font-semibold align-middle"
+            className="ml-1 inline-block rounded-full px-1.5 text-[11px] font-semibold align-middle"
             style={{
               color: ACCENT,
               backgroundColor: `color-mix(in oklab, ${ACCENT} 16%, transparent)`,

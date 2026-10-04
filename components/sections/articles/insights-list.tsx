@@ -23,7 +23,7 @@ export function InsightsList({ items }: { items: ArticleItem[] }) {
             "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           )}
         >
-          <p className="order-2 col-span-2 mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground md:order-none md:col-span-1 md:mt-0">
+          <p className="order-2 col-span-2 mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground md:order-none md:col-span-1 md:mt-0">
             {item.category}
             {item.readTime ? <span className="text-muted-foreground"> · {item.readTime}</span> : null}
           </p>

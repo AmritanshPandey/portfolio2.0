@@ -57,7 +57,7 @@ export function BrowserFrame({
         {url && (
           <div
             className={clsx(
-              "min-w-0 flex-1 truncate rounded-md px-2.5 py-1 text-center font-mono text-[10px]",
+              "min-w-0 flex-1 truncate rounded-md px-2.5 py-1 text-center font-mono text-[11px]",
               dark
                 ? "bg-white/[0.05] text-white/45"
                 : "bg-foreground/[0.04] text-muted-foreground"

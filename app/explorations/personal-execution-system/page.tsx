@@ -396,7 +396,7 @@ function PlanrMark() {
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto w-full max-w-[360px] rounded-[32px] border border-foreground/12 bg-foreground p-3 shadow-[0_28px_90px_rgba(0,0,0,0.18)] dark:border-white/12 dark:bg-black">
-      <div className="overflow-hidden rounded-[24px] bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-white">
+      <div className="overflow-hidden rounded-3xl bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-white">
         {children}
       </div>
     </div>

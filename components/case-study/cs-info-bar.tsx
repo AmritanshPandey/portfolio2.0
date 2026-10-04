@@ -25,7 +25,7 @@ export function CsInfoBar({ cells }: { cells: CsInfoBarCell[] }) {
                 i < cells.length - 1 && "lg:pr-7"
               )}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 {cell.label}
               </p>
               <p className="text-[15px] font-medium text-foreground leading-snug">

@@ -77,7 +77,7 @@ export function CsFeature({
           <div className="mt-2 pt-5 border-t border-border/60 grid gap-6 sm:grid-cols-2">
             {details.map((d) => (
               <div key={d.label}>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-2">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-2">
                   {d.label}
                 </p>
                 <p className="text-[14px] text-foreground leading-snug">{d.text}</p>

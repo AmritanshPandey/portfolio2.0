@@ -56,10 +56,10 @@ function HeroAside() {
   return (
     <div className="rounded-2xl border border-border bg-card/70 p-5 backdrop-blur-sm shadow-[0_30px_70px_-40px_rgba(0,0,0,0.55)]">
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           Configurable architecture
         </p>
-        <span className="font-mono text-[10px] text-accent">4 layers</span>
+        <span className="font-mono text-[11px] text-accent">4 layers</span>
       </div>
       <div className="flex flex-col gap-1.5">
         {layers.map(l => (

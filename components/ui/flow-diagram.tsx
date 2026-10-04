@@ -476,7 +476,7 @@ export function FlowDiagram({
           {node.subtitle && (
             <p
               className={cn(
-                "truncate text-[10.5px] leading-tight",
+                "truncate text-[11px] leading-tight",
                 variant === "root" ? "text-background/80" : "text-foreground/65"
               )}
             >
@@ -706,7 +706,7 @@ export function FlowDiagram({
           p.label ? (
             <span
               key={`lbl-${p.key}`}
-              className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-card px-2 py-0.5 text-[10px] font-medium text-foreground/80 ring-1 ring-foreground/10 shadow-sm"
+              className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-card px-2 py-0.5 text-[11px] font-medium text-foreground/80 ring-1 ring-foreground/10 shadow-sm"
               style={{ left: p.mx, top: p.my, opacity: p.labelOp, transition: "opacity 0.25s ease" }}
             >
               {p.label}
@@ -744,8 +744,8 @@ export function FlowDiagram({
 
         {/* Viewer hint — bottom-right corner */}
         {showHelp && (
-          <div className="pointer-events-auto absolute bottom-2 right-2 z-30 select-none rounded-lg border border-border/60 bg-card/80 px-2.5 py-2 text-[10px] leading-relaxed text-muted-foreground shadow-sm backdrop-blur-sm">
-            <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          <div className="pointer-events-auto absolute bottom-2 right-2 z-30 select-none rounded-lg border border-border/60 bg-card/80 px-2.5 py-2 text-[11px] leading-relaxed text-muted-foreground shadow-sm backdrop-blur-sm">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               How to explore
             </p>
             <ul className="space-y-0.5">
@@ -778,7 +778,7 @@ export function FlowDiagram({
               <button
                 type="button"
                 onClick={resetAll}
-                className="mt-1.5 rounded text-[10px] font-medium text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
+                className="mt-1.5 rounded text-[11px] font-medium text-accent outline-none hover:underline focus-visible:ring-2 focus-visible:ring-accent"
               >
                 Reset layout
               </button>

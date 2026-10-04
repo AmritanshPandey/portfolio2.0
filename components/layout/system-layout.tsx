@@ -72,7 +72,7 @@ function SystemHero({
           {tags?.map(tag => (
             <span
               key={tag}
-              className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded"
+              className="text-[11px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded"
               style={{ background: "rgba(0,0,0,0.25)", color: "rgba(255,255,255,0.65)" }}
             >
               {tag}
@@ -209,7 +209,7 @@ function SwatchesVisual({ title, groups }: Extract<SystemVisual, { kind: "swatch
                     className="w-14 h-10 rounded-lg border border-border/40"
                     style={{ backgroundColor: color.hex }}
                   />
-                  <p className="text-[10px] text-center text-muted-foreground leading-tight">
+                  <p className="text-[11px] text-center text-muted-foreground leading-tight">
                     {color.name}
                     <br />
                     <span className="font-mono">{color.hex}</span>
@@ -237,10 +237,10 @@ function TypeScaleVisual({ title, steps }: Extract<SystemVisual, { kind: "type-s
         {steps.map((step, i) => (
           <div key={i} className="px-6 py-4 flex items-baseline gap-6">
             <div className="w-20 flex-shrink-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 {step.label}
               </p>
-              <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+              <p className="text-[11px] font-mono text-muted-foreground mt-0.5">
                 {step.size} / {step.weight}
               </p>
             </div>
@@ -305,7 +305,7 @@ function ComponentCard({ comp }: { comp: SystemComponent }) {
           {comp.tags.map(tag => (
             <span
               key={tag}
-              className="text-[10px] font-semibold uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-muted/60 text-muted-foreground"
+              className="text-[11px] font-semibold uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-muted/60 text-muted-foreground"
             >
               {tag}
             </span>
@@ -370,7 +370,7 @@ function RelatedCard({
         />
       </div>
       <div className="p-4 bg-background flex-1">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {category ?? "System"}
         </span>
         <p className="text-[13px] font-medium leading-snug mt-1.5 mb-1 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2">

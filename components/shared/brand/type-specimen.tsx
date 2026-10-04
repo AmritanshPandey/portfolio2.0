@@ -28,7 +28,7 @@ export function TypeSpecimen({ className }: { className?: string }) {
         >
           Aa
         </span>
-        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           Display
         </span>
       </div>
@@ -49,7 +49,7 @@ export function TypeSpecimen({ className }: { className?: string }) {
               title={`${label} · ${w}`}
             >
               Ag
-              <span className="ml-1 align-middle font-mono text-[10px] text-muted-foreground">
+              <span className="ml-1 align-middle font-mono text-[11px] text-muted-foreground">
                 {w}
               </span>
             </span>

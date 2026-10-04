@@ -126,11 +126,11 @@ function HeroAside() {
               <div className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[c.status]}`} />
               <span className="text-[12px] font-medium text-foreground">{c.name}</span>
             </div>
-            <p className={`text-[10px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
+            <p className={`text-[11px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
           </div>
         ))}
       </div>
-      <p className="text-[10px] text-muted-foreground mt-3 leading-relaxed">
+      <p className="text-[11px] text-muted-foreground mt-3 leading-relaxed">
         Every design decision was filtered through: &ldquo;Will this render in Outlook Desktop?&rdquo;
       </p>
     </div>
@@ -216,14 +216,14 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="rounded-2xl border border-border bg-card p-7">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Operational problem</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Operational problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
                   Custom emails needed HTML. Teams relied on slow, costly agencies or
                   skipped custom emails for outdated templates.
                 </p>
               </div>
               <div className="rounded-2xl border border-border bg-card p-7">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Technical problem</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">Technical problem</p>
                 <p className="text-[14px] text-muted-foreground leading-relaxed">
                   Even good HTML broke in Outlook Desktop, which ignores modern CSS. There
                   was no standard to stop it happening again.
@@ -234,7 +234,7 @@ export default function Page() {
 
           <FadeIn>
             <div className="rounded-2xl border border-border bg-muted/40 px-8 py-6">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">The central tension</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-3">The central tension</p>
               <p className="text-[16px] text-foreground leading-relaxed max-w-2xl">
                 Teams wanted richer emails; Outlook Desktop, still dominant in enterprise,
                 couldn&apos;t render them.{" "}
@@ -262,7 +262,7 @@ export default function Page() {
 
               {/* Engineer */}
               <div className="p-7 border-r border-border">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-1">Senior Engineer</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-1">Senior Engineer</p>
                 <p className="text-[16px] font-semibold text-foreground mb-5 tracking-tight">HTML + Builder Code</p>
                 <ul className="flex flex-col gap-3">
                   {[
@@ -281,7 +281,7 @@ export default function Page() {
 
               {/* You, highlighted */}
               <div className="p-7 bg-accent/[0.08] border-r border-accent/25">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent mb-1">You, Design System Lead</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-accent mb-1">You, Design System Lead</p>
                 <p className="text-[16px] font-semibold text-accent mb-5 tracking-tight">Component Architecture + Governance</p>
                 <ul className="flex flex-col gap-3">
                   {[
@@ -303,7 +303,7 @@ export default function Page() {
 
               {/* Designer */}
               <div className="p-7">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-1">Designer</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-1">Designer</p>
                 <p className="text-[16px] font-semibold text-foreground mb-5 tracking-tight">Builder Dashboard UX</p>
                 <ul className="flex flex-col gap-3">
                   {[
@@ -507,7 +507,7 @@ export default function Page() {
           {/* Adoption feedback loop */}
           <FadeIn>
             <div className="space-y-4">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 Adoption strategy, the feedback loop
               </p>
               <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
@@ -580,7 +580,7 @@ export default function Page() {
                     <div key={block.label} className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3">
                       <span className="text-[14px] text-muted-foreground select-none">⠿</span>
                       <span className="text-[13px] font-medium text-foreground flex-1">{block.label}</span>
-                      <span className="text-[10px] font-mono text-muted-foreground tracking-wide">{block.type}</span>
+                      <span className="text-[11px] font-mono text-muted-foreground tracking-wide">{block.type}</span>
                     </div>
                   ))}
                 </div>
@@ -614,7 +614,7 @@ export default function Page() {
 
           <FadeIn>
             <div className="rounded-2xl bg-muted/40 border border-border p-7 max-w-3xl">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">The organisational shift</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-3">The organisational shift</p>
               <p className="text-[15px] text-foreground leading-relaxed">
                 The barrier wasn&apos;t capability. It was confidence.{" "}
                 <em className="not-italic font-medium text-foreground">That&apos;s what a well-designed system does: it changes what people feel able to do.</em>

@@ -123,7 +123,7 @@ export function CsAnnotatedImage({
               <span
                 aria-hidden
                 className={clsx(
-                  "mt-[2px] font-mono text-[10px] font-bold tabular-nums transition-colors",
+                  "mt-[2px] font-mono text-[11px] font-bold tabular-nums transition-colors",
                   isActive ? "text-accent" : "text-muted-foreground"
                 )}
               >

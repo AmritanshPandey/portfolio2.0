@@ -1645,7 +1645,7 @@ export default function ShowcasePage() {
                       </div>
                     </div>
                     <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.06] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.34)]">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-300/80">
+                      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-emerald-300/80">
                         Today
                       </p>
                       <h4 className="mt-2 text-[25px] font-semibold leading-[1.05] tracking-tight">

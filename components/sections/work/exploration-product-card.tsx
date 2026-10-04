@@ -93,7 +93,7 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
             <div className="flex items-center justify-between gap-3">
               <p className="type-meta">{card.eyebrow}</p>
               {statusCfg && (
-                <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/40 bg-muted/40 px-2.5 py-1 text-[10px] font-medium leading-none text-muted-foreground">
+                <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/40 bg-muted/40 px-2.5 py-1 text-[11px] font-medium leading-none text-muted-foreground">
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${statusCfg.dot}${statusCfg.pulse ? " animate-pulse" : ""}`}
                   />
@@ -124,7 +124,7 @@ export function ExplorationProductCard({ card }: { card: ExplorationCardData }) 
               {card.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[10px] font-medium leading-[1.45] text-muted-foreground"
+                  className="rounded-full border border-border/35 bg-muted/25 px-2 py-0.5 text-[11px] font-medium leading-[1.45] text-muted-foreground"
                 >
                   {tag}
                 </span>

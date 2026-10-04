@@ -173,11 +173,11 @@ export function LineageStrip() {
           className="relative rounded-xl border bg-background p-4 flex flex-col"
           style={{ borderColor: i === 3 ? "rgba(244,114,168,0.4)" : undefined }}
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{l.era}</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{l.era}</span>
           <span className="font-semibold text-[17px] tracking-tight text-foreground mt-1.5 mb-1.5">{l.title}</span>
           <p className="text-[12.5px] leading-relaxed text-muted-foreground flex-1">{l.body}</p>
           <span
-            className="inline-block mt-3 self-start font-mono text-[10px] px-2 py-1 rounded-full border"
+            className="inline-block mt-3 self-start font-mono text-[11px] px-2 py-1 rounded-full border"
             style={{ color: l.accent, borderColor: `${l.accent}55` }}
           >
             {l.tag}
@@ -199,7 +199,7 @@ export function DiscoveryVsAllocation() {
   return (
     <div className="grid md:grid-cols-2 gap-3">
       <div className="rounded-xl border border-border/50 bg-background p-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground mb-3">Solved · search problem</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground mb-3">Solved · search problem</p>
         <p className="text-[15px] font-semibold text-foreground mb-3">Discovery</p>
         <div className="flex flex-wrap gap-1.5">
           {Array.from({ length: 28 }).map((_, i) => (
@@ -209,7 +209,7 @@ export function DiscoveryVsAllocation() {
         <p className="text-[12.5px] text-muted-foreground mt-3 leading-relaxed">Turn a messy pool of strangers into a scrollable, filterable feed. We are very good at this.</p>
       </div>
       <div className="rounded-xl border border-rose-500/30 bg-rose-500/[0.03] p-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400 mb-3">Unsolved · economics problem</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400 mb-3">Unsolved · economics problem</p>
         <p className="text-[15px] font-semibold text-foreground mb-3">Allocation</p>
         <div className="flex flex-wrap gap-1.5">
           {Array.from({ length: 28 }).map((_, i) => (
@@ -287,7 +287,7 @@ export function ConcentrationDemo() {
 
           {!fair && (
             <label className="flex items-center gap-3 flex-1 min-w-[200px]">
-              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground whitespace-nowrap">Skew</span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground whitespace-nowrap">Skew</span>
               <input
                 type="range" min={1} max={4} step={0.1} value={k}
                 onChange={e => setK(+e.target.value)}
@@ -297,7 +297,7 @@ export function ConcentrationDemo() {
           )}
 
           <div className="flex items-baseline gap-2 ml-auto">
-            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">Gini</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Gini</span>
             <span className="font-mono text-[22px] font-semibold text-foreground tabular-nums">{g.toFixed(2)}</span>
           </div>
         </div>
@@ -372,11 +372,11 @@ export function TradeoffFrontier() {
         {/* controls + metrics */}
         <div className="p-5 md:p-6 flex flex-col">
           <div className="flex items-baseline justify-between mb-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400">λ · fairness dial</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-rose-600 dark:text-rose-400">λ · fairness dial</span>
             <span className="font-semibold text-[26px] text-foreground tabular-nums">{lam.toFixed(2)}</span>
           </div>
           <input type="range" aria-label="Fairness dial lambda" min={0} max={2.5} step={0.05} value={lam} onChange={e => setLam(+e.target.value)} className="w-full accent-rose-500" />
-          <div className="flex justify-between font-mono text-[10px] text-muted-foreground mt-1 mb-5">
+          <div className="flex justify-between font-mono text-[11px] text-muted-foreground mt-1 mb-5">
             <span>0 · compatibility</span><span>2.5 · fairness first</span>
           </div>
 
@@ -397,7 +397,7 @@ export function TradeoffFrontier() {
 function Metric({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className={`rounded-lg border px-3 py-2.5 ${accent ? "border-rose-500/30 bg-rose-500/[0.04]" : "border-border/50 bg-background"}`}>
-      <p className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-muted-foreground leading-tight">{label}</p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground leading-tight">{label}</p>
       <p className={`font-semibold text-[22px] tabular-nums mt-1 ${accent ? "text-rose-600 dark:text-rose-400" : "text-foreground"}`}>{value}</p>
     </div>
   )
@@ -414,7 +414,7 @@ function BarGroup({ title, rows, pick, denom }: {
 }) {
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground mb-2.5">{title}</p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground mb-2.5">{title}</p>
       <div className="space-y-2">
         {rows.map(r => {
           const val = r.m ? pick(r.m) : 0

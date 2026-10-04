@@ -475,7 +475,7 @@ export function ChromaticLensHero() {
             <IconArrowLeft size={14} stroke={2} />
             Showcase
           </Link>
-          <span className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white/70 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-black/60 backdrop-blur-md dark:border-white/15 dark:bg-white/[0.06] dark:text-white/60">
+          <span className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-white/70 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-black/60 backdrop-blur-md dark:border-white/15 dark:bg-white/[0.06] dark:text-white/60">
             <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "#ff1e6b" }} />
             Kinetic type · Chromatic lens
           </span>

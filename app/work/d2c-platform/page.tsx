@@ -73,10 +73,10 @@ function HeroAside() {
       {/* Shared system base */}
       <div className="flex items-center justify-between rounded-xl border border-border/70 bg-muted/40 px-3.5 py-3 mb-3">
         <div className="flex items-center gap-2">
-          <span className="grid h-6 w-6 place-items-center rounded-md bg-foreground text-[10px] font-bold text-background">S</span>
+          <span className="grid h-6 w-6 place-items-center rounded-md bg-foreground text-[11px] font-bold text-background">S</span>
           <span className="text-[12px] font-medium text-foreground">Shared component system</span>
         </div>
-        <span className="font-mono text-[10px] text-muted-foreground">PDP · Cart · Checkout</span>
+        <span className="font-mono text-[11px] text-muted-foreground">PDP · Cart · Checkout</span>
       </div>
 
       {/* Fan-out connector */}
@@ -92,8 +92,8 @@ function HeroAside() {
           <div key={b.name} className="rounded-xl border border-border/70 bg-background/60 p-2.5 flex flex-col gap-2">
             <div className="h-10 rounded-md" style={{ background: `linear-gradient(135deg, ${b.accent}, color-mix(in srgb, ${b.accent} 55%, #000))` }} />
             <div>
-              <p className="text-[10px] font-semibold text-foreground leading-tight truncate">{b.name}</p>
-              <p className="text-[9px] text-muted-foreground truncate">{b.product}</p>
+              <p className="text-[11px] font-semibold text-foreground leading-tight truncate">{b.name}</p>
+              <p className="text-[11px] text-muted-foreground truncate">{b.product}</p>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: b.accent }} />
@@ -163,7 +163,7 @@ function PdpVisual() {
       <div className="relative grid h-full grid-rows-[auto_1fr_auto] gap-3 p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               PDP focus
             </p>
             <p className="mt-1 text-sm font-medium text-foreground">
@@ -172,7 +172,7 @@ function PdpVisual() {
           </div>
           <div className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-right">
             <p className="text-lg font-semibold leading-none text-accent">68%</p>
-            <p className="mt-0.5 text-[9px] text-muted-foreground">pre-checkout</p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">pre-checkout</p>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ function PdpVisual() {
                   <div className="h-2.5 w-36 rounded-full bg-foreground" />
                   <div className="h-2 w-24 rounded-full bg-muted-foreground/45" />
                 </div>
-                <span className="rounded-full border border-accent/35 bg-accent/10 px-2.5 py-1 text-[10px] font-medium text-accent">
+                <span className="rounded-full border border-accent/35 bg-accent/10 px-2.5 py-1 text-[11px] font-medium text-accent">
                   PDP
                 </span>
               </div>
@@ -208,7 +208,7 @@ function PdpVisual() {
                           : "border-border bg-muted/70"
                       }`}
                     />
-                    <p className={`text-center text-[9px] ${index === 1 ? "text-accent" : "text-muted-foreground"}`}>
+                    <p className={`text-center text-[11px] ${index === 1 ? "text-accent" : "text-muted-foreground"}`}>
                       {step}
                     </p>
                   </div>
@@ -228,7 +228,7 @@ function PdpVisual() {
                       {item.label}
                     </p>
                   </div>
-                  <p className="mt-2 text-[10px] leading-snug text-muted-foreground">
+                  <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
                     {item.value}
                   </p>
                 </div>
@@ -268,14 +268,14 @@ function CartVisual() {
         <div className="flex min-h-0 flex-col justify-between rounded-3xl border border-border bg-background/82 p-4 shadow-[0_20px_56px_-40px_rgba(0,0,0,0.55)] backdrop-blur-sm">
           <div className="flex items-center justify-between border-b border-border/70 pb-3">
             <div>
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Shared cart component
               </p>
               <p className="mt-1 text-sm font-medium text-foreground">
                 One structure, many skins
               </p>
             </div>
-            <span className="rounded-full bg-accent/10 px-3 py-1 text-[10px] font-medium text-accent">
+            <span className="rounded-full bg-accent/10 px-3 py-1 text-[11px] font-medium text-accent">
               v1 component
             </span>
           </div>
@@ -355,7 +355,7 @@ function CheckoutVisual() {
       <div className="relative grid h-full grid-rows-[auto_1fr] gap-4 p-3">
         <div className="grid grid-cols-[1fr_auto] items-center gap-4 rounded-2xl border border-border bg-background/78 p-4 backdrop-blur-sm">
           <div>
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Checkout compression
             </p>
             <p className="mt-1 text-sm font-medium text-foreground">
@@ -369,7 +369,7 @@ function CheckoutVisual() {
 
         <div className="grid min-h-0 grid-cols-[0.9fr_1.1fr] gap-3">
           <div className="flex min-h-0 flex-col justify-between rounded-2xl border border-border bg-background/68 p-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               Before · six steps
             </p>
             <div className="grid grid-cols-3 gap-2">
@@ -385,7 +385,7 @@ function CheckoutVisual() {
           </div>
 
           <div className="flex min-h-0 flex-col justify-between rounded-2xl border border-accent/35 bg-accent/8 p-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
               After · three decisions
             </p>
             <div className="grid gap-2.5">
@@ -498,7 +498,7 @@ export default function Page() {
               ].map((c, i) => (
                 <FadeIn key={c.num} delay={i * 0.05}>
                   <div className="rounded-2xl border border-border bg-card p-5">
-                    <p className="text-[10px] font-mono text-accent tracking-[0.1em] mb-3">{c.num}</p>
+                    <p className="text-[11px] font-mono text-accent tracking-[0.1em] mb-3">{c.num}</p>
                     <p className="text-[14px] font-semibold text-foreground mb-2 tracking-tight">{c.label}</p>
                     <p className="text-[13px] text-muted-foreground leading-relaxed">{c.body}</p>
                   </div>
@@ -742,7 +742,7 @@ export default function Page() {
                       <div className="h-2 w-16 rounded-full bg-muted mb-3" />
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-semibold text-foreground">₹ 549</span>
-                        <div className="h-7 w-20 rounded-lg flex items-center justify-center text-[10px] text-white font-medium" style={{ background: t.primary }}>Add to Cart</div>
+                        <div className="h-7 w-20 rounded-lg flex items-center justify-center text-[11px] text-white font-medium" style={{ background: t.primary }}>Add to Cart</div>
                       </div>
                     </div>
                   </div>

@@ -150,7 +150,7 @@ function Poster({ children, label }: { children: ReactNode; label: string }) {
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         {children}
       </svg>
-      <span className="pointer-events-none absolute bottom-2.5 left-3 font-mono text-[10px] text-white/45">
+      <span className="pointer-events-none absolute bottom-2.5 left-3 font-mono text-[11px] text-white/45">
         {label}
       </span>
     </div>

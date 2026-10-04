@@ -221,7 +221,7 @@ function ShotCard({
               {shot.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/14 bg-white/10 px-2 py-1 text-[10px] font-medium text-white/78 backdrop-blur"
+                  className="rounded-full border border-white/14 bg-white/10 px-2 py-1 text-[11px] font-medium text-white/78 backdrop-blur"
                 >
                   {tag}
                 </span>
@@ -323,7 +323,7 @@ export function UiDesignGallery() {
                 <IconMaximize size={16} strokeWidth={2} aria-hidden="true" />
               </div>
               <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-white/56">
+                <p className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-white/56">
                   {featuredShot.category} / {featuredShot.year}
                 </p>
                 <h2 className="max-w-xl text-2xl font-semibold leading-tight text-white md:text-3xl">
@@ -404,7 +404,7 @@ export function UiDesignGallery() {
             <aside className="border-t border-white/10 bg-neutral-950 p-5 text-white lg:border-l lg:border-t-0 lg:p-6">
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
-                  <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">
+                  <p className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-white/45">
                     {selectedShot.category} / {selectedShot.year}
                   </p>
                   <h2 id="gallery-preview-title" className="text-xl font-semibold leading-tight">

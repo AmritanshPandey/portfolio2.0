@@ -97,7 +97,7 @@ export default function CaseStudyTemplatePage() {
                   overhead.
                 </p>
                 <div>
-                  <p className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
+                  <p className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
                     What I did
                   </p>
                   <p className="text-[14px] leading-relaxed text-muted-foreground">

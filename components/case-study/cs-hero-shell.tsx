@@ -94,7 +94,7 @@ function MetaCard({ metaKey, value }: { metaKey: string; value: string }) {
     <div className="flex flex-col gap-3 rounded-xl border border-border/50 bg-foreground/[0.02] p-3.5 dark:bg-white/[0.025]">
       <Icon size={16} stroke={1.75} className="text-accent" />
       <div>
-        <p className="mb-1 font-mono text-[10px] font-semibold tracking-[0.12em] uppercase text-muted-foreground">
+        <p className="mb-1 font-mono text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground">
           {toLabel(metaKey)}
         </p>
         <p className="text-[13px] font-medium leading-snug text-foreground">
@@ -160,14 +160,14 @@ export function CsHeroShell({
             {keywords && keywords.length > 0 ? (
               <motion.p
                 {...entrance(0)}
-                className="mb-6 font-mono text-[10.5px] font-semibold tracking-[0.1em] uppercase text-accent"
+                className="mb-6 font-mono text-[11px] font-semibold tracking-[0.1em] uppercase text-accent"
               >
                 {keywords.join(" · ")}
               </motion.p>
             ) : (
               <motion.nav
                 {...entrance(0)}
-                className="mb-7 flex flex-wrap items-center gap-3 font-mono text-[10.5px] font-semibold tracking-[0.1em] uppercase text-muted-foreground"
+                className="mb-7 flex flex-wrap items-center gap-3 font-mono text-[11px] font-semibold tracking-[0.1em] uppercase text-muted-foreground"
               >
                 <span>{breadcrumb.kind}</span>
                 <span className="h-1 w-1 rounded-full bg-accent/60" />
@@ -185,7 +185,7 @@ export function CsHeroShell({
             {badge && (
               <motion.span
                 {...entrance(1)}
-                className="mb-5 inline-block rounded-full border border-border/70 bg-muted/40 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+                className="mb-5 inline-block rounded-full border border-border/70 bg-muted/40 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
               >
                 {badge}
               </motion.span>
@@ -277,7 +277,7 @@ export function CsHeroShell({
               className="min-w-0"
             >
               {asideLabel && (
-                <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                   {asideLabel}
                 </p>
               )}

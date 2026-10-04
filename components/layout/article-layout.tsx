@@ -167,7 +167,7 @@ function ImageCompare({ section }: { section: ArticleSection }) {
               <div className="relative aspect-[16/10]">
                 <Image src={b.src} alt={b.alt ?? "Before comparison image"} fill sizes="(max-width: 768px) 50vw, 380px" className="object-contain" />
               </div>
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 text-[10px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm">
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm">
                 {b.label ?? "Before"}
               </span>
             </div>
@@ -179,7 +179,7 @@ function ImageCompare({ section }: { section: ArticleSection }) {
               <div className="relative aspect-[16/10]">
                 <Image src={a.src} alt={a.alt ?? "After comparison image"} fill sizes="(max-width: 768px) 50vw, 380px" className="object-contain" />
               </div>
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[10px] font-bold uppercase tracking-wider text-background backdrop-blur-sm">
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-accent/80 text-[11px] font-bold uppercase tracking-wider text-background backdrop-blur-sm">
                 {a.label ?? "After"}
               </span>
             </div>

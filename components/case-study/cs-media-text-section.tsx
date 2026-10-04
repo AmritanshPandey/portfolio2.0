@@ -78,7 +78,7 @@ export function CsMediaTextSection({
       )}
     >
       {eyebrow && (
-        <p className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+        <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
           {eyebrow}
         </p>
       )}

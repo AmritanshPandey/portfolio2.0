@@ -46,7 +46,7 @@ export function ServiceSheetCard({ item, active, className }: ServiceSheetCardPr
       {/* Sheet — anchored to the bottom, inset so the image frames it. */}
       <div className="absolute inset-x-4 bottom-4">
         <div className="relative overflow-hidden rounded-[1.25rem] bg-background px-5 pb-5 pt-5 ring-1 ring-foreground/[0.08] dark:ring-white/[0.06]">
-          <p className="mb-3 flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mb-3 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             <span className="truncate">{item.category}</span>
           </p>
 

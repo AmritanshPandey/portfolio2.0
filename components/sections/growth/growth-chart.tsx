@@ -70,7 +70,7 @@ export function GrowthChart({
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-14 lg:py-28">
         {/* ── Left: editorial column ─────────────────────────────────── */}
         <div className="max-w-md">
-          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-[11px] font-medium tracking-normal text-muted-foreground">
             {eyebrow}
           </p>
 
