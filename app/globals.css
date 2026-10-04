@@ -803,7 +803,12 @@
       padding-block: var(--space-11);
     }
   }
+}
 
+/* Component-level classes live in @layer components, below utilities, so
+   Tailwind utilities on the same element (hidden, md:block, p-*, rounded-*)
+   always win. */
+@layer components {
   /* ─────────────────────────
      LAYER LANGUAGE (spec §8). Fixed stacking order, bottom to top:
      interface < system < annotation < context. Layers overlap by grid

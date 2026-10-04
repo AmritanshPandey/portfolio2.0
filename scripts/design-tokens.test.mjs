@@ -73,3 +73,11 @@ test("layers: glass degrades without backdrop-filter and under reduced transpare
   assert.match(css, /@supports \(\(backdrop-filter: blur\(1px\)\) or \(-webkit-backdrop-filter: blur\(1px\)\)\)\s*\{\s*\.layer-glass/)
   assert.match(css, /@media \(prefers-reduced-transparency: reduce\)\s*\{\s*\.layer-glass/)
 })
+
+test("layers: layer classes sit in @layer components so Tailwind utilities (hidden, p-*, rounded-*) override them", () => {
+  const block = css.match(/@layer components \{([\s\S]*?)\n\}/)
+  assert.ok(block, "an @layer components block")
+  for (const c of [".layer-interface", ".layer-system", ".layer-glass", ".marker", ".marker-line"]) {
+    assert.match(block[1], new RegExp(`\\${c}\\s*\\{`), c)
+  }
+})
