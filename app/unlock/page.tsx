@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function UnlockPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>
+  searchParams: Promise<{ next?: string | string[] }>
 }) {
   const { next } = await searchParams
   const cookie = (await cookies()).get(GATE_COOKIE)?.value

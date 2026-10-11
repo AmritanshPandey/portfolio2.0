@@ -9,9 +9,10 @@ export type UnlockState = { error: boolean }
 const WRONG_PASSWORD_DELAY_MS = 400
 
 export async function unlock(_prev: UnlockState, form: FormData): Promise<UnlockState> {
-  const password = process.env.SITE_PASSWORD
-  // Never trimmed: the password is compared exactly as typed.
-  const submitted = String(form.get("password") ?? "")
+  // Both sides trimmed: a password copied from the resume PDF or an email
+  // often carries a stray space.
+  const password = process.env.SITE_PASSWORD?.trim()
+  const submitted = String(form.get("password") ?? "").trim()
   const next = String(form.get("next") ?? "")
 
   const closed = gateMode({ password, nodeEnv: process.env.NODE_ENV }) === "closed"

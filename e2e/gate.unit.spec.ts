@@ -45,6 +45,28 @@ test("safeNext", () => {
 test("isPublicPath", () => {
   for (const p of ["/unlock", "/unlock/", "/_next/static/chunks/a.js", "/favicon.ico", "/opengraph-image", "/opengraph-image-1a2b", "/robots.txt", "/robots.txt/"])
     expect(isPublicPath(p), p).toBe(true)
-  for (const p of ["/", "/work/white-label-rfp", "/resume.pdf", "/unlockx", "/assets/images/pic.webp", "/sitemap.xml"])
+  for (const p of ["/", "/work/white-label-rfp", "/resume.pdf", "/unlockx", "/sitemap.xml"])
     expect(isPublicPath(p), p).toBe(false)
+})
+
+test("safeNext rejects control-character and non-string tricks", () => {
+  expect(safeNext("/\t/evil.example")).toBe("/")
+  expect(safeNext("/\n/evil.example")).toBe("/")
+  expect(safeNext("/\r/evil.example")).toBe("/")
+  expect(safeNext(["/a", "/b"])).toBe("/")
+  expect(safeNext(42)).toBe("/")
+  expect(safeNext("/work/agent-commerce#outcome")).toBe("/work/agent-commerce#outcome")
+})
+
+test("isPublicPath allows optimisable images and Vercel's own endpoints only", () => {
+  for (const p of ["/assets/images/pic.webp", "/assets/images/work/agent-commerce.jpg", "/article.png", "/_vercel/insights/script.js"])
+    expect(isPublicPath(p), p).toBe(true)
+  for (const p of ["/assets/images/Wednesday.pdf", "/resume.pdf", "/assets/other.webp"])
+    expect(isPublicPath(p), p).toBe(false)
+})
+
+test("a configured password with stray spaces matches the cookie the action sets", async () => {
+  const cookie = await accessToken("alpha")
+  expect(await hasAccess(cookie, { password: " alpha ", nodeEnv: "production" })).toBe(true)
+  expect(gateMode({ password: "   ", nodeEnv: "production" })).toBe("closed")
 })

@@ -19,16 +19,19 @@ const TOKEN_MESSAGE = "site-access-v1"
 
 // Reachable without the cookie. `/unlock` needs the framework's assets to
 // render; the favicon, social preview image and robots.txt serve link
-// previews and crawlers.
-const PUBLIC_EXACT = new Set(["/unlock", "/favicon.ico", "/robots.txt"])
-const PUBLIC_PREFIXES = ["/_next/", "/opengraph-image"]
+// previews and crawlers; `/_vercel/` is Vercel's own analytics endpoint.
+// Images next/image optimises must be public too: the optimiser fetches the
+// source without the visitor's cookie. Image types only, so PDFs stay gated.
+const PUBLIC_EXACT = new Set(["/unlock", "/favicon.ico", "/robots.txt", "/article.png"])
+const PUBLIC_PREFIXES = ["/_next/", "/_vercel/", "/opengraph-image"]
+const PUBLIC_IMAGE = /^\/assets\/images\/.+\.(?:png|jpe?g|webp|avif|gif|svg)$/i
 
 /**
  * `off` only for local development without a password. Anywhere else a
  * missing password keeps the gate shut (`closed`) rather than open.
  */
 export function gateMode(env: GateEnv): GateMode {
-  if (env.password) return "on"
+  if (env.password?.trim()) return "on"
   return env.nodeEnv === "development" ? "off" : "closed"
 }
 
@@ -59,16 +62,32 @@ export async function hasAccess(cookie: string | undefined, env: GateEnv): Promi
   const mode = gateMode(env)
   if (mode === "off") return true
   if (mode === "closed" || !cookie || !env.password) return false
-  return safeEqual(cookie, await accessToken(env.password))
+  // Trimmed to match the unlock action, which trims both sides.
+  return safeEqual(cookie, await accessToken(env.password.trim()))
 }
 
-/** Only same-site paths survive; anything that could leave the site becomes `/`. */
-export function safeNext(next: string | null | undefined): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) return "/"
-  return next
+const SAME_SITE = "http://gate.invalid"
+
+/**
+ * Only same-site paths survive; anything that could leave the site becomes
+ * `/`. Parsed rather than prefix-checked, because browsers strip tabs and
+ * newlines (`/\t/evil.example` reads as `//evil.example`).
+ */
+export function safeNext(next: unknown): string {
+  if (typeof next !== "string" || !next.startsWith("/")) return "/"
+  try {
+    const url = new URL(next, SAME_SITE)
+    return url.origin === SAME_SITE ? url.pathname + url.search + url.hash : "/"
+  } catch {
+    return "/"
+  }
 }
 
 export function isPublicPath(pathname: string): boolean {
   const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname
-  return PUBLIC_EXACT.has(path) || PUBLIC_PREFIXES.some((prefix) => path.startsWith(prefix))
+  return (
+    PUBLIC_EXACT.has(path) ||
+    PUBLIC_PREFIXES.some((prefix) => path.startsWith(prefix)) ||
+    PUBLIC_IMAGE.test(path)
+  )
 }

@@ -1,12 +1,19 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect, useRef } from "react"
 import { unlock, type UnlockState } from "./actions"
 
 const INITIAL: UnlockState = { error: false }
 
 export function UnlockForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState(unlock, INITIAL)
+  const field = useRef<HTMLInputElement>(null)
+
+  // Each failed attempt returns a new state object: put the visitor back in
+  // the field so they can retype straight away.
+  useEffect(() => {
+    if (state.error) field.current?.focus()
+  }, [state])
 
   return (
     <form action={action} className="space-y-3">
@@ -16,6 +23,7 @@ export function UnlockForm({ next }: { next: string }) {
       </label>
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
+          ref={field}
           id="password"
           name="password"
           type="password"
@@ -34,7 +42,8 @@ export function UnlockForm({ next }: { next: string }) {
         </button>
       </div>
       <p id="unlock-error" aria-live="polite" className="min-h-5 text-[13px] text-red-600 dark:text-red-400">
-        {state.error ? "That password didn't work." : ""}
+        {/* Cleared while pending, so a repeat error is announced again. */}
+        {state.error && !pending ? "That password didn't work." : ""}
       </p>
     </form>
   )

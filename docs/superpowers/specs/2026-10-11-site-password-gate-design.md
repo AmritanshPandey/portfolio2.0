@@ -19,7 +19,7 @@ never fail open.
 | Mechanism | Next.js 16 `proxy.ts` plus an unlock page; no paid Vercel add-on |
 | Credential | One shared password in the `SITE_PASSWORD` environment variable |
 | Session | Signed cookie, 30 days |
-| Search | Disallow all crawling |
+| Search | Disallow search crawling; allow link-preview bots, which only reach `/unlock` |
 
 ## 3. Out of scope
 
@@ -46,12 +46,15 @@ fast and stays quiet.
 ## 5. Request flow
 
 1. `proxy.ts` runs on every request except the public allowlist:
-   `/unlock`, `/_next/*`, `/favicon.ico`, `/opengraph-image*`, `/robots.txt`.
+   `/unlock`, `/_next/*`, `/_vercel/*`, `/favicon.ico`, `/opengraph-image*`,
+   `/robots.txt`, and images that `next/image` optimises (`/assets/images/*`
+   with an image extension, and `/article.png`).
 2. If the request carries a valid `site_access` cookie, it passes through
    untouched (static pages stay static and cached).
 3. Otherwise the proxy responds `307` to `/unlock?next=<path and query>`.
 4. The unlock form posts to a server action:
-   - Compare the submitted value with `SITE_PASSWORD` in constant time.
+   - Trim both values, then compare the submitted value with `SITE_PASSWORD`
+     in constant time.
    - Wrong: wait 400ms, return the error state.
    - Right: set the cookie, redirect to `next`.
 5. `next` is honoured only when it starts with `/` and not `//` or `/\`;
@@ -80,13 +83,17 @@ Changing `SITE_PASSWORD` invalidates every existing cookie.
 - `.env.example` (committed, with a `.gitignore` exception) documents the
   variable with a local-only value. Production and preview values are set by
   the owner in Vercel, never in the repo.
-- `app/robots.ts` returns `Disallow: /` and drops the sitemap reference.
+- `app/robots.ts` allows link-preview bots (LinkedIn, X, Facebook, Slack,
+  Discord, WhatsApp), returns `Disallow: /` for everyone else, and drops the
+  sitemap reference.
 - `/unlock` sets `robots: { index: false }`.
 
 ## 8. Honest limits
 
-The gate is a front-door lock, not a vault. HTML, RSC payloads and
-`/resume.pdf` are protected. Files under `/_next/static` stay reachable for
+The gate is a front-door lock, not a vault. HTML, RSC payloads, PDFs and
+`/resume.pdf` are protected. Site images are not: Next's image optimiser
+fetches source images without the visitor's cookie, so images under
+`/assets/images/` stay public to keep them loading for unlocked visitors. Files under `/_next/static` stay reachable for
 anyone who knows their hashed URLs, because the unlock page needs the
 framework's scripts to render, and those chunks can contain strings from
 client components. Nothing that would be harmful if leaked belongs on the

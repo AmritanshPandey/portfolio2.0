@@ -39,3 +39,10 @@ test("a valid cookie passes through", async ({ request }) => {
   const res = await request.get("/", { maxRedirects: 0, headers: { cookie: `site_access=${token}` } })
   expect(res.status()).toBe(200)
 })
+
+test("link-preview bots may fetch the unlock page; everyone else is disallowed", async ({ request }) => {
+  const body = await (await request.get("/robots.txt")).text()
+  for (const bot of ["LinkedInBot", "Twitterbot", "facebookexternalhit", "Slackbot-LinkExpanding"]) expect(body).toContain(`User-Agent: ${bot}`)
+  expect(body).toMatch(/Allow: \//)
+  expect(body).toContain("Disallow: /")
+})
