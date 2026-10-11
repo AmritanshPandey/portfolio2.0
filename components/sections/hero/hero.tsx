@@ -94,13 +94,8 @@ export default function Hero() {
               data-hero-fade
               className="mb-6 inline-flex w-fit max-w-full items-center gap-3 rounded-full border border-black/[0.07] bg-white/[0.82] px-4 py-2 shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-white/70 backdrop-blur-xl dark:border-white/[0.10] dark:bg-white/[0.04] dark:shadow-none dark:ring-white/[0.04] md:mb-8"
             >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-              </span>
+              <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-accent" />
               <p className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium leading-6 tracking-normal text-foreground/70 dark:text-muted-foreground sm:text-[13px]">
-                <span className="text-foreground/90 dark:text-foreground/74">Senior UX Designer · Mastercard</span>
-                <span aria-hidden className="hidden h-3 w-px bg-foreground/16 dark:bg-border sm:inline-block" />
                 {/* Availability is only useful if it's also the way in. */}
                 <a
                   href={EMAIL_HREF}
@@ -156,19 +151,19 @@ export default function Hero() {
               {/* Proof strip — checkable evidence, not adjectives. */}
               <ul
                 data-hero-fade
-                className="flex flex-wrap gap-x-6 gap-y-1.5 pt-1 font-mono text-[11px] leading-5 tracking-tight text-muted-foreground"
+                className="flex flex-wrap gap-x-6 gap-y-2 pt-1 text-[13.5px] leading-6 text-foreground/70"
               >
                 <li className="flex items-center gap-2">
-                  <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
+                  <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent/80" />
                   PartnerBank · configurable RFP demos{" "}
                   <AddLater note="turnaround number, once confirmed" />
                 </li>
                 <li className="flex items-center gap-2">
-                  <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
+                  <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent/80" />
                   Email Builder · 50+ modular components
                 </li>
                 <li className="flex items-center gap-2">
-                  <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />
+                  <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent/80" />
                   6+ years · fintech, commerce, 0→1
                 </li>
               </ul>

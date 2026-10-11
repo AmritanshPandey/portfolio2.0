@@ -2,8 +2,8 @@ import { FadeIn } from "@/components/shared/fade-in"
 
 /**
  * Career trajectory — the leadership signal. A four-stage arc from 0→1 startup
- * to global enterprise fintech to AI-mediated commerce, plus the operating
- * model underneath it. Facts only (role, domain, what the stage built); no
+ * to global enterprise fintech to AI-mediated commerce. The method lives in
+ * the Approach section; it is not repeated here. Facts only (role, domain, what the stage built); no
  * invented metrics or confidential detail.
  */
 
@@ -39,14 +39,6 @@ const STAGES = [
   },
 ]
 
-const PROCESS = [
-  "Understand the system",
-  "Frame the opportunity",
-  "Simplify the journey",
-  "Prototype the future",
-  "Align stakeholders",
-  "Make it real",
-]
 
 export function TrajectorySection() {
   return (
@@ -60,7 +52,7 @@ export function TrajectorySection() {
               y={20}
               className="group relative flex h-full flex-col gap-4 bg-background p-6 md:p-7"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex h-6 items-center justify-between">
                 <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   {s.period}
                 </span>
@@ -72,41 +64,25 @@ export function TrajectorySection() {
                 )}
               </div>
 
-              <div className="mt-auto">
+              <div>
                 <h3 className="text-[19px] font-semibold leading-tight tracking-[-0.01em] text-foreground">
                   {s.org}
                 </h3>
-                <p className="mt-1 text-[13px] font-medium text-accent">{s.role}</p>
+                <p className={s.current ? "mt-1 text-[13px] font-medium text-accent" : "mt-1 text-[13px] font-medium text-foreground/60"}>
+                  {s.role}
+                </p>
                 <p className="mt-3 text-[13.5px] leading-relaxed text-muted-foreground">
                   {s.line}
                 </p>
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                  {s.tag}
-                </p>
               </div>
+
+              <p className="mt-auto font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                {s.tag}
+              </p>
             </FadeIn>
           </li>
         ))}
       </ol>
-
-      {/* ── How I work ───────────────────────────────────────────────────── */}
-      <FadeIn delay={0.1}>
-        <div className="mt-10 flex flex-col gap-4 border-t border-border/50 pt-8 md:flex-row md:items-center md:gap-6">
-          <span className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            How I work
-          </span>
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[13.5px] text-foreground/80">
-            {PROCESS.map((step, i) => (
-              <li key={step} className="flex items-center gap-2">
-                <span>{step}</span>
-                {i < PROCESS.length - 1 && (
-                  <span aria-hidden className="text-accent">→</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </FadeIn>
     </div>
   )
 }
