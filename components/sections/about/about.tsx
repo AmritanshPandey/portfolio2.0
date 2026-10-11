@@ -170,7 +170,7 @@ export default function AboutSection() {
       </div>
 
       {/* ── CONTENT */}
-      <div className="relative z-[1] max-w-7xl mx-auto px-6 py-16 md:py-20">
+      <div className="relative z-[1] max-w-6xl mx-auto px-5 md:px-6 py-20 md:py-28">
 
         {/* HEADER */}
         <div className="max-w-2xl mb-12 md:mb-14">
