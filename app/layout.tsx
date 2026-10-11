@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
+import { SiteChrome } from "@/components/layout/site-chrome"
 import { FancyCursor } from "@/components/shared/cursor"
 import { ThemeFab } from "@/components/shared/theme-fab"
 import { SiteBackground } from "@/components/shared/site-background"
@@ -134,12 +135,15 @@ export default function RootLayout({
             {/* Reveal failsafe — forces stalled entrance reveals visible */}
             <SettleGuard />
 
-            <FancyCursor />
+            {/* Hidden on /unlock, which stands alone. */}
+            <SiteChrome>
+              <FancyCursor />
 
-            {/* Interactive dot field — a standalone, full-viewport background
-                layer (independent of the hero). Sits behind all content; the
-                opaque section bands scroll over it. */}
-            <SiteBackground />
+              {/* Interactive dot field — a standalone, full-viewport background
+                  layer (independent of the hero). Sits behind all content; the
+                  opaque section bands scroll over it. */}
+              <SiteBackground />
+            </SiteChrome>
 
             {/* Film grain — one quiet texture across every page */}
             <Grain />
@@ -151,11 +155,13 @@ export default function RootLayout({
               Skip to content
             </a>
 
-            {/* Navbar */}
-            <Navbar />
+            <SiteChrome>
+              {/* Navbar */}
+              <Navbar />
 
-            {/* Floating theme toggle — bottom-right, site-wide */}
-            <ThemeFab />
+              {/* Floating theme toggle — bottom-right, site-wide */}
+              <ThemeFab />
+            </SiteChrome>
 
             {/* Content */}
             <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
@@ -163,9 +169,11 @@ export default function RootLayout({
             </main>
 
             {/* Footer */}
-            <FooterGate>
-              <Footer />
-            </FooterGate>
+            <SiteChrome>
+              <FooterGate>
+                <Footer />
+              </FooterGate>
+            </SiteChrome>
 
             {analyticsEnabled && <Analytics />}
           </MotionConfig>
