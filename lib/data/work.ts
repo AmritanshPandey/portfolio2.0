@@ -18,10 +18,10 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     category: "Demo Systems / Mastercard",
     title: "PartnerBank: A demo system for global RFPs",
     description:
-      "Cut custom demo prep from days to same-day configuration.",
+      "A configurable demo system: re-skinning PartnerBank for each bank became configuration, not redesign.",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
-    metric: "Days → same-day demo turnaround.",
+    metric: "Per-bank re-skins became a configuration pass.",
     tags: ["Demo Systems", "RFPs", "Scale"],
     featured: true,
   },

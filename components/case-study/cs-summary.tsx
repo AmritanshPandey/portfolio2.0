@@ -2,15 +2,16 @@
 
 import { motion } from "framer-motion"
 import clsx from "clsx"
+import type { ReactNode } from "react"
 import { EASE, DURATION } from "@/lib/motion"
 
 export interface CsSummaryProps {
   /** What was broken / what was changing. One or two sentences. */
-  problem: string
+  problem: ReactNode
   /** What *you* personally owned. Use direct verbs: Led, Defined, Prototyped. */
-  role: string
+  role: ReactNode
   /** What changed after the work shipped. Honest — qualitative is fine. */
-  outcome: string
+  outcome: ReactNode
   /** Optional label, e.g. "Executive summary" or "The short version". */
   label?: string
   className?: string

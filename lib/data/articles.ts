@@ -13,7 +13,7 @@ export const articleItems: ArticleItem[] = [
     date:        "Jun 2026",
     category:    "Product Strategy",
     tags:        ["Matching Markets", "Marketplaces", "Incentives", "Optimization"],
-    intro: "Every dating app on your phone is great at one thing. It shows you people. Endless profiles, fast filters, a swipe in under a second. That part is basically solved. So why do these apps feel worse every year? Because showing you people was never the hard part. The hard part is who actually gets seen, by whom, and how often. That is the problem I have been working on. The longer I sat with it, the more it looked like a product decision dressed up as an algorithm.",
+    intro: "Every dating app is great at showing you people: endless profiles, fast filters, a swipe in under a second. So why do they feel worse every year? Because the hard part was never showing people. It is who gets seen, by whom, and how often, and that is a product decision dressed up as an algorithm.",
     takeaways: [
       "Dating apps solved discovery, which is a search problem. Who actually gets seen is the part still left open.",
       "Optimizing for engagement rewards keeping people under-served. The goal you pick, not the UI, is the real product.",
@@ -325,7 +325,7 @@ export const articleItems: ArticleItem[] = [
     date:        "Sep 2024",
     category:    "AI Design",
     tags:        ["AI", "Cognitive Load", "Interfaces"],
-    intro: "AI makes products more powerful. It also makes them easier to misuse, harder to explain, and more cognitively demanding for the users who interact with them. Managing that complexity isn't a UX problem, it's a product philosophy problem. The teams getting it right are the ones who treat AI as a tool to reduce user effort, not showcase technical capability.",
+    intro: "AI makes products more powerful, and harder to explain and to use. Managing that is a product philosophy problem, not a UX one. The teams getting it right use AI to reduce effort, not to show off capability.",
     sections: [
       {
         heading: "The Complexity Budget",

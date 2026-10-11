@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "PartnerBank, A White-Label Design System for Global RFPs",
   description:
-    "Enterprise demos took days to customise per client. A configurable white-label design system that made tailored product demos same-day, across global sales cycles.",
+    "A configurable white-label design system that turned per-client demo re-skins into a configuration pass across global RFP cycles.",
 }
 
 export default function WhiteLabelRfpLayout({ children }: { children: React.ReactNode }) {

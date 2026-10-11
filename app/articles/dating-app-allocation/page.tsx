@@ -119,13 +119,13 @@ export default function Page() {
         <FadeIn><Eyebrow num="01" tag="The reframe" /></FadeIn>
         <FadeIn><H2>Most apps solved the easy half</H2></FadeIn>
         <FadeIn>
-          <P>Ask a founder what their app does and you get some version of &ldquo;we help you find the right person.&rdquo; Watch the actual product and it does something smaller. It helps you browse people fast. Those are not the same thing. Browsing is discovery. You take a messy pool of strangers and make it scrollable and filterable. We are very good at that now. Nobody built the part that decides who you should actually meet this week, out of everyone you could meet.</P>
+          <P>Ask a founder what their app does and you hear &ldquo;we help you find the right person.&rdquo; Watch the product and it does something smaller: it helps you browse people fast. Browsing is discovery, and we are very good at it now. Nobody built the part that decides who you should actually meet this week.</P>
         </FadeIn>
         <Figure caption="Discovery is a search problem. Allocation is about who gets the scarce thing. We solved the first one and hoped the second would sort itself out.">
           <DiscoveryVsAllocation />
         </Figure>
         <FadeIn>
-          <P>Allocation is hard because attention runs out. There are only so many people you can seriously consider in a week. When an app hands that attention out badly, it does not break in an obvious way. It quietly sends almost all of it to a small group of very desirable people. Everyone else swipes into nothing. The dashboards still look healthy. The market underneath them is not.</P>
+          <P>Allocation is hard because attention runs out. When an app hands it out badly, nothing visibly breaks. Almost all of it flows to a few very desirable people, and everyone else swipes into nothing. The dashboards look healthy. The market underneath does not.</P>
         </FadeIn>
         <Quote>Discovery means making the haystack easy to search. Allocation means deciding who gets the scarce thing. We spent ten years on the first one and barely touched the second.</Quote>
       </Section>
@@ -135,13 +135,13 @@ export default function Page() {
         <FadeIn><Eyebrow num="02" tag="The objective" /></FadeIn>
         <FadeIn><H2>Optimizing for engagement works against the user</H2></FadeIn>
         <FadeIn>
-          <P>Here is the uncomfortable part for product people. When you tune a dating app for engagement, more time in app, more swipes, more daily actives, you are picking a goal. That goal fights the thing the user actually wants, which is to leave. Someone who finds a real partner stops opening the app. So an app built to maximize swiping is, in practice, built to keep you single but busy.</P>
+          <P>Here is the uncomfortable part. Tuning for engagement (time in app, swipes, daily actives) picks a goal that fights what the user wants, which is to leave. An app built to maximize swiping is built to keep you single but busy.</P>
         </FadeIn>
         <Figure caption="An engagement goal drifts toward concentration on its own. The most wanted few soak up almost everything. Capping attention is what spreads it back.">
           <ConcentrationDemo />
         </Figure>
         <FadeIn>
-          <P>This is a plain incentive problem. The concentration is not a bug someone forgot to fix. It is where an engagement goal naturally lands, because the most desirable profiles pull swipes from everyone else.</P>
+          <P>This is an incentive problem, not a bug. It is where an engagement goal lands, because the most desirable profiles pull swipes from everyone else.</P>
         </FadeIn>
         <Callout>If you make more money when people keep searching, you built a search company and called it matchmaking. The goal you optimize for is the product. Everything after that is detail.</Callout>
       </Section>
@@ -157,10 +157,10 @@ export default function Page() {
           <LineageStrip />
         </Figure>
         <FadeIn>
-          <P>Gale&ndash;Shapley (1962) is the one I build on, and I keep it at the center. The idea is simple and it holds up. Only put two people together when the interest runs both ways. No match should be great for one person and miserable for the other. It also guarantees stability, which means no two people will both want to drop their match for each other. That guarantee is the core of what I do. I did not throw it out.</P>
+          <P>Gale&ndash;Shapley (1962) is the one I build on. Only pair two people when the interest runs both ways, so no match is great for one and miserable for the other. It also guarantees stability: no two people would both rather drop their matches for each other. That guarantee is still the core of what I do.</P>
         </FadeIn>
         <FadeIn>
-          <P>What Gale&ndash;Shapley does not handle is the shape of the problem, not the idea behind it. It gives each person one partner, once. Real matchmaking is a few introductions every week. It needs two clean sides. And on its own it lets the most desirable people take everything while others get skipped. Irving (1985) fixed the two-sides issue by putting everyone in one pool, but it can come back and say no stable matching exists at all. You cannot tell a paying user the system could not seat them this week.</P>
+          <P>What it does not handle is the shape of the problem. It gives each person one partner, once; real matchmaking is a few introductions a week. It needs two clean sides, and it lets the most desirable people take everything. Irving (1985) fixed the two-sides issue with one pool, but it can report that no stable matching exists. You cannot tell a paying user the system could not seat them this week.</P>
         </FadeIn>
       </Section>
 
@@ -169,10 +169,10 @@ export default function Page() {
         <FadeIn><Eyebrow num="04" tag="The new question" /></FadeIn>
         <FadeIn><H2>I changed the question, not the engine</H2></FadeIn>
         <FadeIn>
-          <P>So I changed the question I was asking. &ldquo;What is the one stable pairing of everyone&rdquo; is the wrong question for a market that keeps running. The better question is more practical. Given how compatible people are, and how fairly each person has been treated so far, who should meet whom this week?</P>
+          <P>So I changed the question. Not &ldquo;what is the one stable pairing of everyone,&rdquo; but: given how compatible people are, and how fairly each person has been treated so far, who should meet whom this week?</P>
         </FadeIn>
         <FadeIn>
-          <P>That one change does a lot. A single pairing becomes a weekly allocation. One partner becomes a few introductions. Last week&apos;s results feed into this week&apos;s. And because it is an optimization with limits, it always returns something. The system can fail to find a great match. It cannot fail to run.</P>
+          <P>That turns one pairing into a weekly allocation of a few introductions, where last week feeds this week. And because it is an optimization with limits, it always returns something. It can fail to find a great match. It cannot fail to run.</P>
         </FadeIn>
         <Quote>Going from &ldquo;solve the market once&rdquo; to &ldquo;allocate it fairly every week&rdquo; is the whole idea. Once it is a weekly allocation, the math stops being a wall and becomes a tool.</Quote>
       </Section>
@@ -188,16 +188,16 @@ export default function Page() {
           <WeeklyLoop />
         </Figure>
         <FadeIn>
-          <P>First it filters. Hard rules like age, location, and dealbreakers decide who is even possible. Second it scores. For every possible pair it works out a compatibility number, built so a match only counts as good when it is good for both sides. That scoring is Gale&ndash;Shapley&apos;s mutuality, kept as is. Third it balances. It tracks who has been under-served and steers desirable partners toward them. Fourth it introduces. Everyone gets the same small number of introductions, and next week the loop runs again with new feedback.</P>
+          <P>It filters: hard rules like age, location, and dealbreakers decide who is possible. It scores every pair so a match only counts when it is good for both sides, which is Gale&ndash;Shapley&apos;s mutuality kept as is. It balances, steering desirable partners toward people who have been under-served. And it introduces: everyone gets the same few introductions, and next week the loop runs again.</P>
         </FadeIn>
         <FadeIn>
-          <P>The balance step has one dial, called lambda. At zero, the system only cares about compatibility and ignores who gets left out. Turn it up and it actively pushes sought-after people toward those who keep getting skipped. Drag it below and watch quality trade against reach.</P>
+          <P>The balance step has one dial, lambda. At zero it only cares about compatibility. Turn it up and it pushes sought-after people toward those who keep getting skipped. Drag it below and watch quality trade against reach.</P>
         </FadeIn>
         <Figure caption="A real model, run live on six people. Drag the dial and watch match quality trade against reach for the under-served.">
           <TradeoffFrontier />
         </Figure>
         <FadeIn>
-          <P>One detail here took me a while to get right. The fairness bonus has to reward a pairing, not a person. The obvious version is &ldquo;give lonely people extra points,&rdquo; and it does nothing. With a fixed number of introductions per person, a per-person bonus cancels out in the math and changes the result by zero. The bonus only works when it rewards connecting a lonely person to a desirable one. It has to be about the pair. You only catch that by writing the objective down and checking it.</P>
+          <P>One detail took me a while. The fairness bonus has to reward a pairing, not a person. &ldquo;Give lonely people extra points&rdquo; does nothing: with a fixed number of introductions each, a per-person bonus cancels out. It only works when it rewards connecting a lonely person with a desirable one. You only catch that by writing the objective down.</P>
         </FadeIn>
         <FadeIn>
           <P>Underneath all of it, the thing we optimize for is still a stable, mutual match. Gale&ndash;Shapley&apos;s guarantee is the target. Fairness and the weekly cap sit on top of it, not in place of it.</P>
@@ -215,7 +215,7 @@ export default function Page() {
           <EngineComparison />
         </Figure>
         <FadeIn>
-          <P>I think the honesty is part of the product. Most platforms hide what they optimize for, because if you saw it you would not like it. I would rather count the blocking pairs and put the number on screen. A product that can show you the tradeoff it picked, and why, is making a different promise about who it is for.</P>
+          <P>I think the honesty is part of the product. Most platforms hide what they optimize for. I would rather count the blocking pairs and put the number on screen. A product that shows the tradeoff it picked is making a different promise about who it is for.</P>
         </FadeIn>
       </Section>
 
@@ -224,10 +224,10 @@ export default function Page() {
         <FadeIn><Eyebrow num="07" tag="The point" /></FadeIn>
         <FadeIn><H2>This is a product problem, not a math problem</H2></FadeIn>
         <FadeIn>
-          <P>It is tempting to file this under &ldquo;neat algorithm.&rdquo; It is not really about the algorithm. That part is the easy half. B-matching and min-cost flow are standard, fast, and decades old. The hard half is the set of calls a product person actually owns. Deciding the job is allocation, not engagement. Deciding fairness belongs in the objective at all. Deciding where on the tradeoff to sit. Deciding to show the stability cost instead of burying it.</P>
+          <P>It is tempting to file this under &ldquo;neat algorithm.&rdquo; But the algorithm is the easy half: b-matching and min-cost flow are standard and decades old. The hard half is the calls a product person owns: that the job is allocation, not engagement; that fairness belongs in the objective; where to sit on the tradeoff; and whether to show the stability cost.</P>
         </FadeIn>
         <FadeIn>
-          <P>Each of those is a judgment about who the product serves. The math just does what you tell it. The biggest decision in a matching product is not how you compute the matches. It is what you chose to optimize for in the first place. Get that wrong and a brilliant algorithm will efficiently give you the wrong result. Get it right and a basic solver gives you a market people can trust.</P>
+          <P>The math does what you tell it. The biggest decision in a matching product is what you optimize for. Get that wrong and a brilliant algorithm efficiently gives you the wrong result. Get it right and a basic solver gives you a market people can trust.</P>
         </FadeIn>
         {article.takeaways && (
           <FadeIn className="mt-10"><Takeaways items={article.takeaways} /></FadeIn>

@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
     ],
   },
   distDir: process.env.NEXT_DIST_DIR ?? ".next",
+  // Which Vercel environment built this (production / preview / development).
+  // Inlined at build time so client components can read it; <AddLater> uses
+  // it to keep editorial to-do notes off the live site.
+  env: {
+    NEXT_PUBLIC_DEPLOY_ENV: process.env.VERCEL_ENV ?? "development",
+  },
 };
 
 export default nextConfig;

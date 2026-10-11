@@ -54,7 +54,7 @@ const analyticsEnabled = process.env.VERCEL === "1"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Amritansh Pandey | Product Thinker | Mastercard",
+    default: "Amritansh Pandey | Senior UX Designer | Mastercard",
     template: "%s | Amritansh Pandey",
   },
   description:
@@ -63,13 +63,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Amritansh Pandey",
     url: SITE_URL,
-    title: "Amritansh Pandey | Product Thinker | Mastercard",
+    title: "Amritansh Pandey | Senior UX Designer | Mastercard",
     description:
       "6+ years building products end to end: PartnerBank demo systems, agentic commerce, enterprise product systems, and front-end prototypes.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Amritansh Pandey | Product Thinker | Mastercard",
+    title: "Amritansh Pandey | Senior UX Designer | Mastercard",
     description: "6+ years building products end to end, from early demo to CPO stage.",
   },
 }

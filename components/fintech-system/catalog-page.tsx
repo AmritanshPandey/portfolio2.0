@@ -533,16 +533,16 @@ function ComponentCategorySpecimen({ category }: { category: string }) {
 function ComponentsSection() {
   const categories = Array.from(new Set(fintechComponentSpecs.map((spec) => spec.category)))
   const componentStories: Record<string, string> = {
-    Navigation: "Keeps orientation simple across desktop, tablet, and mobile without adding another layer of product chrome.",
+    Navigation: "Simple orientation on every screen size, without extra chrome.",
     Buttons: "Makes the next action clear while keeping destructive and secondary decisions deliberately quieter.",
-    Inputs: "Handles money, identity, credentials, search, and dates with readable helper states instead of noisy validation.",
-    Cards: "Frames balances, cards, alerts, and insights as small decisions people can understand at a glance.",
-    Data: "Turns dense transactions, KPIs, filters, charts, and tables into scannable financial rhythm.",
-    Trading: "Covers quote views, watchlists, order tickets, positions, fills, and market-state language for brokerage products.",
-    "Crypto Wallet": "Covers asset balances, network selection, wallet addresses, receive QR, swaps, gas fees, and irreversible transfer warnings.",
-    Feedback: "Confirms what happened, what is still processing, and what needs recovery without sounding robotic.",
-    Security: "Treats consent, risk, authentication, and session prompts as calm trust moments.",
-    Overlays: "Keeps modals, drawers, sheets, popovers, and confirmations focused on the consequence of the choice.",
+    Inputs: "Money, identity, search, and dates, with readable helper states.",
+    Cards: "Balances, alerts, and insights readable at a glance.",
+    Data: "Dense transactions, KPIs, and tables made scannable.",
+    Trading: "Quotes, watchlists, order tickets, and positions.",
+    "Crypto Wallet": "Balances, networks, addresses, swaps, fees, and irreversible-transfer warnings.",
+    Feedback: "What happened, what's processing, and what needs fixing.",
+    Security: "Consent, authentication, and session prompts as calm trust moments.",
+    Overlays: "Modals and confirmations focused on the consequence of the choice.",
   }
   const specimenCategories = ["Cards", "Data", "Trading", "Crypto Wallet", "Security"]
 
@@ -580,7 +580,7 @@ function ComponentsSection() {
         <div>
           <p className="fin-eyebrow text-[var(--fin-text-secondary)]">Selected specimens</p>
           <p className="fin-body mt-2 max-w-[62ch] text-[var(--fin-text-secondary)]">
-            A few living examples show the tone: compact, calm, and focused on the decision in front of the user.
+            Compact, calm, and focused on the decision in front of the user.
           </p>
         </div>
         <div className="space-y-6">
@@ -654,7 +654,7 @@ export function FintechSystemCatalogPage() {
                 Money movement that feels instant, clear, and calm.
               </h1>
               <p className="mt-5 max-w-[62ch] text-[17px] leading-relaxed text-[var(--fin-text-secondary)]">
-                A reusable fintech design system for the moments people check balances, send money, approve payments, and decide whether something feels trustworthy.
+                A fintech design system for checking balances, sending money, and approving payments.
               </p>
             </div>
 
@@ -724,7 +724,7 @@ export function FintechSystemCatalogPage() {
               id="screens"
               label="Example screens"
               title="Core product moments, one system language"
-              description="The system is shown through a treasury command center, a high-risk payment review, and a mobile wallet. The component library also extends into brokerage and crypto-wallet flows without changing the visual grammar."
+              description="A treasury command center, a high-risk payment review, and a mobile wallet, plus brokerage and crypto flows in the same visual grammar."
             />
             <FinExampleScreens />
           </section>
@@ -734,7 +734,7 @@ export function FintechSystemCatalogPage() {
               id="foundations"
               label="Foundations"
               title="Foundations that make money feel understandable"
-              description="The system keeps the basics restrained: a small palette, readable type, steady spacing, and clear status language. The goal is to help people scan money without making the interface feel clinical."
+              description="A small palette, readable type, steady spacing, and clear status language, so money scans easily without feeling clinical."
             />
             <div className="space-y-8">
               <ColorSystemSection />
@@ -749,7 +749,7 @@ export function FintechSystemCatalogPage() {
               id="components"
               label="Component library"
               title="Components organized around real financial tasks"
-              description="Instead of showing every state as a technical inventory, the catalog groups components by what they help a person do: move money, trade assets, manage crypto wallets, review risk, read activity, recover from errors, and trust a session."
+              description="Grouped by what they help a person do: move money, trade, review risk, read activity, recover from errors."
             />
             <ComponentsSection />
           </section>
@@ -759,7 +759,7 @@ export function FintechSystemCatalogPage() {
               id="patterns"
               label="Financial UX patterns"
               title="Reusable flows for money, markets, and trust"
-              description="Each pattern records trigger, required data, primary states, and compliance or risk behavior so teams can scale decisions across payments, cards, lending, trading, crypto wallets, wealth, analytics, and admin workflows."
+              description="Each pattern records its trigger, data, states, and risk behaviour, so teams reuse decisions instead of remaking them."
             />
             <PatternsSection />
           </section>
@@ -769,7 +769,7 @@ export function FintechSystemCatalogPage() {
               id="accessibility"
               label="Accessibility and trust"
               title="Rules for secure, readable, accountable interfaces"
-              description="Financial interfaces need more than attractive defaults. The system includes explicit accessibility and decision-safety rules for color, focus, motion, charts, status, and irreversible actions."
+              description="Accessibility and decision-safety rules for colour, focus, motion, charts, status, and irreversible actions."
             />
             <AccessibilitySection />
           </section>

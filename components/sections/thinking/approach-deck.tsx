@@ -34,19 +34,19 @@ const STEPS: Step[] = [
     num: "01",
     q: "Identify what cannot move",
     icon: IconViewfinder,
-    body: "Set the fixed points first so the team knows where there is room to move.",
+    body: "Set the fixed points first, so the team knows where it can move.",
   },
   {
     num: "02",
     q: "Map the moving parts",
     icon: IconSitemap,
-    body: "See the flows, handoffs, dependencies, and edge cases before committing to a screen.",
+    body: "See flows, handoffs, and edge cases before committing to a screen.",
   },
   {
     num: "03",
     q: "Choose the smallest proof",
     icon: IconScissors,
-    body: "Build the smallest version that proves the decision, not the fullest expression of it.",
+    body: "Build the smallest version that proves the decision.",
   },
   {
     num: "04",
@@ -58,13 +58,13 @@ const STEPS: Step[] = [
     num: "05",
     q: "Make alignment concrete",
     icon: IconUsers,
-    body: "Turn debate into a shared artifact: a rule, flow, token model, prototype, or implementation note.",
+    body: "Turn debate into a shared artifact: a rule, a flow, a prototype.",
   },
   {
     num: "06",
     q: "Systematize what works",
     icon: IconStack2,
-    body: "Promote proven decisions into components, templates, documentation, and governance.",
+    body: "Turn proven decisions into components, templates, and docs.",
   },
 ]
 
@@ -356,7 +356,7 @@ export function ApproachDeck() {
             Approach
           </h2>
           <p className="type-section-intro text-muted-foreground">
-            A practical way to turn ambiguity into clear product decisions teams can build from.
+            How I turn ambiguity into decisions teams can build from.
           </p>
         </div>
 

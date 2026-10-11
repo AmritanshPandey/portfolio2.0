@@ -199,10 +199,10 @@ export default function AboutSection() {
             {/* TEXT */}
             <div className="space-y-5">
               <p className="type-prose text-foreground/82">
-                I like figuring out how things work. That shows up in the job, but also in the rest of life: long routes, unfamiliar cities, cooking, Lego, and small collections that reward patience.
+                I like figuring out how things work, at work and off it.
               </p>
               <p className="type-prose text-foreground/80">
-                The same values keep coming back in my design work: clarity, systems, craft, and making decisions visible enough for others to build from. Teaching is the part I return to most, mentoring designers and watching ideas click.
+                In design that means clarity, systems, and decisions visible enough for others to build from. Teaching is the part I return to most.
               </p>
             </div>
 
