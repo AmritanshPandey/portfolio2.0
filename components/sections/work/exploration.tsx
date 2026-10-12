@@ -70,17 +70,17 @@ export default function ExplorationsSection() {
           </div>
 
           <div className="mt-6 max-w-[34rem]">
-            <p className="text-[13px] font-medium text-muted-foreground">
+            <p className="ledger-label">
               {card.status === "Live" ? (
                 <span className="inline-flex items-center gap-1.5 text-accent">
-                  <span className="size-1.5 rounded-full bg-accent" />
+                  <span className="size-1.5 bg-accent" />
                   Live product
                 </span>
               ) : (
                 card.status
               )}
             </p>
-            <h3 className="mt-2 text-[clamp(1.25rem,2vw,1.5rem)] font-semibold leading-snug tracking-[-0.012em] text-foreground text-balance">
+            <h3 className="mt-2 text-[clamp(1.5rem,2.4vw,2.25rem)] font-[760] leading-[1.02] tracking-[-0.03em] text-foreground [font-variation-settings:'wdth'_106] text-balance">
               {card.title}
             </h3>
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground text-pretty">

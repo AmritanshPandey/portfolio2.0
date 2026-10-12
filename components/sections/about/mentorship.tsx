@@ -1,5 +1,3 @@
-"use client"
-
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { advisoryItems, teachingItems, menteeItems } from "@/lib/data"
 
@@ -72,12 +70,12 @@ export default function AdvisorySection() {
       <div className="flex flex-wrap items-center gap-4 border-t border-border/60 pt-6">
         <a
           href={EMAIL_HREF}
-          className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-[14px] font-medium text-white transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:text-neutral-950"
+          className="btn-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           Start a conversation
-          <IconArrowUpRight size={16} stroke={2} />
+          <IconArrowUpRight size={16} stroke={2} aria-hidden className="btn-arrow" />
         </a>
-        <span className="text-[13px] text-muted-foreground">{EMAIL}</span>
+        <span className="ledger-label">{EMAIL}</span>
       </div>
     </div>
   )

@@ -144,7 +144,7 @@ export default function Page() {
     <div className="min-h-screen bg-background text-foreground">
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--background),transparent_42%,var(--background))]" />
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-28 md:grid-cols-[minmax(0,1fr)_420px] md:px-6 md:pb-24 md:pt-32">
+        <div className="ledger relative grid grid-cols-1 gap-10 pb-20 pt-28 md:grid-cols-[minmax(0,1fr)_420px] md:pb-24 md:pt-32">
           <div className="flex max-w-3xl flex-col justify-center">
             {/* Standardised breadcrumb kicker */}
             <nav className="mb-6 flex flex-wrap items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
@@ -215,7 +215,7 @@ export default function Page() {
       </section>
 
       <div className="border-b border-border/60">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:px-6 md:py-20 lg:grid-cols-[190px_1fr]">
+        <div className="ledger grid grid-cols-1 gap-10 py-14 md:py-20 lg:grid-cols-[190px_minmax(0,1fr)]">
           <aside className="hidden lg:block">
             <nav className="sticky top-28 space-y-1 border-l border-border pl-4" aria-label="PlanR page sections">
               <p className="type-meta mb-4 text-muted-foreground">On this page</p>
@@ -231,13 +231,13 @@ export default function Page() {
             </nav>
           </aside>
 
-          <div className="space-y-20">
+          <div className="min-w-0 space-y-20">
             <nav className="flex gap-2 overflow-x-auto pb-2 lg:hidden" aria-label="PlanR page sections">
               {sectionNav.map((item) => (
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  className="type-cta shrink-0 rounded-full border border-border bg-card px-3 py-2 text-foreground/62"
+                  className="type-cta shrink-0 border border-border bg-card px-3 py-2 text-foreground/70"
                 >
                   {item.label}
                 </a>

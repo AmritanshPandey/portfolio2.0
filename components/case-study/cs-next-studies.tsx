@@ -1,10 +1,8 @@
-"use client"
-
 import Link from "next/link"
-import { IconArrowRight } from "@tabler/icons-react"
-import { VerticalCard } from "@/components/shared/vertical-card"
+import { IconArrowRight, IconArrowUpRight } from "@tabler/icons-react"
 import { workItems } from "@/lib/data"
 
+/** Keep reading: the other case studies as ruled line items. */
 export function CsNextStudies({ currentHref }: { currentHref: string }) {
   const nextStudies = [...workItems]
     .sort((a, b) => a.order - b.order)
@@ -14,44 +12,48 @@ export function CsNextStudies({ currentHref }: { currentHref: string }) {
   if (nextStudies.length === 0) return null
 
   return (
-    <section className="bg-canvas-raised-muted relative overflow-hidden text-foreground transition-colors duration-500">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-black/[0.05] dark:bg-white/[0.06]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-px h-px bg-white/30 dark:bg-white/[0.02]" />
-
-      <div className="relative mx-auto max-w-6xl px-5 py-16 md:px-6 md:py-24">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between md:mb-10">
-          <div className="max-w-2xl">
-            <p className="type-meta mb-3">Keep reading</p>
-            <h2 className="type-section-title text-foreground">
-              More case studies
-            </h2>
+    <section className="relative bg-background text-foreground" style={{ paddingTop: "var(--section-y)" }}>
+      <div className="ledger">
+        <div aria-hidden data-settle="rule" className="rule-ink" />
+        <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between md:mt-6">
+          <div>
+            <p className="ledger-label mb-3">Keep reading</p>
+            <h2 className="type-section-title text-foreground">More case studies</h2>
           </div>
-
-          <Link
-            href="/#work"
-            className="group inline-flex min-h-11 items-center gap-2 text-[14px] font-medium text-muted-foreground transition-colors duration-500 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
+          <Link href="/#work" className="group inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold link-underline">
             All case studies
-            <IconArrowRight
-              size={15}
-              stroke={2}
-              className="transition-transform duration-500 group-hover:translate-x-0.5"
-            />
+            <IconArrowRight size={15} stroke={2} aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-          {nextStudies.map((item, index) => (
-            <VerticalCard
+        <div className="work-index mt-12 md:mt-16">
+          {nextStudies.map((item, i) => (
+            <Link
               key={item.href}
               href={item.href}
-              title={item.title}
-              category={item.category}
-              metric={item.metric}
-              ctaLabel="View case study"
-              index={index + 1}
-              showImage={false}
-            />
+              data-settle
+              style={{ ["--i" as string]: i }}
+              className="work-row group ledger-grid items-baseline gap-y-2 border-t border-border py-6 last:border-b md:py-8"
+            >
+              <p className="ledger-label col-span-12 md:col-span-3">
+                <span className="mr-4 text-foreground transition-colors duration-300 group-hover:text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {item.category}
+              </p>
+              <h3 className="col-span-11 text-[clamp(1.375rem,2.4vw,2.25rem)] font-[760] leading-[1.04] tracking-[-0.03em] [font-variation-settings:'wdth'_106] md:col-span-6 text-balance">
+                {item.title}
+              </h3>
+              <IconArrowUpRight
+                size={20}
+                stroke={1.75}
+                aria-hidden
+                className="col-span-1 justify-self-end transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-1 md:col-start-12 md:row-start-1"
+              />
+              {item.metric && (
+                <p className="col-span-12 text-[15px] text-muted-foreground md:col-span-6 md:col-start-4">{item.metric}</p>
+              )}
+            </Link>
           ))}
         </div>
       </div>

@@ -41,4 +41,4 @@ What this must NOT look like:
 
 ## Accessibility & Inclusion
 
-Target **WCAG AA**: body text ≥4.5:1, large text ≥3:1, visible keyboard focus states, and a `prefers-reduced-motion` alternative for every animation (partially handled today via Framer Motion's `reducedMotion="user"`). The site defaults to dark with light-mode support — contrast and legibility must hold in both themes.
+Target **WCAG AA**: body text ≥4.5:1, large text ≥3:1, visible keyboard focus states, and a `prefers-reduced-motion` alternative for every animation (partially handled today via Framer Motion's `reducedMotion="user"`). The site defaults to light paper with a dark mode — contrast and legibility must hold in both themes.

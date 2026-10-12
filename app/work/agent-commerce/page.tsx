@@ -1,10 +1,8 @@
-import {
-  CsHeroShell,
-  CsSection,
-  CsDecision,
-  CsInfoBar,
-  CsNextStudies,
-} from "@/components/case-study"
+import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
+import { CsSection } from "@/components/case-study/cs-section"
+import { CsDecision } from "@/components/case-study/cs-decision"
+import { CsInfoBar } from "@/components/case-study/cs-info-bar"
+import { CsNextStudies } from "@/components/case-study/cs-next-studies"
 import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -197,16 +195,6 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
 function Hero() {
   return (
     <CsHeroShell
-      className="
-        lg:[&_[data-cs-hero-inner]]:max-w-[1120px]
-        lg:[&_[data-cs-hero-grid]]:grid-cols-[minmax(0,1fr)_260px]
-        lg:[&_[data-cs-hero-grid]]:gap-14
-        lg:[&_[data-cs-hero-title]]:max-w-[780px]
-        lg:[&_[data-cs-hero-title]]:text-[48px]
-        xl:[&_[data-cs-hero-title]]:text-[52px]
-        [&_[data-cs-hero-lede]]:max-w-[660px]
-        lg:[&_[data-cs-hero-aside]]:pt-12
-      "
       breadcrumb={{ kind: "Case Study", category: "Agentic Commerce", client: "Mastercard · Creative Studio" }}
       keywords={["Agentic Commerce", "Trust UX", "Flagship · Ongoing"]}
       badge="Flagship · Ongoing"

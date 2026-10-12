@@ -3,7 +3,7 @@
 Personal portfolio. Goal: convert hiring managers, founders and design peers into conversations about senior product roles. Read `PRODUCT.md` (audience, brand, anti-references) and `DESIGN.md` (tokens, type scale, component rules) before UI work.
 
 ## Stack
-Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion, Lenis, next-themes (dark default), shadcn/radix, Recharts, WebGL shader backgrounds. Static site, no backend/DB. Analytics only when `VERCEL === "1"`.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion, Lenis, next-themes (light paper default), shadcn/radix, Recharts. Visual system: "Ledger" (see DESIGN.md). Static site, no backend/DB. Analytics only when `VERCEL === "1"`.
 
 ## Commands
 ```bash

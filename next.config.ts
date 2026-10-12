@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   // Overridable so a second dev instance (e.g. preview tooling) can run
   // alongside `next dev` without fighting over the .next lock.
   experimental: {
+    // Page transitions: route changes cross-dissolve through React's
+    // <ViewTransition> (see app/layout.tsx and the ::view-transition rules).
+    viewTransition: true,
     optimizePackageImports: [
       "@tabler/icons-react",
       "@hugeicons/react",

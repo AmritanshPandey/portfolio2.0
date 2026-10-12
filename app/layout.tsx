@@ -5,49 +5,32 @@ import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
 import { SiteChrome } from "@/components/layout/site-chrome"
 import { FancyCursor } from "@/components/shared/cursor"
-import { ThemeFab } from "@/components/shared/theme-fab"
-import { SiteBackground } from "@/components/shared/site-background"
-import { Grain } from "@/components/shared/motion"
+import { SettleObserver } from "@/components/shared/settle-observer"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
-import { Bricolage_Grotesque, Onest, JetBrains_Mono, Caveat } from "next/font/google"
+import { Archivo, Martian_Mono } from "next/font/google"
 import { ThemeProvider } from "next-themes"
-import { MotionConfig } from "framer-motion"
+import { ViewTransition } from "react"
+import { ReducedMotion } from "@/components/shared/reduced-motion"
 import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx"
 import { SITE_URL } from "@/lib/site"
 
-// Display: carries every heading. The `opsz` axis is requested so the browser
-// applies optical sizing automatically — letterforms open up at 15px and tighten
-// at 80px, which is the whole reason to pick a face with that axis.
-const display = Bricolage_Grotesque({
+// Ledger type: one family, two voices. Archivo's width axis carries the
+// hierarchy (expanded display, normal reading text); Martian Mono sets every
+// figure, reference and caption. Both are self-hosted and subset by next/font.
+const sans = Archivo({
   subsets: ["latin"],
-  axes: ["opsz"],
-  variable: "--ff-display",
-  display: "swap",
-})
-
-// Body + UI. Deliberately quiet so it never competes with the display face.
-const sans = Onest({
-  subsets: ["latin"],
+  axes: ["wdth"],
   variable: "--ff-sans",
   display: "swap",
 })
 
-// Real mono for the surviving data labels. Previously `--font-mono` was never
-// defined, so those labels fell through to whatever system mono the visitor
-// happened to have — different on every OS.
-const mono = JetBrains_Mono({
+const mono = Martian_Mono({
   subsets: ["latin"],
   variable: "--ff-mono",
   display: "swap",
-})
-
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-caveat",
 })
 
 const analyticsEnabled = process.env.VERCEL === "1"
@@ -77,8 +60,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f0f" },
+    { media: "(prefers-color-scheme: light)", color: "#F2F0EB" },
+    { media: "(prefers-color-scheme: dark)", color: "#101010" },
   ],
 }
 
@@ -91,12 +74,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={clsx(
-        display.variable,
-        sans.variable,
-        mono.variable,
-        caveat.variable
-      )}
+      className={clsx(sans.variable, mono.variable)}
     >
       <head>
         {/* Progressive enhancement: mark that scripting is available BEFORE
@@ -120,12 +98,13 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {/* Honour prefers-reduced-motion across all Framer Motion animations */}
-          <MotionConfig reducedMotion="user">
+          <ReducedMotion />
+          <>
             {/* Lenis smooth scroll */}
             <SmoothScroll />
 
@@ -139,14 +118,10 @@ export default function RootLayout({
             <SiteChrome>
               <FancyCursor />
 
-              {/* Interactive dot field — a standalone, full-viewport background
-                  layer (independent of the hero). Sits behind all content; the
-                  opaque section bands scroll over it. */}
-              <SiteBackground />
             </SiteChrome>
 
-            {/* Film grain — one quiet texture across every page */}
-            <Grain />
+            {/* The settle: rules draw and content lands as it scrolls in */}
+            <SettleObserver />
 
             <a
               href="#main-content"
@@ -159,13 +134,11 @@ export default function RootLayout({
               {/* Navbar */}
               <Navbar />
 
-              {/* Floating theme toggle — bottom-right, site-wide */}
-              <ThemeFab />
             </SiteChrome>
 
             {/* Content */}
             <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
-              {children}
+              <ViewTransition>{children}</ViewTransition>
             </main>
 
             {/* Footer */}
@@ -176,7 +149,7 @@ export default function RootLayout({
             </SiteChrome>
 
             {analyticsEnabled && <Analytics />}
-          </MotionConfig>
+          </>
         </ThemeProvider>
       </body>
     </html>

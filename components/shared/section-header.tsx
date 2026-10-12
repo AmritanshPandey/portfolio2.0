@@ -1,23 +1,26 @@
 import clsx from "clsx"
-import { Reveal, TextReveal } from "@/components/shared/motion"
 
 type Variant = "default" | "compact" | "hero" | "quiet"
 type HeadingLevel = "h1" | "h2" | "h3"
 
 interface SectionHeaderProps {
-  /** Accepted for caller compatibility; no longer rendered.
-   *  Per DESIGN.md, per-section uppercase tracked eyebrows are an anti-reference. */
+  /** Accepted for caller compatibility; not rendered (no eyebrow labels). */
   eyebrow?: string
   title: string
   description?: string
   variant?: Variant
   as?: HeadingLevel
+  /** When true, the title and intro settle in as they scroll into view. */
   animated?: boolean
-  /** Accepted for caller compatibility; gradient-text word emphasis (shimmer)
-   *  removed per DESIGN.md. Hierarchy now comes from size + weight. */
+  /** Accepted for caller compatibility; gradient emphasis is retired. */
   accentIndex?: number
 }
 
+/**
+ * Ledger section header: the title hangs from the left edge of the grid; the
+ * intro sits against it on the right, top-aligned, so the pair reads as a
+ * caption to the heading rather than a subtitle under it.
+ */
 export function SectionHeader({
   title,
   description,
@@ -25,45 +28,35 @@ export function SectionHeader({
   as: Tag = "h2",
   animated = true,
 }: SectionHeaderProps) {
-  const variants = {
-    default: { container: "max-w-[700px] space-y-4", title: "type-section-title" },
-    compact: { container: "max-w-2xl space-y-4", title: "type-section-title" },
-    hero: { container: "mb-10 md:mb-12 max-w-3xl space-y-5", title: "type-page-title" },
-    // One step down from the display size. Used so the page has sections that
-    // whisper: not every band gets the same 68px drum hit.
-    quiet: {
-      container: "max-w-[640px] space-y-3",
-      title: "text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold tracking-[-0.015em] leading-tight",
-    },
-  }
-
-  const styles = variants[variant]
+  const quiet = variant === "quiet"
+  const settle = animated ? { "data-settle": "" } : {}
 
   return (
-    <div className={clsx(styles.container)}>
-      {animated ? (
-        <TextReveal
-          as={Tag}
-          className={clsx("text-neutral-900 dark:text-white", styles.title)}
-        >
-          {title}
-        </TextReveal>
-      ) : (
-        <Tag className={clsx("text-neutral-900 dark:text-white", styles.title)}>
-          {title}
-        </Tag>
-      )}
+    <div className="ledger-grid gap-y-5">
+      <Tag
+        {...settle}
+        className={clsx(
+          "col-span-12 text-foreground",
+          quiet
+            ? "md:col-span-7 text-[clamp(1.75rem,3.2vw,3rem)] font-[750] leading-[0.98] tracking-[-0.03em] [font-variation-settings:'wdth'_110]"
+            : variant === "hero"
+              ? "type-page-title md:col-span-9"
+              : "type-section-title md:col-span-8",
+        )}
+      >
+        {title}
+      </Tag>
 
       {description && (
-        animated ? (
-          <Reveal as="p" y={18} delay={0.12} className="type-section-intro text-muted-foreground">
-            {description}
-          </Reveal>
-        ) : (
-          <p className="type-section-intro text-muted-foreground">
-            {description}
-          </p>
-        )
+        <p
+          {...settle}
+          style={{ ["--i" as string]: 1 }}
+          className={clsx(
+            "type-section-intro col-span-12 text-muted-foreground md:col-span-4 md:col-start-9 md:pt-2",
+          )}
+        >
+          {description}
+        </p>
       )}
     </div>
   )

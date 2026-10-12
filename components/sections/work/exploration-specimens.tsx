@@ -49,7 +49,7 @@ export function PlanRSpecimen({ className }: { className?: string }) {
                   "grid size-[4.4cqw] shrink-0 place-items-center rounded-full text-[2.2cqw] font-semibold tabular-nums",
                   i === 2
                     ? "bg-accent text-white dark:text-neutral-950"
-                    : "bg-foreground/[0.07] text-foreground/45"
+                    : "bg-foreground/[0.07] text-foreground/60"
                 )}
               >
                 {i + 1}
@@ -57,7 +57,7 @@ export function PlanRSpecimen({ className }: { className?: string }) {
               <span
                 className={clsx(
                   "truncate text-[2.7cqw] leading-tight",
-                  i === 2 ? "font-medium text-foreground" : "text-foreground/45"
+                  i === 2 ? "font-medium text-foreground" : "text-foreground/60"
                 )}
               >
                 {stage}
@@ -69,7 +69,7 @@ export function PlanRSpecimen({ className }: { className?: string }) {
         {/* Today, as the live app shows it. */}
         <div className="flex flex-col justify-center">
           <div className="rounded-[1.4cqw] bg-canvas-muted p-[3.6cqw] shadow-[0_1.2cqw_3cqw_-1.4cqw_rgba(0,0,0,0.35)] ring-1 ring-foreground/[0.06]">
-            <p className="text-[2.3cqw] font-medium text-foreground/50">Today</p>
+            <p className="text-[2.3cqw] font-medium text-foreground/60">Today</p>
             <p className="mt-[0.8cqw] text-[3.3cqw] font-semibold leading-tight text-foreground">
               Launch portfolio refresh
             </p>
@@ -94,7 +94,7 @@ export function PlanRSpecimen({ className }: { className?: string }) {
                   <span
                     className={clsx(
                       "truncate text-[2.45cqw]",
-                      t.done ? "text-foreground/40 line-through decoration-foreground/30" : "text-foreground/75"
+                      t.done ? "text-foreground/60 line-through decoration-foreground/30" : "text-foreground/75"
                     )}
                   >
                     {t.task}
@@ -136,7 +136,7 @@ export function FintechSystemSpecimen({ className }: { className?: string }) {
               >
                 {t.label}
               </span>
-              <span className="truncate text-[2.45cqw] text-foreground/45">{t.rule}</span>
+              <span className="truncate text-[2.45cqw] text-foreground/60">{t.rule}</span>
             </li>
           ))}
         </ul>

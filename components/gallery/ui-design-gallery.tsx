@@ -12,7 +12,6 @@ import {
   IconX,
 } from "@tabler/icons-react"
 import clsx from "clsx"
-import { AsciiFlowBackground } from "@/components/ui/backgrounds"
 import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { IphoneFrame } from "@/components/shared/iphone-frame"
 
@@ -277,33 +276,24 @@ export function UiDesignGallery() {
 
   return (
     <div className="bg-background text-foreground">
-      <section className="bg-canvas-gallery relative overflow-hidden border-b border-border pt-32 md:pt-36">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <AsciiFlowBackground opacity={0.85} cellSize={10} speed={0.8} />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-5 pb-10 md:px-6 md:pb-14">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.82fr)_minmax(420px,0.78fr)] lg:items-start">
-            <div className="relative isolate overflow-hidden rounded-3xl border border-white/40 bg-white/25 p-6 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.25),inset_0_1px_0_0_rgba(255,255,255,0.7),inset_0_0_0_1px_rgba(255,255,255,0.12)] backdrop-blur-xl backdrop-saturate-150 md:p-8 lg:max-w-sm lg:justify-self-start dark:border-white/15 dark:bg-white/[0.07] dark:shadow-[0_14px_44px_-10px_rgba(0,0,0,0.65),inset_0_1px_0_0_rgba(255,255,255,0.22),inset_0_0_0_1px_rgba(255,255,255,0.06)]">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/30 via-white/5 to-transparent opacity-80 dark:from-white/12 dark:via-transparent dark:opacity-70"
-              />
-              <div className="relative">
-                <h1 className="max-w-4xl text-balance text-2xl font-bold leading-[1.05] tracking-normal text-foreground md:text-4xl">
-                  Browse the interface board.
-                </h1>
-                <p className="mt-5 max-w-2xl text-[15px] leading-7 text-muted-foreground md:text-base">
-                  A visual-first collection of app screens, systems, commerce flows, and mobile concepts.
-                </p>
-              </div>
+      <section className="relative bg-background" style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 6vw, 104px))" }}>
+        <div className="ledger pb-10 md:pb-14">
+          <div aria-hidden data-hero-rule className="rule-ink" />
+          <div className="ledger-grid mt-6 gap-y-10 md:mt-10 lg:items-end">
+            <div className="col-span-12 lg:col-span-6">
+              <h1 data-hero-line="1" className="type-hero-internal max-w-[12ch] text-foreground">
+                Browse the interface board.
+              </h1>
+              <p data-hero-fade className="mt-6 max-w-[44ch] text-[clamp(1.0625rem,1.3vw,1.25rem)] leading-[1.5] text-muted-foreground">
+                A visual-first collection of app screens, systems, commerce flows, and mobile concepts.
+              </p>
             </div>
 
             <button
               type="button"
               onClick={() => setSelectedShot(featuredShot)}
-              className="group relative block aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-card text-left shadow-[var(--shadow-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+              data-hero-card
+              className="group relative col-span-12 block aspect-[4/3] overflow-hidden bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background lg:col-span-6"
               aria-label={`Open featured design: ${featuredShot.title}`}
             >
               <Image
@@ -348,22 +338,27 @@ export function UiDesignGallery() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-8 md:px-6 md:py-10">
-        <div className="mb-7 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap gap-2" aria-label="Shot filters">
+      <section className="ledger py-8 md:py-10">
+        <div className="mb-8 flex flex-col gap-4 border-t border-border pt-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap gap-x-6 gap-y-3" aria-label="Shot filters">
             {CATEGORIES.map((category) => (
               <button
                 key={category}
                 type="button"
                 onClick={() => setActiveCategory(category)}
                 className={clsx(
-                  "h-10 rounded-full border px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                  activeCategory === category
-                    ? "border-accent bg-accent text-white dark:text-neutral-950"
-                    : "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
+                  "ledger-label relative pb-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  activeCategory === category ? "text-foreground" : "hover:text-foreground"
                 )}
               >
                 {category}
+                <span
+                  aria-hidden
+                  className={clsx(
+                    "absolute inset-x-0 -bottom-px h-[2px] origin-left bg-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    activeCategory === category ? "scale-x-100" : "scale-x-0"
+                  )}
+                />
               </button>
             ))}
           </div>

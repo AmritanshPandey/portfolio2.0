@@ -18,11 +18,11 @@ type GateEnv = { password?: string; nodeEnv?: string }
 const TOKEN_MESSAGE = "site-access-v1"
 
 // Reachable without the cookie. `/unlock` needs the framework's assets to
-// render; the favicon, social preview image and robots.txt serve link
+// render; the favicon and app icons, social preview image and robots.txt serve link
 // previews and crawlers; `/_vercel/` is Vercel's own analytics endpoint.
 // Images next/image optimises must be public too: the optimiser fetches the
 // source without the visitor's cookie. Image types only, so PDFs stay gated.
-const PUBLIC_EXACT = new Set(["/unlock", "/favicon.ico", "/robots.txt", "/article.png"])
+const PUBLIC_EXACT = new Set(["/unlock", "/favicon.ico", "/icon.svg", "/apple-icon.png", "/robots.txt", "/article.png"])
 const PUBLIC_PREFIXES = ["/_next/", "/_vercel/", "/opengraph-image"]
 const PUBLIC_IMAGE = /^\/assets\/images\/.+\.(?:png|jpe?g|webp|avif|gif|svg)$/i
 
