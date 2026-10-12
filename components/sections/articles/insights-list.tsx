@@ -9,28 +9,30 @@ import type { ArticleItem } from "@/lib/types/content"
  */
 export function InsightsList({ items }: { items: ArticleItem[] }) {
   return (
-    <div className="work-index" data-work-animate>
+    <div className="work-index">
       {items.map((item, i) => (
         <Link
           key={item.href}
           href={item.href}
+          data-settle
           data-cursor-card
           data-cursor-label="Read"
+          style={{ ["--i" as string]: i }}
           className={clsx(
-            "work-row group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border/60 py-5 md:py-6",
-            "md:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)_auto] md:gap-x-10",
+            "work-row group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-5 border-t border-border py-5 md:py-7",
+            "md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)_auto] md:gap-x-[var(--col-gap)]",
             i === items.length - 1 && "border-b",
             "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           )}
         >
-          <p className="order-2 col-span-2 mt-2 text-[13px] text-muted-foreground md:order-none md:col-span-1 md:mt-0">
+          <p className="ledger-label order-2 col-span-2 mt-2 md:order-none md:col-span-1 md:mt-0">
             {item.category}
             {item.readTime ? <span className="text-muted-foreground"> · {item.readTime}</span> : null}
           </p>
 
           <h3
             className={clsx(
-              "order-1 md:order-none min-w-0 text-[clamp(1.15rem,2vw,1.5rem)] font-semibold leading-[1.22] tracking-[-0.012em] text-foreground",
+              "order-1 md:order-none min-w-0 text-[clamp(1.25rem,2.2vw,2rem)] font-[720] leading-[1.08] tracking-[-0.025em] text-foreground [font-variation-settings:'wdth'_106]",
               "transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2"
             )}
           >

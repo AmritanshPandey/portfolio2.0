@@ -6,14 +6,14 @@
 // mismatched transform animations are what make entrances feel choppy and are
 // the worst case for Safari's compositor, so everything shares these values.
 
-/** The site's signature ease-out curve (framer-motion cubic-bezier array). */
-export const EASE = [0.22, 1, 0.36, 1] as const
+/** The site's signature ease-out curve, mirrored by --ease-out in globals.css. */
+export const EASE = [0.16, 1, 0.3, 1] as const
 
 /** Standard animation durations, in seconds. */
 export const DURATION = {
-  fast: 0.35,
-  base: 0.5,
-  slow: 0.7,
+  fast: 0.24,
+  base: 0.42,
+  slow: 0.72,
 } as const
 
 /** How far below its resting spot an element starts before fading up (px).

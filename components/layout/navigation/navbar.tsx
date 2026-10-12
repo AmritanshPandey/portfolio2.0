@@ -16,6 +16,7 @@ import { IconHome } from "@tabler/icons-react"
 
 import { scrollToSection } from "@/lib/scroll"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
+import { ThemeToggle } from "@/components/shared/theme-fab"
 
 type NavLink = {
   label: string
@@ -214,27 +215,40 @@ function PrimaryNavItem({
       aria-current={isActive ? "true" : undefined}
       aria-label={Icon ? item.label : undefined}
       className={clsx(
-        "group/nav relative flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium",
-        "transition-colors duration-200 md:px-2.5 lg:px-3 lg:text-sm",
+        "group/nav relative flex h-10 shrink-0 items-center px-2.5 text-[14px] font-medium tracking-[-0.005em]",
+        "transition-colors duration-200 lg:px-3",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
     >
-      {isActive && (
+      {/* Active state: a 2px ultramarine rule that glides between items. */}
+      {isActive && !Icon && (
         <motion.span
-          layoutId="nav-active-pill"
-          className="absolute inset-0 rounded-full border border-accent/25 bg-accent/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] dark:bg-accent/[0.12]"
-          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+          layoutId="nav-active-rule"
+          aria-hidden
+          className="absolute inset-x-2.5 bottom-1 h-[2px] bg-accent lg:inset-x-3"
+          transition={{ type: "spring", stiffness: 520, damping: 42 }}
         />
       )}
 
       <span
         className={clsx(
-          "relative z-10 flex items-center gap-1.5 transition-colors duration-200",
+          "relative z-10 flex items-center transition-colors duration-200",
           isActive ? "text-foreground" : "text-muted-foreground group-hover/nav:text-foreground",
         )}
       >
-        {Icon ? <Icon size={16} strokeWidth={2} className="opacity-75" /> : item.label}
+        {/* Home is a mark, not an icon: a small ultramarine square. */}
+        {Icon ? (
+          <span
+            aria-hidden
+            className={clsx(
+              "block h-3 w-3 bg-accent transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              "group-hover/nav:rotate-45",
+            )}
+          />
+        ) : (
+          item.label
+        )}
       </span>
     </Link>
   )
@@ -249,26 +263,14 @@ function NavShell({
   children: ReactNode
   className?: string
 }) {
-  const blurValue = scrolled ? "saturate(145%) blur(18px)" : "saturate(130%) blur(12px)"
-
   return (
     <nav
       className={clsx(
-        "navbar-enter relative flex max-w-[calc(100vw-2rem)] items-center gap-1 overflow-x-auto rounded-full px-1.5 py-1.5",
-        "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-        "transition-[background,border-color,box-shadow,transform] duration-300 ease-out [transform:translateZ(0)]",
-        scrolled
-          ? "border border-black/[0.08] bg-white/[0.90] shadow-[0_14px_42px_rgba(0,0,0,0.14)] dark:border-white/[0.12] dark:bg-neutral-950/[0.82] dark:shadow-[0_18px_60px_rgba(0,0,0,0.45)]"
-          : "border border-black/[0.06] bg-white/[0.74] shadow-[0_8px_28px_rgba(0,0,0,0.08)] dark:border-white/[0.10] dark:bg-neutral-950/[0.64] dark:shadow-[0_12px_42px_rgba(0,0,0,0.30)]",
+        "navbar-enter ledger flex h-[var(--nav-h)] items-center justify-between gap-4",
         className,
       )}
-      style={{
-        WebkitBackdropFilter: blurValue,
-        backdropFilter: blurValue,
-      }}
+      data-scrolled={scrolled || undefined}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-full bg-gradient-to-r from-transparent via-black/[0.08] to-transparent dark:via-white/[0.15]" />
-      <div className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/35 dark:ring-white/[0.04]" />
       {children}
     </nav>
   )
@@ -292,17 +294,17 @@ function ContactActions({
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 
   return (
-    <div className={clsx(menu ? "grid grid-cols-2 gap-2" : "flex items-center gap-1")}>
+    <div className={clsx(menu ? "grid grid-cols-2 gap-3" : "flex items-center gap-1")}>
       <a
         href={RESUME_HREF}
         target="_blank"
         rel="noopener noreferrer"
         onClick={onNavigate}
         className={clsx(
-          "flex shrink-0 items-center justify-center rounded-full font-medium transition-colors duration-200",
+          "flex shrink-0 items-center justify-center font-medium transition-colors duration-200",
           menu
-            ? "h-11 border border-border/70 text-sm text-foreground"
-            : "h-10 px-3 text-[13px] text-muted-foreground hover:text-foreground md:px-2.5 lg:px-3 lg:text-sm",
+            ? "btn-line w-full"
+            : "h-10 px-2.5 text-[14px] text-muted-foreground hover:text-foreground lg:px-3",
           focus
         )}
       >
@@ -312,8 +314,8 @@ function ContactActions({
         href={EMAIL_HREF}
         onClick={onNavigate}
         className={clsx(
-          "flex shrink-0 items-center justify-center rounded-full bg-accent font-medium text-white transition-[filter] duration-200 hover:brightness-110 dark:text-neutral-950",
-          menu ? "h-11 text-sm" : "h-10 px-4 text-[13px] lg:text-sm",
+          "btn-ink shrink-0",
+          menu ? "w-full" : "!min-h-9 !px-4 text-[14px]",
           focus
         )}
       >
@@ -324,7 +326,7 @@ function ContactActions({
 }
 
 function Divider() {
-  return <div className="mx-1 h-4 w-px shrink-0 bg-border/60" />
+  return <div aria-hidden className="mx-2 h-4 w-px shrink-0 bg-border" />
 }
 
 export default function Navbar() {
@@ -394,16 +396,30 @@ export default function Navbar() {
       {isDetail && (
         <div
           ref={progressBarRef}
-          className="fixed left-0 right-0 top-0 z-[60] h-[2px] origin-left bg-accent/70"
+          className="fixed left-0 right-0 top-0 z-[60] h-[2px] origin-left bg-accent"
           style={{ transform: "scaleX(0)" }}
         />
       )}
 
-      <header className="fixed left-1/2 top-5 z-50 hidden w-[calc(100vw-2rem)] -translate-x-1/2 justify-center md:flex lg:top-7 lg:w-max">
+      <header
+        className={clsx(
+          "fixed inset-x-0 top-0 z-50 hidden bg-background md:block",
+          "border-b transition-[border-color] duration-300",
+          scrolled ? "border-border" : "border-transparent",
+        )}
+      >
         <NavShell scrolled={scrolled}>
-          {/* Left: home + in-page sections */}
-          <div className="relative flex items-center gap-1">
-            {SECTION_LINKS.map((item) => (
+          <PrimaryNavItem
+            item={SECTION_LINKS[0]}
+            isActive={activeNavSection === SECTION_LINKS[0].section}
+            setActiveImmediate={setActive}
+            className="-ml-2.5 lg:-ml-3"
+          />
+
+          <div className="flex items-center">
+          {/* In-page sections */}
+          <div className="relative flex items-center">
+            {SECTION_LINKS.slice(1).map((item) => (
               <PrimaryNavItem
                 key={item.href}
                 item={item}
@@ -415,8 +431,8 @@ export default function Navbar() {
 
           <Divider />
 
-          {/* Right: standalone pages */}
-          <div className="relative flex items-center gap-1">
+          {/* Standalone pages */}
+          <div className="relative flex items-center">
             {PAGE_LINKS.map((item) => (
               <PrimaryNavItem
                 key={item.href}
@@ -430,8 +446,28 @@ export default function Navbar() {
           <Divider />
 
           <ContactActions />
+          <ThemeToggle className="ml-2" />
+          </div>
         </NavShell>
       </header>
+
+      <div
+        className={clsx(
+          "fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end bg-background pb-2.5 md:hidden",
+          "border-b transition-[border-color] duration-300",
+          scrolled || open ? "border-border" : "border-transparent",
+        )}
+      >
+        <div className="ledger flex h-11 items-center">
+          <PrimaryNavItem
+            item={SECTION_LINKS[0]}
+            isActive={activeNavSection === SECTION_LINKS[0].section}
+            setActiveImmediate={setActive}
+            closeMenu={() => setOpen(false)}
+            className="-ml-2.5"
+          />
+        </div>
+      </div>
 
       <button
         ref={btnRef}
@@ -440,14 +476,10 @@ export default function Navbar() {
         aria-expanded={open}
         data-menu-open={open}
         className="
-          fixed right-4 top-[calc(env(safe-area-inset-top)+1rem)] z-50 flex h-14 w-14 items-center justify-center rounded-full md:hidden
-          border border-black/[0.06] bg-white/90 shadow-[0_14px_40px_rgba(0,0,0,0.20)] backdrop-blur-xl
-          transition active:scale-[0.92] dark:border-white/[0.10] dark:bg-neutral-950/84
+          fixed right-[var(--gutter)] top-[calc(env(safe-area-inset-top)+0.625rem)] z-[51] flex h-11 w-11 items-center justify-center md:hidden
+          border border-foreground bg-background text-foreground
+          transition-transform duration-150 active:translate-y-px
         "
-        style={{
-          WebkitBackdropFilter: "saturate(145%) blur(16px)",
-          backdropFilter: "saturate(145%) blur(16px)",
-        }}
       >
         <span aria-hidden className="menu-morph">
           <span />
@@ -459,41 +491,18 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <>
-            <motion.button
-              type="button"
-              aria-label="Close navigation menu"
-              className="fixed inset-0 z-40 bg-background/20 backdrop-blur-[2px] md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              onClick={() => setOpen(false)}
-            />
-
             <motion.div
               ref={menuRef}
-              initial={{ opacity: 0, y: 12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.98 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="
-                fixed right-4 top-[calc(env(safe-area-inset-top)+5rem)] z-50 w-[min(21rem,calc(100vw-2rem))] overflow-hidden rounded-3xl md:hidden
-                border border-black/[0.08] bg-white/94 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl
-                dark:border-white/[0.10] dark:bg-neutral-950/92 dark:shadow-[0_28px_80px_rgba(0,0,0,0.55)]
-              "
-              style={{
-                WebkitBackdropFilter: "saturate(145%) blur(18px)",
-                backdropFilter: "saturate(145%) blur(18px)",
-              }}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-x-0 bottom-0 top-[calc(env(safe-area-inset-top)+4rem)] z-50 flex flex-col overflow-y-auto bg-background md:hidden"
             >
-              <div className="border-b border-border/60 px-4 py-3">
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  Menu
-                </p>
-              </div>
+              <p className="ledger ledger-label pt-5">Menu</p>
 
-              <div className="flex flex-col gap-1 p-3">
-                {SECTION_LINKS.map((item) => (
+              <div className="ledger flex flex-col pt-2">
+                {SECTION_LINKS.slice(1).map((item) => (
                   <PrimaryNavItem
                     key={item.href}
                     item={item}
@@ -503,11 +512,9 @@ export default function Navbar() {
                       setOpen(false)
                     }}
                     closeMenu={() => setOpen(false)}
-                    className="h-11 w-full justify-start rounded-2xl px-3 text-sm"
+                    className="h-auto w-full justify-start border-b border-border !px-0 py-3 text-[2rem] font-[750] tracking-[-0.03em] [font-variation-settings:'wdth'_112]"
                   />
                 ))}
-
-                <div className="my-1 h-px bg-border/55" />
 
                 {PAGE_LINKS.map((item) => (
                   <PrimaryNavItem
@@ -519,13 +526,14 @@ export default function Navbar() {
                       setOpen(false)
                     }}
                     closeMenu={() => setOpen(false)}
-                    className="h-11 w-full justify-start rounded-2xl px-3 text-sm"
+                    className="h-auto w-full justify-start border-b border-border !px-0 py-3 text-[2rem] font-[750] tracking-[-0.03em] [font-variation-settings:'wdth'_112]"
                   />
                 ))}
               </div>
 
-              <div className="border-t border-border/60 p-3">
+              <div className="ledger mt-auto space-y-3 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-8">
                 <ContactActions layout="menu" onNavigate={() => setOpen(false)} />
+                <ThemeToggle className="size-12" />
               </div>
             </motion.div>
           </>

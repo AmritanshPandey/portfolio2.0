@@ -8,20 +8,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* A work-index row is "on" when a pointer hovers it (or the keyboard reaches
+   it). The specimens in work-specimens.tsx key their mechanism off this. Hover
+   is gated to real pointers so a tap never leaves a row stuck on. */
+@custom-variant row-on {
+  @media (hover: hover) and (pointer: fine) {
+    .work-row:hover & {
+      @slot;
+    }
+  }
+  .work-row:focus-visible & {
+    @slot;
+  }
+}
+
 /* ─────────────────────────
    DESIGN TOKENS
 ───────────────────────── */
 
 @theme inline {
-  /* Type system. next/font emits the raw family names as --ff-*; these map them
-     onto Tailwind's font-* utilities (font-sans, font-mono, font-display) and
-     give every stack a real fallback.
-
-     Display (Bricolage Grotesque) carries structural headings only. Body, UI,
-     and card/list labels stay in Onest, so the display face reads as a
-     deliberate voice rather than a texture applied to everything — which is
-     exactly what the single-Montserrat setup failed at. */
-  --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
+  /* ── LEDGER · type ────────────────────────────────────────────────────
+     One family does the work: Archivo's width axis carries the contrast
+     (expanded for display, normal for reading). Martian Mono sets figures,
+     references and meta, always with tabular numerals. */
+  --font-display: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--ff-mono), ui-monospace, "SF Mono", "Menlo", monospace;
 
@@ -42,98 +52,142 @@
   --color-input: var(--input);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-ink: var(--ink);
+  --color-rule: var(--border);
 
-  --radius-lg: var(--radius);
+  /* ── LEDGER · radii ───────────────────────────────────────────────────
+     Ruled paper, not app chrome: corners are nearly square everywhere.
+     Product-UI mockups opt back in with [data-keep-radius] (see below). */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 3px;
+  --radius-2xl: 4px;
+  --radius-3xl: 5px;
+  --radius-4xl: 6px;
 }
 
 /* ─────────────────────────
-   LIGHT
-
-   Also exposed as a `.light` class so a subtree can be force-lit even inside a
-   dark page (used by <BeforeAfter> for the live light↔dark theme split).
+   LEDGER · TOKENS
+   Light is the default sheet: paper, ink, graphite, hairline rules and one
+   ultramarine accent used sparingly (an active state, a link, one mark).
+   Contrast (WCAG AA) on paper: ink 16.6, graphite 6.1, ultramarine 6.6.
 ───────────────────────── */
 
 :root,
 .light {
-  --background: oklch(0.98 0 0);
-  --foreground: oklch(0.18 0 0);
+  --paper: #F2F0EB;
+  --ink: #111111;
+  --graphite: #5C5A55;
+  --ultramarine: #2B35E8;
 
-  /* 0.51, not 0.55: 0.55 measured 4.38:1 on the muted canvas (0.965). 0.51
-     clears AA on every light canvas, down to bg-canvas-accent (0.925). */
-  --text-muted: oklch(0.51 0 0);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --text-muted: var(--graphite);
 
-  --surface-1: oklch(1 0 0);
-  --surface-2: oklch(0.98 0 0);
+  --surface-1: #F8F7F3;   /* a sheet laid on the page: frames, specimens */
+  --surface-2: #E9E6DF;   /* a recessed field */
 
-  --border: oklch(0.9 0 0);
-  --ring: oklch(0.508 0.118 165.612);
-  /* Emerald accent. Light: emerald-700 — emerald-600 measured only 3.3:1 on
-     the near-white canvas (white button text 3.4:1); emerald-700 clears AA
-     both ways. Dark: emerald-400. */
-  --accent: oklch(0.508 0.118 165.612);
-  --primary: var(--accent);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.93 0 0);
-  --secondary-foreground: var(--foreground);
-  --input: oklch(0.96 0 0);
-  --destructive: oklch(0.58 0.2 27);
-  --destructive-foreground: oklch(0.99 0 0);
+  --border: #D6D2C9;      /* hairline rule */
+  --rule-strong: var(--ink);
+  --ring: var(--ultramarine);
+  --accent: var(--ultramarine);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: #E3E0D8;
+  --secondary-foreground: var(--ink);
+  --input: #F8F7F3;
+  --destructive: #B3261E;
+  --destructive-foreground: #FFFFFF;
+  --on-accent: #FFFFFF;
 
-  --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.08);
+  --shadow-sm: none;
+  --shadow-md: 0 1px 0 var(--border);
+  --surface-hover: #EAE7E0;
 
-  /* Standard interactive hover — neutral fill */
-  --surface-hover: oklch(0.95 0 0);
+  --radius: 3px;
 
-  --radius: 0.75rem;
+  /* ── spacing + grid ── */
+  --gutter: clamp(20px, 4.2vw, 72px);
+  --col-gap: clamp(16px, 1.7vw, 28px);
+  --container: 1560px;
+  --section-y: clamp(96px, 11vw, 184px);
+  --measure: 64ch;
+  --nav-h: 64px;
+
+  /* ── motion ── short, decisive, mechanical; nothing floats */
+  --ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 120ms;
+  --dur-2: 180ms;
+  --dur-3: 240ms;
+  --dur-4: 420ms;
+  --dur-5: 720ms;
+  --dur-6: 1000ms;
+
+  /* Legacy handwriting slot now sets in the mono: notes read as annotations. */
+  --font-caveat: var(--ff-mono);
 }
-
-/* ─────────────────────────
-   DARK
-───────────────────────── */
 
 .dark {
-  --background: oklch(0.14 0 0);
-  --foreground: oklch(0.96 0 0);
+  --paper: #101010;
+  --ink: #ECEAE4;
+  --graphite: #9A978F;
+  --ultramarine: #8C93FF;
 
-  /* 0.64, not 0.6: 0.6 dropped to 4.2–4.4:1 on lifted dark surfaces
-     (cards, inputs, secondary pills). 0.64 clears AA on all of them. */
-  --text-muted: oklch(0.64 0 0);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --text-muted: var(--graphite);
 
-  --surface-1: oklch(0.18 0 0);
-  --surface-2: oklch(0.14 0 0);
+  --surface-1: #171716;
+  --surface-2: #0B0B0B;
 
-  --border: oklch(1 0 0 / 10%);
-  --ring: oklch(0.765 0.163 163);
-  --accent: oklch(0.765 0.163 163);
-  --primary: var(--accent);
-  --primary-foreground: oklch(0.11 0 0);
-  --secondary: oklch(0.24 0 0);
-  --secondary-foreground: var(--foreground);
-  --input: oklch(0.22 0 0);
-  --destructive: oklch(0.72 0.19 24);
-  --destructive-foreground: oklch(0.11 0 0);
+  --border: #2B2A27;
+  --rule-strong: var(--ink);
+  --ring: var(--ultramarine);
+  --accent: var(--ultramarine);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: #1E1E1C;
+  --secondary-foreground: var(--ink);
+  --input: #171716;
+  --destructive: #F2867E;
+  --destructive-foreground: #101010;
+  --on-accent: #0B0B0B;
 
-  --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 20px 40px rgba(0, 0, 0, 0.45);
-
-  --surface-hover: oklch(0.215 0 0);
+  --surface-hover: #1A1A19;
 }
 
-.bg-canvas-default {
-  background-color: oklch(0.98 0 0);
+/* Product-UI mockups keep their own rounded geometry: the fintech kit and any
+   device or interface specimen is someone else's interface, not this page. */
+.fintech-system,
+[data-keep-radius] {
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
 }
 
-.dark .bg-canvas-default {
-  background-color: oklch(0.14 0 0);
+/* One sheet of paper: every canvas variant resolves to the page or a sheet.
+   Sections are divided by rules, not by alternating bands. */
+.bg-canvas-default,
+.bg-canvas-muted,
+.bg-canvas-accent,
+.bg-canvas-raised,
+.bg-canvas-gallery,
+.bg-canvas-subtle,
+.bg-canvas-raised-muted {
+  background-color: var(--background);
 }
 
-.bg-canvas-muted {
-  background-color: oklch(0.965 0 0);
-}
-
-.dark .bg-canvas-muted {
-  background-color: oklch(0.105 0 0);
+.dark .dark-bg-surface-18 {
+  background-color: var(--surface-1);
 }
 
 .chart-container .recharts-cartesian-axis-tick text {
@@ -167,47 +221,6 @@
 .chart-container .recharts-radial-bar-background-sector,
 .chart-container .recharts-rectangle.recharts-tooltip-cursor {
   fill: var(--surface-2);
-}
-
-.bg-canvas-accent {
-  background-color: oklch(0.925 0 0);
-}
-
-.dark .bg-canvas-accent {
-  background-color: oklch(0.12 0 0);
-}
-
-.bg-canvas-raised {
-  background-color: oklch(0.985 0 0);
-}
-
-.dark .bg-canvas-raised {
-  background-color: oklch(0.14 0 0);
-}
-
-.bg-canvas-gallery {
-  background-color: oklch(0.98 0 0);
-}
-
-.dark .bg-canvas-gallery {
-  background-color: oklch(0.105 0 0);
-}
-
-.bg-canvas-subtle {
-  background-color: oklch(0.945 0 0);
-}
-
-.dark .bg-canvas-subtle,
-.dark .bg-canvas-raised-muted {
-  background-color: oklch(0.105 0 0);
-}
-
-.bg-canvas-raised-muted {
-  background-color: oklch(0.985 0 0);
-}
-
-.dark .dark-bg-surface-18 {
-  background-color: oklch(0.18 0 0);
 }
 
 .bg-accent-wash {
@@ -444,17 +457,44 @@
 
   html {
     font-family: var(--font-sans);
+    font-variation-settings: "wdth" 100;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    /* Ink thumb on paper: a ruled-edge scrollbar that matches the sheet. */
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--foreground) 55%, transparent) transparent;
   }
 
-  /* Headings default to the display face. Individual type-* classes below can
-     still opt back into the body face where a "heading" is really a label. */
-  h1, h2, h3 {
+  /* Headings set expanded: width carries the hierarchy, colour never does. */
+  h1, h2 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
+    font-variation-settings: "wdth" 112;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 100;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  code, kbd, samp, .font-mono {
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-feature-settings: "tnum" 1, "zero" 1;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--foreground) 45%, transparent);
+    border: 3px solid var(--background);
+    border-radius: 0;
   }
 }
 
@@ -470,8 +510,8 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--accent) 28%, transparent);
-    color: var(--foreground);
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
   p {
@@ -496,219 +536,168 @@
      tier. Montserrat is a wide geometric that needed pulling in; Bricolage is
      narrower and already tightens itself through the opsz axis, so the old
      -0.026em read as cramped. */
+  /* ── LEDGER · TYPE SCALE ───────────────────────────────────────────────
+     Dramatic contrast by size and width, never by colour. Display tiers set
+     expanded and tight; reading text sets normal width at 17px. */
+
+  /* Home hero: the one statement that owns the sheet. 48px → 168px. */
   .type-display-hero {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-size: clamp(2.35rem, 10vw, 3.35rem);
-    line-height: 1.05;
-    font-weight: 700;
-    letter-spacing: -0.018em;
+    font-variation-settings: "wdth" 116;
+    font-size: clamp(3rem, 9.2vw, 10.5rem);
+    line-height: 0.9;
+    font-weight: 800;
+    letter-spacing: -0.045em;
     text-wrap: balance;
   }
 
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .type-display-hero {
-      font-size: clamp(2.4rem, 5.6vw, 3.6rem);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .type-display-hero {
-      font-size: clamp(3.1rem, 6.5vw, 5.25rem);
-    }
-  }
-
-  /* Case-study / internal page hero — bigger than type-page-title,
-     calmer than the home hero. */
+  /* Case-study / internal page hero. 40px → 112px. */
   .type-hero-internal {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    line-height: 1.07;
-    font-weight: 700;
-    letter-spacing: -0.018em;
+    font-variation-settings: "wdth" 112;
+    font-size: clamp(2.5rem, 6.4vw, 7rem);
+    line-height: 0.94;
+    font-weight: 800;
+    letter-spacing: -0.04em;
     text-wrap: balance;
   }
 
   .type-page-title {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-size: 34px;
-    line-height: 1.15;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-variation-settings: "wdth" 112;
+    font-size: clamp(2.25rem, 5vw, 5rem);
+    line-height: 0.96;
+    font-weight: 800;
+    letter-spacing: -0.035em;
     text-wrap: balance;
   }
 
+  /* Section title: large, expanded, left-hung on the grid. 34px → 88px. */
   .type-section-title {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-size: 36px;
-    line-height: 1.11;
-    font-weight: 700;
-    letter-spacing: -0.014em;
+    font-variation-settings: "wdth" 114;
+    font-size: clamp(2.125rem, 5.4vw, 5.5rem);
+    line-height: 0.94;
+    font-weight: 800;
+    letter-spacing: -0.04em;
     text-wrap: balance;
   }
 
   .type-section-intro {
-    max-width: 62ch;
-    font-size: 15px;
-    line-height: 1.7;
-    letter-spacing: 0;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.15vw, 1.1875rem);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
     text-wrap: pretty;
   }
 
   .type-subtitle {
     font-family: var(--font-sans);
-    font-size: 20px;
-    line-height: 1.28;
-    font-weight: 600;
-    letter-spacing: 0;
+    font-variation-settings: "wdth" 104;
+    font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+    line-height: 1.2;
+    font-weight: 650;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
-  /* Case-study section headings — matches the ad-hoc text-2xl/3xl pattern used
-     across all case study pages, now named for consistency. */
   .type-case-title {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-size: 24px;
-    line-height: 1.3;
-    font-weight: 600;
-    letter-spacing: -0.008em;
+    font-variation-settings: "wdth" 110;
+    font-size: clamp(1.75rem, 3.4vw, 3.25rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
     text-wrap: balance;
   }
 
-  @media (min-width: 768px) {
-    .type-case-title {
-      font-size: 30px;
-      line-height: 1.25;
-    }
-  }
-
-  /* The display/body split is by ROLE, not size. Structural headings (h1-h3,
-     the type-*-title tiers) carry the display face because they are prose
-     hierarchy. Labels sitting on a container — card titles, list titles,
-     subgroup labels — stay in the body face, so a grid of cards never turns
-     into a wall of display type. */
+  /* Labels on a container stay normal width: a list never becomes a wall
+     of display type. */
   .type-card-title {
     font-family: var(--font-sans);
-    font-size: 18px;
-    line-height: 1.34;
-    font-weight: 600;
-    letter-spacing: 0;
+    font-variation-settings: "wdth" 100;
+    font-size: 1.1875rem;
+    line-height: 1.25;
+    font-weight: 650;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
 
   .type-list-title {
     font-family: var(--font-sans);
-    font-size: 16px;
-    line-height: 1.42;
+    font-size: 1.0625rem;
+    line-height: 1.3;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: -0.01em;
   }
 
   .type-card-title-featured {
-    font-size: 22px;
-    line-height: 1.3;
-    font-weight: 600;
-    letter-spacing: 0;
+    font-variation-settings: "wdth" 104;
+    font-size: clamp(1.375rem, 2vw, 1.75rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
   .type-card-body {
-    font-size: 13px;
-    line-height: 1.85;
+    font-size: 0.9375rem;
+    line-height: 1.55;
     letter-spacing: 0;
     text-wrap: pretty;
   }
 
   .type-card-body-featured {
-    font-size: 14px;
-    line-height: 1.9;
+    font-size: 1rem;
+    line-height: 1.55;
     letter-spacing: 0;
     text-wrap: pretty;
   }
 
+  /* Meta and captions set in the mono: references, dates, roles. */
   .type-meta {
-    font-size: 12px;
-    line-height: 1.55;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 400;
     letter-spacing: 0;
-    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    color: var(--text-muted);
   }
 
   .type-caption {
-    font-size: 11px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
     line-height: 1.45;
-    font-weight: 500;
+    font-weight: 400;
     letter-spacing: 0;
   }
 
   .type-cta {
-    font-size: 13px;
-    line-height: 1.55;
-    font-weight: 500;
-    letter-spacing: 0;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: -0.005em;
   }
 
   .type-prose {
-    font-size: 16px;
-    line-height: 1.8;
-    letter-spacing: 0;
+    font-size: 1.0625rem;
+    line-height: 1.62;
+    letter-spacing: -0.003em;
     text-wrap: pretty;
   }
 
-  @media (min-width: 768px) {
-    .type-page-title {
-      font-size: 44px;
-      line-height: 1.12;
-    }
-
-    .type-section-title {
-      font-size: 54px;
-      line-height: 1.07;
-    }
-
-    .type-section-intro {
-      font-size: 16px;
-    }
-
-    .type-subtitle {
-      font-size: 22px;
-      line-height: 1.28;
-    }
-
-    .type-card-title-featured {
-      font-size: 24px;
-    }
-
-    .type-prose {
-      font-size: 17px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .type-page-title {
-      font-size: 52px;
-    }
-
-    .type-section-title {
-      font-size: 68px;
-      line-height: 1.04;
-    }
-  }
-
   /* Premium underline for inline body links — opt in with `link-underline`. */
+  /* A ruled underline that thickens and turns ultramarine on hover. */
   .link-underline {
     text-decoration: underline;
     text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--text-muted);
-    transition: text-decoration-color 150ms ease;
+    text-underline-offset: 0.22em;
+    text-decoration-color: color-mix(in srgb, var(--foreground) 35%, transparent);
+    transition: text-decoration-color var(--dur-2) var(--ease-settle), text-decoration-thickness var(--dur-2) var(--ease-settle);
   }
   .link-underline:hover {
-    text-decoration-color: var(--foreground);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
   }
 }
 
@@ -818,27 +807,58 @@
 }
 
 [data-hero-line] {
-  animation: hero-line-rise 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: hero-line-rise 1s var(--ease-out) 120ms both;
+}
+
+/* The hero rule draws across the sheet first; the statement lands on it. */
+@keyframes rule-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+[data-hero-rule] {
+  transform-origin: left center;
+  animation: rule-draw 1.1s var(--ease-out) both;
+}
+
+/* Hero statement: expanded and enormous on wide screens; condensed on phones
+   so the rotating word always fits one line. Width is the responsive tool. */
+.hero-statement {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-size: clamp(2.3rem, 11.6vw, 3.9rem);
+  font-variation-settings: "wdth" 88;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+  .hero-statement {
+    font-size: min(9.1vw, 9.5rem);
+    font-variation-settings: "wdth" 112;
+  }
+  .hero-statement > span { white-space: nowrap; }
 }
 
 [data-hero-line="2"] {
-  animation-delay: 100ms;
+  animation-delay: 210ms;
 }
 
 [data-hero-line="3"] {
-  animation-delay: 200ms;
+  animation-delay: 300ms;
 }
 
 [data-hero-fade] {
-  animation: hero-soft-in 700ms cubic-bezier(0.22, 1, 0.36, 1) 450ms both;
+  animation: hero-soft-in 800ms var(--ease-out) 420ms both;
 }
 
 [data-hero-card] {
-  animation: hero-soft-in 1s cubic-bezier(0.22, 1, 0.36, 1) 550ms both;
+  animation: hero-soft-in 900ms var(--ease-out) 520ms both;
 }
 
 [data-hero-proof] {
-  animation: hero-soft-in 550ms cubic-bezier(0.22, 1, 0.36, 1) 850ms both;
+  animation: hero-soft-in 800ms var(--ease-out) 620ms both;
 }
 
 @keyframes sheen {
@@ -893,38 +913,9 @@
   100% { background-position: -200% center; }
 }
 
+/* Gradient text is retired; the class survives for call-site compatibility. */
 .shimmer-accent {
-  /* light mode — deep emerald → emerald → deep emerald */
-  background: linear-gradient(
-    90deg,
-    #047857 0%,
-    #059669 30%,
-    #10b981 50%,
-    #059669 70%,
-    #047857 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer-sweep 4s linear infinite;
-}
-
-.dark .shimmer-accent {
-  /* dark mode — lighter emerald range */
-  background: linear-gradient(
-    90deg,
-    #34d399 0%,
-    #6ee7b7 35%,
-    #a7f3d0 50%,
-    #6ee7b7 65%,
-    #34d399 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer-sweep 4s linear infinite;
+  color: inherit;
 }
 
 /* ─────────────────────────
@@ -945,54 +936,18 @@
 ───────────────────────── */
 
 @media (hover: hover) and (pointer: fine) {
-  .work-index:hover .work-row {
-    opacity: 0.32;
+  .work-index:hover .work-row > * {
+    opacity: 0.38;
   }
-  .work-index:hover .work-row:hover,
-  .work-index .work-row:focus-visible {
+  .work-index:hover .work-row:hover > *,
+  .work-index .work-row:focus-visible > * {
     opacity: 1;
   }
 }
 
-.work-row {
-  /* Long exponential ease-out — rows breathe rather than snap */
-  transition: opacity 900ms cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.work-title-hover {
-  transform: translate3d(0, 0, 0);
-  transition:
-    transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
-    color 420ms ease;
-  will-change: transform;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .work-row:hover .work-title-hover,
-  .work-row:focus-visible .work-title-hover {
-    transform: translate3d(8px, 0, 0);
-  }
-}
-
-.work-index[data-work-animate] .work-row {
-  animation: work-row-enter 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.work-index[data-work-animate] .work-row:nth-child(1) { animation-delay: 40ms; }
-.work-index[data-work-animate] .work-row:nth-child(2) { animation-delay: 90ms; }
-.work-index[data-work-animate] .work-row:nth-child(3) { animation-delay: 140ms; }
-.work-index[data-work-animate] .work-row:nth-child(4) { animation-delay: 190ms; }
-.work-index[data-work-animate] .work-row:nth-child(n + 5) { animation-delay: 240ms; }
-
-@keyframes work-row-enter {
-  from {
-    opacity: 0.01;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Dimming lives on the row's children so it never inherits the settle delay. */
+.work-row > * {
+  transition: opacity 420ms var(--ease-out);
 }
 
 /* ─────────────────────────
@@ -1105,6 +1060,118 @@
 }
 
 /* ─────────────────────────
+   LEDGER · LAYOUT, RULES, CONTROLS
+───────────────────────── */
+
+@layer utilities {
+  /* The sheet: one container width for every page, gutters that scale. */
+  .ledger {
+    width: min(calc(100% - 2 * var(--gutter)), var(--container));
+    margin-inline: auto;
+  }
+
+  /* 12-column grid. Spans are set per element with col-span-* utilities. */
+  .ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--col-gap);
+  }
+
+  .rule-ink { height: 1px; background: var(--rule-strong); }
+  .rule-hair { height: 1px; background: var(--border); }
+
+  /* Mono reference text: dates, roles, indices, captions. */
+  .ledger-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  /* Controls: rectangles, not pills. Ink is the action; ultramarine is the
+     answer to hover. */
+  .btn-ink,
+  .btn-line {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 48px;
+    padding: 0 1.375rem;
+    white-space: nowrap;
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    transition:
+      background-color var(--dur-2) var(--ease-settle),
+      color var(--dur-2) var(--ease-settle),
+      border-color var(--dur-2) var(--ease-settle),
+      transform var(--dur-1) var(--ease-settle);
+  }
+  .btn-ink {
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .btn-ink:hover { background: var(--accent); color: var(--on-accent); }
+  .btn-line {
+    border: 1px solid var(--foreground);
+    color: var(--foreground);
+  }
+  .btn-line:hover { background: var(--foreground); color: var(--background); }
+  .btn-ink:active,
+  .btn-line:active { transform: translate3d(0, 1px, 0); }
+
+  .btn-ink .btn-arrow,
+  .btn-line .btn-arrow {
+    transition: transform var(--dur-3) var(--ease-out);
+  }
+  .btn-ink:hover .btn-arrow,
+  .btn-line:hover .btn-arrow { transform: translate3d(3px, -3px, 0); }
+}
+
+/* ─────────────────────────
+   LEDGER · THE SETTLE
+   The site's one motion idea. Rules draw left to right, then content lands
+   on them. <SettleObserver> marks elements as they enter the viewport; until
+   it has mounted, nothing is hidden (no-JS and first paint stay legible).
+   Transform and opacity only, so it stays on the compositor.
+───────────────────────── */
+
+[data-settle] {
+  transition:
+    opacity var(--dur-5) var(--ease-out),
+    transform var(--dur-5) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms + var(--settle-delay, 0ms));
+}
+
+.settle-ready [data-settle]:not([data-settled]) {
+  opacity: 0;
+  transform: translate3d(0, 0.55em, 0);
+}
+
+[data-settle="rule"] {
+  transform-origin: left center;
+  transition: transform var(--dur-6) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms + var(--settle-delay, 0ms));
+}
+
+.settle-ready [data-settle="rule"]:not([data-settled]) {
+  opacity: 1;
+  transform: scaleX(0);
+}
+
+/* Page transitions: a short cross-dissolve between routes. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-4);
+  animation-timing-function: var(--ease-settle);
+}
+
+/* ─────────────────────────
    REDUCED MOTION
    Honour the OS-level preference. Decorative motion collapses to a
    static end-state; all content stays fully visible and legible.
@@ -1129,7 +1196,8 @@
   [data-hero-line],
   [data-hero-fade],
   [data-hero-card],
-  [data-hero-proof] {
+  [data-hero-proof],
+  [data-hero-rule] {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -1146,14 +1214,20 @@
     transform: scaleY(1);
   }
 
-  .work-index:hover .work-row {
+  .work-index:hover .work-row > * {
     opacity: 1;
   }
 
-  .work-index[data-work-animate] .work-row {
-    animation: none !important;
+  /* The settle never hides content when motion is reduced */
+  .settle-ready [data-settle],
+  .settle-ready [data-settle="rule"] {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 
   /* The burger ⇄ cross morph snaps instantly — no staged delays */

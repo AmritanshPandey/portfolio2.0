@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import Image from "next/image"
 import clsx from "clsx"
 
@@ -27,13 +27,19 @@ type Props = {
   altPrefix?: string
 }
 
+/**
+ * One plate, captioned like a figure. Photos cross-dissolve in place; the
+ * caption and a counter sit underneath in the mono. Autoplay pauses off
+ * screen and never runs under reduced motion; the ticks pick a photo directly.
+ */
 export default function PhotoCarousel({
   photos = DEFAULT_PHOTOS,
   captions = DEFAULT_CAPTIONS,
-  interval = 3500,
+  interval = 4500,
   altPrefix = "Photo",
 }: Props) {
   const [index, setIndex] = useState(0)
+  const rootRef = useRef<HTMLDivElement>(null)
   const count = photos.length
 
   const advance = useCallback(() => {
@@ -41,112 +47,66 @@ export default function PhotoCarousel({
   }, [count])
 
   useEffect(() => {
-    const id = setInterval(advance, interval)
-    return () => clearInterval(id)
+    const root = rootRef.current
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    let timer: number | null = null
+    const start = () => { if (timer === null) timer = window.setInterval(advance, interval) }
+    const stop = () => { if (timer !== null) { window.clearInterval(timer); timer = null } }
+    const io = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()))
+    io.observe(root)
+    return () => { io.disconnect(); stop() }
   }, [advance, interval])
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-[360px]">
-
-      {/* ── STACK ── */}
-      <div
-        className="relative w-full aspect-[3/4] cursor-pointer"
+    <div ref={rootRef} className="w-full max-w-[420px]">
+      <button
+        type="button"
         onClick={advance}
-        title="Click to advance"
+        aria-label="Next photo"
+        className="relative block aspect-[4/5] w-full cursor-pointer overflow-hidden bg-surface-2"
       >
-        {photos.map((src, i) => {
-          const pos = (i - index + count) % count
-
-          let transform = "rotate(0deg) scale(1) translate(0px, 0px)"
-          let zIndex = 0
-          let opacity = 1
-
-          if (pos === 0) {
-            transform = "rotate(-1deg) scale(1) translate(0px, 0px)"
-            zIndex = 30
-          } else if (pos === 1) {
-            transform = "rotate(3deg) scale(0.97) translate(14px, 8px)"
-            zIndex = 20
-            opacity = 0.9
-          } else if (pos === 2) {
-            transform = "rotate(6.5deg) scale(0.94) translate(28px, 16px)"
-            zIndex = 10
-            opacity = 0.55
-          } else {
-            opacity = 0
-            zIndex = 0
-          }
-
-          const isActive = pos === 0
-          const caption = captions[i % captions.length]
-
-          return (
-            <div
-              key={i}
-              className="absolute inset-0 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ transform, zIndex, opacity }}
-            >
-              <div className={clsx(
-                "w-full h-full rounded-lg overflow-hidden",
-                "bg-white dark:bg-neutral-900",
-                "border border-black/[0.08] dark:border-white/[0.08]",
-                "shadow-[0_4px_20px_rgba(0,0,0,0.10)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.45)]",
-                "flex flex-col",
-                isActive && "hover:-translate-y-1 transition-transform duration-300"
-              )}>
-
-                {/* IMAGE — fills most of the card */}
-                <div className="flex-1 overflow-hidden m-2.5 mb-0 rounded-md">
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={src}
-                      alt={`${altPrefix} ${i + 1}`}
-                      fill
-                      sizes="(max-width: 768px) 90vw, 360px"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-
-                {/* CAPTION — handwritten style */}
-                <div className="h-[46px] flex items-center justify-center px-3">
-                  {isActive && (
-                    <span
-                      className="text-[19px] text-black/60 dark:text-white/50 select-none"
-                      style={{
-                        fontFamily: "var(--font-caveat)",
-                        transform: "rotate(-1.5deg)",
-                        display: "inline-block",
-                      }}
-                    >
-                      {caption}
-                    </span>
-                  )}
-                </div>
-
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* ── DOT INDICATORS ── */}
-      <div className="flex items-center gap-2">
-        {photos.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            aria-label={`Go to photo ${i + 1}`}
+        {photos.map((src, i) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`${altPrefix} ${i + 1}`}
+            fill
+            sizes="(max-width: 767px) 90vw, 420px"
             className={clsx(
-              "rounded-full transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300",
-              i === index
-                ? "w-4 h-1.5 bg-foreground/50"
-                : "w-1.5 h-1.5 bg-foreground/20 hover:bg-foreground/35"
+              "object-cover transition-opacity duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+              i === index ? "opacity-100" : "opacity-0",
             )}
           />
         ))}
-      </div>
+      </button>
 
+      <div className="mt-3 flex items-baseline justify-between gap-4">
+        <p className="ledger-label">
+          <span className="text-foreground">{String(index + 1).padStart(2, "0")}</span>
+          {" / "}
+          {String(count).padStart(2, "0")}
+          <span className="ml-3">{captions[index % captions.length]}</span>
+        </p>
+
+        <div className="flex items-center gap-1.5">
+          {photos.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Go to photo ${i + 1}`}
+              className="group/tick -m-1 p-1"
+            >
+              <span
+                className={clsx(
+                  "block h-2 w-2 transition-colors duration-200",
+                  i === index ? "bg-foreground" : "bg-foreground/20 group-hover/tick:bg-foreground/45",
+                )}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

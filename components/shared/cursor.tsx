@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useCallback } from "react"
 
-const RING_SIZE = 36
-const DOT_SIZE  = 5
+const RING_SIZE = 30
+const DOT_SIZE  = 6
 const IBEAM_W   = 12
 const IBEAM_H   = 24
 const IMG_W     = 300
@@ -91,7 +91,7 @@ export function FancyCursor() {
     }
 
     ring.style.background  = "transparent"
-    ring.style.borderColor = state === "link" ? "rgba(180,180,180,0.55)" : "rgba(130,130,130,0.35)"
+    ring.style.borderColor = state === "link" ? "var(--accent)" : "rgba(120,118,112,0.45)"
   }, [])
 
   useEffect(() => {
@@ -236,7 +236,7 @@ export function FancyCursor() {
         style={{
           width:        DOT_SIZE,
           height:       DOT_SIZE,
-          borderRadius: "50%",
+          borderRadius: 0,
           background:   "white",
           mixBlendMode: "difference",
           willChange:   "transform",
@@ -276,8 +276,8 @@ export function FancyCursor() {
         style={{
           width:        RING_SIZE,
           height:       RING_SIZE,
-          borderRadius: "50%",
-          border:       "1.5px solid rgba(130,130,130,0.35)",
+          borderRadius: 0,
+          border:       "1px solid rgba(120,118,112,0.45)",
           willChange:   "transform",
           transform:    "translate3d(-400px,-400px,0) scale(1)",
           transition:   "border-color 0.15s ease, background 0.15s ease, opacity 0.12s ease",
@@ -300,26 +300,25 @@ export function FancyCursor() {
             opacity:        0,
             transform:      "translateX(-50%) translateY(-50%) scale(0.85)",
             transition:     "opacity 0.18s ease, transform 0.18s ease",
-            borderRadius:   999,
-            minWidth:       72,
-            height:         30,
+            borderRadius:   2,
+            minWidth:       64,
+            height:         28,
             display:        "flex",
             alignItems:     "center",
             justifyContent: "center",
-            background:     "var(--accent)",
-            boxShadow:      "0 2px 12px color-mix(in srgb, var(--accent) 38%, transparent)",
+            background:     "var(--foreground)",
           }}
         >
           <span
             ref={labelSpanRef}
             style={{
               color:         "var(--background)",
-              fontSize:      10.5,
-              fontWeight:    600,
-              letterSpacing: "0.10em",
-              textTransform: "uppercase",
-              paddingLeft:   13,
-              paddingRight:  13,
+              fontFamily:    "var(--font-mono)",
+              fontSize:      12,
+              fontWeight:    400,
+              letterSpacing: 0,
+              paddingLeft:   12,
+              paddingRight:  12,
               whiteSpace:    "nowrap",
               userSelect:    "none",
             }}
@@ -343,10 +342,9 @@ export function FancyCursor() {
             left:         -(IMG_W / 2),
             width:        IMG_W,
             height:       IMG_H,
-            borderRadius: 16,
+            borderRadius: 2,
             overflow:     "hidden",
-            border:       "1px solid rgba(255,255,255,0.10)",
-            boxShadow:    "0 24px 64px rgba(0,0,0,0.45), 0 4px 16px rgba(0,0,0,0.2)",
+            border:       "1px solid var(--border)",
             opacity:      0,
             transform:    "scale(0.88)",
             transition:   "opacity 0.22s ease, transform 0.30s cubic-bezier(0.22,1,0.36,1)",

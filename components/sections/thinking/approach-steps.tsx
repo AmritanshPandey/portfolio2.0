@@ -1,4 +1,3 @@
-import { FadeIn } from "@/components/shared/fade-in"
 
 /**
  * Approach: the six method steps, all visible at once.
@@ -38,28 +37,29 @@ const STEPS = [
 
 export function ApproachSteps() {
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-16">
-      <div className="max-w-[640px] space-y-4">
-        <h2 className="type-section-title text-foreground">Approach</h2>
-        <p className="type-section-intro text-muted-foreground">
+    <div className="ledger-grid gap-y-12">
+      <div className="col-span-12 space-y-5 lg:col-span-4">
+        <h2 data-settle className="type-section-title text-foreground">Approach</h2>
+        <p data-settle style={{ ["--i" as string]: 1 }} className="type-section-intro text-muted-foreground">
           How I turn ambiguity into decisions teams can build from.
         </p>
       </div>
 
-      <ol className="grid gap-x-10 sm:grid-cols-2">
+      <ol className="col-span-12 grid sm:grid-cols-2 sm:gap-x-[var(--col-gap)] lg:col-span-8">
         {STEPS.map((step, i) => (
-          <li key={step.q} className="border-t border-border/60">
-            <FadeIn delay={(i % 2) * 0.06} y={14} className="flex gap-4 py-6 md:py-7">
-              <span className="w-6 shrink-0 pt-0.5 font-mono text-[13px] tabular-nums text-accent">
-                {i + 1}
-              </span>
-              <div>
-                <h3 className="type-card-title text-foreground">{step.q}</h3>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-muted-foreground text-pretty">
-                  {step.body}
-                </p>
-              </div>
-            </FadeIn>
+          <li
+            key={step.q}
+            data-settle
+            style={{ ["--i" as string]: i % 2 }}
+            className="grid grid-cols-[2.5rem_minmax(0,1fr)] border-t border-border py-6 md:py-8"
+          >
+            <span className="ledger-label pt-1 text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3 className="type-card-title text-foreground">{step.q}</h3>
+              <p className="mt-2 text-[15px] leading-[1.55] text-muted-foreground text-pretty">
+                {step.body}
+              </p>
+            </div>
           </li>
         ))}
       </ol>

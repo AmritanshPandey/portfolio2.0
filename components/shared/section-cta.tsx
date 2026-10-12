@@ -5,7 +5,6 @@ import clsx from "clsx"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { scrollToSection } from "@/lib/scroll"
-import { useMagnetic } from "@/hooks/use-magnetic"
 
 type Variant = "primary" | "secondary" | "tertiary"
 
@@ -29,9 +28,8 @@ export function CTA({
   className,
   newTab = false,
 }: Props) {
-  const router    = useRouter()
-  const pathname  = usePathname()
-  const magnetRef = useMagnetic<HTMLAnchorElement>(0.32, 85)
+  const router   = useRouter()
+  const pathname = usePathname()
 
   const Icon =
     icon === "arrow" ? IconArrowUpRight :
@@ -41,12 +39,9 @@ export function CTA({
   // ───── NAVIGATION ─────
   const handleClick = (e: React.MouseEvent) => {
     if (!href) return
-
     if (href.startsWith("#")) {
       e.preventDefault()
-
       const id = href.replace("#", "")
-
       if (pathname === "/") {
         scrollToSection(id)
       } else {
@@ -55,83 +50,21 @@ export function CTA({
     }
   }
 
-
-
   // ───────── PRIMARY + SECONDARY ─────────
+  // Ledger controls: a solid ink rectangle and a ruled outline. Hover answers
+  // in ultramarine (primary) or by inverting (secondary); press sinks 1px.
   if (variant !== "tertiary" && href) {
-    // Same props either way; only the element changes.
     const Root = (newTab ? "a" : Link) as typeof Link
     return (
       <Root
-        ref={magnetRef}
         href={href}
         onClick={handleClick}
         target={newTab ? "_blank" : undefined}
         rel={newTab ? "noopener noreferrer" : undefined}
-        className={clsx(
-          "group/cta relative flex items-center justify-center",
-          "w-full px-5 py-3 rounded-full text-[15px] font-medium",
-          "overflow-hidden",
-          "active:scale-[0.97]",
-          "transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-
-          // PRIMARY — white text on accent in light mode, dark in dark mode.
-          variant === "primary" && [
-            "bg-accent text-white dark:text-neutral-950",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_6px_18px_rgba(16,185,129,0.18)]",
-            "hover:bg-accent",
-            "hover:-translate-y-[1.5px]",
-            "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_14px_34px_rgba(16,185,129,0.32)]",
-            "active:scale-[0.97] active:translate-y-0",
-          ],
-
-          // SECONDARY
-          variant === "secondary" && [
-            "border border-border/60",
-            "bg-background/50 backdrop-blur-md",
-            "text-foreground/70",
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
-            "hover:text-foreground",
-            "hover:border-accent/40",
-            "hover:bg-background/70",
-            "hover:shadow-[0_6px_18px_rgba(16,185,129,0.12)]",
-            "hover:-translate-y-[1px]",
-            "dark:bg-white/[0.04]",
-            "dark:border-white/[0.08]",
-            "dark:hover:bg-white/[0.06]",
-          ],
-
-          // FOCUS
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
-
-          className
-        )}
+        className={clsx(variant === "primary" ? "btn-ink" : "btn-line", "w-full sm:w-auto", className)}
       >
-          {/* shimmer (subtle) — slow sweep, reads as light catching the pill */}
-          <span className="
-            pointer-events-none absolute inset-0 -translate-x-full
-            transition-transform duration-900 ease-[cubic-bezier(0.22,1,0.36,1)]
-            group-hover/cta:translate-x-full
-            bg-gradient-to-r from-transparent via-white/[0.07] to-transparent
-          " />
-
-          {/* INNER */}
-          <span className="relative flex items-center gap-2 transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200 group-hover/cta:translate-x-[1px] group-hover/cta:-translate-y-[1px]">
-            {label}
-
-            {Icon && (
-              <Icon
-                size={15}
-                stroke={2}
-                className="
-                  opacity-80
-                  transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200
-                  group-hover/cta:translate-x-[1.5px]
-                  group-hover/cta:-translate-y-[1.5px]
-                "
-              />
-            )}
-          </span>
+        {label}
+        {Icon && <Icon size={16} stroke={2} aria-hidden className="btn-arrow" />}
       </Root>
     )
   }
@@ -149,33 +82,17 @@ export function CTA({
         }
       }}
       className={clsx(
-        "group/cta inline-flex items-center gap-1.5 text-sm font-medium cursor-pointer",
-        "text-foreground/70 hover:text-foreground transition",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 rounded",
+        "group/cta link-underline inline-flex cursor-pointer items-center gap-1.5 text-[15px] font-semibold text-foreground",
         className
       )}
     >
-      <span className="relative">
-        {label}
-        <span className="
-          absolute left-0 -bottom-px h-px w-0
-          bg-accent dark:bg-accent
-          transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-300 ease-out
-          group-hover/cta:w-full
-        " />
-      </span>
-
+      {label}
       {Icon && (
         <Icon
-          size={14}
+          size={15}
           stroke={2}
-          className="
-            opacity-50
-            transition-[transform,opacity,color,background-color,border-color,box-shadow] duration-200
-            group-hover/cta:opacity-100
-            group-hover/cta:translate-x-[1.5px]
-            group-hover/cta:-translate-y-[1.5px]
-          "
+          aria-hidden
+          className="transition-transform duration-200 group-hover/cta:translate-x-[2px] group-hover/cta:-translate-y-[2px]"
         />
       )}
     </span>
