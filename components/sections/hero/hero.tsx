@@ -3,6 +3,7 @@ import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { AddLater } from "@/components/shared/add-later"
+import { HeroField } from "./hero-field"
 
 const PROOF = [
   { text: "PartnerBank · configurable RFP demos", note: "turnaround number, once confirmed" },
@@ -20,9 +21,11 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative bg-background text-foreground"
+      className="relative isolate bg-background text-foreground"
       style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 7vw, 120px))" }}
     >
+      <HeroField />
+
       <div className="ledger">
         {/* Meta line: availability is also the way in. */}
         <div data-hero-fade className="flex items-baseline justify-between gap-6 pb-4">
