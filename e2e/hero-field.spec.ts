@@ -1,13 +1,10 @@
 import { expect, test, type Page } from "@playwright/test"
-import { accessToken } from "@/lib/gate"
-import { E2E_PASSWORD, E2E_PORT } from "./constants"
 
 // The hero's dot field: a live WebGL shader on desktop pointers, a static CSS
 // dot grid everywhere else (phones, touch, reduced motion) with no shader code
 // loaded at all.
 
 async function openHome(page: Page) {
-  await page.context().addCookies([{ name: "site_access", value: await accessToken(E2E_PASSWORD), url: `http://localhost:${E2E_PORT}` }])
   await page.goto("/")
   await expect(page.locator("#hero [data-hero-field]")).toHaveCount(1)
 }

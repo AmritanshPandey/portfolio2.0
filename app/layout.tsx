@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from "next"
 import Navbar from "@/components/layout/navigation/navbar"
 import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
-import { SiteChrome } from "@/components/layout/site-chrome"
 import { FancyCursor } from "@/components/shared/cursor"
 import { SettleObserver } from "@/components/shared/settle-observer"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
@@ -114,11 +113,7 @@ export default function RootLayout({
             {/* Reveal failsafe — forces stalled entrance reveals visible */}
             <SettleGuard />
 
-            {/* Hidden on /unlock, which stands alone. */}
-            <SiteChrome>
-              <FancyCursor />
-
-            </SiteChrome>
+            <FancyCursor />
 
             {/* The settle: rules draw and content lands as it scrolls in */}
             <SettleObserver />
@@ -130,11 +125,8 @@ export default function RootLayout({
               Skip to content
             </a>
 
-            <SiteChrome>
-              {/* Navbar */}
-              <Navbar />
-
-            </SiteChrome>
+            {/* Navbar */}
+            <Navbar />
 
             {/* Content */}
             <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
@@ -142,11 +134,9 @@ export default function RootLayout({
             </main>
 
             {/* Footer */}
-            <SiteChrome>
-              <FooterGate>
-                <Footer />
-              </FooterGate>
-            </SiteChrome>
+            <FooterGate>
+              <Footer />
+            </FooterGate>
 
             {analyticsEnabled && <Analytics />}
           </>

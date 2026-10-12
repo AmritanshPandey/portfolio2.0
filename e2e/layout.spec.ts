@@ -1,6 +1,4 @@
 import { expect, test } from "@playwright/test"
-import { accessToken } from "@/lib/gate"
-import { E2E_PASSWORD, E2E_PORT } from "./constants"
 
 // Content that runs past the right edge on a phone gets clipped by <main>'s
 // overflow-x: clip, so it is cut off rather than scrollable. Anything inside an
@@ -9,7 +7,6 @@ const PAGES = ["/", "/work/white-label-rfp", "/work/citizen-safety", "/articles"
 
 for (const path of PAGES) {
   test(`nothing is clipped at 375px on ${path}`, async ({ page }) => {
-    await page.context().addCookies([{ name: "site_access", value: await accessToken(E2E_PASSWORD), url: `http://localhost:${E2E_PORT}` }])
     await page.setViewportSize({ width: 375, height: 812 })
     await page.goto(path)
     const clipped = await page.evaluate(() => {
