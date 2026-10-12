@@ -1,21 +1,19 @@
 "use client"
 
 import { motion } from "framer-motion"
-import {
-  CsHeroShell,
-  CsSection,
-  CsDecision,
-  CsInfoBar,
-  CsAreaChart,
-  CsDualLineChart,
-  CsNextStudies,
-  CsChapterNav,
-  CsProvenance,
-  CsSummary,
-  CsOptions,
-  CsQuote,
-  CsReflection,
-} from "@/components/case-study"
+import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
+import { CsSection } from "@/components/case-study/cs-section"
+import { CsDecision } from "@/components/case-study/cs-decision"
+import { CsInfoBar } from "@/components/case-study/cs-info-bar"
+import { CsAreaChart } from "@/components/case-study/cs-area-chart"
+import { CsDualLineChart } from "@/components/case-study/cs-dual-line-chart"
+import { CsNextStudies } from "@/components/case-study/cs-next-studies"
+import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
+import { CsProvenance } from "@/components/case-study/cs-provenance"
+import { CsSummary } from "@/components/case-study/cs-summary"
+import { CsOptions } from "@/components/case-study/cs-options"
+import { CsQuote } from "@/components/case-study/cs-quote"
+import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
 
@@ -205,12 +203,12 @@ function ActTimeline() {
           <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-red-500/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
         <div className="flex-1 bg-red-500/[0.04] border border-red-500/15 rounded-xl px-4 py-3">
-          <p className="text-[11px] font-semibold tracking-normal text-red-600/70 dark:text-red-400/60 mb-1">⚡ Forcing function · Late 2021</p>
+          <p className="text-[11px] font-semibold tracking-normal text-red-700 dark:text-red-400 mb-1">⚡ Forcing function · Late 2021</p>
           <p className="text-[13px] text-foreground/75 leading-relaxed">Restrictions lift. Clients stop renewing.</p>
         </div>
       </div>
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-red-600/70 dark:text-red-400/60 mb-1">Wind down · Post Apr 2021</p>
+        <p className="text-[11px] font-semibold tracking-normal text-red-700 dark:text-red-400 mb-1">Wind down · Post Apr 2021</p>
         <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">₹1.98Cr lifetime revenue, then a wind-down.</p>
       </div>
@@ -239,7 +237,7 @@ function ForcingFunctions() {
     <div className="grid sm:grid-cols-2 gap-4">
       {ffs.map(ff => (
         <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
-          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-600/70 dark:text-red-400/60"}`}>
+          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-700 dark:text-red-400"}`}>
             Forcing function {ff.num} · {ff.date}
           </p>
           <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
@@ -264,7 +262,7 @@ function DailyRhythm() {
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
         <div className="flex h-8 rounded-full overflow-hidden border border-border/40 gap-px">
           <div className="bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[11px] font-semibold text-accent tracking-wide">UX DESIGN</span>
+            <span className="text-[11px] font-semibold text-background tracking-wide dark:text-foreground">UX DESIGN</span>
           </div>
           <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
             <span className="text-[11px] font-semibold text-muted-foreground tracking-wide">PRD</span>
@@ -517,7 +515,7 @@ function DashboardMockup() {
             ))}
           </div>
           <div className="flex-1 mx-4 bg-white/[0.06] rounded-md h-5 flex items-center px-3">
-            <p className="text-[11px] text-neutral-500">drorapp.com/dashboard · Factory A</p>
+            <p className="text-[11px] text-neutral-400">drorapp.com/dashboard · Factory A</p>
           </div>
         </div>
         {/* Dashboard body */}
@@ -676,7 +674,7 @@ function ImpactMetrics() {
 
       {/* Honest assessment */}
       <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-6">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-600/70 dark:text-red-400/60 mb-3">Honest assessment</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-700 dark:text-red-400 mb-3">Honest assessment</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
           ₹1.98Cr sounds like a success. It isn&apos;t, against $494K (~₹4Cr) raised. The pivot sold only while distancing was a compliance requirement. We proved we could sell. We didn&apos;t prove the market would last.
         </p>
@@ -721,8 +719,8 @@ export default function Page() {
       ]} />
 
       {/* 30-second read */}
-      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
-        <div className="mb-5 flex flex-wrap gap-2">
+      <div className="ledger ledger-offset pt-14">
+        <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2">
           <CsProvenance kind="shipped" label="Shipped to real users, 2020–2021" />
           <CsProvenance kind="internal" label="Company later wound down" />
         </div>

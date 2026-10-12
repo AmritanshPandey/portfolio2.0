@@ -1,21 +1,19 @@
-import {
-  CsHeroShell,
-  CsSection,
-  CsDecision,
-  CsInfoBar,
-  CsArchStack,
-  CsMetricBars,
-  CsNextStudies,
-  CsChapterNav,
-  CsProvenance,
-  CsSummary,
-  CsPrinciples,
-  CsOptions,
-  CsComparisonTable,
-  CsAnnotatedImage,
-  CsQuote,
-  CsReflection,
-} from "@/components/case-study"
+import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
+import { CsSection } from "@/components/case-study/cs-section"
+import { CsDecision } from "@/components/case-study/cs-decision"
+import { CsInfoBar } from "@/components/case-study/cs-info-bar"
+import { CsArchStack } from "@/components/case-study/cs-arch-stack"
+import { CsMetricBars } from "@/components/case-study/cs-metric-bars"
+import { CsNextStudies } from "@/components/case-study/cs-next-studies"
+import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
+import { CsProvenance } from "@/components/case-study/cs-provenance"
+import { CsSummary } from "@/components/case-study/cs-summary"
+import { CsPrinciples } from "@/components/case-study/cs-principles"
+import { CsOptions } from "@/components/case-study/cs-options"
+import { CsComparisonTable } from "@/components/case-study/cs-comparison-table"
+import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
+import { CsQuote } from "@/components/case-study/cs-quote"
+import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── CHAPTERS ────────────────────────────────────────────────────────────────
@@ -194,8 +192,8 @@ export default function Page() {
       ]} />
 
       {/* 30-second read */}
-      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
-        <div className="mb-5 flex flex-wrap gap-2">
+      <div className="ledger ledger-offset pt-14">
+        <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2">
           <CsProvenance kind="shipped" label="In production, Mastercard-wide" />
           <CsProvenance kind="anonymised" label="Visuals anonymised" />
         </div>

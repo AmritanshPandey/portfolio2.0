@@ -43,7 +43,7 @@ test("safeNext", () => {
 })
 
 test("isPublicPath", () => {
-  for (const p of ["/unlock", "/unlock/", "/_next/static/chunks/a.js", "/favicon.ico", "/opengraph-image", "/opengraph-image-1a2b", "/robots.txt", "/robots.txt/"])
+  for (const p of ["/unlock", "/unlock/", "/_next/static/chunks/a.js", "/favicon.ico", "/opengraph-image", "/opengraph-image-1a2b", "/robots.txt", "/robots.txt/", "/icon.svg", "/apple-icon.png"])
     expect(isPublicPath(p), p).toBe(true)
   for (const p of ["/", "/work/white-label-rfp", "/resume.pdf", "/unlockx", "/sitemap.xml"])
     expect(isPublicPath(p), p).toBe(false)

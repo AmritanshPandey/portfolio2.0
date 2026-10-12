@@ -1077,6 +1077,15 @@
     column-gap: var(--col-gap);
   }
 
+  /* Children start at column 4 on wide screens: the reading column of a
+     case study, with the left rail left open. */
+  @media (min-width: 1024px) {
+    .ledger-offset > * {
+      margin-left: calc((100% - 11 * var(--col-gap)) / 12 * 3 + 3 * var(--col-gap));
+      max-width: calc((100% - 11 * var(--col-gap)) / 12 * 9 + 8 * var(--col-gap));
+    }
+  }
+
   .rule-ink { height: 1px; background: var(--rule-strong); }
   .rule-hair { height: 1px; background: var(--border); }
 
@@ -1164,6 +1173,15 @@
   transform: scaleX(0);
 }
 
+/* Loading: a single rule that runs left to right while a route streams in. */
+@keyframes ledger-run {
+  0%   { transform: scaleX(0); transform-origin: left center; }
+  50%  { transform: scaleX(1); transform-origin: left center; }
+  50.01% { transform: scaleX(1); transform-origin: right center; }
+  100% { transform: scaleX(0); transform-origin: right center; }
+}
+.ledger-loading { animation: ledger-run 1.4s var(--ease-in-out) infinite; }
+
 /* Page transitions: a short cross-dissolve between routes. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -1230,6 +1248,8 @@
     animation: none !important;
   }
 
+  .ledger-loading { animation: none !important; transform: none !important; }
+
   /* The burger ⇄ cross morph snaps instantly — no staged delays */
   .menu-morph span {
     transition-delay: 0ms !important;
@@ -1281,3 +1301,34 @@ html:not(.js) main [style*="opacity: 0"] {
 
 :root { color-scheme: light; }
 .dark { color-scheme: dark; }
+
+/* ─────────────────────────
+   LEDGER · SYSTEM OVERRIDES
+   Deliberately unlayered, so they outrank Tailwind's layered utilities and
+   restyle every legacy instance in one place instead of 200 call sites.
+   Product-UI mockups (the fintech kit, anything marked data-keep-radius)
+   are someone else's interface and keep their own styling.
+───────────────────────── */
+
+/* Uppercase, letter-spaced eyebrow labels become sentence-case mono labels. */
+.uppercase[class*="tracking-["]:not(.fintech-system *):not([data-keep-radius] *),
+.uppercase[class*="tracking-wide"]:not(.fintech-system *):not([data-keep-radius] *),
+.uppercase[class*="tracking-widest"]:not(.fintech-system *):not([data-keep-radius] *) {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stock gradient placeholders recede into the sheet: greyscale plates, not
+   orange and blue blooms competing with the one accent. */
+img[src*="%2Fassets%2Fimages%2Fwork%2F"],
+img[src^="/assets/images/work/"] {
+  filter: grayscale(1) contrast(1.08);
+}
+
+/* Paper is flat: arbitrary drop shadows go, outside product mockups. */
+[class*="shadow-["]:not(.fintech-system *):not([data-keep-radius] *):not([data-keep-radius]) {
+  box-shadow: none;
+}

@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { AnimatePresence, motion } from "framer-motion"
 import clsx from "clsx"
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -168,12 +168,15 @@ function PrimaryNavItem({
   setActiveImmediate,
   closeMenu,
   className,
+  labelRef,
 }: {
   item: NavLink
   isActive: boolean
   setActiveImmediate: (id: string) => void
   closeMenu?: () => void
   className?: string
+  /** Lets the desktop nav measure this label for its gliding underline. */
+  labelRef?: (el: HTMLSpanElement | null) => void
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -221,17 +224,8 @@ function PrimaryNavItem({
         className,
       )}
     >
-      {/* Active state: a 2px ultramarine rule that glides between items. */}
-      {isActive && !Icon && (
-        <motion.span
-          layoutId="nav-active-rule"
-          aria-hidden
-          className="absolute inset-x-2.5 bottom-1 h-[2px] bg-accent lg:inset-x-3"
-          transition={{ type: "spring", stiffness: 520, damping: 42 }}
-        />
-      )}
-
       <span
+        ref={labelRef}
         className={clsx(
           "relative z-10 flex items-center transition-colors duration-200",
           isActive ? "text-foreground" : "text-muted-foreground group-hover/nav:text-foreground",
@@ -391,6 +385,30 @@ export default function Navbar() {
   const effectiveActive = detailRoute?.section ?? (isHome ? active : "hero")
   const activeNavSection = navSectionFor(effectiveActive)
 
+  // Gliding underline: measure the active label inside the links container.
+  const linksRef = useRef<HTMLDivElement>(null)
+  const labelRefs = useRef<Record<string, HTMLSpanElement | null>>({})
+  const [bar, setBar] = useState<{ x: number; w: number } | null>(null)
+  // The first placement snaps; only later moves glide.
+  const [barAnimates, setBarAnimates] = useState(false)
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setBarAnimates(true))
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const box = linksRef.current?.getBoundingClientRect()
+      const label = labelRefs.current[activeNavSection]?.getBoundingClientRect()
+      setBar(box && label ? { x: label.left - box.left, w: label.width } : null)
+    }
+    measure()
+    window.addEventListener("resize", measure)
+    document.fonts?.ready.then(measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [activeNavSection])
+
   return (
     <>
       {isDetail && (
@@ -416,15 +434,30 @@ export default function Navbar() {
             className="-ml-2.5 lg:-ml-3"
           />
 
-          <div className="flex items-center">
+          <div ref={linksRef} className="relative flex items-center">
+          {/* Active state: one 2px ultramarine rule that glides between items
+              (transform only), placed without a slide on first paint. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute bottom-[14px] left-0 h-[2px] w-[100px] origin-left bg-accent"
+            style={{
+              transform: `translateX(${bar?.x ?? 0}px) scaleX(${(bar?.w ?? 0) / 100})`,
+              opacity: bar ? 1 : 0,
+              transition: barAnimates
+                ? "transform 480ms cubic-bezier(0.16,1,0.3,1), opacity 200ms ease"
+                : "none",
+            }}
+          />
+
           {/* In-page sections */}
-          <div className="relative flex items-center">
+          <div className="flex items-center">
             {SECTION_LINKS.slice(1).map((item) => (
               <PrimaryNavItem
                 key={item.href}
                 item={item}
                 isActive={activeNavSection === item.section}
                 setActiveImmediate={setActive}
+                labelRef={(el) => { labelRefs.current[item.section] = el }}
               />
             ))}
           </div>
@@ -432,13 +465,14 @@ export default function Navbar() {
           <Divider />
 
           {/* Standalone pages */}
-          <div className="relative flex items-center">
+          <div className="flex items-center">
             {PAGE_LINKS.map((item) => (
               <PrimaryNavItem
                 key={item.href}
                 item={item}
                 isActive={activeNavSection === item.section}
                 setActiveImmediate={setActive}
+                labelRef={(el) => { labelRefs.current[item.section] = el }}
               />
             ))}
           </div>
@@ -488,17 +522,18 @@ export default function Navbar() {
         </span>
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              ref={menuRef}
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-x-0 bottom-0 top-[calc(env(safe-area-inset-top)+4rem)] z-50 flex flex-col overflow-y-auto bg-background md:hidden"
-            >
+      {/* Phone menu: a paper sheet that fades and drops in (CSS only). It is
+          inert while closed so nothing hidden can take focus. */}
+      <div
+        ref={menuRef}
+        inert={!open}
+        aria-hidden={!open}
+        className={clsx(
+          "fixed inset-x-0 bottom-0 top-[calc(env(safe-area-inset-top)+4rem)] z-50 flex flex-col overflow-y-auto bg-background md:hidden",
+          "transition-[opacity,transform,visibility] duration-[240ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+          open ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible -translate-y-2 opacity-0",
+        )}
+      >
               <p className="ledger ledger-label pt-5">Menu</p>
 
               <div className="ledger flex flex-col pt-2">
@@ -535,10 +570,7 @@ export default function Navbar() {
                 <ContactActions layout="menu" onNavigate={() => setOpen(false)} />
                 <ThemeToggle className="size-12" />
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      </div>
     </>
   )
 }

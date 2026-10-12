@@ -1,9 +1,5 @@
-"use client"
-
-import { motion } from "framer-motion"
 import clsx from "clsx"
 import type { ReactNode } from "react"
-import { EASE, DURATION, RISE } from "@/lib/motion"
 
 type Variant = "default" | "muted" | "dark"
 
@@ -11,46 +7,30 @@ interface Props {
   /** Kept for call-site compatibility; section headings are rendered by each page. */
   label?: string
   children: ReactNode
+  /** Kept for call-site compatibility; every section sits on the same sheet. */
   variant?: Variant
-  /** Deprecated — section separation now comes from the single edge line. */
+  /** Deprecated — section separation comes from the rule. */
   withDivider?: boolean
   /** Anchor target for in-page links. */
   id?: string
 }
 
-const BG: Record<Variant, string> = {
-  default: "bg-canvas-default text-foreground",
-  muted:   "bg-canvas-muted text-foreground",
-  // "dark" is a contrast/accent band: a deeper neutral in light mode, near-black in dark mode.
-  dark:    "bg-canvas-accent text-foreground",
-}
-
-const EDGE_LINE = "bg-black/[0.05] dark:bg-white/[0.06]"
-const EDGE_HIGHLIGHT = "bg-white/30 dark:bg-white/[0.02]"
-
-export function CsSection({ children, variant = "default", id }: Props) {
+/**
+ * A case-study section: a hairline across the sheet, then a reading column
+ * that starts at column 4 of the grid, leaving the left rail open, so the
+ * case study shares the home page's asymmetric sheet.
+ */
+export function CsSection({ children, id }: Props) {
   return (
-    <section id={id} className={clsx("relative w-full overflow-hidden transition-colors duration-300", id && "scroll-mt-24", BG[variant])}>
-
-      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-0 h-px", EDGE_LINE)} />
-      <div aria-hidden className={clsx("pointer-events-none absolute inset-x-0 top-px h-px", EDGE_HIGHLIGHT)} />
-
-      <div className="relative max-w-[820px] mx-auto px-6 py-20 md:py-24">
-
-        {/* Content */}
-        <motion.div
-          initial={{ opacity: 0, y: RISE }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: DURATION.base, ease: EASE }}
-          className="min-w-0"
-        >
-          {children}
-        </motion.div>
-
+    <section id={id} className={clsx("relative w-full bg-background text-foreground", id && "scroll-mt-24")}>
+      <div className="ledger">
+        <div aria-hidden className="rule-hair" />
+        <div className="ledger-grid py-16 md:py-24">
+          <div className="col-span-12 min-w-0 lg:col-span-9 lg:col-start-4 xl:col-span-8 xl:col-start-4">
+            {children}
+          </div>
+        </div>
       </div>
-
-      <div className={clsx("absolute bottom-0 left-0 h-px w-full", EDGE_LINE)} />
     </section>
   )
 }

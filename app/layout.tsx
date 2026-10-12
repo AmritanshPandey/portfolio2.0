@@ -11,7 +11,8 @@ import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Archivo, Martian_Mono } from "next/font/google"
 import { ThemeProvider } from "next-themes"
-import { MotionConfig } from "framer-motion"
+import { ViewTransition } from "react"
+import { ReducedMotion } from "@/components/shared/reduced-motion"
 import { Analytics } from "@vercel/analytics/next"
 import clsx from "clsx"
 import { SITE_URL } from "@/lib/site"
@@ -102,7 +103,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {/* Honour prefers-reduced-motion across all Framer Motion animations */}
-          <MotionConfig reducedMotion="user">
+          <ReducedMotion />
+          <>
             {/* Lenis smooth scroll */}
             <SmoothScroll />
 
@@ -136,7 +138,7 @@ export default function RootLayout({
 
             {/* Content */}
             <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
-              {children}
+              <ViewTransition>{children}</ViewTransition>
             </main>
 
             {/* Footer */}
@@ -147,7 +149,7 @@ export default function RootLayout({
             </SiteChrome>
 
             {analyticsEnabled && <Analytics />}
-          </MotionConfig>
+          </>
         </ThemeProvider>
       </body>
     </html>

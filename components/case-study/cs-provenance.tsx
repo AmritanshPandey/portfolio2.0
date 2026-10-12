@@ -41,19 +41,16 @@ export function CsProvenance({ kind, label, className }: CsProvenanceProps) {
     <span
       data-kind={kind}
       className={clsx(
-        "inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1",
-        "font-mono text-[11px] font-semibold uppercase tracking-[0.14em]",
-        meta.accent
-          ? "border-accent/30 bg-accent/[0.07] text-accent"
-          : "border-border/70 bg-foreground/[0.03] text-muted-foreground dark:bg-white/[0.03]",
+        "ledger-label inline-flex w-fit items-center gap-2",
+        meta.accent ? "text-foreground" : "text-muted-foreground",
         className
       )}
     >
       <span
         aria-hidden
         className={clsx(
-          "size-1.5 rounded-full",
-          meta.accent ? "bg-accent" : "bg-muted-foreground/50"
+          "size-[7px]",
+          meta.accent ? "bg-accent" : "border border-current"
         )}
       />
       {label ?? meta.label}

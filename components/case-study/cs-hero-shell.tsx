@@ -1,24 +1,6 @@
-"use client"
-
-import { motion } from "framer-motion"
 import clsx from "clsx"
-import {
-  IconPencil,
-  IconDevices,
-  IconFocusCentered,
-  IconBuilding,
-  IconClockHour4,
-  IconUsersGroup,
-  IconBriefcase,
-  IconCalendarEvent,
-  IconLayersSubtract,
-  IconClock,
-  IconCalendar,
-  IconCode,
-} from "@tabler/icons-react"
 import { ReadingProgress } from "@/components/shared/reading-progress"
-import { entrance } from "@/lib/motion"
-import type { ComponentType, CSSProperties, ReactNode } from "react"
+import type { ReactNode } from "react"
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
@@ -37,7 +19,7 @@ export interface CsHeroShellProps {
   badge?: ReactNode
   // Accent-colored descriptor tags above the title (replaces breadcrumb visually when set)
   keywords?: string[]
-  // Meta fields rendered as icon cards — max 4 looks best
+  // Meta fields rendered as a ruled two-column table
   meta?: Record<string, string>
   // Footer bar
   readTime?: string
@@ -46,29 +28,14 @@ export interface CsHeroShellProps {
   // Visual slot — untouched
   aside?: ReactNode
   asideLabel?: string
+  /** Kept for call-site compatibility; the aside takes the right-hand columns. */
   asideCol?: string
   // Extra content (backwards-compat — renders below meta)
   children?: ReactNode
   className?: string
 }
 
-// ─── ICON MAP ────────────────────────────────────────────────────────────────
-
-type TablerIcon = ComponentType<{ size?: number; stroke?: number; className?: string }>
-
-const META_ICONS: Record<string, TablerIcon> = {
-  role:          IconPencil,
-  platform:      IconDevices,
-  scope:         IconFocusCentered,
-  organisation:  IconBuilding,
-  organization:  IconBuilding,
-  duration:      IconClockHour4,
-  team:          IconUsersGroup,
-  industry:      IconBriefcase,
-  year:          IconCalendarEvent,
-  brandsUnified: IconLayersSubtract,
-  stack:         IconCode,
-}
+// ─── LABELS ──────────────────────────────────────────────────────────────────
 
 const META_LABELS: Record<string, string> = {
   role:          "Role",
@@ -88,25 +55,14 @@ function toLabel(key: string): string {
   return META_LABELS[key] ?? key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())
 }
 
-function MetaCard({ metaKey, value }: { metaKey: string; value: string }) {
-  const Icon = META_ICONS[metaKey] ?? IconBriefcase
-  return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border/50 bg-foreground/[0.02] p-3.5 dark:bg-white/[0.025]">
-      <Icon size={16} stroke={1.75} className="text-accent" />
-      <div>
-        <p className="mb-1 font-mono text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground">
-          {toLabel(metaKey)}
-        </p>
-        <p className="text-[13px] font-medium leading-snug text-foreground">
-          {value}
-        </p>
-      </div>
-    </div>
-  )
-}
-
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
+/**
+ * Ledger case-study hero: the keyword line and a drawn rule, the title across
+ * the whole sheet, then the lede and a ruled meta table on the left with the
+ * project's bespoke visual on the right. No glows, no icon cards; the hero
+ * lands with the same CSS rise as the home statement (legible if it never runs).
+ */
 export function CsHeroShell({
   breadcrumb,
   title,
@@ -114,7 +70,6 @@ export function CsHeroShell({
   badge,
   aside,
   asideLabel,
-  asideCol = "360px",
   children,
   className,
   keywords,
@@ -123,173 +78,103 @@ export function CsHeroShell({
   publishedDate,
   topics,
 }: CsHeroShellProps) {
-  const hasAside   = Boolean(aside)
+  const hasAside    = Boolean(aside)
   const metaEntries = meta ? Object.entries(meta).filter(([, v]) => Boolean(v)) : []
-  const hasMeta    = metaEntries.length > 0
-  const hasFooter  = Boolean(readTime || publishedDate || (topics && topics.length > 0))
+  const hasMeta     = metaEntries.length > 0
+  const footerParts = [
+    readTime,
+    publishedDate ? `Published: ${publishedDate}` : null,
+    topics && topics.length > 0 ? topics.join(" · ") : null,
+  ].filter(Boolean)
+
+  const metaTable = hasMeta && (
+    <dl data-hero-fade className="border-t border-border">
+      {metaEntries.map(([key, value]) => (
+        <div key={key} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-x-4 border-b border-border py-3">
+          <dt className="ledger-label pt-[2px]">{toLabel(key)}</dt>
+          <dd className="text-[15px] font-medium leading-snug text-foreground">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
 
   return (
-    <div className={clsx("bg-canvas-raised relative overflow-hidden", className)}>
-
+    <div className={clsx("relative bg-background", className)}>
       <ReadingProgress />
-
-      {/* Ambient glow */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(16,185,129,0.07),transparent_62%)] dark:bg-[radial-gradient(820px_460px_at_16%_-12%,rgba(16,185,129,0.11),transparent_62%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(16,185,129,0.04),transparent_60%)] dark:bg-[radial-gradient(620px_400px_at_100%_-6%,rgba(16,185,129,0.07),transparent_60%)]" />
-      </div>
 
       <div
         data-cs-hero-inner
-        className="relative max-w-[1000px] mx-auto px-6 pt-32 pb-16 md:pt-40 md:pb-20"
+        className="ledger pb-16 md:pb-24"
+        style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 6vw, 104px))" }}
       >
-        <div
-          data-cs-hero-grid
-          className={clsx(
-            hasAside
-              ? "grid lg:grid-cols-[1fr_var(--cs-aside)] gap-12 lg:gap-16 items-start"
-              : "block"
+        {/* Keyword line, or the breadcrumb when there are no keywords. */}
+        <div data-hero-fade className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pb-4">
+          {keywords && keywords.length > 0 ? (
+            <p className="ledger-label text-foreground">{keywords.join(" · ")}</p>
+          ) : (
+            <nav className="ledger-label flex flex-wrap items-baseline gap-x-3 text-foreground">
+              <span>{breadcrumb.kind}</span>
+              <span aria-hidden>·</span>
+              <span>{breadcrumb.category}</span>
+              {breadcrumb.client && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span>{breadcrumb.client}</span>
+                </>
+              )}
+            </nav>
           )}
-          style={hasAside ? ({ "--cs-aside": asideCol } as CSSProperties) : undefined}
+          {badge && (
+            <span className="ledger-label inline-flex items-center gap-2">
+              <span aria-hidden className="h-[7px] w-[7px] bg-accent" />
+              {badge}
+            </span>
+          )}
+        </div>
+
+        <div aria-hidden data-hero-rule className="rule-ink" />
+
+        <h1
+          data-cs-hero-title
+          data-hero-line="1"
+          className="type-hero-internal mt-6 max-w-[17ch] text-foreground md:mt-10"
         >
+          {title}
+        </h1>
 
-          {/* ── LEFT: copy ── */}
-          <div className="min-w-0">
-
-            {/* Keywords (accent tags) — or fallback to breadcrumb nav */}
-            {keywords && keywords.length > 0 ? (
-              <motion.p
-                {...entrance(0)}
-                className="mb-6 font-mono text-[11px] font-semibold tracking-[0.1em] uppercase text-accent"
-              >
-                {keywords.join(" · ")}
-              </motion.p>
-            ) : (
-              <motion.nav
-                {...entrance(0)}
-                className="mb-7 flex flex-wrap items-center gap-3 font-mono text-[11px] font-semibold tracking-[0.1em] uppercase text-muted-foreground"
-              >
-                <span>{breadcrumb.kind}</span>
-                <span className="h-1 w-1 rounded-full bg-accent/60" />
-                <span className="text-accent">{breadcrumb.category}</span>
-                {breadcrumb.client && (
-                  <>
-                    <span className="h-1 w-1 rounded-full bg-border" />
-                    <span>{breadcrumb.client}</span>
-                  </>
-                )}
-              </motion.nav>
-            )}
-
-            {/* Badge pill */}
-            {badge && (
-              <motion.span
-                {...entrance(1)}
-                className="mb-5 inline-block rounded-full border border-border/70 bg-muted/40 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
-              >
-                {badge}
-              </motion.span>
-            )}
-
-            {/* Title */}
-            <motion.h1
-              data-cs-hero-title
-              {...entrance(2)}
-              className={clsx(
-                "type-hero-internal mb-5 text-neutral-900 dark:text-white",
-                hasAside ? "max-w-xl" : "max-w-3xl"
-              )}
-            >
-              {title}
-            </motion.h1>
-
-            {/* Lede */}
-            <motion.div
+        <div data-cs-hero-grid className="ledger-grid mt-12 gap-y-12 md:mt-16">
+          <div className="col-span-12 min-w-0 lg:col-span-6">
+            <div
               data-cs-hero-lede
-              {...entrance(3)}
-              className={clsx(
-                "text-[16px] leading-[1.7] text-foreground/65",
-                hasAside ? "max-w-xl" : "max-w-[54ch]"
-              )}
+              data-hero-fade
+              className="max-w-[48ch] text-[clamp(1.125rem,1.4vw,1.375rem)] leading-[1.45] tracking-[-0.01em] text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground"
             >
               {lede}
-            </motion.div>
+            </div>
 
-            {/* Meta icon cards */}
-            {hasMeta && (
-              <motion.div
-                {...entrance(4)}
-                className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-4"
-              >
-                {metaEntries.map(([key, value]) => (
-                  <MetaCard key={key} metaKey={key} value={value} />
-                ))}
-              </motion.div>
+            {footerParts.length > 0 && (
+              <p data-hero-fade className="ledger-label mt-6">
+                {footerParts.join("  ·  ")}
+              </p>
             )}
 
-            {/* Extra children (backwards-compat) */}
-            {children && (
-              <motion.div
-                {...entrance(5)}
-                className="mt-8"
-              >
-                {children}
-              </motion.div>
-            )}
+            {hasAside && hasMeta && <div className="mt-10">{metaTable}</div>}
 
-            {/* Footer: read time · published date · topic tags */}
-            {hasFooter && (
-              <motion.div
-                {...entrance(6)}
-                className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border/50 pt-5 text-[12px] text-muted-foreground"
-              >
-                {readTime && (
-                  <span className="flex items-center gap-1.5">
-                    <IconClock size={13} stroke={1.75} />
-                    {readTime}
-                  </span>
-                )}
-                {readTime && (publishedDate || (topics && topics.length > 0)) && (
-                  <div aria-hidden className="h-3 w-px bg-border/70" />
-                )}
-                {publishedDate && (
-                  <span className="flex items-center gap-1.5">
-                    <IconCalendar size={13} stroke={1.75} />
-                    Published: {publishedDate}
-                  </span>
-                )}
-                {publishedDate && topics && topics.length > 0 && (
-                  <div aria-hidden className="h-3 w-px bg-border/70" />
-                )}
-                {topics && topics.length > 0 && (
-                  <span>{topics.join(" · ")}</span>
-                )}
-              </motion.div>
-            )}
-
+            {children && <div data-hero-fade className="mt-8">{children}</div>}
           </div>
 
-          {/* ── RIGHT: bespoke visual — untouched ── */}
-          {hasAside && (
-            <motion.div
-              data-cs-hero-aside
-              {...entrance(2)}
-              className="min-w-0"
-            >
-              {asideLabel && (
-                <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                  {asideLabel}
-                </p>
-              )}
-              {aside}
-            </motion.div>
-          )}
-
+          <div data-cs-hero-aside data-hero-card className="col-span-12 min-w-0 lg:col-span-5 lg:col-start-8">
+            {hasAside ? (
+              <>
+                {asideLabel && <p className="ledger-label mb-4">{asideLabel}</p>}
+                {aside}
+              </>
+            ) : (
+              metaTable
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Bottom separator */}
-      <div aria-hidden className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border/60 to-transparent" />
     </div>
   )
 }

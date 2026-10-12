@@ -24,10 +24,14 @@ export default async function UnlockPage({
 
   return (
     <div className="flex min-h-dvh items-center justify-center px-5 py-16">
-      <div className="w-full max-w-[26rem]">
-        <h1 className="type-page-title text-foreground">Amritansh Pandey</h1>
-        <p className="mt-1 text-[15px] text-muted-foreground">Senior UX Designer</p>
-        <p className="mt-6 text-[15px] leading-relaxed text-foreground/80 text-pretty">
+      <div className="w-full max-w-[28rem]">
+        <span aria-hidden className="block h-3 w-3 bg-accent" />
+        <h1 className="mt-6 text-[clamp(2.25rem,6vw,3rem)] font-[800] leading-[0.95] tracking-[-0.04em] text-foreground [font-variation-settings:'wdth'_112]">
+          Amritansh Pandey
+        </h1>
+        <p className="ledger-label mt-3">Senior UX Designer</p>
+        <div aria-hidden className="rule-ink mt-8" />
+        <p className="mt-6 text-[16px] leading-[1.55] text-foreground/80 text-pretty">
           This portfolio is shared privately. Use the password from my email or resume, or ask me for access.
         </p>
         <div className="mt-8">
@@ -35,7 +39,7 @@ export default async function UnlockPage({
         </div>
         <a
           href={EMAIL_HREF}
-          className="mt-2 inline-block text-[14px] font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
+          className="link-underline mt-3 inline-block text-[15px] font-semibold text-foreground"
         >
           Ask for access
         </a>

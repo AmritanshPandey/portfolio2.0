@@ -1,25 +1,23 @@
 import Image from "next/image"
-import {
-  CsHeroShell,
-  CsSection,
-  CsDecision,
-  CsList,
-  CsInfoBar,
-  CsFeature,
-  CsBeforeAfter,
-  CsArchStack,
-  CsMetricBars,
-  CsTimeline,
-  CsNextStudies,
-  CsChapterNav,
-  CsProvenance,
-  CsSummary,
-  CsPrinciples,
-  CsOptions,
-  CsQuote,
-  CsReflection,
-  BrowserFrame,
-} from "@/components/case-study"
+import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
+import { CsSection } from "@/components/case-study/cs-section"
+import { CsDecision } from "@/components/case-study/cs-decision"
+import { CsList } from "@/components/case-study/cs-list"
+import { CsInfoBar } from "@/components/case-study/cs-info-bar"
+import { CsFeature } from "@/components/case-study/cs-feature"
+import { CsBeforeAfter } from "@/components/case-study/cs-before-after"
+import { CsArchStack } from "@/components/case-study/cs-arch-stack"
+import { CsMetricBars } from "@/components/case-study/cs-metric-bars"
+import { CsTimeline } from "@/components/case-study/cs-timeline"
+import { CsNextStudies } from "@/components/case-study/cs-next-studies"
+import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
+import { CsProvenance } from "@/components/case-study/cs-provenance"
+import { CsSummary } from "@/components/case-study/cs-summary"
+import { CsPrinciples } from "@/components/case-study/cs-principles"
+import { CsOptions } from "@/components/case-study/cs-options"
+import { CsQuote } from "@/components/case-study/cs-quote"
+import { CsReflection } from "@/components/case-study/cs-reflection"
+import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
 
@@ -437,8 +435,8 @@ export default function Page() {
       ]} />
 
       {/* 30-second read */}
-      <div className="mx-auto max-w-5xl px-6 pt-14 md:px-8">
-        <div className="mb-5 flex flex-wrap gap-2">
+      <div className="ledger ledger-offset pt-14">
+        <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2">
           <CsProvenance kind="shipped" label="Shipped to production, 2022" />
         </div>
         <CsSummary

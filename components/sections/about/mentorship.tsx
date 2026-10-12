@@ -1,5 +1,3 @@
-"use client"
-
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { advisoryItems, teachingItems, menteeItems } from "@/lib/data"
 
