@@ -20,12 +20,15 @@ const NIGHT_INK = [0.925, 0.918, 0.894, 0.4] as const
 const ULTRAMARINE = [0.169, 0.208, 0.91] as const
 const NIGHT_ULTRAMARINE = [0.549, 0.576, 1] as const
 
-// Pool the dots behind the statement and dissolve them before the fold.
-const POOL = "linear-gradient(to bottom, #000 0%, #000 42%, transparent 82%)"
+// The sheet hangs from the hero rule: a short fade so no dot is cut in half
+// against the rule, full strength behind the statement, gone before the fold.
+const POOL = "linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%)"
 
 /**
  * The hero's dot field: a sheet of dots behind the statement that the cursor
  * presses into, with a ripple on click. Decorative and pointer-events-none.
+ * Mounted under the hero rule, inside the ledger column, and bled out to the
+ * viewport edges.
  */
 export function HeroField() {
   const [live, setLive] = useState(false)
@@ -65,7 +68,7 @@ export function HeroField() {
     <div
       aria-hidden
       data-hero-field
-      className="pointer-events-none absolute inset-0 -z-10"
+      className="pointer-events-none absolute inset-y-0 left-[calc(50%-50vw)] right-[calc(50%-50vw)] -z-10"
       style={{ maskImage: POOL, WebkitMaskImage: POOL }}
     >
       <div data-hero-dots className="hero-dots absolute inset-0" />

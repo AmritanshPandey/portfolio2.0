@@ -31,6 +31,19 @@ test("the hero dot field goes live on a desktop pointer", async ({ page }) => {
   await expect.poll(() => seen.shader).toBe(true)
 })
 
+test("the dot field is one full-width sheet that starts at the hero rule", async ({ page }) => {
+  await openHome(page)
+  const box = await page.evaluate(() => {
+    const field = document.querySelector("#hero [data-hero-field]")!.getBoundingClientRect()
+    const rule = document.querySelector("#hero [data-hero-rule]")!.getBoundingClientRect()
+    return { fieldTop: field.top, ruleBottom: rule.bottom, left: field.left, right: field.right, vw: document.documentElement.clientWidth }
+  })
+  expect(box.fieldTop).toBeGreaterThanOrEqual(box.ruleBottom - 1)
+  expect(box.fieldTop).toBeLessThanOrEqual(box.ruleBottom + 2)
+  expect(box.left).toBeLessThanOrEqual(0)
+  expect(box.right).toBeGreaterThanOrEqual(box.vw)
+})
+
 test("reduced motion keeps the static dots and skips the shader", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" })
   await openHome(page)
