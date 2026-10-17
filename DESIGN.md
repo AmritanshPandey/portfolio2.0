@@ -105,10 +105,10 @@ pure CSS on load and stays legible if the animation never runs.
 
 The hero has one ambient layer, **the dot field** (`HeroField`): a sheet of
 faint ink dots that hangs from the hero rule and breathes. On a desktop pointer
-it becomes the **pixel wake** (`WakeField`, WebGL): moving the cursor prints
-whole cells as square ink pixels against per-cell thresholds, so the wake has a
-ragged edge and winks out cell by cell over about a second; a click sends a
-ring of ultramarine pixels through the same grid. It loads only when the page
+it becomes the **pixel wake** (`WakeField`, WebGL): moving the cursor leaves a
+fine wake in which dots grow into small square pixels (about half ink) and
+settle back into dots, each cell at its own moment, within a second; a click
+sends a soft ring of ultramarine pixels a short way out, easing as it goes. It loads only when the page
 is idle on a desktop pointer; phones, touch and reduced motion get a static CSS
 dot grid and never download the shader.
 

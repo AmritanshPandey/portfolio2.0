@@ -5,34 +5,33 @@ import { usePerformanceMode } from "@/hooks/use-performance-mode"
 
 /**
  * The hero's pixel wake. A sheet of faint ink dots on the ledger grid; moving
- * the cursor leaves a wake that prints whole cells as square ink pixels, which
- * wink out cell by cell as the wake fades. A click sends a ring of ultramarine
- * pixels across the sheet.
+ * the cursor leaves a fine wake in which dots grow into small square pixels
+ * and settle back into dots as it fades, cell by cell. A click sends a soft
+ * ring of ultramarine pixels a little way across the sheet.
  *
  * Two passes per frame:
  *  1. Trail: a low-resolution texture that remembers where the cursor went.
  *     Each frame it bleeds into its neighbours, fades, and takes a new stroke
  *     along the segment the cursor travelled, wider when it moves fast.
  *  2. Sheet: one sample of the trail at each cell's centre, compared with the
- *     cell's own random threshold. Past it, the cell switches on; well past
- *     it, the pixel prints larger. Thresholds differ per cell, so the wake's
- *     edge is ragged and pixels pop in and out one at a time instead of
- *     fading as a blob.
+ *     cell's own random threshold. Past it, the dot grows into a square and
+ *     darkens; as the trail fades it shrinks back. Thresholds differ per cell,
+ *     so the wake's edge stays organic and cells turn at their own moment
+ *     instead of fading as one blob.
  *
  * Desktop pointers only (HeroField decides). If WebGL is missing or the
  * context is lost, the static CSS dot grid takes over.
  */
 
 type RGBA = readonly [number, number, number, number]
-type RGB = readonly [number, number, number]
 
 export type WakeColors = {
   /** resting dot */
   dot: RGBA
-  /** wake pixel */
+  /** wake pixel, fully grown */
   wake: RGBA
-  /** click ring pixel */
-  ring: RGB
+  /** click ring pixel, fully grown */
+  ring: RGBA
 }
 
 type WakeFieldProps = {
@@ -44,31 +43,37 @@ type WakeFieldProps = {
 
 // Trail: one texel per this many CSS px.
 const TRAIL_TEXEL = 6
-// Seconds for the wake to fall to ~37%. A saturated cell with the lowest
-// threshold outlasts it by ~1.3s; a typical one winks out in ~0.3s.
-const WAKE_FADE = 0.45
-// Stroke radius in field heights, before speed widens it.
-const STROKE_RADIUS = 0.03
-// Field heights per second that count as a full-strength stroke.
-const FULL_SPEED = 1.4
-// Energy a full-strength stroke deposits per frame: enough that a stroke's
-// core saturates and its edges stay ragged.
-const DEPOSIT = 0.6
+// Seconds for the wake to fall to ~37%: a stroke has settled back into dots
+// in under a second.
+const WAKE_FADE = 0.42
+// Stroke radius in field heights, before speed widens it: a pencil line,
+// a couple of cells wide.
+const STROKE_RADIUS = 0.026
+// Field heights per second that count as a full-strength stroke: an
+// ordinary hand-speed sweep (~700px/s on a laptop) prints at full strength.
+const FULL_SPEED = 0.8
+// Energy a full-strength stroke deposits per frame.
+const DEPOSIT = 0.55
 // A jump longer than this (field heights, one frame) is a teleport, not a
 // stroke: the pointer re-entered the window or the page scrolled under it.
 const TELEPORT = 0.3
+// Moves closer together than this (ms) blend into one smoothed speed. After
+// a longer gap the speed is taken from that move alone: near zero after a
+// real pause, the true speed when a busy page delivered the move late.
+const BLEND_WITHIN = 80
 
-// Click rings.
+// Click rings: eased out, so the ring leaves quickly and settles.
 const MAX_RINGS = 3
-const RING_LIFE = 1.4 // s
-const RING_SPEED = 0.95 // field heights per second
-const RING_WIDTH = 0.035 // gaussian band, field heights
-const RING_TAIL = 0.2 // tail length behind the front, field heights
+const RING_LIFE = 1.1 // s
+const RING_REACH = 0.42 // final radius, field heights
+const RING_WIDTH = 0.028 // gaussian band, field heights
+const RING_TAIL = 0.12 // tail length behind the front, field heights
 
-// Cell geometry, as fractions of the cell.
+// Cell geometry, as fractions of the cell. A cell grows from the resting dot
+// to a square pixel as the energy past its threshold rises through GROW.
 const DOT_RADIUS = 0.07
-const PIXEL = 0.2 // half side of a wake pixel
-const PIXEL_LARGE = 0.29
+const PIXEL = 0.165 // half side of a fully grown pixel (~6px on the 18px grid)
+const GROW = 0.14
 
 const glf = (n: number) => {
   const s = String(n)
@@ -110,7 +115,7 @@ void main() {
     vec2 ap = uv * k - a;
     float t = clamp(dot(ap, ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
     float d = length(ap - ab * t);
-    float r = ${glf(STROKE_RADIUS)} * (1.0 + 0.6 * u_force);
+    float r = ${glf(STROKE_RADIUS)} * (1.0 + 0.4 * u_force);
     energy += u_force * ${glf(DEPOSIT)} * exp(-(d * d) / (r * r));
   }
   gl_FragColor = vec4(min(energy, 1.0), 0.0, 0.0, 1.0);
@@ -126,7 +131,7 @@ uniform float u_time;
 uniform sampler2D u_trail;
 uniform vec4 u_dot;
 uniform vec4 u_wake;
-uniform vec3 u_ring;
+uniform vec4 u_ring;
 uniform vec4 u_rings[${MAX_RINGS}]; // xy centre (field uv), z radius, w strength
 
 float hash(vec2 p) {
@@ -140,12 +145,21 @@ float ringEnergy(vec4 ring, vec2 p) {
   float behind = ring.z - r;
   // A short tail that travels with the front, so lit cells wink off as it
   // passes rather than freezing inside the ring.
-  float tail = behind > 0.0 ? (1.0 - smoothstep(0.0, ${glf(RING_TAIL)}, behind)) * 0.14 : 0.0;
+  float tail = behind > 0.0 ? (1.0 - smoothstep(0.0, ${glf(RING_TAIL)}, behind)) * 0.1 : 0.0;
   return (exp(-band * band) + tail) * ring.w;
 }
 
-float square(vec2 local, float side, float aa) {
-  return 1.0 - smoothstep(side - aa, side + aa, max(abs(local.x), abs(local.y)));
+// A cell's mark: a rounded square of half-size s and corner radius c, so the
+// same shape runs from a round dot (c = s) to a crisp pixel (c small).
+float mark(vec2 local, float s, float c, float aa) {
+  vec2 q = abs(local) - vec2(s - c);
+  float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - c;
+  return 1.0 - smoothstep(-aa, aa, d);
+}
+
+// How far a cell has grown towards a pixel, 0..1.
+float growth(float energy, float threshold) {
+  return smoothstep(0.0, ${glf(GROW)}, energy - threshold);
 }
 
 void main() {
@@ -159,22 +173,24 @@ void main() {
   float weight = 0.75 + 0.5 * seed;
   float breathe = 0.88 + 0.12 * sin(u_time * (0.5 + 0.4 * seed) + seed * 6.2831);
   float vignette = smoothstep(1.2, 0.3, length(centre - 0.5));
-  float restDot = 1.0 - smoothstep(${glf(DOT_RADIUS)} - aa, ${glf(DOT_RADIUS)} + aa, length(local));
-  vec4 colour = vec4(u_dot.rgb, u_dot.a * weight * breathe * vignette * restDot);
+  float restAlpha = u_dot.a * weight * breathe * vignette;
 
-  // Wake: the cell prints once the trail under its centre passes the cell's
-  // own threshold, and prints larger well past it.
+  // Wake: past the cell's own threshold the dot grows into a square and
+  // darkens; as the trail fades it shrinks back into the dot.
   float energy = texture2D(u_trail, centre).r;
-  float threshold = 0.06 + 0.8 * hash(cell + 17.31);
-  float on = step(threshold, energy);
-  float side = mix(${glf(PIXEL)}, ${glf(PIXEL_LARGE)}, step(threshold + 0.3, energy));
-  colour = mix(colour, u_wake, on * square(local, side, aa));
+  float g = growth(energy, 0.08 + 0.75 * hash(cell + 17.31));
+  float s = mix(${glf(DOT_RADIUS)}, ${glf(PIXEL)}, g);
+  float shape = mark(local, s, mix(s, s * 0.2, g), aa);
+  vec4 colour = vec4(mix(u_dot.rgb, u_wake.rgb, g), mix(restAlpha, u_wake.a, g) * shape);
 
-  // Click rings print through the same cells, in ultramarine.
+  // Click rings grow the same marks, in ultramarine.
   float rings = 0.0;
   for (int i = 0; i < ${MAX_RINGS}; i++) rings += ringEnergy(u_rings[i], centre);
-  float ringOn = step(0.06 + 0.8 * hash(cell + 41.7), rings);
-  colour = mix(colour, vec4(u_ring, 0.95), ringOn * square(local, ${glf(PIXEL)}, aa));
+  float rg = growth(rings, 0.08 + 0.6 * hash(cell + 41.7));
+  if (rg > 0.0) {
+    float rs = mix(${glf(DOT_RADIUS)}, ${glf(PIXEL)}, rg);
+    colour = mix(colour, u_ring, rg * mark(local, rs, mix(rs, rs * 0.2, rg), aa));
+  }
 
   gl_FragColor = colour;
 }
@@ -300,10 +316,13 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
     const isDark = () => document.documentElement.classList.contains("dark")
     let colors = isDark() ? dark : light
 
-    // Pointer, in field uv (y up). `from` is where last frame's stroke ended.
+    // Pointer, in field uv (y up). `from` is where the last stroke ended.
+    // Speed is measured from the pointer events themselves, so it holds up
+    // when moves arrive less often than frames (a trackpad on a 120Hz screen).
     let pointer: { x: number; y: number } | null = null
     let from: { x: number; y: number } | null = null
-    let force = 0
+    let lastMove: { x: number; y: number; t: number } | null = null
+    let speed = 0 // field heights per second, smoothed
     const rings: Ring[] = []
 
     const toField = (clientX: number, clientY: number) => {
@@ -317,7 +336,18 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
     const onPointerMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return
       const p = toField(e.clientX, e.clientY)
-      pointer = p.inside ? { x: p.x, y: p.y } : null
+      if (!p.inside) {
+        onLeave()
+        return
+      }
+      if (lastMove) {
+        const gap = e.timeStamp - lastMove.t
+        const dist = Math.hypot((p.x - lastMove.x) * (cssW / cssH), p.y - lastMove.y)
+        const instant = dist / (Math.max(gap, 4) / 1000)
+        speed = gap < BLEND_WITHIN ? speed + (instant - speed) * 0.5 : instant
+      }
+      lastMove = { x: p.x, y: p.y, t: e.timeStamp }
+      pointer = { x: p.x, y: p.y }
       kick()
     }
     const onPointerDown = (e: PointerEvent) => {
@@ -333,6 +363,8 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
     const onLeave = () => {
       pointer = null
       from = null
+      lastMove = null
+      speed = 0
     }
 
     let raf = 0
@@ -346,18 +378,18 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
       const dt = last ? Math.min(Math.max((now - last) / 1000, 1 / 240), 1 / 20) : 1 / 60
       last = now
 
-      // Stroke for this frame: from where the last one ended to the pointer.
+      // Stroke for this frame: from where the last one ended to the pointer,
+      // at the speed the pointer events report. Only frames where the pointer
+      // has moved deposit, so stopping never pools ink, and a frame that runs
+      // late still draws the whole segment it missed.
       let strokeFrom = from
       const strokeTo = pointer
-      let target = 0
-      if (strokeTo && strokeFrom) {
+      let deposit = 0
+      if (strokeTo && strokeFrom && (strokeTo.x !== strokeFrom.x || strokeTo.y !== strokeFrom.y)) {
         const dist = Math.hypot((strokeTo.x - strokeFrom.x) * (cssW / cssH), strokeTo.y - strokeFrom.y)
         if (dist > TELEPORT) strokeFrom = strokeTo
-        else target = Math.min(1, dist / dt / FULL_SPEED)
+        else deposit = Math.min(1, speed / FULL_SPEED)
       }
-      // Eases in as the stroke speeds up, but stops the moment the cursor
-      // does: winding down in place would pool ink into a block at the stop.
-      force = target > force ? force + (target - force) * (1 - Math.exp(-dt * 24)) : target
       from = strokeTo
 
       // Pass 1: trail.
@@ -375,7 +407,7 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
       const b = strokeTo ?? a
       gl.uniform2f(ut.u_from, a.x, a.y)
       gl.uniform2f(ut.u_to, b.x, b.y)
-      gl.uniform1f(ut.u_force, strokeTo && force > 0.01 ? force : 0)
+      gl.uniform1f(ut.u_force, deposit > 0.01 ? deposit : 0)
       gl.uniform1f(ut.u_aspect, cssW / cssH)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       read = 1 - read
@@ -385,7 +417,8 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
       ringData.fill(0)
       rings.forEach((ring, i) => {
         const age = (now - ring.start) / 1000
-        ringData.set([ring.x, ring.y, age * RING_SPEED, 1.25 * Math.pow(1 - age / RING_LIFE, 1.4)], i * 4)
+        const p = age / RING_LIFE
+        ringData.set([ring.x, ring.y, RING_REACH * (1 - Math.pow(1 - p, 3)), 1.2 * Math.pow(1 - p, 1.5)], i * 4)
       })
 
       // Pass 2: the sheet.
@@ -405,7 +438,7 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
       gl.uniform1f(us.u_time, (now / 1000) % 3600)
       gl.uniform4f(us.u_dot, ...colors.dot)
       gl.uniform4f(us.u_wake, ...colors.wake)
-      gl.uniform3f(us.u_ring, ...colors.ring)
+      gl.uniform4f(us.u_ring, ...colors.ring)
       gl.uniform4fv(us.u_rings, ringData)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
 

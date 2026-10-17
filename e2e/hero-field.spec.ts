@@ -32,27 +32,45 @@ async function emptyBand(page: Page) {
 
 type Band = Awaited<ReturnType<typeof emptyBand>>
 
-// Counts strongly inked pixels (resting dots are too faint to count) and
-// ultramarine pixels in the band.
+// Total ink and ultramarine the field itself has drawn in a region: summed
+// pixel alpha, read from the live canvas inside the frame it was drawn in (its
+// buffer isn't preserved). No screenshot, so no capture delay for the wake to
+// fade during, and the page's own text and colours never count.
 async function inkIn(page: Page, band: Band) {
-  const png = await page.screenshot({ clip: { x: band.left, y: band.top, width: band.right - band.left, height: band.bottom - band.top } })
-  return page.evaluate(async (b64) => {
-    const img = new Image()
-    img.src = `data:image/png;base64,${b64}`
-    await img.decode()
-    const canvas = Object.assign(document.createElement("canvas"), { width: img.width, height: img.height })
-    const ctx = canvas.getContext("2d")!
-    ctx.drawImage(img, 0, 0)
-    const data = ctx.getImageData(0, 0, img.width, img.height).data
+  return page.evaluate(async (r) => {
+    const canvas = document.querySelector("#hero [data-hero-field] canvas") as HTMLCanvasElement
+    const box = canvas.getBoundingClientRect()
+    const scale = canvas.width / box.width
+    const w = Math.round((r.right - r.left) * scale)
+    const h = Math.round((r.bottom - r.top) * scale)
+    const out = Object.assign(document.createElement("canvas"), { width: w, height: h })
+    const ctx = out.getContext("2d")!
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => {
+        ctx.drawImage(canvas, (r.left - box.left) * scale, (r.top - box.top) * scale, w, h, 0, 0, w, h)
+        resolve()
+      }),
+    )
+    const data = ctx.getImageData(0, 0, w, h).data
     let ink = 0
     let blue = 0
     for (let i = 0; i < data.length; i += 4) {
-      const [r, g, b] = [data[i], data[i + 1], data[i + 2]]
-      if (b > 150 && b - r > 80) blue++
-      else if (0.299 * r + 0.587 * g + 0.114 * b < 110) ink++
+      const alpha = data[i + 3] / 255
+      if (data[i + 2] - data[i] > 60) blue += alpha
+      else ink += alpha
     }
-    return { ink, blue }
-  }, png.toString("base64"))
+    return { ink: Math.round(ink), blue: Math.round(blue) }
+  }, band)
+}
+
+// Moves the pointer across the band the way a hand does: one move every
+// `msPerStep`, rather than a burst the page receives in a single frame.
+async function stroke(page: Page, band: Band, msPerStep: number, steps = 30) {
+  const y = (band.top + band.bottom) / 2
+  for (let i = 0; i <= steps; i++) {
+    await page.mouse.move(band.left + ((band.right + 100 - band.left) * i) / steps, y)
+    await page.waitForTimeout(msPerStep)
+  }
 }
 
 async function liveField(page: Page) {
@@ -75,28 +93,48 @@ test("the hero dot field goes live on a desktop pointer", async ({ page }) => {
 test("moving the cursor leaves a wake of ink pixels that fades away", async ({ page }) => {
   await liveField(page)
   const band = await emptyBand(page)
-  const y = (band.top + band.bottom) / 2
-  await page.mouse.move(band.left, y)
+  // The cursor waits left of the measured band, so it isn't counted as ink.
+  await page.mouse.move(20, (band.top + band.bottom) / 2)
   const before = await inkIn(page, band)
 
-  await page.mouse.move(band.right + 100, y, { steps: 24 })
+  await stroke(page, band, 12)
   const during = await inkIn(page, band)
-  expect(during.ink).toBeGreaterThan(before.ink + 1500)
+  // A working wake adds ~500 here; none adds ~0.
+  expect(during.ink).toBeGreaterThan(before.ink + 150)
 
   await page.waitForTimeout(3000)
   const after = await inkIn(page, band)
-  expect(after.ink).toBeLessThan(before.ink + 200)
+  expect(after.ink).toBeLessThan(before.ink + 10)
+})
+
+test("a slow, hand-speed stroke leaves a wake too", async ({ page }) => {
+  // Moves arrive less often than frames here, as with a trackpad on a 120Hz
+  // screen; the wake must not depend on a move landing in every frame.
+  await liveField(page)
+  const band = await emptyBand(page)
+  await page.mouse.move(20, (band.top + band.bottom) / 2)
+  const before = await inkIn(page, band)
+
+  await stroke(page, band, 22, 60)
+  const during = await inkIn(page, band)
+  // ~140 at hand speed.
+  expect(during.ink).toBeGreaterThan(before.ink + 60)
 })
 
 test("a click sends out a ring of ultramarine pixels", async ({ page }) => {
   await liveField(page)
   const band = await emptyBand(page)
-  await page.mouse.click(650, (band.top + band.bottom) / 2)
-  await page.waitForTimeout(120)
-  // The band only catches the ring where it crosses it. The old dot ripple
-  // printed ~270 blue pixels here; a ring of square pixels prints 1000+.
-  const ring = await inkIn(page, band)
-  expect(ring.blue).toBeGreaterThan(600)
+  const y = (band.top + band.bottom) / 2
+  // A square around the click, wide enough to hold the ring at 250ms.
+  const around = { top: y - 260, bottom: y + 260, left: 390, right: 910 }
+  await page.mouse.move(650, y)
+  const before = await inkIn(page, around)
+  await page.mouse.down()
+  await page.mouse.up()
+  await page.waitForTimeout(250)
+  const ring = await inkIn(page, around)
+  // ~2,100 for the ring; nothing in the field is ultramarine before it.
+  expect(ring.blue).toBeGreaterThan(before.blue + 500)
 })
 
 test("the dot field is one full-width sheet that starts at the hero rule", async ({ page }) => {

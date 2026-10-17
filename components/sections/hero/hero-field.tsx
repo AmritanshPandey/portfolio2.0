@@ -11,17 +11,18 @@ const WakeField = dynamic(() => import("./wake-field").then((m) => m.WakeField),
 // The complement of the media query that shows `.hero-dots` in globals.css.
 const LIVE_QUERY = "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)"
 
-// Faint ink dots at rest; the wake prints in ink, like pencil on paper, and
-// only the click ring uses ultramarine.
+// Faint ink dots at rest; the wake prints in ink at about half strength, like
+// pencil on paper, and only the click ring uses ultramarine.
 const LIGHT: WakeColors = {
   dot: [0.067, 0.067, 0.067, 0.34],
-  wake: [0.067, 0.067, 0.067, 0.82],
-  ring: [0.169, 0.208, 0.91],
+  wake: [0.067, 0.067, 0.067, 0.52],
+  ring: [0.169, 0.208, 0.91, 0.68],
 }
 const DARK: WakeColors = {
   dot: [0.925, 0.918, 0.894, 0.4],
-  wake: [0.925, 0.918, 0.894, 0.85],
-  ring: [0.549, 0.576, 1],
+  wake: [0.925, 0.918, 0.894, 0.6],
+  // Lavender on near-black needs more strength to read as clearly.
+  ring: [0.549, 0.576, 1, 0.9],
 }
 
 // The sheet hangs from the hero rule: a short fade so no dot is cut in half
