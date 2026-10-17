@@ -55,8 +55,6 @@ interface HeroShaderGridProps {
   darkColor?: RGBA
   /** soft tint that bleeds in near the cursor */
   tintColor?: RGB
-  /** tint in dark mode (defaults to tintColor) */
-  darkTintColor?: RGB
   /** Opacity used only for the static fallback grid. */
   fallbackOpacity?: number
   /**
@@ -316,7 +314,6 @@ export function HeroShaderGrid({
   lightColor = [0, 0, 0, 0.42],
   darkColor = [1, 1, 1, 0.5],
   tintColor = DEFAULT_TINT,
-  darkTintColor,
   fallbackOpacity = 1,
   shimmer = 1,
 }: HeroShaderGridProps) {
@@ -330,7 +327,7 @@ export function HeroShaderGrid({
   const maxDpr = isHigh ? 2 : isBalanced ? 1.5 : 1
 
   // Stable key so the effect only re-runs when the actual config changes.
-  const colorKey = JSON.stringify([lightColor, darkColor, tintColor, darkTintColor])
+  const colorKey = JSON.stringify([lightColor, darkColor, tintColor])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -486,7 +483,6 @@ export function HeroShaderGrid({
 
     const isDark = () => document.documentElement.classList.contains("dark")
     let base = isDark() ? darkColor : lightColor
-    let tint = isDark() ? (darkTintColor ?? tintColor) : tintColor
 
     const resize = () => {
       if (contextLost) return
@@ -591,7 +587,7 @@ export function HeroShaderGrid({
       gl.uniform1f(u.radius, radius)
       gl.uniform2f(u.velocity, dragX, dragY)
       gl.uniform4f(u.baseColor, base[0], base[1], base[2], base[3])
-      gl.uniform3f(u.tintColor, tint[0], tint[1], tint[2])
+      gl.uniform3f(u.tintColor, tintColor[0], tintColor[1], tintColor[2])
       // Wrap the clock hourly to keep float precision healthy in the shader.
       gl.uniform1f(u.time, (now / 1000) % 3600)
       gl.uniform1f(u.shimmer, shimmer)
@@ -723,7 +719,6 @@ export function HeroShaderGrid({
     // React to theme toggles (next-themes flips `.dark` on <html>).
     const mo = new MutationObserver(() => {
       base = isDark() ? darkColor : lightColor
-      tint = isDark() ? (darkTintColor ?? tintColor) : tintColor
       kick()
     })
     mo.observe(document.documentElement, {

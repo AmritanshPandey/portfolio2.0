@@ -103,11 +103,14 @@ then content lands a few pixels onto them (`data-settle`, driven by
 `SettleObserver`). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
 
-The hero has one ambient layer, **the dot field** (`HeroField`): a WebGL sheet
-of ink dots behind the statement that breathes faintly, parts under the cursor
-and ripples ultramarine on click. It loads only when the page is idle on a
-desktop pointer; phones, touch and reduced motion get a static CSS dot grid and
-never download the shader.
+The hero has one ambient layer, **the dot field** (`HeroField`): a sheet of
+faint ink dots that hangs from the hero rule and breathes. On a desktop pointer
+it becomes the **pixel wake** (`WakeField`, WebGL): moving the cursor prints
+whole cells as square ink pixels against per-cell thresholds, so the wake has a
+ragged edge and winks out cell by cell over about a second; a click sends a
+ring of ultramarine pixels through the same grid. It loads only when the page
+is idle on a desktop pointer; phones, touch and reduced motion get a static CSS
+dot grid and never download the shader.
 
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms

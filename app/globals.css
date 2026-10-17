@@ -1144,13 +1144,15 @@
   .btn-line:hover .btn-arrow { transform: translate3d(3px, -3px, 0); }
 }
 
-/* Hero dot field. Desktop pointers get the live WebGL field (<HeroField>);
-   phones, touch and reduced motion get this static grid and no shader code. */
-.hero-dots {
-  display: none;
+/* Hero dot field. Desktop pointers get the live pixel wake (<WakeField>);
+   phones, touch and reduced motion get this static grid and no shader code.
+   The fallback is the same grid, shown when WebGL is unavailable. */
+.hero-dots,
+.hero-dots-fallback {
   background-image: radial-gradient(circle, var(--hero-dot) 0.8px, transparent 1.8px);
   background-size: 18px 18px;
 }
+.hero-dots { display: none; }
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
   .hero-dots { display: block; }
 }
