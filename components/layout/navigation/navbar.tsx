@@ -17,6 +17,7 @@ import { IconHome } from "@tabler/icons-react"
 import { scrollToSection } from "@/lib/scroll"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { ThemeToggle } from "@/components/shared/theme-fab"
+import { SoundToggle } from "@/components/shared/sound-toggle"
 
 type NavLink = {
   label: string
@@ -480,6 +481,7 @@ export default function Navbar() {
           <Divider />
 
           <ContactActions />
+          <SoundToggle className="ml-2" />
           <ThemeToggle className="ml-2" />
           </div>
         </NavShell>

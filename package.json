@@ -9,6 +9,7 @@
     "lint": "eslint",
     "dev:preview": "NEXT_DIST_DIR=.next-preview next dev",
     "check:type": "! grep -rEn 'text-\\[(9|9\\.5|10|10\\.5)px\\]' app components --include='*.tsx' --exclude-dir=fintech-system",
+    "test:unit": "node --test --experimental-strip-types \"lib/**/*.test.mjs\"",
     "test:e2e": "playwright test"
   },
   "dependencies": {

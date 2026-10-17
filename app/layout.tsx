@@ -5,6 +5,7 @@ import Footer from "@/components/layout/footer/footer"
 import { FooterGate } from "@/components/layout/footer/footer-gate"
 import { FancyCursor } from "@/components/shared/cursor"
 import { SettleObserver } from "@/components/shared/settle-observer"
+import { RulePluck } from "@/components/shared/rule-pluck"
 import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
@@ -117,6 +118,9 @@ export default function RootLayout({
 
             {/* The settle: rules draw and content lands as it scrolls in */}
             <SettleObserver />
+
+            {/* Rules pluck like strings under a desktop pointer */}
+            <RulePluck />
 
             <a
               href="#main-content"

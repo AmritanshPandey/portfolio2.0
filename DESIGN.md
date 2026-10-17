@@ -112,7 +112,16 @@ never download the shader.
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms
 cross-dissolve between routes (View Transitions). Apart from the dot field,
-nothing loops for attention. Every animation has a `prefers-reduced-motion`
+nothing loops for attention. Ink rules are strings: on a desktop pointer, sweeping
+across one catches it, bends it toward the pointer (18px at most), and it
+slips free and rings flat in about a second, lit ultramarine by how hard it
+was plucked (`RulePluck`, physics in `lib/pluck.ts`). Only pointer movement
+plucks; scrolling a rule past the pointer never does.
+
+Sound is opt-in and off by default. The wave-mark square beside the theme
+toggle turns on one plucked note per release (synthesised, no audio files),
+rising in pitch down the page, for the visit only (sessionStorage). It is only
+offered where rules can be plucked. Every animation has a `prefers-reduced-motion`
 path (the settle never arms, hero animations are off, the dot field is static,
 Framer Motion is globally skipped).
 
@@ -132,6 +141,6 @@ Existing focus styles stay as they are.
 
 ## 8. Signature details
 
-Square ultramarine home mark; half-filled square theme toggle; square cursor
-with a mono label; ink-thumb scrollbar; ultramarine text selection; ink sheet
+Square ultramarine home mark; half-filled square theme toggle; wave-mark
+square sound toggle; pluckable ink rules; square cursor with a mono label; ink-thumb scrollbar; ultramarine text selection; ink sheet
 favicon with an ultramarine mark; a ruled 404 in the same voice as the site.
