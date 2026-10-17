@@ -36,6 +36,7 @@ const POOL = "linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, tra
  */
 export function HeroField() {
   const [live, setLive] = useState(false)
+  const [painted, setPainted] = useState(false)
 
   useEffect(() => {
     const query = window.matchMedia(LIVE_QUERY)
@@ -57,7 +58,10 @@ export function HeroField() {
     const onChange = () => {
       cancel()
       if (query.matches) schedule()
-      else setLive(false)
+      else {
+        setLive(false)
+        setPainted(false)
+      }
     }
 
     if (query.matches) schedule()
@@ -72,11 +76,12 @@ export function HeroField() {
     <div
       aria-hidden
       data-hero-field
+      data-live={painted || undefined}
       className="pointer-events-none absolute inset-y-0 left-[calc(50%-50vw)] right-[calc(50%-50vw)] -z-10"
       style={{ maskImage: POOL, WebkitMaskImage: POOL }}
     >
       <div data-hero-dots className="hero-dots absolute inset-0" />
-      {live && <WakeField spacing={18} light={LIGHT} dark={DARK} />}
+      {live && <WakeField spacing={18} light={LIGHT} dark={DARK} onPaint={() => setPainted(true)} />}
     </div>
   )
 }

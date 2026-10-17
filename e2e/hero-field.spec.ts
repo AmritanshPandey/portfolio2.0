@@ -137,6 +137,63 @@ test("a click sends out a ring of ultramarine pixels", async ({ page }) => {
   expect(ring.blue).toBeGreaterThan(before.blue + 500)
 })
 
+test("the live sheet's dots sit exactly on the static grid's", async ({ page }) => {
+  // If both layers are ever on screen, their dots must coincide, not double.
+  await liveField(page)
+  const rows = await page.evaluate(async () => {
+    const canvas = document.querySelector("#hero [data-hero-field] canvas") as HTMLCanvasElement
+    const box = canvas.getBoundingClientRect()
+    const scale = canvas.width / box.width
+    // A strip over one column of dots near the middle (the CSS grid's dots
+    // sit at 9px + 18px·n from the field's top-left), 40px to 400px down. A
+    // dot's ink spreads over neighbouring pixels, so the strip is 3px wide and
+    // each dot is located by the centre of its ink.
+    const x = Math.round((9 + 18 * Math.round(box.width / 2 / 18)) * scale) - 2
+    const w = Math.max(3, Math.round(4 * scale))
+    const top = Math.round(40 * scale)
+    const h = Math.round(360 * scale)
+    const out = Object.assign(document.createElement("canvas"), { width: w, height: h })
+    const ctx = out.getContext("2d")!
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => {
+        ctx.drawImage(canvas, x, top, w, h, 0, 0, w, h)
+        resolve()
+      }),
+    )
+    const data = ctx.getImageData(0, 0, w, h).data
+    const row = Array.from({ length: h }, (_, y) => {
+      let sum = 0
+      for (let i = 0; i < w; i++) sum += data[(y * w + i) * 4 + 3]
+      return sum
+    })
+    const centres: number[] = []
+    for (let y = 0; y < h; y++) {
+      if (row[y] <= 4) continue
+      let mass = 0
+      let moment = 0
+      for (; y < h && row[y] > 4; y++) {
+        mass += row[y]
+        moment += row[y] * (y + 0.5)
+      }
+      centres.push((top + moment / mass) / scale)
+    }
+    return centres
+  })
+  expect(rows.length).toBeGreaterThan(12)
+  for (const y of rows) {
+    const offset = (((y - 9) % 18) + 18) % 18
+    expect(Math.min(offset, 18 - offset)).toBeLessThan(1.5)
+  }
+})
+
+test("the static grid hides once the live sheet has painted, whatever the media query says", async ({ page }) => {
+  await openHome(page)
+  // Stands in for a browser where the static grid's media query matches too.
+  await page.addStyleTag({ content: ".hero-dots { display: block }" })
+  await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(1, { timeout: 5000 })
+  await expect.poll(() => staticDotsShown(page)).toBe(false)
+})
+
 test("the dot field is one full-width sheet that starts at the hero rule", async ({ page }) => {
   await openHome(page)
   const box = await page.evaluate(() => {

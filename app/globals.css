@@ -1156,6 +1156,9 @@
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
   .hero-dots { display: block; }
 }
+/* Once the live sheet has painted it owns the dots, whatever the media query
+   above decided: the static grid never sits under it. */
+[data-hero-field][data-live] .hero-dots { display: none; }
 
 /* ─────────────────────────
    LEDGER · THE SETTLE

@@ -39,6 +39,8 @@ type WakeFieldProps = {
   spacing: number
   light: WakeColors
   dark: WakeColors
+  /** called once, when the sheet has painted its first frame */
+  onPaint?: () => void
 }
 
 // Trail: one texel per this many CSS px.
@@ -163,9 +165,13 @@ float growth(float energy, float threshold) {
 }
 
 void main() {
-  vec2 cell = floor(gl_FragCoord.xy / u_cell);
-  vec2 local = fract(gl_FragCoord.xy / u_cell) - 0.5;
+  // The lattice runs from the top-left, exactly like the CSS dot grid, so the
+  // two coincide if both are ever on screen instead of doubling up.
+  vec2 p = vec2(gl_FragCoord.x, u_resolution.y - gl_FragCoord.y);
+  vec2 cell = floor(p / u_cell);
+  vec2 local = fract(p / u_cell) - 0.5;
   vec2 centre = (cell + 0.5) * u_cell / u_resolution;
+  centre.y = 1.0 - centre.y; // back to field uv, y up
   float aa = 1.0 / u_cell;
 
   // Resting sheet: each dot has its own weight and a slow breathe.
@@ -222,9 +228,13 @@ function compile(gl: WebGLRenderingContext, vertSrc: string, fragSrc: string) {
 
 type Ring = { x: number; y: number; start: number }
 
-export function WakeField({ spacing, light, dark }: WakeFieldProps) {
+export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const onPaintRef = useRef(onPaint)
+  useEffect(() => {
+    onPaintRef.current = onPaint
+  })
   const [painted, setPainted] = useState(false)
   const [failed, setFailed] = useState(false)
 
@@ -445,6 +455,7 @@ export function WakeField({ spacing, light, dark }: WakeFieldProps) {
       if (first) {
         first = false
         setPainted(true)
+        onPaintRef.current?.()
       }
       // The resting dots breathe, so keep drawing while the sheet is on
       // screen; observers below pause it when it scrolls away or the tab hides.
