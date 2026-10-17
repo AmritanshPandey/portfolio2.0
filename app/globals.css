@@ -1091,6 +1091,30 @@
   .rule-ink { height: 1px; background: var(--rule-strong); }
   .rule-hair { height: 1px; background: var(--border); }
 
+  /* Pluckable rules (<RulePluck>): while a rule moves, an SVG copy bends
+     inside it and its own line is hidden. The copy is lit ultramarine by how
+     hard it was plucked and fades back to ink as it settles. */
+  .rule-ink { position: relative; }
+  .rule-ink[data-plucking] { background: transparent; }
+  .rule-pluck {
+    position: absolute;
+    left: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .rule-pluck path {
+    fill: none;
+    stroke: var(--rule-strong);
+    stroke: color-mix(in oklab, var(--accent) calc(var(--pluck-glow, 0) * 85%), var(--rule-strong));
+    stroke-width: 1px;
+  }
+
+  /* The sound toggle only exists where rules can be plucked. */
+  .sound-toggle { display: none; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .sound-toggle { display: flex; }
+  }
+
   /* Mono reference text: dates, roles, indices, captions. */
   .ledger-label {
     font-family: var(--font-mono);
