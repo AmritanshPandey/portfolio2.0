@@ -22,6 +22,18 @@ function getPendingHomeSection() {
   return id && HOME_SECTION_IDS.has(id) ? id : null
 }
 
+// A fresh visit (not a reload or back/forward) already opens at the top, so
+// there is nothing to reset, and resetting anyway would cancel a visitor who
+// started scrolling while the page loaded (Safari applies a wheel scroll a
+// moment late, so it can't be detected in time). Reloads, back/forward and
+// client-side page changes still start at the top.
+let firstLoad = true
+function isFreshVisit() {
+  if (!firstLoad) return false
+  const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined
+  return nav?.type === "navigate"
+}
+
 function resetPageScroll() {
   window.scrollTo({ top: 0, left: 0, behavior: "auto" })
   document.documentElement.scrollTop = 0
@@ -45,7 +57,7 @@ export function ScrollToHash() {
   useLayoutEffect(() => {
     if (window.location.hash) return
     if (pathname === "/" && getPendingHomeSection()) return
-    resetPageScroll()
+    if (!isFreshVisit()) resetPageScroll()
   }, [pathname])
 
   useEffect(() => {
@@ -55,6 +67,20 @@ export function ScrollToHash() {
     let attempts = 0
     const maxAttempts = 12
     let cleanHashTimer: ReturnType<typeof setTimeout> | undefined
+
+    // Someone who has already started scrolling is never sent back to the top
+    // by the deferred reset below.
+    let userScrolled = false
+    const onScrollIntent = () => {
+      userScrolled = true
+    }
+    const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "])
+    const onKey = (e: KeyboardEvent) => {
+      if (SCROLL_KEYS.has(e.key)) userScrolled = true
+    }
+    window.addEventListener("wheel", onScrollIntent, { passive: true })
+    window.addEventListener("touchmove", onScrollIntent, { passive: true })
+    window.addEventListener("keydown", onKey)
 
     // ── Zone detection (based on viewport)
     const updateCursorZone = () => {
@@ -135,7 +161,7 @@ export function ScrollToHash() {
       }
 
       // 2. Internal-page navbar handoff to a home section. This avoids Next
-      // hash navigation and lets Lenis perform a single controlled scroll.
+      // hash navigation and performs a single controlled scroll.
       if (pendingHomeSection) {
         const el = document.getElementById(pendingHomeSection)
 
@@ -146,9 +172,11 @@ export function ScrollToHash() {
         }
       }
 
-      // 3. Default page navigation should always start from the top.
+      // 3. Default page navigation should always start from the top, unless
+      // the visitor is already scrolling.
       if (!hash && !pendingHomeSection) {
-        resetPageScroll()
+        if (!userScrolled && !isFreshVisit()) resetPageScroll()
+        firstLoad = false
         setTimeout(updateCursorZone, 120)
         return
       }
@@ -182,6 +210,9 @@ export function ScrollToHash() {
       if (cleanHashTimer) clearTimeout(cleanHashTimer)
       if (settleRaf) cancelAnimationFrame(settleRaf)
       window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("wheel", onScrollIntent)
+      window.removeEventListener("touchmove", onScrollIntent)
+      window.removeEventListener("keydown", onKey)
     }
   }, [pathname])
 

@@ -6,7 +6,6 @@ import { FooterGate } from "@/components/layout/footer/footer-gate"
 import { FancyCursor } from "@/components/shared/cursor"
 import { SettleObserver } from "@/components/shared/settle-observer"
 import { RulePluck } from "@/components/shared/rule-pluck"
-import { SmoothScroll } from "@/components/shared/smooth-scroll"
 import { SettleGuard } from "@/components/shared/settle-guard"
 import { ScrollToHash } from "@/app/scroll-to-hash"
 import { Archivo, Martian_Mono } from "next/font/google"
@@ -105,8 +104,6 @@ export default function RootLayout({
           {/* Honour prefers-reduced-motion across all Framer Motion animations */}
           <ReducedMotion />
           <>
-            {/* Lenis smooth scroll */}
-            <SmoothScroll />
 
             {/* Scroll restore */}
             <ScrollToHash />
