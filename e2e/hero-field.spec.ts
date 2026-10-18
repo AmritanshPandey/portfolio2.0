@@ -73,7 +73,17 @@ async function stroke(page: Page, band: Band, msPerStep: number, steps = 30) {
   }
 }
 
+// The live sheet hands over to static dots when frames run slow (see the 30fps
+// test). Headless Chromium draws WebGL on the CPU, so a runner with several
+// workers is slow in just that way; tests of the live sheet hold it live.
+async function keepLive(page: Page) {
+  await page.addInitScript(() => {
+    ;(window as Window & { __heroWakeKeepLive?: boolean }).__heroWakeKeepLive = true
+  })
+}
+
 async function liveField(page: Page) {
+  await keepLive(page)
   await openHome(page)
   await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(1, { timeout: 5000 })
   await page.waitForTimeout(800)
@@ -84,6 +94,7 @@ const staticDotsShown = (page: Page) =>
 
 test("the hero dot field goes live on a desktop pointer", async ({ page }) => {
   const seen = watchForShaderCode(page)
+  await keepLive(page)
   await openHome(page)
   await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(1, { timeout: 5000 })
   expect(await staticDotsShown(page)).toBe(false)
@@ -192,6 +203,7 @@ test("the live sheet's dots sit exactly on the static grid's", async ({ page }) 
 })
 
 test("the static grid hides once the live sheet has painted, whatever the media query says", async ({ page }) => {
+  await keepLive(page)
   await openHome(page)
   // Stands in for a browser where the static grid's media query matches too.
   await page.addStyleTag({ content: ".hero-dots { display: block }" })
@@ -238,12 +250,22 @@ test.describe("where the live sheet would not be smooth", () => {
 
   test("a browser held to 30fps falls back to the static dots", async ({ page }) => {
     // Chrome's Energy Saver and Safari's Low Power Mode both cap frames at ~30fps.
+    // Chrome often delivers the sheet's first visibility notice a few frames
+    // after it starts drawing; holding every notice back makes that the order
+    // here, so the check must finish with no help from a moving pointer.
     await page.addInitScript(() => {
       window.requestAnimationFrame = (cb) => window.setTimeout(() => cb(performance.now()), 33)
       window.cancelAnimationFrame = (id) => window.clearTimeout(id)
+      const Observer = window.IntersectionObserver
+      window.IntersectionObserver = class extends Observer {
+        constructor(cb: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+          super((entries, observer) => void setTimeout(() => cb(entries, observer), 300), options)
+        }
+      }
     })
     await openHome(page)
-    await expect.poll(() => staticDotsShown(page), { timeout: 8000 }).toBe(true)
+    // 80 frames at 30fps, slower still on a busy test runner.
+    await expect.poll(() => staticDotsShown(page), { timeout: 20_000 }).toBe(true)
     await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(0)
   })
 })
@@ -259,11 +281,17 @@ test("the live sheet stops drawing while nothing moves", async ({ page }) => {
     }
   })
   await liveField(page)
-  await page.waitForTimeout(3000)
   const draws = () => page.evaluate(() => (window as unknown as { __draws: number }).__draws)
-  const idle = await draws()
-  await page.waitForTimeout(1000)
-  expect((await draws()) - idle).toBeLessThanOrEqual(2)
+  const drawsOver = async (ms: number) => {
+    const start = await draws()
+    await page.waitForTimeout(ms)
+    return (await draws()) - start
+  }
+  // The frame-rate check's first 80 frames always draw, for longer on a busy
+  // runner; once they are done the sheet sits still, and stays.
+  await expect.poll(() => drawsOver(1000), { timeout: 20_000 }).toBeLessThanOrEqual(2)
+  expect(await drawsOver(1000)).toBeLessThanOrEqual(2)
+  await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(1)
 })
 
 test("reduced motion keeps the static dots and skips the shader", async ({ page }) => {
