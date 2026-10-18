@@ -117,8 +117,9 @@ test("a slow, hand-speed stroke leaves a wake too", async ({ page }) => {
 
   await stroke(page, band, 22, 60)
   const during = await inkIn(page, band)
-  // ~140 at hand speed.
-  expect(during.ink).toBeGreaterThan(before.ink + 60)
+  // ~140 at hand speed, ~30 on a heavily loaded machine; the old bug, where
+  // natural strokes printed nothing, gave 0–8.
+  expect(during.ink).toBeGreaterThan(before.ink + 20)
 })
 
 test("a click sends out a ring of ultramarine pixels", async ({ page }) => {
