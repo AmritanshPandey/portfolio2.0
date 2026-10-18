@@ -4,20 +4,21 @@ import { useEffect, useRef, useState } from "react"
 import { usePerformanceMode } from "@/hooks/use-performance-mode"
 
 /**
- * The hero's pixel wake. A sheet of faint ink dots on the ledger grid; moving
- * the cursor leaves a fine wake in which dots grow into small square pixels
- * and settle back into dots as it fades, cell by cell. A click sends a soft
- * ring of ultramarine pixels a little way across the sheet.
+ * The hero's pixel wake. At rest, a fine screen of tiny ink dots packed 8px
+ * apart; moving the cursor turns the cells it passes into near-touching
+ * square pixels, so the sheet briefly reads as a pixel mosaic, and they step
+ * back down through three ink levels to dots as the wake fades. A click sends
+ * a ring of ultramarine pixels through the same grid.
  *
  * Two passes per frame:
  *  1. Trail: a low-resolution texture that remembers where the cursor went.
  *     Each frame it bleeds into its neighbours, fades, and takes a new stroke
  *     along the segment the cursor travelled, wider when it moves fast.
  *  2. Sheet: one sample of the trail at each cell's centre, compared with the
- *     cell's own random threshold. Past it, the dot grows into a square and
- *     darkens; as the trail fades it shrinks back. Thresholds differ per cell,
- *     so the wake's edge stays organic and cells turn at their own moment
- *     instead of fading as one blob.
+ *     cell's own random threshold. Past it the dot becomes a square pixel,
+ *     its ink stepped to one of three levels by how far past it the trail
+ *     is, like dithering. Thresholds differ per cell, so the wake's edge is
+ *     pixel-ragged and cells turn at their own moment.
  *
  * Built to stay smooth, Safari included: it draws only while something moves
  * (a stroke, a fading wake, a ring) and sits still otherwise; it outputs
@@ -53,18 +54,18 @@ type WakeFieldProps = {
 }
 
 // Trail: one texel per this many CSS px.
-const TRAIL_TEXEL = 6
+const TRAIL_TEXEL = 4
 // Seconds for the wake to fall to ~37%: a stroke has settled back into dots
 // in under a second.
-const WAKE_FADE = 0.42
+const WAKE_FADE = 0.5
 // Stroke radius in field heights, before speed widens it: a pencil line,
 // a couple of cells wide.
-const STROKE_RADIUS = 0.026
+const STROKE_RADIUS = 0.046
 // Field heights per second that count as a full-strength stroke: an
 // ordinary hand-speed sweep (~700px/s on a laptop) prints at full strength.
 const FULL_SPEED = 0.8
 // Energy a full-strength stroke deposits per frame.
-const DEPOSIT = 0.55
+const DEPOSIT = 0.7
 // A jump longer than this (field heights, one frame) is a teleport, not a
 // stroke: the pointer re-entered the window or the page scrolled under it.
 const TELEPORT = 0.3
@@ -95,11 +96,15 @@ const SLOW_WINDOWS = 2
 // 14px under the rule, full to 42% of the height, gone by 82%.
 const FADE_TOP_PX = 14
 
-// Cell geometry, as fractions of the cell. A cell grows from the resting dot
-// to a square pixel as the energy past its threshold rises through GROW.
-const DOT_RADIUS = 0.07
-const PIXEL = 0.165 // half side of a fully grown pixel (~6px on the 18px grid)
-const GROW = 0.14
+// Cell geometry, as fractions of the cell. On the 8px grid the resting dot is
+// ~1.8px across and a pixel is 7px square with a 1px gap, both landing on
+// whole device pixels on a 2x screen, so they stay crisp.
+const DOT_RADIUS = 0.11
+const PIXEL = 0.4375 // half side
+// A lit cell's ink steps through LEVELS levels as the energy past its
+// threshold rises through GROW.
+const GROW = 0.3
+const LEVELS = 3
 
 const glf = (n: number) => {
   const s = String(n)
@@ -175,17 +180,21 @@ float ringEnergy(vec4 ring, vec2 p) {
   return (exp(-band * band) + tail) * ring.w;
 }
 
-// A cell's mark: a rounded square of half-size s and corner radius c, so the
-// same shape runs from a round dot (c = s) to a crisp pixel (c small).
-float mark(vec2 local, float s, float c, float aa) {
-  vec2 q = abs(local) - vec2(s - c);
-  float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - c;
-  return 1.0 - smoothstep(-aa, aa, d);
+float dotMark(vec2 local, float aa) {
+  return 1.0 - smoothstep(${glf(DOT_RADIUS)} - aa, ${glf(DOT_RADIUS)} + aa, length(local));
 }
 
-// How far a cell has grown towards a pixel, 0..1.
-float growth(float energy, float threshold) {
-  return smoothstep(0.0, ${glf(GROW)}, energy - threshold);
+float pixelMark(vec2 local, float aa) {
+  vec2 q = abs(local);
+  return 1.0 - smoothstep(${glf(PIXEL)} - aa, ${glf(PIXEL)} + aa, max(q.x, q.y));
+}
+
+// A cell's ink level once its energy passes its threshold: 1/3, 2/3 or 1,
+// stepping up as the energy climbs through GROW; 0 below the threshold.
+float level(float energy, float threshold) {
+  float past = energy - threshold;
+  if (past <= 0.0) return 0.0;
+  return max(1.0, ceil(clamp(past / ${glf(GROW)}, 0.0, 1.0) * ${glf(LEVELS)})) / ${glf(LEVELS)};
 }
 
 void main() {
@@ -196,29 +205,23 @@ void main() {
   vec2 local = fract(p / u_cell) - 0.5;
   vec2 centre = (cell + 0.5) * u_cell / u_resolution;
   centre.y = 1.0 - centre.y; // back to field uv, y up
-  float aa = 1.0 / u_cell;
+  float aa = 0.6 / u_cell; // a crisp edge, ~0.6 device px
 
-  // Resting sheet: each dot has its own weight.
-  float weight = 0.75 + 0.5 * hash(cell);
+  // Resting sheet: one even tone, softly vignetted.
   float vignette = smoothstep(1.2, 0.3, length(centre - 0.5));
-  float restAlpha = u_dot.a * weight * vignette;
+  vec4 colour = vec4(u_dot.rgb, u_dot.a * vignette * dotMark(local, aa));
 
-  // Wake: past the cell's own threshold the dot grows into a square and
-  // darkens; as the trail fades it shrinks back into the dot.
+  // Wake: past the cell's own threshold the dot becomes a pixel, its ink
+  // stepped by how far past it the trail is.
   float energy = texture2D(u_trail, centre).r;
-  float g = growth(energy, 0.08 + 0.75 * hash(cell + 17.31));
-  float s = mix(${glf(DOT_RADIUS)}, ${glf(PIXEL)}, g);
-  float shape = mark(local, s, mix(s, s * 0.2, g), aa);
-  vec4 colour = vec4(mix(u_dot.rgb, u_wake.rgb, g), mix(restAlpha, u_wake.a, g) * shape);
+  float lit = level(energy, 0.08 + 0.75 * hash(cell + 17.31));
+  if (lit > 0.0) colour = vec4(u_wake.rgb, u_wake.a * lit * pixelMark(local, aa));
 
-  // Click rings grow the same marks, in ultramarine.
+  // Click rings light the same pixels, in ultramarine.
   float rings = 0.0;
   for (int i = 0; i < ${MAX_RINGS}; i++) rings += ringEnergy(u_rings[i], centre);
-  float rg = growth(rings, 0.08 + 0.6 * hash(cell + 41.7));
-  if (rg > 0.0) {
-    float rs = mix(${glf(DOT_RADIUS)}, ${glf(PIXEL)}, rg);
-    colour = mix(colour, u_ring, rg * mark(local, rs, mix(rs, rs * 0.2, rg), aa));
-  }
+  float ringLit = level(rings, 0.16 + 0.7 * hash(cell + 41.7));
+  if (ringLit > 0.0) colour = vec4(u_ring.rgb, u_ring.a * ringLit * pixelMark(local, aa));
 
   float fromTop = u_resolution.y - gl_FragCoord.y;
   colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((0.82 - fromTop / u_resolution.y) / 0.4, 0.0, 1.0);

@@ -90,7 +90,7 @@
   --surface-2: #E9E6DF;   /* a recessed field */
 
   --border: #D6D2C9;      /* hairline rule */
-  --hero-dot: rgb(17 17 17 / 0.16);
+  --hero-dot: rgb(17 17 17 / 0.15);
   --rule-strong: var(--ink);
   --ring: var(--ultramarine);
   --accent: var(--ultramarine);
@@ -1180,8 +1180,8 @@
    The fallback is the same grid, shown when WebGL is unavailable. */
 .hero-dots,
 .hero-dots-fallback {
-  background-image: radial-gradient(circle, var(--hero-dot) 0.8px, transparent 1.8px);
-  background-size: 18px 18px;
+  background-image: radial-gradient(circle, var(--hero-dot) 0.6px, transparent 1.1px);
+  background-size: 8px 8px; /* PITCH in hero-field.tsx */
   /* The same fade the live sheet draws in its shader. */
   mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);

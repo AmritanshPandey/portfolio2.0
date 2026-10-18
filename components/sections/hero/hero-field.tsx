@@ -11,18 +11,22 @@ const WakeField = dynamic(() => import("./wake-field").then((m) => m.WakeField),
 // The complement of the media query that shows `.hero-dots` in globals.css.
 const LIVE_QUERY = "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)"
 
-// Faint ink dots at rest; the wake prints in ink at about half strength, like
-// pencil on paper, and only the click ring uses ultramarine.
+// The dot pitch, in CSS px. It matches .hero-dots' background-size, so the
+// static grid and the live sheet line up exactly.
+const PITCH = 8
+
+// A fine, faint screen of ink dots at rest; the wake's pixels print in ink,
+// and only the click ring uses ultramarine.
 const LIGHT: WakeColors = {
-  dot: [0.067, 0.067, 0.067, 0.34],
-  wake: [0.067, 0.067, 0.067, 0.52],
-  ring: [0.169, 0.208, 0.91, 0.68],
+  dot: [0.067, 0.067, 0.067, 0.16],
+  wake: [0.067, 0.067, 0.067, 0.45],
+  ring: [0.169, 0.208, 0.91, 0.5],
 }
 const DARK: WakeColors = {
-  dot: [0.925, 0.918, 0.894, 0.4],
-  wake: [0.925, 0.918, 0.894, 0.6],
+  dot: [0.925, 0.918, 0.894, 0.18],
+  wake: [0.925, 0.918, 0.894, 0.5],
   // Lavender on near-black needs more strength to read as clearly.
-  ring: [0.549, 0.576, 1, 0.9],
+  ring: [0.549, 0.576, 1, 0.7],
 }
 
 // Set when this session found the browser too slow for the live sheet.
@@ -148,7 +152,7 @@ export function HeroField() {
     >
       <div data-hero-dots className="hero-dots absolute inset-0" />
       {live && (
-        <WakeField spacing={18} light={LIGHT} dark={DARK} onPaint={() => setPainted(true)} onSlow={onSlow} />
+        <WakeField spacing={PITCH} light={LIGHT} dark={DARK} onPaint={() => setPainted(true)} onSlow={onSlow} />
       )}
     </div>
   )
