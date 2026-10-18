@@ -19,6 +19,13 @@ import { usePerformanceMode } from "@/hooks/use-performance-mode"
  *     so the wake's edge stays organic and cells turn at their own moment
  *     instead of fading as one blob.
  *
+ * Built to stay smooth, Safari included: it draws only while something moves
+ * (a stroke, a fading wake, a ring) and sits still otherwise; it outputs
+ * premultiplied colour and does its own top and bottom fade, so the browser
+ * composites one plain layer. It watches its own frame rate: a browser held
+ * to ~30fps (battery saver, Low Power Mode, a slow machine) hands over to the
+ * static dots through onSlow.
+ *
  * Desktop pointers only (HeroField decides). If WebGL is missing or the
  * context is lost, the static CSS dot grid takes over.
  */
@@ -41,6 +48,8 @@ type WakeFieldProps = {
   dark: WakeColors
   /** called once, when the sheet has painted its first frame */
   onPaint?: () => void
+  /** called if the browser can't hold a smooth frame rate */
+  onSlow?: () => void
 }
 
 // Trail: one texel per this many CSS px.
@@ -70,6 +79,21 @@ const RING_LIFE = 1.1 // s
 const RING_REACH = 0.42 // final radius, field heights
 const RING_WIDTH = 0.028 // gaussian band, field heights
 const RING_TAIL = 0.12 // tail length behind the front, field heights
+
+// Drawing: after the last stroke or click, keep drawing this long (s) while
+// the wake and rings fade, then stop until something moves.
+const ACTIVE_FOR = 2.5
+// Frame-rate check, in windows of PROBE_FRAMES frame intervals: two slow
+// windows in a row (median slower than ~36fps, ~2.7s at 30fps) mean the
+// browser is held back for good, not just having a janky moment. The first
+// two windows always draw, so every visit is measured.
+const PROBE_FRAMES = 40
+const SLOW_FRAME_MS = 28
+const SLOW_WINDOWS = 2
+
+// The sheet's fade, matching the static grid's CSS mask: in over the first
+// 14px under the rule, full to 42% of the height, gone by 82%.
+const FADE_TOP_PX = 14
 
 // Cell geometry, as fractions of the cell. A cell grows from the resting dot
 // to a square pixel as the energy past its threshold rises through GROW.
@@ -129,7 +153,7 @@ precision highp float;
 uniform vec2 u_resolution; // device px
 uniform float u_cell;      // cell size, device px
 uniform float u_aspect;
-uniform float u_time;
+uniform float u_fadeTop;   // top fade length, device px
 uniform sampler2D u_trail;
 uniform vec4 u_dot;
 uniform vec4 u_wake;
@@ -174,12 +198,10 @@ void main() {
   centre.y = 1.0 - centre.y; // back to field uv, y up
   float aa = 1.0 / u_cell;
 
-  // Resting sheet: each dot has its own weight and a slow breathe.
-  float seed = hash(cell);
-  float weight = 0.75 + 0.5 * seed;
-  float breathe = 0.88 + 0.12 * sin(u_time * (0.5 + 0.4 * seed) + seed * 6.2831);
+  // Resting sheet: each dot has its own weight.
+  float weight = 0.75 + 0.5 * hash(cell);
   float vignette = smoothstep(1.2, 0.3, length(centre - 0.5));
-  float restAlpha = u_dot.a * weight * breathe * vignette;
+  float restAlpha = u_dot.a * weight * vignette;
 
   // Wake: past the cell's own threshold the dot grows into a square and
   // darkens; as the trail fades it shrinks back into the dot.
@@ -198,7 +220,9 @@ void main() {
     colour = mix(colour, u_ring, rg * mark(local, rs, mix(rs, rs * 0.2, rg), aa));
   }
 
-  gl_FragColor = colour;
+  float fromTop = u_resolution.y - gl_FragCoord.y;
+  colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((0.82 - fromTop / u_resolution.y) / 0.4, 0.0, 1.0);
+  gl_FragColor = vec4(colour.rgb * colour.a, colour.a); // premultiplied
 }
 `
 
@@ -228,12 +252,16 @@ function compile(gl: WebGLRenderingContext, vertSrc: string, fragSrc: string) {
 
 type Ring = { x: number; y: number; start: number }
 
-export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
+const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[xs.length >> 1]
+
+export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const onPaintRef = useRef(onPaint)
+  const onSlowRef = useRef(onSlow)
   useEffect(() => {
     onPaintRef.current = onPaint
+    onSlowRef.current = onSlow
   })
   const [painted, setPainted] = useState(false)
   const [failed, setFailed] = useState(false)
@@ -252,7 +280,7 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
       antialias: false,
       depth: false,
       stencil: false,
-      premultipliedAlpha: false,
+      premultipliedAlpha: true,
       preserveDrawingBuffer: false,
     })
     const trailProgram = gl && compile(gl, VERT, TRAIL_FRAG)
@@ -274,7 +302,7 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
     const uniforms = (program: WebGLProgram, names: string[]) =>
       Object.fromEntries(names.map((n) => [n, gl.getUniformLocation(program, n)]))
     const ut = uniforms(trailProgram, ["u_prev", "u_texel", "u_keep", "u_from", "u_to", "u_force", "u_aspect"])
-    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_time", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
+    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_fadeTop", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
 
     // Two trail textures, ping-ponged: read last frame, write this one.
     const trail = [0, 1].map(() => ({ tex: gl.createTexture(), fbo: gl.createFramebuffer() }))
@@ -366,6 +394,7 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
       if (!p.inside) return
       rings.push({ x: p.x, y: p.y, start: performance.now() })
       if (rings.length > MAX_RINGS) rings.shift()
+      activeUntil = performance.now() + ACTIVE_FOR * 1000
       kick()
     }
     // Leaving the window, or the page scrolling under a still pointer, ends
@@ -381,10 +410,27 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
     let visible = true
     let last = 0
     let first = true
+    let activeUntil = 0
+    let probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
+    const intervals: number[] = []
+    let slowWindows = 0
     const ringData = new Float32Array(MAX_RINGS * 4)
 
     const frame = (now: number) => {
       raf = 0
+      // Only consecutive frames count: `last` is cleared whenever drawing
+      // pauses, so a pause is never mistaken for a slow frame.
+      if (last) {
+        intervals.push(now - last)
+        if (intervals.length === PROBE_FRAMES) {
+          slowWindows = median(intervals) > SLOW_FRAME_MS ? slowWindows + 1 : 0
+          intervals.length = 0
+          if (slowWindows >= SLOW_WINDOWS) {
+            onSlowRef.current?.()
+            return
+          }
+        }
+      }
       const dt = last ? Math.min(Math.max((now - last) / 1000, 1 / 240), 1 / 20) : 1 / 60
       last = now
 
@@ -401,6 +447,7 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
         else deposit = Math.min(1, speed / FULL_SPEED)
       }
       from = strokeTo
+      if (deposit > 0) activeUntil = now + ACTIVE_FOR * 1000
 
       // Pass 1: trail.
       gl.useProgram(trailProgram)
@@ -436,16 +483,13 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
       bindQuad(sheetProgram)
       gl.bindFramebuffer(gl.FRAMEBUFFER, null)
       gl.viewport(0, 0, width, height)
-      gl.enable(gl.BLEND)
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-      gl.clearColor(0, 0, 0, 0)
-      gl.clear(gl.COLOR_BUFFER_BIT)
+      // One full-screen draw of premultiplied colour: no clear or blend needed.
       gl.bindTexture(gl.TEXTURE_2D, trail[read].tex)
       gl.uniform1i(us.u_trail, 0)
       gl.uniform2f(us.u_resolution, width, height)
       gl.uniform1f(us.u_cell, spacing * dpr)
       gl.uniform1f(us.u_aspect, cssW / cssH)
-      gl.uniform1f(us.u_time, (now / 1000) % 3600)
+      gl.uniform1f(us.u_fadeTop, FADE_TOP_PX * dpr)
       gl.uniform4f(us.u_dot, ...colors.dot)
       gl.uniform4f(us.u_wake, ...colors.wake)
       gl.uniform4f(us.u_ring, ...colors.ring)
@@ -457,9 +501,12 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
         setPainted(true)
         onPaintRef.current?.()
       }
-      // The resting dots breathe, so keep drawing while the sheet is on
-      // screen; observers below pause it when it scrolls away or the tab hides.
-      if (visible) raf = requestAnimationFrame(frame)
+      // Keep drawing through the frame-rate check and while anything is
+      // fading; then stop, and the last frame stays on screen until the next
+      // move. Observers below also pause it off screen or in a hidden tab.
+      if (probe > 0) probe--
+      if (visible && (probe > 0 || now < activeUntil)) raf = requestAnimationFrame(frame)
+      else last = 0
     }
 
     const kick = () => {
@@ -495,6 +542,7 @@ export function WakeField({ spacing, light, dark, onPaint }: WakeFieldProps) {
 
     const mo = new MutationObserver(() => {
       colors = isDark() ? dark : light
+      kick()
     })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
 

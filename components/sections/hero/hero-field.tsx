@@ -25,9 +25,35 @@ const DARK: WakeColors = {
   ring: [0.549, 0.576, 1, 0.9],
 }
 
-// The sheet hangs from the hero rule: a short fade so no dot is cut in half
-// against the rule, full strength behind the statement, gone before the fold.
-const POOL = "linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%)"
+// Set when this session found the browser too slow for the live sheet.
+const SLOW_KEY = "hero-wake:slow"
+
+type Battery = {
+  charging: boolean
+  level: number
+  addEventListener?: (type: string, listener: () => void) => void
+  removeEventListener?: (type: string, listener: () => void) => void
+}
+const getBattery = () =>
+  (navigator as Navigator & { getBattery?: () => Promise<Battery> }).getBattery?.().catch(() => undefined)
+
+// Battery saver comes on at 20% in Chrome and macOS by default.
+const onLowBattery = (b: Battery) => !b.charging && b.level <= 0.2
+
+// Devices where the live sheet would not be smooth keep the static dots:
+// iPads (iPadOS reports a Mac; a touch screen gives it away), Safari on four
+// cores or fewer, a laptop on a low battery, and any browser this session
+// already found too slow. WakeField checks the frame rate it actually gets.
+async function staysStill() {
+  if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true
+  const safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+  if (safari && navigator.hardwareConcurrency <= 4) return true
+  try {
+    if (sessionStorage.getItem(SLOW_KEY)) return true
+  } catch {}
+  const battery = await getBattery()
+  return battery ? onLowBattery(battery) : false
+}
 
 /**
  * The hero's dot field: a sheet of dots under the hero rule, bled out to the
@@ -37,6 +63,9 @@ const POOL = "linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, tra
 export function HeroField() {
   const [live, setLive] = useState(false)
   const [painted, setPainted] = useState(false)
+  // True when this device should keep the static dots even though it passes
+  // the media query (see staysStill, and WakeField's frame-rate check).
+  const [still, setStill] = useState(false)
 
   useEffect(() => {
     const query = window.matchMedia(LIVE_QUERY)
@@ -55,33 +84,72 @@ export function HeroField() {
       else window.clearTimeout(handle)
       handle = undefined
     }
-    const onChange = () => {
+    let cancelled = false
+    const decide = async () => {
       cancel()
-      if (query.matches) schedule()
-      else {
-        setLive(false)
-        setPainted(false)
-      }
+      const stay = await staysStill()
+      if (cancelled || !query.matches) return
+      setStill(stay)
+      if (!stay) schedule()
+    }
+    const onChange = () => {
+      if (query.matches) return void decide()
+      cancel()
+      setLive(false)
+      setPainted(false)
+      setStill(false)
     }
 
-    if (query.matches) schedule()
+    // Unplugging, or the battery running low, while the page is open.
+    let battery: Battery | undefined
+    const onBattery = () => {
+      if (!battery || !onLowBattery(battery)) return
+      cancel()
+      setStill(true)
+      setLive(false)
+      setPainted(false)
+    }
+    void getBattery()?.then((b) => {
+      if (cancelled || !b) return
+      battery = b
+      b.addEventListener?.("chargingchange", onBattery)
+      b.addEventListener?.("levelchange", onBattery)
+    })
+
+    if (query.matches) void decide()
     query.addEventListener("change", onChange)
     return () => {
+      cancelled = true
       cancel()
       query.removeEventListener("change", onChange)
+      battery?.removeEventListener?.("chargingchange", onBattery)
+      battery?.removeEventListener?.("levelchange", onBattery)
     }
   }, [])
+
+  // WakeField found the frame rate too low: static dots for the rest of the
+  // session, so it isn't retried on every page.
+  const onSlow = () => {
+    try {
+      sessionStorage.setItem(SLOW_KEY, "1")
+    } catch {}
+    setStill(true)
+    setLive(false)
+    setPainted(false)
+  }
 
   return (
     <div
       aria-hidden
       data-hero-field
       data-live={painted || undefined}
+      data-static={still || undefined}
       className="pointer-events-none absolute inset-y-0 left-[calc(50%-50vw)] right-[calc(50%-50vw)] -z-10"
-      style={{ maskImage: POOL, WebkitMaskImage: POOL }}
     >
       <div data-hero-dots className="hero-dots absolute inset-0" />
-      {live && <WakeField spacing={18} light={LIGHT} dark={DARK} onPaint={() => setPainted(true)} />}
+      {live && (
+        <WakeField spacing={18} light={LIGHT} dark={DARK} onPaint={() => setPainted(true)} onSlow={onSlow} />
+      )}
     </div>
   )
 }

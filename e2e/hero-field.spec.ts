@@ -141,6 +141,10 @@ test("a click sends out a ring of ultramarine pixels", async ({ page }) => {
 test("the live sheet's dots sit exactly on the static grid's", async ({ page }) => {
   // If both layers are ever on screen, their dots must coincide, not double.
   await liveField(page)
+  // The sheet only draws while something moves; nudge the pointer near the
+  // left edge, far from the column being read, so the next frame draws.
+  await page.mouse.move(40, 420)
+  await page.mouse.move(48, 424)
   const rows = await page.evaluate(async () => {
     const canvas = document.querySelector("#hero [data-hero-field] canvas") as HTMLCanvasElement
     const box = canvas.getBoundingClientRect()
@@ -206,6 +210,60 @@ test("the dot field is one full-width sheet that starts at the hero rule", async
   expect(box.fieldTop).toBeLessThanOrEqual(box.ruleBottom + 2)
   expect(box.left).toBeLessThanOrEqual(0)
   expect(box.right).toBeGreaterThanOrEqual(box.vw)
+})
+
+test.describe("where the live sheet would not be smooth", () => {
+  test("an iPad, even with a trackpad, gets the static dots", async ({ page }) => {
+    // iPadOS reports itself as a Mac; a touch screen gives it away.
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "platform", { get: () => "MacIntel" })
+      Object.defineProperty(navigator, "maxTouchPoints", { get: () => 5 })
+    })
+    await openHome(page)
+    await page.waitForTimeout(2500)
+    await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(0)
+    expect(await staticDotsShown(page)).toBe(true)
+  })
+
+  test("a laptop on battery saver gets the static dots", async ({ page }) => {
+    await page.addInitScript(() => {
+      const battery = { charging: false, level: 0.15, addEventListener() {}, removeEventListener() {} }
+      Object.defineProperty(navigator, "getBattery", { value: () => Promise.resolve(battery) })
+    })
+    await openHome(page)
+    await page.waitForTimeout(2500)
+    await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(0)
+    expect(await staticDotsShown(page)).toBe(true)
+  })
+
+  test("a browser held to 30fps falls back to the static dots", async ({ page }) => {
+    // Chrome's Energy Saver and Safari's Low Power Mode both cap frames at ~30fps.
+    await page.addInitScript(() => {
+      window.requestAnimationFrame = (cb) => window.setTimeout(() => cb(performance.now()), 33)
+      window.cancelAnimationFrame = (id) => window.clearTimeout(id)
+    })
+    await openHome(page)
+    await expect.poll(() => staticDotsShown(page), { timeout: 8000 }).toBe(true)
+    await expect(page.locator("#hero [data-hero-field] canvas")).toHaveCount(0)
+  })
+})
+
+test("the live sheet stops drawing while nothing moves", async ({ page }) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __draws: number }
+    w.__draws = 0
+    const draw = WebGLRenderingContext.prototype.drawArrays
+    WebGLRenderingContext.prototype.drawArrays = function (...args) {
+      w.__draws++
+      return draw.apply(this, args)
+    }
+  })
+  await liveField(page)
+  await page.waitForTimeout(3000)
+  const draws = () => page.evaluate(() => (window as unknown as { __draws: number }).__draws)
+  const idle = await draws()
+  await page.waitForTimeout(1000)
+  expect((await draws()) - idle).toBeLessThanOrEqual(2)
 })
 
 test("reduced motion keeps the static dots and skips the shader", async ({ page }) => {

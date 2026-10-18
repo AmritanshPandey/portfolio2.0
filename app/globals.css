@@ -1151,6 +1151,9 @@
 .hero-dots-fallback {
   background-image: radial-gradient(circle, var(--hero-dot) 0.8px, transparent 1.8px);
   background-size: 18px 18px;
+  /* The same fade the live sheet draws in its shader. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
 }
 .hero-dots { display: none; }
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
@@ -1159,6 +1162,9 @@
 /* Once the live sheet has painted it owns the dots, whatever the media query
    above decided: the static grid never sits under it. */
 [data-hero-field][data-live] .hero-dots { display: none; }
+/* Devices the live sheet wouldn't be smooth on (iPads, battery saver, slow
+   frame rates) keep the static grid. */
+[data-hero-field][data-static] .hero-dots { display: block; }
 
 /* ─────────────────────────
    LEDGER · THE SETTLE
