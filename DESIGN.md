@@ -151,7 +151,7 @@ Framer Motion is globally skipped).
   toggles carry the edge alone, `.glass-edge`). No refraction. Solid where the
   browser can't blur or the reader asks for reduced transparency.
 - Glass plates (`.glass-plate`, `<GlassPlate>`) are the one place content goes
-  glass: the hero's intro and proof list, so the dot grid frosts under the text
+  glass: the hero's intro, so the dot grid frosts under the text
   instead of running through it. Paper at 55%, a 10px blur, a light rim, a faint
   inner shade, an outer hairline and a specular sheen across the top-left;
   Ledger's 4px corners, no drop shadow. On Chromium with a desktop pointer the

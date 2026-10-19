@@ -872,10 +872,6 @@
   animation: hero-soft-in 560ms var(--ease-out) 280ms both;
 }
 
-[data-hero-proof] {
-  animation: hero-soft-in 520ms var(--ease-out) 320ms both;
-}
-
 @keyframes sheen {
   0% { background-position: 200% center; }
   100% { background-position: -200% center; }
@@ -1189,9 +1185,8 @@
   .glass,
   .glass-edge,
   .btn-line { box-shadow: inset 0 1px 0 var(--glass-edge); }
-  /* Glass plates: content-strength glass behind the hero's intro and proof
-     list, so the dot grid frosts under the text instead of running through
-     it. Thinner than the nav's glass, so the grid still reads through. A
+  /* Glass plates: content-strength glass behind the hero's intro, so the
+     dot grid frosts under the text instead of running through it. Thinner than the nav's glass, so the grid still reads through. A
      light rim, a faint inner shade along the foot, an outer hairline and a
      specular sheen across the top-left; Ledger corners. Chromium on a
      desktop pointer adds a lens at the rim (<GlassPlate>). */
@@ -1357,7 +1352,6 @@
   [data-hero-line],
   [data-hero-fade],
   [data-hero-card],
-  [data-hero-proof],
   [data-hero-rule] {
     animation: none !important;
     opacity: 1 !important;

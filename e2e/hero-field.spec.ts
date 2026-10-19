@@ -230,12 +230,12 @@ test("the dot field fills the hero down to its foot, past the content", async ({
     const field = document.querySelector("#hero [data-hero-field]")!.getBoundingClientRect()
     const hero = document.getElementById("hero")!.getBoundingClientRect()
     const figure = document.querySelector("#hero figure")!.getBoundingClientRect()
-    const proof = document.querySelector("#hero [data-hero-proof]")!.getBoundingClientRect()
+    const intro = document.querySelector("#hero .glass-plate")!.getBoundingClientRect()
     return {
       fieldTop: field.top,
       fieldBottom: field.bottom,
       heroBottom: hero.bottom,
-      contentBottom: Math.max(figure.bottom, proof.bottom),
+      contentBottom: Math.max(figure.bottom, intro.bottom),
     }
   })
   expect(Math.abs(box.fieldBottom - box.heroBottom)).toBeLessThanOrEqual(1)

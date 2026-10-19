@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test"
 
 // Liquid glass is for the layer that floats over content (the nav bars, the
-// phone menu button and secondary buttons) and for the two plates under the
-// hero's intro and proof list. The page shows through them, blurred; primary
+// phone menu button and secondary buttons) and for the plate under the
+// hero's intro. The page shows through them, blurred; primary
 // actions and everything else stay solid. Chromium on a desktop pointer bends
-// what passes under the plates' rims with an SVG lens.
+// what passes under the plate's rim with an SVG lens.
 
 type Material = { blur: boolean; alpha: number }
 
@@ -38,27 +38,21 @@ test("the secondary action is glass and the primary stays solid ink", async ({ p
   expect(primary).toEqual({ blur: false, alpha: 1 })
 })
 
-test("the hero's intro and proof list sit on glass plates, a gap apart", async ({ page }) => {
+test("the hero's intro sits on a glass plate", async ({ page }) => {
   await page.goto("/")
-  const plates = page.locator("#hero .glass-plate")
-  await expect(plates).toHaveCount(2)
-  await expect(plates.nth(0)).toContainText("Senior UX Designer at Mastercard.")
-  await expect(plates.nth(0).getByRole("link", { name: /View selected work/ })).toBeVisible()
-  await expect(plates.nth(1).locator("[data-hero-proof]")).toBeVisible()
+  const plate = page.locator("#hero .glass-plate")
+  await expect(plate).toHaveCount(1)
+  await expect(plate).toContainText("Senior UX Designer at Mastercard.")
+  await expect(plate.getByRole("link", { name: /View selected work/ })).toBeVisible()
 
-  for (const i of [0, 1]) {
-    const m = await material(page, `#hero .glass-plate >> nth=${i}`)
-    // Translucent enough to read as glass, opaque enough to keep text at AA.
-    expect(m.blur).toBe(true)
-    expect(m.alpha).toBeGreaterThanOrEqual(0.5)
-    expect(m.alpha).toBeLessThan(0.7)
-  }
-
-  const [a, b] = await plates.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON()))
-  expect(b.left - a.right).toBeGreaterThanOrEqual(16)
+  const m = await material(page, "#hero .glass-plate")
+  // Translucent enough to read as glass, opaque enough to keep text at AA.
+  expect(m.blur).toBe(true)
+  expect(m.alpha).toBeGreaterThanOrEqual(0.5)
+  expect(m.alpha).toBeLessThan(0.7)
 })
 
-test("in Chromium the plates' rims bend what is under them; elsewhere they are plain glass", async ({ page, browserName }) => {
+test("in Chromium the plate's rim bends what is under it; elsewhere it is plain glass", async ({ page, browserName }) => {
   await page.goto("/")
   const plate = page.locator("#hero .glass-plate").first()
   if (browserName === "chromium") {
@@ -92,7 +86,7 @@ test.describe("on a phone", () => {
     expect(header).toBe("fixed")
   })
 
-  test("the plates stay plain glass, without the lens", async ({ page }) => {
+  test("the plate stays plain glass, without the lens", async ({ page }) => {
     await page.goto("/")
     const plate = page.locator("#hero .glass-plate").first()
     await expect(plate).toBeVisible()
