@@ -3,26 +3,16 @@ import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { AddLater } from "@/components/shared/add-later"
-import { cn } from "@/lib/utils"
 import { HeroField } from "./hero-field"
 import { GlassPlate } from "./glass-plate"
 
-// A glass plate's reach past its content: it pads by what it extends into
-// the gutter, so the content keeps its place on the grid. On wide screens
-// the intro and proof plates sit side by side, so the sides that face each
-// other stop at their column and pad inward, keeping the column gap between
-// the two panes.
+// The glass plate's reach past its content: it pads by what it extends into
+// the gutter, so the content keeps its place on the grid.
 const PLATE = "-mx-3 -my-3 p-3 sm:-mx-6 sm:-my-5 sm:px-6 sm:py-5"
 
-const PROOF = [
-  { text: "PartnerBank · configurable RFP demos", note: "turnaround number, once confirmed" },
-  { text: "Email Builder · 50+ modular components" },
-  { text: "6+ years · fintech, commerce, 0→1" },
-]
-
 /**
- * Ledger hero: one statement set across the whole sheet, then the evidence
- * laid out underneath like a statement of account. The headline rule draws
+ * Ledger hero: one statement set across the whole sheet, then the portrait
+ * and the intro with its two actions underneath. The headline rule draws
  * and the lines land on load (pure CSS, transform-only, so the text is
  * legible even if the animation never runs).
  */
@@ -52,7 +42,7 @@ export default function Hero() {
         <div aria-hidden data-hero-rule className="rule-ink" />
 
         {/* Everything under the rule sits on one sheet of dots, which runs
-            on past the proof list and fades out into the next section. */}
+            on past the portrait and intro and fades out into the next section. */}
         <div className="relative pb-[clamp(56px,7vw,112px)] pt-6 md:pt-10">
           <HeroField />
 
@@ -95,7 +85,7 @@ export default function Hero() {
                 frosts under the text. The plate reaches into the gutter by
                 as much as it pads, so nothing on it moves. */}
             <div data-hero-fade className="col-span-12 sm:col-span-8 lg:col-span-5 lg:col-start-5">
-              <GlassPlate className={cn(PLATE, "lg:mr-0")}>
+              <GlassPlate className={PLATE}>
                 <p className="text-[clamp(1.125rem,1.45vw,1.5rem)] leading-[1.42] tracking-[-0.012em] text-muted-foreground text-pretty">
                   <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
                   I combine product thinking, visual systems, and front-end
@@ -115,29 +105,6 @@ export default function Hero() {
                 note="the headline rotates “AI agents” and this intro says “AI”, but no case study shows AI work. Add the locked Agent Pay card, or drop AI from here."
               />
             </div>
-
-            {/* Proof, set as line items, on its own pane. */}
-            <GlassPlate className={cn(PLATE, "col-span-12 self-start lg:col-span-3 lg:col-start-10 lg:ml-0")}>
-              <ul data-hero-proof>
-                {PROOF.map((item, i) => (
-                  <li
-                    key={item.text}
-                    className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-2 border-t border-border py-3 last:border-b"
-                  >
-                    <span className="ledger-label">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="text-[15px] leading-snug tracking-[-0.005em]">
-                      {item.text}
-                      {item.note && (
-                        <>
-                          {" "}
-                          <AddLater note={item.note} />
-                        </>
-                      )}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </GlassPlate>
           </div>
         </div>
       </div>
