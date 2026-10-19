@@ -52,7 +52,7 @@ export function SoundToggle({ className }: { className?: string }) {
       aria-pressed={on}
       title={on ? "Sound on" : "Sound off"}
       className={clsx(
-        "sound-toggle size-9 shrink-0 items-center justify-center border text-foreground",
+        "sound-toggle glass-edge size-9 shrink-0 items-center justify-center border text-foreground",
         "transition-[border-color,transform] duration-200 hover:border-foreground active:translate-y-px",
         on ? "border-foreground" : "border-border",
         className,

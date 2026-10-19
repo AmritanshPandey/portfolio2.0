@@ -41,8 +41,9 @@ export default function Hero() {
 
         <div aria-hidden data-hero-rule className="rule-ink" />
 
-        {/* Everything under the rule sits on one sheet of dots. */}
-        <div className="relative pt-6 md:pt-10">
+        {/* Everything under the rule sits on one sheet of dots, which runs
+            on past the proof list and fades out into the next section. */}
+        <div className="relative pb-[clamp(56px,7vw,112px)] pt-6 md:pt-10">
           <HeroField />
 
           <h1 className="hero-statement">

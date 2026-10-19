@@ -93,8 +93,10 @@ const SLOW_FRAME_MS = 28
 const SLOW_WINDOWS = 2
 
 // The sheet's fade, matching the static grid's CSS mask: in over the first
-// 14px under the rule, full to 42% of the height, gone by 82%.
+// 14px under the rule, full all the way down the hero, then out over its last
+// 96px into the next section.
 const FADE_TOP_PX = 14
+const FADE_BOTTOM_PX = 96
 
 // Cell geometry, as fractions of the cell. On the 8px grid the resting dot is
 // ~1.8px across and a pixel is 7px square with a 1px gap, both landing on
@@ -159,6 +161,7 @@ uniform vec2 u_resolution; // device px
 uniform float u_cell;      // cell size, device px
 uniform float u_aspect;
 uniform float u_fadeTop;   // top fade length, device px
+uniform float u_fadeBottom; // bottom fade length, device px
 uniform sampler2D u_trail;
 uniform vec4 u_dot;
 uniform vec4 u_wake;
@@ -224,7 +227,7 @@ void main() {
   if (ringLit > 0.0) colour = vec4(u_ring.rgb, u_ring.a * ringLit * pixelMark(local, aa));
 
   float fromTop = u_resolution.y - gl_FragCoord.y;
-  colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((0.82 - fromTop / u_resolution.y) / 0.4, 0.0, 1.0);
+  colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((u_resolution.y - fromTop) / u_fadeBottom, 0.0, 1.0);
   gl_FragColor = vec4(colour.rgb * colour.a, colour.a); // premultiplied
 }
 `
@@ -305,7 +308,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     const uniforms = (program: WebGLProgram, names: string[]) =>
       Object.fromEntries(names.map((n) => [n, gl.getUniformLocation(program, n)]))
     const ut = uniforms(trailProgram, ["u_prev", "u_texel", "u_keep", "u_from", "u_to", "u_force", "u_aspect"])
-    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_fadeTop", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
+    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_fadeTop", "u_fadeBottom", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
 
     // Two trail textures, ping-ponged: read last frame, write this one.
     const trail = [0, 1].map(() => ({ tex: gl.createTexture(), fbo: gl.createFramebuffer() }))
@@ -493,6 +496,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       gl.uniform1f(us.u_cell, spacing * dpr)
       gl.uniform1f(us.u_aspect, cssW / cssH)
       gl.uniform1f(us.u_fadeTop, FADE_TOP_PX * dpr)
+      gl.uniform1f(us.u_fadeBottom, FADE_BOTTOM_PX * dpr)
       gl.uniform4f(us.u_dot, ...colors.dot)
       gl.uniform4f(us.u_wake, ...colors.wake)
       gl.uniform4f(us.u_ring, ...colors.ring)

@@ -223,6 +223,38 @@ test("the dot field is one full-width sheet that starts at the hero rule", async
   expect(box.right).toBeGreaterThanOrEqual(box.vw)
 })
 
+test("the dot field fills the hero down to its foot, past the content", async ({ page }) => {
+  await liveField(page)
+  const box = await page.evaluate(() => {
+    const field = document.querySelector("#hero [data-hero-field]")!.getBoundingClientRect()
+    const hero = document.getElementById("hero")!.getBoundingClientRect()
+    const figure = document.querySelector("#hero figure")!.getBoundingClientRect()
+    const proof = document.querySelector("#hero [data-hero-proof]")!.getBoundingClientRect()
+    return {
+      fieldTop: field.top,
+      fieldBottom: field.bottom,
+      heroBottom: hero.bottom,
+      contentBottom: Math.max(figure.bottom, proof.bottom),
+    }
+  })
+  expect(Math.abs(box.fieldBottom - box.heroBottom)).toBeLessThanOrEqual(1)
+  // Room below the content for the sheet to fade out in.
+  expect(box.fieldBottom - box.contentBottom).toBeGreaterThanOrEqual(56)
+
+  // And the dots are drawn low down, where the old sheet (gone by 82% of its
+  // height) drew nothing: from 86% of the way down to where the foot's fade
+  // begins. Nudge the pointer far away so the next frame draws.
+  await page.mouse.move(20, 300)
+  await page.mouse.move(24, 304)
+  const low = await inkIn(page, {
+    top: Math.ceil(box.fieldTop + (box.fieldBottom - box.fieldTop) * 0.86),
+    bottom: Math.floor(box.fieldBottom - 100),
+    left: 100,
+    right: 1200,
+  })
+  expect(low.ink).toBeGreaterThan(40)
+})
+
 test.describe("where the live sheet would not be smooth", () => {
   test("an iPad, even with a trackpad, gets the static dots", async ({ page }) => {
     // iPadOS reports itself as a Mac; a touch screen gives it away.
