@@ -51,7 +51,7 @@ export function ApproachSteps() {
             key={step.q}
             data-settle
             style={{ ["--i" as string]: i % 2 }}
-            className="grid grid-cols-[2.5rem_minmax(0,1fr)] border-t border-border py-6 md:py-8"
+            className="grid grid-cols-[2.5rem_minmax(0,1fr)] py-6 md:py-8"
           >
             <span className="ledger-label pt-1 text-accent">{String(i + 1).padStart(2, "0")}</span>
             <div>
