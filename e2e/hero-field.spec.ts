@@ -84,8 +84,9 @@ async function stroke(page: Page, band: Band, msPerStep: number, steps = 30) {
 }
 
 // The live sheet hands over to static dots when frames run slow (see the 30fps
-// test). Headless Chromium draws WebGL on the CPU, so a runner with several
-// workers is slow in just that way; tests of the live sheet hold it live.
+// test). Without a GPU, headless Chromium draws WebGL on the CPU, and a runner
+// with several workers is slow in just that way; tests of the live sheet hold
+// it live.
 async function keepLive(page: Page) {
   await page.addInitScript(() => {
     ;(window as Window & { __heroWakeKeepLive?: boolean }).__heroWakeKeepLive = true
