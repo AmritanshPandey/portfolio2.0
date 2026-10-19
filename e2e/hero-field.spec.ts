@@ -4,6 +4,15 @@ import { expect, test, type Page } from "@playwright/test"
 // dot grid everywhere else (phones, touch, reduced motion) with no shader code
 // loaded at all.
 
+// Tests must not depend on the host's battery (the live sheet stands down on
+// a low battery): unless a test says otherwise, the device is plugged in.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const battery = { charging: true, level: 1, addEventListener() {}, removeEventListener() {} }
+    Object.defineProperty(navigator, "getBattery", { value: () => Promise.resolve(battery), configurable: true })
+  })
+})
+
 async function openHome(page: Page) {
   await page.goto("/")
   await expect(page.locator("#hero [data-hero-field]")).toHaveCount(1)
@@ -150,10 +159,11 @@ test("the live sheet's dots sit exactly on the static grid's", async ({ page }) 
     const box = canvas.getBoundingClientRect()
     const scale = canvas.width / box.width
     // A strip over one column of dots near the middle (the CSS grid's dots
-    // sit at 9px + 18px·n from the field's top-left), 40px to 400px down. A
-    // dot's ink spreads over neighbouring pixels, so the strip is 3px wide and
-    // each dot is located by the centre of its ink.
-    const x = Math.round((9 + 18 * Math.round(box.width / 2 / 18)) * scale) - 2
+    // sit at pitch/2 + pitch·n from the field's top-left), 40px to 400px
+    // down. A dot's ink spreads over neighbouring pixels, so the strip is a
+    // few pixels wide and each dot is located by the centre of its ink.
+    const pitch = parseFloat(getComputedStyle(document.querySelector("#hero .hero-dots")!).backgroundSize)
+    const x = Math.round((pitch / 2 + pitch * Math.round(box.width / 2 / pitch)) * scale) - 2
     const w = Math.max(3, Math.round(4 * scale))
     const top = Math.round(40 * scale)
     const h = Math.round(360 * scale)
@@ -182,12 +192,13 @@ test("the live sheet's dots sit exactly on the static grid's", async ({ page }) 
       }
       centres.push((top + moment / mass) / scale)
     }
-    return centres
+    return { centres, pitch }
   })
-  expect(rows.length).toBeGreaterThan(12)
-  for (const y of rows) {
-    const offset = (((y - 9) % 18) + 18) % 18
-    expect(Math.min(offset, 18 - offset)).toBeLessThan(1.5)
+  const { centres, pitch } = rows
+  expect(centres.length).toBeGreaterThan(12)
+  for (const y of centres) {
+    const offset = (((y - pitch / 2) % pitch) + pitch) % pitch
+    expect(Math.min(offset, pitch - offset)).toBeLessThan(1)
   }
 })
 
@@ -228,7 +239,7 @@ test.describe("where the live sheet would not be smooth", () => {
   test("a laptop on battery saver gets the static dots", async ({ page }) => {
     await page.addInitScript(() => {
       const battery = { charging: false, level: 0.15, addEventListener() {}, removeEventListener() {} }
-      Object.defineProperty(navigator, "getBattery", { value: () => Promise.resolve(battery) })
+      Object.defineProperty(navigator, "getBattery", { value: () => Promise.resolve(battery), configurable: true })
     })
     await openHome(page)
     await page.waitForTimeout(2500)
