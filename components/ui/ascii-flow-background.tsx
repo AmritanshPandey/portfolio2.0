@@ -28,6 +28,14 @@ export interface AsciiFlowBackgroundProps {
    * to the flow field while loading or on error.
    */
   src?: string
+  /** Draw one frame and hold it: a still ASCII texture. */
+  still?: boolean
+  /** Frames per second while animating (default 60). */
+  fps?: number
+  /** CSS variable holding the glyph font family, e.g. a next/font variable. */
+  fontVar?: string
+  /** Cap on the canvas's device-pixel ratio (default 2). */
+  maxDpr?: number
 }
 
 const DEFAULT_RAMP = " .:-=+*#%@"
@@ -55,6 +63,10 @@ export function AsciiFlowBackground({
   accentDarkVar,
   speed = 1,
   src,
+  still = false,
+  fps = 60,
+  fontVar,
+  maxDpr = 2,
 }: AsciiFlowBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -64,9 +76,11 @@ export function AsciiFlowBackground({
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches || still
     const ramp = chars.length > 0 ? chars : DEFAULT_RAMP
     const glyph = fontSize ?? cellSize
+    const family = fontVar ? getComputedStyle(document.body).getPropertyValue(fontVar).trim() : ""
+    const font = `${glyph}px ${family ? `${family}, ` : ""}ui-monospace, SFMono-Regular, Menlo, monospace`
 
     let cols = 0
     let rows = 0
@@ -133,7 +147,7 @@ export function AsciiFlowBackground({
 
     const build = () => {
       const rect = canvas.getBoundingClientRect()
-      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      dpr = Math.min(window.devicePixelRatio || 1, maxDpr)
       width = rect.width
       height = rect.height
       canvas.width = Math.max(1, Math.round(width * dpr))
@@ -171,7 +185,7 @@ export function AsciiFlowBackground({
 
     const draw = (t: number) => {
       ctx.clearRect(0, 0, width, height)
-      ctx.font = `${glyph}px ui-monospace, SFMono-Regular, Menlo, monospace`
+      ctx.font = font
       const time = reduced ? 0 : (t / 1000) * speed
       const half = cellSize / 2
 
@@ -200,8 +214,13 @@ export function AsciiFlowBackground({
 
     let raf = 0
     let running = false
+    let lastDraw = 0
+    const frameMs = 1000 / fps
     const loop = (t: number) => {
-      draw(t)
+      if (t - lastDraw >= frameMs - 1) {
+        lastDraw = t
+        draw(t)
+      }
       raf = requestAnimationFrame(loop)
     }
     const start = () => {
@@ -219,6 +238,8 @@ export function AsciiFlowBackground({
 
     if (reduced) {
       draw(0)
+      // A web font may arrive after the first frame: draw the still frame again.
+      void document.fonts?.ready.then(() => draw(0))
     } else {
       start()
     }
@@ -263,6 +284,10 @@ export function AsciiFlowBackground({
     accentDarkVar,
     speed,
     src,
+    still,
+    fps,
+    fontVar,
+    maxDpr,
   ])
 
   return (

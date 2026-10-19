@@ -115,6 +115,13 @@ with a trackpad), low battery, reduced motion, and any browser that can't hold
 ~36fps get the same dot screen as a static CSS texture, and never download the
 shader.
 
+The gallery header has the other ambient layer, **the ASCII field**
+(`GalleryAscii`): graphite glyphs in the site's mono drifting at 30fps, the
+brightest clusters lighting up in ultramarine, hanging from the header rule
+and dissolving below. It follows the dot field's rules (`lib/motion-budget.ts`):
+a still frame on phones, iPads, low battery and reduced motion, and on phones
+it keeps to the right edge, away from the text.
+
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms
 cross-dissolve between routes (View Transitions). Apart from the dot field,
