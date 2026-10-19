@@ -31,7 +31,9 @@ export function SettleObserver() {
           io.unobserve(entry.target)
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0 }
+      // Lands as soon as a block's top edge enters the screen, so it is
+      // already settling while it comes into view.
+      { rootMargin: "0px", threshold: 0 }
     )
 
     const track = (scope: ParentNode) => {

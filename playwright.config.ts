@@ -6,10 +6,11 @@ export default defineConfig({
   use: { baseURL: `http://localhost:${E2E_PORT}` },
   // WebKit is Safari's engine: the hero's live sheet has to hold up there too.
   projects: [
-    // Chromium's new headless mode draws WebGL on the GPU, as Chrome does for
-    // visitors. The default headless shell draws it on the CPU (SwiftShader),
-    // which starves the hero's live sheet once several workers run at once.
-    { name: "chromium", use: { ...devices["Desktop Chrome"], channel: "chromium" } },
+    // Headless Chromium draws WebGL in software (SwiftShader) unless told to
+    // use the GPU, as Chrome does for real visitors. In software, parallel
+    // workers starve each other's frames, and the live sheet rightly falls
+    // back to the static dots mid-test. Without a GPU it stays in software.
+    { name: "chromium", use: { ...devices["Desktop Chrome"], launchOptions: { args: ["--enable-gpu"] } } },
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
   ],
   // A production build, so pages behave as they do on Vercel.

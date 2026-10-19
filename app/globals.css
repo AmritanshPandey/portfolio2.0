@@ -90,7 +90,7 @@
   --surface-2: #E9E6DF;   /* a recessed field */
 
   --border: #D6D2C9;      /* hairline rule */
-  --hero-dot: rgb(17 17 17 / 0.16);
+  --hero-dot: rgb(17 17 17 / 0.15);
   --rule-strong: var(--ink);
   --ring: var(--ultramarine);
   --accent: var(--ultramarine);
@@ -809,7 +809,7 @@
 }
 
 [data-hero-line] {
-  animation: hero-line-rise 1s var(--ease-out) 120ms both;
+  animation: hero-line-rise 680ms var(--ease-out) 40ms both;
 }
 
 /* The hero rule draws across the sheet first; the statement lands on it. */
@@ -820,7 +820,7 @@
 
 [data-hero-rule] {
   transform-origin: left center;
-  animation: rule-draw 1.1s var(--ease-out) both;
+  animation: rule-draw 640ms var(--ease-out) both;
 }
 
 /* Hero statement: expanded and enormous on wide screens; condensed on phones
@@ -844,23 +844,25 @@
 }
 
 [data-hero-line="2"] {
-  animation-delay: 210ms;
+  animation-delay: 100ms;
 }
 
 [data-hero-line="3"] {
-  animation-delay: 300ms;
+  animation-delay: 160ms;
 }
 
+/* The rest of the hero follows the statement closely: the whole landing is
+   over in under 0.9s, so nobody waits on it. */
 [data-hero-fade] {
-  animation: hero-soft-in 800ms var(--ease-out) 420ms both;
+  animation: hero-soft-in 520ms var(--ease-out) 220ms both;
 }
 
 [data-hero-card] {
-  animation: hero-soft-in 900ms var(--ease-out) 520ms both;
+  animation: hero-soft-in 560ms var(--ease-out) 280ms both;
 }
 
 [data-hero-proof] {
-  animation: hero-soft-in 800ms var(--ease-out) 620ms both;
+  animation: hero-soft-in 520ms var(--ease-out) 320ms both;
 }
 
 @keyframes sheen {
@@ -949,7 +951,12 @@
 
 /* Dimming lives on the row's children so it never inherits the settle delay. */
 .work-row > * {
-  transition: opacity 420ms var(--ease-out);
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+/* Pressing a row answers at once, before the page changes. */
+.work-row:active > * {
+  opacity: 0.72;
+  transition-duration: var(--dur-1);
 }
 
 /* ─────────────────────────
@@ -1173,8 +1180,8 @@
    The fallback is the same grid, shown when WebGL is unavailable. */
 .hero-dots,
 .hero-dots-fallback {
-  background-image: radial-gradient(circle, var(--hero-dot) 0.8px, transparent 1.8px);
-  background-size: 18px 18px;
+  background-image: radial-gradient(circle, var(--hero-dot) 0.6px, transparent 1.1px);
+  background-size: 8px 8px; /* PITCH in hero-field.tsx */
   /* The same fade the live sheet draws in its shader. */
   mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
@@ -1183,6 +1190,16 @@
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
   .hero-dots { display: block; }
 }
+/* Gallery ASCII field: on phones the heading and intro run the full width,
+   so the glyphs gather at the right edge and fade out before the text. */
+@media (max-width: 767px) {
+  .gallery-ascii-side {
+    opacity: 0.6;
+    mask-image: linear-gradient(to left, #000 0%, #000 8%, transparent 55%);
+    -webkit-mask-image: linear-gradient(to left, #000 0%, #000 8%, transparent 55%);
+  }
+}
+
 /* Once the live sheet has painted it owns the dots, whatever the media query
    above decided: the static grid never sits under it. */
 [data-hero-field][data-live] .hero-dots { display: none; }
@@ -1198,11 +1215,13 @@
    Transform and opacity only, so it stays on the compositor.
 ───────────────────────── */
 
+/* Quick on purpose: a block lands in 0.4s, and a list's stagger stops
+   growing after six items, so nothing below the fold keeps you waiting. */
 [data-settle] {
   transition:
-    opacity var(--dur-5) var(--ease-out),
-    transform var(--dur-5) var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 70ms + var(--settle-delay, 0ms));
+    opacity 400ms var(--ease-out),
+    transform 400ms var(--ease-out);
+  transition-delay: calc(min(var(--i, 0), 6) * 35ms + var(--settle-delay, 0ms));
 }
 
 .settle-ready [data-settle]:not([data-settled]) {
@@ -1212,8 +1231,8 @@
 
 [data-settle="rule"] {
   transform-origin: left center;
-  transition: transform var(--dur-6) var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 70ms + var(--settle-delay, 0ms));
+  transition: transform 600ms var(--ease-out);
+  transition-delay: calc(min(var(--i, 0), 6) * 35ms + var(--settle-delay, 0ms));
 }
 
 .settle-ready [data-settle="rule"]:not([data-settled]) {
@@ -1230,10 +1249,14 @@
 }
 .ledger-loading { animation: ledger-run 1.4s var(--ease-in-out) infinite; }
 
-/* Page transitions: a short cross-dissolve between routes. */
-::view-transition-old(root),
+/* Page transitions: a quick cross-dissolve. The old page gets out of the way
+   fast; the new one arrives a beat slower. */
+::view-transition-old(root) {
+  animation-duration: 140ms;
+  animation-timing-function: var(--ease-out);
+}
 ::view-transition-new(root) {
-  animation-duration: var(--dur-4);
+  animation-duration: 220ms;
   animation-timing-function: var(--ease-settle);
 }
 
@@ -1241,8 +1264,8 @@
    REDUCED MOTION
    Honour the OS-level preference. Decorative motion collapses to a
    static end-state; all content stays fully visible and legible.
-   (Framer Motion is handled via <MotionConfig reducedMotion="user">,
-   and Lenis smooth-scroll is skipped, in their respective files.)
+   (Framer Motion is skipped globally by <ReducedMotion>; scrolling is
+   native, and scroll-behavior falls back to auto below.)
 ───────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

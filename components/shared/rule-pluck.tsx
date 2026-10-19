@@ -18,6 +18,8 @@ interface Pluck {
   d: number
   v: number
   held: boolean
+  /** Let go since the last frame: drawn where it slipped free before it rings. */
+  slipped: boolean
 }
 
 /**
@@ -61,7 +63,7 @@ export function RulePluck() {
       svg.append(path)
       el.append(svg)
       el.setAttribute("data-plucking", "")
-      const p: Pluck = { el, svg, path, width, x0: 0, d: 0, v: 0, held: false }
+      const p: Pluck = { el, svg, path, width, x0: 0, d: 0, v: 0, held: false, slipped: false }
       active.set(el, p)
       return p
     }
@@ -74,6 +76,7 @@ export function RulePluck() {
 
     const release = (p: Pluck, d: number) => {
       p.held = false
+      p.slipped = true
       p.d = Math.max(-PLUCK.pull, Math.min(PLUCK.pull, d))
       p.v = 0
       playNote(rules().indexOf(p.el), Math.abs(p.d) / PLUCK.pull, (p.x0 / p.width) * 2 - 1)
@@ -87,7 +90,11 @@ export function RulePluck() {
           end(p)
           continue
         }
-        if (!p.held) {
+        // A rule that has just slipped free is drawn there first, then rings.
+        // Stepping it straight away would skip the slip by a whole frame,
+        // further the slower the frames, and the pluck would look weaker.
+        if (p.slipped) p.slipped = false
+        else if (!p.held) {
           const s = stepString(p, dt)
           p.d = s.d
           p.v = s.v

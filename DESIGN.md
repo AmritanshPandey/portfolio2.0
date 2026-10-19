@@ -103,17 +103,24 @@ then content lands a few pixels onto them (`data-settle`, driven by
 `SettleObserver`). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
 
-The hero has one ambient layer, **the dot field** (`HeroField`): a sheet of
-faint ink dots that hangs from the hero rule and breathes. On a desktop pointer
-it becomes the **pixel wake** (`WakeField`, WebGL): moving the cursor leaves a
-fine wake in which dots grow into small square pixels (about half ink) and
-settle back into dots, each cell at its own moment, within a second; a click
-sends a soft ring of ultramarine pixels a short way out, easing as it goes. It
-draws only while something moves and sits still otherwise. It loads only when
-the page is idle on a desktop pointer; phones, touch, iPads (even with a
-trackpad), low battery, reduced motion, and any browser that can't hold ~36fps
-(battery saver, Low Power Mode) get the static CSS dot grid instead, and never
-download the shader.
+The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen
+of tiny ink dots packed 8px apart, one even tone, hanging from the hero rule.
+On a desktop pointer it becomes the **pixel wake** (`WakeField`, WebGL): the
+cells the cursor passes turn into near-touching 7px square pixels, so the sheet
+briefly reads as a pixel mosaic, and they step back down through three ink
+levels to dots as the wake fades; a click sends a soft ring of ultramarine
+pixels through the same grid. It draws only while something moves. It loads
+only when the page is idle on a desktop pointer; phones, touch, iPads (even
+with a trackpad), low battery, reduced motion, and any browser that can't hold
+~36fps get the same dot screen as a static CSS texture, and never download the
+shader.
+
+The gallery header has the other ambient layer, **the ASCII field**
+(`GalleryAscii`): graphite glyphs in the site's mono drifting at 30fps, the
+brightest clusters lighting up in ultramarine, hanging from the header rule
+and dissolving below. It follows the dot field's rules (`lib/motion-budget.ts`):
+a still frame on phones, iPads, low battery and reduced motion, and on phones
+it keeps to the right edge, away from the text.
 
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms

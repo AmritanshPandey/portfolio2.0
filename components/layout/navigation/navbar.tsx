@@ -440,7 +440,7 @@ export default function Navbar() {
               (transform only), placed without a slide on first paint. */}
           <span
             aria-hidden
-            className="pointer-events-none absolute bottom-[14px] left-0 h-[2px] w-[100px] origin-left bg-accent"
+            className="pointer-events-none absolute bottom-[8px] left-0 h-[2px] w-[100px] origin-left bg-accent"
             style={{
               transform: `translateX(${bar?.x ?? 0}px) scaleX(${(bar?.w ?? 0) / 100})`,
               opacity: bar ? 1 : 0,
