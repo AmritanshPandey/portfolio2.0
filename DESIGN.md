@@ -123,10 +123,20 @@ and dissolving below. It follows the dot field's rules (`lib/motion-budget.ts`):
 a still frame on phones, iPads, low battery and reduced motion, and on phones
 it keeps to the right edge, away from the text.
 
+The footer has the third, **the sea** (`FooterSea`): swell lines of graphite
+tildes in the mono running from a faded horizon down to the foot of the page,
+closer together and calmer far away. Each line rises and falls with the water
+under it and hides the swells behind it, with a face of fading full stops
+below; the highest front crests glint ultramarine, a glyph or two at a time.
+It is the same ASCII renderer as the gallery's (`AsciiFlowBackground`,
+`shape="waves"`; geometry in `lib/ascii-sea.ts`), runs at 30fps only while on
+screen in a visible tab, costs about a millisecond a frame, and follows the
+same rules: a still frame on phones, iPads, low battery and reduced motion.
+
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms
-cross-dissolve between routes (View Transitions). Apart from the dot field,
-nothing loops for attention. Ink rules are strings: on a desktop pointer, sweeping
+cross-dissolve between routes (View Transitions). Apart from these ambient
+layers, nothing loops for attention. Ink rules are strings: on a desktop pointer, sweeping
 across one catches it, bends it toward the pointer (18px at most), and it
 slips free and rings flat in about a second, lit ultramarine by how hard it
 was plucked (`RulePluck`, physics in `lib/pluck.ts`). Only pointer movement

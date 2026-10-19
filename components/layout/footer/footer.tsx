@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { CopyEmail } from "./copy-email"
+import { FooterSea } from "./footer-sea"
 import { EMAIL, LINKEDIN_HREF, RESUME_HREF } from "@/lib/contact"
 
 const FOOTER_LINKS = [
@@ -38,7 +39,8 @@ function FooterLink({ label, href, external }: (typeof FOOTER_LINKS)[number]) {
 
 /**
  * The closing line of the ledger: the sign-off set large, the two ways in
- * beside it, then the links and the colophon on a hairline.
+ * beside it, then the links and the colophon on a hairline, and under them
+ * the sea the page runs out into.
  */
 export default function Footer() {
   return (
@@ -79,6 +81,7 @@ export default function Footer() {
           <p className="ledger-label">© {new Date().getFullYear()} Amritansh Pandey</p>
         </div>
       </div>
+      <FooterSea />
     </footer>
   )
 }
