@@ -47,7 +47,8 @@ type Band = Awaited<ReturnType<typeof emptyBand>>
 // fade during, and the page's own text and colours never count.
 async function inkIn(page: Page, band: Band) {
   return page.evaluate(async (r) => {
-    const canvas = document.querySelector("#hero [data-hero-field] canvas") as HTMLCanvasElement
+    const canvas = document.querySelector<HTMLCanvasElement>("#hero [data-hero-field] canvas")
+    if (!canvas) throw new Error("No live sheet: the field fell back to the static dots (too slow, or WebGL failed)")
     const box = canvas.getBoundingClientRect()
     const scale = canvas.width / box.width
     const w = Math.round((r.right - r.left) * scale)
