@@ -138,99 +138,102 @@ const Constellation = dynamic(
 )
 
 /* ─── Posters ────────────────────────────────────────────────────────────────
-   Flat SVG artwork on the wall's black canvas. Emerald is the one accent. */
+   Line drawings in the page's own ink, with ultramarine as the one accent, so
+   they sit on the Ledger sheet in either theme. Product mockups (the bank
+   brand skins) keep their own colours. */
 
-const A = "#34d399"
-const LINE = "rgba(255,255,255,0.22)"
-const FILL = "rgba(255,255,255,0.06)"
+const LINE = { stroke: "currentColor", strokeOpacity: 0.32 }
+const FILL = { fill: "currentColor", fillOpacity: 0.05 }
+/** Accent marks: set `fill` or `stroke` to currentColor alongside this. */
+const A = "text-accent"
 
-function Poster({ children, label }: { children: ReactNode; label: string }) {
+function Poster({ children }: { children: ReactNode }) {
   return (
-    <div className="absolute inset-0 bg-[#0b0b0b]">
-      <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
-        {children}
-      </svg>
-      <span className="pointer-events-none absolute bottom-2.5 left-3 font-mono text-[11px] text-white/45">
-        {label}
-      </span>
-    </div>
+    <svg viewBox="0 0 200 200" className="absolute inset-0 h-full w-full text-foreground" aria-hidden>
+      {children}
+    </svg>
   )
 }
 
-/* Its own component so each tile's textPath gets a unique id — the wall
-   renders every poster many times over. */
+/* Its own component so its textPath gets a unique id. */
 function MarqueePoster() {
   const id = useId()
   return (
-    <Poster label="curved marquee">
-      <path d="M20 140 C 60 40, 140 40, 180 120" fill="none" stroke={LINE} strokeWidth="1" />
+    <Poster>
+      <path d="M20 140 C 60 40, 140 40, 180 120" fill="none" {...LINE} strokeWidth="1" />
       <path id={id} d="M20 140 C 60 40, 140 40, 180 120" fill="none" />
-      <text fontSize="11" fill="rgba(255,255,255,0.7)" letterSpacing="1.5">
+      <text fontSize="11" fill="currentColor" fillOpacity="0.72" letterSpacing="1.5">
         <textPath href={`#${id}`}>PRODUCT · SYSTEMS · CRAFT · PROOF ·</textPath>
       </text>
-      <circle cx="60" cy="40" r="4" fill={A} />
-      <circle cx="140" cy="40" r="4" fill={A} />
-      <line x1="20" y1="140" x2="60" y2="40" stroke={A} strokeDasharray="2 3" />
-      <line x1="180" y1="120" x2="140" y2="40" stroke={A} strokeDasharray="2 3" />
+      <g className={A}>
+        <circle cx="60" cy="40" r="4" fill="currentColor" />
+        <circle cx="140" cy="40" r="4" fill="currentColor" />
+        <line x1="20" y1="140" x2="60" y2="40" stroke="currentColor" strokeDasharray="2 3" />
+        <line x1="180" y1="120" x2="140" y2="40" stroke="currentColor" strokeDasharray="2 3" />
+      </g>
     </Poster>
   )
 }
 
 const posters = {
   brandSkins: (
-    <Poster label="brand skins">
+    <Poster>
       <rect x="30" y="50" width="140" height="84" rx="10" fill="#E11D48" />
       <rect x="100" y="50" width="70" height="84" fill="#8A6420" />
-      <line x1="100" y1="40" x2="100" y2="144" stroke="#fff" strokeWidth="1.5" />
-      <circle cx="100" cy="92" r="8" fill="#fff" />
-      <rect x="42" y="112" width="44" height="6" rx="3" fill="rgba(255,255,255,0.7)" />
+      <rect x="42" y="112" width="44" height="6" rx="3" fill="#fff" fillOpacity="0.7" />
+      <line x1="100" y1="40" x2="100" y2="144" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="100" cy="92" r="8" fill="currentColor" />
     </Poster>
   ),
   themeSplit: (
-    <Poster label="theme split">
-      <rect x="36" y="40" width="128" height="110" rx="12" fill="#f4f4f2" />
+    <Poster>
+      <rect x="36" y="40" width="128" height="110" rx="12" fill="#F4F4F2" {...LINE} />
       <path d="M100 40 H152 a12 12 0 0 1 12 12 V138 a12 12 0 0 1 -12 12 H100 Z" fill="#161616" />
-      <circle cx="68" cy="78" r="14" fill="none" stroke={A} strokeWidth="5" />
-      <circle cx="132" cy="78" r="14" fill="none" stroke={A} strokeWidth="5" />
-      <line x1="100" y1="32" x2="100" y2="158" stroke={A} strokeWidth="1.5" />
+      <g className={A} stroke="currentColor">
+        <circle cx="68" cy="78" r="14" fill="none" strokeWidth="5" />
+        <circle cx="132" cy="78" r="14" fill="none" strokeWidth="5" />
+        <line x1="100" y1="32" x2="100" y2="158" strokeWidth="1.5" />
+      </g>
     </Poster>
   ),
   marquee: <MarqueePoster />,
   flow: (
-    <Poster label="flow diagram">
-      <rect x="80" y="30" width="40" height="22" rx="5" fill={FILL} stroke={A} />
+    <Poster>
+      <rect x="80" y="30" width="40" height="22" rx="5" className={A} stroke="currentColor" {...FILL} />
       {[36, 88, 140].map((x) => (
-        <rect key={x} x={x} y="92" width="30" height="20" rx="5" fill={FILL} stroke={LINE} />
+        <rect key={x} x={x} y="92" width="30" height="20" rx="5" {...FILL} {...LINE} />
       ))}
       {[70, 118].map((x) => (
-        <rect key={x} x={x} y="146" width="30" height="20" rx="5" fill={FILL} stroke={LINE} />
+        <rect key={x} x={x} y="146" width="30" height="20" rx="5" {...FILL} {...LINE} />
       ))}
-      <g fill="none" stroke={LINE}>
+      <g fill="none" {...LINE}>
         <path d="M100 52 V72 H51 V92" />
-        <path d="M100 52 V92" stroke={A} />
         <path d="M100 72 H155 V92" />
-        <path d="M103 112 V130 H85 V146" stroke={A} />
         <path d="M103 130 H133 V146" />
+      </g>
+      <g fill="none" className={A} stroke="currentColor">
+        <path d="M100 52 V92" />
+        <path d="M103 112 V130 H85 V146" />
       </g>
     </Poster>
   ),
   infoArch: (
-    <Poster label="information architecture">
-      <rect x="78" y="90" width="44" height="20" rx="10" fill={A} />
-      <g fill="none" stroke={LINE}>
+    <Poster>
+      <rect x="78" y="90" width="44" height="20" rx="10" className={A} fill="currentColor" />
+      <g fill="none" {...LINE}>
         <path d="M100 90 V70 H50 V56 M100 70 H150 V56 M100 70 V56" />
         <path d="M100 110 V130 H60 V144 M100 130 H140 V144" />
       </g>
       {[36, 86, 136].map((x) => (
-        <rect key={x} x={x} y="38" width="28" height="18" rx="4" fill={FILL} stroke={LINE} />
+        <rect key={x} x={x} y="38" width="28" height="18" rx="4" {...FILL} {...LINE} />
       ))}
       {[46, 126].map((x) => (
-        <rect key={x} x={x} y="144" width="28" height="18" rx="4" fill={FILL} stroke={LINE} />
+        <rect key={x} x={x} y="144" width="28" height="18" rx="4" {...FILL} {...LINE} />
       ))}
     </Poster>
   ),
   colorScale: (
-    <Poster label="color scale">
+    <Poster>
       {Array.from({ length: 10 }, (_, i) => (
         <rect
           key={i}
@@ -239,48 +242,56 @@ const posters = {
           width="14"
           height="60"
           rx="3"
-          fill={`hsl(158 ${40 + i * 4}% ${92 - i * 8}%)`}
+          fill={`hsl(236 ${50 + i * 4}% ${94 - i * 8}%)`}
         />
       ))}
-      <text x="22" y="150" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="monospace">50 → 950 · 4.5:1 ✓</text>
+      <text x="22" y="150" fontSize="9" fill="currentColor" fillOpacity="0.6" fontFamily="monospace">50 → 950 · 4.5:1 ✓</text>
     </Poster>
   ),
   attention: (
-    <Poster label="attention model">
+    <Poster>
       {Array.from({ length: 14 }, (_, i) => {
         // Rounded so server and client serialise identical attribute strings.
         const h = Math.round((100 * Math.pow(1 - i / 14, 2.4) + 4) * 10) / 10
-        return (
-          <rect key={i} x={26 + i * 11} y={150 - h} width="8" height={h} rx="1.5" fill={i < 2 ? A : "rgba(255,255,255,0.25)"} />
+        return i < 2 ? (
+          <rect key={i} x={26 + i * 11} y={150 - h} width="8" height={h} rx="1.5" className={A} fill="currentColor" />
+        ) : (
+          <rect key={i} x={26 + i * 11} y={150 - h} width="8" height={h} rx="1.5" fill="currentColor" fillOpacity="0.25" />
         )
       })}
-      <line x1="22" y1="150" x2="182" y2="150" stroke={LINE} />
+      <line x1="22" y1="150" x2="182" y2="150" {...LINE} />
     </Poster>
   ),
   frontier: (
-    <Poster label="trade-off frontier">
-      <line x1="34" y1="160" x2="176" y2="160" stroke={LINE} />
-      <line x1="34" y1="160" x2="34" y2="30" stroke={LINE} />
-      <path d="M40 44 C 90 50, 150 90, 170 154" fill="none" stroke={A} strokeWidth="1.5" />
+    <Poster>
+      <line x1="34" y1="160" x2="176" y2="160" {...LINE} />
+      <line x1="34" y1="160" x2="34" y2="30" {...LINE} />
       {[[60, 90], [90, 120], [120, 104], [70, 132], [140, 140]].map(([x, y]) => (
-        <circle key={`${x}-${y}`} cx={x} cy={y} r="3" fill="rgba(255,255,255,0.4)" />
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="3" fill="currentColor" fillOpacity="0.4" />
       ))}
-      <circle cx="104" cy="70" r="5" fill={A} />
+      <g className={A}>
+        <path d="M40 44 C 90 50, 150 90, 170 154" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="104" cy="70" r="5" fill="currentColor" />
+      </g>
     </Poster>
   ),
   constellation: (
-    <Poster label="constellation">
+    <Poster>
       {(() => {
         const pts = [[40, 60], [80, 40], [120, 70], [160, 50], [60, 110], [110, 120], [150, 130], [90, 160], [140, 96]]
         const edges = [[0, 1], [1, 2], [2, 3], [0, 4], [4, 5], [5, 2], [5, 6], [5, 7], [2, 8], [8, 6]]
         return (
           <>
             {edges.map(([a, b]) => (
-              <line key={`${a}-${b}`} x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} stroke={LINE} />
+              <line key={`${a}-${b}`} x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} {...LINE} />
             ))}
-            {pts.map(([x, y], i) => (
-              <circle key={i} cx={x} cy={y} r={i === 5 ? 4 : 2} fill={i === 5 ? A : "rgba(255,255,255,0.6)"} />
-            ))}
+            {pts.map(([x, y], i) =>
+              i === 5 ? (
+                <circle key={i} cx={x} cy={y} r="4" className={A} fill="currentColor" />
+              ) : (
+                <circle key={i} cx={x} cy={y} r="2" fill="currentColor" fillOpacity="0.6" />
+              ),
+            )}
           </>
         )
       })()}

@@ -5,10 +5,6 @@ import { useEffect, useState } from "react"
 import { IconArrowUpRight } from "@tabler/icons-react"
 
 import {
-  InfiniteImageWall,
-  type InfiniteWallItem,
-} from "@/components/gallery/infinite-image-wall"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -16,48 +12,85 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-import { EXPERIMENTS } from "./experiments"
+import { EXPERIMENTS, type Experiment } from "./experiments"
+import { PanSheet } from "./pan-sheet"
 
-const WALL_CELL_WIDTH = 1680
-const WALL_CELL_HEIGHT = 1000
-const TILE_SIZE = 210
-const GRID_X = [140, 420, 700, 980, 1260, 1540] as const
-const GRID_Y = [130, 380, 630, 880] as const
+/* Each experiment is pinned to the sheet once, read left to right in two
+   rows: the ones that power a case study or an essay first. Every other
+   column hangs half a tile lower, so the sheet reads as a pinboard rather
+   than a grid of cards. */
+const ROWS = [
+  ["brand-skins", "attention", "color-scale", "frontier", "constellation"],
+  ["theme-split", "flow-diagram", "info-architecture", "curved-marquee"],
+]
 
-function grid(row: number, col: number) {
-  return {
-    x: GRID_X[col] - TILE_SIZE / 2,
-    y: GRID_Y[row] - TILE_SIZE / 2,
-    width: TILE_SIZE,
-    height: TILE_SIZE,
-  }
-}
+const TILE_W = 300
+const TILE_H = 340
+const POSTER_H = 225
+const GAP_X = 64
+const GAP_Y = 72
+const DROP = (TILE_H + GAP_Y) / 2
 
-/* Offsetting each row by two keeps the same experiment from stacking in a
-   column (9 experiments over a 6-wide grid would otherwise line up). */
-const WALL_ITEMS: InfiniteWallItem[] = Array.from(
-  { length: GRID_Y.length * GRID_X.length },
-  (_, index) => {
-    const row = Math.floor(index / GRID_X.length)
-    const col = index % GRID_X.length
-    const experiment = EXPERIMENTS[(index + row * 2) % EXPERIMENTS.length]
+const COLUMNS = Math.max(...ROWS.map((row) => row.length))
+const SHEET_W = COLUMNS * TILE_W + (COLUMNS - 1) * GAP_X
+const SHEET_H = ROWS.length * TILE_H + (ROWS.length - 1) * GAP_Y + DROP
+
+const TILES = ROWS.flatMap((row, r) =>
+  row.map((id, c) => {
+    const experiment = EXPERIMENTS.find((e) => e.id === id)
+    if (!experiment) throw new Error(`No experiment "${id}"`)
     return {
-      id: `wall-${experiment.id}-${index}`,
-      title: experiment.title,
-      meta: experiment.kind,
-      cover: experiment.poster,
-      ...grid(row, col),
+      experiment,
+      left: c * (TILE_W + GAP_X),
+      top: r * (TILE_H + GAP_Y) + (c % 2 ? DROP : 0),
     }
-  }
+  }),
 )
 
-const experimentFor = (item: InfiniteWallItem) =>
-  EXPERIMENTS.find((e) => item.id.startsWith(`wall-${e.id}-`))
+function Tile({
+  experiment,
+  index,
+  left,
+  top,
+  onOpen,
+}: {
+  experiment: Experiment
+  index: number
+  left: number
+  top: number
+  onOpen: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      data-lab-tile={experiment.id}
+      data-cursor-card
+      data-cursor-label="Open"
+      className="group absolute flex flex-col overflow-hidden rounded-[3px] border border-border bg-card text-left transition-[border-color] duration-200 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+      style={{ left, top, width: TILE_W, height: TILE_H }}
+    >
+      <div className="relative w-full shrink-0 border-b border-border" style={{ height: POSTER_H }}>
+        {experiment.poster}
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-1.5 p-4">
+        <p className="type-meta flex gap-3">
+          <span className="tabular-nums">{String(index + 1).padStart(2, "0")}</span>
+          <span>{experiment.kind}</span>
+        </p>
+        <p className="type-list-title text-foreground transition-colors duration-200 group-hover:text-accent">
+          {experiment.title}
+        </p>
+        {experiment.usedIn && <p className="type-meta mt-auto truncate">Used in {experiment.usedIn.label}</p>}
+      </div>
+    </button>
+  )
+}
 
 export function PlaygroundWall() {
-  const [activeItem, setActiveItem] = useState<InfiniteWallItem | null>(null)
-  const experiment = activeItem ? experimentFor(activeItem) : undefined
+  const [experiment, setExperiment] = useState<Experiment | null>(null)
 
+  // Panning sideways on a trackpad must not swipe the browser back a page.
   useEffect(() => {
     const root = document.documentElement
     const body = document.body
@@ -106,15 +139,16 @@ export function PlaygroundWall() {
       window.history.back()
     }
 
+    // Only sideways swipes are held back; the sheet handles its own wheel
+    // events, and the page above it still scrolls on a short screen.
     const stopTrackpadHistorySwipe = (event: WheelEvent) => {
       if (event.ctrlKey || !event.cancelable) return
 
       if (Math.abs(event.deltaX) > 12 && Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
         lastTrackpadSwipeAt = performance.now()
         armHistoryGuard()
+        event.preventDefault()
       }
-
-      event.preventDefault()
     }
 
     window.addEventListener("popstate", onPopState)
@@ -136,55 +170,41 @@ export function PlaygroundWall() {
   }, [])
 
   return (
-    <Dialog
-      open={Boolean(activeItem)}
-      onOpenChange={(open) => {
-        if (!open) {
-          setActiveItem(null)
-        }
-      }}
-    >
-      <InfiniteImageWall
-        items={WALL_ITEMS}
-        onOpen={setActiveItem}
-        cellWidth={WALL_CELL_WIDTH}
-        cellHeight={WALL_CELL_HEIGHT}
-        showCaptions
-        className="h-full min-h-full"
-      />
+    <Dialog open={Boolean(experiment)} onOpenChange={(open) => !open && setExperiment(null)}>
+      <PanSheet width={SHEET_W} height={SHEET_H} padY={40} label="Experiments">
+        {TILES.map((tile, i) => (
+          <Tile key={tile.experiment.id} {...tile} index={i} onOpen={() => setExperiment(tile.experiment)} />
+        ))}
+      </PanSheet>
 
       {experiment && (
-        <DialogContent className="max-h-[calc(100vh-2rem)] max-w-[min(94vw,76rem)] gap-0 overflow-hidden rounded-[2rem] border border-white/12 bg-[#050505] p-0 text-white ring-1 ring-white/10 sm:max-w-[min(94vw,76rem)]">
-          <div className="grid max-h-[calc(100vh-2rem)] overflow-y-auto md:grid-cols-[minmax(0,1fr)_20rem] md:overflow-hidden">
-            {/* Live stage — site-themed so the component renders as it does in place */}
-            <div className="min-h-[50vh] overflow-auto bg-background p-4 text-foreground sm:p-6 md:max-h-[calc(100vh-2rem)]">
+        <DialogContent className="max-h-[calc(100svh-2rem)] max-w-[min(94vw,76rem)] gap-0 overflow-hidden rounded-[4px] border border-border bg-background p-0 text-foreground ring-0 sm:max-w-[min(94vw,76rem)]">
+          <div className="grid max-h-[calc(100svh-2rem)] overflow-y-auto md:grid-cols-[minmax(0,1fr)_20rem] md:overflow-hidden">
+            {/* Live stage: on the page's own paper, as the piece sits in place. */}
+            <div className="min-h-[50vh] overflow-auto bg-background p-4 sm:p-6 md:max-h-[calc(100svh-2rem)]">
               <experiment.Live />
             </div>
 
-            <div className="flex min-h-0 flex-col justify-between gap-8 border-t border-white/10 p-6 md:border-l md:border-t-0 md:p-8">
+            <div className="flex min-h-0 flex-col justify-between gap-8 border-t border-border bg-card p-6 md:border-l md:border-t-0 md:p-8">
               <DialogHeader className="gap-4">
-                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300/80">
-                  {experiment.kind}
-                </p>
-                <DialogTitle className="text-[clamp(28px,3.4vw,40px)] font-semibold leading-[0.98] tracking-tight text-white">
+                <p className="type-meta">{experiment.kind}</p>
+                <DialogTitle className="text-[clamp(1.75rem,2.6vw,2.375rem)] font-[750] leading-none tracking-[-0.03em] text-foreground [font-variation-settings:'wdth'_110] [text-wrap:balance]">
                   {experiment.title}
                 </DialogTitle>
-                <DialogDescription className="text-sm leading-relaxed text-white/62">
+                <DialogDescription className="type-card-body text-muted-foreground">
                   {experiment.note}
                 </DialogDescription>
               </DialogHeader>
 
               {experiment.usedIn && (
-                <div className="border-t border-white/10 pt-5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
-                    Used in
-                  </p>
+                <div className="border-t border-border pt-5">
+                  <p className="type-meta">Used in</p>
                   <Link
                     href={experiment.usedIn.href}
-                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-white/85 underline-offset-4 hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+                    className="link-underline type-cta mt-2 inline-block text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     {experiment.usedIn.label}
-                    <IconArrowUpRight size={14} aria-hidden />
+                    <IconArrowUpRight size={14} aria-hidden className="ml-1 inline-block align-[-1px]" />
                   </Link>
                 </div>
               )}
