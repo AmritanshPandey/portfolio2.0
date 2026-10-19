@@ -106,6 +106,7 @@
   --shadow-sm: none;
   --shadow-md: 0 1px 0 var(--border);
   --surface-hover: #EAE7E0;
+  --glass-edge: rgb(255 255 255 / 0.8); /* .glass: the bright top edge */
 
   --radius: 3px;
 
@@ -158,6 +159,7 @@
   --destructive: #F2867E;
   --destructive-foreground: #101010;
   --on-accent: #0B0B0B;
+  --glass-edge: rgb(255 255 255 / 0.09);
 
   --surface-hover: #1A1A19;
 }
@@ -1163,6 +1165,35 @@
     border: 1px solid var(--foreground);
     color: var(--foreground);
   }
+
+  /* Liquid glass, only for the layer that floats over content: the nav, its
+     controls and secondary buttons. The page's own paper, let partly
+     through, so what passes under it (the hero's dots and pixels) softens
+     rather than vanishes; a bright top edge catches the light. No
+     refraction: blur, tint and an edge, in every browser. */
+  .glass,
+  .btn-line {
+    background-color: color-mix(in oklab, var(--background) 76%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
+  }
+  .glass,
+  .glass-edge,
+  .btn-line { box-shadow: inset 0 1px 0 var(--glass-edge); }
+  /* Solid where the browser can't blur, or the reader asks for less
+     transparency. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass,
+    .btn-line { background-color: var(--background); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass,
+    .btn-line {
+      background-color: var(--background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
   .btn-line:hover { background: var(--foreground); color: var(--background); }
   .btn-ink:active,
   .btn-line:active { transform: translate3d(0, 1px, 0); }
@@ -1182,9 +1213,10 @@
 .hero-dots-fallback {
   background-image: radial-gradient(circle, var(--hero-dot) 0.6px, transparent 1.1px);
   background-size: 8px 8px; /* PITCH in hero-field.tsx */
-  /* The same fade the live sheet draws in its shader. */
-  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
+  /* The same fade the live sheet draws in its shader (FADE_TOP_PX and
+     FADE_BOTTOM_PX in wake-field.tsx): in under the rule, out at the foot. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 96px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 96px), transparent 100%);
 }
 .hero-dots { display: none; }
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {

@@ -422,7 +422,7 @@ export default function Navbar() {
 
       <header
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 hidden bg-background md:block",
+          "glass fixed inset-x-0 top-0 z-50 hidden md:block",
           "border-b transition-[border-color] duration-300",
           scrolled ? "border-border" : "border-transparent",
         )}
@@ -489,7 +489,7 @@ export default function Navbar() {
 
       <div
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end bg-background pb-2.5 md:hidden",
+          "glass fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end pb-2.5 md:hidden",
           "border-b transition-[border-color] duration-300",
           scrolled || open ? "border-border" : "border-transparent",
         )}
@@ -513,7 +513,7 @@ export default function Navbar() {
         data-menu-open={open}
         className="
           fixed right-[var(--gutter)] top-[calc(env(safe-area-inset-top)+0.625rem)] z-[51] flex h-11 w-11 items-center justify-center md:hidden
-          border border-foreground bg-background text-foreground
+          glass border border-foreground text-foreground
           transition-transform duration-150 active:translate-y-px
         "
       >

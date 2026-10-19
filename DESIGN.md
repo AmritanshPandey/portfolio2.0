@@ -104,7 +104,8 @@ then content lands a few pixels onto them (`data-settle`, driven by
 pure CSS on load and stays legible if the animation never runs.
 
 The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen
-of tiny ink dots packed 8px apart, one even tone, hanging from the hero rule.
+of tiny ink dots packed 8px apart, one even tone, filling the hero from the
+hero rule down and fading out over its last 96px into the next section.
 On a desktop pointer it becomes the **pixel wake** (`WakeField`, WebGL): the
 cells the cursor passes turn into near-touching 7px square pixels, so the sheet
 briefly reads as a pixel mosaic, and they step back down through three ink
@@ -141,11 +142,17 @@ Framer Motion is globally skipped).
 ## 6. Controls
 
 - `.btn-ink` (solid ink rectangle, ultramarine on hover) for the one primary
-  action; `.btn-line` (ruled outline, inverts on hover) for secondary.
+  action; `.btn-line` (ruled outline on glass, inverts on hover) for secondary.
 - Text links use `.link-underline` (hairline that thickens and turns ultramarine).
 - Filters are mono text buttons with an ultramarine underline when active.
-- No pills, no glass, no drop shadows (a system override removes arbitrary
-  shadows outside mockups).
+- Glass (`.glass`) only for the layer that floats over content: the nav bars,
+  the phone menu button and `.btn-line`. The page's own paper at 76%, blurring
+  what passes under it, with a bright 1px top edge (`--glass-edge`; the nav's
+  toggles carry the edge alone, `.glass-edge`). No refraction. Solid where the
+  browser can't blur or the reader asks for reduced transparency. Content,
+  cards and the primary action never go glass.
+- No pills, no drop shadows (a system override removes arbitrary shadows
+  outside mockups).
 
 ## 7. Focus
 
