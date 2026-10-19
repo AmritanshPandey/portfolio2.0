@@ -1190,6 +1190,16 @@
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
   .hero-dots { display: block; }
 }
+/* Gallery ASCII field: on phones the heading and intro run the full width,
+   so the glyphs gather at the right edge and fade out before the text. */
+@media (max-width: 767px) {
+  .gallery-ascii-side {
+    opacity: 0.6;
+    mask-image: linear-gradient(to left, #000 0%, #000 8%, transparent 55%);
+    -webkit-mask-image: linear-gradient(to left, #000 0%, #000 8%, transparent 55%);
+  }
+}
+
 /* Once the live sheet has painted it owns the dots, whatever the media query
    above decided: the static grid never sits under it. */
 [data-hero-field][data-live] .hero-dots { display: none; }

@@ -14,6 +14,7 @@ import {
 import clsx from "clsx"
 import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { IphoneFrame } from "@/components/shared/iphone-frame"
+import { GalleryAscii } from "./gallery-ascii"
 
 type ShotCategory = "All" | "Web App" | "Systems" | "Mobile"
 
@@ -276,64 +277,68 @@ export function UiDesignGallery() {
 
   return (
     <div className="bg-background text-foreground">
-      <section className="relative bg-background" style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 6vw, 104px))" }}>
+      <section className="relative isolate overflow-hidden bg-background" style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 6vw, 104px))" }}>
         <div className="ledger pb-10 md:pb-14">
           <div aria-hidden data-hero-rule className="rule-ink" />
-          <div className="ledger-grid mt-6 gap-y-10 md:mt-10 lg:items-end">
-            <div className="col-span-12 lg:col-span-6">
-              <h1 data-hero-line="1" className="type-hero-internal max-w-[12ch] text-foreground">
-                Browse the interface board.
-              </h1>
-              <p data-hero-fade className="mt-6 max-w-[44ch] text-[clamp(1.0625rem,1.3vw,1.25rem)] leading-[1.5] text-muted-foreground">
-                A visual-first collection of app screens, systems, commerce flows, and mobile concepts.
-              </p>
-            </div>
+          {/* Everything under the rule sits on the ASCII field. */}
+          <div className="relative pt-6 md:pt-10">
+            <GalleryAscii />
+            <div className="ledger-grid gap-y-10 lg:items-end">
+              <div className="col-span-12 lg:col-span-6">
+                <h1 data-hero-line="1" className="type-hero-internal max-w-[12ch] text-foreground">
+                  Browse the interface board.
+                </h1>
+                <p data-hero-fade className="mt-6 max-w-[44ch] text-[clamp(1.0625rem,1.3vw,1.25rem)] leading-[1.5] text-muted-foreground">
+                  A visual-first collection of app screens, systems, commerce flows, and mobile concepts.
+                </p>
+              </div>
 
-            <button
-              type="button"
-              onClick={() => setSelectedShot(featuredShot)}
-              data-hero-card
-              className="group relative col-span-12 block aspect-[4/3] overflow-hidden bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background lg:col-span-6"
-              aria-label={`Open featured design: ${featuredShot.title}`}
-            >
-              <Image
-                src={featuredShot.image}
-                alt=""
-                fill
-                priority
-                sizes="(min-width: 1024px) 44vw, 100vw"
-                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/22 to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white/86 backdrop-blur">
-                <FormatIcon format={featuredShot.format} />
-                Featured design
-              </div>
-              <div className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white text-neutral-950 shadow-[0_10px_26px_rgba(0,0,0,0.28)]">
-                <IconMaximize size={16} strokeWidth={2} aria-hidden="true" />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                <p className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-white/56">
-                  {featuredShot.category} / {featuredShot.year}
-                </p>
-                <h2 className="max-w-xl text-2xl font-semibold leading-tight text-white md:text-3xl">
-                  {featuredShot.title}
-                </h2>
-                <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">
-                  {featuredShot.description}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {featuredShot.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/14 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white/76 backdrop-blur"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <button
+                type="button"
+                onClick={() => setSelectedShot(featuredShot)}
+                data-hero-card
+                className="group relative col-span-12 block aspect-[4/3] overflow-hidden bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background lg:col-span-6"
+                aria-label={`Open featured design: ${featuredShot.title}`}
+              >
+                <Image
+                  src={featuredShot.image}
+                  alt=""
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 44vw, 100vw"
+                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/22 to-transparent" />
+                <div className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white/86 backdrop-blur">
+                  <FormatIcon format={featuredShot.format} />
+                  Featured design
                 </div>
-              </div>
-            </button>
+                <div className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white text-neutral-950 shadow-[0_10px_26px_rgba(0,0,0,0.28)]">
+                  <IconMaximize size={16} strokeWidth={2} aria-hidden="true" />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                  <p className="mb-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-white/56">
+                    {featuredShot.category} / {featuredShot.year}
+                  </p>
+                  <h2 className="max-w-xl text-2xl font-semibold leading-tight text-white md:text-3xl">
+                    {featuredShot.title}
+                  </h2>
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">
+                    {featuredShot.description}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {featuredShot.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-white/14 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white/76 backdrop-blur"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </section>

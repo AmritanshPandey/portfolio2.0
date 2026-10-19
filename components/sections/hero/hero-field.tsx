@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 import type { WakeColors } from "./wake-field"
+import { type Battery, getBattery, markSlow, onLowBattery, staysStill } from "@/lib/motion-budget"
 
 // Loaded only once the page is idle on a desktop pointer. Phones, touch and
 // reduced motion never download it and keep the static CSS dots instead.
@@ -27,36 +28,6 @@ const DARK: WakeColors = {
   wake: [0.925, 0.918, 0.894, 0.5],
   // Lavender on near-black needs more strength to read as clearly.
   ring: [0.549, 0.576, 1, 0.7],
-}
-
-// Set when this session found the browser too slow for the live sheet.
-const SLOW_KEY = "hero-wake:slow"
-
-type Battery = {
-  charging: boolean
-  level: number
-  addEventListener?: (type: string, listener: () => void) => void
-  removeEventListener?: (type: string, listener: () => void) => void
-}
-const getBattery = () =>
-  (navigator as Navigator & { getBattery?: () => Promise<Battery> }).getBattery?.().catch(() => undefined)
-
-// Battery saver comes on at 20% in Chrome and macOS by default.
-const onLowBattery = (b: Battery) => !b.charging && b.level <= 0.2
-
-// Devices where the live sheet would not be smooth keep the static dots:
-// iPads (iPadOS reports a Mac; a touch screen gives it away), Safari on four
-// cores or fewer, a laptop on a low battery, and any browser this session
-// already found too slow. WakeField checks the frame rate it actually gets.
-async function staysStill() {
-  if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true
-  const safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-  if (safari && navigator.hardwareConcurrency <= 4) return true
-  try {
-    if (sessionStorage.getItem(SLOW_KEY)) return true
-  } catch {}
-  const battery = await getBattery()
-  return battery ? onLowBattery(battery) : false
 }
 
 /**
@@ -134,9 +105,7 @@ export function HeroField() {
   // WakeField found the frame rate too low: static dots for the rest of the
   // session, so it isn't retried on every page.
   const onSlow = () => {
-    try {
-      sessionStorage.setItem(SLOW_KEY, "1")
-    } catch {}
+    markSlow()
     setStill(true)
     setLive(false)
     setPainted(false)
