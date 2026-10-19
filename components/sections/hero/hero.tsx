@@ -3,7 +3,16 @@ import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { AddLater } from "@/components/shared/add-later"
+import { cn } from "@/lib/utils"
 import { HeroField } from "./hero-field"
+import { GlassPlate } from "./glass-plate"
+
+// A glass plate's reach past its content: it pads by what it extends into
+// the gutter, so the content keeps its place on the grid. On wide screens
+// the intro and proof plates sit side by side, so the sides that face each
+// other stop at their column and pad inward, keeping the column gap between
+// the two panes.
+const PLATE = "-mx-3 -my-3 p-3 sm:-mx-6 sm:-my-5 sm:px-6 sm:py-5"
 
 const PROOF = [
   { text: "PartnerBank · configurable RFP demos", note: "turnaround number, once confirmed" },
@@ -22,7 +31,8 @@ export default function Hero() {
     <section
       id="hero"
       className="relative isolate bg-background text-foreground"
-      style={{ paddingTop: "calc(var(--nav-h) + clamp(40px, 7vw, 120px))" }}
+      // Clear of the fixed nav, then a short breath before the meta line.
+      style={{ paddingTop: "calc(var(--nav-h) + clamp(24px, 3.5vw, 56px))" }}
     >
       <div className="ledger">
         {/* Meta line: availability is also the way in. */}
@@ -81,19 +91,23 @@ export default function Hero() {
               </figcaption>
             </figure>
 
-            {/* Intro and the two actions. */}
+            {/* Intro and the two actions, on a pane of glass so the dot grid
+                frosts under the text. The plate reaches into the gutter by
+                as much as it pads, so nothing on it moves. */}
             <div data-hero-fade className="col-span-12 sm:col-span-8 lg:col-span-5 lg:col-start-5">
-              <p className="text-[clamp(1.125rem,1.45vw,1.5rem)] leading-[1.42] tracking-[-0.012em] text-muted-foreground text-pretty">
-                <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
-                I combine product thinking, visual systems, and front-end
-                prototyping to make fintech, AI, and enterprise workflows
-                clearer and more trustworthy.
-              </p>
+              <GlassPlate className={cn(PLATE, "lg:mr-0")}>
+                <p className="text-[clamp(1.125rem,1.45vw,1.5rem)] leading-[1.42] tracking-[-0.012em] text-muted-foreground text-pretty">
+                  <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
+                  I combine product thinking, visual systems, and front-end
+                  prototyping to make fintech, AI, and enterprise workflows
+                  clearer and more trustworthy.
+                </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <CTA label="View selected work" href="#work" />
-                <CTA label="View resume" href={RESUME_HREF} newTab variant="secondary" />
-              </div>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <CTA label="View selected work" href="#work" />
+                  <CTA label="View resume" href={RESUME_HREF} newTab variant="secondary" />
+                </div>
+              </GlassPlate>
 
               <AddLater
                 block
@@ -102,26 +116,28 @@ export default function Hero() {
               />
             </div>
 
-            {/* Proof, set as line items. */}
-            <ul data-hero-proof className="col-span-12 lg:col-span-3 lg:col-start-10">
-              {PROOF.map((item, i) => (
-                <li
-                  key={item.text}
-                  className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-2 border-t border-border py-3 last:border-b"
-                >
-                  <span className="ledger-label">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="text-[15px] leading-snug tracking-[-0.005em]">
-                    {item.text}
-                    {item.note && (
-                      <>
-                        {" "}
-                        <AddLater note={item.note} />
-                      </>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {/* Proof, set as line items, on its own pane. */}
+            <GlassPlate className={cn(PLATE, "col-span-12 self-start lg:col-span-3 lg:col-start-10 lg:ml-0")}>
+              <ul data-hero-proof>
+                {PROOF.map((item, i) => (
+                  <li
+                    key={item.text}
+                    className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-2 border-t border-border py-3 last:border-b"
+                  >
+                    <span className="ledger-label">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-[15px] leading-snug tracking-[-0.005em]">
+                      {item.text}
+                      {item.note && (
+                        <>
+                          {" "}
+                          <AddLater note={item.note} />
+                        </>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </GlassPlate>
           </div>
         </div>
       </div>

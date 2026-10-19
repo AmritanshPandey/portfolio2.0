@@ -149,8 +149,15 @@ Framer Motion is globally skipped).
   the phone menu button and `.btn-line`. The page's own paper at 76%, blurring
   what passes under it, with a bright 1px top edge (`--glass-edge`; the nav's
   toggles carry the edge alone, `.glass-edge`). No refraction. Solid where the
-  browser can't blur or the reader asks for reduced transparency. Content,
-  cards and the primary action never go glass.
+  browser can't blur or the reader asks for reduced transparency.
+- Glass plates (`.glass-plate`, `<GlassPlate>`) are the one place content goes
+  glass: the hero's intro and proof list, so the dot grid frosts under the text
+  instead of running through it. Paper at 55%, a 10px blur, a light rim, a faint
+  inner shade, an outer hairline and a specular sheen across the top-left;
+  Ledger's 4px corners, no drop shadow. On Chromium with a desktop pointer the
+  rim bends what passes under it (an SVG lens as the backdrop-filter: bent and
+  nearly sharp at the rim, frosted in the middle); elsewhere the plate is the
+  plain CSS glass. Cards, sections and the primary action never go glass.
 - No pills, no drop shadows (a system override removes arbitrary shadows
   outside mockups).
 

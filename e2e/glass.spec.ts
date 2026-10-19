@@ -1,8 +1,10 @@
 import { expect, test, type Page } from "@playwright/test"
 
-// Liquid glass is only for the layer that floats over content: the nav bars,
-// the phone menu button and secondary buttons. The page shows through them,
-// blurred; primary actions and content stay solid.
+// Liquid glass is for the layer that floats over content (the nav bars, the
+// phone menu button and secondary buttons) and for the two plates under the
+// hero's intro and proof list. The page shows through them, blurred; primary
+// actions and everything else stay solid. Chromium on a desktop pointer bends
+// what passes under the plates' rims with an SVG lens.
 
 type Material = { blur: boolean; alpha: number }
 
@@ -16,7 +18,8 @@ function material(page: Page, selector: string): Promise<Material> {
     const slash = bg.match(/\/\s*([\d.]+)\s*\)$/)
     const rgba = bg.match(/^rgba\([^)]*,\s*([\d.]+)\)$/)
     const alpha = bg === "transparent" ? 0 : Number(slash?.[1] ?? rgba?.[1] ?? 1)
-    return { blur: filter.includes("blur"), alpha }
+    // The lens is an SVG filter that blurs as part of its chain.
+    return { blur: filter.includes("blur") || filter.includes("url("), alpha }
   })
 }
 
@@ -33,6 +36,40 @@ test("the secondary action is glass and the primary stays solid ink", async ({ p
   const primary = await material(page, "#hero a.btn-ink")
   expect(isGlass(secondary)).toBe(true)
   expect(primary).toEqual({ blur: false, alpha: 1 })
+})
+
+test("the hero's intro and proof list sit on glass plates, a gap apart", async ({ page }) => {
+  await page.goto("/")
+  const plates = page.locator("#hero .glass-plate")
+  await expect(plates).toHaveCount(2)
+  await expect(plates.nth(0)).toContainText("Senior UX Designer at Mastercard.")
+  await expect(plates.nth(0).getByRole("link", { name: /View selected work/ })).toBeVisible()
+  await expect(plates.nth(1).locator("[data-hero-proof]")).toBeVisible()
+
+  for (const i of [0, 1]) {
+    const m = await material(page, `#hero .glass-plate >> nth=${i}`)
+    // Translucent enough to read as glass, opaque enough to keep text at AA.
+    expect(m.blur).toBe(true)
+    expect(m.alpha).toBeGreaterThanOrEqual(0.5)
+    expect(m.alpha).toBeLessThan(0.7)
+  }
+
+  const [a, b] = await plates.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON()))
+  expect(b.left - a.right).toBeGreaterThanOrEqual(16)
+})
+
+test("in Chromium the plates' rims bend what is under them; elsewhere they are plain glass", async ({ page, browserName }) => {
+  await page.goto("/")
+  const plate = page.locator("#hero .glass-plate").first()
+  if (browserName === "chromium") {
+    await expect(plate).toHaveAttribute("data-lens", "")
+    await expect(plate.locator("filter feDisplacementMap")).toHaveCount(1)
+    expect(await plate.evaluate((el) => getComputedStyle(el).backdropFilter)).toMatch(/^url\(/)
+  } else {
+    await page.waitForTimeout(500)
+    await expect(plate).not.toHaveAttribute("data-lens")
+    expect(await plate.evaluate((el) => getComputedStyle(el).backdropFilter)).toContain("blur")
+  }
 })
 
 test.describe("on a phone", () => {
@@ -53,5 +90,13 @@ test.describe("on a phone", () => {
       return el ? getComputedStyle(el).position : null
     })
     expect(header).toBe("fixed")
+  })
+
+  test("the plates stay plain glass, without the lens", async ({ page }) => {
+    await page.goto("/")
+    const plate = page.locator("#hero .glass-plate").first()
+    await expect(plate).toBeVisible()
+    await page.waitForTimeout(500)
+    await expect(plate).not.toHaveAttribute("data-lens")
   })
 })
