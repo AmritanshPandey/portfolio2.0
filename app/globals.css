@@ -107,6 +107,11 @@
   --shadow-md: 0 1px 0 var(--border);
   --surface-hover: #EAE7E0;
   --glass-edge: rgb(255 255 255 / 0.8); /* .glass: the bright top edge */
+  /* .glass-plate: rim, inner shade, outer hairline and specular sheen. */
+  --glass-rim: rgb(255 255 255 / 0.65);
+  --glass-shade: rgb(17 17 17 / 0.06);
+  --glass-line: rgb(17 17 17 / 0.08);
+  --glass-sheen: rgb(255 255 255 / 0.45);
 
   --radius: 3px;
 
@@ -160,6 +165,10 @@
   --destructive-foreground: #101010;
   --on-accent: #0B0B0B;
   --glass-edge: rgb(255 255 255 / 0.09);
+  --glass-rim: rgb(255 255 255 / 0.12);
+  --glass-shade: rgb(0 0 0 / 0.35);
+  --glass-line: rgb(0 0 0 / 0.4);
+  --glass-sheen: rgb(255 255 255 / 0.07);
 
   --surface-hover: #1A1A19;
 }
@@ -1180,14 +1189,45 @@
   .glass,
   .glass-edge,
   .btn-line { box-shadow: inset 0 1px 0 var(--glass-edge); }
+  /* Glass plates: content-strength glass behind the hero's intro and proof
+     list, so the dot grid frosts under the text instead of running through
+     it. Thinner than the nav's glass, so the grid still reads through. A
+     light rim, a faint inner shade along the foot, an outer hairline and a
+     specular sheen across the top-left; Ledger corners. Chromium on a
+     desktop pointer adds a lens at the rim (<GlassPlate>). */
+  .glass-plate {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid var(--glass-rim);
+    border-radius: 4px;
+    background-color: color-mix(in oklab, var(--background) 55%, transparent);
+    -webkit-backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
+    backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
+    box-shadow:
+      0 0 0 1px var(--glass-line),
+      inset 0 1px 0 var(--glass-edge),
+      inset 0 -1px 0 var(--glass-shade);
+  }
+  .glass-plate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(155deg, var(--glass-sheen) 0%, transparent 42%);
+    pointer-events: none;
+  }
+
   /* Solid where the browser can't blur, or the reader asks for less
      transparency. */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass,
+    .glass-plate,
     .btn-line { background-color: var(--background); }
   }
   @media (prefers-reduced-transparency: reduce) {
     .glass,
+    .glass-plate,
     .btn-line {
       background-color: var(--background);
       -webkit-backdrop-filter: none;
