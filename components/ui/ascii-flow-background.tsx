@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 
 import { cn } from "@/lib/utils"
+import { createWaves } from "./ascii-waves"
 
 export interface AsciiFlowBackgroundProps {
   className?: string
@@ -36,6 +37,12 @@ export interface AsciiFlowBackgroundProps {
   fontVar?: string
   /** Cap on the canvas's device-pixel ratio (default 2). */
   maxDpr?: number
+  /**
+   * "flow" (default): the drifting plasma, or `src` dithered. "waves": a sea of
+   * swell lines rising and falling towards a horizon (see ascii-waves.ts);
+   * `cellSize` is then the column pitch and `fontSize` the front crest's size.
+   */
+  shape?: "flow" | "waves"
 }
 
 const DEFAULT_RAMP = " .:-=+*#%@"
@@ -48,8 +55,9 @@ const DEFAULT_RAMP = " .:-=+*#%@"
  * media; pass `src` to dither an actual image instead.
  *
  * Theme-aware (re-reads CSS variables when `.dark` toggles), static under
- * prefers-reduced-motion, and self-pausing off-screen. Drop it into any
- * `position: relative` parent or use it as a `<BackgroundBand>` layer.
+ * prefers-reduced-motion, and self-pausing off-screen and in hidden tabs. Drop
+ * it into any `position: relative` parent or use it as a `<BackgroundBand>`
+ * layer. `shape="waves"` draws the footer's sea instead of the flow field.
  */
 export function AsciiFlowBackground({
   className,
@@ -67,6 +75,7 @@ export function AsciiFlowBackground({
   fps = 60,
   fontVar,
   maxDpr = 2,
+  shape = "flow",
 }: AsciiFlowBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -80,7 +89,10 @@ export function AsciiFlowBackground({
     const ramp = chars.length > 0 ? chars : DEFAULT_RAMP
     const glyph = fontSize ?? cellSize
     const family = fontVar ? getComputedStyle(document.body).getPropertyValue(fontVar).trim() : ""
-    const font = `${glyph}px ${family ? `${family}, ` : ""}ui-monospace, SFMono-Regular, Menlo, monospace`
+    const fontFamily = `${family ? `${family}, ` : ""}ui-monospace, SFMono-Regular, Menlo, monospace`
+    const font = `${glyph}px ${fontFamily}`
+    const sea = shape === "waves" ? createWaves(cellSize, glyph) : null
+    sea?.setFont(fontFamily)
 
     let cols = 0
     let rows = 0
@@ -118,6 +130,8 @@ export function AsciiFlowBackground({
       const dark = document.documentElement.classList.contains("dark")
       colors.base = resolve(dark ? colorDarkVar : colorLightVar, "#737373")
       colors.accent = resolve(dark ? accentDarkVar : accentLightVar, dark ? "#34d399" : "#059669")
+      const rgb = ({ r, g, b }: RGBA) => `rgb(${r}, ${g}, ${b})`
+      sea?.setColors(rgb(colors.base), rgb(colors.accent))
     }
 
     // Optional source image, sampled into a tiny offscreen buffer that matches
@@ -156,6 +170,7 @@ export function AsciiFlowBackground({
       cols = Math.max(1, Math.ceil(width / cellSize))
       rows = Math.max(1, Math.ceil(height / cellSize))
       buildSample()
+      sea?.resize(width, height, dpr)
     }
 
     // Brightness at grid cell (cx, cy) in 0..1.
@@ -184,9 +199,13 @@ export function AsciiFlowBackground({
     ctx.textBaseline = "middle"
 
     const draw = (t: number) => {
+      const time = reduced ? 0 : (t / 1000) * speed
+      if (sea) {
+        sea.draw(ctx, time, opacity)
+        return
+      }
       ctx.clearRect(0, 0, width, height)
       ctx.font = font
-      const time = reduced ? 0 : (t / 1000) * speed
       const half = cellSize / 2
 
       for (let cy = 0; cy < rows; cy++) {
@@ -233,16 +252,27 @@ export function AsciiFlowBackground({
       cancelAnimationFrame(raf)
     }
 
+    // Runs only while on screen in a visible tab.
+    let onScreen = true
+    const update = () => {
+      if (onScreen && document.visibilityState !== "hidden") start()
+      else stop()
+    }
+
+    let disposed = false
     refreshColors()
     build()
 
-    if (reduced) {
-      draw(0)
-      // A web font may arrive after the first frame: draw the still frame again.
-      void document.fonts?.ready.then(() => draw(0))
-    } else {
-      start()
-    }
+    // Draw now rather than on the first animation frame, so the canvas is
+    // never blank while handing over from a still frame to the live one.
+    draw(reduced ? 0 : performance.now())
+    update()
+    // A web font may arrive after the first frame: draw it in the font.
+    void document.fonts?.ready.then(() => {
+      if (disposed) return
+      sea?.repaint()
+      if (reduced) draw(0)
+    })
 
     const ro = new ResizeObserver(() => {
       build()
@@ -256,18 +286,21 @@ export function AsciiFlowBackground({
     })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
 
-    // Self-pause when scrolled off-screen.
+    // Self-pause when scrolled off-screen or when the tab is hidden.
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) start()
-        else stop()
+        onScreen = entry.isIntersecting
+        update()
       },
       { threshold: 0 }
     )
     io.observe(canvas)
+    document.addEventListener("visibilitychange", update)
 
     return () => {
+      disposed = true
       stop()
+      document.removeEventListener("visibilitychange", update)
       ro.disconnect()
       mo.disconnect()
       io.disconnect()
@@ -288,6 +321,7 @@ export function AsciiFlowBackground({
     fps,
     fontVar,
     maxDpr,
+    shape,
   ])
 
   return (
