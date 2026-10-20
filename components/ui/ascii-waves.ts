@@ -24,7 +24,8 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t
  * Crest glyphs come from a small atlas, one per size and colour, repainted
  * only when the size, colours or font change, so a crest is an image copy
  * rather than text layout. The face's full stops are drawn as their squares,
- * one path per row. A frame costs about a millisecond on a laptop.
+ * one path per row. A frame costs about 1ms at phone width, 3ms on a wide
+ * desktop.
  */
 export function createWaves(pitch: number, frontSize: number) {
   let width = 0

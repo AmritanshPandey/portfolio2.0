@@ -9,11 +9,12 @@ const FADE = "linear-gradient(to bottom, transparent 0, #000 42%)"
 /**
  * The footer's ASCII sea: swell lines of graphite tildes in the site's mono,
  * rising and falling from a horizon down to the foot of the page, the highest
- * front crests glinting ultramarine. Live at 30fps on a desktop pointer while
- * on screen; phones, iPads, low battery and reduced motion get one still frame.
+ * front crests glinting ultramarine. Light enough to run anywhere: live at
+ * 30fps on any screen, phones included, while on screen; reduced motion and a
+ * low battery get one still frame.
  */
 export function FooterSea() {
-  const still = useAmbientStill()
+  const still = useAmbientStill("anywhere")
 
   return (
     <div

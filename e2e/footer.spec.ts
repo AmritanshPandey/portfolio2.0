@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test"
 
 // The footer's ASCII sea: swell lines of mono glyphs that rise and fall under
-// the colophon. Live on a desktop pointer while it is on screen; a still frame
-// wherever the site's other ambient layers hold still (phones, reduced motion).
+// the colophon. Live on any screen, phones included, while it is on screen;
+// a still frame under reduced motion or on a low battery.
 
 // Tests must not depend on the host's battery: the device is plugged in.
 test.beforeEach(async ({ page }) => {
@@ -96,13 +96,39 @@ test("the sea redraws in the night palette when the theme flips", async ({ page 
   await expect.poll(async () => (await snapshot(page)).lum).toBeGreaterThan(light.lum + 30)
 })
 
+const lowBattery = (page: Page) =>
+  page.addInitScript(() => {
+    const battery = { charging: false, level: 0.15, addEventListener() {}, removeEventListener() {} }
+    Object.defineProperty(navigator, "getBattery", { value: () => Promise.resolve(battery), configurable: true })
+  })
+
+test("a laptop on low battery shows a still sea", async ({ page }) => {
+  await lowBattery(page)
+  await openFooter(page)
+  await page.waitForTimeout(300)
+  expect(await isStill(page)).toBe(true)
+})
+
 test.describe("on a phone", () => {
   test.use({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true })
 
-  test("the footer shows a still sea, with nothing to scroll sideways", async ({ page }) => {
+  test("the sea is live too, with nothing to scroll sideways", async ({ page }) => {
     await openFooter(page)
-    expect(await isStill(page)).toBe(true)
+    expect(await isStill(page)).toBe(false)
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
+  })
+
+  test("reduced motion shows a still sea", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await openFooter(page)
+    expect(await isStill(page)).toBe(true)
+  })
+
+  test("a phone on low battery shows a still sea", async ({ page }) => {
+    await lowBattery(page)
+    await openFooter(page)
+    await page.waitForTimeout(300)
+    expect(await isStill(page)).toBe(true)
   })
 })

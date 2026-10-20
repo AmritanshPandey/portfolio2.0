@@ -263,8 +263,10 @@ export function AsciiFlowBackground({
     refreshColors()
     build()
 
-    if (reduced) draw(0)
-    else update()
+    // Draw now rather than on the first animation frame, so the canvas is
+    // never blank while handing over from a still frame to the live one.
+    draw(reduced ? 0 : performance.now())
+    update()
     // A web font may arrive after the first frame: draw it in the font.
     void document.fonts?.ready.then(() => {
       if (disposed) return

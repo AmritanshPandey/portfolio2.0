@@ -130,8 +130,11 @@ under it and hides the swells behind it, with a face of fading full stops
 below; the highest front crests glint ultramarine, a glyph or two at a time.
 It is the same ASCII renderer as the gallery's (`AsciiFlowBackground`,
 `shape="waves"`; geometry in `lib/ascii-sea.ts`), runs at 30fps only while on
-screen in a visible tab, costs about a millisecond a frame, and follows the
-same rules: a still frame on phones, iPads, low battery and reduced motion.
+screen in a visible tab, and costs about 1ms a frame at phone width (about
+3ms on a wide desktop). Being that light, it is the one ambient layer that
+also moves on phones and iPads
+(`useAmbientStill("anywhere")`); reduced motion and a low battery get a still
+frame, and plugging back in lets it move again.
 
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms
