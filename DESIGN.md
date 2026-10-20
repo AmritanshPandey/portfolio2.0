@@ -116,6 +116,16 @@ with a trackpad), low battery, reduced motion, and any browser that can't hold
 ~36fps get the same dot screen as a static CSS texture, and never download the
 shader.
 
+The portrait sits in that screen (`HalftonePortrait`): on a desktop pointer the
+photo is drawn as a halftone on the sheet's own 8px lattice (ink dots grown by
+how dark the photo is, light dots on the night sheet), so the person is made of
+the same dots as the page. The cursor's wake turns the cells it crosses into
+square pixels of the photo's colour, fading back within a second; resting on
+it develops the photo (cells flip in a ragged order, then the photo itself
+fades in) and leaving returns it to dots. On load the photo dissolves into the
+screen once. The real image stays in the page; phones, touch and reduced
+motion see only it.
+
 The gallery header has the other ambient layer, **the ASCII field**
 (`GalleryAscii`): graphite glyphs in the site's mono drifting at 30fps, the
 brightest clusters lighting up in ultramarine, hanging from the header rule
@@ -170,7 +180,12 @@ Framer Motion is globally skipped).
   Ledger's 4px corners, no drop shadow. On Chromium with a desktop pointer the
   rim bends what passes under it (an SVG lens as the backdrop-filter: bent and
   nearly sharp at the rim, frosted in the middle); elsewhere the plate is the
-  plain CSS glass. Cards, sections and the primary action never go glass.
+  plain CSS glass. The glass is alive on a desktop pointer: a soft highlight
+  follows the pointer across it and its rim brightens nearest the pointer
+  (`--px`, `--py`, `--glass-hot`); with reduced motion it stays still. On wide
+  screens the plate spans the rest of the row and matches the photo's height
+  (`.hero-intro`), the intro hanging from the photo's top and the actions level
+  with its foot. Cards, sections and the primary action never go glass.
 - No pills, no drop shadows (a system override removes arbitrary shadows
   outside mockups).
 

@@ -1,10 +1,11 @@
-import Image from "next/image"
 import { CTA } from "@/components/shared/section-cta"
 import { RollingWord } from "@/components/shared/rolling-word"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { AddLater } from "@/components/shared/add-later"
 import { HeroField } from "./hero-field"
 import { GlassPlate } from "./glass-plate"
+import { HalftonePortrait } from "./halftone-portrait"
+import { cn } from "@/lib/utils"
 
 // The glass plate's reach past its content: it pads by what it extends into
 // the gutter, so the content keeps its place on the grid.
@@ -56,22 +57,19 @@ export default function Hero() {
             </span>
           </h1>
 
-          <div className="ledger-grid mt-14 gap-y-12 md:mt-24">
-            {/* Portrait: a plate on the sheet, captioned like a figure. */}
+          <div className="@container ledger-grid mt-14 gap-y-12 md:mt-24">
+            {/* Portrait: drawn in the sheet's own dot screen on a desktop
+                pointer, developing into the photo under the cursor;
+                captioned like a figure. */}
             <figure
               data-hero-card
               className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-4 sm:block lg:col-span-3"
             >
-              <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden bg-surface-2">
-                <Image
-                  src="/assets/images/pic.webp"
-                  alt="Amritansh Pandey"
-                  fill
-                  priority
-                  sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
-                  className="object-cover"
-                />
-              </div>
+              <HalftonePortrait
+                src="/assets/images/pic.webp"
+                alt="Amritansh Pandey"
+                sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
+              />
               <figcaption className="max-w-[320px] space-y-1 sm:mt-3">
                 <p className="text-[15px] font-semibold tracking-[-0.01em]">Amritansh Pandey</p>
                 <p className="ledger-label flex flex-col gap-y-0.5 lg:flex-row lg:flex-wrap lg:items-baseline lg:justify-between lg:gap-x-3">
@@ -83,10 +81,13 @@ export default function Hero() {
 
             {/* Intro and the two actions, on a pane of glass so the dot grid
                 frosts under the text. The plate reaches into the gutter by
-                as much as it pads, so nothing on it moves. */}
-            <div data-hero-fade className="col-span-12 sm:col-span-8 lg:col-span-5 lg:col-start-5">
-              <GlassPlate className={PLATE}>
-                <p className="text-[clamp(1.125rem,1.45vw,1.5rem)] leading-[1.42] tracking-[-0.012em] text-muted-foreground text-pretty">
+                as much as it pads, so nothing on it moves. On wide screens it
+                spans the rest of the row and matches the photo's height
+                (.hero-intro): the intro hangs from the photo's top, the
+                actions sit level with its foot. */}
+            <div data-hero-fade className="hero-intro col-span-12 sm:col-span-8 lg:col-span-8 lg:col-start-5">
+              <GlassPlate className={cn(PLATE, "lg:flex lg:h-[calc(100%+2.5rem)] lg:flex-col lg:justify-between")}>
+                <p className="text-[clamp(1.125rem,2.5vw,2.375rem)] leading-[1.26] tracking-[-0.02em] text-muted-foreground text-pretty">
                   <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
                   I combine product thinking, visual systems, and front-end
                   prototyping to make fintech, AI, and enterprise workflows
@@ -98,13 +99,13 @@ export default function Hero() {
                   <CTA label="View resume" href={RESUME_HREF} newTab variant="secondary" />
                 </div>
               </GlassPlate>
-
-              <AddLater
-                block
-                className="mt-8"
-                note="the headline rotates “AI agents” and this intro says “AI”, but no case study shows AI work. Add the locked Agent Pay card, or drop AI from here."
-              />
             </div>
+
+            <AddLater
+              block
+              className="col-span-12 lg:col-span-8 lg:col-start-5"
+              note="the headline rotates “AI agents” and this intro says “AI”, but no case study shows AI work. Add the locked Agent Pay card, or drop AI from here."
+            />
           </div>
         </div>
       </div>
