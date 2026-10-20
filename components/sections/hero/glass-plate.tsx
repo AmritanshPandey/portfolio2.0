@@ -6,11 +6,14 @@ import { cn } from "@/lib/utils"
 // The rim the lens bends (CSS px), and how far it bends what is under it at
 // the very edge (feDisplacementMap scale; the shift is half of it).
 const RIM = 22
-const BEND = 28
+const BEND = 22
 // The plate's centre stays frosted for the text; this soft a blur. The rim
-// stays nearly sharp, so the bend shows.
+// is only lightly softened: enough to smooth the bent dots into a band, not
+// so much that the bend is lost.
 const BLUR = 8
-const RIM_SOFTEN = 0.8
+const RIM_SOFTEN = 2.2
+// How near (px) the pointer has to come for the glass to catch its light.
+const REACH = 360
 
 /**
  * Chromium on a desktop pointer: the only browsers that draw an SVG filter
@@ -75,6 +78,51 @@ export function GlassPlate({ className, children }: { className?: string; childr
   const ref = useRef<HTMLDivElement>(null)
   const id = `lens-${useId().replace(/[^a-zA-Z0-9-]/g, "")}`
   const [lens, setLens] = useState<Lens | null>(null)
+
+  // Living glass: the sheen and the rim light follow the pointer (through
+  // --px, --py and --glass-hot in .glass-plate), brightest when it is on the
+  // plate and fading out by REACH away. Desktop pointers with motion only.
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return
+    let raf = 0
+    let point: { x: number; y: number } | null = null
+    const paint = () => {
+      raf = 0
+      const rect = el.getBoundingClientRect()
+      if (!point) {
+        el.style.setProperty("--glass-hot", "0")
+        return
+      }
+      const dx = Math.max(rect.left - point.x, 0, point.x - rect.right)
+      const dy = Math.max(rect.top - point.y, 0, point.y - rect.bottom)
+      const hot = Math.max(0, 1 - Math.hypot(dx, dy) / REACH)
+      el.style.setProperty("--px", `${(point.x - rect.left).toFixed(1)}px`)
+      el.style.setProperty("--py", `${(point.y - rect.top).toFixed(1)}px`)
+      el.style.setProperty("--glass-hot", hot.toFixed(3))
+    }
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(paint)
+    }
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return
+      point = { x: e.clientX, y: e.clientY }
+      schedule()
+    }
+    const onLeave = () => {
+      point = null
+      schedule()
+    }
+    window.addEventListener("pointermove", onMove, { passive: true })
+    window.addEventListener("scroll", schedule, { passive: true })
+    document.documentElement.addEventListener("pointerleave", onLeave)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("scroll", schedule)
+      document.documentElement.removeEventListener("pointerleave", onLeave)
+    }
+  }, [])
 
   useEffect(() => {
     const el = ref.current
