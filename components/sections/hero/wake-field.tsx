@@ -420,6 +420,11 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
     const intervals: number[] = []
     let slowWindows = 0
+    // End-to-end tests of the live sheet set this before the page loads: a
+    // runner drawing several browsers' WebGL on the CPU at once is slow for
+    // its own reasons. Honoured only under automation, so never for a visitor.
+    const keepLive =
+      navigator.webdriver && (window as Window & { __heroWakeKeepLive?: boolean }).__heroWakeKeepLive === true
     const ringData = new Float32Array(MAX_RINGS * 4)
 
     const frame = (now: number) => {
@@ -431,7 +436,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
         if (intervals.length === PROBE_FRAMES) {
           slowWindows = median(intervals) > SLOW_FRAME_MS ? slowWindows + 1 : 0
           intervals.length = 0
-          if (slowWindows >= SLOW_WINDOWS) {
+          if (slowWindows >= SLOW_WINDOWS && !keepLive) {
             onSlowRef.current?.()
             return
           }
@@ -532,8 +537,12 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     ro.observe(wrap)
 
     const io = new IntersectionObserver(([entry]) => {
+      const wasVisible = visible
       visible = entry.isIntersecting && document.visibilityState === "visible"
-      if (visible) {
+      // Only coming back into view is a pause. The first notice often lands a
+      // few frames into drawing; clearing `last` then would cost the
+      // frame-rate check an interval, and the visit would go unmeasured.
+      if (visible && !wasVisible) {
         last = 0
         kick()
       }
