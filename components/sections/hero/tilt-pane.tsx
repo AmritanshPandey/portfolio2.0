@@ -1,0 +1,108 @@
+"use client"
+
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
+import { cn } from "@/lib/utils"
+
+// The most the pane leans (degrees), and how far the photo drifts against it (px).
+const TILT = 4
+const DRIFT = 6
+// Share of the remaining tilt covered each frame: a soft spring.
+const EASE = 0.12
+// Ripples in flight at once; older ones are dropped.
+const MAX_RIPPLES = 3
+
+type Ripple = { id: number; x: number; y: number; size: number }
+
+/**
+ * Makes the hero pane a card you can play with: it leans toward the pointer
+ * (sets --tilt-x and --tilt-y, -1 to 1, for anything inside that drifts
+ * against it) and a click sends a ripple across the glass. Tilt is for
+ * desktop pointers with motion; ripples answer taps too, and both stay off
+ * under reduced motion.
+ */
+export function TiltPane({ className, children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [ripples, setRipples] = useState<Ripple[]>([])
+  const nextId = useRef(0)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return
+    let raf = 0
+    let x = 0
+    let y = 0
+    let tx = 0
+    let ty = 0
+
+    const frame = () => {
+      x += (tx - x) * EASE
+      y += (ty - y) * EASE
+      if (Math.abs(tx - x) < 0.002 && Math.abs(ty - y) < 0.002) {
+        x = tx
+        y = ty
+      }
+      el.style.transform =
+        x || y ? `perspective(1200px) rotateX(${(-y * TILT).toFixed(3)}deg) rotateY(${(x * TILT).toFixed(3)}deg)` : ""
+      el.style.setProperty("--tilt-x", x.toFixed(4))
+      el.style.setProperty("--tilt-y", y.toFixed(4))
+      raf = x === tx && y === ty ? 0 : requestAnimationFrame(frame)
+    }
+    const run = () => {
+      if (!raf) raf = requestAnimationFrame(frame)
+    }
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return
+      const rect = el.getBoundingClientRect()
+      tx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1))
+      ty = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1))
+      run()
+    }
+    const onLeave = () => {
+      tx = 0
+      ty = 0
+      run()
+    }
+
+    el.addEventListener("pointermove", onMove)
+    el.addEventListener("pointerleave", onLeave)
+    return () => {
+      cancelAnimationFrame(raf)
+      el.style.transform = ""
+      el.removeEventListener("pointermove", onMove)
+      el.removeEventListener("pointerleave", onLeave)
+    }
+  }, [])
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    // Big enough to reach the far corner from wherever it starts.
+    const size = 2 * Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y))
+    const id = nextId.current++
+    setRipples((rs) => [...rs.slice(-(MAX_RIPPLES - 1)), { id, x, y, size }])
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      onPointerDown={onPointerDown}
+      className={cn("relative will-change-transform", className)}
+      style={{ ["--tilt-drift" as string]: `${DRIFT}px` }}
+    >
+      {children}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[4px]">
+        {ripples.map((r) => (
+          <span
+            key={r.id}
+            className="glass-ripple"
+            style={{ left: r.x, top: r.y, width: r.size, height: r.size }}
+            onAnimationEnd={() => setRipples((rs) => rs.filter((q) => q.id !== r.id))}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
