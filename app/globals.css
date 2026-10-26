@@ -1276,18 +1276,33 @@
   .btn-line:hover .btn-arrow { transform: translate3d(3px, -3px, 0); }
 }
 
-/* The hero's intro plate matches the portrait's height on wide screens. The
-   photo is min(3 columns, 320px) wide at 4:5; a column is worked out from the
-   hero grid's own width (it is a size container), so it holds at any width
-   without measuring anything in script. */
-@media (min-width: 1024px) {
-  .hero-intro {
-    /* Three columns and their two gaps. Kept in a custom property: the
-       build's CSS transform drops this sum when it sits inside min(). */
-    --hero-photo-w: calc((100cqw - 11 * var(--col-gap)) / 4 + 2 * var(--col-gap));
-    align-self: start;
-    height: calc(min(320px, var(--hero-photo-w)) * 1.25);
-  }
+/* A ripple across the hero's glass pane (<TiltPane>): a bright ring that
+   leaves the click quickly and fades as it reaches the far corner. Size and
+   centre come from the click; the ring stays thin as it grows. */
+.glass-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  /* A crest of light with a faint ink trough behind it, like water bending
+     the light under the glass; it reads on the pale pane and the dark one. */
+  background: radial-gradient(
+    closest-side,
+    transparent 86%,
+    color-mix(in oklab, var(--foreground) 8%, transparent) 92%,
+    color-mix(in oklab, var(--glass-rim-hot) 80%, transparent) 96.5%,
+    transparent 100%
+  );
+  -webkit-backdrop-filter: brightness(1.05) contrast(1.05);
+  backdrop-filter: brightness(1.05) contrast(1.05);
+  animation: glass-ripple 1100ms cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+@keyframes glass-ripple {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  45% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-ripple { display: none; }
 }
 
 /* Hero dot field. Desktop pointers get the live pixel wake (<WakeField>);
