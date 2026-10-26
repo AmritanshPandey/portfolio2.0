@@ -72,20 +72,18 @@ export default function Hero() {
                   <div className="ledger-grid gap-y-6">
                     <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-4 sm:block lg:col-span-3">
                       <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden bg-surface-2">
-                        {/* Drifts a few px against the tilt, so the photo
-                            seems to float under the glass. */}
-                        <Image
-                          src="/assets/images/pic.webp"
-                          alt="Amritansh Pandey"
-                          fill
-                          priority
-                          sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
-                          className="scale-[1.04] object-cover"
-                          style={{
-                            translate:
-                              "calc(var(--tilt-x, 0) * var(--tilt-drift, 0px) * -1) calc(var(--tilt-y, 0) * var(--tilt-drift, 0px) * -1)",
-                          }}
-                        />
+                        {/* Drifts a few px against the tilt (TiltPane), so
+                            the photo seems to float under the glass. */}
+                        <div data-tilt-drift className="absolute inset-0 scale-[1.04]">
+                          <Image
+                            src="/assets/images/pic.webp"
+                            alt="Amritansh Pandey"
+                            fill
+                            priority
+                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
+                            className="object-cover"
+                          />
+                        </div>
                       </div>
                       <figcaption className="max-w-[320px] space-y-1 sm:mt-3">
                         <p className="text-[15px] font-semibold tracking-[-0.01em]">Amritansh Pandey</p>

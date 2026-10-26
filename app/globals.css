@@ -1190,11 +1190,11 @@
   .glass,
   .glass-edge,
   .btn-line { box-shadow: inset 0 1px 0 var(--glass-edge); }
-  /* Glass plates: content-strength glass behind the hero's intro, so the
-     dot grid frosts under the text instead of running through it. Thinner than the nav's glass, so the grid still reads through. A
-     light rim, a faint inner shade along the foot, an outer hairline and a
-     specular sheen across the top-left; Ledger corners. Chromium on a
-     desktop pointer adds a lens at the rim (<GlassPlate>). */
+  /* Glass plates: content-strength glass behind the hero, so the dot grid
+     frosts under the text instead of running through it. Thinner than the
+     nav's glass, so the grid still reads through. A light rim, a faint inner
+     shade along the foot, an outer hairline and a specular sheen across the
+     top-left; Ledger corners. */
   .glass-plate {
     position: relative;
     isolation: isolate;
@@ -1208,27 +1208,34 @@
       inset 0 1px 0 var(--glass-edge),
       inset 0 -1px 0 var(--glass-shade);
   }
-  /* The sheen: a fixed specular sweep across the top-left, and a soft
-     highlight that follows the pointer (<GlassPlate> sets --px, --py and
-     --glass-hot, 0 to 1 by how near it is). */
+  /* The fixed specular sweep across the top-left. */
   .glass-plate::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
     border-radius: inherit;
-    background:
-      radial-gradient(
-        320px circle at var(--px, 0px) var(--py, 0px),
-        color-mix(in oklab, var(--glass-sheen-hot) calc(var(--glass-hot, 0) * 100%), transparent),
-        transparent 70%
-      ),
-      linear-gradient(155deg, var(--glass-sheen) 0%, transparent 42%);
+    background: linear-gradient(155deg, var(--glass-sheen) 0%, transparent 42%);
     pointer-events: none;
   }
-  /* The rim catches the pointer's light: a 1px ring over the border,
-     brightest nearest the pointer. */
-  .glass-plate::after {
+  /* What follows the pointer: a soft highlight across the glass, and the rim
+     catching the light as a 1px ring over the border, brightest nearest the
+     pointer. <GlassPlate> sets --px, --py and --glass-hot (0 to 1 by how near
+     the pointer is) on this layer alone, so moving the light restyles one
+     element, not the content on the glass. */
+  .glass-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      320px circle at var(--px, 0px) var(--py, 0px),
+      color-mix(in oklab, var(--glass-sheen-hot) calc(var(--glass-hot, 0) * 100%), transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+  .glass-glow::after {
     content: "";
     position: absolute;
     inset: -1px;
@@ -1245,7 +1252,13 @@
     mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
     mask-clip: content-box, border-box;
     mask-composite: exclude;
-    pointer-events: none;
+  }
+  /* An outline button on the glass is already frosted by the plate under it;
+     blurring again would make the browser recompute the backdrop twice. */
+  .glass-plate .btn-line {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: color-mix(in oklab, var(--background) 40%, transparent);
   }
 
   /* Solid where the browser can't blur, or the reader asks for less
@@ -1292,9 +1305,7 @@
     color-mix(in oklab, var(--glass-rim-hot) 80%, transparent) 96.5%,
     transparent 100%
   );
-  -webkit-backdrop-filter: brightness(1.05) contrast(1.05);
-  backdrop-filter: brightness(1.05) contrast(1.05);
-  animation: glass-ripple 1100ms cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+  animation: glass-ripple 700ms cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
 }
 @keyframes glass-ripple {
   0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
