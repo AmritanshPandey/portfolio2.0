@@ -4,7 +4,7 @@ import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
 import { AddLater } from "@/components/shared/add-later"
 import { HeroField } from "./hero-field"
 import { GlassPlate } from "./glass-plate"
-import { HalftonePortrait } from "./halftone-portrait"
+import { EngravedPortrait } from "./engraved-portrait"
 import { cn } from "@/lib/utils"
 
 // The glass plate's reach past its content: it pads by what it extends into
@@ -58,14 +58,14 @@ export default function Hero() {
           </h1>
 
           <div className="@container ledger-grid mt-14 gap-y-12 md:mt-24">
-            {/* Portrait: drawn in the sheet's own dot screen on a desktop
+            {/* Portrait: engraved in fine rules on a desktop
                 pointer, developing into the photo under the cursor;
                 captioned like a figure. */}
             <figure
               data-hero-card
               className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-4 sm:block lg:col-span-3"
             >
-              <HalftonePortrait
+              <EngravedPortrait
                 src="/assets/images/pic.webp"
                 alt="Amritansh Pandey"
                 sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
