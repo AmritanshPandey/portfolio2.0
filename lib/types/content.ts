@@ -1,12 +1,17 @@
 export interface WorkItem {
+  /** "Domain / Client", e.g. "Demo Systems / Mastercard". */
   category: string
   title: string
+  /** The problem the work answered, in one sentence. */
   description: string
+  /** Amritansh's role, as stated on the case study. */
+  role?: string
   image: string
   href: string
   tags?: string[]
   featured?: boolean
-  /** Short outcome / impact line shown on the "More case studies" cards. */
+  /** The outcome, distinct from the problem; shown on the home page and the
+   *  "More case studies" cards. Only what the case study itself states. */
   metric?: string
   order: number
 }

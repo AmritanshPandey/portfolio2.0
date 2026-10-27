@@ -15,9 +15,10 @@ function slugOf(href: string) {
 
 /**
  * The work, set as a statement of account: one ruled line item per case
- * study, each with a reference, its client, and a drawn specimen of the
- * mechanism it shipped. Hovering a line runs the specimen and lets the other
- * lines recede. Rows settle in one by one as they scroll into view.
+ * study, each with a reference, its client, the role held, a drawn specimen
+ * of the mechanism it shipped, and the problem and outcome as two entries.
+ * Hovering a line runs the specimen and lets the other lines recede. Rows
+ * settle in one by one as they scroll into view.
  */
 export function WorkIndex({ items }: { items: WorkItem[] }) {
   return (
@@ -46,10 +47,11 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
 
             <div className="col-span-12 flex min-w-0 flex-col md:col-span-7 lg:col-span-8 lg:pl-[calc(var(--col-gap)*1)]">
               <div className="flex items-baseline justify-between gap-4">
-                <p className="ledger-label flex items-baseline gap-4">
+                <p className="ledger-label flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1">
                   <span className="text-foreground transition-colors duration-300 group-hover:text-accent">{ref}</span>
                   <span>{category.client}</span>
-                  <span className="hidden sm:inline">{category.type}</span>
+                  {item.role && <span className="text-foreground/80">{item.role}</span>}
+                  <span className="hidden lg:inline">{category.type}</span>
                 </p>
                 <IconArrowUpRight
                   size={22}
@@ -63,13 +65,17 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
                 {item.title}
               </h3>
 
-              <p className="mt-5 max-w-[52ch] text-[15px] leading-[1.55] text-muted-foreground md:text-base">
-                {item.description}
-              </p>
-
-              {item.metric && (
-                <p className="ledger-label mt-auto pt-6 text-foreground/80">→ {item.metric}</p>
-              )}
+              {/* Problem and outcome, entered like two lines of the account. */}
+              <dl className="mt-6 grid max-w-[64ch] grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-[15px] leading-[1.5] md:text-base">
+                <dt className="ledger-label pt-[0.2em]">Problem</dt>
+                <dd className="text-muted-foreground">{item.description}</dd>
+                {item.metric && (
+                  <>
+                    <dt className="ledger-label pt-[0.2em]"><span className="text-accent">Outcome</span></dt>
+                    <dd className="text-foreground">{item.metric}</dd>
+                  </>
+                )}
+              </dl>
             </div>
           </Link>
         )
