@@ -26,7 +26,7 @@ export default function AboutSection() {
         <div aria-hidden data-settle="rule" className="rule-ink" />
 
         <div className="mt-5 md:mt-6">
-          <SectionHeader title="Who I am" description="Curious, hands-on, drawn to systems." />
+          <SectionHeader title="Who I am" description="Curious, hands-on, and usually mid-project." />
         </div>
 
         <div className="ledger-grid mt-12 gap-y-14 md:mt-20">
@@ -38,7 +38,7 @@ export default function AboutSection() {
             <div data-settle className="space-y-6 text-[clamp(1.375rem,2.1vw,2.125rem)] font-[560] leading-[1.24] tracking-[-0.022em] text-foreground [font-variation-settings:'wdth'_104]">
               <p>I like figuring out how things work, at work and off it.</p>
               <p className="text-muted-foreground">
-                In design that means clarity, systems, and decisions visible enough for others to build from. Teaching is the part I return to most.
+                Teaching is the part I return to most, and the best test of whether I understand something.
               </p>
             </div>
 

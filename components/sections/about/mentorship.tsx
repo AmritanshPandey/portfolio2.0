@@ -65,14 +65,14 @@ export default function AdvisorySection() {
         ))}
       </ul>
 
-      {/* The ask: also the page's closing call, so a scroll-through doesn't
-          end without a next step. */}
+      {/* The ask, kept secondary: the footer carries the page's main call
+          to start a conversation. */}
       <div className="flex flex-wrap items-center gap-4 border-t border-border/60 pt-6">
         <a
           href={EMAIL_HREF}
-          className="btn-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="btn-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          Start a conversation
+          Ask about advisory
           <IconArrowUpRight size={16} stroke={2} aria-hidden className="btn-arrow" />
         </a>
         <span className="ledger-label">{EMAIL}</span>

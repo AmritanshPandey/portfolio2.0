@@ -2,7 +2,7 @@ import Link from "next/link"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { CopyEmail } from "./copy-email"
 import { FooterSea } from "./footer-sea"
-import { EMAIL, LINKEDIN_HREF, RESUME_HREF } from "@/lib/contact"
+import { EMAIL, EMAIL_HREF, LINKEDIN_HREF, RESUME_HREF } from "@/lib/contact"
 
 const FOOTER_LINKS = [
   { label: "Work", href: "/#work", external: false },
@@ -38,9 +38,9 @@ function FooterLink({ label, href, external }: (typeof FOOTER_LINKS)[number]) {
 }
 
 /**
- * The closing line of the ledger: the sign-off set large, the two ways in
- * beside it, then the links and the colophon on a hairline, and under them
- * the sea the page runs out into.
+ * The closing line of the ledger: the sign-off set large and the direct way
+ * in beside it (write, or copy the address), then the links and the
+ * colophon on a hairline, and under them the sea the page runs out into.
  */
 export default function Footer() {
   return (
@@ -53,8 +53,7 @@ export default function Footer() {
             data-settle
             className="col-span-12 max-w-[26ch] text-[clamp(1.75rem,3.4vw,3.5rem)] font-[760] leading-[1.02] tracking-[-0.035em] [font-variation-settings:'wdth'_110] lg:col-span-8 text-balance"
           >
-            I work where product logic, interface craft, and financial systems meet. If the work here
-            connects with something you are building, I am easy to reach.
+            If the work here connects with something you are building, I am easy to reach.
           </p>
 
           <div
@@ -62,11 +61,11 @@ export default function Footer() {
             style={{ ["--i" as string]: 1 }}
             className="col-span-12 flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:flex-col lg:items-stretch lg:pt-2"
           >
-            <CopyEmail email={EMAIL} />
-            <Link href="/#work" className="btn-line">
-              View work
+            <a href={EMAIL_HREF} className="btn-ink">
+              Start a conversation
               <IconArrowUpRight size={16} stroke={2} aria-hidden className="btn-arrow" />
-            </Link>
+            </a>
+            <CopyEmail email={EMAIL} />
           </div>
         </div>
 

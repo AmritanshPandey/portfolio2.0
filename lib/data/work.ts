@@ -2,7 +2,8 @@ import type { WorkItem } from "@/lib/types/content"
 
 // ─── SEQUENCE ────────────────────────────────────────────────────────────────
 // Reorder slugs here to change display order.
-// Positions 0-1 → featured (larger title in WorkIndex).
+// Role, problem (description) and outcome (metric) are taken from each case
+// study's own summary; don't add a figure the case study doesn't state.
 
 const SEQUENCE: string[] = [
   "white-label-rfp",
@@ -18,10 +19,11 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     category: "Demo Systems / Mastercard",
     title: "PartnerBank: A demo system for global RFPs",
     description:
-      "A configurable demo system: re-skinning PartnerBank for each bank became configuration, not redesign.",
+      "Demos decide enterprise RFPs, but every new bank needed manual design work, so effort grew with every deal.",
+    role: "Design Lead",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
-    metric: "Per-bank re-skins became a configuration pass.",
+    metric: "A re-skin became a configuration pass; the library grew from 8 to 31 components in six months.",
     tags: ["Demo Systems", "RFPs", "Scale"],
     featured: true,
   },
@@ -29,28 +31,31 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     category: "Commerce Infrastructure / Honasa",
     title: "Honasa: One commerce system for many D2C brands",
     description:
-      "Shared checkout, catalog, and campaign patterns without flattening the brands.",
+      "Three brands sold almost entirely through marketplaces and needed their own storefronts in eight weeks, with no design system.",
+    role: "First in-house UX designer",
     image: "/assets/images/work/commerce-platform.jpg",
     href: "/work/d2c-platform",
-    metric: "3 brands on a shared commerce foundation.",
+    metric: "All three storefronts shipped in the window on one shared system, with no critical post-launch bugs.",
   },
   {
     category: "0→1 Product / Dror",
     title: "Dror: Building and pivoting a safety product",
     description:
-      "Shipped two products, reached ₹1.98Cr revenue, and learned where PMF breaks.",
+      "A 10-person startup's consumer safety app lost its use case to COVID lockdowns before it could make money.",
+    role: "Sole PM and designer",
     image: "/assets/images/work/fintech-ai-system.jpg",
     href: "/work/citizen-safety",
-    metric: "₹1.98Cr revenue across two 0→1 products.",
+    metric: "The B2B pivot shipped in six weeks and reached ₹1.98Cr lifetime revenue.",
   },
   {
     category: "Design Systems / Mastercard",
     title: "Mastercard Email Builder: Moving teams out of HTML",
     description:
-      "50+ components and 28 templates helped teams ship on-brand emails without code.",
+      "Custom emails needed HTML, so teams waited on agencies or fell back to outdated templates.",
+    role: "Design System Lead",
     image: "/assets/images/work/design-tokens.jpg",
     href: "/work/email-builder",
-    metric: "50+ components / 28 templates shipped.",
+    metric: "A no-code builder on 50+ Outlook-safe components and 28 templates, adopted Mastercard-wide.",
   },
 ]
 

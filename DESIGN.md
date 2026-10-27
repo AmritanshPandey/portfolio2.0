@@ -79,8 +79,8 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 
 - **Archivo** (variable, `wdth` axis) is the whole voice. Width carries the
   hierarchy: display sets expanded (`wdth` 112–116), reading text normal
-  (`wdth` 100), and the phone hero condenses (`wdth` 88) so the rotating word
-  always fits one line.
+  (`wdth` 100), and the phone hero condenses (`wdth` 88) so each line of the
+  statement holds on one line. The statement is static: no rotating words.
 - **Martian Mono** sets references, dates, roles, captions and labels, always
   with tabular figures and in sentence case. Uppercase letter-spaced eyebrows
   are retired; a system override converts any legacy instance.
@@ -171,21 +171,24 @@ Framer Motion is globally skipped).
 - Glass (`.glass`) only for the layer that floats over content: the nav bars,
   the phone menu button and `.btn-line`. The page's own paper at 76%, blurring
   what passes under it, with a bright 1px top edge (`--glass-edge`; the nav's
-  toggles carry the edge alone, `.glass-edge`). No refraction. Solid where the
-  browser can't blur or the reader asks for reduced transparency.
+  toggles carry the edge alone, `.glass-edge`). No refraction, and never glass
+  on glass: the phone menu button sits on the bar as plain paper with the edge.
+  A 14px blur, kept modest because the fixed nav re-blurs on every scroll
+  frame. Solid where the browser can't blur or the reader asks for reduced
+  transparency.
 - Glass plates (`.glass-plate`, `<GlassPlate>`) are the one place content goes
-  glass: the hero's intro, so the dot grid frosts under the text
-  instead of running through it. Paper at 55%, a 10px blur, a light rim, a faint
-  inner shade, an outer hairline and a specular sheen across the top-left;
-  Ledger's 4px corners, no drop shadow. On Chromium with a desktop pointer the
-  rim bends what passes under it (an SVG lens as the backdrop-filter: bent and
-  nearly sharp at the rim, frosted in the middle); elsewhere the plate is the
-  plain CSS glass. The glass is alive on a desktop pointer: a soft highlight
-  follows the pointer across it and its rim brightens nearest the pointer
-  (`--px`, `--py`, `--glass-hot`); with reduced motion it stays still. On wide
-  screens the plate spans the rest of the row and matches the photo's height
-  (`.hero-intro`), the intro hanging from the photo's top and the actions level
-  with its foot. Cards, sections and the primary action never go glass.
+  glass: the hero's one pane holding the portrait, the intro and both actions,
+  so the dot grid frosts under it instead of running through it. Paper at 55%,
+  a 10px blur, a light rim, a faint inner shade, an outer hairline and a
+  specular sheen across the top-left; Ledger's 4px corners, no drop shadow, no
+  refraction. The glass is alive on a desktop pointer: a soft highlight
+  follows the pointer and the rim brightens nearest it, on a leaf layer
+  (`.glass-glow`, `--px`, `--py`, `--glass-hot`) so moving the light restyles
+  nothing else. The pane leans toward the pointer (`<TiltPane>`, 4°, the photo
+  drifting a few px against it), a click sends a ring of light across it, and
+  the two actions lean toward a nearby pointer (`<Magnetic>`). All of it is
+  plain transforms; with reduced motion it stays still. An outline button on
+  the plate does not blur a second time. Cards, sections and the primary action never go glass.
 - No pills, no drop shadows (a system override removes arbitrary shadows
   outside mockups).
 
