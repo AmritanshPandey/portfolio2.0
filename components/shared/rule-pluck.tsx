@@ -46,6 +46,15 @@ export function RulePluck() {
     let last = 0
 
     const rules = () => Array.from(document.querySelectorAll<HTMLElement>(".rule-ink"))
+    // Each rule's line in page coordinates, measured on the first move after
+    // a scroll or resize. A move then only measures the rule it crosses, not
+    // every rule on the page.
+    let lines: { el: HTMLElement; y: number }[] | null = null
+    const measure = () =>
+      (lines = rules().map((el) => {
+        const box = el.getBoundingClientRect()
+        return { el, y: box.top + window.scrollY + box.height / 2 }
+      }))
 
     const begin = (el: HTMLElement, width: number): Pluck => {
       const existing = active.get(el)
@@ -126,10 +135,13 @@ export function RulePluck() {
       prev = cur
       if (!live()) return
 
-      for (const el of rules()) {
+      for (const line of lines ?? measure()) {
+        const el = line.el
+        const p = active.get(el)
+        // Neither held nor crossed by this move: nothing to measure.
+        if (!p?.held && (!from || crossingX(from, cur, line.y) === null)) continue
         const box = el.getBoundingClientRect()
         const y = box.top + window.scrollY + box.height / 2
-        const p = active.get(el)
 
         // A caught rule follows the pointer until it is drawn past the pull
         // limit or the pointer leaves either end, then it slips free.
@@ -173,6 +185,7 @@ export function RulePluck() {
     // Scrolling moves the rules, not the pointer: re-base the pointer so the
     // next move is not read as a sweep, and let go of anything held.
     const onScroll = () => {
+      lines = null
       if (client) prev = { x: client.x, y: client.y + window.scrollY }
       active.forEach((p) => p.held && release(p, p.d))
     }
@@ -188,7 +201,11 @@ export function RulePluck() {
 
     window.addEventListener("pointermove", onMove, { passive: true })
     window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", endAll)
+    const onResize = () => {
+      lines = null
+      endAll()
+    }
+    window.addEventListener("resize", onResize)
     document.documentElement.addEventListener("pointerleave", onLeave)
     fine.addEventListener("change", onModeChange)
     reduce.addEventListener("change", onModeChange)
@@ -197,7 +214,7 @@ export function RulePluck() {
     return () => {
       window.removeEventListener("pointermove", onMove)
       window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", endAll)
+      window.removeEventListener("resize", onResize)
       document.documentElement.removeEventListener("pointerleave", onLeave)
       fine.removeEventListener("change", onModeChange)
       reduce.removeEventListener("change", onModeChange)

@@ -1180,12 +1180,14 @@
      controls and secondary buttons. The page's own paper, let partly
      through, so what passes under it (the hero's dots and pixels) softens
      rather than vanishes; a bright top edge catches the light. No
-     refraction: blur, tint and an edge, in every browser. */
+     refraction: blur, tint and an edge, in every browser. The blur is kept
+     modest: the fixed nav re-blurs on every scroll frame, and its cost grows
+     with the radius (most of all on Safari and iPhone). */
   .glass,
   .btn-line {
     background-color: color-mix(in oklab, var(--background) 76%, transparent);
-    -webkit-backdrop-filter: blur(20px) saturate(1.6);
-    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    backdrop-filter: blur(14px) saturate(1.6);
   }
   .glass,
   .glass-edge,
@@ -1368,7 +1370,8 @@
 
 .settle-ready [data-settle]:not([data-settled]) {
   opacity: 0;
-  transform: translate3d(0, 0.55em, 0);
+  /* 2D, so a waiting element is not promoted to its own layer. */
+  transform: translateY(0.55em);
 }
 
 [data-settle="rule"] {
