@@ -16,6 +16,7 @@ import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
+import { partnerBankLayers } from "@/lib/data/partnerbank"
 import type { BrandSkin } from "@/components/case-study/cs-brand-skin-compare"
 
 // ─── BRAND SKINS ─────────────────────────────────────────────────────────────
@@ -249,12 +250,7 @@ export default function Page() {
               Each layer has one job, so brand changes never touch UX logic.
             </p>
           </div>
-          <CsArchStack layers={[
-            { num: "L1", title: "Core Banking UX Layer", body: "Accounts, transactions, transfers, and statements. Unchanged across deals.", meta: ["flows", "interactions", "states"] },
-            { num: "L2", title: "Modular Component Library", body: "Account card, transaction list, CTA block: primitives that compose into any screen.", meta: ["primitives", "variants", "compositions"] },
-            { num: "L3", title: "Brand Token Layer", body: "Colour, type, radius, and elevation tokens that re-skin everything in one pass.", meta: ["color", "type", "elevation"], isCore: true },
-            { num: "L4", title: "Demo Configuration Engine", body: "Combines tokens and components into a deal-ready demo.", meta: ["configure", "preview", "ship"] },
-          ]} />
+          <CsArchStack layers={partnerBankLayers} />
         </div>
       </CsSection>
 

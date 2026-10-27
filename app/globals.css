@@ -847,7 +847,7 @@
 }
 
 /* Hero statement: expanded and enormous on wide screens; condensed on phones
-   so the rotating word always fits one line. Width is the responsive tool. */
+   so each line holds on one line. Width is the responsive tool. */
 .hero-statement {
   font-family: var(--font-display);
   font-weight: 800;

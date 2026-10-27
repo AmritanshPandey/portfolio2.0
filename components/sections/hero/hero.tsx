@@ -1,7 +1,5 @@
 import { CTA } from "@/components/shared/section-cta"
-import { RollingWord } from "@/components/shared/rolling-word"
 import { EMAIL_HREF, RESUME_HREF } from "@/lib/contact"
-import { AddLater } from "@/components/shared/add-later"
 import Image from "next/image"
 import { Magnetic } from "@/components/shared/magnetic"
 import { HeroField } from "./hero-field"
@@ -50,9 +48,7 @@ export default function Hero() {
 
           <h1 className="hero-statement">
             <span data-hero-line="1" className="block">Product design for</span>
-            <span data-hero-line="2" className="block whitespace-nowrap">
-              <RollingWord words={["complex systems", "fintech", "AI agents", "payments", "enterprise"]} />
-            </span>
+            <span data-hero-line="2" className="block whitespace-nowrap">complex systems</span>
             <span data-hero-line="3" className="block">
               people can trust<span className="text-accent">.</span>
             </span>
@@ -99,9 +95,8 @@ export default function Hero() {
                     <div className="col-span-12 flex flex-col justify-between sm:col-span-8 lg:col-span-8 lg:col-start-5">
                       <p className="text-[clamp(1.125rem,2.5vw,2.375rem)] leading-[1.26] tracking-[-0.02em] text-muted-foreground text-pretty">
                         <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
-                        I combine product thinking, visual systems, and front-end
-                        prototyping to make fintech, AI, and enterprise workflows
-                        clearer and more trustworthy.
+                        I design scalable product systems for fintech and enterprise
+                        teams, by making better decisions under real constraints.
                       </p>
 
                       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -117,12 +112,6 @@ export default function Hero() {
                 </GlassPlate>
               </TiltPane>
             </div>
-
-            <AddLater
-              block
-              className="col-span-12 lg:col-span-8 lg:col-start-5"
-              note="the headline rotates “AI agents” and this intro says “AI”, but no case study shows AI work. Add the locked Agent Pay card, or drop AI from here."
-            />
           </div>
         </div>
       </div>
