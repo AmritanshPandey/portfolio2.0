@@ -39,8 +39,15 @@ export default function PhotoCarousel({
   altPrefix = "Photo",
 }: Props) {
   const [index, setIndex] = useState(0)
+  // Photos fetched so far: the one showing and the next, then each as it
+  // comes up, so the plate loads one photo ahead instead of all at once.
+  const [loaded, setLoaded] = useState(() => new Set([0, 1 % photos.length]))
   const rootRef = useRef<HTMLDivElement>(null)
   const count = photos.length
+
+  // Updated while rendering, as soon as the index moves (no extra pass).
+  const ahead = (index + 1) % count
+  if (!loaded.has(index) || !loaded.has(ahead)) setLoaded(new Set([...loaded, index, ahead]))
 
   const advance = useCallback(() => {
     setIndex((prev) => (prev + 1) % count)
@@ -65,7 +72,7 @@ export default function PhotoCarousel({
         aria-label="Next photo"
         className="relative block aspect-[4/5] w-full cursor-pointer overflow-hidden bg-surface-2"
       >
-        {photos.map((src, i) => (
+        {photos.map((src, i) => loaded.has(i) && (
           <Image
             key={src}
             src={src}
@@ -73,7 +80,7 @@ export default function PhotoCarousel({
             fill
             sizes="(max-width: 767px) 90vw, 420px"
             className={clsx(
-              "object-cover transition-opacity duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+              "object-cover transition-opacity duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
               i === index ? "opacity-100" : "opacity-0",
             )}
           />

@@ -62,7 +62,7 @@ function TokensSpecimen() {
             className={clsx(
               "absolute flex aspect-[1.586] w-[28%] flex-col justify-between overflow-hidden rounded-[1.4cqw] p-[2.2cqw] text-white",
               "shadow-[0_1.6cqw_3.2cqw_-1cqw_rgba(0,0,0,0.45)]",
-              "scale-[1.42] row-on:scale-100 transition-[translate,rotate,scale] duration-[900ms]",
+              "scale-[1.42] row-on:scale-100 transition-[translate,rotate,scale] duration-[600ms]",
               EASE,
               BANK_POSE[i]
             )}
@@ -218,7 +218,7 @@ function PivotSpecimen() {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray="1"
-          className="row-on:animate-[work-draw_1.5s_cubic-bezier(0.19,1,0.22,1)] motion-reduce:animate-none"
+          className="row-on:animate-[work-draw_700ms_cubic-bezier(0.19,1,0.22,1)] motion-reduce:animate-none"
         />
         <circle cx={x(peak)} cy={y(maxRev, maxRev)} r="3.25" fill="var(--accent)" />
 
@@ -241,7 +241,7 @@ function EmailSpecimen() {
   // The gaps between components widen, so the email card itself grows and
   // stays centred rather than having its blocks slide out past its edge.
   const part = clsx(
-    "transition-[margin,outline-color] duration-700 outline-1 outline-dashed outline-offset-[0.4cqw] outline-transparent",
+    "transition-[margin,outline-color] duration-500 outline-1 outline-dashed outline-offset-[0.4cqw] outline-transparent",
     "row-on:outline-accent/60",
     EASE
   )

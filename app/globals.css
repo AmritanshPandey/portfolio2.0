@@ -825,7 +825,7 @@
 }
 
 [data-hero-line] {
-  animation: hero-line-rise 680ms var(--ease-out) 40ms both;
+  animation: hero-line-rise 560ms var(--ease-out) 40ms both;
 }
 
 /* The hero rule draws across the sheet first; the statement lands on it. */
@@ -834,9 +834,16 @@
   to { transform: scaleX(1); }
 }
 
+/* A work row's chart line drawing itself on hover (work-specimens.tsx): the
+   path is normalised to pathLength 1, so the dash runs 1 to 0. */
+@keyframes work-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
 [data-hero-rule] {
   transform-origin: left center;
-  animation: rule-draw 640ms var(--ease-out) both;
+  animation: rule-draw 560ms var(--ease-out) both;
 }
 
 /* Hero statement: expanded and enormous on wide screens; condensed on phones

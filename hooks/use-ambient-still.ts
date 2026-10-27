@@ -23,13 +23,14 @@ const lowBattery = async () => {
 }
 
 /**
- * Whether an ambient canvas layer (the gallery's ASCII field, the footer's
- * sea) should hold one still frame: true until this device is known to
- * animate it at the given reach, and again whenever the media query stops
- * matching or the battery runs low. Plugging back in lets it move again.
+ * How an ambient canvas layer (the gallery's ASCII field, the footer's sea)
+ * should run on this device at the given reach: "live", "still" (one held
+ * frame), or null until that is known. It goes still again whenever the media
+ * query stops matching or the battery runs low; plugging back in lets it move
+ * again. A layer that waits for the answer builds its canvas once.
  */
-export function useAmbientStill(reach: AmbientReach = "desktop") {
-  const [still, setStill] = useState(true)
+export function useAmbientMode(reach: AmbientReach = "desktop"): "live" | "still" | null {
+  const [still, setStill] = useState<boolean | null>(null)
 
   useEffect(() => {
     const query = window.matchMedia(LIVE_QUERY[reach])
@@ -58,5 +59,14 @@ export function useAmbientStill(reach: AmbientReach = "desktop") {
     }
   }, [reach])
 
-  return still
+  return still === null ? null : still ? "still" : "live"
+}
+
+/**
+ * Whether an ambient canvas layer should hold one still frame: true until
+ * this device is known to animate it (see useAmbientMode), so a layer on
+ * screen at load shows a frame straight away.
+ */
+export function useAmbientStill(reach: AmbientReach = "desktop") {
+  return useAmbientMode(reach) !== "live"
 }
