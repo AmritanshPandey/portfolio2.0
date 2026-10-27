@@ -273,7 +273,8 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
   const [failed, setFailed] = useState(false)
 
   const { isHigh, isBalanced } = usePerformanceMode()
-  const maxDpr = isHigh ? 2 : isBalanced ? 1.5 : 1
+  // The cells are 8px blocks, so past 1.5x the extra pixels buy nothing visible.
+  const maxDpr = isHigh || isBalanced ? 1.5 : 1
   const colorKey = JSON.stringify([light, dark])
 
   useEffect(() => {
@@ -369,8 +370,11 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let speed = 0 // field heights per second, smoothed
     const rings: Ring[] = []
 
+    // The canvas box, measured on demand and dropped on scroll or resize, so
+    // a pointer move never forces layout.
+    let box: DOMRect | null = null
     const toField = (clientX: number, clientY: number) => {
-      const rect = canvas.getBoundingClientRect()
+      const rect = (box ??= canvas.getBoundingClientRect())
       return {
         x: (clientX - rect.left) / Math.max(1, rect.width),
         y: 1 - (clientY - rect.top) / Math.max(1, rect.height),
@@ -378,11 +382,17 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       }
     }
     const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return
+      if (e.pointerType === "touch" || !visible) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) {
-        onLeave()
+        if (pointer) onLeave()
         return
+      }
+      // The frame-rate check runs on the first stroke, not at load, so it
+      // never competes with the landing.
+      if (!probed) {
+        probed = true
+        probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
       }
       if (lastMove) {
         const gap = e.timeStamp - lastMove.t
@@ -395,7 +405,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       kick()
     }
     const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return
+      if (e.pointerType === "touch" || !visible) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) return
       rings.push({ x: p.x, y: p.y, start: performance.now() })
@@ -410,6 +420,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       from = null
       lastMove = null
       speed = 0
+      box = null
     }
 
     let raf = 0
@@ -417,7 +428,8 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let last = 0
     let first = true
     let activeUntil = 0
-    let probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
+    let probe = 0
+    let probed = false
     const intervals: number[] = []
     let slowWindows = 0
     const ringData = new Float32Array(MAX_RINGS * 4)
@@ -525,6 +537,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       if (resizeRaf) return
       resizeRaf = requestAnimationFrame(() => {
         resizeRaf = 0
+        box = null
         if (!resize()) setFailed(true)
         kick()
       })

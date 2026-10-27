@@ -3,7 +3,7 @@
 Personal portfolio. Goal: convert hiring managers, founders and design peers into conversations about senior product roles. Read `PRODUCT.md` (audience, brand, anti-references) and `DESIGN.md` (tokens, type scale, component rules) before UI work.
 
 ## Stack
-Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion, Lenis, next-themes (light paper default), shadcn/radix, Recharts. Visual system: "Ledger" (see DESIGN.md). Static site, no backend/DB. Analytics only when `VERCEL === "1"`.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion (case studies only; not on the home page), next-themes (light paper default), shadcn/radix, Recharts. Visual system: "Ledger" (see DESIGN.md). Static site, no backend/DB. Analytics only when `VERCEL === "1"`.
 
 ## Commands
 ```bash
@@ -15,7 +15,7 @@ npx tsc --noEmit
 `npm run dev:preview` uses `NEXT_DIST_DIR=.next-preview` so a second dev server can run alongside.
 
 ## Architecture
-- `app/layout.tsx`: fonts, theme, smooth scroll, cursor, shader background, skip link, `<main id="main-content">`.
+- `app/layout.tsx`: fonts, theme, cursor, reveal observers, skip link, `<main id="main-content">`. Scrolling is native (no smooth-scroll library).
 - `app/page.tsx`: home = Hero, Work, Explorations, Approach, Insights, Trajectory, Advisory (`components/sections/*`).
 - Content is typed data in `lib/data/*.ts` (articles, work, explorations, about, systems).
 - Case studies: `/work/[slug]` reads `data/case-studies/<slug>.json` at build time into `components/case-study/case-study-renderer.tsx`, which picks from ~40 `cs-*` block components. Five case studies also have hand-built routes under `app/work/`.
@@ -29,6 +29,7 @@ npx tsc --noEmit
 - Framer reveals write `opacity:0` into SSR HTML; a `.js` class plus CSS fallback and `SettleGuard` keep content visible. Scan for contrast only after content has scrolled in.
 
 ## Gotchas
+- Performance on the home page: anything that tracks the pointer or scroll should listen only while on screen, cache rects, and write transforms or leaf-element variables (never inherited CSS variables on a large subtree). Measure with a production build (`NEXT_DIST_DIR=.next-build npm run build`; revert the `tsconfig.json` include it adds).
 - No tests. `@playwright/test` is installed but unused.
 - `data/casestudy/` (agent-commerce, honasa, white-label-rfp) and `data/case-studies/` (d2c-platform) both exist; the loader only reads `case-studies/`.
 - `components/sections/growth/growth-chart.tsx` appears unused.

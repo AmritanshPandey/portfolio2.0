@@ -14,11 +14,12 @@ const MAX_RIPPLES = 3
 type Ripple = { id: number; x: number; y: number; size: number }
 
 /**
- * Makes the hero pane a card you can play with: it leans toward the pointer
- * (sets --tilt-x and --tilt-y, -1 to 1, for anything inside that drifts
- * against it) and a click sends a ripple across the glass. Tilt is for
- * desktop pointers with motion; ripples answer taps too, and both stay off
- * under reduced motion.
+ * Makes the hero pane a card you can play with: it leans toward the pointer,
+ * anything inside marked [data-tilt-drift] drifts a few px against it, and a
+ * click sends a ripple across the glass. Both are plain transforms written
+ * straight onto their elements, so a tilt frame restyles nothing else. Tilt
+ * is for desktop pointers with motion; ripples answer taps too, and both stay
+ * off under reduced motion.
  */
 export function TiltPane({ className, children }: { className?: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -28,11 +29,15 @@ export function TiltPane({ className, children }: { className?: string; children
   useEffect(() => {
     const el = ref.current
     if (!el || !matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return
+    const drift = [...el.querySelectorAll<HTMLElement>("[data-tilt-drift]")]
     let raf = 0
     let x = 0
     let y = 0
     let tx = 0
     let ty = 0
+    // The pane's own box, measured once per hover: the tilt itself would skew
+    // a fresh measurement on every move.
+    let rect: DOMRect | null = null
 
     const frame = () => {
       x += (tx - x) * EASE
@@ -41,36 +46,62 @@ export function TiltPane({ className, children }: { className?: string; children
         x = tx
         y = ty
       }
-      el.style.transform =
-        x || y ? `perspective(1200px) rotateX(${(-y * TILT).toFixed(3)}deg) rotateY(${(x * TILT).toFixed(3)}deg)` : ""
-      el.style.setProperty("--tilt-x", x.toFixed(4))
-      el.style.setProperty("--tilt-y", y.toFixed(4))
+      const moving = x !== tx || y !== ty || x !== 0 || y !== 0
+      el.style.transform = moving
+        ? `perspective(1200px) rotateX(${(-y * TILT).toFixed(3)}deg) rotateY(${(x * TILT).toFixed(3)}deg)`
+        : ""
+      for (const d of drift) {
+        d.style.transform = moving ? `translate3d(${(-x * DRIFT).toFixed(2)}px, ${(-y * DRIFT).toFixed(2)}px, 0)` : ""
+      }
+      // A layer only while it moves; at rest the pane is part of the page.
+      const hint = moving ? "transform" : ""
+      el.style.willChange = hint
+      for (const d of drift) d.style.willChange = hint
       raf = x === tx && y === ty ? 0 : requestAnimationFrame(frame)
     }
     const run = () => {
       if (!raf) raf = requestAnimationFrame(frame)
     }
 
+    const onEnter = () => {
+      rect = null
+    }
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return
-      const rect = el.getBoundingClientRect()
+      if (!rect) {
+        // Measured flat, so the box is the pane's, not its tilted outline.
+        const t = el.style.transform
+        el.style.transform = ""
+        rect = el.getBoundingClientRect()
+        el.style.transform = t
+      }
       tx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1))
       ty = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1))
       run()
     }
     const onLeave = () => {
+      rect = null
       tx = 0
       ty = 0
       run()
     }
 
+    el.addEventListener("pointerenter", onEnter)
     el.addEventListener("pointermove", onMove)
     el.addEventListener("pointerleave", onLeave)
+    window.addEventListener("scroll", onEnter, { passive: true })
     return () => {
       cancelAnimationFrame(raf)
       el.style.transform = ""
+      el.style.willChange = ""
+      for (const d of drift) {
+        d.style.transform = ""
+        d.style.willChange = ""
+      }
+      el.removeEventListener("pointerenter", onEnter)
       el.removeEventListener("pointermove", onMove)
       el.removeEventListener("pointerleave", onLeave)
+      window.removeEventListener("scroll", onEnter)
     }
   }, [])
 
@@ -89,8 +120,7 @@ export function TiltPane({ className, children }: { className?: string; children
     <div
       ref={ref}
       onPointerDown={onPointerDown}
-      className={cn("relative will-change-transform", className)}
-      style={{ ["--tilt-drift" as string]: `${DRIFT}px` }}
+      className={cn("relative", className)}
     >
       {children}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[4px]">
