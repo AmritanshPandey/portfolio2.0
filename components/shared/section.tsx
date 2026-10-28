@@ -1,13 +1,26 @@
+import clsx from "clsx"
 import { SectionHeader } from "./section-header"
 import { SectionTransition } from "./section-transition"
 
-type Bg = "default" | "muted" | "dark" | "grid" | "squares" | "approach"
+type Bg = "default" | "muted" | "dark" | "grid" | "squares" | "approach" | "ink"
+
+// How much air above a section. The page varies it so the long scroll has a
+// rhythm instead of one repeated interval.
+const SPACE = {
+  tight: "calc(var(--section-y) * 0.6)",
+  default: "var(--section-y)",
+  loose: "calc(var(--section-y) * 1.3)",
+} as const
 
 interface SectionProps {
   id?: string
-  /** Kept for call-site compatibility. Ledger is one sheet of paper:
-   *  sections are divided by rules, never by alternating bands. */
+  /** Ledger is one sheet of paper: sections are divided by rules, not
+   *  alternating bands. The one exception is "ink", the night band reserved
+   *  for the page's key framework (.ink-band). Other values are kept for
+   *  call-site compatibility and render as the page. */
   bg?: Bg
+  /** Air above the section; see SPACE. */
+  space?: keyof typeof SPACE
   children: React.ReactNode
   eyebrow?: string
   title?: string
@@ -26,6 +39,8 @@ interface SectionProps {
  */
 export function Section({
   id,
+  bg,
+  space = "default",
   children,
   eyebrow,
   title,
@@ -39,8 +54,12 @@ export function Section({
   return (
     <section
       id={id}
-      className="relative w-full scroll-mt-[var(--nav-h)] bg-background text-foreground"
-      style={{ paddingTop: "var(--section-y)" }}
+      className={clsx(
+        "relative w-full scroll-mt-[var(--nav-h)] bg-background text-foreground",
+        bg === "ink" && "ink-band",
+      )}
+      // The ink band closes on its own colour, so it pads its foot as well.
+      style={{ paddingTop: SPACE[space], paddingBottom: bg === "ink" ? "var(--section-y)" : undefined }}
     >
       <div className="ledger">
         <div aria-hidden data-settle="rule" className="rule-ink" />

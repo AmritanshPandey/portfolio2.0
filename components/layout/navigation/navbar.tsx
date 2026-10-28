@@ -44,6 +44,7 @@ const PAGE_LINKS: NavLink[] = [
 const SECTION_IDS = [
   "hero",
   "work",
+  "systems",
   "explorations",
   "approach",
   "insights",
@@ -72,14 +73,26 @@ function getDetailRoute(pathname: string) {
   return null
 }
 
-function navSectionFor(activeId: string) {
-  const idx = SECTION_IDS.indexOf(activeId)
-  if (idx === -1) return activeId
+// Home sections without a nav item of their own, and the item they belong to.
+// Systems is the work taken apart; advisory and leadership are part of who he
+// is. Approach is method, not a place in the nav, so nothing lights for it
+// (lighting the item above it said "Exploration" while reading Approach).
+const BELONGS_TO: Record<string, string> = {
+  systems: "work",
+  approach: "",
+  leadership: "about",
+  advisory: "about",
+}
 
+function navSectionFor(activeId: string) {
+  if (activeId in BELONGS_TO) return BELONGS_TO[activeId]
+  if (NAV_IDS.includes(activeId)) return activeId
+
+  // Anything else: the nearest nav item above it.
+  const idx = SECTION_IDS.indexOf(activeId)
   for (let i = idx; i >= 0; i--) {
     if (NAV_IDS.includes(SECTION_IDS[i])) return SECTION_IDS[i]
   }
-
   return activeId
 }
 

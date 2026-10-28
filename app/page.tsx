@@ -27,9 +27,10 @@ export default function Page() {
       </Section>
 
       {/* ───────────────── SYSTEMS ───────────────── */}
+      {/* The page's key framework, so the one section set on ink. */}
       <Section
         id="systems"
-        bg="default"
+        bg="ink"
         title="One system, taken apart."
         description="PartnerBank, layer by layer: why the brand lives in exactly one layer, what that cost, and what it bought."
       >
@@ -59,6 +60,7 @@ export default function Page() {
       <Section
         id="insights"
         bg="muted"
+        space="tight"
         title="Insights"
         description="Short essays on systems, incentives, risk, AI trust, and decision-making."
       >
@@ -80,6 +82,7 @@ export default function Page() {
       <Section
         id="advisory"
         bg="default"
+        space="tight"
         title="Advisory, on the side"
         description="Product direction, UX critique, and mentoring for a small number of teams and designers."
         headerVariant="quiet"

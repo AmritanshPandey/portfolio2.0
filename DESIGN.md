@@ -92,6 +92,14 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 - `.ledger` is the sheet (container + gutters); `.ledger-grid` the 12 columns.
 - Sections open with an ink rule (`.rule-ink`, drawn on entry), then the title
   hung left with its intro set against it on the right.
+- The long scroll has a rhythm, not one interval: `Section` takes
+  `space="tight" | "default" | "loose"` for the air above it, and a few
+  sections break the shared header on purpose. Approach keeps its heading
+  sticky on the left while the steps scroll past on the right.
+- One sheet of paper, with one exception: the **ink band** (`bg="ink"`,
+  `.ink-band`), the night tokens scoped to a single full-bleed section. It is
+  reserved for the page's key framework (the Systems section) and used once;
+  on the night theme it lifts to a raised sheet.
 - Case-study reading columns start at column 4 (`.ledger-offset`, `CsSection`),
   leaving a left rail open. Lists are ruled line items, not card grids.
 - Cards are rare: a raised sheet (`--surface-1`) only for specimens and mockups.
@@ -110,21 +118,16 @@ On a desktop pointer it becomes the **pixel wake** (`WakeField`, WebGL): the
 cells the cursor passes turn into near-touching 7px square pixels, so the sheet
 briefly reads as a pixel mosaic, and they step back down through three ink
 levels to dots as the wake fades; a click sends a soft ring of ultramarine
-pixels through the same grid. It draws only while something moves. It loads
+pixels through the same grid. On the first visit of a session it draws one
+stroke across the statement by itself, shortly after it starts, so the reader
+learns the page answers the pointer; any real move takes over. Phones get one
+ring across the glass pane instead. It draws only while something moves. It loads
 only when the page is idle on a desktop pointer; phones, touch, iPads (even
 with a trackpad), low battery, reduced motion, and any browser that can't hold
 ~36fps get the same dot screen as a static CSS texture, and never download the
 shader.
 
-The portrait sits in that screen (`HalftonePortrait`): on a desktop pointer the
-photo is drawn as a halftone on the sheet's own 8px lattice (ink dots grown by
-how dark the photo is, light dots on the night sheet), so the person is made of
-the same dots as the page. The cursor's wake turns the cells it crosses into
-square pixels of the photo's colour, fading back within a second; resting on
-it develops the photo (cells flip in a ragged order, then the photo itself
-fades in) and leaving returns it to dots. On load the photo dissolves into the
-screen once. The real image stays in the page; phones, touch and reduced
-motion see only it.
+The portrait is a plain photo on the hero's glass pane (see Glass plates).
 
 The gallery header has the other ambient layer, **the ASCII field**
 (`GalleryAscii`): graphite glyphs in the site's mono drifting at 30fps, the

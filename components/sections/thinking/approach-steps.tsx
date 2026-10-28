@@ -5,7 +5,7 @@
  * This replaced a swipeable card deck that showed one step at a time and
  * auto-advanced every few seconds. A fast scanner saw a sixth of the method,
  * and the loop competed with the page. A plain numbered list reads in one
- * pass, with the heading beside it on wide screens.
+ * pass. On wide screens the heading stays put while the steps scroll past.
  */
 
 const STEPS = [
@@ -37,26 +37,37 @@ const STEPS = [
 
 export function ApproachSteps() {
   return (
-    <div className="ledger-grid gap-y-12">
-      <div className="col-span-12 space-y-5 lg:col-span-4">
-        <h2 data-settle className="type-section-title text-foreground">Approach</h2>
-        <p data-settle style={{ ["--i" as string]: 1 }} className="type-section-intro text-muted-foreground">
-          How I turn ambiguity into decisions teams can build from.
-        </p>
+    <div className="ledger-grid gap-y-10">
+      {/* The heading holds its place while the steps scroll past it, so the
+          section reads as a method being walked through rather than the same
+          header-and-grid as the sections around it. */}
+      <div className="col-span-12 lg:col-span-4">
+        <div className="space-y-5 lg:sticky lg:top-[calc(var(--nav-h)+3rem)]">
+          <h2 data-settle className="type-section-title text-foreground">Approach</h2>
+          <p data-settle style={{ ["--i" as string]: 1 }} className="type-section-intro max-w-[30ch] text-muted-foreground">
+            How I turn ambiguity into decisions teams can build from.
+          </p>
+        </div>
       </div>
 
-      <ol className="col-span-12 grid sm:grid-cols-2 sm:gap-x-[var(--col-gap)] lg:col-span-8">
+      <ol className="col-span-12 border-t border-border lg:col-span-7 lg:col-start-6">
         {STEPS.map((step, i) => (
           <li
             key={step.q}
             data-settle
-            style={{ ["--i" as string]: i % 2 }}
-            className="grid grid-cols-[2.5rem_minmax(0,1fr)] py-6 md:py-8"
+            className="grid grid-cols-[3.25rem_minmax(0,1fr)] gap-x-5 border-b border-border py-8 md:grid-cols-[5rem_minmax(0,1fr)] md:py-12"
           >
-            <span className="ledger-label pt-1 text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <span
+              aria-hidden
+              className="text-[clamp(1.75rem,3vw,2.75rem)] font-[760] leading-[1] tracking-[-0.04em] text-muted-foreground tabular-nums [font-variation-settings:'wdth'_108]"
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <div>
-              <h3 className="type-card-title text-foreground">{step.q}</h3>
-              <p className="mt-2 text-[15px] leading-[1.55] text-muted-foreground text-pretty">
+              <h3 className="text-[clamp(1.375rem,2.2vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground text-balance">
+                {step.q}
+              </h3>
+              <p className="mt-3 max-w-[46ch] text-base leading-[1.55] text-muted-foreground text-pretty md:text-[17px]">
                 {step.body}
               </p>
             </div>

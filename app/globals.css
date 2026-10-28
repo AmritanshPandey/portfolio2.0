@@ -178,6 +178,39 @@
   --surface-hover: #1A1A19;
 }
 
+/* The ink band: one section set as night on the paper page, reserved for the
+   page's key framework (the Systems section) so it reads as the one place the
+   page changes key. The night tokens, scoped; on the night theme it lifts to a
+   raised sheet so it still reads as a band. Rules, accents and hairlines all
+   follow the tokens, so nothing inside needs to know it is on ink. */
+.ink-band {
+  --paper: #101010;
+  --ink: #ECEAE4;
+  --graphite: #9A978F;
+  --ultramarine: #8C93FF;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --text-muted: var(--graphite);
+  --surface-1: #171716;
+  --surface-2: #0B0B0B;
+  --border: #2B2A27;
+  --rule-strong: var(--ink);
+  --ring: var(--ultramarine);
+  --accent: var(--ultramarine);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: #1E1E1C;
+  --secondary-foreground: var(--ink);
+  --input: #171716;
+  --surface-hover: #1A1A19;
+  color-scheme: dark;
+}
+.dark .ink-band {
+  --paper: #1A1A19;
+  --surface-1: #222220;
+  --border: #353430;
+}
+
 /* Product-UI mockups keep their own rounded geometry: the fintech kit and any
    device or interface specimen is someone else's interface, not this page. */
 .fintech-system,
@@ -193,7 +226,8 @@
 }
 
 /* One sheet of paper: every canvas variant resolves to the page or a sheet.
-   Sections are divided by rules, not by alternating bands. */
+   Sections are divided by rules, not by alternating bands; the one exception
+   is the ink band above. */
 .bg-canvas-default,
 .bg-canvas-muted,
 .bg-canvas-accent,
