@@ -105,6 +105,29 @@ export function TiltPane({ className, children }: { className?: string; children
     }
   }, [])
 
+  // Phones have no pointer to play with, so on the first visit of a session
+  // the glass answers once by itself: one ring from near the top of the pane,
+  // after the hero has landed. Desktop gets the pixel stroke instead.
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !matchMedia("(pointer: coarse) and (prefers-reduced-motion: no-preference)").matches) return
+    try {
+      if (sessionStorage.getItem("pane:intro")) return
+      sessionStorage.setItem("pane:intro", "1")
+    } catch {
+      return
+    }
+    const timer = window.setTimeout(() => {
+      if (window.scrollY > 40) return
+      const rect = el.getBoundingClientRect()
+      const x = rect.width / 2
+      const y = rect.height * 0.3
+      const size = 2 * Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y))
+      setRipples([{ id: nextId.current++, x, y, size }])
+    }, 1100)
+    return () => clearTimeout(timer)
+  }, [])
+
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const rect = e.currentTarget.getBoundingClientRect()

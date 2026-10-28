@@ -81,6 +81,14 @@ const RING_REACH = 0.42 // final radius, field heights
 const RING_WIDTH = 0.028 // gaussian band, field heights
 const RING_TAIL = 0.12 // tail length behind the front, field heights
 
+// On the first visit of a session the sheet draws one stroke across the
+// statement by itself, shortly after it starts, so a reader learns it answers
+// the pointer. Any real move takes over at once. Field uv, y up: the stroke
+// runs left to right through the statement in a gentle S.
+const INTRO_DELAY_MS = 500
+const INTRO_MS = 1500
+const INTRO_KEY = "wake:intro"
+
 // Drawing: after the last stroke or click, keep drawing this long (s) while
 // the wake and rings fade, then stop until something moves.
 const ACTIVE_FOR = 2.5
@@ -385,8 +393,14 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       if (e.pointerType === "touch" || !visible) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) {
-        if (pointer) onLeave()
+        if (pointer && !intro) onLeave()
         return
+      }
+      // The reader's own hand takes over from the intro stroke.
+      if (intro) {
+        intro = null
+        from = null
+        lastMove = null
       }
       // The frame-rate check runs on the first stroke, not at load, so it
       // never competes with the landing.
@@ -430,6 +444,8 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let activeUntil = 0
     let probe = 0
     let probed = false
+    let intro: { start: number } | null = null
+    let introTimer = 0
     const intervals: number[] = []
     let slowWindows = 0
     const ringData = new Float32Array(MAX_RINGS * 4)
@@ -451,6 +467,20 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       }
       const dt = last ? Math.min(Math.max((now - last) / 1000, 1 / 240), 1 / 20) : 1 / 60
       last = now
+
+      // The intro stroke steers the pointer itself, at a steady hand speed.
+      if (intro) {
+        const t = (now - intro.start) / INTRO_MS
+        if (t >= 1) {
+          intro = null
+          pointer = null
+          from = null
+          speed = 0
+        } else {
+          pointer = { x: 0.06 + 0.88 * t, y: 0.76 + 0.07 * Math.sin(t * Math.PI * 2) }
+          speed = FULL_SPEED * 0.9
+        }
+      }
 
       // Stroke for this frame: from where the last one ended to the pointer,
       // at the speed the pointer events report. Only frames where the pointer
@@ -524,7 +554,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       // fading; then stop, and the last frame stays on screen until the next
       // move. Observers below also pause it off screen or in a hidden tab.
       if (probe > 0) probe--
-      if (visible && (probe > 0 || now < activeUntil)) raf = requestAnimationFrame(frame)
+      if (visible && (probe > 0 || intro || now < activeUntil)) raf = requestAnimationFrame(frame)
       else last = 0
     }
 
@@ -572,6 +602,25 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       setFailed(true)
     }
 
+    // Once per session, only at the top of the page and before the reader
+    // has touched the sheet.
+    const startIntro = () => {
+      if (pointer || !visible || window.scrollY > 40) return
+      try {
+        if (sessionStorage.getItem(INTRO_KEY)) return
+        sessionStorage.setItem(INTRO_KEY, "1")
+      } catch {
+        return
+      }
+      intro = { start: performance.now() }
+      if (!probed) {
+        probed = true
+        probe = PROBE_FRAMES * SLOW_WINDOWS + 1
+      }
+      kick()
+    }
+    introTimer = window.setTimeout(startIntro, INTRO_DELAY_MS)
+
     window.addEventListener("pointermove", onPointerMove, { passive: true })
     window.addEventListener("pointerdown", onPointerDown, { passive: true })
     window.addEventListener("blur", onLeave)
@@ -582,6 +631,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     kick()
 
     return () => {
+      clearTimeout(introTimer)
       if (raf) cancelAnimationFrame(raf)
       if (resizeRaf) cancelAnimationFrame(resizeRaf)
       ro.disconnect()
