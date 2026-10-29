@@ -59,7 +59,7 @@ function HeroVisual() {
       <div className="flex items-stretch gap-3 px-2">
         <div className="flex flex-col items-center">
           <div className="w-px flex-1 bg-accent/30" />
-          <div className="w-2 h-2 rounded-full bg-accent/60 my-1 shrink-0" />
+          <div className="w-2 h-2 bg-accent/60 my-1 shrink-0" />
           <div className="w-px flex-1 bg-accent/30" />
         </div>
         <div className="flex-1 rounded-xl border border-accent/20 bg-accent/[0.04] px-4 py-3 my-1">
@@ -177,7 +177,7 @@ function ActTimeline() {
       </div>
       <div className="flex items-start gap-3 px-4 py-4">
         <div className="flex flex-col items-center mt-1 shrink-0">
-          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-accent/50 my-1" /><div className="w-px h-4 bg-border/50" />
+          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 bg-accent/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
         <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
           <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">⚡ Forcing function · March 2020</p>
@@ -200,15 +200,15 @@ function ActTimeline() {
       </div>
       <div className="flex items-start gap-3 px-4 py-4">
         <div className="flex flex-col items-center mt-1 shrink-0">
-          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 rounded-full bg-red-500/50 my-1" /><div className="w-px h-4 bg-border/50" />
+          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 bg-foreground/50 my-1" /><div className="w-px h-4 bg-border/50" />
         </div>
-        <div className="flex-1 bg-red-500/[0.04] border border-red-500/15 rounded-xl px-4 py-3">
-          <p className="text-[11px] font-semibold tracking-normal text-red-700 dark:text-red-400 mb-1">⚡ Forcing function · Late 2021</p>
+        <div className="flex-1 bg-foreground/[0.04] border border-foreground/15 rounded-xl px-4 py-3">
+          <p className="text-[11px] font-semibold tracking-normal text-foreground mb-1">⚡ Forcing function · Late 2021</p>
           <p className="text-[13px] text-foreground/75 leading-relaxed">Restrictions lift. Clients stop renewing.</p>
         </div>
       </div>
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-red-700 dark:text-red-400 mb-1">Wind down · Post Apr 2021</p>
+      <div className="rounded-2xl border border-foreground/20 bg-foreground/[0.03] p-5">
+        <p className="text-[11px] font-semibold tracking-normal text-foreground mb-1">Wind down · Post Apr 2021</p>
         <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">₹1.98Cr lifetime revenue, then a wind-down.</p>
       </div>
@@ -236,8 +236,8 @@ function ForcingFunctions() {
   return (
     <div className="grid sm:grid-cols-2 gap-4">
       {ffs.map(ff => (
-        <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-red-500/20 bg-red-500/[0.03]"}`}>
-          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-red-700 dark:text-red-400"}`}>
+        <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-foreground/20 bg-foreground/[0.03]"}`}>
+          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-foreground"}`}>
             Forcing function {ff.num} · {ff.date}
           </p>
           <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
@@ -260,9 +260,9 @@ function DailyRhythm() {
       {/* 24h bar */}
       <div>
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
-        <div className="flex h-8 rounded-full overflow-hidden border border-border/40 gap-px">
-          <div className="bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[11px] font-semibold text-background tracking-wide dark:text-foreground">UX DESIGN</span>
+        <div className="flex h-8 overflow-hidden border border-border/40 gap-px">
+          <div className="bg-foreground flex items-center justify-center" style={{ width: "35%" }}>
+            <span className="text-[11px] font-semibold text-background tracking-wide">UX DESIGN</span>
           </div>
           <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
             <span className="text-[11px] font-semibold text-muted-foreground tracking-wide">PRD</span>
@@ -361,15 +361,15 @@ function GapsGrid() {
                 <span className="text-[12px] text-muted-foreground">Completed onboarding</span>
                 <span className="text-[12px] font-medium text-foreground">32%</span>
               </div>
-              <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div className="h-full rounded-full bg-accent/60" style={{ width: "32%" }} />
+              <div className="h-3 bg-muted overflow-hidden">
+                <div className="h-full bg-accent/60" style={{ width: "32%" }} />
               </div>
               <div className="flex items-center justify-between mt-3 mb-2">
                 <span className="text-[12px] text-muted-foreground">Dropped off</span>
                 <span className="text-[12px] font-semibold text-accent">68%</span>
               </div>
-              <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div className="h-full rounded-full bg-accent/70" style={{ width: "68%" }} />
+              <div className="h-3 bg-muted overflow-hidden">
+                <div className="h-full bg-accent/70" style={{ width: "68%" }} />
               </div>
             </div>
             <div className="shrink-0 text-right">
@@ -443,9 +443,9 @@ function PivotValidation() {
               </div>
               <div className="flex gap-1">
                 <div className="w-5 shrink-0" />
-                <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                <div className="flex-1 h-2 bg-muted overflow-hidden">
                   <motion.div
-                    className="h-full rounded-full bg-accent/60"
+                    className="h-full bg-accent/60"
                     initial={{ width: 0 }}
                     whileInView={{ width: s.width }}
                     viewport={{ once: true }}
@@ -506,7 +506,8 @@ function ProductComparison() {
 function DashboardMockup() {
   return (
     <FadeIn>
-      <div className="rounded-2xl border border-border overflow-hidden">
+      {/* A product mockup: its own palette and corners (DESIGN.md §2). */}
+      <div data-keep-radius className="rounded-2xl border border-border overflow-hidden">
         {/* Browser bar */}
         <div className="bg-neutral-900 h-9 flex items-center px-4 gap-2">
           <div className="flex gap-1.5">
@@ -640,9 +641,9 @@ function ImpactMetrics() {
               <p className="text-[11px] text-muted-foreground">Top 10.7%</p>
             </div>
           </div>
-          <div className="relative h-4 rounded-full bg-muted overflow-hidden">
+          <div className="relative h-4 bg-muted overflow-hidden">
             <motion.div
-              className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-accent/80 to-accent/40"
+              className="absolute left-0 top-0 h-full bg-accent/70"
               initial={{ width: 0 }}
               whileInView={{ width: "10.7%" }}
               viewport={{ once: true }}
@@ -673,8 +674,8 @@ function ImpactMetrics() {
       </FadeIn>
 
       {/* Honest assessment */}
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.03] p-6">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-red-700 dark:text-red-400 mb-3">Honest assessment</p>
+      <div className="rounded-2xl border border-foreground/20 bg-foreground/[0.03] p-6">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground mb-3">Honest assessment</p>
         <p className="text-[14px] leading-relaxed text-foreground/80">
           ₹1.98Cr sounds like a success. It isn&apos;t, against $494K (~₹4Cr) raised. The pivot sold only while distancing was a compliance requirement. We proved we could sell. We didn&apos;t prove the market would last.
         </p>
@@ -805,7 +806,7 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsSection id="pivot" label="The Pivot" variant="dark" withDivider={false}>
+      <CsSection id="pivot" label="The Pivot" variant="ink" withDivider={false}>
         <div className="space-y-5">
           <div className="space-y-2">
             <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">The decision that changed everything</h2>
