@@ -41,11 +41,11 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
             )}
           >
             {/* Specimen: a drawn picture of the mechanism, not a stock image. */}
-            <div className="col-span-12 md:col-span-5 lg:col-span-4">
+            <div className="col-span-12 md:col-span-5">
               <WorkSpecimen slug={slugOf(item.href)} />
             </div>
 
-            <div className="col-span-12 flex min-w-0 flex-col md:col-span-7 lg:col-span-8 lg:pl-[calc(var(--col-gap)*1)]">
+            <div className="col-span-12 flex min-w-0 flex-col md:col-span-7 lg:pl-[calc(var(--col-gap)*1)]">
               <div className="flex items-baseline justify-between gap-4">
                 <p className="ledger-label flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1">
                   <span className="text-foreground transition-colors duration-300 group-hover:text-accent">{ref}</span>
@@ -72,7 +72,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
                 {item.metric && (
                   <>
                     <dt className="ledger-label pt-[0.2em]"><span className="text-accent">Outcome</span></dt>
-                    <dd className="text-foreground">{item.metric}</dd>
+                    <dd className="text-foreground tabular-nums">{item.metric}</dd>
                   </>
                 )}
               </dl>

@@ -3,9 +3,7 @@ import Link from "next/link"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import { partnerBankCase, partnerBankLayers } from "@/lib/data/partnerbank"
-
-// One token file per bank: the only thing that changes between deals.
-const BANK_FILES = ["bank-a.tokens", "bank-b.tokens", "bank-c.tokens"]
+import { TokenSkin } from "./token-skin"
 
 const ARGUMENT = [
   { term: "Constraint", text: partnerBankCase.constraint },
@@ -17,9 +15,9 @@ const ARGUMENT = [
 /**
  * One system, taken apart: PartnerBank's four layers as ruled line items, the
  * brand layer marked in the accent with the per-bank token files that feed
- * it, and beside them the case for the design (constraint, decision,
- * trade-off, outcome). Server-rendered; rows settle in like the rest of the
- * page, with no script of their own.
+ * it, which re-skin a live account card (<TokenSkin>, the one client island),
+ * and beside them the case for the design (constraint, decision, trade-off,
+ * outcome). Rows settle in like the rest of the page.
  */
 export function SystemStack() {
   return (
@@ -53,16 +51,7 @@ export function SystemStack() {
               </div>
               <p className="mt-1.5 max-w-[52ch] text-[15px] leading-[1.55] text-muted-foreground">{layer.body}</p>
               {layer.meta && <p className="ledger-label mt-2">{layer.meta.join(" · ")}</p>}
-              {layer.isCore && (
-                <p className="ledger-label mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span>per deal →</span>
-                  {BANK_FILES.map((file) => (
-                    <span key={file} className="border border-border px-1.5 py-0.5 text-foreground">
-                      {file}
-                    </span>
-                  ))}
-                </p>
-              )}
+              {layer.isCore && <TokenSkin />}
             </div>
           </li>
         ))}
@@ -78,7 +67,7 @@ export function SystemStack() {
               <dd
                 data-settle
                 style={{ ["--i" as string]: i + 1 }}
-                className={"strong" in entry ? "text-foreground" : "text-muted-foreground"}
+                className={"strong" in entry ? "text-foreground tabular-nums" : "text-muted-foreground"}
               >
                 {entry.text}
               </dd>

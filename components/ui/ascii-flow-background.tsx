@@ -115,9 +115,11 @@ export function AsciiFlowBackground({
       const [r, g, b, a] = pctx.getImageData(0, 0, 1, 1).data
       return { r, g, b, a: a / 255 }
     }
+    // Tokens are read where the canvas sits, not at the page root, so a layer
+    // inside a scoped palette (the footer on the ink band) draws in it.
     const resolve = (nameOrColor: string | undefined, fallback: string) => {
       const raw = nameOrColor?.startsWith("--")
-        ? getComputedStyle(document.documentElement).getPropertyValue(nameOrColor).trim()
+        ? getComputedStyle(canvas).getPropertyValue(nameOrColor).trim()
         : nameOrColor ?? ""
       return toRGBA(raw || fallback)
     }

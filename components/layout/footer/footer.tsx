@@ -38,13 +38,15 @@ function FooterLink({ label, href, external }: (typeof FOOTER_LINKS)[number]) {
 }
 
 /**
- * The closing line of the ledger: the sign-off set large and the direct way
- * in beside it (write, or copy the address), then the links and the
- * colophon on a hairline, and under them the sea the page runs out into.
+ * The closing line of the ledger, set on ink: the sign-off large and the
+ * direct way in beside it (write, or copy the address), then the links and
+ * the colophon on a hairline, and under them the sea the page runs out into.
  */
 export default function Footer() {
   return (
-    <footer className="relative bg-background text-foreground" style={{ paddingTop: "var(--section-y)" }}>
+    // Set on the ink band (.ink-band): every page closes on its darkest
+    // moment, with the way in at the centre of it.
+    <footer className="ink-band relative bg-background text-foreground" style={{ paddingTop: "var(--section-y)" }}>
       <div className="ledger pb-10">
         <div aria-hidden data-settle="rule" className="rule-ink" />
 

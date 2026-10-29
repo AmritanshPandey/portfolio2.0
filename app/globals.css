@@ -570,6 +570,14 @@
     text-wrap: pretty;
   }
 
+  /* Opening and closing quotes and stops hang outside the measure, so a
+     paragraph's left edge stays optically straight (Safari; ignored
+     elsewhere). */
+  p,
+  blockquote {
+    hanging-punctuation: first allow-end last;
+  }
+
   /* One focus ring for anything that doesn't define its own.
      Components that opt out via `outline-none` (e.g. CTA) keep theirs. */
   :focus-visible {
@@ -1332,6 +1340,75 @@
   .btn-line:hover .btn-arrow { transform: translate3d(3px, -3px, 0); }
 }
 
+/* An Insights row opening to its summary (insights-list.tsx): the summary's
+   row grows from 0fr to 1fr on hover or keyboard focus. Touch screens can't
+   hover, so they show it throughout. */
+.insight-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 400ms var(--ease-out),
+    opacity 300ms var(--ease-out);
+}
+.insight-more > * {
+  min-height: 0;
+  overflow: hidden;
+}
+.work-row:hover .insight-more,
+.work-row:focus-visible .insight-more {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+@media (hover: none) {
+  .insight-more {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .insight-more { transition: none; }
+}
+
+/* The Systems section's live re-skin (<TokenSkin>): a PartnerBank card drawn
+   only from --bank-* variables, so a token swap eases colour, corner and
+   weight and never moves the layout. A product mockup: its own palette. */
+.token-card {
+  border-radius: var(--bank-radius);
+  background: #FBFAF7;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+  transition: border-radius 400ms var(--ease-out);
+}
+.token-card-head {
+  background-color: var(--bank-primary);
+  background-image: linear-gradient(135deg, transparent 0%, var(--bank-deep) 140%);
+  transition: background-color 400ms var(--ease-out);
+}
+.token-card-chip {
+  border-radius: calc(var(--bank-radius) * 0.4);
+  background: rgb(255 255 255 / 0.35);
+  transition: border-radius 400ms var(--ease-out);
+}
+.token-card-cta {
+  border-radius: calc(var(--bank-radius) * 0.6);
+  background-color: var(--bank-primary);
+  transition: background-color 400ms var(--ease-out), border-radius 400ms var(--ease-out);
+}
+.token-card-ghost {
+  border-radius: calc(var(--bank-radius) * 0.6);
+  box-shadow: inset 0 0 0 1px var(--bank-primary);
+  color: var(--bank-deep);
+  transition: box-shadow 400ms var(--ease-out), color 400ms var(--ease-out), border-radius 400ms var(--ease-out);
+}
+.token-card span,
+.token-card p {
+  transition: font-weight 400ms var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .token-card,
+  .token-card * { transition: none !important; }
+}
+
 /* A ripple across the hero's glass pane (<TiltPane>): a bright ring that
    leaves the click quickly and fades as it reaches the far corner. Size and
    centre come from the click; the ring stays thin as it grows. */
@@ -1426,6 +1503,24 @@
   transform: scaleX(0);
 }
 
+/* Section titles rise out of a slot as their rule finishes drawing: the line
+   lifts while a clip opens from the bottom, like the hero statement landing.
+   The clip always reaches past the box (negative insets) so descenders and
+   overhangs are never cut, and both ends are insets so it can interpolate. */
+[data-settle="title"] {
+  clip-path: inset(-0.15em -0.15em -0.3em -0.15em);
+  transition:
+    clip-path 640ms var(--ease-out),
+    transform 640ms var(--ease-out);
+  transition-delay: calc(160ms + var(--settle-delay, 0ms));
+}
+
+.settle-ready [data-settle="title"]:not([data-settled]) {
+  opacity: 1;
+  transform: translateY(0.45em);
+  clip-path: inset(100% -0.15em -0.3em -0.15em);
+}
+
 /* Loading: a single rule that runs left to right while a route streams in. */
 @keyframes ledger-run {
   0%   { transform: scaleX(0); transform-origin: left center; }
@@ -1494,9 +1589,11 @@
 
   /* The settle never hides content when motion is reduced */
   .settle-ready [data-settle],
-  .settle-ready [data-settle="rule"] {
+  .settle-ready [data-settle="rule"],
+  .settle-ready [data-settle="title"] {
     opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
   }
 
   ::view-transition-old(root),

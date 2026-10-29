@@ -10,6 +10,17 @@ export interface SystemLayer {
   isCore?: boolean
 }
 
+/**
+ * The case study's anonymised prospects, each a set of brand tokens on the
+ * same product: the work row's card specimen and the Systems section's live
+ * re-skin both draw from these. Mockup palettes (DESIGN.md §2).
+ */
+export const partnerBankBanks = [
+  { name: "Heritage Trust", file: "bank-a.tokens", num: "9120", type: "Private credit", from: "#D4A24C", to: "#8B6508", radius: 2, weight: 700 },
+  { name: "North Bank", file: "bank-b.tokens", num: "4287", type: "Premier debit", from: "#F43F5E", to: "#9F1239", radius: 14, weight: 600 },
+  { name: "Verde Bank", file: "bank-c.tokens", num: "7503", type: "Everyday debit", from: "#4DA88A", to: "#2F6F5A", radius: 8, weight: 500 },
+]
+
 export const partnerBankLayers: SystemLayer[] = [
   { num: "L1", title: "Core Banking UX Layer", body: "Accounts, transactions, transfers, and statements. Unchanged across deals.", meta: ["flows", "interactions", "states"] },
   { num: "L2", title: "Modular Component Library", body: "Account card, transaction list, CTA block: primitives that compose into any screen.", meta: ["primitives", "variants", "compositions"] },

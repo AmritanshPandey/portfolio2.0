@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import clsx from "clsx"
 import { drorRevenueVsRestrictions } from "@/lib/data/dror"
+import { partnerBankBanks } from "@/lib/data/partnerbank"
 
 /**
  * Work specimens: one small, code-drawn diagram per case study.
@@ -25,7 +26,8 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
     <div
       aria-hidden
       className={clsx(
-        "@container relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-card",
+        // Ledger's 4px corner on the frame; the mockups inside keep their own.
+        "@container relative aspect-[16/10] w-full overflow-hidden rounded-[4px] bg-card",
         "ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]",
         className
       )}
@@ -37,12 +39,8 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
 
 /* ── PartnerBank: one component, three brand skins ───────────────────────── */
 
-const BANKS = [
-  // The case study's own anonymised prospects and token colours.
-  { name: "Heritage Trust", num: "9120", type: "Private credit", from: "#D4A24C", to: "#8B6508" },
-  { name: "North Bank", num: "4287", type: "Premier debit", from: "#F43F5E", to: "#9F1239" },
-  { name: "Verde Bank", num: "7503", type: "Everyday debit", from: "#4DA88A", to: "#2F6F5A" },
-]
+// The case study's own anonymised prospects and token colours.
+const BANKS = partnerBankBanks
 
 // Resting: stacked like a hand of cards, held large so the hand fills the
 // frame. Active: dealt into a row at true size, which needs the width back.
