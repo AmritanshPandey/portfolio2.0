@@ -43,7 +43,7 @@ export function ApproachSteps() {
           header-and-grid as the sections around it. */}
       <div className="col-span-12 lg:col-span-4">
         <div className="space-y-5 lg:sticky lg:top-[calc(var(--nav-h)+3rem)]">
-          <h2 data-settle className="type-section-title text-foreground">Approach</h2>
+          <h2 data-settle="title" className="type-section-title text-foreground">Approach</h2>
           <p data-settle style={{ ["--i" as string]: 1 }} className="type-section-intro max-w-[30ch] text-muted-foreground">
             How I turn ambiguity into decisions teams can build from.
           </p>

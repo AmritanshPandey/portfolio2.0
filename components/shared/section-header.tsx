@@ -30,11 +30,13 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   const quiet = variant === "quiet"
   const settle = animated ? { "data-settle": "" } : {}
+  // The title rises out of a slot rather than fading in (see globals.css).
+  const settleTitle = animated ? { "data-settle": "title" } : {}
 
   return (
     <div className="ledger-grid gap-y-5">
       <Tag
-        {...settle}
+        {...settleTitle}
         className={clsx(
           "col-span-12 text-foreground",
           quiet

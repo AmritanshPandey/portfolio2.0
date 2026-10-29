@@ -97,9 +97,15 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
   sections break the shared header on purpose. Approach keeps its heading
   sticky on the left while the steps scroll past on the right.
 - One sheet of paper, with one exception: the **ink band** (`bg="ink"`,
-  `.ink-band`), the night tokens scoped to a single full-bleed section. It is
-  reserved for the page's key framework (the Systems section) and used once;
-  on the night theme it lifts to a raised sheet.
+  `.ink-band`), the night tokens scoped to a full-bleed section. It is used in
+  two places only: the page's key framework (the Systems section, where the
+  brand-token chips re-skin a live PartnerBank card, `<TokenSkin>`) and the
+  close (the footer, on every page). On the night theme it lifts to a raised
+  sheet. Anything drawn inside reads its tokens from where it sits.
+- Work, Explorations and Insights share one grammar: ruled line items, a
+  specimen on the left where there is one, entries on the right, and the other
+  rows receding on hover (`.work-index` / `.work-row`). Specimen frames take
+  Ledger's 4px corner; the mockups inside keep their own.
 - Case-study reading columns start at column 4 (`.ledger-offset`, `CsSection`),
   leaving a left rail open. Lists are ruled line items, not card grids.
 - Cards are rare: a raised sheet (`--surface-1`) only for specimens and mockups.
@@ -108,7 +114,8 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 
 One idea, used everywhere it appears: **the settle**. Rules draw left to right,
 then content lands a few pixels onto them (`data-settle`, driven by
-`SettleObserver`). Transform and opacity only. The hero runs the same settle in
+`SettleObserver`). Section titles land bolder: they rise out of a slot as their
+rule finishes (`data-settle="title"`, a clip that opens from the bottom). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
 
 The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen

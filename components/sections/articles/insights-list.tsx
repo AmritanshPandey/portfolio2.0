@@ -5,7 +5,10 @@ import type { ArticleItem } from "@/lib/types/content"
 
 /**
  * Reading list — the quieter sibling of the work index. Same editorial
- * row grammar (hairlines, recede-on-hover), smaller voice.
+ * row grammar (hairlines, recede-on-hover), smaller voice. Pointing at an
+ * essay (or reaching it by keyboard) opens its row to the one-line summary,
+ * so a scanner can tell the essays apart without leaving the page; touch
+ * screens, which can't hover, show the summary throughout.
  */
 export function InsightsList({ items }: { items: ArticleItem[] }) {
   return (
@@ -30,14 +33,25 @@ export function InsightsList({ items }: { items: ArticleItem[] }) {
             {item.readTime ? <span className="text-muted-foreground"> · {item.readTime}</span> : null}
           </p>
 
-          <h3
-            className={clsx(
-              "order-1 md:order-none min-w-0 text-[clamp(1.25rem,2.2vw,2rem)] font-[720] leading-[1.08] tracking-[-0.025em] text-foreground [font-variation-settings:'wdth'_106]",
-              "transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2"
+          <div className="order-1 min-w-0 md:order-none">
+            <h3
+              className={clsx(
+                "text-[clamp(1.25rem,2.2vw,2rem)] font-[720] leading-[1.08] tracking-[-0.025em] text-foreground [font-variation-settings:'wdth'_106]",
+                "transition-transform duration-600 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2"
+              )}
+            >
+              {item.title}
+            </h3>
+            {item.description && (
+              <div className="insight-more">
+                <div>
+                  <p className="max-w-[58ch] pt-3 text-[15px] leading-[1.55] text-muted-foreground text-pretty md:translate-x-2 md:text-base">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
             )}
-          >
-            {item.title}
-          </h3>
+          </div>
 
           <span className="order-1 md:order-none relative grid shrink-0 place-items-center overflow-hidden">
             <IconArrowUpRight
