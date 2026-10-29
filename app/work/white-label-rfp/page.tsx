@@ -77,7 +77,7 @@ function HeroAside() {
               <span className="block text-[13px] font-medium text-foreground leading-tight">{l.title}</span>
               <span className="block text-[11px] text-muted-foreground">{l.meta}</span>
             </span>
-            {l.accent && <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />}
+            {l.accent && <span className="h-1.5 w-1.5 bg-accent shrink-0" />}
           </div>
         ))}
       </div>
@@ -255,7 +255,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key Decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="default">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-5">
           <CsDecision
             index={0}

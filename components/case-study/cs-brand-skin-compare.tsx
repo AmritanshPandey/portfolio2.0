@@ -156,14 +156,14 @@ export function CsBrandSkinCompare({ base, alternates, className }: CsBrandSkinC
               aria-pressed={s.id === active.id}
               onClick={() => setActiveId(s.id)}
               className={clsx(
-                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[13px] transition-colors",
+                "inline-flex items-center gap-2 border px-3 py-1.5 text-[13px] transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
                 s.id === active.id
                   ? "border-foreground/40 bg-foreground/[0.06] text-foreground"
                   : "border-border text-muted-foreground hover:border-foreground/25 hover:text-foreground"
               )}
             >
-              <span className="size-2.5 rounded-full" style={{ background: s.primary }} />
+              <span className="size-2.5" style={{ background: s.primary }} />
               {s.bank}
             </button>
           ))}

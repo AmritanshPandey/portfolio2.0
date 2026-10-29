@@ -45,17 +45,17 @@ const EMAIL_CLIENTS = [
 const STATUS_DOT: Record<string, string> = {
   ok:      "bg-accent",
   partial: "bg-accent",
-  problem: "bg-red-500",
+  problem: "bg-destructive",
 }
 const STATUS_BG: Record<string, string> = {
   ok:      "bg-card border-border",
   partial: "bg-accent/8 border-accent/40",
-  problem: "bg-red-500/8 border-red-400/40",
+  problem: "bg-destructive/[0.06] border-destructive/40",
 }
 const STATUS_TEXT: Record<string, string> = {
   ok:      "text-muted-foreground",
   partial: "text-accent",
-  problem: "text-red-700 dark:text-red-400",
+  problem: "text-destructive",
 }
 
 // ─── CONSTRAINT TABLE DATA ───────────────────────────────────────────────────
@@ -121,7 +121,7 @@ function HeroAside() {
         {EMAIL_CLIENTS.map(c => (
           <div key={c.name} className={`rounded-xl p-3 border ${STATUS_BG[c.status]}`}>
             <div className="flex items-center gap-2 mb-1">
-              <div className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[c.status]}`} />
+              <div className={`w-2 h-2 shrink-0 ${STATUS_DOT[c.status]}`} />
               <span className="text-[12px] font-medium text-foreground">{c.name}</span>
             </div>
             <p className={`text-[11px] leading-relaxed ${STATUS_TEXT[c.status]}`}>{c.issue}</p>
@@ -358,7 +358,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key Decisions */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-5">
           <div className="pb-6">
             <CsOptions
@@ -514,7 +514,7 @@ export default function Page() {
               <div className="flex items-center flex-wrap gap-2 rounded-2xl bg-card border border-border p-5">
                 {["Training", "Adoption", "User feedback", "Iteration", "Improved usability", "Wider adoption"].map((step, i, arr) => (
                   <div key={step} className="flex items-center gap-2">
-                    <span className="text-[12px] font-medium text-foreground bg-muted border border-border rounded-full px-3 py-1 whitespace-nowrap">
+                    <span className="text-[12px] font-medium text-foreground bg-muted border border-border px-3 py-1 whitespace-nowrap">
                       {step}
                     </span>
                     {i < arr.length - 1 && (
@@ -541,8 +541,9 @@ export default function Page() {
           <FadeIn>
             <div className="grid md:grid-cols-2 gap-5">
 
-              {/* Before, dark code panel */}
-              <div className="rounded-2xl overflow-hidden border border-border">
+              {/* Before, dark code panel: a mockup of the old workflow, so it
+                  keeps its own code colours and corners (DESIGN.md §2). */}
+              <div data-keep-radius className="rounded-2xl overflow-hidden border border-border">
                 <div className="px-6 py-4 bg-neutral-900 border-b border-white/10">
                   <p className="text-[12px] font-medium text-neutral-400 uppercase tracking-[0.14em]">Before, manual HTML workflow</p>
                 </div>

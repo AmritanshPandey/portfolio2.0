@@ -61,7 +61,7 @@ const ROADMAP = [
 /** Signature visual — the agent booking flow with the silent-guardian trust moment. */
 function PhoneVisual() {
   return (
-    <div className="relative flex justify-center">
+    <div data-keep-radius className="relative flex justify-center">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.10)_0%,transparent_62%)] dark:bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.16)_0%,transparent_62%)]" />
 
       <div className="relative z-10 w-[190px] overflow-hidden rounded-[26px] border border-black/[0.12] bg-white shadow-[0_16px_44px_-34px_rgba(0,0,0,0.38)] md:w-[205px] dark:border-white/[0.14] dark:bg-[#111] dark:shadow-[0_28px_70px_rgba(0,0,0,0.56)]">
@@ -126,20 +126,20 @@ function AnxietyCurve() {
 
       {/* guardian zone */}
       <rect x="300" y="22" width="240" height="128" rx="10" fill="rgba(244,63,94,0.05)" stroke="rgba(244,63,94,0.2)" strokeDasharray="3 5" />
-      <text x="420" y="16" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="#f43f5e" letterSpacing="0.12em">GUARDIAN ZONE</text>
+      <text x="420" y="16" textAnchor="middle" fontFamily="monospace" fontSize="9" fill="var(--accent)" letterSpacing="0.12em">GUARDIAN ZONE</text>
 
       <line x1="20" y1="150" x2="680" y2="150" stroke="rgba(255,255,255,0.1)" />
       <text x="20" y="40" fontFamily="monospace" fontSize="9" fill="rgba(255,255,255,0.4)">anxiety</text>
 
       {/* area + line */}
       <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133 L 660 150 L 40 150 Z" fill="url(#anx-fill)" />
-      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133" fill="none" stroke="#f43f5e" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M40 133 C 120 140 180 142 240 128 C 290 112 320 70 340 56 C 380 46 420 42 440 45 C 480 50 510 66 540 73 C 590 100 600 132 660 133" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
 
       {/* guardian markers */}
       {guardian.map(([x, y], i) => (
         <g key={i}>
-          <circle cx={x} cy={y} r="11" fill="none" stroke="#f43f5e" strokeOpacity="0.3" />
-          <circle cx={x} cy={y} r="5.5" fill="#f43f5e" />
+          <circle cx={x} cy={y} r="11" fill="none" stroke="var(--accent)" strokeOpacity="0.3" />
+          <circle cx={x} cy={y} r="5.5" fill="var(--accent)" />
         </g>
       ))}
 
@@ -147,7 +147,7 @@ function AnxietyCurve() {
       {stages.map((s, i) => {
         const active = i >= 3 && i <= 5
         return (
-          <text key={s} x={xs[i]} y="174" textAnchor="middle" fontSize="10" fontWeight={active ? 600 : 400} fill={active ? "#f43f5e" : "rgba(255,255,255,0.42)"}>{s}</text>
+          <text key={s} x={xs[i]} y="174" textAnchor="middle" fontSize="10" fontWeight={active ? 600 : 400} fill={active ? "var(--accent)" : "rgba(255,255,255,0.42)"}>{s}</text>
         )
       })}
     </svg>
@@ -163,7 +163,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
       <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
         {bars.map((h, i) => (
           <rect key={i} x={6 + i * 9} y={24 - h / 2} width="3.5" height={h} rx="1.75"
-            fill={hot.has(i) ? "#f43f5e" : "var(--text-muted)"} opacity={hot.has(i) ? 1 : 0.5} />
+            fill={hot.has(i) ? "var(--accent)" : "var(--text-muted)"} opacity={hot.has(i) ? 1 : 0.5} />
         ))}
       </svg>
     )
@@ -177,7 +177,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
           let d = `M ${cx - 21} 24`
           for (let k = 0; k < 6; k++) d += ` L ${cx - 21 + (k + 1) * 6} ${24 + (k % 2 ? amp : -amp)}`
           d += ` L ${cx + 21} 24`
-          return <path key={bi} d={d} fill="none" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          return <path key={bi} d={d} fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         })}
       </svg>
     )
@@ -186,7 +186,7 @@ function SensoryGlyph({ kind }: { kind: "visual" | "sound" | "haptic" }) {
     <svg viewBox="0 0 240 48" className="h-10 w-full" aria-hidden>
       <line x1="6" y1="24" x2="234" y2="24" stroke="var(--border)" />
       {[60, 120, 180].map((x, i) => (
-        <text key={i} x={x} y={i === 1 ? 31 : 30} textAnchor="middle" fontSize={i === 1 ? 22 : 15} fill="#f43f5e" opacity={i === 1 ? 1 : 0.5}>✦</text>
+        <text key={i} x={x} y={i === 1 ? 31 : 30} textAnchor="middle" fontSize={i === 1 ? 22 : 15} fill="var(--accent)" opacity={i === 1 ? 1 : 0.5}>✦</text>
       ))}
     </svg>
   )
@@ -364,7 +364,7 @@ export default function Page() {
       </CsSection>
 
       {/* ── DECISIONS ── dark */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="dark">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-6">
           <h2 className="type-case-title text-foreground mb-2">
             Four calls that shaped the work
@@ -445,7 +445,7 @@ export default function Page() {
                   { label: ["Receipt", "/ done"],       active: false, role: []                     },
                 ].map((node, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center relative z-10">
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 ${
+                    <div className={`w-7 h-7 flex items-center justify-center mb-3 ${
                       node.active
                         ? "bg-accent shadow-[0_0_20px_rgba(244,63,94,0.45)]"
                         : "bg-muted border border-border"
@@ -471,7 +471,7 @@ export default function Page() {
               { dot: "bg-accent",                 label: "Mastercard present, trust signal active" },
             ].map(l => (
               <div key={l.label} className="flex items-center gap-2 text-[12px] text-muted-foreground">
-                <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${l.dot}`} />
+                <div className={`w-2.5 h-2.5 shrink-0 ${l.dot}`} />
                 {l.label}
               </div>
             ))}
@@ -624,7 +624,7 @@ export default function Page() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.18)_0%,transparent_65%)]" />
             <div className="relative z-10 w-[320px] max-w-full">
               {/* iPhone 16 device frame */}
-              <div className="relative rounded-[3rem] border border-white/[0.12] bg-[#1b1b1d] p-[11px] shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
+              <div data-keep-radius className="relative rounded-[3rem] border border-white/[0.12] bg-[#1b1b1d] p-[11px] shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
 
                 {/* Side buttons, action + volume (left), power (right) */}
                 <span className="absolute -left-[3px] top-[96px] h-[26px] w-[3px] rounded-r bg-[#0e0e10]" />
@@ -702,7 +702,7 @@ export default function Page() {
                   <div key={col.version} className={`p-6 ${col.version === "Future" ? "bg-muted" : "bg-background"}`}>
                     <p className="text-[13px] font-semibold text-foreground mb-0.5">{col.version}</p>
                     <p className="text-[12px] text-muted-foreground mb-3">{col.date}</p>
-                    <span className={`inline-block text-[11px] font-medium px-2.5 py-1 rounded-full mb-4 ${col.badgeClass}`}>
+                    <span className={`inline-block text-[11px] font-medium px-2.5 py-1 mb-4 ${col.badgeClass}`}>
                       {col.badge}
                     </span>
                     <ul className="flex flex-col gap-2">
