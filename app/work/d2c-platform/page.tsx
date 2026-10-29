@@ -154,7 +154,7 @@ function PdpVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.025),transparent_48%)] dark:bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_48%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.11] dark:opacity-[0.08]" />
 
@@ -259,7 +259,7 @@ function CartVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.15),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
 
       <div className="relative grid h-full grid-cols-[1.1fr_0.9fr] gap-4 p-3">
@@ -347,7 +347,7 @@ function CheckoutVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.15),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_50%)]" />
 
       <div className="relative grid h-full grid-rows-[auto_1fr] gap-4 p-3">
@@ -633,7 +633,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="muted">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -729,8 +729,8 @@ export default function Page() {
                     <div className="w-7 h-7 rounded-lg border border-border" style={{ background: t.primary }} />
                   </div>
 
-                  {/* Mini product card */}
-                  <div className="rounded-xl overflow-hidden border border-border">
+                  {/* Mini product card: a mockup of the brand's own UI */}
+                  <div data-keep-radius className="rounded-xl overflow-hidden border border-border">
                     <div className="h-24 flex items-center justify-center relative" style={{ background: `linear-gradient(135deg, ${t.primary}, color-mix(in srgb, ${t.primary} 58%, #000))` }}>
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.2),transparent_60%)]" />
                       <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30" />
