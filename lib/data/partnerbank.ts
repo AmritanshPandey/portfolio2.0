@@ -1,5 +1,5 @@
-// PartnerBank's system, shared by its case study (app/work/white-label-rfp)
-// and the home page's systems section, so the two never drift apart.
+// PartnerBank's system: the case study's layer stack (app/work/white-label-rfp)
+// and the banks the home page's work row deals out.
 
 export interface SystemLayer {
   num: string
@@ -12,13 +12,13 @@ export interface SystemLayer {
 
 /**
  * The case study's anonymised prospects, each a set of brand tokens on the
- * same product: the work row's card specimen and the Systems section's live
- * re-skin both draw from these. Mockup palettes (DESIGN.md §2).
+ * same product, drawn by the work row's card specimen. Mockup palettes
+ * (DESIGN.md §2).
  */
 export const partnerBankBanks = [
-  { name: "Heritage Trust", file: "bank-a.tokens", num: "9120", type: "Private credit", from: "#D4A24C", to: "#8B6508", radius: 2, weight: 700 },
-  { name: "North Bank", file: "bank-b.tokens", num: "4287", type: "Premier debit", from: "#F43F5E", to: "#9F1239", radius: 14, weight: 600 },
-  { name: "Verde Bank", file: "bank-c.tokens", num: "7503", type: "Everyday debit", from: "#4DA88A", to: "#2F6F5A", radius: 8, weight: 500 },
+  { name: "Heritage Trust", num: "9120", type: "Private credit", from: "#D4A24C", to: "#8B6508" },
+  { name: "North Bank", num: "4287", type: "Premier debit", from: "#F43F5E", to: "#9F1239" },
+  { name: "Verde Bank", num: "7503", type: "Everyday debit", from: "#4DA88A", to: "#2F6F5A" },
 ]
 
 export const partnerBankLayers: SystemLayer[] = [
@@ -27,12 +27,3 @@ export const partnerBankLayers: SystemLayer[] = [
   { num: "L3", title: "Brand Token Layer", body: "Colour, type, radius, and elevation tokens that re-skin everything in one pass.", meta: ["color", "type", "elevation"], isCore: true },
   { num: "L4", title: "Demo Configuration Engine", body: "Combines tokens and components into a deal-ready demo.", meta: ["configure", "preview", "ship"] },
 ]
-
-/** The argument for the system, each line as the case study states it. */
-export const partnerBankCase = {
-  href: "/work/white-label-rfp",
-  constraint: "Demos decide enterprise RFPs, and every bank wants to see its own brand on the same product.",
-  decision: "Split the product into four layers so brand lives in exactly one: a new bank changes tokens, never UX logic.",
-  tradeoff: "Two sprints of upfront work before the payoff showed in demo build times.",
-  outcome: "A new bank's re-skin became a configuration pass, and the library grew from 8 to 31 components in six months.",
-}

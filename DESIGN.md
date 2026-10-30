@@ -98,10 +98,10 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
   sticky on the left while the steps scroll past on the right.
 - One sheet of paper, with one exception: the **ink band** (`bg="ink"`,
   `.ink-band`), the night tokens scoped to a full-bleed section. It is used in
-  two places only: the page's key framework (the Systems section, where the
-  brand-token chips re-skin a live PartnerBank card, `<TokenSkin>`) and the
-  close (the footer, on every page). On the night theme it lifts to a raised
-  sheet. Anything drawn inside reads its tokens from where it sits.
+  two places only: the close (the footer, on every page) and each case
+  study's key decision (`CsSection variant="ink"`). On the night theme it
+  lifts to a raised sheet. Anything drawn inside reads its tokens from where
+  it sits.
 - Work, Explorations and Insights share one grammar: ruled line items, a
   specimen on the left where there is one, entries on the right, and the other
   rows receding on hover (`.work-index` / `.work-row`). Specimen frames take

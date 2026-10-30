@@ -5,7 +5,6 @@ import Hero from "@/components/sections/hero/hero"
 import ProductDesignApproachSection from "@/components/sections/thinking/product-design"
 import CaseStudy from "@/components/sections/work/case-study"
 import ExplorationsSection from "@/components/sections/work/exploration"
-import { SystemStack } from "@/components/sections/systems/system-stack"
 import { Section } from "@/components/shared/section"
 
 export default function Page() {
@@ -24,17 +23,6 @@ export default function Page() {
         headerAnimated={false}
       >
         <CaseStudy />
-      </Section>
-
-      {/* ───────────────── SYSTEMS ───────────────── */}
-      {/* The page's key framework, so the one section set on ink. */}
-      <Section
-        id="systems"
-        bg="ink"
-        title="One system, taken apart."
-        description="PartnerBank, layer by layer: why the brand lives in exactly one layer, what that cost, and what it bought."
-      >
-        <SystemStack />
       </Section>
 
       {/* ───────────────── EXPLORATIONS ───────────────── */}
