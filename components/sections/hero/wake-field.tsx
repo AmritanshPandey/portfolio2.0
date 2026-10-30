@@ -420,6 +420,9 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     }
     const onPointerDown = (e: PointerEvent) => {
       if (e.pointerType === "touch" || !visible) return
+      // A click on the glass card is a click on the card, not the sheet: no
+      // ring rippling through under the glass.
+      if ((e.target as Element | null)?.closest?.(".glass-plate")) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) return
       rings.push({ x: p.x, y: p.y, start: performance.now() })
