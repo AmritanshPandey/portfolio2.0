@@ -171,20 +171,24 @@ function Hero() {
 function ActTimeline() {
   return (
     <div className="flex flex-col gap-0">
+      {/* The lockdown predates Act 1: it hit in March 2020, before I joined
+          in May, and set the conditions Act 1 was built in. */}
+      <div className="flex items-start gap-3 px-4 pb-4">
+        <div className="flex flex-col items-center mt-1 shrink-0">
+          <div className="w-1.5 h-1.5 bg-accent/50 mb-1" /><div className="w-px h-6 bg-border/50" />
+        </div>
+        <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
+          <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">⚡ Forcing function · March 2020, before I joined</p>
+          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. People stop moving, and so does B2C growth.</p>
+        </div>
+      </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
         <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
         <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
         <p className="text-[13px] text-muted-foreground leading-relaxed">A consumer safety app, 0→1. Real users, near-zero revenue.</p>
       </div>
-      <div className="flex items-start gap-3 px-4 py-4">
-        <div className="flex flex-col items-center mt-1 shrink-0">
-          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 bg-accent/50 my-1" /><div className="w-px h-4 bg-border/50" />
-        </div>
-        <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
-          <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">⚡ Forcing function · March 2020</p>
-          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. People stop moving, and so does B2C growth.</p>
-          <AddLater note="the date. This sits after Act 1 (May–Oct 2020) but says March 2020, and the Context section says you were “6 months into building” by then." className="mt-2 inline-block" />
-        </div>
+      <div className="flex items-center gap-3 px-4 py-2">
+        <div className="ml-[11px] w-px h-8 bg-border/50" />
       </div>
       <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
         <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
@@ -222,7 +226,7 @@ function ActTimeline() {
 function ForcingFunctions() {
   const ffs = [
     {
-      num: "#1", date: "March 2020", accent: "rose" as const,
+      num: "#1", date: "March 2020, before I joined", accent: "rose" as const,
       event: "COVID-19 locks everyone home",
       before: "We were building a safety app for people moving through cities: SOS alerts and safety circles.",
       after: "People stop moving. The core use case disappears, and revenue stays near zero.",
@@ -753,7 +757,6 @@ export default function Page() {
             </p>
           </div>
           <ForcingFunctions />
-          <AddLater block note="the timeline. Forcing function #1 is dated March 2020, but Act 1 ran May–Oct 2020 and your LinkedIn start is May 2020." />
         </div>
       </CsSection>
 

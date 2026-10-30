@@ -38,7 +38,7 @@ export default function AboutSection() {
 
           <div className="col-span-12 md:col-span-7 lg:col-span-7 lg:col-start-6">
             <div data-settle className="space-y-6 text-[clamp(1.375rem,2.1vw,2.125rem)] font-[560] leading-[1.24] tracking-[-0.022em] text-foreground [font-variation-settings:'wdth'_104]">
-              <p>I like figuring out how things work, at work and off it.</p>
+              <p>I take things apart to see how they work, products included.</p>
               <p className="text-muted-foreground">
                 Teaching is the part I return to most, and the best test of whether I understand something.
               </p>

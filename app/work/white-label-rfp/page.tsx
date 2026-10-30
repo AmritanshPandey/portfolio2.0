@@ -15,7 +15,6 @@ import { CsOptions } from "@/components/case-study/cs-options"
 import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
-import { AddLater } from "@/components/shared/add-later"
 import { partnerBankLayers } from "@/lib/data/partnerbank"
 import type { BrandSkin } from "@/components/case-study/cs-brand-skin-compare"
 
@@ -157,8 +156,7 @@ export default function Page() {
           role="Led the design side: decoupled core UX from brand, standardised the component library, and introduced token theming so a re-skin became a configuration pass."
           outcome={
             <>
-              A four-layer configurable architecture that made prospect re-skins a config swap.{" "}
-              <AddLater note="the measured change in demo turnaround. The site has said “same-day”, “10 days to 3 days” and “about 70%”; keep the one that’s true." />
+              A four-layer configurable architecture that made prospect re-skins a config swap, and cut a per-deal demo from about 10 days to about 3.
             </>
           }
         />
@@ -533,12 +531,28 @@ export default function Page() {
             </p>
           </div>
 
-          <AddLater block note="a before-and-after chart of demo turnaround with the real numbers. The old chart was labelled “illustrative” while the metric beside it said “measured”." />
+          {/* Per-deal demo turnaround, before and after the system: two ruled
+              bars drawn to scale (about 10 days, about 3). */}
+          <figure className="border-t border-border">
+            <figcaption className="ledger-label py-3">Per-deal demo turnaround</figcaption>
+            {[
+              { label: "Before", value: "~10 days", width: "100%", tone: "bg-foreground/25" },
+              { label: "After", value: "~3 days", width: "30%", tone: "bg-accent" },
+            ].map((row) => (
+              <div key={row.label} className="grid grid-cols-[4.5rem_minmax(0,1fr)_5.5rem] items-center gap-x-4 border-b border-border py-4">
+                <span className="ledger-label">{row.label}</span>
+                <span className="h-3">
+                  <span className={`block h-full ${row.tone}`} style={{ width: row.width }} />
+                </span>
+                <span className="text-right text-[15px] font-medium tabular-nums text-foreground">{row.value}</span>
+              </div>
+            ))}
+          </figure>
 
           <div className="grid md:grid-cols-2 divide-x divide-border border-t border-b border-border">
             {[
               { num: "M.01", figure: "Template → Config", label: "A rigid template became a reusable configuration model." },
-              { num: "M.02", figure: "Faster sales loop", label: "Demos kept pace with high-stakes negotiations." },
+              { num: "M.02", figure: "~10 → ~3 days", label: "Per-deal demos kept pace with high-stakes negotiations." },
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
