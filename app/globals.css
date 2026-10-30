@@ -1370,45 +1370,6 @@
   .insight-more { transition: none; }
 }
 
-/* The Systems section's live re-skin (<TokenSkin>): a PartnerBank card drawn
-   only from --bank-* variables, so a token swap eases colour, corner and
-   weight and never moves the layout. A product mockup: its own palette. */
-.token-card {
-  border-radius: var(--bank-radius);
-  background: #FBFAF7;
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
-  transition: border-radius 400ms var(--ease-out);
-}
-.token-card-head {
-  background-color: var(--bank-primary);
-  background-image: linear-gradient(135deg, transparent 0%, var(--bank-deep) 140%);
-  transition: background-color 400ms var(--ease-out);
-}
-.token-card-chip {
-  border-radius: calc(var(--bank-radius) * 0.4);
-  background: rgb(255 255 255 / 0.35);
-  transition: border-radius 400ms var(--ease-out);
-}
-.token-card-cta {
-  border-radius: calc(var(--bank-radius) * 0.6);
-  background-color: var(--bank-primary);
-  transition: background-color 400ms var(--ease-out), border-radius 400ms var(--ease-out);
-}
-.token-card-ghost {
-  border-radius: calc(var(--bank-radius) * 0.6);
-  box-shadow: inset 0 0 0 1px var(--bank-primary);
-  color: var(--bank-deep);
-  transition: box-shadow 400ms var(--ease-out), color 400ms var(--ease-out), border-radius 400ms var(--ease-out);
-}
-.token-card span,
-.token-card p {
-  transition: font-weight 400ms var(--ease-out);
-}
-@media (prefers-reduced-motion: reduce) {
-  .token-card,
-  .token-card * { transition: none !important; }
-}
-
 /* A ripple across the hero's glass pane (<TiltPane>): a bright ring that
    leaves the click quickly and fades as it reaches the far corner. Size and
    centre come from the click; the ring stays thin as it grows. */
