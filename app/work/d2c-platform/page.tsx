@@ -111,6 +111,7 @@ function HeroAside() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-d2c-platform"
       breadcrumb={{ kind: "Case Study", category: "D2C Commerce", client: "Honasa Consumer" }}
       keywords={["First In-House UX Designer", "0→1 Commerce Foundations", "Multi-Brand Scale"]}
       title={

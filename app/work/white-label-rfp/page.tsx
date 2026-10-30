@@ -91,6 +91,7 @@ function HeroAside() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-white-label-rfp"
       breadcrumb={{ kind: "Case Study", category: "Enterprise Systems", client: "Mastercard · PartnerBank" }}
       keywords={["Enterprise Systems", "RFP Enablement", "Design Lead"]}
       title={
