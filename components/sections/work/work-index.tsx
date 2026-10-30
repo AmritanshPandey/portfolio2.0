@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ViewTransition } from "react"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import type { WorkItem } from "@/lib/types/content"
@@ -40,9 +41,13 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
               i === items.length - 1 && "border-b",
             )}
           >
-            {/* Specimen: a drawn picture of the mechanism, not a stock image. */}
+            {/* Specimen: a drawn picture of the mechanism, not a stock image.
+                Named for the study's hero, so opening the study grows this
+                specimen into its opening visual (CsHeroShell transitionName). */}
             <div className="col-span-12 md:col-span-5">
-              <WorkSpecimen slug={slugOf(item.href)} />
+              <ViewTransition name={`case-${slugOf(item.href)}`} share="case-morph">
+                <WorkSpecimen slug={slugOf(item.href)} />
+              </ViewTransition>
             </div>
 
             <div className="col-span-12 flex min-w-0 flex-col md:col-span-7 lg:pl-[calc(var(--col-gap)*1)]">

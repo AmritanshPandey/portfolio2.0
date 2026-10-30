@@ -1541,6 +1541,54 @@
   animation-timing-function: var(--ease-settle);
 }
 
+/* The page itself swaps in place on a route change: the old page drops out
+   at once and the new one fades in where it lands. Animating its box would
+   slide the whole page from the old scroll position. */
+@keyframes page-swap-in {
+  from { opacity: 0; }
+}
+::view-transition-group(.page-swap) {
+  animation: none;
+}
+::view-transition-old(.page-swap) {
+  display: none;
+}
+::view-transition-new(.page-swap) {
+  animation: page-swap-in 240ms var(--ease-settle) both;
+}
+
+/* The nav holds still through a route change: it is its own layer, painted
+   above the page's, and simply shows its new state. Without this the page's
+   snapshot covers it for the length of the transition. */
+::view-transition-group(site-nav),
+::view-transition-group(site-nav-bar) {
+  animation: none;
+}
+::view-transition-old(site-nav),
+::view-transition-old(site-nav-bar) {
+  display: none;
+}
+::view-transition-new(site-nav),
+::view-transition-new(site-nav-bar) {
+  animation: none;
+}
+
+/* Opening a case study from its work row: the row's specimen grows into the
+   study's opening visual (and shrinks back on the way home) while the rest of
+   the page cross-fades. The two pictures differ in shape, so each fills the
+   moving box rather than stretching. */
+::view-transition-group(.case-morph) {
+  animation-duration: 560ms;
+  animation-timing-function: var(--ease-out);
+}
+::view-transition-old(.case-morph),
+::view-transition-new(.case-morph) {
+  height: 100%;
+  object-fit: cover;
+  animation-duration: 560ms;
+  animation-timing-function: var(--ease-out);
+}
+
 /* ─────────────────────────
    REDUCED MOTION
    Honour the OS-level preference. Decorative motion collapses to a
@@ -1597,7 +1645,10 @@
   }
 
   ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-new(root),
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
     animation: none !important;
   }
 

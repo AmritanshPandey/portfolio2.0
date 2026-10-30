@@ -447,7 +447,9 @@ export default function Navbar() {
 
       <header
         className={clsx(
-          "glass fixed inset-x-0 top-0 z-50 hidden md:block",
+          // Its own view-transition layer (globals.css): it holds still above
+          // the page while a route change cross-fades or morphs under it.
+          "glass fixed inset-x-0 top-0 z-50 hidden md:block [view-transition-name:site-nav]",
           "border-b transition-[border-color] duration-300",
           scrolled ? "border-border" : "border-transparent",
         )}
@@ -514,7 +516,7 @@ export default function Navbar() {
 
       <div
         className={clsx(
-          "glass fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end pb-2.5 md:hidden",
+          "glass fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end pb-2.5 md:hidden [view-transition-name:site-nav-bar]",
           "border-b transition-[border-color] duration-300",
           scrolled || open ? "border-border" : "border-transparent",
         )}

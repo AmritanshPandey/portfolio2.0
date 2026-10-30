@@ -133,6 +133,7 @@ function HeroVisual() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-citizen-safety"
       breadcrumb={{ kind: "Case Study", category: "Product · 0→1 + Pivot", client: "Dror · 2020–2021" }}
       keywords={["Sole PM + Designer", "0→1 Product", "B2C → B2B Pivot"]}
       title="Two products, one pivot, eleven months"

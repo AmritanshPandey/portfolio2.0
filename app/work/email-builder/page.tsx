@@ -138,6 +138,7 @@ function HeroAside() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-email-builder"
       breadcrumb={{ kind: "Case Study", category: "Design Systems", client: "Mastercard · Creative Studio" }}
       keywords={["Design System Lead", "Email Infrastructure", "No-Code Tooling"]}
       title={
