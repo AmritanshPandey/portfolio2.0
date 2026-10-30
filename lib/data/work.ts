@@ -23,7 +23,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     role: "Design Lead",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
-    metric: "A re-skin became a configuration pass; the library grew from 8 to 31 components in six months.",
+    metric: "A per-deal demo went from about 10 days to about 3; the library grew from 8 to 31 components in six months.",
     tags: ["Demo Systems", "RFPs", "Scale"],
     featured: true,
   },
