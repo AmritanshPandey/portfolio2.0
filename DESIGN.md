@@ -127,8 +127,8 @@ briefly reads as a pixel mosaic, and they step back down through three ink
 levels to dots as the wake fades; a click sends a soft ring of ultramarine
 pixels through the same grid. On the first visit of a session it draws one
 stroke across the statement by itself, shortly after it starts, so the reader
-learns the page answers the pointer; any real move takes over. Phones get one
-ring across the glass pane instead. It draws only while something moves. It loads
+learns the page answers the pointer; any real move takes over; phones get
+nothing extra. It draws only while something moves. It loads
 only when the page is idle on a desktop pointer; phones, touch, iPads (even
 with a trackpad), low battery, reduced motion, and any browser that can't hold
 ~36fps get the same dot screen as a static CSS texture, and never download the
@@ -195,8 +195,9 @@ Framer Motion is globally skipped).
   follows the pointer and the rim brightens nearest it, on a leaf layer
   (`.glass-glow`, `--px`, `--py`, `--glass-hot`) so moving the light restyles
   nothing else. The pane leans toward the pointer (`<TiltPane>`, 4°, the photo
-  drifting a few px against it), a click sends a ring of light across it, and
-  the two actions lean toward a nearby pointer (`<Magnetic>`). All of it is
+  drifting a few px against it), and the two actions lean toward a nearby
+  pointer (`<Magnetic>`). It is the one soft object on the sheet: a 20px corner
+  (the portrait inside, 12px), so it reads as a pane laid over the paper. All of it is
   plain transforms; with reduced motion it stays still. An outline button on
   the plate does not blur a second time. Cards, sections and the primary action never go glass.
 - No pills, no drop shadows (a system override removes arbitrary shadows

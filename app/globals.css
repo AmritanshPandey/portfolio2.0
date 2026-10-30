@@ -1245,12 +1245,14 @@
      frosts under the text instead of running through it. Thinner than the
      nav's glass, so the grid still reads through. A light rim, a faint inner
      shade along the foot, an outer hairline and a specular sheen across the
-     top-left; Ledger corners. */
+     top-left. The one soft object on the sheet: a 20px corner, so it reads as
+     a pane laid over the paper rather than part of the ruled grid (its glow
+     and rim light inherit it). */
   .glass-plate {
     position: relative;
     isolation: isolate;
     border: 1px solid var(--glass-rim);
-    border-radius: 4px;
+    border-radius: 20px;
     background-color: color-mix(in oklab, var(--background) 55%, transparent);
     -webkit-backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
     backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
@@ -1368,33 +1370,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .insight-more { transition: none; }
-}
-
-/* A ripple across the hero's glass pane (<TiltPane>): a bright ring that
-   leaves the click quickly and fades as it reaches the far corner. Size and
-   centre come from the click; the ring stays thin as it grows. */
-.glass-ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  /* A crest of light with a faint ink trough behind it, like water bending
-     the light under the glass; it reads on the pale pane and the dark one. */
-  background: radial-gradient(
-    closest-side,
-    transparent 86%,
-    color-mix(in oklab, var(--foreground) 8%, transparent) 92%,
-    color-mix(in oklab, var(--glass-rim-hot) 80%, transparent) 96.5%,
-    transparent 100%
-  );
-  animation: glass-ripple 700ms cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
-}
-@keyframes glass-ripple {
-  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-  45% { opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .glass-ripple { display: none; }
 }
 
 /* Hero dot field. Desktop pointers get the live pixel wake (<WakeField>);

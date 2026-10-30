@@ -67,7 +67,7 @@ export default function Hero() {
                 <GlassPlate className={PLATE}>
                   <div className="ledger-grid gap-y-6">
                     <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-4 sm:block lg:col-span-3">
-                      <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden bg-surface-2">
+                      <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-[12px] bg-surface-2">
                         {/* Drifts a few px against the tilt (TiltPane), so
                             the photo seems to float under the glass. */}
                         <div data-tilt-drift className="absolute inset-0 scale-[1.04]">
