@@ -7,6 +7,7 @@ import type { WorkItem } from "@/lib/types/content"
 
 const SEQUENCE: string[] = [
   "white-label-rfp",
+  "agent-commerce",
   "d2c-platform",
   "citizen-safety",
   "email-builder",
@@ -26,6 +27,16 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     metric: "A per-deal demo went from about 10 days to about 3; the library grew from 8 to 31 components in six months.",
     tags: ["Demo Systems", "RFPs", "Scale"],
     featured: true,
+  },
+  {
+    category: "Agentic Commerce / Mastercard",
+    title: "Agent Pay: Mastercard's role in AI-led payments",
+    description:
+      "Agentic commerce removes the checkout screen, and with it the moment people see Mastercard and feel safe.",
+    role: "Lead · Creative Studio",
+    image: "/assets/images/work/agent-commerce.jpg",
+    href: "/work/agent-commerce",
+    metric: "The silent guardian became Mastercard's agreed approach to agentic commerce; the CPO used the React demo at Money20/20.",
   },
   {
     category: "Commerce Infrastructure / Honasa",

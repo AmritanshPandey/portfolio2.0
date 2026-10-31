@@ -293,10 +293,109 @@ function EmailSpecimen() {
   )
 }
 
+/* ── Agent Pay: the brand shows up only where anxiety peaks ──────────────── */
+
+// The case study's own anxiety curve (AnxietyCurve on the Agent Pay page):
+// one start point, then cubic segments, in its 700-wide coordinates.
+const ANXIETY = [
+  [40, 133], [120, 140], [180, 142], [240, 128], [290, 112], [320, 70], [340, 56], [380, 46],
+  [420, 42], [440, 45], [480, 50], [510, 66], [540, 73], [590, 100], [600, 132], [660, 133],
+]
+const STAGES = ["Intent", "Browse", "Select", "Confirm", "Verify", "Complete", "Done"]
+// The three guardian moments, and when the redrawn line reaches each one.
+const GUARDIAN = [
+  { x: 340, y: 56, delay: 520 },
+  { x: 440, y: 45, delay: 620 },
+  { x: 540, y: 73, delay: 720 },
+]
+
+function GuardianSpecimen() {
+  // The source curve is wide and shallow; stretch it vertically to fill the
+  // frame. Marks are drawn at mapped points so they stay square.
+  const Y = (y: number) => 110 + (y - 40) * 2.1
+  const p = (i: number) => `${ANXIETY[i][0]} ${Y(ANXIETY[i][1]).toFixed(1)}`
+  const curve = [`M${p(0)}`, ...[1, 4, 7, 10, 13].map((i) => `C${p(i)} ${p(i + 1)} ${p(i + 2)}`)].join(" ")
+  const base = Y(150)
+
+  return (
+    <Frame>
+      <svg viewBox="0 0 700 438" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="guardian-area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Where the brand is present; silent everywhere else. */}
+        <rect
+          x="290" y="92" width="300" height={base - 92}
+          fill="var(--accent)" fillOpacity="0.05"
+          stroke="var(--accent)" strokeOpacity="0.3" strokeDasharray="4 6"
+        />
+        <text x="440" y="78" textAnchor="middle" fontSize="18" fill="var(--accent)">
+          Mastercard shows up
+        </text>
+        <text x="40" y="270" fontSize="18" className="fill-muted-foreground">Anxiety</text>
+
+        <line x1="30" y1={base} x2="670" y2={base} className="stroke-foreground/15" strokeWidth="2" />
+        <path d={`${curve} L660 ${base} L40 ${base} Z`} fill="url(#guardian-area)" />
+        <path
+          d={curve}
+          pathLength={1}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="4.5"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          className="row-on:animate-[work-draw_1100ms_cubic-bezier(0.45,0,0.25,1)] motion-reduce:animate-none"
+        />
+
+        {GUARDIAN.map((g) => (
+          <g key={g.x}>
+            <line
+              x1={g.x} y1={Y(g.y) + 14} x2={g.x} y2={base}
+              stroke="var(--accent)" strokeOpacity="0.35" strokeWidth="2" strokeDasharray="3 5"
+            />
+            <g
+              className="origin-center [transform-box:fill-box] row-on:animate-[work-pop_480ms_cubic-bezier(0.19,1,0.22,1)_both] motion-reduce:animate-none"
+              style={{ animationDelay: `${g.delay}ms` }}
+            >
+              <rect
+                x={g.x - 14} y={Y(g.y) - 14} width="28" height="28"
+                fill="var(--color-card)" stroke="var(--accent)" strokeOpacity="0.4" strokeWidth="2"
+              />
+              <rect x={g.x - 6} y={Y(g.y) - 6} width="12" height="12" fill="var(--accent)" />
+            </g>
+          </g>
+        ))}
+
+        {STAGES.map((stage, i) => {
+          const guardian = i >= 3 && i <= 5
+          return (
+            <text
+              key={stage}
+              x={40 + i * 100}
+              y={base + 34}
+              textAnchor="middle"
+              fontSize="18"
+              fontWeight={guardian ? 600 : 400}
+              className={guardian ? "fill-accent" : "fill-muted-foreground"}
+            >
+              {stage}
+            </text>
+          )
+        })}
+      </svg>
+    </Frame>
+  )
+}
+
 /* ── Registry ────────────────────────────────────────────────────────────── */
 
 const SPECIMENS: Record<string, () => React.JSX.Element> = {
   "white-label-rfp": TokensSpecimen,
+  "agent-commerce": GuardianSpecimen,
   "d2c-platform": BackboneSpecimen,
   "citizen-safety": PivotSpecimen,
   "email-builder": EmailSpecimen,
