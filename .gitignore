@@ -59,3 +59,6 @@ next-env.d.ts
 # Apple's iPhone Duo model: fetched at build time, never committed (scripts/prepare-iphone-duo.py)
 /public/iphone-duo/
 /.cache/
+
+# Redesign snapshots (scripts/snap.mjs)
+/snapshots/
