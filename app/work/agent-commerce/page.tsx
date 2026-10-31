@@ -3,6 +3,7 @@ import { CsSection } from "@/components/case-study/cs-section"
 import { CsDecision } from "@/components/case-study/cs-decision"
 import { CsInfoBar } from "@/components/case-study/cs-info-bar"
 import { CsNextStudies } from "@/components/case-study/cs-next-studies"
+import { FoldPhone } from "@/components/case-study/fold-phone"
 import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -652,6 +653,28 @@ export default function Page() {
         </div>      </CsSection>
 
       {/* ── IMPACT ── light */}
+      {/* The flow on a foldable: the agent's pick and the payment it asks the
+          user to approve, side by side; folded, only the confirmation shows. */}
+      <CsSection id="unfolded" label="The flow, unfolded">
+        <div className="space-y-8">
+          <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
+            <h2 className="type-case-title text-foreground">Two steps, one fold.</h2>
+            <p className="text-[15px] text-muted-foreground leading-relaxed">
+              The agent&apos;s pick and the payment it asks you to approve, side by side. Fold it and the
+              cover shows only the confirmation: the moment the trust signal has to carry on its own.
+            </p>
+          </div>
+          <FoldPhone
+            screens="/assets/images/agent-pay/fold-screens.jpg"
+            alt="Agent Pay on a foldable: the agent's bike picks beside the payment sheet with Confirm and pay, $193.00."
+          />
+          <p className="ledger-label max-w-2xl">
+            Screens from the white-labelled demo above, set on Apple&apos;s iPhone Duo reference model as a
+            presentation study. Drag to turn it; play or scrub to fold.
+          </p>
+        </div>
+      </CsSection>
+
       <CsSection id="impact" label="Impact">
         <div className="space-y-10">
           <h2 className="type-case-title text-foreground">
