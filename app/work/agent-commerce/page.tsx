@@ -224,6 +224,7 @@ function Hero() {
       topics={["Trust", "AI Payments", "Prototype", "Money20/20"]}
       asideCol="260px"
       aside={<PhoneVisual />}
+      transitionName="case-agent-commerce"
     />
   )
 }

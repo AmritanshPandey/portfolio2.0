@@ -883,6 +883,12 @@
   to { stroke-dashoffset: 0; }
 }
 
+/* A specimen mark arriving as the line reaches it (work-specimens.tsx). */
+@keyframes work-pop {
+  from { opacity: 0; scale: 0.3; }
+  to { opacity: 1; scale: 1; }
+}
+
 [data-hero-rule] {
   transform-origin: left center;
   animation: rule-draw 560ms var(--ease-out) both;
