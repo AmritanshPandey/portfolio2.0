@@ -36,7 +36,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     role: "Lead · Creative Studio",
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
-    metric: "The silent guardian became Mastercard's agreed approach to agentic commerce; the CPO used the React demo at Money20/20.",
+    metric: "The silent guardian became Mastercard's direction for agentic commerce.",
   },
   {
     category: "Commerce Infrastructure / Honasa",
