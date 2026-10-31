@@ -304,9 +304,9 @@ const ANXIETY = [
 const STAGES = ["Intent", "Browse", "Select", "Confirm", "Verify", "Complete", "Done"]
 // The three guardian moments, and when the redrawn line reaches each one.
 const GUARDIAN = [
-  { x: 340, y: 56, delay: 520 },
-  { x: 440, y: 45, delay: 620 },
-  { x: 540, y: 73, delay: 720 },
+  { x: 340, y: 56, delay: 400 },
+  { x: 440, y: 45, delay: 470 },
+  { x: 540, y: 73, delay: 560 },
 ]
 
 function GuardianSpecimen() {
