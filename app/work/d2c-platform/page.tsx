@@ -95,7 +95,7 @@ function HeroAside() {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: b.accent }} />
-              <span className="font-mono text-[8px] text-muted-foreground truncate">{b.token}</span>
+              <span className="font-mono text-[11px] text-muted-foreground truncate">{b.token}</span>
             </div>
           </div>
         ))}
@@ -466,7 +466,7 @@ export default function Page() {
             </p>
           </div>
           <CsList items={[
-            "No customer data: the brands couldn&apos;t see their own repeat buyers",
+            "No customer data: the brands couldn’t see their own repeat buyers",
             "Three distinct brands on identical commerce logic",
             "No design process, component library, or handoff workflow",
           ]} />
