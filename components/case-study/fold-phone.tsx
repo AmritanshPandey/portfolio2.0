@@ -233,6 +233,14 @@ export function FoldPhone({
         renderer.dispose()
         return
       }
+      // Each step below runs in its own task, so a frame of page scroll can
+      // land between them instead of waiting for one long setup.
+      const nextTask = () => new Promise<void>((resolve) => setTimeout(resolve, 0))
+      await nextTask()
+      if (disposed) {
+        renderer.dispose()
+        return
+      }
       model.scale.multiplyScalar(100)
       model.updateMatrixWorld(true)
       const owned: { dispose: () => void }[] = [texture, screenMaterials.inner, screenMaterials.outer]
@@ -301,6 +309,38 @@ export function FoldPhone({
         owned.push(geometry)
         if (!kind) owned.push(material)
       })
+
+      // Ready the first frame before showing it: decode every image off the
+      // main thread, upload one texture per task, and compile the shaders in
+      // parallel where the browser can. Otherwise all of it lands in the
+      // first render as one stall while the page is scrolling.
+      const maps = new Set<import("three").Texture>([texture])
+      phone.traverse((object) => {
+        const mesh = object as import("three").Mesh
+        if (!mesh.isMesh) return
+        for (const value of Object.values(mesh.material)) {
+          if ((value as import("three").Texture | null)?.isTexture) maps.add(value as import("three").Texture)
+        }
+      })
+      const abort = () => {
+        for (const item of owned) item.dispose()
+        scene.environment?.dispose()
+        renderer.dispose()
+        renderer.domElement.remove()
+      }
+      for (const map of maps) {
+        // The model's own images arrive after the model; wait for each.
+        const until = performance.now() + 4000
+        while (!(map.image as HTMLImageElement | null)?.complete && performance.now() < until) {
+          await new Promise((resolve) => setTimeout(resolve, 50))
+        }
+        await (map.image as HTMLImageElement | null)?.decode?.().catch(() => {})
+        await nextTask()
+        if (disposed) return abort()
+        renderer.initTexture(map)
+      }
+      await renderer.compileAsync(scene, camera)
+      if (disposed) return abort()
 
       // State, and drawing only while something moves.
       let current = 180
