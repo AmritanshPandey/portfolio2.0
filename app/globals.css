@@ -1374,6 +1374,14 @@
     opacity: 1;
   }
 }
+/* Mid-scroll, a row the page slides under the pointer stays shut; the one
+   that was open when the scroll began stays open (insights-scroll-hold.tsx). */
+@media (hover: hover) {
+  html[data-scrolling] .work-row:hover:not([data-hover-held]):not(:focus-visible) .insight-more {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .insight-more { transition: none; }
 }
