@@ -13,6 +13,21 @@ const STOP = 0.14
 // Front crests this high catch the accent: a glint, a few glyphs at a time.
 const GLINT = 0.8
 
+// The pointer lifts the water under it (in crest heights, falling off over
+// these reaches, px), and a quick stroke sends a ring out across the lines.
+// Water the pointer raises past STIR glints on any line, near or far.
+const LIFT = 1.1
+const LIFT_X = 80
+const LIFT_Y = 34
+const STIR = 0.45
+const RING_SPEED = 240
+const RING_WIDTH = 20
+const RING_LIFE = 1.8
+const RINGS = 10
+// Rings spread across the lines more slowly than along them, as on water
+// seen at a slant.
+const RING_SLANT = 2
+
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
 /**
@@ -26,6 +41,10 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t
  * rather than text layout. The face's full stops are drawn as their squares,
  * one path per row. A frame costs about 1ms at phone width, 3ms on a wide
  * desktop.
+ *
+ * Given the pointer (see `pointer`), the water rises under it and glints, and
+ * quick strokes leave rings that spread and fade; the stir is added to the
+ * swell, so crests hide and glint exactly as the sea's own do.
  */
 export function createWaves(pitch: number, frontSize: number) {
   let width = 0
@@ -39,6 +58,17 @@ export function createWaves(pitch: number, frontSize: number) {
   let cols = 0
   let ys = new Float32Array(0)
   let hs = new Float32Array(0)
+  let ss = new Float32Array(0)
+
+  // The pointer: where it is (eased towards it), how present it is (fading
+  // in and out), and the rings its strokes have sent out. Times in seconds.
+  let target: { x: number; y: number } | null = null
+  let px = 0
+  let py = 0
+  let presence = 0
+  let lastFrame = 0
+  const rings: { x: number; y: number; t: number; s: number }[] = []
+  let emit = { x: 0, y: 0, t: 0 }
 
   const atlas = typeof document === "undefined" ? null : document.createElement("canvas")
   // Atlas slot of each crest size: plain at 2i, glinting at 2i + 1.
@@ -79,7 +109,30 @@ export function createWaves(pitch: number, frontSize: number) {
       cols = Math.ceil(w / pitch) + 1
       ys = new Float32Array(cols)
       hs = new Float32Array(cols)
+      ss = new Float32Array(cols)
       paint()
+    },
+    /** The pointer over the sea, in px from the band's top left; null once it leaves. */
+    pointer(x: number | null, y = 0) {
+      const now = performance.now() / 1000
+      if (x === null) {
+        target = null
+        return
+      }
+      // Arriving from nowhere: start the lift where the pointer is.
+      if (presence < 0.05) {
+        px = x
+        py = y
+        emit = { x, y, t: now }
+      }
+      target = { x, y }
+      const moved = Math.hypot(x - emit.x, y - emit.y)
+      if (moved > 14 && now - emit.t > 0.08) {
+        const speed = moved / (now - emit.t)
+        rings.push({ x, y, t: now, s: Math.min(1, speed / 900) * 0.8 })
+        if (rings.length > RINGS) rings.shift()
+        emit = { x, y, t: now }
+      }
     },
     setColors(baseColor: string, accentColor: string) {
       base = baseColor
@@ -94,11 +147,42 @@ export function createWaves(pitch: number, frontSize: number) {
     repaint: paint,
 
     draw(ctx: CanvasRenderingContext2D, time: number, opacity: number) {
+      // Ease the lift after the pointer and fade it in or out.
+      const now = performance.now() / 1000
+      const dt = lastFrame ? Math.min(0.1, now - lastFrame) : 0
+      lastFrame = now
+      if (target) {
+        const follow = 1 - Math.exp(-dt * 9)
+        px += (target.x - px) * follow
+        py += (target.y - py) * follow
+      }
+      presence += ((target ? 1 : 0) - presence) * (1 - Math.exp(-dt * 5))
+      while (rings.length && now - rings[0].t > RING_LIFE) rings.shift()
+      const stirred = presence > 0.01 || rings.length > 0
+
       ctx.clearRect(0, 0, width, height)
       for (const line of lines) {
         const { depth, y, amp, size, seed } = line
+        // How much of the lift reaches this line.
+        const reach = stirred ? presence * LIFT * Math.exp(-((y - py) ** 2) / (2 * LIFT_Y ** 2)) : 0
         for (let c = 0; c < cols; c++) {
-          hs[c] = swellHeight(c * pitch, depth, time, seed)
+          const x = c * pitch
+          let stir = 0
+          if (stirred) {
+            const dx = x - px
+            if (reach > 0.002 && dx > -3 * LIFT_X && dx < 3 * LIFT_X) {
+              stir += reach * Math.exp(-(dx * dx) / (2 * LIFT_X ** 2))
+            }
+            for (const ring of rings) {
+              const age = now - ring.t
+              const off = Math.hypot(x - ring.x, (y - ring.y) * RING_SLANT) - age * RING_SPEED
+              if (off > -3 * RING_WIDTH && off < 3 * RING_WIDTH) {
+                stir += ring.s * Math.exp(-(off * off) / (2 * RING_WIDTH ** 2)) * (1 - age / RING_LIFE) ** 2
+              }
+            }
+          }
+          ss[c] = stir
+          hs[c] = swellHeight(x, depth, time, seed) + stir
           ys[c] = y - amp * hs[c]
         }
 
@@ -129,8 +213,8 @@ export function createWaves(pitch: number, frontSize: number) {
         const crest = slots.get(size)
         if (crest === undefined) continue
         for (let c = 0; c < cols; c++) {
-          const lit = depth >= 0.6 && hs[c] > GLINT
-          ctx.globalAlpha = lit ? strength : strength * (0.62 + 0.38 * hs[c])
+          const lit = (depth >= 0.6 && hs[c] > GLINT) || ss[c] > STIR
+          ctx.globalAlpha = lit ? strength : strength * (0.62 + 0.38 * Math.min(1, hs[c]))
           blit(ctx, lit ? crest + 1 : crest, c * pitch, ys[c])
         }
       }
