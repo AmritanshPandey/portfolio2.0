@@ -11,9 +11,9 @@ import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react
  *
  * The fold, the projected screen UI and the progressive blur are adapted from
  * jadon7/iphone-duo (main.js), MIT License, Copyright (c) 2026 jadon7. The
- * phone is Apple's iPhone Duo reference model, prepared at build time by
- * scripts/prepare-iphone-duo.py into public/iphone-duo/ and never committed;
- * it belongs to Apple and is shown as a reference device.
+ * phone is Apple's iPhone Duo reference model, prepared once by
+ * scripts/prepare-iphone-duo.py into public/devices/iphone-duo/; it belongs
+ * to Apple and is shown as a reference device.
  *
  * Heavy by nature (Three.js plus a ~6 MB model), so nothing loads until the
  * viewer is about to scroll into view; until then, and wherever WebGL or the
@@ -41,7 +41,7 @@ type Api = { setAngle: (value: number) => void; setPlaying: (on: boolean) => voi
 export function FoldPhone({
   screens,
   alt,
-  modelUrl = "/iphone-duo/iPhone_Duo_Render.usdc",
+  modelUrl = "/devices/iphone-duo/iPhone_Duo_Render.usdc",
 }: {
   screens: string
   alt: string
