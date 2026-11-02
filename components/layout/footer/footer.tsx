@@ -1,24 +1,40 @@
 import Link from "next/link"
-import { IconArrowUpRight } from "@tabler/icons-react"
+import {
+  IconArrowUpRight,
+  IconBrandBehance,
+  IconBrandDribbbleFilled,
+  IconBrandGithubFilled,
+  IconBrandLinkedinFilled,
+} from "@tabler/icons-react"
 import { CopyEmail } from "./copy-email"
 import { FooterSea } from "./footer-sea"
 import { EMAIL, EMAIL_HREF, LINKEDIN_HREF, RESUME_HREF } from "@/lib/contact"
 
-const FOOTER_LINKS = [
+interface FooterLinkItem {
+  label: string
+  href: string
+  external: boolean
+  /** A network's own mark, in its own colour (GitHub's is white on the ink). */
+  logo?: typeof IconBrandGithubFilled
+  brand?: string
+}
+
+const FOOTER_LINKS: FooterLinkItem[] = [
   { label: "Work", href: "/#work", external: false },
   // A file, not a route: a plain link, so it isn't prefetched as a page.
   { label: "Resume", href: RESUME_HREF, external: true },
-  { label: "LinkedIn", href: LINKEDIN_HREF, external: true },
-  { label: "GitHub", href: "https://github.com/AmritanshPandey", external: true },
-  { label: "Behance", href: "https://www.behance.net/amritanshpandey", external: true },
-  { label: "Dribbble", href: "https://dribbble.com/amrit10", external: true },
+  { label: "LinkedIn", href: LINKEDIN_HREF, external: true, logo: IconBrandLinkedinFilled, brand: "#0A66C2" },
+  { label: "GitHub", href: "https://github.com/AmritanshPandey", external: true, logo: IconBrandGithubFilled, brand: "var(--foreground)" },
+  { label: "Behance", href: "https://www.behance.net/amritanshpandey", external: true, logo: IconBrandBehance, brand: "#1769FF" },
+  { label: "Dribbble", href: "https://dribbble.com/amrit10", external: true, logo: IconBrandDribbbleFilled, brand: "#EA4C89" },
 ]
 
-function FooterLink({ label, href, external }: (typeof FOOTER_LINKS)[number]) {
+function FooterLink({ label, href, external, logo: Logo, brand }: FooterLinkItem) {
   const className =
     "group inline-flex items-center gap-1 text-[15px] font-medium text-foreground link-underline"
   const content = (
     <>
+      {Logo && <Logo size={17} aria-hidden className="mr-1 shrink-0" style={{ color: brand }} />}
       {label}
       {external && (
         <IconArrowUpRight
@@ -46,7 +62,11 @@ export default function Footer() {
   return (
     // Set on the ink band (.ink-band): every page closes on its darkest
     // moment, with the way in at the centre of it.
-    <footer className="ink-band relative bg-background text-foreground" style={{ paddingTop: "var(--section-y)" }}>
+    // A half beat of paper above it, so the last section has room to end.
+    <footer
+      className="ink-band relative bg-background text-foreground"
+      style={{ marginTop: "calc(var(--section-y) / 2)", paddingTop: "var(--section-y)" }}
+    >
       <div className="ledger pb-10">
         <div aria-hidden data-settle="rule" className="rule-ink" />
 

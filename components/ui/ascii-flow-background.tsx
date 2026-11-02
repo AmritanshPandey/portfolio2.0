@@ -43,6 +43,11 @@ export interface AsciiFlowBackgroundProps {
    * `cellSize` is then the column pitch and `fontSize` the front crest's size.
    */
   shape?: "flow" | "waves"
+  /**
+   * Waves only: the water answers a mouse or pen, rising and glinting under
+   * it and ringing out from quick strokes. Ignored when still.
+   */
+  interactive?: boolean
 }
 
 const DEFAULT_RAMP = " .:-=+*#%@"
@@ -76,6 +81,7 @@ export function AsciiFlowBackground({
   fontVar,
   maxDpr = 2,
   shape = "flow",
+  interactive = false,
 }: AsciiFlowBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -300,12 +306,40 @@ export function AsciiFlowBackground({
       }
       raf = requestAnimationFrame(loop)
     }
+    // The sea's pointer: listened for only while the sea runs, against a
+    // cached box that a scroll or resize clears. The canvas itself takes no
+    // pointer events, so the page under it keeps them.
+    let box: DOMRect | null = null
+    const forget = () => {
+      box = null
+    }
+    const onPointer = (e: PointerEvent) => {
+      if (!sea || e.pointerType === "touch") return
+      box ??= canvas.getBoundingClientRect()
+      const x = e.clientX - box.left
+      const y = e.clientY - box.top
+      // The band fades in from its top edge; the pointer may stir it from just above.
+      sea.pointer(x >= 0 && x <= width && y >= -24 && y <= height ? x : null, y)
+    }
+    const onLeave = () => sea?.pointer(null)
+    const listen = (on: boolean) => {
+      if (!sea || !interactive) return
+      const method = on ? "addEventListener" : "removeEventListener"
+      window[method]("pointermove", onPointer as EventListener, { passive: true })
+      window[method]("scroll", forget, { passive: true })
+      window[method]("blur", onLeave)
+      document.documentElement[method]("pointerleave", onLeave)
+      if (!on) onLeave()
+    }
+
     const start = () => {
       if (running || reduced) return
       running = true
       raf = requestAnimationFrame(loop)
+      listen(true)
     }
     const stop = () => {
+      if (running) listen(false)
       running = false
       cancelAnimationFrame(raf)
     }
@@ -335,6 +369,7 @@ export function AsciiFlowBackground({
 
     const ro = new ResizeObserver(() => {
       build()
+      forget()
       if (reduced) draw(0)
     })
     ro.observe(canvas)
@@ -381,6 +416,7 @@ export function AsciiFlowBackground({
     fontVar,
     maxDpr,
     shape,
+    interactive,
   ])
 
   return (
