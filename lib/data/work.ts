@@ -42,7 +42,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     role: "Lead · Creative Studio",
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
-    metric: "The silent guardian became Mastercard's agreed approach to agentic commerce; the CPO used the React demo at Money20/20.",
+    metric: "The silent guardian became Mastercard's direction for agentic commerce.",
     working: {
       pressure: "Brand wanted the logo present at every stage.",
       call: "Mastercard stays hidden by default and shows up at three moments: payment confirmation, identity verification, and completion.",
