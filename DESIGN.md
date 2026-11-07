@@ -122,6 +122,16 @@ then content lands a few pixels onto them (`data-settle`, driven by
 rule finishes (`data-settle="title"`, a clip that opens from the bottom). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
 
+The hero statement is **posted like a ledger entry**: its two claims carry mono
+footnote marks, stamped on after the lines land; a hairline drops from each
+mark to its note's rule (`HeroLeaders` measures where), the rule draws outward
+from where the line lands, and the note prints one character at a time behind
+a square cursor. All done by about 1.9s. Hovering a claim or its note moves
+the ultramarine from the full stop to that mark, its line and its number, so
+the accent is still on one thing; with sound on, the claim ticks. Phones get
+the notes settling in without lines or printing; reduced motion shows it all
+at rest.
+
 The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen
 of tiny ink dots packed 8px apart, one even tone, filling the hero from the
 hero rule down and fading out over its last 96px into the next section.

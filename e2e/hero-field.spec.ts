@@ -29,12 +29,13 @@ function watchForShaderCode(page: Page) {
   return seen
 }
 
-// The empty band between the headline and the portrait row: nothing but the
-// dot field is drawn there, so any change in it comes from the field.
+// The empty band between the statement's notes and the portrait row: nothing
+// but the dot field is drawn there, so any change in it comes from the field.
 async function emptyBand(page: Page) {
   return page.evaluate(() => {
-    const h1 = document.querySelector("#hero h1")!.getBoundingClientRect()
-    const grid = document.querySelector("#hero .ledger-grid")!.getBoundingClientRect()
+    const h1 = (document.querySelector("#hero .hero-notes") ?? document.querySelector("#hero h1"))!.getBoundingClientRect()
+    // The glass plate reaches up past its grid, so the band ends at the glass.
+    const grid = (document.querySelector("#hero .glass-plate") ?? document.querySelector("#hero .ledger-grid"))!.getBoundingClientRect()
     return { top: Math.ceil(h1.bottom) + 8, bottom: Math.floor(grid.top) - 8, left: 100, right: 1200 }
   })
 }
