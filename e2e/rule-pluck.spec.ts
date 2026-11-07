@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test"
 
 // Pluckable rules: on a desktop pointer, sweeping across an ink rule catches
 // it like a string. It bends toward the pointer, slips free past the pull
-// limit, rings and settles flat. Sound is opt-in and off by default. Phones,
+// limit, rings and settles flat. Sound is on by default, from the first click. Phones,
 // touch and reduced motion never pluck.
 
 const HERO_RULE = "#hero [data-hero-rule]"
@@ -105,29 +105,41 @@ test("scrolling a rule past a resting pointer does not pluck it", async ({ page 
   await expect(page.locator(".rule-ink svg")).toHaveCount(0)
 })
 
-test("sound is off until asked for, then each pluck plays a note", async ({ page }) => {
+test("sound is on by default and starts with the first click", async ({ page }) => {
   await countNotes(page)
   const { x, y } = await heroRule(page)
   const toggle = page.getByRole("button", { name: "Sound" })
-  await expect(toggle).toHaveAttribute("aria-pressed", "false")
+  await expect(toggle).toHaveAttribute("aria-pressed", "true")
 
+  // The browser holds all audio until a gesture: nothing plays before one.
   await page.mouse.move(x, y - 60)
   await page.mouse.move(x, y + 60)
   await page.waitForTimeout(100)
   expect(await notes(page)).toBe(0)
 
-  await toggle.click()
-  await expect(toggle).toHaveAttribute("aria-pressed", "true")
-  await expect.poll(() => notes(page)).toBe(1) // a soft note confirms it is on
-  const afterToggle = 1
-
-  // The toggle sits above the rule, so this first move does not cross it.
+  await page.mouse.click(x, y + 200)
   await page.mouse.move(x, y - 60)
   await page.mouse.move(x, y + 60)
-  await expect.poll(() => notes(page)).toBe(afterToggle + 1)
+  await expect.poll(() => notes(page)).toBe(1)
+})
 
-  // The choice lasts for the visit, not forever.
+test("turning sound off silences the rules and is remembered", async ({ page }) => {
+  await countNotes(page)
+  const { x, y } = await heroRule(page)
+  const toggle = page.getByRole("button", { name: "Sound" })
+
+  await toggle.click()
+  await expect(toggle).toHaveAttribute("aria-pressed", "false")
+  await page.mouse.move(x, y - 60)
+  await page.mouse.move(x, y + 60)
+  await page.waitForTimeout(100)
+  expect(await notes(page)).toBe(0)
+
   await page.reload()
+  await expect(page.getByRole("button", { name: "Sound" })).toHaveAttribute("aria-pressed", "false")
+
+  // Turning it back on confirms with a soft note, and forgets the choice.
+  await page.getByRole("button", { name: "Sound" }).click()
   await expect(page.getByRole("button", { name: "Sound" })).toHaveAttribute("aria-pressed", "true")
   expect(await page.evaluate(() => window.localStorage.getItem("ledger-sound"))).toBeNull()
 })
