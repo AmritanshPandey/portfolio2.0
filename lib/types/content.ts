@@ -6,6 +6,9 @@ export interface WorkItem {
   description: string
   /** Amritansh's role, as stated on the case study. */
   role?: string
+  /** Who Amritansh was there, as one plain line under the title on the home
+   *  page ("Design lead at Mastercard"). */
+  byline?: string
   image: string
   href: string
   tags?: string[]

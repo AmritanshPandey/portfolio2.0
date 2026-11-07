@@ -23,6 +23,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     description:
       "Demos decide enterprise RFPs, but every new bank needed manual design work, so effort grew with every deal.",
     role: "Design Lead",
+    byline: "Design lead at Mastercard",
     image: "/assets/images/work/white-label-platform.jpg",
     href: "/work/white-label-rfp",
     metric: "A per-deal demo went from about 10 days to about 3; the library grew from 8 to 31 components in six months.",
@@ -40,6 +41,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     description:
       "Agentic commerce removes the checkout screen, and with it the moment people see Mastercard and feel safe.",
     role: "Lead · Creative Studio",
+    byline: "Lead, Creative Studio at Mastercard",
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
     metric: "The silent guardian became Mastercard's direction for agentic commerce.",
@@ -55,6 +57,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     description:
       "Three brands sold almost entirely through marketplaces and needed their own storefronts in eight weeks, with no design system.",
     role: "First in-house UX designer",
+    byline: "First in-house UX designer at Honasa",
     image: "/assets/images/work/commerce-platform.jpg",
     href: "/work/d2c-platform",
     metric: "All three storefronts shipped in the window on one shared system, with no critical post-launch bugs.",
@@ -70,6 +73,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     description:
       "A 10-person startup's consumer safety app lost its use case to COVID lockdowns before it could make money.",
     role: "Sole PM and designer",
+    byline: "Sole PM and designer at DROR Labs (later Lythouse)",
     image: "/assets/images/work/fintech-ai-system.jpg",
     href: "/work/citizen-safety",
     metric: "The B2B pivot shipped in six weeks and reached ₹1.98Cr lifetime revenue.",
@@ -85,6 +89,7 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     description:
       "Custom emails needed HTML, so teams waited on agencies or fell back to outdated templates.",
     role: "Design System Lead",
+    byline: "Design system lead at Mastercard",
     image: "/assets/images/work/design-tokens.jpg",
     href: "/work/email-builder",
     metric: "A no-code builder on 50+ Outlook-safe components and 28 templates, adopted Mastercard-wide.",

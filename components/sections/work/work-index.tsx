@@ -29,7 +29,7 @@ function WorkingNote({
     <div className="working-note">
       <div>
         <div className="ledger-grid pb-8 md:pb-12">
-          <div className="col-span-12 min-w-0 md:col-span-7 md:col-start-6 lg:pl-[calc(var(--col-gap)*1)]">
+          <div className="col-span-12 min-w-0 md:col-span-7 md:col-start-6 md:pl-[3.75rem] lg:pl-[calc(var(--col-gap)*1+3.75rem)]">
             <div aria-hidden className="working-note-rule" />
             <dl
               aria-label={`The working behind ${title}`}
@@ -85,28 +85,29 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
                 </ViewTransition>
               </div>
 
-              <div className="col-span-12 flex min-w-0 flex-col md:col-span-7 lg:pl-[calc(var(--col-gap)*1)]">
-                <div className="flex items-baseline justify-between gap-4">
-                  <p className="ledger-label flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <span className="text-foreground transition-colors duration-300 group-hover:text-accent">{ref}</span>
-                    <span>{category.client}</span>
-                    {item.role && <span className="text-foreground/80">{item.role}</span>}
-                    <span className="hidden lg:inline">{category.type}</span>
-                  </p>
-                  <IconArrowUpRight
-                    size={22}
-                    stroke={1.75}
-                    aria-hidden
-                    className="shrink-0 text-foreground transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-1"
-                  />
-                </div>
+              {/* Entered like a line of the account: the reference hangs in the
+                  margin, the title and everything under it share one edge. */}
+              <div className="col-span-12 grid min-w-0 grid-cols-[2.25rem_minmax(0,1fr)_auto] items-baseline gap-x-3 self-start md:col-span-7 md:grid-cols-[3rem_minmax(0,1fr)_auto] lg:pl-[calc(var(--col-gap)*1)]">
+                <span className="ledger-label text-foreground transition-colors duration-300 group-hover:text-accent">{ref}</span>
 
-                <h3 className="mt-4 max-w-[22ch] text-[clamp(1.625rem,3vw,3.25rem)] font-[780] leading-[1] tracking-[-0.035em] text-foreground [font-variation-settings:'wdth'_108] text-balance">
+                <h3 className="max-w-[22ch] text-[clamp(1.625rem,3vw,3.25rem)] font-[780] leading-[1] tracking-[-0.035em] text-foreground [font-variation-settings:'wdth'_108] text-balance">
                   {item.title}
                 </h3>
 
-                {/* Problem and outcome, entered like two lines of the account. */}
-                <dl className="mt-6 grid max-w-[64ch] grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-[15px] leading-[1.5] md:text-base">
+                <IconArrowUpRight
+                  size={22}
+                  stroke={1.75}
+                  aria-hidden
+                  className="self-start text-foreground transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+
+                <p className="col-span-2 col-start-2 mt-3 text-[15px] leading-[1.4] text-muted-foreground md:text-base">
+                  {item.byline ?? [item.role, category.client].filter(Boolean).join(" at ")}
+                </p>
+
+                {/* Problem and outcome, entered like two lines of the account.
+                    Phones give them the full width back. */}
+                <dl className="col-span-3 mt-6 grid max-w-[64ch] grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-[15px] leading-[1.5] md:col-span-2 md:col-start-2 md:text-base">
                   <dt className="ledger-label pt-[0.2em]">Problem</dt>
                   <dd className="text-muted-foreground">{item.description}</dd>
                   {item.metric && (
