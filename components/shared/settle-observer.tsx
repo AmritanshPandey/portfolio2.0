@@ -36,11 +36,17 @@ export function SettleObserver() {
       { rootMargin: "0px", threshold: 0 }
     )
 
+    // Measure every block first, then mark them: marking between measurements
+    // would make each next measurement recalculate the page's styles.
     const track = (scope: ParentNode) => {
       const vh = window.innerHeight
-      scope.querySelectorAll<HTMLElement>("[data-settle]:not([data-settled])").forEach((el) => {
+      const blocks = Array.from(scope.querySelectorAll<HTMLElement>("[data-settle]:not([data-settled])"))
+      const onScreen = blocks.map((el) => {
         const box = el.getBoundingClientRect()
-        if (box.top < vh && box.bottom > 0) el.setAttribute("data-settled", "")
+        return box.top < vh && box.bottom > 0
+      })
+      blocks.forEach((el, i) => {
+        if (onScreen[i]) el.setAttribute("data-settled", "")
         else io.observe(el)
       })
     }

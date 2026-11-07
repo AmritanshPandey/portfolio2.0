@@ -12,24 +12,38 @@ test("scrolling is native: no smooth-scroll library takes over the wheel", async
   expect(hijacked).toBe(false)
 })
 
+// The posting of the statement's notes (footnote marks, drop lines, printed
+// notes) runs after the landing, over content that is already readable.
+const POSTING = ".hero-mark, .hero-leader, .hero-notes, .hero-notes *"
+
+// The motion's own length (delay + duration of its last animation), so page
+// load time can't make these flaky.
+function heroMotionLength({ posting, selector }: { posting: boolean; selector: string }) {
+  const hero = document.querySelector("#hero")!
+  return Math.max(
+    ...document
+      .getAnimations()
+      .filter((a) => {
+        const target = (a.effect as KeyframeEffect | null)?.target
+        return target instanceof Element && hero.contains(target) && target.matches(selector) === posting
+      })
+      .map((a) => Number(a.effect!.getComputedTiming().endTime)),
+  )
+}
+
 test("the hero's landing takes under 0.9s from first frame to last", async ({ page }) => {
   await page.goto("/")
-  // The motion's own length (delay + duration of its last animation), so page
-  // load time can't make this flaky.
-  const length = await page.evaluate(() => {
-    const hero = document.querySelector("#hero")!
-    return Math.max(
-      ...document
-        .getAnimations()
-        .filter((a) => {
-          const target = (a.effect as KeyframeEffect | null)?.target
-          return target instanceof Element && hero.contains(target)
-        })
-        .map((a) => Number(a.effect!.getComputedTiming().endTime)),
-    )
-  })
+  const length = await page.evaluate(heroMotionLength, { posting: false, selector: POSTING })
   expect(length).toBeGreaterThan(0)
   expect(length).toBeLessThan(900)
+})
+
+test("the statement's notes are posted within 2s, leaving the landing alone", async ({ page }) => {
+  await page.goto("/")
+  expect(await page.locator(POSTING).count()).toBeGreaterThan(0)
+  const length = await page.evaluate(heroMotionLength, { posting: true, selector: POSTING })
+  expect(length).toBeGreaterThan(900)
+  expect(length).toBeLessThan(2000)
 })
 
 test("a block scrolled into view has landed within 0.75s", async ({ page }) => {
@@ -57,6 +71,34 @@ test("a block scrolled into view has landed within 0.75s", async ({ page }) => {
   // the old timings took ~1.1s.
   expect(elapsed).toBeLessThan(750)
 })
+
+// The page cross-fade is for route changes. Anything else that starts one
+// (a lazy island revealing through Suspense inside the layout's
+// <ViewTransition>) blanks the whole page for a frame and fades it back in.
+for (const path of ["/", "/work/citizen-safety"]) {
+  test(`loading ${path} and reading to the end starts no page cross-fade`, async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as unknown as { __transitions: number }
+      w.__transitions = 0
+      const start = Document.prototype.startViewTransition
+      if (!start) return
+      Document.prototype.startViewTransition = function (...args: Parameters<typeof start>) {
+        w.__transitions++
+        return start.apply(this, args)
+      }
+    })
+    await page.goto(path)
+    // Long enough for idle-loaded islands (the hero's live sheet, charts).
+    await page.waitForTimeout(2500)
+    const height = await page.evaluate(() => document.documentElement.scrollHeight)
+    for (let y = 0; y < height; y += 600) {
+      await page.mouse.wheel(0, 600)
+      await page.waitForTimeout(60)
+    }
+    await page.waitForTimeout(1500)
+    expect(await page.evaluate(() => (window as unknown as { __transitions: number }).__transitions)).toBe(0)
+  })
+}
 
 test("page changes cross-fade in a quarter of a second or less", async ({ page }) => {
   await page.goto("/")
