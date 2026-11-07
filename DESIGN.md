@@ -165,10 +165,11 @@ slips free and rings flat in about a second, lit ultramarine by how hard it
 was plucked (`RulePluck`, physics in `lib/pluck.ts`). Only pointer movement
 plucks; scrolling a rule past the pointer never does.
 
-Sound is opt-in and off by default. The wave-mark square beside the theme
-toggle turns on one plucked note per release (synthesised, no audio files),
-rising in pitch down the page, for the visit only (sessionStorage). It is only
-offered where rules can be plucked. Every animation has a `prefers-reduced-motion`
+Sound is on by default: one plucked note per release (synthesised, no audio
+files), rising in pitch down the page. Browsers hold all audio until a gesture,
+so it starts with the visitor's first click, tap or key press. The wave-mark
+square beside the theme toggle turns it off, and that choice is remembered
+across visits (localStorage). It only exists where rules can be plucked. Every animation has a `prefers-reduced-motion`
 path (the settle never arms, hero animations are off, the dot field is static,
 Framer Motion is globally skipped).
 
