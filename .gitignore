@@ -56,8 +56,7 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 
-# Apple's iPhone Duo model: fetched at build time, never committed (scripts/prepare-iphone-duo.py)
-/public/iphone-duo/
+# Download cache of scripts/prepare-iphone-duo.py
 /.cache/
 
 # Redesign snapshots (scripts/snap.mjs)

@@ -2,6 +2,7 @@ import Link from "next/link"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import type { ArticleItem } from "@/lib/types/content"
+import { InsightsScrollHold } from "./insights-scroll-hold"
 
 /**
  * Reading list — the quieter sibling of the work index. Same editorial
@@ -13,6 +14,7 @@ import type { ArticleItem } from "@/lib/types/content"
 export function InsightsList({ items }: { items: ArticleItem[] }) {
   return (
     <div className="work-index">
+      <InsightsScrollHold />
       {items.map((item, i) => (
         <Link
           key={item.href}

@@ -19,7 +19,7 @@ export default function Page() {
         id="work"
         bg="default"
         title="Systems that shipped."
-        description="Four case studies across enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
+        description="Five case studies across agentic payments, enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
         headerAnimated={false}
       >
         <CaseStudy />

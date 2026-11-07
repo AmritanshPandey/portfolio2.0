@@ -43,6 +43,11 @@ export interface AsciiFlowBackgroundProps {
    * `cellSize` is then the column pitch and `fontSize` the front crest's size.
    */
   shape?: "flow" | "waves"
+  /**
+   * Waves only: the water answers a mouse or pen, rising and glinting under
+   * it and ringing out from quick strokes. Ignored when still.
+   */
+  interactive?: boolean
 }
 
 const DEFAULT_RAMP = " .:-=+*#%@"
@@ -76,6 +81,7 @@ export function AsciiFlowBackground({
   fontVar,
   maxDpr = 2,
   shape = "flow",
+  interactive = false,
 }: AsciiFlowBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -134,6 +140,42 @@ export function AsciiFlowBackground({
       colors.accent = resolve(dark ? accentDarkVar : accentLightVar, dark ? "#34d399" : "#059669")
       const rgb = ({ r, g, b }: RGBA) => `rgb(${r}, ${g}, ${b})`
       sea?.setColors(rgb(colors.base), rgb(colors.accent))
+      stamps.clear()
+    }
+
+    // The flow's glyphs come from an atlas: each glyph in each colour is
+    // drawn once with fillText, then stamped with drawImage, which costs a
+    // fraction as much per cell. Colours stay exact: a stamp is keyed by its
+    // glyph and its rounded rgb. Rebuilt when the size, theme or font changes.
+    const ATLAS_COLS = 32
+    const ATLAS_SLOTS = ATLAS_COLS * 12
+    const atlas = document.createElement("canvas")
+    const actx = atlas.getContext("2d")
+    const stamps = new Map<number, number>()
+    let slot = 0
+    const resetAtlas = () => {
+      stamps.clear()
+      slot = Math.ceil((glyph * dpr * 2.2) / 2) * 2
+      atlas.width = slot * ATLAS_COLS
+      atlas.height = slot * (ATLAS_SLOTS / ATLAS_COLS)
+      if (!actx) return
+      // Set the text the way the field's canvas has it: sizing a canvas
+      // resets it to start-aligned text on the alphabetic baseline, drawn
+      // from the cell centre. The slot is wide enough for the glyph either way.
+      actx.font = `${glyph * dpr}px ${fontFamily}`
+      actx.textAlign = "start"
+      actx.textBaseline = "alphabetic"
+    }
+    const stamp = (key: number, ch: string, fill: string) => {
+      if (!actx || stamps.size >= ATLAS_SLOTS) return -1
+      const i = stamps.size
+      const x = (i % ATLAS_COLS) * slot
+      const y = Math.floor(i / ATLAS_COLS) * slot
+      actx.clearRect(x, y, slot, slot)
+      actx.fillStyle = fill
+      actx.fillText(ch, x + slot / 2, y + slot / 2)
+      stamps.set(key, i)
+      return i
     }
 
     // Optional source image, sampled into a tiny offscreen buffer that matches
@@ -173,6 +215,7 @@ export function AsciiFlowBackground({
       rows = Math.max(1, Math.ceil(height / cellSize))
       buildSample()
       sea?.resize(width, height, dpr)
+      if (!sea) resetAtlas()
     }
 
     // Brightness at grid cell (cx, cy) in 0..1.
@@ -209,6 +252,11 @@ export function AsciiFlowBackground({
       ctx.clearRect(0, 0, width, height)
       ctx.font = font
       const half = cellSize / 2
+      // Stamps are placed in device pixels, so a cell lands where fillText
+      // would have drawn it.
+      const step = cellSize * dpr
+      const offset = half * dpr - slot / 2
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
 
       for (let cy = 0; cy < rows; cy++) {
         for (let cx = 0; cx < cols; cx++) {
@@ -226,10 +274,24 @@ export function AsciiFlowBackground({
           const g = Math.round(colors.base.g + (colors.accent.g - colors.base.g) * mix)
           const bl = Math.round(colors.base.b + (colors.accent.b - colors.base.b) * mix)
           ctx.globalAlpha = opacity * (0.18 + shaped * 0.82)
-          ctx.fillStyle = `rgb(${r}, ${g}, ${bl})`
-          ctx.fillText(ch, cx * cellSize + half, cy * cellSize + half)
+          const key = idx * 16777216 + ((r << 16) | (g << 8) | bl)
+          const i = stamps.get(key) ?? stamp(key, ch, `rgb(${r}, ${g}, ${bl})`)
+          if (i >= 0) {
+            ctx.drawImage(
+              atlas,
+              (i % ATLAS_COLS) * slot, Math.floor(i / ATLAS_COLS) * slot, slot, slot,
+              Math.round(cx * step + offset), Math.round(cy * step + offset), slot, slot
+            )
+          } else {
+            // Atlas full: draw this cell directly.
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+            ctx.fillStyle = `rgb(${r}, ${g}, ${bl})`
+            ctx.fillText(ch, cx * cellSize + half, cy * cellSize + half)
+            ctx.setTransform(1, 0, 0, 1, 0, 0)
+          }
         }
       }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.globalAlpha = 1
     }
 
@@ -244,12 +306,40 @@ export function AsciiFlowBackground({
       }
       raf = requestAnimationFrame(loop)
     }
+    // The sea's pointer: listened for only while the sea runs, against a
+    // cached box that a scroll or resize clears. The canvas itself takes no
+    // pointer events, so the page under it keeps them.
+    let box: DOMRect | null = null
+    const forget = () => {
+      box = null
+    }
+    const onPointer = (e: PointerEvent) => {
+      if (!sea || e.pointerType === "touch") return
+      box ??= canvas.getBoundingClientRect()
+      const x = e.clientX - box.left
+      const y = e.clientY - box.top
+      // The band fades in from its top edge; the pointer may stir it from just above.
+      sea.pointer(x >= 0 && x <= width && y >= -24 && y <= height ? x : null, y)
+    }
+    const onLeave = () => sea?.pointer(null)
+    const listen = (on: boolean) => {
+      if (!sea || !interactive) return
+      const method = on ? "addEventListener" : "removeEventListener"
+      window[method]("pointermove", onPointer as EventListener, { passive: true })
+      window[method]("scroll", forget, { passive: true })
+      window[method]("blur", onLeave)
+      document.documentElement[method]("pointerleave", onLeave)
+      if (!on) onLeave()
+    }
+
     const start = () => {
       if (running || reduced) return
       running = true
       raf = requestAnimationFrame(loop)
+      listen(true)
     }
     const stop = () => {
+      if (running) listen(false)
       running = false
       cancelAnimationFrame(raf)
     }
@@ -273,11 +363,13 @@ export function AsciiFlowBackground({
     void document.fonts?.ready.then(() => {
       if (disposed) return
       sea?.repaint()
+      stamps.clear()
       if (reduced) draw(0)
     })
 
     const ro = new ResizeObserver(() => {
       build()
+      forget()
       if (reduced) draw(0)
     })
     ro.observe(canvas)
@@ -324,6 +416,7 @@ export function AsciiFlowBackground({
     fontVar,
     maxDpr,
     shape,
+    interactive,
   ])
 
   return (

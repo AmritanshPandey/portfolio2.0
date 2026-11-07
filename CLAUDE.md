@@ -34,6 +34,7 @@ npx tsc --noEmit
 - Framer reveals write `opacity:0` into SSR HTML; a `.js` class plus CSS fallback and `SettleGuard` keep content visible. Scan for contrast only after content has scrolled in.
 
 ## Gotchas
+- Never use `next/dynamic` or Suspense under the root layout: a Suspense reveal runs the layout's `<ViewTransition>`, which blanks the whole page and fades it back in. Use `lazyClient` (`components/shared/lazy-client.tsx`).
 - Performance on the home page: anything that tracks the pointer or scroll should listen only while on screen, cache rects, and write transforms or leaf-element variables (never inherited CSS variables on a large subtree). Measure with a production build (`NEXT_DIST_DIR=.next-build npm run build`; revert the `tsconfig.json` include it adds).
 - Tests: Playwright specs in `e2e/` (`npm run test:e2e`) and `node --test` units in `lib/*.test.mjs` (`npm run test:unit`).
 - `data/casestudy/` (honasa) and `data/case-studies/` (d2c-platform) both exist; the loader only reads `case-studies/`.

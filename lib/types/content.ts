@@ -6,6 +6,9 @@ export interface WorkItem {
   description: string
   /** Amritansh's role, as stated on the case study. */
   role?: string
+  /** Who Amritansh was there, as one plain line under the title on the home
+   *  page ("Design lead at Mastercard"). */
+  byline?: string
   image: string
   href: string
   tags?: string[]
@@ -13,6 +16,15 @@ export interface WorkItem {
   /** The outcome, distinct from the problem; shown on the home page and the
    *  "More case studies" cards. Only what the case study itself states. */
   metric?: string
+  /** The working: the study's key decision, in its own words. */
+  working?: {
+    /** What pushed the other way. */
+    pressure: string
+    /** The decision taken. */
+    call: string
+    /** What it cost. */
+    cost: string
+  }
   order: number
 }
 

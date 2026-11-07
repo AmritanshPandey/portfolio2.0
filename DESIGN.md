@@ -106,6 +106,10 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
   specimen on the left where there is one, entries on the right, and the other
   rows receding on hover (`.work-index` / `.work-row`). Specimen frames take
   Ledger's 4px corner; the mockups inside keep their own.
+- **Show the working** (`WorkingScope`): a switch in a bar that stays in reach
+  over the work list opens a note under each row: Pressure, My call, Cost, in
+  the case study's own words (`working` in `lib/data/work.ts`). The notes are
+  plain text in the page, opened by CSS, and sit outside the row's link.
 - Case-study reading columns start at column 4 (`.ledger-offset`, `CsSection`),
   leaving a left rail open. Lists are ruled line items, not card grids.
 - Cards are rare: a raised sheet (`--surface-1`) only for specimens and mockups.
@@ -117,6 +121,16 @@ then content lands a few pixels onto them (`data-settle`, driven by
 `SettleObserver`). Section titles land bolder: they rise out of a slot as their
 rule finishes (`data-settle="title"`, a clip that opens from the bottom). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
+
+The hero statement is **posted like a ledger entry**: its two claims carry mono
+footnote marks, stamped on after the lines land; a hairline drops from each
+mark to its note's rule (`HeroLeaders` measures where), the rule draws outward
+from where the line lands, and the note prints one character at a time behind
+a square cursor. All done by about 1.9s. Hovering a claim or its note moves
+the ultramarine from the full stop to that mark, its line and its number, so
+the accent is still on one thing; with sound on, the claim ticks. Phones get
+the notes settling in without lines or printing; reduced motion shows it all
+at rest.
 
 The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen
 of tiny ink dots packed 8px apart, one even tone, filling the hero from the
@@ -165,10 +179,11 @@ slips free and rings flat in about a second, lit ultramarine by how hard it
 was plucked (`RulePluck`, physics in `lib/pluck.ts`). Only pointer movement
 plucks; scrolling a rule past the pointer never does.
 
-Sound is opt-in and off by default. The wave-mark square beside the theme
-toggle turns on one plucked note per release (synthesised, no audio files),
-rising in pitch down the page, for the visit only (sessionStorage). It is only
-offered where rules can be plucked. Every animation has a `prefers-reduced-motion`
+Sound is on by default: one plucked note per release (synthesised, no audio
+files), rising in pitch down the page. Browsers hold all audio until a gesture,
+so it starts with the visitor's first click, tap or key press. The wave-mark
+square beside the theme toggle turns it off, and that choice is remembered
+across visits (localStorage). It only exists where rules can be plucked. Every animation has a `prefers-reduced-motion`
 path (the settle never arms, hero animations are off, the dot field is static,
 Framer Motion is globally skipped).
 

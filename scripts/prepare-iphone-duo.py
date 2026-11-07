@@ -1,9 +1,10 @@
 """Prepare Apple's iPhone Duo reference model for the Agent Pay fold viewer.
 
 Downloads Apple's USDZ, selects its unfolded (Landscape) pose, flattens the
-references and points textures at local files, writing public/iphone-duo/
-(git-ignored). Apple's assets belong to Apple and are never committed; this
-runs at build time on Vercel (see vercel.json) and once locally.
+references and points textures at local files, writing
+public/devices/iphone-duo/, which is committed. Run it again only to remake
+those files, e.g. if Apple updates the model (delete the folder first).
+The model belongs to Apple and is shown as a reference device.
 
 Adapted from jadon7/iphone-duo (scripts/prepare-assets.py), MIT License,
 Copyright (c) 2026 jadon7. Apple's UI images are not fetched: the viewer
@@ -19,7 +20,7 @@ from zipfile import ZipFile
 from pxr import Sdf, Usd
 
 root = Path(__file__).resolve().parents[1]
-out = root / "public" / "iphone-duo"
+out = root / "public" / "devices" / "iphone-duo"
 textures = out / "textures"
 cache = root / ".cache" / "iphone-duo"
 textures.mkdir(parents=True, exist_ok=True)
