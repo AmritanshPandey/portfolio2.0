@@ -1,9 +1,10 @@
 /**
  * Ledger sound: the plucked-rule notes, and the visitor's on/off choice.
  *
- * Off by default. Turning it on lasts for the visit (sessionStorage), never
- * across visits, so nobody returns days later to a page that makes noise.
- * Notes are synthesised with Karplus–Strong (a noise burst ringing through a
+ * On by default, but browsers hold all audio until the visitor's first click,
+ * tap or key press, so the first note can only follow one (wakeSoundOnGesture).
+ * Turning it off is remembered across visits (localStorage), so nobody who
+ * silenced the site comes back to noise. Notes are synthesised with Karplus–Strong (a noise burst ringing through a
  * short delay line), so there are no audio files to download.
  */
 
@@ -25,14 +26,15 @@ let enabled: boolean | null = null
 
 function stored(): boolean {
   try {
-    return window.sessionStorage.getItem(KEY) === "on"
+    return window.localStorage.getItem(KEY) !== "off"
   } catch {
-    return false
+    return true
   }
 }
 
 export function isSoundOn(): boolean {
-  if (enabled === null) enabled = typeof window !== "undefined" && stored()
+  if (typeof window === "undefined") return true
+  if (enabled === null) enabled = stored()
   return enabled
 }
 
@@ -46,7 +48,8 @@ export function subscribeSound(listener: Listener): () => void {
 export function setSound(on: boolean) {
   enabled = on
   try {
-    window.sessionStorage.setItem(KEY, on ? "on" : "off")
+    if (on) window.localStorage.removeItem(KEY)
+    else window.localStorage.setItem(KEY, "off")
   } catch {
     // Storage can be blocked; the choice still holds until the page reloads.
   }
@@ -91,9 +94,8 @@ function unlock(): AudioContext | null {
 }
 
 /**
- * When sound was switched on earlier in the visit, the browser still needs a
- * fresh gesture after a reload before it will play. The first click or key
- * press anywhere wakes it.
+ * Browsers need a gesture on every page load before they will play anything.
+ * The first click or key press anywhere wakes the sound.
  */
 export function wakeSoundOnGesture(): () => void {
   const wake = () => {
