@@ -45,6 +45,23 @@ Work rules:
 
 ---
 
+### Shipped since this plan was written
+
+These landed on `main` after commit `10f1492`. Line numbers and findings below predate them.
+
+- **Agent Pay is already a home work row (#45), second in the list.** Phase 2 still moves it first
+  and gates its page. Its outcome line uses D3-approved facts only (#46).
+- **Hero statement is annotated (#47):** two footnote marks and two ruled notes under the statement,
+  animated in. This covers part of F4 and overlaps Phase 2 step 4's proof strip: decide with the
+  owner whether the strip is still needed, and keep the 7.2 rows to D3-approved facts. The notes
+  move into `lib/data/proof.ts` when that lands.
+- **Work rows (#48):** the tag eyebrow is gone; a byline sits under the title (`WorkItem.byline`).
+- **"Show the working" (#54):** a note under each work row. Its Agent Pay copy goes beyond the two
+  D3 facts; the owner has yet to confirm it.
+- **Lazy islands use `lazyClient`, never `next/dynamic` (#52);** see CLAUDE.md.
+- **Device models now live in the repo (#51)**, so F14's build-time download is gone. D9 still
+  needs an answer: Apple's model is now committed, not only fetched.
+
 ## 1. Verdict and target
 
 **What's already right.** Ledger is a real point of view: paper, ink and one ultramarine accent;
@@ -110,7 +127,8 @@ hidden in production, e2e specs). **Don't rebuild any of this. Extend it.**
 
 - Keyboard focus-ring styling stays exactly as it is (DESIGN.md §7).
 - Light paper is the default; night through the toggle; no system theme.
-- Sound is opt-in and off by default.
+- Sound is on by default and starts with the visitor's first click, tap or key press; turning it
+  off is remembered (changed by the owner, #53; this replaces "opt-in and off by default").
 - Native scrolling; no smooth-scroll library.
 - Framer Motion stays off the home page.
 
