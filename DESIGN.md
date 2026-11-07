@@ -106,6 +106,10 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
   specimen on the left where there is one, entries on the right, and the other
   rows receding on hover (`.work-index` / `.work-row`). Specimen frames take
   Ledger's 4px corner; the mockups inside keep their own.
+- **Show the working** (`WorkingScope`): a switch in a bar that stays in reach
+  over the work list opens a note under each row: Pressure, My call, Cost, in
+  the case study's own words (`working` in `lib/data/work.ts`). The notes are
+  plain text in the page, opened by CSS, and sit outside the row's link.
 - Case-study reading columns start at column 4 (`.ledger-offset`, `CsSection`),
   leaving a left rail open. Lists are ruled line items, not card grids.
 - Cards are rare: a raised sheet (`--surface-1`) only for specimens and mockups.
