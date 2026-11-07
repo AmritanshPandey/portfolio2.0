@@ -1,12 +1,11 @@
 "use client"
 
-import dynamic from "next/dynamic"
+import { lazyClient } from "@/components/shared/lazy-client"
 import { WhenIdle } from "@/components/shared/when-idle"
 
 // The plot brings Recharts; it loads once the page is idle or nearby.
-const CsAreaChartPlot = dynamic(() => import("./cs-chart-plots").then((m) => m.CsAreaChartPlot), {
-  ssr: false,
-  loading: () => <div className="h-[200px] w-full" />,
+const CsAreaChartPlot = lazyClient(() => import("./cs-chart-plots").then((m) => m.CsAreaChartPlot), {
+  fallback: () => <div className="h-[200px] w-full" />,
 })
 
 export interface CsAreaChartAnnotation {

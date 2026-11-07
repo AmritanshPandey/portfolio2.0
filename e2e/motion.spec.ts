@@ -58,6 +58,34 @@ test("a block scrolled into view has landed within 0.75s", async ({ page }) => {
   expect(elapsed).toBeLessThan(750)
 })
 
+// The page cross-fade is for route changes. Anything else that starts one
+// (a lazy island revealing through Suspense inside the layout's
+// <ViewTransition>) blanks the whole page for a frame and fades it back in.
+for (const path of ["/", "/work/citizen-safety"]) {
+  test(`loading ${path} and reading to the end starts no page cross-fade`, async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as unknown as { __transitions: number }
+      w.__transitions = 0
+      const start = Document.prototype.startViewTransition
+      if (!start) return
+      Document.prototype.startViewTransition = function (...args: Parameters<typeof start>) {
+        w.__transitions++
+        return start.apply(this, args)
+      }
+    })
+    await page.goto(path)
+    // Long enough for idle-loaded islands (the hero's live sheet, charts).
+    await page.waitForTimeout(2500)
+    const height = await page.evaluate(() => document.documentElement.scrollHeight)
+    for (let y = 0; y < height; y += 600) {
+      await page.mouse.wheel(0, 600)
+      await page.waitForTimeout(60)
+    }
+    await page.waitForTimeout(1500)
+    expect(await page.evaluate(() => (window as unknown as { __transitions: number }).__transitions)).toBe(0)
+  })
+}
+
 test("page changes cross-fade in a quarter of a second or less", async ({ page }) => {
   await page.goto("/")
   const durations = await page.evaluate(() => {
