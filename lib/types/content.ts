@@ -16,14 +16,15 @@ export interface WorkItem {
   /** The outcome, distinct from the problem; shown on the home page and the
    *  "More case studies" cards. Only what the case study itself states. */
   metric?: string
-  /** The working: the study's key decision, in its own words. */
+  /** The working: the study's key decision, in its own words. Pressure and
+   *  cost are left out where they can't be made public. */
   working?: {
     /** What pushed the other way. */
-    pressure: string
+    pressure?: string
     /** The decision taken. */
     call: string
     /** What it cost. */
-    cost: string
+    cost?: string
   }
   order: number
 }

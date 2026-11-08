@@ -35,12 +35,20 @@ function WorkingNote({
               aria-label={`The working behind ${title}`}
               className="working-note-entries mt-5 grid max-w-[64ch] grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-3 text-[15px] leading-[1.5] md:text-base"
             >
-              <dt className="ledger-label pt-[0.2em]">Pressure</dt>
-              <dd className="text-muted-foreground">{pressure}</dd>
+              {pressure && (
+                <>
+                  <dt className="ledger-label pt-[0.2em]">Pressure</dt>
+                  <dd className="text-muted-foreground">{pressure}</dd>
+                </>
+              )}
               <dt className="ledger-label pt-[0.2em]"><span className="text-accent">My call</span></dt>
               <dd className="text-foreground">{call}</dd>
-              <dt className="ledger-label pt-[0.2em]">Cost</dt>
-              <dd className="text-muted-foreground">{cost}</dd>
+              {cost && (
+                <>
+                  <dt className="ledger-label pt-[0.2em]">Cost</dt>
+                  <dd className="text-muted-foreground">{cost}</dd>
+                </>
+              )}
             </dl>
           </div>
         </div>

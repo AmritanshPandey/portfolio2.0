@@ -45,10 +45,10 @@ const ITEMS: Omit<WorkItem, "order">[] = [
     image: "/assets/images/work/agent-commerce.jpg",
     href: "/work/agent-commerce",
     metric: "The silent guardian became Mastercard's direction for agentic commerce.",
+    // Only what D3 clears for the home page (docs/redesign/DECISIONS.md);
+    // the outcome above carries the other cleared fact.
     working: {
-      pressure: "Brand wanted the logo present at every stage.",
-      call: "Mastercard stays hidden by default and shows up at three moments: payment confirmation, identity verification, and completion.",
-      cost: "Pushing back on the team that owns the brand meant arguing it as product strategy, not taste.",
+      call: "Set the design direction for agentic commerce at Mastercard.",
     },
   },
   {
