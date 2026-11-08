@@ -12,38 +12,24 @@ test("scrolling is native: no smooth-scroll library takes over the wheel", async
   expect(hijacked).toBe(false)
 })
 
-// The posting of the statement's notes (footnote marks, drop lines, printed
-// notes) runs after the landing, over content that is already readable.
-const POSTING = ".hero-mark, .hero-leader, .hero-notes, .hero-notes *"
-
-// The motion's own length (delay + duration of its last animation), so page
-// load time can't make these flaky.
-function heroMotionLength({ posting, selector }: { posting: boolean; selector: string }) {
-  const hero = document.querySelector("#hero")!
-  return Math.max(
-    ...document
-      .getAnimations()
-      .filter((a) => {
-        const target = (a.effect as KeyframeEffect | null)?.target
-        return target instanceof Element && hero.contains(target) && target.matches(selector) === posting
-      })
-      .map((a) => Number(a.effect!.getComputedTiming().endTime)),
-  )
-}
-
 test("the hero's landing takes under 0.9s from first frame to last", async ({ page }) => {
   await page.goto("/")
-  const length = await page.evaluate(heroMotionLength, { posting: false, selector: POSTING })
+  // The motion's own length (delay + duration of its last animation), so page
+  // load time can't make this flaky.
+  const length = await page.evaluate(() => {
+    const hero = document.querySelector("#hero")!
+    return Math.max(
+      ...document
+        .getAnimations()
+        .filter((a) => {
+          const target = (a.effect as KeyframeEffect | null)?.target
+          return target instanceof Element && hero.contains(target)
+        })
+        .map((a) => Number(a.effect!.getComputedTiming().endTime)),
+    )
+  })
   expect(length).toBeGreaterThan(0)
   expect(length).toBeLessThan(900)
-})
-
-test("the statement's notes are posted within 2s, leaving the landing alone", async ({ page }) => {
-  await page.goto("/")
-  expect(await page.locator(POSTING).count()).toBeGreaterThan(0)
-  const length = await page.evaluate(heroMotionLength, { posting: true, selector: POSTING })
-  expect(length).toBeGreaterThan(900)
-  expect(length).toBeLessThan(2000)
 })
 
 test("a block scrolled into view has landed within 0.75s", async ({ page }) => {
