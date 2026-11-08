@@ -54,8 +54,8 @@ These landed on `main` after commit `10f1492`. Line numbers and findings below p
 - **Hero statement annotations (#47) were removed** at the owner's request: no footnote marks or
   notes under the statement. F4 and Phase 2 step 4's proof strip are open again.
 - **Work rows (#48):** the tag eyebrow is gone; a byline sits under the title (`WorkItem.byline`).
-- **"Show the working" (#54):** a note under each work row. Its Agent Pay copy goes beyond the two
-  D3 facts; the owner has yet to confirm it.
+- **"Show the working" (#54):** a note under each work row. Agent Pay's is trimmed to the D3 facts
+  at the owner's request: one "My call" line, no pressure or cost.
 - **Lazy islands use `lazyClient`, never `next/dynamic` (#52);** see CLAUDE.md.
 - **Device models now live in the repo (#51)**, so F14's build-time download is gone. D9 still
   needs an answer: Apple's model is now committed, not only fetched.
