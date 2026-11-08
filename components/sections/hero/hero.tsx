@@ -5,43 +5,10 @@ import { Magnetic } from "@/components/shared/magnetic"
 import { HeroField } from "./hero-field"
 import { GlassPlate } from "./glass-plate"
 import { TiltPane } from "./tilt-pane"
-import { HeroLeaders } from "./hero-leaders"
-import Link from "next/link"
-import { Fragment } from "react"
 
 // The glass pane's reach past its content: it pads by what it extends into
 // the gutter, so the content keeps its place on the grid.
 const PLATE = "-mx-3 -my-3 p-3 sm:-mx-6 sm:-my-6 sm:p-6"
-
-// Notes to the statement. Public facts only (docs/redesign/DECISIONS.md, D3).
-const NOTES = [
-  {
-    n: 1,
-    links: [
-      { label: "Agent Pay", href: "/work/agent-commerce" },
-      { label: "PartnerBank", href: "/work/white-label-rfp" },
-      { label: "Honasa", href: "/work/d2c-platform" },
-    ],
-  },
-  {
-    n: 2,
-    links: [
-      {
-        label: "The silent guardian became Mastercard’s direction for agentic commerce.",
-        href: "/work/agent-commerce",
-      },
-    ],
-  },
-]
-
-/** A footnote mark on the statement; it lands like a stamp after the line. */
-function HeroMark({ n }: { n: number }) {
-  return (
-    <a href={`#hero-note-${n}`} aria-hidden tabIndex={-1} data-mark={n} className="hero-mark">
-      {n}
-    </a>
-  )
-}
 
 /**
  * Ledger hero: one statement set across the whole sheet, then one pane of
@@ -79,52 +46,15 @@ export default function Hero() {
         <div className="relative pb-[clamp(56px,7vw,112px)] pt-6 md:pt-10">
           <HeroField />
 
-          {/* The statement is itemised: two claims carry footnote marks, and
-              their notes are posted on ruled lines under it (globals.css,
-              "Hero notes"; HeroLeaders draws the drop lines and the hover tick). */}
           <h1 className="hero-statement">
             <span data-hero-line="1" className="block">Product design for</span>
-            <span data-hero-line="2" className="block whitespace-nowrap">
-              <span data-claim="1">complex systems</span>
-              <HeroMark n={1} />
-            </span>
+            <span data-hero-line="2" className="block whitespace-nowrap">complex systems</span>
             <span data-hero-line="3" className="block">
-              <span data-claim="2">people can trust</span>
-              <span data-stop className="text-accent">.</span>
-              <HeroMark n={2} />
+              people can trust<span className="text-accent">.</span>
             </span>
           </h1>
 
-          <span aria-hidden data-leader="1" className="hero-leader" hidden />
-          <span aria-hidden data-leader="2" className="hero-leader" hidden />
-
-          <ol aria-label="Notes to the statement" className="hero-notes mt-5 md:mt-7">
-            {NOTES.map((note) => {
-              const text = note.links.map((l) => l.label).join(" · ")
-              return (
-                <li key={note.n} id={`hero-note-${note.n}`} data-note={note.n} className="hero-note">
-                  <span aria-hidden data-note-rule className="hero-note-rule" />
-                  <span aria-hidden className="hero-note-ref">{note.n}</span>
-                  <span className="hero-note-print" style={{ "--chars": text.length } as React.CSSProperties}>
-                    <span className="hero-note-text">
-                      {note.links.map((l, i) => (
-                        <Fragment key={l.label}>
-                          {i > 0 && " · "}
-                          <Link href={l.href} className="hero-note-link">
-                            {l.label}
-                          </Link>
-                        </Fragment>
-                      ))}
-                    </span>
-                    <span aria-hidden className="hero-note-cursor" />
-                  </span>
-                </li>
-              )
-            })}
-          </ol>
-          <HeroLeaders />
-
-          <div className="@container ledger-grid mt-10 gap-y-12 md:mt-16">
+          <div className="@container ledger-grid mt-14 gap-y-12 md:mt-24">
             {/* One pane of glass for the portrait, the intro and the two
                 actions, so the dot grid frosts under all of it. It leans
                 toward the pointer, ripples where it's clicked, and the

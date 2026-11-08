@@ -51,10 +51,8 @@ These landed on `main` after commit `10f1492`. Line numbers and findings below p
 
 - **Agent Pay is already a home work row (#45), second in the list.** Phase 2 still moves it first
   and gates its page. Its outcome line uses D3-approved facts only (#46).
-- **Hero statement is annotated (#47):** two footnote marks and two ruled notes under the statement,
-  animated in. This covers part of F4 and overlaps Phase 2 step 4's proof strip: decide with the
-  owner whether the strip is still needed, and keep the 7.2 rows to D3-approved facts. The notes
-  move into `lib/data/proof.ts` when that lands.
+- **Hero statement annotations (#47) were removed** at the owner's request: no footnote marks or
+  notes under the statement. F4 and Phase 2 step 4's proof strip are open again.
 - **Work rows (#48):** the tag eyebrow is gone; a byline sits under the title (`WorkItem.byline`).
 - **"Show the working" (#54):** a note under each work row. Its Agent Pay copy goes beyond the two
   D3 facts; the owner has yet to confirm it.
