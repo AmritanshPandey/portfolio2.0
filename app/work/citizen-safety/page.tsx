@@ -333,7 +333,7 @@ function GapsGrid() {
   const gaps = [
     { num: "Gap 01", finding: "Connectivity assumption",         change: "Life360 needed constant internet. Patchy connectivity in smaller cities broke it when it mattered." },
     { num: "Gap 02", finding: "English-first UI",                change: "English-heavy onboarding. Our users needed icon-first, low-literacy design." },
-    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "&lsquo;Track your family&rsquo; felt invasive. We made it an opt-in, mutual safety circle." },
+    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "‘Track your family’ felt invasive. We made it an opt-in, mutual safety circle." },
     { num: "Gap 04 · Research", finding: "68% drop-off in Life360 onboarding", change: "Tested Life360 with 15 Indian users. They dropped off at permissions, the English UI, and the smartphone assumption." },
   ]
   return (

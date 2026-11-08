@@ -5,6 +5,11 @@ Personal portfolio. Goal: convert hiring managers, founders and design peers int
 ## Stack
 Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion (case studies only; not on the home page), next-themes (light paper default), shadcn/radix, Recharts. Visual system: "Ledger" (see DESIGN.md). Static site, no backend/DB. Analytics only when `VERCEL === "1"`.
 
+## Redesign
+The current plan is `docs/redesign/REDESIGN.md`, with owner answers in `docs/redesign/DECISIONS.md`. Run a phase with `/redesign <n>`. `npm run check:ledger` reports Ledger drift; `npm run snap` takes before/after screenshots.
+
+`.impeccable/design.json` and `docs/archive/2026-07-audit.md` predate Ledger; never use them as a spec.
+
 ## Commands
 ```bash
 npm run dev      # http://localhost:3000
@@ -16,7 +21,7 @@ npx tsc --noEmit
 
 ## Architecture
 - `app/layout.tsx`: fonts, theme, cursor, reveal observers, skip link, `<main id="main-content">`. Scrolling is native (no smooth-scroll library).
-- `app/page.tsx`: home = Hero, Work, Explorations, Approach, Insights, Trajectory, Advisory (`components/sections/*`).
+- `app/page.tsx`: home = Hero, Work, Explorations, Approach, Insights, Advisory, About (`components/sections/*`).
 - Content is typed data in `lib/data/*.ts` (articles, work, explorations, about, systems).
 - Case studies: `/work/[slug]` reads `data/case-studies/<slug>.json` at build time into `components/case-study/case-study-renderer.tsx`, which picks from ~40 `cs-*` block components. Five case studies also have hand-built routes under `app/work/`.
 - Shared UI: `components/shared` (motion, shaders, cursor, cards, CTAs), `components/ui` (primitives, flow diagram, charts).
@@ -31,7 +36,5 @@ npx tsc --noEmit
 ## Gotchas
 - Never use `next/dynamic` or Suspense under the root layout: a Suspense reveal runs the layout's `<ViewTransition>`, which blanks the whole page and fades it back in. Use `lazyClient` (`components/shared/lazy-client.tsx`).
 - Performance on the home page: anything that tracks the pointer or scroll should listen only while on screen, cache rects, and write transforms or leaf-element variables (never inherited CSS variables on a large subtree). Measure with a production build (`NEXT_DIST_DIR=.next-build npm run build`; revert the `tsconfig.json` include it adds).
-- No tests. `@playwright/test` is installed but unused.
-- `data/casestudy/` (agent-commerce, honasa, white-label-rfp) and `data/case-studies/` (d2c-platform) both exist; the loader only reads `case-studies/`.
-- `components/sections/growth/growth-chart.tsx` appears unused.
-- `PRODUCT.md` says "7 years"; the canonical claim is "6+ years".
+- Tests: Playwright specs in `e2e/` (`npm run test:e2e`) and `node --test` units in `lib/*.test.mjs` (`npm run test:unit`).
+- `data/casestudy/` (honasa) and `data/case-studies/` (d2c-platform) both exist; the loader only reads `case-studies/`.

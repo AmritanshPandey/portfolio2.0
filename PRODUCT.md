@@ -16,7 +16,7 @@ The shared job to be done: quickly grasp seniority, range, and impact, then dig 
 
 ## Product Purpose
 
-A personal portfolio for Amritansh Pandey — Product Thinker at Mastercard, 7 years building fintech end to end. It exists to convert qualified visitors into conversations about senior product roles by demonstrating depth (Agent Pay, PartnerBank, agentic commerce, the React demo the CPO used at Money20/20), range (work, explorations, systems, and writing), and a distinctive point of view. Success is a hiring manager or founder reaching out — or a peer remembering the site.
+A personal portfolio for Amritansh Pandey — Senior UX Designer at Mastercard, 6+ years building fintech end to end. It exists to convert qualified visitors into conversations about senior product roles by demonstrating depth (Agent Pay, PartnerBank, agentic commerce, the React demo the CPO used at Money20/20), range (work, explorations, systems, and writing), and a distinctive point of view. Success is a hiring manager or founder reaching out — or a peer remembering the site.
 
 ## Brand Personality
 

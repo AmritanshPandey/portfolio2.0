@@ -58,3 +58,6 @@ next-env.d.ts
 
 # Download cache of scripts/prepare-iphone-duo.py
 /.cache/
+
+# Redesign snapshots (scripts/snap.mjs)
+/snapshots/

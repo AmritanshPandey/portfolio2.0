@@ -1,8 +1,6 @@
 # Amritansh Pandey — Portfolio
 
-Product-design portfolio built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind v4. Dark-default with full light-mode support; one emerald accent; motion honours `prefers-reduced-motion` throughout.
-
-See [`AUDIT.md`](./AUDIT.md) for the design audit and the phased improvement plan, and [`DESIGN.md`](./DESIGN.md) for the design system (tokens, type scale, component rules).
+Product-design portfolio built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind v4. Visual system: Ledger. Light paper by default with a night theme on the toggle, one ultramarine accent, and motion that honours `prefers-reduced-motion` throughout. [`DESIGN.md`](./DESIGN.md) is the spec (tokens, type scale, component rules); the current redesign plan is [`docs/redesign/REDESIGN.md`](./docs/redesign/REDESIGN.md).
 
 ## Getting started
 

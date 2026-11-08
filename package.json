@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "dev:preview": "NEXT_DIST_DIR=.next-preview next dev",
-    "check:type": "! grep -rEn 'text-\\[(9|9\\.5|10|10\\.5)px\\]' app components --include='*.tsx' --exclude-dir=fintech-system",
+    "check:type": "! grep -rEn 'text-\\[(9|9\\.5|10|10\\.5)px\\]' app components --include='*.tsx' --exclude-dir=fintech-system && npm run check:ledger",
     "test:unit": "node --test --experimental-strip-types \"lib/**/*.test.mjs\"",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:ledger": "node scripts/check-ledger.mjs",
+    "snap": "node scripts/snap.mjs"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.0.0",

@@ -96,7 +96,7 @@ function PhoneVisual() {
               <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
               <p className="text-[11px] font-medium text-accent">Transaction verified and protected</p>
             </div>
-            <p className="mt-2 text-right text-[8px] tracking-[0.04em] text-muted-foreground dark:text-neutral-600">Secured by trusted payment network ✦</p>
+            <p className="mt-2 text-right text-[11px] tracking-[0.04em] text-muted-foreground dark:text-neutral-600">Secured by trusted payment network ✦</p>
           </div>
         </div>
       </div>
