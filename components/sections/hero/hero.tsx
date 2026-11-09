@@ -65,9 +65,13 @@ export default function Hero() {
             <div data-hero-fade className="col-span-12">
               <TiltPane>
                 <GlassPlate className={PLATE}>
-                  <div className="ledger-grid gap-y-6">
-                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-4 sm:block lg:col-span-3">
-                      <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-[12px] bg-surface-2">
+                  {/* From a tablet up the plate is as tall as its content:
+                      the photo stands exactly as tall as the intro and its
+                      actions beside it (it fills their row and crops), and its
+                      caption takes the row below. Phones stack, as before. */}
+                  <div className="ledger-grid gap-y-6 sm:gap-y-3">
+                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-3 sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:grid-cols-1 sm:grid-rows-subgrid sm:items-stretch lg:col-span-2">
+                      <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-[12px] bg-surface-2 sm:aspect-auto sm:min-h-40 sm:max-w-none">
                         {/* Drifts a few px against the tilt (TiltPane), so
                             the photo seems to float under the glass. */}
                         <div data-tilt-drift className="absolute inset-0 scale-[1.04]">
@@ -76,14 +80,16 @@ export default function Hero() {
                             alt="Amritansh Pandey"
                             fill
                             priority
-                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 30vw, 22vw"
-                            className="object-cover"
+                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 24vw, 15vw"
+                            className="object-cover sm:object-[50%_30%]"
                           />
                         </div>
                       </div>
-                      <figcaption className="max-w-[320px] space-y-1 sm:mt-3">
+                      {/* May run past the photo's column into the empty space
+                          beside it, so the role stays on one line. */}
+                      <figcaption className="max-w-[320px] space-y-1 sm:w-max sm:max-w-none">
                         <p className="text-[15px] font-semibold tracking-[-0.01em]">Amritansh Pandey</p>
-                        <p className="ledger-label flex flex-col gap-y-0.5 lg:flex-row lg:flex-wrap lg:items-baseline lg:justify-between lg:gap-x-3">
+                        <p className="ledger-label flex flex-col gap-y-0.5">
                           <span className="text-[11px] sm:whitespace-nowrap sm:text-xs">Fintech · Systems Builder</span>
                           <span aria-hidden>usually mid-demo</span>
                         </p>
@@ -91,8 +97,8 @@ export default function Hero() {
                     </figure>
 
                     {/* The intro hangs from the top; the actions sit level
-                        with the caption's foot. */}
-                    <div className="col-span-12 flex flex-col justify-between sm:col-span-8 lg:col-span-8 lg:col-start-5">
+                        with the photo's foot. */}
+                    <div className="col-span-12 flex flex-col justify-between sm:col-span-9 sm:col-start-4 sm:row-start-1 sm:pl-[var(--col-gap)] lg:col-span-10 lg:col-start-3">
                       <p className="text-[clamp(1.125rem,2.5vw,2.375rem)] leading-[1.26] tracking-[-0.02em] text-muted-foreground text-pretty">
                         <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
                         I design scalable product systems for fintech and enterprise
