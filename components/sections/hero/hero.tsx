@@ -5,6 +5,7 @@ import { Magnetic } from "@/components/shared/magnetic"
 import { HeroField } from "./hero-field"
 import { GlassPlate } from "./glass-plate"
 import { TiltPane } from "./tilt-pane"
+import { HeroPhone } from "./hero-phone"
 
 // The glass pane's reach past its content: it pads by what it extends into
 // the gutter, so the content keeps its place on the grid.
@@ -62,7 +63,7 @@ export default function Hero() {
                 much as it pads, and its inner grid is the page's, so nothing
                 on it moves off the columns. The tilt sits inside the fading
                 wrapper: the landing animation holds a transform of its own. */}
-            <div data-hero-fade className="col-span-12">
+            <div data-hero-fade className="col-span-12 lg:col-span-8">
               <TiltPane>
                 <GlassPlate className={PLATE}>
                   {/* From a tablet up the plate is as tall as its content:
@@ -70,7 +71,7 @@ export default function Hero() {
                       actions beside it (it fills their row and crops), and its
                       caption takes the row below. Phones stack, as before. */}
                   <div className="ledger-grid gap-y-6 sm:gap-y-3">
-                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-3 sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:grid-cols-1 sm:grid-rows-subgrid sm:items-stretch lg:col-span-2">
+                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-3 sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:grid-cols-1 sm:grid-rows-subgrid sm:items-stretch lg:col-span-4">
                       <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-[12px] bg-surface-2 sm:aspect-auto sm:min-h-40 sm:max-w-none">
                         {/* Drifts a few px against the tilt (TiltPane), so
                             the photo seems to float under the glass. */}
@@ -80,7 +81,7 @@ export default function Hero() {
                             alt="Amritansh Pandey"
                             fill
                             priority
-                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 24vw, 15vw"
+                            sizes="(max-width: 639px) 42vw, (max-width: 1023px) 24vw, 20vw"
                             className="object-cover sm:object-[50%_30%]"
                           />
                         </div>
@@ -98,7 +99,7 @@ export default function Hero() {
 
                     {/* The intro hangs from the top; the actions sit level
                         with the photo's foot. */}
-                    <div className="col-span-12 flex flex-col justify-between sm:col-span-9 sm:col-start-4 sm:row-start-1 sm:pl-[var(--col-gap)] lg:col-span-10 lg:col-start-3">
+                    <div className="col-span-12 flex flex-col justify-between sm:col-span-9 sm:col-start-4 sm:row-start-1 sm:pl-[var(--col-gap)] lg:col-span-8 lg:col-start-5">
                       <p className="text-[clamp(1.125rem,2.5vw,2.375rem)] leading-[1.26] tracking-[-0.02em] text-muted-foreground text-pretty">
                         <span className="font-semibold text-foreground">Senior UX Designer at Mastercard.</span>{" "}
                         I design scalable product systems for fintech and enterprise
@@ -117,6 +118,13 @@ export default function Hero() {
                   </div>
                 </GlassPlate>
               </TiltPane>
+            </div>
+
+            {/* The phone stands beside the card on a desktop: it loads once
+                the page has settled, rises into place and swivels toward the
+                pointer (HeroPhone). Tablets and phones keep the card alone. */}
+            <div className="hidden lg:col-span-4 lg:block">
+              <HeroPhone />
             </div>
           </div>
         </div>
