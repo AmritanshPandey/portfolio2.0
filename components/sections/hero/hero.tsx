@@ -47,6 +47,11 @@ export default function Hero() {
         <div className="relative pb-[clamp(56px,7vw,112px)] pt-6 md:pt-10">
           <HeroField />
 
+          {/* On a desktop the statement and the card share the left eight
+              columns and the phone stands beside both, top to foot; below
+              that they stack and the phone isn't shown. */}
+          <div className="lg:grid lg:grid-cols-12 lg:gap-x-[var(--col-gap)]">
+          <div className="lg:col-span-8">
           <h1 className="hero-statement">
             <span data-hero-line="1" className="block">Product design for</span>
             <span data-hero-line="2" className="block whitespace-nowrap">complex systems</span>
@@ -55,7 +60,7 @@ export default function Hero() {
             </span>
           </h1>
 
-          <div className="@container ledger-grid mt-14 gap-y-12 md:mt-24">
+          <div className="@container ledger-grid mt-14 gap-y-12 md:mt-24 lg:mt-16">
             {/* One pane of glass for the portrait, the intro and the two
                 actions, so the dot grid frosts under all of it. It leans
                 toward the pointer, ripples where it's clicked, and the
@@ -63,7 +68,7 @@ export default function Hero() {
                 much as it pads, and its inner grid is the page's, so nothing
                 on it moves off the columns. The tilt sits inside the fading
                 wrapper: the landing animation holds a transform of its own. */}
-            <div data-hero-fade className="col-span-12 lg:col-span-8">
+            <div data-hero-fade className="col-span-12">
               <TiltPane>
                 <GlassPlate className={PLATE}>
                   {/* From a tablet up the plate is as tall as its content:
@@ -119,12 +124,13 @@ export default function Hero() {
                 </GlassPlate>
               </TiltPane>
             </div>
+          </div>
+          </div>
 
-            {/* The phone stands beside the card on a desktop: it loads once
-                the page has settled, rises into place and swivels toward the
-                pointer (HeroPhone). Its stage keeps the phone's tall shape, so it
-                runs on past the card's foot. Tablets and phones keep the card alone. */}
-            <div className="hidden lg:col-span-4 lg:block lg:self-start">
+            {/* The phone stands beside the statement and the card on a
+                desktop, filling their height: it loads once the page has
+                settled, rises into place and swivels toward the pointer. */}
+            <div className="hidden lg:col-span-4 lg:block">
               <HeroPhone />
             </div>
           </div>

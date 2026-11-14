@@ -914,6 +914,14 @@
   .hero-statement > span { white-space: nowrap; }
 }
 
+/* On a desktop the statement shares its row with the hero phone, so it sets
+   to fit eight columns. */
+@media (min-width: 1024px) {
+  .hero-statement {
+    font-size: min(6vw, 6.25rem);
+  }
+}
+
 [data-hero-line="2"] {
   animation-delay: 100ms;
 }
