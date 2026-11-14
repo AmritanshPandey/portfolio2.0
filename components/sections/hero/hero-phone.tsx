@@ -168,8 +168,8 @@ export function HeroPhone() {
         if (!width || !h) return
         renderer.setSize(width, h)
         camera.aspect = width / h
-        // The phone fills about 88% of the stage's height.
-        camera.position.z = (height / 0.88 / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+        // The phone fills about 94% of the stage's height.
+        camera.position.z = (height / 0.94 / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
         camera.updateProjectionMatrix()
         kick()
       }
@@ -272,5 +272,5 @@ export function HeroPhone() {
     }
   }, [mode])
 
-  return <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative h-full min-h-[320px] w-full" />
+  return <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative aspect-[1/1.45] w-full" />
 }
