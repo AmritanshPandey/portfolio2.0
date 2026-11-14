@@ -83,6 +83,8 @@ export function HeroPhone() {
     let teardown: (() => void) | null = null
 
     const start = async () => {
+      // Hidden below a desktop width: don't fetch what nobody sees.
+      if (!stage.getClientRects().length) return
       if (!document.createElement("canvas").getContext("webgl2")) return
       const [THREE, { USDLoader }, { RoomEnvironment }] = await Promise.all([
         import("three"),
@@ -272,5 +274,5 @@ export function HeroPhone() {
     }
   }, [mode])
 
-  return <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative aspect-[1/1.45] w-full" />
+  return <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative h-full min-h-[480px] w-full" />
 }
