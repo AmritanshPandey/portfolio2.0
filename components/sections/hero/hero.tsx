@@ -122,8 +122,9 @@ export default function Hero() {
 
             {/* The phone stands beside the card on a desktop: it loads once
                 the page has settled, rises into place and swivels toward the
-                pointer (HeroPhone). Tablets and phones keep the card alone. */}
-            <div className="hidden lg:col-span-4 lg:block">
+                pointer (HeroPhone). Its stage keeps the phone's tall shape, so it
+                runs on past the card's foot. Tablets and phones keep the card alone. */}
+            <div className="hidden lg:col-span-4 lg:block lg:self-start">
               <HeroPhone />
             </div>
           </div>
