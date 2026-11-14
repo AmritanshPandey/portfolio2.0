@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { usePerformanceMode } from "@/hooks/use-performance-mode"
+import { playNote } from "@/lib/ledger-sound"
 
 /**
  * The hero's pixel wake. At rest, a fine screen of tiny ink dots packed 8px
@@ -74,7 +75,10 @@ const TELEPORT = 0.3
 // real pause, the true speed when a busy page delivered the move late.
 const BLEND_WITHIN = 80
 
-// Click rings: eased out, so the ring leaves quickly and settles.
+// Click rings: eased out, so the ring leaves quickly and settles. Each one
+// sounds the lowest note of the rules' scale, softly, under them.
+const RING_NOTE = 0
+const RING_STRENGTH = 0.3
 const MAX_RINGS = 3
 const RING_LIFE = 1.1 // s
 const RING_REACH = 0.42 // final radius, field heights
@@ -427,6 +431,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       if (!p.inside) return
       rings.push({ x: p.x, y: p.y, start: performance.now() })
       if (rings.length > MAX_RINGS) rings.shift()
+      playNote(RING_NOTE, RING_STRENGTH, (e.clientX / window.innerWidth) * 2 - 1)
       activeUntil = performance.now() + ACTIVE_FOR * 1000
       kick()
     }
