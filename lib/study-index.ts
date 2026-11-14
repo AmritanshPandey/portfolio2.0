@@ -40,10 +40,14 @@ export function studyAt(studies: StudyEntry[], href: string): StudyEntry | undef
   return studies.find((s) => s.href === href)
 }
 
-/** The next study of the same kind, wrapping to the first; none for an href outside the index. */
+/**
+ * The next study of the same kind, wrapping to the first. None for an href
+ * outside the index, or for a study alone in its kind (never itself).
+ */
 export function nextStudy(studies: StudyEntry[], href: string): StudyEntry | undefined {
   const current = studyAt(studies, href)
   if (!current) return undefined
   const same = studies.filter((s) => s.kind === current.kind)
+  if (same.length < 2) return undefined
   return same[(same.indexOf(current) + 1) % same.length]
 }

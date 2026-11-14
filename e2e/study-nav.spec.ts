@@ -53,3 +53,28 @@ test.describe("the place tracker on a phone", () => {
     await expect(page.locator("[data-study-tracker-phone]")).toContainText("The Stakes")
   })
 })
+
+test.describe("the ending", () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  test("leads to the next study", async ({ page }) => {
+    await page.goto("/work/white-label-rfp")
+    const next = page.locator("[data-study-next] a").first()
+    await expect(next).toHaveAttribute("href", "/work/agent-commerce")
+    await expect(next).toContainText("Agent Pay")
+  })
+
+  test("wraps from the last study to the first", async ({ page }) => {
+    await page.goto("/work/email-builder")
+    await expect(page.locator("[data-study-next] a").first()).toHaveAttribute("href", "/work/white-label-rfp")
+  })
+
+  test("a page outside the index has no ending, and nothing breaks", async ({ page }) => {
+    const errors: string[] = []
+    page.on("pageerror", (e) => errors.push(e.message))
+    await page.goto("/explorations/smart-journal")
+    await page.waitForTimeout(500)
+    await expect(page.locator("[data-study-next]")).toHaveCount(0)
+    expect(errors).toEqual([])
+  })
+})

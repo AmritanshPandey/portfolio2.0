@@ -1,10 +1,5 @@
-import { StudyTracker } from "@/components/study/study-tracker"
+import { StudyLayout } from "@/components/study/study-layout"
 
 export default function WorkLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {children}
-      <StudyTracker />
-    </>
-  )
+  return <StudyLayout>{children}</StudyLayout>
 }
