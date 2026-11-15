@@ -11,7 +11,7 @@ interface Chapter {
 }
 
 // The reading line: a chapter is current once its top has passed 30% of the
-// way down the screen (the line CsChapterNav used).
+// way down the screen.
 const LINE = 0.3
 
 /**

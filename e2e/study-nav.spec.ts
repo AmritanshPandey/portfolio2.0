@@ -168,3 +168,20 @@ test.describe("the index on a phone", () => {
     await expect(page.locator("[data-study-index-trigger]")).toHaveText("01 / 05 · PartnerBank")
   })
 })
+
+test.describe("every study page", () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  for (const path of [...WORK, "/explorations/personal-execution-system"]) {
+    test(`${path} has the layer and none of the old navigation`, async ({ page }) => {
+      await page.goto(path)
+      await expect(page.locator("[data-study-index]")).toHaveCount(1)
+      if (path.startsWith("/work/")) {
+        await expect(page.locator("[data-study-tracker]")).toHaveCount(1)
+        await expect(page.locator("[data-study-next]")).toHaveCount(1)
+      }
+      await expect(page.getByRole("heading", { name: "More case studies" })).toHaveCount(0)
+      await expect(page.locator('[aria-label="Case study sections"]')).toHaveCount(0)
+    })
+  }
+})

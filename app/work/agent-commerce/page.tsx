@@ -2,7 +2,6 @@ import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
 import { CsSection } from "@/components/case-study/cs-section"
 import { CsDecision } from "@/components/case-study/cs-decision"
 import { CsInfoBar } from "@/components/case-study/cs-info-bar"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
 import { FoldPhone } from "@/components/case-study/fold-phone"
 import { FadeIn } from "@/components/shared/fade-in"
 
@@ -798,8 +797,6 @@ export default function Page() {
           </div>
         </div>
       </CsSection>
-
-      <CsNextStudies currentHref="/work/agent-commerce" />
 
     </div>
   )

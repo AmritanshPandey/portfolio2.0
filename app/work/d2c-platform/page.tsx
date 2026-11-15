@@ -9,8 +9,6 @@ import { CsBeforeAfter } from "@/components/case-study/cs-before-after"
 import { CsArchStack } from "@/components/case-study/cs-arch-stack"
 import { CsMetricBars } from "@/components/case-study/cs-metric-bars"
 import { CsTimeline } from "@/components/case-study/cs-timeline"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsPrinciples } from "@/components/case-study/cs-principles"
@@ -20,23 +18,6 @@ import { CsReflection } from "@/components/case-study/cs-reflection"
 import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "situation",        label: "Situation" },
-  { id: "problem",          label: "Problem" },
-  { id: "what-i-led",       label: "What I led" },
-  { id: "principles",       label: "Principles" },
-  { id: "architecture",     label: "Architecture" },
-  { id: "key-decisions",    label: "Decisions" },
-  { id: "core-flows",       label: "Core flows" },
-  { id: "tokens",           label: "Tokens in action" },
-  { id: "the-shift",        label: "The shift" },
-  { id: "what-changed",     label: "What changed" },
-  { id: "how-we-got-there", label: "Timeline" },
-  { id: "reflection",       label: "Reflection" },
-]
 
 // ─── BRAND COLORS ─────────────────────────────────────────────────────────────
 // The real storefront accents — this is the token layer that varies per brand.
@@ -421,8 +402,6 @@ function CheckoutVisual() {
 export default function Page() {
   return (
     <div className="min-h-screen">
-
-      <CsChapterNav chapters={CHAPTERS} />
 
       <Hero />
 
@@ -909,7 +888,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/d2c-platform" />
 
     </div>
   )

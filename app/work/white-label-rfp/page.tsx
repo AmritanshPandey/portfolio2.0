@@ -7,8 +7,6 @@ import { CsFeature } from "@/components/case-study/cs-feature"
 import { CsBeforeAfter } from "@/components/case-study/cs-before-after"
 import { CsBrandSkinCompare } from "@/components/case-study/cs-brand-skin-compare"
 import { CsArchStack } from "@/components/case-study/cs-arch-stack"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsOptions } from "@/components/case-study/cs-options"
@@ -24,21 +22,6 @@ const BRAND_SKINS: BrandSkin[] = [
   { id: "north",    bank: "North Bank",     primary: "#E11D48", deep: "#9F1239", radius: "12px", fontLabel: "Onest",       fontStack: "var(--ff-sans), ui-sans-serif, system-ui, sans-serif" },
   { id: "heritage", bank: "Heritage Trust", primary: "#8A6420", deep: "#6E4E12", radius: "4px",  fontLabel: "Serif",       fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
   { id: "verde",    bank: "Verde Bank",     primary: "#25785C", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
-]
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "problem",           label: "Problem" },
-  { id: "stakes",            label: "The stakes" },
-  { id: "what-i-led",        label: "What I led" },
-  { id: "architecture",      label: "Architecture" },
-  { id: "key-decisions",     label: "Decisions" },
-  { id: "inside-the-system", label: "Inside the system" },
-  { id: "tokens",            label: "Tokens in action" },
-  { id: "the-shift",         label: "The shift" },
-  { id: "what-changed",      label: "What changed" },
-  { id: "reflection",        label: "Reflection" },
 ]
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
@@ -131,8 +114,6 @@ function Hero() {
 export default function Page() {
   return (
     <div className="min-h-screen">
-
-      <CsChapterNav chapters={CHAPTERS} />
 
       <Hero />
 
@@ -577,7 +558,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/white-label-rfp" />
 
     </div>
   )
