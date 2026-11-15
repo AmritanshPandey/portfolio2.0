@@ -19,6 +19,7 @@ import { CsQuote } from "@/components/case-study/cs-quote"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { FadeIn } from "@/components/shared/fade-in"
+import { DeviceScene } from "@/components/case-study/device-scene"
 import { AddLater } from "@/components/shared/add-later"
 
 // ─── CHAPTERS ────────────────────────────────────────────────────────────────
@@ -147,6 +148,9 @@ function Hero() {
 
 // ─── CORE FLOW VISUALS ──────────────────────────────────────────────────────
 
+// The flat storefront mockups that Core Flows showed before its device
+// scenes. Kept: they can be captured as the devices' real screens.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function PdpVisual() {
   const proofItems = [
     { label: "Ingredient proof", value: "Persistent drawer" },
@@ -252,6 +256,7 @@ function PdpVisual() {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CartVisual() {
   const themes = [
     { name: "Mamaearth", accent: BRAND.mamaearth, tint: "rgba(0,175,239,0.14)", radius: "14px" },
@@ -339,6 +344,7 @@ function CartVisual() {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CheckoutVisual() {
   const before = ["01", "02", "03", "04", "05", "06"]
   const after = [
@@ -673,7 +679,7 @@ export default function Page() {
               { label: "Key Focus", text: "Ingredient panel · Trust badges · Sticky CTA" },
               { label: "Insight",   text: "68% of drop-off happened before checkout" },
             ]}
-            visual={<PdpVisual />}
+            scene={<DeviceScene kind="iphone" screen="/assets/images/honasa/placeholder-phone.png" alt="Placeholder for Mamaearth's product page on an iPhone, turning from its back to its screen as you scroll." />}
           />
 
           {/* Cart */}
@@ -686,7 +692,7 @@ export default function Page() {
               { label: "Structure", text: "Thumbnail · Quantity · Cross-sell · Summary" },
               { label: "Theming",   text: "Brand token swap, no structural duplication" },
             ]}
-            visual={<CartVisual />}
+            scene={<DeviceScene kind="duo" screen="/assets/images/honasa/placeholder-duo.png" alt="Placeholder for the cart and checkout on an iPhone Duo, unfolding as you scroll." />}
           />
 
           {/* Checkout */}
@@ -699,7 +705,7 @@ export default function Page() {
               { label: "Reduction", text: "6 form steps → 3 across all brands" },
               { label: "Key UX",    text: "Address autocomplete · Persistent summary" },
             ]}
-            visual={<CheckoutVisual />}
+            scene={<DeviceScene kind="macbook" screen="/assets/images/honasa/placeholder-desktop.png" alt="Placeholder for Mamaearth's storefront on a MacBook Air, opening as you scroll." />}
           />
         </div>
       </CsSection>
