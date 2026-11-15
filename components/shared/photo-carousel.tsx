@@ -70,7 +70,7 @@ export default function PhotoCarousel({
         type="button"
         onClick={advance}
         aria-label="Next photo"
-        className="relative block aspect-[4/5] w-full cursor-pointer overflow-hidden bg-surface-2"
+        className="group/plate relative block aspect-[4/5] w-full cursor-pointer overflow-hidden bg-surface-2"
       >
         {photos.map((src, i) => loaded.has(i) && (
           <Image
@@ -80,7 +80,10 @@ export default function PhotoCarousel({
             fill
             sizes="(max-width: 767px) 90vw, 420px"
             className={clsx(
-              "object-cover transition-opacity duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+              "object-cover transition-[opacity,filter] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+              // Greyscale on the sheet, colour when looked at. Touch never
+              // hovers, so it keeps the colour there.
+              "[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover/plate:grayscale-0",
               i === index ? "opacity-100" : "opacity-0",
             )}
           />

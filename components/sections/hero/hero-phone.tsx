@@ -71,10 +71,45 @@ function drawScreen(): HTMLCanvasElement {
   return c
 }
 
+/**
+ * The phone where the model never loads (reduced motion, low battery, no
+ * WebGL2): the same object drawn flat in the sheet's own tokens, so the
+ * hero's right column is never empty. No three.js on this path.
+ */
+function StillPhone() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div
+        data-keep-radius
+        className="flex aspect-[9/19] h-[94%] max-h-[720px] flex-col rounded-[44px] border border-foreground bg-foreground p-[7px]"
+      >
+        <div className="relative flex flex-1 flex-col overflow-hidden rounded-[37px] bg-card px-[9%] pb-[9%] pt-[7%]">
+          <span className="absolute left-1/2 top-[1.6%] h-[2.6%] w-[30%] -translate-x-1/2 rounded-full bg-foreground" />
+          <p className="ledger-label text-foreground">9:41</p>
+          <div className="mt-[18%] space-y-2">
+            <span className="block h-3 w-[62%] bg-foreground" />
+            <span className="block h-3 w-[44%] bg-foreground" />
+          </div>
+          <ul className="mt-[14%] border-t border-border">
+            {[70, 58, 64, 50, 61, 46].map((w, i) => (
+              <li key={w} className="flex items-center gap-3 border-b border-border py-[7.5%]">
+                <span className={i === 0 ? "h-2 w-2 shrink-0 bg-accent" : "h-2 w-2 shrink-0 bg-foreground"} />
+                <span className="block h-1.5 bg-foreground/25" style={{ width: `${w}%` }} />
+              </li>
+            ))}
+          </ul>
+          <span className="mt-auto block h-[7%] w-full bg-accent" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function HeroPhone() {
   const mode = useAmbientMode("desktop")
   const stageRef = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
+  const [noGl, setNoGl] = useState(false)
 
   useEffect(() => {
     const stage = stageRef.current
@@ -85,7 +120,7 @@ export function HeroPhone() {
     const start = async () => {
       // Hidden below a desktop width: don't fetch what nobody sees.
       if (!stage.getClientRects().length) return
-      if (!document.createElement("canvas").getContext("webgl2")) return
+      if (!document.createElement("canvas").getContext("webgl2")) return setNoGl(true)
       const [THREE, { USDLoader }, { RoomEnvironment }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/loaders/USDLoader.js"),
@@ -274,5 +309,9 @@ export function HeroPhone() {
     }
   }, [mode])
 
-  return <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative h-full min-h-[480px] w-full" />
+  return (
+    <div ref={stageRef} data-ready={ready || undefined} aria-hidden className="relative h-full min-h-[480px] w-full">
+      {(mode === "still" || noGl) && <StillPhone />}
+    </div>
+  )
 }

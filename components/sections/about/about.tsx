@@ -20,9 +20,7 @@ export default function AboutSection() {
     <section
       id="about"
       className="relative scroll-mt-[var(--nav-h)] bg-background text-foreground"
-      // A longer breath before the personal close than between the sections
-      // above it.
-      style={{ paddingTop: "calc(var(--section-y) * 1.3)" }}
+      style={{ paddingTop: "var(--section-y)" }}
     >
       <div className="ledger">
         <div aria-hidden data-settle="rule" className="rule-ink" />
