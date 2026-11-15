@@ -78,3 +78,93 @@ test.describe("the ending", () => {
     expect(errors).toEqual([])
   })
 })
+
+const WORK = ["/work/white-label-rfp", "/work/agent-commerce", "/work/d2c-platform", "/work/citizen-safety", "/work/email-builder"]
+
+async function pastHero(page: Page) {
+  await page.evaluate(() => {
+    const hero = document.querySelector("[data-cs-hero-inner]")!
+    window.scrollTo(0, hero.getBoundingClientRect().bottom + window.scrollY + 200)
+  })
+  await page.waitForTimeout(400)
+}
+
+test.describe("the index", () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  test("lists studies in home order and marks this one", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    const index = page.locator("[data-study-index]")
+    const hrefs = await index.locator("a[data-study-href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")))
+    expect(hrefs.slice(0, 5)).toEqual(WORK)
+    await expect(index.locator('a[href="/work/agent-commerce"]')).toHaveAttribute("aria-current", "page")
+    await expect(index.getByRole("link", { name: "All work" })).toHaveAttribute("href", "/#work")
+  })
+
+  test("labels the explorations self-directed", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    const text = await page.locator("[data-study-index]").innerText()
+    expect(text.indexOf("Self-directed")).toBeGreaterThan(-1)
+    expect(text.indexOf("Self-directed")).toBeLessThan(text.indexOf("PlanR"))
+  })
+
+  test("waits for the hero and steps aside for the ending", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    const index = page.locator("[data-study-index]")
+    await expect(index).toHaveAttribute("data-shown", "false")
+    await pastHero(page)
+    await expect(index).toHaveAttribute("data-shown", "true")
+    await page.locator("[data-study-next]").scrollIntoViewIfNeeded()
+    await expect(index).toHaveAttribute("data-shown", "false")
+  })
+
+  test("stays pinned to the screen, with the tracker", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    const strip = (await page.locator("[data-study-index]").boundingBox())!
+    expect(strip.y + strip.height).toBeLessThanOrEqual(900 + 1)
+    expect(strip.y).toBeGreaterThan(900 - 200)
+    const rail = (await page.locator("[data-study-tracker]").boundingBox())!
+    expect(rail.y).toBeGreaterThanOrEqual(0)
+    expect(rail.y + rail.height).toBeLessThanOrEqual(900)
+  })
+
+  test("still shows with reduced motion, without sliding", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    const index = page.locator("[data-study-index]")
+    await expect(index).toHaveAttribute("data-shown", "true")
+    expect(await index.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThan(0.01)
+  })
+})
+
+test.describe("the index on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+
+  test("opens a sheet and closes on Escape", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    const trigger = page.locator("[data-study-index-trigger]")
+    await expect(trigger).toHaveText("02 / 05 · Agent Pay")
+    await trigger.click()
+    const sheet = page.getByRole("dialog", { name: "All studies" })
+    await expect(sheet).toBeVisible()
+    await expect(sheet.locator("a[data-study-href]")).toHaveCount(6)
+    await page.keyboard.press("Escape")
+    await expect(sheet).toBeHidden()
+    await expect(trigger).toBeFocused()
+  })
+
+  test("moving to another study closes the sheet", async ({ page }) => {
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    await page.locator("[data-study-index-trigger]").click()
+    const sheet = page.getByRole("dialog", { name: "All studies" })
+    await sheet.locator('a[href="/work/white-label-rfp"]').click()
+    await page.waitForURL("**/work/white-label-rfp")
+    await expect(sheet).toBeHidden()
+    await expect(page.locator("[data-study-index-trigger]")).toHaveText("01 / 05 · PartnerBank")
+  })
+})

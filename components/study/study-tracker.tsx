@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import clsx from "clsx"
+import { BodyPortal } from "./body-portal"
 
 interface Chapter {
   id: string
@@ -70,7 +71,7 @@ export function StudyTracker() {
   const ref = (i: number) => String(i + 1).padStart(2, "0")
 
   return (
-    <>
+    <BodyPortal>
       {/* Wide screens: the rail */}
       <nav
         data-study-tracker
@@ -149,6 +150,6 @@ export function StudyTracker() {
           ))}
         </ol>
       </dialog>
-    </>
+    </BodyPortal>
   )
 }
