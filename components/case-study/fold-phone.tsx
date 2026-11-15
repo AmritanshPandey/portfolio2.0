@@ -38,14 +38,21 @@ const OUTER_MESH = "hhgAIoCGsHXeDPY"
 
 type Api = { setAngle: (value: number) => void; setPlaying: (on: boolean) => void }
 
+/** An outside driver for the fold, e.g. page scroll: 0 is closed, 1 open. */
+export type FoldDrive = { get: () => number; listen: (onChange: () => void) => () => void }
+
 export function FoldPhone({
   screens,
   alt,
   modelUrl = "/devices/iphone-duo/iPhone_Duo_Render.usdc",
+  drive,
 }: {
   screens: string
   alt: string
   modelUrl?: string
+  /** When given, the fold follows it (eased) instead of the play and slider
+   *  controls, with no intro and no dragging. */
+  drive?: FoldDrive
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -108,7 +115,7 @@ export function FoldPhone({
       controls.enableDamping = true
       controls.enablePan = false
       controls.enableZoom = false
-      controls.enableRotate = finePointer
+      controls.enableRotate = finePointer && !drive
       controls.minPolarAngle = Math.PI * 0.25
       controls.maxPolarAngle = Math.PI * 0.75
       controls.target.set(0, 0, HINGE_Z)
@@ -377,7 +384,11 @@ export function FoldPhone({
         raf = 0
         const delta = Math.min((now - last) / 1000, 0.05)
         last = now
-        if (isPlaying) {
+        if (drive) {
+          const target = drive.get() * 180
+          const next = current + (target - current) * (1 - Math.exp(-delta * 10))
+          applyAngle(Math.abs(target - next) < 0.05 ? target : next)
+        } else if (isPlaying) {
           phase = (phase + delta) % 8.6
           let value: number
           if (phase < 1.2) value = 180
@@ -399,7 +410,8 @@ export function FoldPhone({
         }
         controls.update()
         renderer.render(scene, camera)
-        if (onScreen && (isPlaying || transition || dragging || now < settleUntil)) raf = requestAnimationFrame(frame)
+        const following = drive && Math.abs(drive.get() * 180 - current) > 0.05
+        if (onScreen && (isPlaying || transition || dragging || following || now < settleUntil)) raf = requestAnimationFrame(frame)
       }
       const kick = () => {
         if (!raf && onScreen) {
@@ -446,10 +458,11 @@ export function FoldPhone({
 
       // Open, then (motion allowing) fold it closed and open once, so the
       // reader sees the cover screen take over.
-      applyAngle(180)
+      applyAngle(drive ? drive.get() * 180 : 180)
+      const unlisten = drive?.listen(kick)
       resize()
       setStatus("ready")
-      if (!reduce) {
+      if (!reduce && !drive) {
         transition = { from: 180, to: 30, elapsed: 0 }
         queue = [180]
       }
@@ -457,6 +470,7 @@ export function FoldPhone({
 
       teardown = () => {
         cancelAnimationFrame(raf)
+        unlisten?.()
         ro.disconnect()
         visibility.disconnect()
         controls.dispose()
@@ -483,11 +497,11 @@ export function FoldPhone({
       near.disconnect()
       teardown?.()
     }
-  }, [screens, modelUrl])
+  }, [screens, modelUrl, drive])
 
   return (
-    <div ref={wrapRef} className="w-full">
-      <div className="relative aspect-[25/17] w-full">
+    <div ref={wrapRef} className={drive ? "h-full w-full" : "w-full"}>
+      <div className={drive ? "relative h-full w-full" : "relative aspect-[25/17] w-full"}>
         {/* The still screens: shown until the phone is ready, and instead of
             it where WebGL or the model is unavailable. */}
         <div
@@ -499,6 +513,7 @@ export function FoldPhone({
         <div ref={stageRef} className="absolute inset-0" />
       </div>
 
+      {!drive && (
       <div className="mt-4 flex items-center gap-4">
         <button
           type="button"
@@ -529,6 +544,7 @@ export function FoldPhone({
           <span className="ledger-label w-10 shrink-0 text-right tabular-nums">{angle}°</span>
         </label>
       </div>
+      )}
     </div>
   )
 }
