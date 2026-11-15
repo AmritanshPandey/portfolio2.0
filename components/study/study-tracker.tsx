@@ -121,7 +121,7 @@ export function StudyTracker() {
             type="button"
             data-study-tracker-phone
             onClick={() => listRef.current?.showModal()}
-            className="ledger-label ml-4 mt-1 bg-background/90 px-2 py-1 text-foreground"
+            className="ledger-label block w-full border-b border-border bg-background px-4 py-2 text-left text-foreground"
           >
             {ref(active)} · {current.label}
           </button>

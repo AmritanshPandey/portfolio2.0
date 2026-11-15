@@ -98,18 +98,18 @@ export function StudyIndex() {
         aria-label="Studies"
         inert={!shown}
         className={clsx(
-          "fixed inset-x-0 bottom-0 z-40 transition-[transform,opacity] duration-300 motion-reduce:transition-none",
+          "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background transition-[transform,opacity] duration-300 motion-reduce:transition-none",
           shown ? "translate-y-0 opacity-100" : "translate-y-full opacity-0",
         )}
       >
         <div className="ledger">
           {hint && (
-            <p className="mb-2 hidden max-w-[60ch] bg-background/95 py-2 text-[14px] leading-snug text-muted-foreground md:block">
+            <p className="hidden max-w-[60ch] pt-3 text-[14px] leading-snug text-muted-foreground md:block">
               {hint.problem}
             </p>
           )}
           {/* Wide screens: the strip */}
-          <div className="ledger-label hidden items-center gap-x-5 border-t border-border bg-background/95 py-3 md:flex">
+          <div className="ledger-label hidden items-center gap-x-5 py-3 md:flex">
             {work.map((s) => link(s))}
             {explorations.length > 0 && (
               <>
@@ -123,7 +123,7 @@ export function StudyIndex() {
             </Link>
           </div>
           {/* Phones: one line, the list in a sheet */}
-          <div className="flex items-center justify-between border-t border-border bg-background/95 py-3 md:hidden">
+          <div className="flex items-center justify-between py-1 md:hidden">
             <button
               type="button"
               ref={triggerRef}

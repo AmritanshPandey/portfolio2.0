@@ -128,6 +128,10 @@ test.describe("the index", () => {
     const rail = (await page.locator("[data-study-tracker]").boundingBox())!
     expect(rail.y).toBeGreaterThanOrEqual(0)
     expect(rail.y + rail.height).toBeLessThanOrEqual(900)
+    // Solid, edge to edge: the page never shows through it.
+    expect(strip.width).toBe(1440)
+    const bg = await page.locator("[data-study-index]").evaluate((el) => getComputedStyle(el).backgroundColor)
+    expect(bg).not.toMatch(/rgba\(.*, 0(\.\d+)?\)$|transparent/)
   })
 
   test("still shows with reduced motion, without sliding", async ({ page }) => {
