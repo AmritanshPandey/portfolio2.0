@@ -189,3 +189,48 @@ test.describe("every study page", () => {
     })
   }
 })
+
+test.describe("from the final review", () => {
+  test("the strip fits a 1024px tablet, All work included", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 })
+    await page.goto("/work/agent-commerce")
+    await pastHero(page)
+    const allWork = (await page.locator("[data-study-index]").getByRole("link", { name: "All work" }).boundingBox())!
+    expect(allWork.x + allWork.width).toBeLessThanOrEqual(1024)
+  })
+
+  test("after moving to another study, the tracker lists that study's chapters", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto("/work/white-label-rfp")
+    await page.locator("[data-study-next] a").first().click()
+    await page.waitForURL("**/work/agent-commerce")
+    await page.waitForTimeout(500)
+    const labels = await page.locator("main section[data-chapter]").evaluateAll((s) => s.map((el) => (el as HTMLElement).dataset.chapterLabel))
+    expect(labels.length).toBeGreaterThan(0)
+    const rail = await page.locator("[data-study-tracker] a").evaluateAll((as) => as.map((a) => a.getAttribute("aria-label")))
+    expect(rail.map((l) => l?.replace(/^\d+ · /, ""))).toEqual(labels)
+  })
+
+  test("a rail tick names its chapter when it has keyboard focus", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto("/work/white-label-rfp")
+    const tick = page.locator("[data-study-tracker] a").nth(2)
+    await tick.focus()
+    await expect(tick.locator(".ledger-label")).toBeVisible()
+  })
+
+  test("Back with the phone sheet open closes it", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto("/work/white-label-rfp")
+    await page.locator("[data-study-next] a").first().click()
+    await page.waitForURL("**/work/agent-commerce")
+    // The site returns a client navigation to the top a moment after it lands.
+    await page.waitForTimeout(600)
+    await pastHero(page)
+    await page.locator("[data-study-index-trigger]").click()
+    await expect(page.getByRole("dialog", { name: "All studies" })).toBeVisible()
+    await page.goBack()
+    await page.waitForURL("**/work/white-label-rfp")
+    await expect(page.getByRole("dialog", { name: "All studies" })).toBeHidden()
+  })
+})

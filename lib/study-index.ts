@@ -13,7 +13,7 @@ export interface StudyEntry {
   href: string
   slug: string
   title: string
-  /** The name before the colon: "PartnerBank: A demo system…" → "PartnerBank". */
+  /** The item's `short`, else the name before the colon: "PartnerBank: A demo system…" → "PartnerBank". */
   short: string
   /** The public problem line (the work row's description). */
   problem: string
@@ -22,11 +22,11 @@ export interface StudyEntry {
   ref: string
 }
 
-const entry = (item: { href: string; title: string; description: string }, kind: StudyKind, i: number): StudyEntry => ({
+const entry = (item: { href: string; title: string; short?: string; description: string }, kind: StudyKind, i: number): StudyEntry => ({
   href: item.href,
   slug: item.href.split("/").filter(Boolean).pop() ?? "",
   title: item.title,
-  short: item.title.split(":")[0].trim(),
+  short: item.short ?? item.title.split(":")[0].trim(),
   problem: item.description,
   kind,
   ref: String(i + 1).padStart(2, "0"),

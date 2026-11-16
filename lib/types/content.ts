@@ -31,6 +31,8 @@ export interface WorkItem {
 
 export interface ExplorationItem {
   title: string
+  /** The name in the study index, when the title's part before a colon isn't one ("PlanR"). */
+  short?: string
   description: string
   question?: string
   tested?: string

@@ -98,7 +98,7 @@ export function StudyIndex() {
         aria-label="Studies"
         inert={!shown}
         className={clsx(
-          "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background transition-[transform,opacity] duration-300 motion-reduce:transition-none",
+          "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] transition-[transform,opacity] duration-300 motion-reduce:transition-none",
           shown ? "translate-y-0 opacity-100" : "translate-y-full opacity-0",
         )}
       >
@@ -109,7 +109,7 @@ export function StudyIndex() {
             </p>
           )}
           {/* Wide screens: the strip */}
-          <div className="ledger-label hidden items-center gap-x-5 py-3 md:flex">
+          <div className="ledger-label hidden items-center gap-x-5 overflow-x-auto py-3 md:flex">
             {work.map((s) => link(s))}
             {explorations.length > 0 && (
               <>
@@ -143,14 +143,14 @@ export function StudyIndex() {
       <dialog
         ref={sheetRef}
         aria-label="All studies"
-        className="m-0 mt-auto w-full max-w-none border-t border-border bg-background p-0 text-foreground backdrop:bg-black/30"
+        className="m-0 mt-auto w-full max-w-none border-t border-border bg-background p-0 text-foreground backdrop:bg-background/70"
         onClick={(e) => e.target === e.currentTarget && closeSheet()}
         onClose={() => {
           setSheetOpen(false)
           triggerRef.current?.focus()
         }}
       >
-        <div className="ledger-label flex flex-col px-4 pb-8 pt-4">
+        <div className="ledger-label flex flex-col px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-4">
           {work.map((s) => (
             <div key={s.href} className="flex min-h-12 items-center border-b border-border">
               {link(s, closeSheet)}

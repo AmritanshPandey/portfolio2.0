@@ -31,12 +31,20 @@ export function StudyTracker() {
   const [active, setActive] = useState(-1)
   const listRef = useRef<HTMLDialogElement>(null)
 
+  // A new route starts with no chapters until its own are read, so the
+  // previous study's never show for a frame (the layout persists).
+  const [route, setRoute] = useState(pathname)
+  if (route !== pathname) {
+    setRoute(pathname)
+    setChapters([])
+    setActive(-1)
+  }
+
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[data-chapter]"))
     // Reading the DOM once per route: the page decides what its chapters are.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setChapters(sections.map((s) => ({ id: s.id, label: s.dataset.chapterLabel ?? s.id })))
-    setActive(-1)
     listRef.current?.close()
     if (sections.length === 0) return
 
@@ -96,11 +104,15 @@ export function StudyTracker() {
                       on ? "w-7 opacity-100" : "w-4 opacity-30 group-hover:opacity-70",
                     )}
                   />
-                  {on && (
-                    <span className="ledger-label whitespace-nowrap text-foreground">
-                      {ref(i)} · {c.label}
-                    </span>
-                  )}
+                  {/* Named when current, and when a keyboard reaches it. */}
+                  <span
+                    className={clsx(
+                      "ledger-label whitespace-nowrap text-foreground",
+                      on ? "inline" : "hidden group-focus-visible:inline",
+                    )}
+                  >
+                    {ref(i)} · {c.label}
+                  </span>
                 </a>
               </li>
             )
@@ -131,10 +143,10 @@ export function StudyTracker() {
       <dialog
         ref={listRef}
         aria-label="Chapters"
-        className="m-0 mt-auto w-full max-w-none border-t border-border bg-background p-0 text-foreground backdrop:bg-black/30"
+        className="m-0 mt-auto w-full max-w-none border-t border-border bg-background p-0 text-foreground backdrop:bg-background/70"
         onClick={(e) => e.target === listRef.current && listRef.current?.close()}
       >
-        <ol className="px-4 pb-8 pt-4">
+        <ol className="px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-4">
           {chapters.map((c, i) => (
             <li key={c.id} className="border-b border-border">
               <a
