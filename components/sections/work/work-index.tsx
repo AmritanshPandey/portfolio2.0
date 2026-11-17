@@ -81,7 +81,9 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
               style={{ ["--i" as string]: i }}
               className={clsx(
                 "work-row group ledger-grid gap-y-6 border-t border-border py-8 md:py-12",
-                i === items.length - 1 && "border-b",
+                // The next section's rule closes the list, so the last row has no
+                // rule or foot of its own.
+                i === items.length - 1 && "pb-0 md:pb-0",
               )}
             >
               {/* Specimen: a drawn picture of the mechanism, not a stock image.

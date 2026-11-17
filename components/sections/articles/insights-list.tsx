@@ -26,7 +26,6 @@ export function InsightsList({ items }: { items: ArticleItem[] }) {
           className={clsx(
             "work-row group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-5 border-t border-border py-5 md:py-7",
             "md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)_auto] md:gap-x-[var(--col-gap)]",
-            i === items.length - 1 && "border-b",
             "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
           )}
         >
