@@ -1438,14 +1438,6 @@
   translate: 0 0;
   transition-delay: 120ms;
 }
-/* The list closes on one rule: under the last note, not above it. */
-[data-working] .work-row:nth-last-child(2) {
-  border-bottom-color: transparent;
-}
-[data-working] .working-note:last-child {
-  border-bottom: 1px solid var(--border);
-}
-
 .working-switch-track {
   position: relative;
   flex: none;

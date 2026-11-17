@@ -7,6 +7,7 @@ type Bg = "default" | "muted" | "dark" | "grid" | "squares" | "approach" | "ink"
 // How much air above a section. The page varies it so the long scroll has a
 // rhythm instead of one repeated interval.
 const SPACE = {
+  snug: "calc(var(--section-y) * 0.4)",
   tight: "calc(var(--section-y) * 0.6)",
   default: "var(--section-y)",
   loose: "calc(var(--section-y) * 1.3)",

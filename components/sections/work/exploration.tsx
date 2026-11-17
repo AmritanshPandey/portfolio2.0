@@ -67,7 +67,9 @@ export default function ExplorationsSection() {
           style={{ ["--i" as string]: i }}
           className={clsx(
             "work-row group ledger-grid gap-y-6 border-t border-border py-8 md:py-12",
-            i === rows.length - 1 && "border-b",
+            // The next section's rule closes the list, so the last row has no
+                // rule or foot of its own.
+                i === rows.length - 1 && "pb-0 md:pb-0",
           )}
         >
           <div className="col-span-12 md:col-span-5">{row.specimen}</div>

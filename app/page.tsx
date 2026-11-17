@@ -30,7 +30,7 @@ export default function Page() {
       <Section
         id="explorations"
         bg="muted"
-        space="tight"
+        space="snug"
         title="Explorations"
         description="Self-directed work: product ideas and reusable systems, outside client constraints."
       >
@@ -39,7 +39,7 @@ export default function Page() {
 
       {/* ───────────────── APPROACH ───────────────── */}
       {/* Heading + intro live inside the deck (two-column), so no Section header here. */}
-      <Section id="approach" bg="approach">
+      <Section id="approach" bg="approach" space="snug">
         <ProductDesignApproachSection />
       </Section>
 
