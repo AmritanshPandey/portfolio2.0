@@ -3,7 +3,6 @@ import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
 import { CsSection } from "@/components/case-study/cs-section"
 import { CsDecision } from "@/components/case-study/cs-decision"
 import { CsInfoBar } from "@/components/case-study/cs-info-bar"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { DemoPoster } from "@/components/case-study/demo-poster"
@@ -789,8 +788,6 @@ export default function Page() {
           </dl>
         </div>
       </CsSection>
-
-      <CsNextStudies currentHref="/work/agent-commerce" />
 
     </div>
   )

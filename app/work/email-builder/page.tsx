@@ -4,8 +4,6 @@ import { CsDecision } from "@/components/case-study/cs-decision"
 import { CsInfoBar } from "@/components/case-study/cs-info-bar"
 import { CsArchStack } from "@/components/case-study/cs-arch-stack"
 import { CsMetricBars } from "@/components/case-study/cs-metric-bars"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsPrinciples } from "@/components/case-study/cs-principles"
@@ -15,21 +13,6 @@ import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
 import { CsQuote } from "@/components/case-study/cs-quote"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "problem",          label: "Problem" },
-  { id: "my-role",          label: "My role" },
-  { id: "principles",       label: "Principles" },
-  { id: "key-decisions",    label: "Decisions" },
-  { id: "architecture",     label: "Architecture" },
-  { id: "outlook-problem",  label: "The Outlook problem" },
-  { id: "template-library", label: "Template library" },
-  { id: "the-shift",        label: "The shift" },
-  { id: "what-changed",     label: "What changed" },
-  { id: "reflection",       label: "Reflection" },
-]
 
 // ─── EMAIL CLIENT COMPAT DATA ────────────────────────────────────────────────
 
@@ -178,8 +161,6 @@ function Hero() {
 export default function Page() {
   return (
     <div className="min-h-screen">
-
-      <CsChapterNav chapters={CHAPTERS} />
 
       <Hero />
 
@@ -684,7 +665,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/email-builder" />
 
     </div>
   )

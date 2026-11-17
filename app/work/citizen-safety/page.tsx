@@ -7,8 +7,6 @@ import { CsDecision } from "@/components/case-study/cs-decision"
 import { CsInfoBar } from "@/components/case-study/cs-info-bar"
 import { CsAreaChart } from "@/components/case-study/cs-area-chart"
 import { CsDualLineChart } from "@/components/case-study/cs-dual-line-chart"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsOptions } from "@/components/case-study/cs-options"
@@ -16,20 +14,6 @@ import { CsQuote } from "@/components/case-study/cs-quote"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "story",           label: "The story" },
-  { id: "context",         label: "Context" },
-  { id: "role-reality",    label: "Role reality" },
-  { id: "act-1",           label: "Act 1, consumer" },
-  { id: "act-1-decisions", label: "Act 1 decisions" },
-  { id: "pivot",           label: "The pivot" },
-  { id: "act-3",           label: "Act 3, B2B" },
-  { id: "impact",          label: "Impact" },
-  { id: "reflection",      label: "Reflection" },
-]
 
 // ─── HERO ──────────────────────────────────────────────────────────────────
 
@@ -712,8 +696,6 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
-      <CsChapterNav chapters={CHAPTERS} />
-
       <Hero />
 
       <CsInfoBar cells={[
@@ -911,7 +893,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/citizen-safety" />
 
     </div>
   )

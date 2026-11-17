@@ -23,10 +23,13 @@ interface Props {
  * that starts at column 4 of the grid, leaving the left rail open, so the
  * case study shares the home page's asymmetric sheet.
  */
-export function CsSection({ children, id, variant }: Props) {
+export function CsSection({ children, id, label, variant }: Props) {
   return (
     <section
       id={id}
+      // A labelled, anchored section is a chapter: the study tracker lists it.
+      data-chapter={id && label ? "" : undefined}
+      data-chapter-label={id && label ? label : undefined}
       className={clsx(
         "relative w-full bg-background text-foreground",
         id && "scroll-mt-24",
