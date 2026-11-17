@@ -93,12 +93,12 @@ Answer:
 
 ---
 
-## D9. iPhone Duo model in the fold viewer · open
+## D9. iPhone Duo model in the fold viewer · answered (2026-11-08)
 
 - keep (I've checked Apple's terms)
 - swap to a neutral foldable frame drawn in code
 
-Answer:
+Answer: keep. The model now lives in the repo (#51), not only fetched at build time.
 
 ---
 
