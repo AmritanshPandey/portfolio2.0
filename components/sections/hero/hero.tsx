@@ -76,7 +76,7 @@ export default function Hero() {
                       actions beside it (it fills their row and crops), and its
                       caption takes the row below. Phones stack, as before. */}
                   <div className="ledger-grid gap-y-6 sm:gap-y-3">
-                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-end gap-x-4 sm:col-span-3 sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:grid-cols-1 sm:grid-rows-subgrid sm:items-stretch lg:col-span-4">
+                    <figure className="col-span-12 grid grid-cols-[42%_minmax(0,1fr)] items-start gap-x-4 sm:col-span-3 sm:col-start-1 sm:row-span-2 sm:row-start-1 sm:grid-cols-1 sm:grid-rows-subgrid sm:items-stretch lg:col-span-4">
                       <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-[12px] bg-surface-2 sm:aspect-auto sm:min-h-40 sm:max-w-none">
                         {/* Drifts a few px against the tilt (TiltPane), so
                             the photo seems to float under the glass. */}

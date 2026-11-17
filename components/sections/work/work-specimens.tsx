@@ -60,7 +60,7 @@ function TokensSpecimen() {
             className={clsx(
               "absolute flex aspect-[1.586] w-[28%] flex-col justify-between overflow-hidden rounded-[1.4cqw] p-[2.2cqw] text-white",
               "shadow-[0_1.6cqw_3.2cqw_-1cqw_rgba(0,0,0,0.45)]",
-              "scale-[1.42] row-on:scale-100 transition-[translate,rotate,scale] duration-[600ms]",
+              "scale-[1.28] saturate-[0.82] row-on:scale-100 transition-[translate,rotate,scale] duration-[600ms]",
               EASE,
               BANK_POSE[i]
             )}
@@ -94,49 +94,88 @@ const STORES = [
   { name: "Aqualogica", color: "#0066CC" },
 ]
 
+// A product, drawn: cap and bottle. The same shape in every storefront.
+function Bottle({ className }: { className?: string }) {
+  return (
+    <span className={clsx("flex flex-col items-center", className)}>
+      <span className="h-[14%] w-[34%] rounded-t-[0.3cqw] bg-current opacity-70" />
+      <span className="mt-[4%] w-full flex-1 rounded-[0.6cqw] bg-current" />
+    </span>
+  )
+}
+
 function BackboneSpecimen() {
-  // The skeleton is the shared system: identical in all three storefronts.
-  // Activating the row lights it up everywhere at once, one brand after the
-  // other, while each brand's own colour stays put.
+  // The skeleton is the shared system: the same bars, tiles and bones in all
+  // three storefronts. Activating the row lights it up everywhere at once,
+  // one brand after the other, while each brand's own colour stays put.
   // The per-storefront stagger comes from inline transitionDelay on each bone.
   const bone = clsx(
-    "rounded-full bg-foreground/[0.12] transition-colors duration-500 row-on:bg-accent/70",
+    "rounded-full bg-foreground/[0.14] transition-colors duration-500 row-on:bg-accent/70",
     EASE
   )
 
   return (
     <Frame>
       <div className="absolute inset-0 flex items-center justify-center gap-[3.5cqw]">
-        {STORES.map((s, i) => (
-          <div
-            key={s.name}
-            className={clsx(
-              "flex aspect-[9/16] w-[23%] flex-col overflow-hidden rounded-[1.4cqw] bg-background p-[1.4cqw]",
-              "ring-1 ring-foreground/[0.1] transition-shadow duration-500 row-on:ring-accent/55 dark:ring-white/[0.09]",
-              EASE
-            )}
-            style={{ transitionDelay: `${i * 90}ms` }}
-          >
-            <p className="truncate text-[max(1.45cqw,8px)] font-medium leading-none text-foreground/75">
-              {s.name}
-            </p>
+        {STORES.map((s, i) => {
+          const tint = `color-mix(in srgb, ${s.color} 14%, var(--background))`
+          return (
             <div
-              className="mt-[1.2cqw] flex aspect-[4/3] items-center justify-center rounded-[0.9cqw]"
-              style={{ background: `linear-gradient(145deg, ${s.color}, color-mix(in srgb, ${s.color} 55%, #000))` }}
+              key={s.name}
+              className={clsx(
+                "flex aspect-[9/16] w-[23%] flex-col overflow-hidden rounded-[1.4cqw] bg-background p-[1.4cqw]",
+                "ring-1 ring-foreground/[0.1] transition-shadow duration-500 row-on:ring-accent/55 dark:ring-white/[0.09]",
+                EASE
+              )}
+              style={{ transitionDelay: `${i * 90}ms` }}
             >
-              <span className="h-[5.5cqw] w-[5.5cqw] rounded-full bg-white/25 ring-1 ring-white/40" />
+              {/* Store bar: the brand's name, and a bag. */}
+              <div className="flex items-center justify-between gap-[1cqw]">
+                <p className="truncate text-[max(1.45cqw,8px)] font-medium leading-none text-foreground/80">
+                  {s.name}
+                </p>
+                <span className="h-[1.7cqw] w-[1.7cqw] shrink-0 rounded-[0.3cqw] ring-1 ring-foreground/40" />
+              </div>
+
+              {/* Banner: the brand's colour, flat, with the hero product. */}
+              <div
+                className="mt-[1.2cqw] flex aspect-[16/11] items-end justify-between rounded-[0.8cqw] p-[1.2cqw]"
+                style={{ background: s.color }}
+              >
+                <div className="space-y-[0.7cqw] pb-[0.3cqw]">
+                  <span className="block h-[1cqw] w-[7cqw] rounded-full bg-white/90" />
+                  <span className="block h-[1cqw] w-[4.5cqw] rounded-full bg-white/55" />
+                </div>
+                <Bottle className="h-[82%] w-[3.4cqw] text-white/90" />
+              </div>
+
+              {/* Two products: tile, title, price. */}
+              <div className="mt-[1.3cqw] grid grid-cols-2 gap-[1cqw]">
+                {[0, 1].map((k) => (
+                  <div key={k}>
+                    <div
+                      className="flex aspect-square items-center justify-center rounded-[0.6cqw]"
+                      style={{ background: tint, color: s.color }}
+                    >
+                      <Bottle className="h-[58%] w-[2.2cqw]" />
+                    </div>
+                    <div
+                      className={clsx("mt-[0.9cqw] h-[0.9cqw] w-[88%]", bone)}
+                      style={{ transitionDelay: `${i * 90 + k * 40}ms` }}
+                    />
+                    <div
+                      className={clsx("mt-[0.7cqw] h-[0.9cqw] w-[46%]", bone)}
+                      style={{ transitionDelay: `${i * 90 + 40 + k * 40}ms` }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* The action, in the brand's colour. */}
+              <span className="mt-auto block h-[3cqw] w-full rounded-[0.6cqw]" style={{ background: s.color }} />
             </div>
-            <div className="mt-[1.6cqw] space-y-[1cqw]">
-              <div className={clsx("h-[1cqw] w-[85%]", bone)} style={{ transitionDelay: `${i * 90}ms` }} />
-              <div className={clsx("h-[1cqw] w-[60%]", bone)} style={{ transitionDelay: `${i * 90 + 40}ms` }} />
-              <div className={clsx("h-[1cqw] w-[72%]", bone)} style={{ transitionDelay: `${i * 90 + 80}ms` }} />
-            </div>
-            <div className="mt-auto flex items-center justify-between gap-[1cqw]">
-              <div className={clsx("h-[1cqw] w-[30%]", bone)} style={{ transitionDelay: `${i * 90 + 120}ms` }} />
-              <span className="h-[3.2cqw] w-[48%] rounded-[0.7cqw]" style={{ background: s.color }} />
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </Frame>
   )

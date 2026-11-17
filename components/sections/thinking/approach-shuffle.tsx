@@ -83,11 +83,11 @@ export function ApproachShuffle({ steps }: { steps: ApproachStep[] }) {
               key={s.q}
               data-step={step}
               data-settle
-              className="grid grid-cols-[3.25rem_minmax(0,1fr)] gap-x-5 border-b border-border bg-background py-8 md:grid-cols-[5rem_minmax(0,1fr)] md:py-12"
+              className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 border-b border-border bg-background py-8 md:grid-cols-[3.5rem_minmax(0,1fr)] md:py-12"
             >
               <span
                 aria-hidden
-                className={`text-[clamp(1.75rem,3vw,2.75rem)] font-[760] leading-[1] tracking-[-0.04em] tabular-nums [font-variation-settings:'wdth'_108] transition-colors duration-300 ${away ? "text-accent" : "text-muted-foreground"}`}
+                className={`ledger-label pt-[0.45em] transition-colors duration-300 motion-reduce:transition-none ${away ? "text-accent" : ""}`}
               >
                 {String(step + 1).padStart(2, "0")}
               </span>

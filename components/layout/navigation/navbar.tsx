@@ -537,7 +537,7 @@ export default function Navbar() {
         data-menu-open={open}
         className="
           fixed right-[var(--gutter)] top-[calc(env(safe-area-inset-top)+0.625rem)] z-[51] flex h-11 w-11 items-center justify-center md:hidden
-          bg-background glass-edge border border-foreground text-foreground
+          bg-background glass-edge border border-border text-foreground
           transition-transform duration-150 active:translate-y-px
         "
       >

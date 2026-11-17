@@ -18,6 +18,7 @@ export default function Page() {
       <Section
         id="work"
         bg="default"
+        space="tight"
         title="Systems that shipped."
         description="Five case studies across agentic payments, enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
         headerAnimated={false}
@@ -29,6 +30,7 @@ export default function Page() {
       <Section
         id="explorations"
         bg="muted"
+        space="tight"
         title="Explorations"
         description="Self-directed work: product ideas and reusable systems, outside client constraints."
       >
