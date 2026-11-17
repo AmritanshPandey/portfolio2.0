@@ -3,6 +3,15 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react"
+import { playNote } from "@/lib/ledger-sound"
+
+// The clasp: a muted tick as the phone shuts flat (lower) or opens flat
+// (higher), from the rules' scale.
+const CLOSED = 0.5
+const OPEN = 179.5
+const CLASP_CLOSE = 1
+const CLASP_OPEN = 3
+const CLASP_STRENGTH = 0.35
 
 /**
  * A foldable phone showing two product screens: open, the inner screen shows
@@ -361,8 +370,15 @@ export function FoldPhone({
       let raf = 0
       let last = performance.now()
       let onScreen = true
+      // The clasp sounds only once the reader has played or scrubbed the
+      // fold, never during the intro fold the page runs by itself.
+      let userDriven = false
 
       const applyAngle = (value: number) => {
+        if (userDriven) {
+          if (current > CLOSED && value <= CLOSED) playNote(CLASP_CLOSE, CLASP_STRENGTH, 0, { muted: true })
+          else if (current < OPEN && value >= OPEN) playNote(CLASP_OPEN, CLASP_STRENGTH, 0, { muted: true })
+        }
         current = value
         bend.value = ((180 - value) / 180) * Math.PI
         // Folded, only the fixed half shows; ease it to the centre.
@@ -431,6 +447,7 @@ export function FoldPhone({
 
       api.current = {
         setAngle: (value) => {
+          userDriven = true
           isPlaying = false
           setPlaying(false)
           transition = null
@@ -439,6 +456,7 @@ export function FoldPhone({
           kick()
         },
         setPlaying: (on) => {
+          if (on) userDriven = true
           transition = null
           queue = []
           if (on) phase = 1.2 + (Math.acos((2 * current) / 180 - 1) / Math.PI) * 3.1

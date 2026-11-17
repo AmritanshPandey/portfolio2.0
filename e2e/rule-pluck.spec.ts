@@ -117,10 +117,14 @@ test("sound is on by default and starts with the first click", async ({ page }) 
   await page.waitForTimeout(100)
   expect(await notes(page)).toBe(0)
 
+  // The click may sound its own ring in the hero's dots (sound-cues.spec.ts);
+  // count the pluck from after it.
   await page.mouse.click(x, y + 200)
+  await page.waitForTimeout(200)
+  const afterClick = await notes(page)
   await page.mouse.move(x, y - 60)
   await page.mouse.move(x, y + 60)
-  await expect.poll(() => notes(page)).toBe(1)
+  await expect.poll(() => notes(page)).toBe(afterClick + 1)
 })
 
 test("turning sound off silences the rules and is remembered", async ({ page }) => {

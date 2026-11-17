@@ -67,7 +67,7 @@ export function setSound(on: boolean) {
 
 let ctx: AudioContext | null = null
 let out: AudioNode | null = null
-const buffers = new Map<number, AudioBuffer>()
+const buffers = new Map<string, AudioBuffer>()
 const lastPlayed = new Map<number, number>()
 
 /**
@@ -109,13 +109,20 @@ export function wakeSoundOnGesture(): () => void {
   }
 }
 
-// One buffer per note, made the first time it plays (about 290KB each).
-function pluckBuffer(c: AudioContext, freq: number): AudioBuffer {
-  const cached = buffers.get(freq)
+// One buffer per note and voice, made the first time it plays (about 290KB
+// for a ring, 70KB for a tick). A muted string loses its energy fast, so it
+// reads as a tick rather than a note.
+const RING = { decay: 0.996, seconds: 1.5, fade: 0.3 }
+const MUTED = { decay: 0.97, seconds: 0.35, fade: 0.1 }
+
+function pluckBuffer(c: AudioContext, freq: number, muted: boolean): AudioBuffer {
+  const key = `${freq}:${muted}`
+  const cached = buffers.get(key)
   if (cached) return cached
 
+  const voice = muted ? MUTED : RING
   const rate = c.sampleRate
-  const length = Math.floor(rate * 1.5)
+  const length = Math.floor(rate * voice.seconds)
   const buffer = c.createBuffer(1, length, rate)
   const data = buffer.getChannelData(0)
   const period = Math.max(2, Math.round(rate / freq))
@@ -134,27 +141,31 @@ function pluckBuffer(c: AudioContext, freq: number): AudioBuffer {
     const sample = ring[j]
     data[i] = sample
     peak = Math.max(peak, Math.abs(sample))
-    ring[j] = 0.996 * 0.5 * (sample + ring[next])
+    ring[j] = voice.decay * 0.5 * (sample + ring[next])
     j = next
   }
 
-  // Normalise, and fade the last 300ms so a note never ends on a click.
-  const fade = Math.floor(rate * 0.3)
+  // Normalise, and fade the tail so a note never ends on a click.
+  const fade = Math.floor(rate * voice.fade)
   const scale = peak > 0 ? 1 / peak : 0
   for (let i = 0; i < length; i++) {
     const tail = i > length - fade ? (length - i) / fade : 1
     data[i] *= scale * tail
   }
 
-  buffers.set(freq, buffer)
+  buffers.set(key, buffer)
   return buffer
 }
 
 /**
  * Plays the note for the `index`-th rule on the page. `strength` (0–1) is how
  * far the rule was drawn; `pan` (−1 to 1) is where along it it was caught.
+ * `muted` plays the same note as a short tick (the fold phone's clasp).
+ *
+ * Every sound on the site goes through here, and each answers the visitor's
+ * own hand (a pluck, a click, a fold), never the page moving by itself.
  */
-export function playNote(index: number, strength: number, pan: number) {
+export function playNote(index: number, strength: number, pan: number, { muted = false }: { muted?: boolean } = {}) {
   // Until a gesture has started audio there is nothing to play into; a note
   // queued on a suspended context would sound late, on the next click.
   const c = ctx
@@ -167,7 +178,7 @@ export function playNote(index: number, strength: number, pan: number) {
   const s = Math.min(Math.max(strength, 0), 1)
   const freq = NOTES[((index % NOTES.length) + NOTES.length) % NOTES.length]
   const source = c.createBufferSource()
-  source.buffer = pluckBuffer(c, freq)
+  source.buffer = pluckBuffer(c, freq, muted)
   // A hair of detune per note keeps repeated plucks from sounding sampled.
   source.playbackRate.value = 1 + (Math.random() - 0.5) * 0.006
 
