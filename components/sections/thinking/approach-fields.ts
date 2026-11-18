@@ -1,288 +1,438 @@
-import { G, grain, noise, onCell, outline, segment, smooth, stroke, type Motif } from "@/components/shared/ascii-field"
+import { smooth, type FieldState, type Motif } from "@/components/shared/ascii-field"
 
 /**
- * The Approach field's six pictures, one per step, in order. The field
- * decodes from one into the next as the reader moves down the steps.
+ * The Approach field's six pictures, one per step, in order. Each is a small
+ * lit 3D scene, raymarched per glyph cell: the light ramp ( .:-=+*#%@) does
+ * the shading, a dotted floor and a contact shadow ground it, and accent
+ * marks the one thing the step is about. The pointer turns the camera.
+ * The field decodes from one scene into the next as the reader moves down.
  */
 
-// 01 Identify what cannot move: fixed anchors the flow bends around.
-const ANCHORS = [
-  [0.3, 0.28, 0.1],
-  [0.7, 0.52, 0.12],
-  [0.36, 0.77, 0.085],
-] as const
-const anchors = (): Motif => ({
-  still: 2,
-  cell: (x, y, t, out, f) => {
-    const ax = x * f.aspect
-    // A flow past cylinders: the stream function and its slope.
-    let psi = y
-    let px = 0
-    let py = 1
-    for (const [cx, cy, r] of ANCHORS) {
-      const dx = ax - cx * f.aspect
-      const dy = y - cy
-      const d2 = dx * dx + dy * dy
-      const d = Math.sqrt(d2)
-      // The anchor: a ring, fixed, in the accent; a mark at its centre.
-      if (Math.abs(d - r) < f.cy * 0.5) {
-        out.b = 0.95
-        out.g = G.hash
-        out.a = 1
-        return
+type Sdf = (x: number, y: number, z: number) => number
+
+// The material of the surface the last sdf call found nearest: 0 graphite,
+// 1 accent. Set inside each scene's sdf, read once at the hit point.
+let mat = 0
+
+const DIST = 4.8
+const FOCAL = 2.7
+const STEPS = 64
+
+/* ── Shapes ──────────────────────────────────────────────────────────────── */
+
+const len3 = (x: number, y: number, z: number) => Math.sqrt(x * x + y * y + z * z)
+const sphere = (x: number, y: number, z: number, r: number) => len3(x, y, z) - r
+function box(x: number, y: number, z: number, bx: number, by: number, bz: number, r = 0) {
+  const qx = Math.abs(x) - bx + r
+  const qy = Math.abs(y) - by + r
+  const qz = Math.abs(z) - bz + r
+  return len3(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0) - r
+}
+/** A cube's twelve edges as bars of half-thickness e. */
+function frameBox(x: number, y: number, z: number, b: number, e: number) {
+  const px = Math.abs(x) - b
+  const py = Math.abs(y) - b
+  const pz = Math.abs(z) - b
+  const qx = Math.abs(px + e) - e
+  const qy = Math.abs(py + e) - e
+  const qz = Math.abs(pz + e) - e
+  const part = (ax: number, ay: number, az: number) =>
+    len3(Math.max(ax, 0), Math.max(ay, 0), Math.max(az, 0)) + Math.min(Math.max(ax, ay, az), 0)
+  return Math.min(part(px, qy, qz), part(qx, py, qz), part(qx, qy, pz))
+}
+function capsule(x: number, y: number, z: number, ax: number, ay: number, az: number, bx: number, by: number, bz: number, r: number) {
+  const px = x - ax
+  const py = y - ay
+  const pz = z - az
+  const dx = bx - ax
+  const dy = by - ay
+  const dz = bz - az
+  const h = Math.min(1, Math.max(0, (px * dx + py * dy + pz * dz) / (dx * dx + dy * dy + dz * dz || 1)))
+  return len3(px - dx * h, py - dy * h, pz - dz * h) - r
+}
+
+/* ── The renderer ────────────────────────────────────────────────────────── */
+
+interface Cam {
+  yaw: number
+  pitch: number
+}
+
+interface Scene {
+  still: number
+  /** The floor's height, in scene units (the frame is about ±1.9 tall). */
+  floor: number
+  /** Radius of a sphere at the origin holding everything: rays that miss it
+   *  skip the march. */
+  bound: number
+  view: (t: number, f: FieldState, cam: Cam) => void
+  frame?: (t: number, f: FieldState) => void
+  sdf: Sdf
+}
+
+function scene(s: Scene): Motif {
+  const cam: Cam = { yaw: 0, pitch: 0 }
+  // Camera basis and light, in scene space, refreshed each frame.
+  let cy = 1
+  let sy = 0
+  let cp = 1
+  let sp = 0
+  let ox = 0
+  let oy = 0
+  let oz = -DIST
+  let lx = 0
+  let ly = 1
+  let lz = 0
+
+  // View space to scene space: pitch about x, then yaw about y.
+  let rx = 0
+  let ry = 0
+  let rz = 0
+  const rot = (x: number, y: number, z: number) => {
+    const y1 = y * cp - z * sp
+    const z1 = y * sp + z * cp
+    rx = x * cy + z1 * sy
+    ry = y1
+    rz = -x * sy + z1 * cy
+  }
+
+  return {
+    still: s.still,
+    frame: (t, f) => {
+      s.view(t, f, cam)
+      // The pointer turns the camera a little: the scene leans toward it.
+      const yaw = cam.yaw + (f.px - 0.5) * f.pull * 0.9
+      const pitch = cam.pitch + (f.py - 0.5) * f.pull * 0.45
+      cy = Math.cos(yaw)
+      sy = Math.sin(yaw)
+      cp = Math.cos(pitch)
+      sp = Math.sin(pitch)
+      rot(0, 0, -DIST)
+      ox = rx
+      oy = ry
+      oz = rz
+      // Key light from the upper left, a little in front.
+      rot(-0.52, 0.72, -0.46)
+      const il = 1 / len3(rx, ry, rz)
+      lx = rx * il
+      ly = ry * il
+      lz = rz * il
+      s.frame?.(t, f)
+    },
+    cell: (x, y, _t, out, f) => {
+      out.g = 0
+      rot((x - 0.5) * 2 * f.aspect, (0.5 - y) * 2, FOCAL)
+      const il = 1 / len3(rx, ry, rz)
+      const dx = rx * il
+      const dy = ry * il
+      const dz = rz * il
+
+      // Does the ray pass the bounding sphere at all?
+      const bq = ox * dx + oy * dy + oz * dz
+      const disc = bq * bq - (ox * ox + oy * oy + oz * oz - s.bound * s.bound)
+      if (disc > 0) {
+        let d = Math.max(0, -bq - Math.sqrt(disc))
+        const end = -bq + Math.sqrt(disc)
+        for (let i = 0; i < STEPS && d < end; i++) {
+          const px = ox + dx * d
+          const py = oy + dy * d
+          const pz = oz + dz * d
+          const h = s.sdf(px, py, pz)
+          if (h < 0.003) {
+            // Normal from four taps.
+            const e = 0.004
+            const a = s.sdf(px + e, py - e, pz - e)
+            const b = s.sdf(px - e, py - e, pz + e)
+            const c = s.sdf(px - e, py + e, pz - e)
+            const g = s.sdf(px + e, py + e, pz + e)
+            let nx = a - b - c + g
+            let ny = -a - b + c + g
+            let nz = -a + b - c + g
+            const nl = 1 / (len3(nx, ny, nz) || 1)
+            nx *= nl
+            ny *= nl
+            nz *= nl
+            s.sdf(px, py, pz)
+            const accent = mat
+            const diff = Math.max(0, nx * lx + ny * ly + nz * lz)
+            // Blinn highlight and a rim, so round forms read as round.
+            let hx = lx - dx
+            let hy = ly - dy
+            let hz = lz - dz
+            const hl = 1 / (len3(hx, hy, hz) || 1)
+            hx *= hl
+            hy *= hl
+            hz *= hl
+            const spec = Math.pow(Math.max(0, nx * hx + ny * hy + nz * hz), 28)
+            const rim = Math.pow(1 - Math.max(0, -(nx * dx + ny * dy + nz * dz)), 3)
+            out.b = Math.min(1, 0.13 + 0.72 * diff + 0.35 * spec + 0.18 * rim)
+            out.a = accent ? 0.75 + 0.25 * diff : spec * 0.8
+            return
+          }
+          d += h
+        }
       }
-      if (onCell(x, cx, f.cx) && onCell(y, cy, f.cy)) {
-        out.b = 1
-        out.g = G.plus
-        out.a = 1
-        return
-      }
-      if (d < r) {
-        out.b = 0
-        return
-      }
-      const k = r * r
-      psi -= (k * dy) / d2
-      px += (2 * k * dx * dy) / (d2 * d2)
-      py -= (k * (dx * dx - dy * dy)) / (d2 * d2)
-    }
-    // Streamlines every 1/14 of psi, one cell thick, drawn along the flow.
-    const n = psi * 14
-    const near = Math.abs(n - Math.round(n)) / (14 * Math.hypot(px, py))
-    if (near < f.cy * 0.5) {
-      const travel = 0.5 + 0.5 * Math.sin(ax * 18 - t * 2.2 + Math.round(n) * 1.7)
-      out.b = 0.25 + 0.5 * travel
-      out.g = stroke(py, -px)
+
+      // The floor: only the scene's soft contact shadow, so the form sits
+      // on something without a horizon cutting the frame.
+      out.b = 0
+      if (dy >= -0.001) return
+      const tf = (s.floor - oy) / dy
+      if (tf <= 0) return
+      const fx = ox + dx * tf
+      const fz = oz + dz * tf
+      const fade = smooth(9, 4, tf)
+      if (fade <= 0) return
+      if (fx * fx + fz * fz > (s.bound + 0.8) * (s.bound + 0.8)) return
+      const shade = 1 - smooth(0.0, 0.35, s.sdf(fx, s.floor, fz))
+      out.b = 0.2 * shade * shade * fade
       out.a = 0
-      return
-    }
-    out.b = grain(x, y, t)
-  },
-})
+    },
+  }
+}
 
-// 02 Map the moving parts: components in motion, joined by their handoffs.
-const parts = (): Motif => {
-  const N = 6
-  const nodes = new Float32Array(N * 2)
-  const EDGES = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [1, 4], [0, 3]]
-  let pulse = 0
-  return {
-    still: 1.5,
+/* ── 01 Identify what cannot move ─────────────────────────────────────────
+   A fixed block, in the accent, while a ring of parts circles it. */
+const anchor = (): Motif => {
+  const N = 9
+  const orb = new Float32Array(N * 3)
+  return scene({
+    still: 2.6,
+    floor: -0.85,
+    bound: 1.75,
+    view: (_t, _f, cam) => {
+      cam.yaw = 0.62
+      cam.pitch = 0.42
+    },
     frame: (t) => {
       for (let i = 0; i < N; i++) {
-        const a = (i / N) * Math.PI * 2 + t * 0.14
-        const r = 0.3 + 0.05 * Math.sin(t * 0.6 + i * 1.7)
-        nodes[i * 2] = 0.5 + Math.cos(a) * r * 0.9
-        nodes[i * 2 + 1] = 0.5 + Math.sin(a) * r * 0.72
+        const a = (i / N) * Math.PI * 2 + t * 0.55
+        orb[i * 3] = Math.cos(a) * 1.38
+        orb[i * 3 + 1] = -0.05 + 0.32 * Math.sin(a * 2 + t * 0.4)
+        orb[i * 3 + 2] = Math.sin(a) * 1.38
       }
-      pulse = (t * 0.45) % 1
     },
-    cell: (x, y, t, out, f) => {
-      // The parts: small boxes, each with a live centre.
+    sdf: (x, y, z) => {
+      const block = box(x, y + 0.2, z, 0.5, 0.65, 0.5, 0.05)
+      let d = block
+      mat = 1
       for (let i = 0; i < N; i++) {
-        const nx = nodes[i * 2]
-        const ny = nodes[i * 2 + 1]
-        const hw = f.cx * 2
-        const hh = f.cy * 1
-        const edge = outline(x, y, nx, ny, hw, hh, f)
-        if (edge) {
-          out.b = 0.85
-          out.g = edge
-          out.a = 0.6
-          return
-        }
-        if (Math.abs(x - nx) < hw && Math.abs(y - ny) < hh) {
-          out.b = onCell(x, nx, f.cx) ? 1 : 0
-          out.g = G.at
-          out.a = 1
-          return
+        const o = sphere(x - orb[i * 3], y - orb[i * 3 + 1], z - orb[i * 3 + 2], i % 3 ? 0.13 : 0.17)
+        if (o < d) {
+          d = o
+          mat = 0
         }
       }
-      // The handoffs: dotted lines along each edge, a packet travelling.
-      out.b = grain(x, y, t)
-      const ax = x * f.aspect
-      for (let e = 0; e < EDGES.length; e++) {
-        const [i, j] = EDGES[e]
-        const x0 = nodes[i * 2] * f.aspect
-        const y0 = nodes[i * 2 + 1]
-        const x1 = nodes[j * 2] * f.aspect
-        const y1 = nodes[j * 2 + 1]
-        if (segment(ax, y, x0, y0, x1, y1) > f.cy * 0.5) continue
-        const k = (pulse + e * 0.17) % 1
-        const hx = x0 + (x1 - x0) * k
-        const hy = y0 + (y1 - y0) * k
-        if (Math.hypot(ax - hx, y - hy) < f.cy * 1.2) {
-          out.b = 1
-          out.g = G.star
-          out.a = 1
-        } else {
-          out.b = 0.4
-          out.g = stroke(x1 - x0, y1 - y0)
-          out.a = 0
-        }
-        return
-      }
+      return d
     },
-  }
-}
-
-// 03 Choose the smallest proof: the field narrows to one small square.
-const proof = (): Motif => {
-  let hw = 0.4
-  let hh = 0.4
-  let held = 0
-  return {
-    still: 3.9,
-    frame: (t, f) => {
-      const k = (t % 7) / 7
-      // Narrow, hold the proof, let the field back in.
-      const s = smooth(0.06, 0.5, k) * (1 - smooth(0.86, 1, k))
-      const size = 0.42 - s * 0.34
-      hw = size
-      hh = size * Math.min(1.25, f.aspect)
-      held = smooth(0.5, 0.58, k) * (1 - smooth(0.82, 0.88, k))
-    },
-    cell: (x, y, t, out, f) => {
-      const edge = outline(x, y, 0.5, 0.5, hw, hh, f)
-      if (edge) {
-        out.b = 0.9
-        out.g = edge
-        out.a = 0.3 + 0.7 * held
-        return
-      }
-      const inside = Math.abs(x - 0.5) < hw && Math.abs(y - 0.5) < hh
-      // The field of options: everywhere, faint outside the frame.
-      const v = noise(x * 8 + t * 0.25, y * 8 - t * 0.18)
-      if (inside) {
-        if (held > 0.05) {
-          out.b = 0.4 + 0.5 * held
-          out.g = (Math.floor(x / f.cx) + Math.floor(y / f.cy)) % 2 ? G.hash : G.plus
-          out.a = held
-        } else {
-          out.b = v > 0.62 ? 0.5 : v > 0.45 ? 0.3 : 0
-          out.g = v > 0.62 ? G.plus : G.colon
-        }
-      } else {
-        out.b = v > 0.6 ? 0.22 : grain(x, y, t)
-        out.g = v > 0.6 ? G.colon : 0
-      }
-    },
-  }
-}
-
-// 04 Prototype the risk: turbulence where the cursor is, calm elsewhere.
-const risk = (): Motif => {
-  let rx = 0.5
-  let ry = 0.5
-  return {
-    still: 2.4,
-    frame: (t, f) => {
-      // With no pointer, the unknown wanders; with one, it follows it.
-      const wx = 0.5 + 0.26 * Math.sin(t * 0.33)
-      const wy = 0.5 + 0.28 * Math.sin(t * 0.27 + 1.3)
-      rx = wx + (f.px - wx) * f.pull
-      ry = wy + (f.py - wy) * f.pull
-    },
-    cell: (x, y, t, out, f) => {
-      const dx = (x - rx) * f.aspect
-      const dy = y - ry
-      const d = Math.hypot(dx, dy)
-      const storm = Math.exp(-(d * d) / 0.02)
-      // A calm grid: the known parts, in order.
-      const grid = onCell(x, Math.round(x * 8) / 8, f.cx) && onCell(y, Math.round(y * 10) / 10, f.cy)
-      if (storm < 0.08) {
-        out.b = grid ? 0.4 : grain(x, y, t)
-        out.g = grid ? G.plus : 0
-        return
-      }
-      // The storm: glyphs turning with a swirl around the unknown.
-      const a = Math.atan2(dy, dx) + 1.4 + noise(d * 8 - t * 1.2, t * 0.4) * 1.5
-      const v = noise(Math.cos(a) * 3 + d * 10 - t * 1.4, Math.sin(a) * 3 + t * 0.5)
-      out.b = storm * (0.35 + 0.65 * v)
-      out.g = v > 0.72 ? G.star : v < 0.3 ? G.dot : stroke(Math.cos(a), Math.sin(a))
-      out.a = storm * smooth(0.35, 0.75, v)
-    },
-  }
-}
-
-// 05 Make alignment concrete: scattered marks snap into one rule.
-const align = (): Motif => {
-  const N = 22
-  const home = Array.from({ length: N }, (_, i) => {
-    const s = Math.sin(i * 91.7) * 43758.5
-    const s2 = Math.sin(i * 47.3 + 3) * 24634.6
-    return [0.1 + 0.8 * (s - Math.floor(s)), 0.1 + 0.8 * (s2 - Math.floor(s2))] as const
   })
-  const pos = new Float32Array(N * 2)
-  let snap = 0
-  return {
-    still: 3.6,
-    frame: (t) => {
-      const k = (t % 7) / 7
-      snap = smooth(0.12, 0.45, k) * (1 - smooth(0.84, 0.98, k))
-      for (let i = 0; i < N; i++) {
-        // Each mark a little late or early, so the snap reads as agreement.
-        const own = smooth(0, 1, Math.min(1, snap * 1.35 - (i % 5) * 0.07))
-        const [hx, hy] = home[i]
-        const jx = hx + 0.015 * Math.sin(t * 0.9 + i)
-        const jy = hy + 0.015 * Math.cos(t * 0.8 + i * 1.3)
-        pos[i * 2] = jx + (0.12 + (0.76 * i) / (N - 1) - jx) * own
-        pos[i * 2 + 1] = jy + (0.5 - jy) * own
-      }
-    },
-    cell: (x, y, t, out, f) => {
-      for (let i = 0; i < N; i++) {
-        if (onCell(x, pos[i * 2], f.cx) && onCell(y, pos[i * 2 + 1], f.cy)) {
-          out.b = 1
-          out.g = snap > 0.9 ? G.plus : G.at
-          out.a = snap
-          return
-        }
-      }
-      // The rule they agree on, drawn in as they arrive.
-      if (onCell(y, 0.5 + 0.0001, f.cy) && x > 0.1 && x < 0.9) {
-        out.b = 0.2 + 0.6 * snap
-        out.g = G.floor
-        out.a = snap
-        return
-      }
-      out.b = grain(x, y, t)
-    },
-  }
 }
 
-// 06 Systematize what works: one proven tile, repeated.
-const tiles = (): Motif => ({
-  still: 2.2,
-  cell: (x, y, t, out, f) => {
-    const n = 3
-    const w = 1 / n
-    const h = w * f.aspect
-    const ix = Math.floor(x / w)
-    const iy = Math.floor(y / h)
-    const cx = (ix + 0.5) * w
-    const cy = (iy + 0.5) * h
-    if (cy + h * 0.38 > 1) {
-      out.b = grain(x, y, t)
-      return
-    }
-    // The wave of repetition runs out from the first tile.
-    const wave = 0.5 + 0.5 * Math.sin((ix + iy) * 1.1 - t * 1.6)
-    const origin = ix === 0 && iy === 0
-    const lit = origin ? 1 : smooth(0.8, 1, wave) * 0.8
-    const b = 0.35 + 0.55 * (origin ? 1 : wave)
-    // The tile: a frame, a title bar, a line, a control. Same everywhere.
-    const edge = outline(x, y, cx, cy, w * 0.38, h * 0.38, f)
-    let g = edge
-    if (!g && onCell(y, cy - h * 0.2, f.cy) && Math.abs(x - cx) < w * 0.26) g = G.equals
-    else if (!g && onCell(y, cy, f.cy) && Math.abs(x - cx) < w * 0.26) g = G.dash
-    else if (!g && onCell(y, cy + h * 0.2, f.cy) && x > cx + w * 0.06 && x < cx + w * 0.26) g = G.hash
-    if (g) {
-      out.b = b
-      out.g = g
-      out.a = lit
-    } else out.b = grain(x, y, t)
-  },
-})
+/* ── 02 Map the moving parts ──────────────────────────────────────────────
+   The parts and their handoffs as a turning graph; one packet travels it. */
+const VERTS = [
+  [1, 0, 0],
+  [0, 0, 1],
+  [-1, 0, 0],
+  [0, 0, -1],
+  [0, 1, 0],
+  [0, -1, 0],
+] as const
+const EDGES = [
+  [0, 1], [1, 2], [2, 3], [3, 0],
+  [0, 4], [1, 4], [2, 4], [3, 4],
+  [0, 5], [1, 5], [2, 5], [3, 5],
+] as const
+// The packet's route: around the waist, up, over and down.
+const ROUTE = [0, 1, 4, 3, 2, 5, 0] as const
+const parts = (): Motif => {
+  const S = 1.12
+  let kx = 0
+  let ky = 0
+  let kz = 0
+  return scene({
+    still: 1.9,
+    floor: -1.55,
+    bound: 1.45,
+    view: (t, _f, cam) => {
+      cam.yaw = 0.4 + t * 0.32
+      cam.pitch = 0.36
+    },
+    frame: (t) => {
+      const legs = ROUTE.length - 1
+      const p = (t * 0.55) % legs
+      const leg = Math.floor(p)
+      const k = smooth(0, 1, p - leg)
+      const a = VERTS[ROUTE[leg]]
+      const b = VERTS[ROUTE[leg + 1]]
+      kx = (a[0] + (b[0] - a[0]) * k) * S
+      ky = (a[1] + (b[1] - a[1]) * k) * S
+      kz = (a[2] + (b[2] - a[2]) * k) * S
+    },
+    sdf: (x, y, z) => {
+      let d = sphere(x - kx, y - ky, z - kz, 0.17)
+      mat = 1
+      let g = Infinity
+      for (const v of VERTS) g = Math.min(g, sphere(x - v[0] * S, y - v[1] * S, z - v[2] * S, 0.22))
+      for (const [i, j] of EDGES) {
+        const a = VERTS[i]
+        const b = VERTS[j]
+        g = Math.min(g, capsule(x, y, z, a[0] * S, a[1] * S, a[2] * S, b[0] * S, b[1] * S, b[2] * S, 0.075))
+      }
+      if (g < d) {
+        d = g
+        mat = 0
+      }
+      return d
+    },
+  })
+}
 
-export const approachFields = (): Motif[] => [anchors(), parts(), proof(), risk(), align(), tiles()]
+/* ── 03 Choose the smallest proof ─────────────────────────────────────────
+   A wide open frame closes down onto one small, solid cube. */
+const proof = (): Motif => {
+  let size = 1
+  let core = 0
+  return scene({
+    still: 4.6,
+    floor: -1.35,
+    bound: 1.85,
+    view: (t, _f, cam) => {
+      cam.yaw = 0.7 + t * 0.28
+      cam.pitch = 0.5
+    },
+    frame: (t) => {
+      const k = (t % 8) / 8
+      const close = smooth(0.08, 0.48, k) * (1 - smooth(0.86, 1, k))
+      size = 1.05 - 0.7 * close
+      core = smooth(0.4, 0.56, k) * (1 - smooth(0.82, 0.9, k))
+    },
+    sdf: (x, y, z) => {
+      let d = frameBox(x, y, z, size, 0.055)
+      mat = 0
+      if (core > 0.01) {
+        const c = box(x, y, z, 0.27 * core, 0.27 * core, 0.27 * core, 0.03)
+        if (c < d) {
+          d = c
+          mat = 1
+        }
+      }
+      return d
+    },
+  })
+}
+
+/* ── 04 Prototype the risk ────────────────────────────────────────────────
+   An unknown that will not hold its shape; its worst bulges in the accent.
+   The pointer stirs it. */
+const risk = (): Motif => {
+  let amp = 0.2
+  let tt = 0
+  return scene({
+    still: 2.2,
+    floor: -1.45,
+    bound: 1.45,
+    view: (t, _f, cam) => {
+      cam.yaw = t * 0.22
+      cam.pitch = 0.3
+    },
+    frame: (t, f) => {
+      tt = t
+      amp = 0.17 + 0.12 * f.pull + 0.04 * Math.sin(t * 0.7)
+    },
+    sdf: (x, y, z) => {
+      const w =
+        Math.sin(x * 2.6 + tt * 1.1) * Math.sin(y * 2.9 + tt * 0.8) * Math.sin(z * 2.4 + tt * 0.95) +
+        0.45 * Math.sin(x * 5.1 - tt * 1.4 + y * 2) * Math.sin(z * 4.7 + tt * 1.2)
+      mat = w > 0.42 ? 1 : 0
+      // Displacement bends distances; step short so the march holds.
+      return (sphere(x, y, z, 0.98) - amp * w) * 0.62
+    },
+  })
+}
+
+/* ── 05 Make alignment concrete ───────────────────────────────────────────
+   Scattered marks come into one line, and the rule they agree on appears. */
+const align = (): Motif => {
+  const N = 5
+  const home = Array.from({ length: N }, (_, i) => {
+    const r = (k: number) => {
+      const s = Math.sin(i * 91.7 + k * 13.1) * 43758.5
+      return s - Math.floor(s)
+    }
+    return [(r(0) - 0.5) * 2.5, (r(1) - 0.5) * 2.2, (r(2) - 0.5) * 1.6] as const
+  })
+  const pos = new Float32Array(N * 3)
+  let rod = 0
+  return scene({
+    still: 4.2,
+    floor: -1.25,
+    bound: 1.85,
+    view: (t, _f, cam) => {
+      cam.yaw = 0.12 + 0.12 * Math.sin(t * 0.25)
+      cam.pitch = 0.26
+    },
+    frame: (t) => {
+      const k = (t % 8) / 8
+      const snap = smooth(0.1, 0.45, k) * (1 - smooth(0.85, 0.98, k))
+      rod = smooth(0.38, 0.55, k) * (1 - smooth(0.8, 0.88, k))
+      for (let i = 0; i < N; i++) {
+        // Each a little early or late, so it reads as agreement, not a cut.
+        const own = smooth(0, 1, Math.min(1, snap * 1.4 - (i % 4) * 0.08))
+        const [hx, hy, hz] = home[i]
+        const jx = hx + 0.06 * Math.sin(t * 0.8 + i)
+        const jy = hy + 0.06 * Math.cos(t * 0.7 + i * 1.3)
+        const tx = -1.16 + (2.32 * i) / (N - 1)
+        pos[i * 3] = jx + (tx - jx) * own
+        pos[i * 3 + 1] = jy + (0 - jy) * own
+        pos[i * 3 + 2] = hz + (0 - hz) * own
+      }
+    },
+    sdf: (x, y, z) => {
+      let d = Infinity
+      mat = 0
+      for (let i = 0; i < N; i++) d = Math.min(d, sphere(x - pos[i * 3], y - pos[i * 3 + 1], z - pos[i * 3 + 2], 0.24))
+      if (rod > 0.01) {
+        const r = capsule(x, y, z, -1.4 * rod, 0, 0, 1.45 * rod, 0, 0, 0.085)
+        if (r < d) {
+          d = r
+          mat = 1
+        }
+      }
+      return d
+    },
+  })
+}
+
+/* ── 06 Systematize what works ────────────────────────────────────────────
+   One proven unit, in the accent, and the same unit repeated into a whole:
+   eight blocks that open out and settle back together. */
+const tiles = (): Motif => {
+  let gap = 0.42
+  return scene({
+    still: 1.2,
+    floor: -1.3,
+    bound: 1.8,
+    view: (t, _f, cam) => {
+      cam.yaw = 0.6 + t * 0.3
+      cam.pitch = 0.48
+    },
+    frame: (t) => {
+      const k = (t % 7) / 7
+      const open = smooth(0.08, 0.32, k) * (1 - smooth(0.62, 0.86, k))
+      gap = 0.4 + 0.22 * open
+    },
+    sdf: (x, y, z) => {
+      // Fold into one octant: all eight blocks are the same block.
+      const ax = Math.abs(x)
+      const ay = Math.abs(y)
+      const az = Math.abs(z)
+      const d = box(ax - gap, ay - gap, az - gap, 0.34, 0.34, 0.34, 0.05)
+      // The original: the block nearest the light.
+      mat = x < 0 && y > 0 && z < 0 ? 1 : 0
+      return d
+    },
+  })
+}
+
+export const approachFields = (): Motif[] => [anchor(), parts(), proof(), risk(), align(), tiles()]

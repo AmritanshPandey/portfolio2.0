@@ -79,7 +79,7 @@ export function ApproachSteps() {
               beside them to hold it. */}
           <figure aria-hidden className="mt-10 hidden lg:block">
             <div className="relative aspect-[5/6] max-h-[calc(100svh-var(--nav-h)-26rem)] w-full overflow-hidden rounded-[4px] bg-card ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]">
-              <AsciiField motifs={motifs} index={active} cell={10} className="absolute inset-0" />
+              <AsciiField motifs={motifs} index={active} cell={8} className="absolute inset-0" />
             </div>
             <figcaption className="ledger-label mt-4 flex gap-3">
               <span className="text-accent">{num(active)}</span>
@@ -89,7 +89,7 @@ export function ApproachSteps() {
         </div>
       </div>
 
-      <ol ref={listRef} className="col-span-12 border-t border-border lg:col-span-7 lg:col-start-6">
+      <ol ref={listRef} className="col-span-12 lg:col-span-7 lg:col-start-6">
         {STEPS.map((s, i) => (
           <li
             key={s.q}
@@ -98,6 +98,8 @@ export function ApproachSteps() {
             className={clsx(
               "grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 py-8 md:grid-cols-[3.5rem_minmax(0,1fr)] md:py-12",
               i < STEPS.length - 1 ? "border-b border-border" : "pb-0 md:pb-0",
+              // No rule above the first step: it starts level with the heading.
+              i === 0 && "pt-0 md:pt-0",
             )}
           >
             <span
