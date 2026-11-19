@@ -60,7 +60,7 @@ export interface Motif {
 // Light to dense. The first glyph is the paper itself. After the ramp come
 // the line glyphs a motif can ask for by name (G).
 const RAMP = " .:-=+*#%@"
-const LINES = "/\\|_o"
+const LINES = "/\\|_o<^~"
 const GLYPHS = RAMP + LINES
 export const G = {
   dash: RAMP.indexOf("-"),
@@ -69,6 +69,9 @@ export const G = {
   bar: RAMP.length + 2,
   floor: RAMP.length + 3,
   ring: RAMP.length + 4,
+  lt: RAMP.length + 5,
+  caret: RAMP.length + 6,
+  tilde: RAMP.length + 7,
   dot: RAMP.indexOf("."),
   colon: RAMP.indexOf(":"),
   equals: RAMP.indexOf("="),

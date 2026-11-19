@@ -1278,6 +1278,15 @@
       inset 0 1px 0 var(--glass-edge),
       inset 0 -1px 0 var(--glass-shade);
   }
+  /* The Approach list's pane: laid over the busiest field on the page, so
+     it carries more paper than the hero's plates and only a light blur: the
+     glyphs under it stay legible as shapes, moving, while the paper keeps
+     the type on it at full contrast in both themes. */
+  .glass-plate.approach-glass {
+    background-color: color-mix(in oklab, var(--background) 56%, transparent);
+    -webkit-backdrop-filter: blur(3px) saturate(1.5);
+    backdrop-filter: blur(3px) saturate(1.5);
+  }
   /* The fixed specular sweep across the top-left. */
   .glass-plate::before {
     content: "";
