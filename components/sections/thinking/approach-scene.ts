@@ -90,9 +90,28 @@ function line(sd: Sd, u: number, v: number, out: CellOut, b: number, a: number) 
   return true
 }
 
-/** A filled, lit form: an inked outline and a body shaded from the
- *  upper left, denser toward the lit rim. */
-function solid(sd: Sd, u: number, v: number, out: CellOut, a: number, base = 0.36) {
+// The key light, from the upper left and in front: x, y (down), z (out).
+const LX = -0.48
+const LY = -0.58
+const LZ = 0.66
+
+/** How a rounded form of the given radius is lit at depth s inside its
+ *  edge, facing outward along (GX, GY): a pillow, so tubes read as tubes. */
+function pillow(s: number, r: number) {
+  const k = Math.min(s, r)
+  const h = Math.sqrt(Math.max(1e-6, r * r - (r - k) * (r - k)))
+  const slope = (r - k) / h
+  const nx = GX * slope
+  const ny = GY * slope
+  const nl = 1 / Math.sqrt(nx * nx + ny * ny + 1)
+  const diff = Math.max(0, (nx * LX + ny * LY + LZ) * nl)
+  // A tight highlight where the surface turns toward the light.
+  const spec = Math.pow(Math.max(0, (nx * -0.3 + ny * -0.42 + 0.86) * nl), 18)
+  return { diff, spec }
+}
+
+/** A filled, lit form: an inked outline and a rounded body. */
+function solid(sd: Sd, u: number, v: number, out: CellOut, a: number, base = 0.12, r = 0.06) {
   const d = sd(u, v)
   if (d > Math.max(CW, CH)) return false
   grad(sd, u, v)
@@ -102,9 +121,12 @@ function solid(sd: Sd, u: number, v: number, out: CellOut, a: number, base = 0.3
     return true
   }
   if (d > 0) return false
-  const depth = smooth(0, 0.09, -d)
-  const lit = Math.max(0, -(GX * 0.6 + GY * 0.8))
-  set(out, base + 0.46 * lit * (1 - depth) + 0.14 * depth, a)
+  const { diff, spec } = pillow(-d, r)
+  // A little ordered grain, so a broad face never fills with one glyph.
+  const grain = (hash(Math.floor(u / CW), Math.floor(v / CH)) - 0.5) * 0.09
+  // Light falls off toward the lower right of the form as a whole.
+  const fall = 0.08 * Math.max(-1, Math.min(1, (u * 0.6 + v * 0.8) * 1.5))
+  set(out, Math.max(0.06, Math.min(1, base + 0.62 * diff + 0.3 * spec + grain - fall)), a)
   return true
 }
 
@@ -185,6 +207,25 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
   let type2 = 1
   let bob = 0
   let time = 0
+  // Bounds of the drawing hand and pencil, refreshed each frame.
+  let pu0 = 0
+  let pu1 = 0
+  let pv0 = 0
+  let pv1 = 0
+  // The ground's field, sampled on a grid two cells apart and blended
+  // between, so each cell costs a lookup rather than six noise calls.
+  let gw = 0
+  let gh = 0
+  let gStep = 0.01
+  let gStepY = 0.01
+  let gField = new Float32Array(0)
+  let gDx = new Float32Array(0)
+  let gDy = new Float32Array(0)
+  // Where the ground is quiet (the heading, around the illustration) and
+  // busy (under the glass), on the same grid; rebuilt when the layout moves.
+  let gQuiet = new Float32Array(0)
+  let gBusy = new Float32Array(0)
+  let maskFor = ""
 
   // The pencil runs down and right from its point.
   const DX = 0.8
@@ -334,7 +375,7 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
         if (seg(u, v, ax, ay, bx, by) < tol) return set(out, 1, 0, stroke(ex, ey)), true
       }
     }
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; u > -0.66 && u < 0.1 && v > 0.06 && v < 0.6 && i < 24; i++) {
       const ax = CURVE[i * 2]
       const ay = CURVE[i * 2 + 1]
       const bx = CURVE[i * 2 + 2]
@@ -371,8 +412,8 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
   /** Everything drawn in front of the ground; false where the ground shows. */
   function scene(u: number, v: number, out: CellOut): boolean {
     // The drawing hand and its pencil, frontmost.
-    if (Math.abs(u - px - 0.55) < 0.95 && v > py - 0.2) {
-      if (solid(penFinger, u, v, out, 1, 0.42)) return true
+    if (u > pu0 && u < pu1 && v > pv0 && v < pv1) {
+      if (solid(penFinger, u, v, out, 1, 0.14, 0.055)) return true
       const pd = pencil(u, v)
       if (pd < Math.max(CW, CH)) {
         const k = along(u, v)
@@ -381,11 +422,13 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
         if (pd < 0) {
           if (k < 0.08) return set(out, 0.22, 0, G.dot), true
           if (k > 0.68) return set(out, 0.85, 1, G.hash), true
-          const stripe = Math.abs(across(u, v)) < CH * 0.35
-          return set(out, stripe ? 0.75 : 0.42, 0, stripe ? G.equals : G.dash), true
+          // A hexagonal barrel: lit on the upper face, a crease down the middle.
+          const c = across(u, v) / 0.036
+          if (Math.abs(c) < (CH * 0.35) / 0.036) return set(out, 0.85, 0, G.dash), true
+          return set(out, c < 0 ? 0.62 - 0.2 * c : 0.3 - 0.1 * c, 0), true
         }
       }
-      if (solid(penHand, u, v, out, 1, 0.42)) {
+      if (solid(penHand, u, v, out, 1, 0.12, 0.17)) {
         if (out.g === 0 && penSeams(u, v) < CH * 0.5) {
           grad(penSeams, u, v)
           set(out, 1, 1, stroke(-GY, GX))
@@ -395,19 +438,20 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
     }
 
     // The tile, and the hand placing it.
-    if (tScale > 0.02 && solid(tile, u, v, out, 1, 0.5)) {
+    if (tScale > 0.02 && Math.abs(u - tx) < 0.2 && Math.abs(v - ty) < 0.2 && solid(tile, u, v, out, 1, 0.2, 0.09)) {
       // Its picture: a sun and a hill, cut out of the fill.
       if (out.g === 0) {
         const lu = (u - tx) / tScale
         const lv = (v - ty) / tScale
-        const sun = Math.abs(len(lu + 0.035, lv + 0.035) - 0.03) < CH * 0.45
-        const hill = Math.abs(lv - (0.04 - 0.035 * Math.sin(lu * 28))) < CH * 0.4 && Math.abs(lu) < 0.09
-        if (sun || hill) set(out, 0, 0)
+        const sun = len(lu + 0.04, lv + 0.04) < 0.026
+        const hill = Math.abs(lv - (0.045 - 0.03 * Math.sin(lu * 26))) < CH * 0.5 && Math.abs(lu) < 0.085
+        if (sun) set(out, 1, 1, G.ring)
+        else if (hill) set(out, 1, 1, G.tilde)
       }
       return true
     }
-    if (u < hx + 0.05 && u > hx - 2 && v > hy - 0.12 && v < hy + 0.95) {
-      if (solid(hand, u, v, out, 0, 0.3)) {
+    if (u < hx + 0.03 && u > hx - 1.9 && v > hy - 0.1 && v < hy + 0.76) {
+      if (solid(hand, u, v, out, 0, 0.08, 0.16)) {
         if (out.g === 0 && seams(u, v) < CH * 0.5) {
           grad(seams, u, v)
           set(out, 0.95, 0, stroke(-GY, GX))
@@ -417,6 +461,7 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
     }
 
     // The phones. Inside a screen is paper, so the ground stops there.
+    if (u < -0.52 || u > 0.74 || v < -0.97 || v > 0.95) return loose(u, v, out)
     if (line(FRONT, u, v, out, 1, 0)) return true
     if (FRONT(u, v) < 0) {
       if (!frontScreen(u, v, out)) set(out, 0, 0)
@@ -428,8 +473,21 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
       return true
     }
 
-    // Loose shapes beside them, hatched.
+    // A soft shadow under each phone, down and to the right.
     {
+      const sh = Math.min(FRONT(u - 0.05, v - 0.06), BACK(u - 0.05, v - 0.06))
+      if (sh < 0.03) {
+        const k = smooth(0.03, -0.05, sh)
+        if (fract((u * 31 + v * 17) * 3) < 0.55) return set(out, 0.1 + 0.12 * k, 0), true
+      }
+    }
+
+    return loose(u, v, out)
+  }
+
+  /** Loose shapes beside the phones, hatched. */
+  function loose(u: number, v: number, out: CellOut): boolean {
+    if (u > 0.62 && u < 1.26 && v > -0.48 && v < 0.12) {
       const d = arch(u, v)
       if (near(d) || d < 0) {
         if (line(arch, u, v, out, 1, 0)) return true
@@ -440,7 +498,7 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
         }
       }
     }
-    {
+    if (u > -1.08 && u < -0.42 && v > 0.36 && v < 0.65) {
       const d = pill(u, v)
       if (near(d) || d < 0) {
         if (line(pill, u, v, out, 1, 0)) return true
@@ -457,32 +515,26 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
    *  spark in the accent. Busy on purpose; it is meant to be read through
    *  glass, not looked at. */
   function ground(x: number, y: number, t: number, out: CellOut, f: FieldState) {
-    let quiet = 0
-    for (const r of layout.quiet) {
-      const dx = Math.max(r.x0 - x, 0, x - r.x1) * f.aspect
-      const dy = Math.max(r.y0 - y, 0, y - r.y1)
-      quiet = Math.max(quiet, 1 - smooth(0, 0.05, len(dx, dy)))
-    }
-    // Calmer around the illustration, so it reads first; busiest out at the
-    // edges and under the glass.
-    const iu = ((x - layout.x) * f.aspect) / layout.unit + 0.1
-    const iv = (y - layout.y) / layout.unit
-    quiet = Math.max(quiet, 0.6 * Math.exp(-(iu * iu * 0.9 + iv * iv * 0.7)))
+    const sx = Math.min(gw - 1.001, x / gStep)
+    const sy = Math.min(gh - 1.001, y / gStepY)
+    const i0 = Math.floor(sx)
+    const j0 = Math.floor(sy)
+    const ax = sx - i0
+    const ay = sy - j0
+    const k = j0 * gw + i0
+    const w00 = (1 - ax) * (1 - ay)
+    const w10 = ax * (1 - ay)
+    const w01 = (1 - ax) * ay
+    const w11 = ax * ay
+    const quiet = gQuiet[k] * w00 + gQuiet[k + 1] * w10 + gQuiet[k + gw] * w01 + gQuiet[k + gw + 1] * w11
     if (quiet > 0.98) return set(out, 0, 0)
-    let busy = 0
-    for (const r of layout.busy) {
-      const dx = Math.max(r.x0 - x, 0, x - r.x1) * f.aspect
-      const dy = Math.max(r.y0 - y, 0, y - r.y1)
-      busy = Math.max(busy, 1 - smooth(0, 0.08, len(dx, dy)))
-    }
-    const X = x * f.aspect
-    const field = noise(X * 3.2 + t * 0.09, y * 3.2 - t * 0.07) * 0.7 + noise(X * 7 - t * 0.2, y * 7 + t * 0.15) * 0.3
+    const busy = gBusy[k] * w00 + gBusy[k + 1] * w10 + gBusy[k + gw] * w01 + gBusy[k + gw + 1] * w11
+    const field = gField[k] * w00 + gField[k + 1] * w10 + gField[k + gw] * w01 + gField[k + gw + 1] * w11
+    const fx = gDx[k] * w00 + gDx[k + 1] * w10 + gDx[k + gw] * w01 + gDx[k + gw + 1] * w11
+    const fy = gDy[k] * w00 + gDy[k + 1] * w10 + gDy[k + gw] * w01 + gDy[k + gw + 1] * w11
     // Contours of the field: thin moving lines, drawn along themselves.
     const lv = field * 9
-    const e = 0.004
-    const fx = noise((X + e) * 3.2 + t * 0.09, y * 3.2 - t * 0.07) - noise((X - e) * 3.2 + t * 0.09, y * 3.2 - t * 0.07)
-    const fy = noise(X * 3.2 + t * 0.09, (y + e) * 3.2 - t * 0.07) - noise(X * 3.2 + t * 0.09, (y - e) * 3.2 - t * 0.07)
-    const slope = len(fx, fy) / (2 * e) || 1
+    const slope = len(fx, fy) || 1
     const gap = Math.abs(fract(lv) - 0.5) / (9 * 0.7 * slope)
     let b = 0
     let g = 0
@@ -497,7 +549,7 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
       const ri = Math.floor(y / f.cy)
       const flick = hash(ci, ri + Math.floor(t * (3 + 5 * busy) + hash(ci, ri) * 9))
       const level = smooth(0.3, 0.8, field)
-      b = flick < 0.35 + level * 0.4 + busy * 0.3 ? 0.07 + (0.2 + 0.5 * busy) * Math.max(level, busy * 0.85) * flick + 0.12 * busy : 0
+      b = flick < 0.22 + level * 0.36 + busy * 0.45 ? 0.07 + (0.2 + 0.5 * busy) * Math.max(level, busy * 0.85) * flick + 0.12 * busy : 0
       if (flick > 0.993 - busy * 0.012) {
         b = 0.7
         a = 1
@@ -540,6 +592,71 @@ export function approachScene(): { motif: Motif; place: (next: SceneLayout) => v
       const lift = smooth(0.58, 0.66, k) * (1 - smooth(0.96, 1, k))
       px = ox + DX * 0.12 * lift + 0.01 * Math.sin(t * 7)
       py = oy + DY * 0.12 * lift + 0.01 * Math.cos(t * 6)
+
+      // The drawing hand's bounds: pencil, palm and the arm off to the right.
+      const cx = px + DX * 0.54 + NX * 0.14
+      const cy = py + DY * 0.54 + NY * 0.14
+      const ex = cx + DX * 0.95 + NX * 0.15
+      const ey = cy + DY * 0.95 + NY * 0.15
+      pu0 = Math.min(px, cx) - 0.22
+      pu1 = Math.max(px + DX * 0.78, ex) + 0.2
+      pv0 = Math.min(py, cy) - 0.22
+      pv1 = Math.max(py + DY * 0.78, ey) + 0.2
+
+      // The ground's grid.
+      gStep = f.cx * 2
+      gStepY = f.cy * 2
+      const nw = Math.ceil(1 / gStep) + 2
+      const nh = Math.ceil(1 / gStepY) + 2
+      if (nw !== gw || nh !== gh) {
+        gw = nw
+        gh = nh
+        gField = new Float32Array(nw * nh)
+        gDx = new Float32Array(nw * nh)
+        gDy = new Float32Array(nw * nh)
+        gQuiet = new Float32Array(nw * nh)
+        gBusy = new Float32Array(nw * nh)
+        maskFor = ""
+      }
+      const key = `${layout.x},${layout.y},${layout.unit},${f.aspect},${JSON.stringify(layout.quiet)},${JSON.stringify(layout.busy)}`
+      if (key !== maskFor) {
+        maskFor = key
+        for (let j = 0; j < gh; j++) {
+          const y = j * gStepY
+          for (let i = 0; i < gw; i++) {
+            const x = i * gStep
+            let quiet = 0
+            for (const r of layout.quiet) {
+              const dx = Math.max(r.x0 - x, 0, x - r.x1) * f.aspect
+              const dy = Math.max(r.y0 - y, 0, y - r.y1)
+              quiet = Math.max(quiet, 1 - smooth(0, 0.05, len(dx, dy)))
+            }
+            // Calmer around the illustration, so it reads first.
+            const iu = ((x - layout.x) * f.aspect) / layout.unit + 0.1
+            const iv = (y - layout.y) / layout.unit
+            quiet = Math.max(quiet, 0.6 * Math.exp(-(iu * iu * 0.9 + iv * iv * 0.7)))
+            let busy = 0
+            for (const r of layout.busy) {
+              const dx = Math.max(r.x0 - x, 0, x - r.x1) * f.aspect
+              const dy = Math.max(r.y0 - y, 0, y - r.y1)
+              busy = Math.max(busy, 1 - smooth(0, 0.08, len(dx, dy)))
+            }
+            gQuiet[j * gw + i] = quiet
+            gBusy[j * gw + i] = busy
+          }
+        }
+      }
+      const e = 0.004
+      for (let j = 0; j < gh; j++) {
+        const y = j * gStepY
+        for (let i = 0; i < gw; i++) {
+          const X = i * gStep * f.aspect
+          const n = j * gw + i
+          gField[n] = noise(X * 3.2 + t * 0.09, y * 3.2 - t * 0.07) * 0.7 + noise(X * 7 - t * 0.2, y * 7 + t * 0.15) * 0.3
+          gDx[n] = (noise((X + e) * 3.2 + t * 0.09, y * 3.2 - t * 0.07) - noise((X - e) * 3.2 + t * 0.09, y * 3.2 - t * 0.07)) / (2 * e)
+          gDy[n] = (noise(X * 3.2 + t * 0.09, (y + e) * 3.2 - t * 0.07) - noise(X * 3.2 + t * 0.09, (y - e) * 3.2 - t * 0.07)) / (2 * e)
+        }
+      }
 
       type1 = 0.25 + 0.75 * smooth(0.05, 0.3, fract(t / 6))
       type2 = smooth(0.2, 0.42, fract(t / 6))

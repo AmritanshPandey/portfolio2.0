@@ -59,29 +59,31 @@ export interface Motif {
 
 // Light to dense. The first glyph is the paper itself. After the ramp come
 // the line glyphs a motif can ask for by name (G).
+// Light to dense: the default shading ramp. The first glyph is the paper
+// itself. A field can pass its own (`ramp`) for finer shading.
 const RAMP = " .:-=+*#%@"
-const LINES = "/\\|_o<^~"
-const GLYPHS = RAMP + LINES
+// Glyphs a motif asks for by name (G), whatever the ramp. Index 0 is unused,
+// so 0 can mean "pick by brightness".
+const NAMED = " .:-=+*#@/\\|_o<^~"
 export const G = {
-  dash: RAMP.indexOf("-"),
-  rise: RAMP.length,
-  fall: RAMP.length + 1,
-  bar: RAMP.length + 2,
-  floor: RAMP.length + 3,
-  ring: RAMP.length + 4,
-  lt: RAMP.length + 5,
-  caret: RAMP.length + 6,
-  tilde: RAMP.length + 7,
-  dot: RAMP.indexOf("."),
-  colon: RAMP.indexOf(":"),
-  equals: RAMP.indexOf("="),
-  plus: RAMP.indexOf("+"),
-  star: RAMP.indexOf("*"),
-  hash: RAMP.indexOf("#"),
-  at: RAMP.indexOf("@"),
+  dot: NAMED.indexOf("."),
+  colon: NAMED.indexOf(":"),
+  dash: NAMED.indexOf("-"),
+  equals: NAMED.indexOf("="),
+  plus: NAMED.indexOf("+"),
+  star: NAMED.indexOf("*"),
+  hash: NAMED.indexOf("#"),
+  at: NAMED.indexOf("@"),
+  rise: NAMED.indexOf("/"),
+  fall: NAMED.indexOf("\\"),
+  bar: NAMED.indexOf("|"),
+  floor: NAMED.indexOf("_"),
+  ring: NAMED.indexOf("o"),
+  lt: NAMED.indexOf("<"),
+  caret: NAMED.indexOf("^"),
+  tilde: NAMED.indexOf("~"),
 } as const
 const LEVELS = 6
-const FPS = 30
 const REVEAL_MS = 1500
 const BLEND_MS = 760
 
@@ -93,13 +95,19 @@ export function AsciiField({
   motifs,
   index = 0,
   cell = 9,
+  ramp = RAMP,
+  fps = 30,
   energyFrom,
   className,
 }: {
   motifs: Motif[]
   index?: number
-  /** Cell width in CSS pixels; height is 1.55×. */
+  /** Cell width in CSS pixels; height is 1.6×. */
   cell?: number
+  /** Shading ramp, light to dense, starting with a space. */
+  ramp?: string
+  /** Frame rate while live. */
+  fps?: number
   energyFrom?: string
   className?: string
 }) {
@@ -125,6 +133,7 @@ export function AsciiField({
     if (!ctx) return
     const live = mode === "live" && !matchMedia("(prefers-reduced-motion: reduce)").matches
 
+    const glyphs = ramp + NAMED
     const cw = cell
     const ch = Math.round(cell * 1.6)
     const family = getComputedStyle(document.body).getPropertyValue("--ff-mono").trim()
@@ -161,7 +170,7 @@ export function AsciiField({
       const base = toRGB(style.getPropertyValue("--text-muted").trim(), [92, 90, 85])
       const hot = toRGB(style.getPropertyValue("--accent").trim(), [43, 53, 232])
       const sheet = document.createElement("canvas")
-      sheet.width = Math.ceil(GLYPHS.length * cw * dpr)
+      sheet.width = Math.ceil(glyphs.length * cw * dpr)
       sheet.height = Math.ceil(LEVELS * ch * dpr)
       const a = sheet.getContext("2d")
       if (!a) return
@@ -172,7 +181,7 @@ export function AsciiField({
       for (let l = 0; l < LEVELS; l++) {
         const k = l / (LEVELS - 1)
         a.fillStyle = `rgb(${base.map((c, i) => Math.round(c + (hot[i] - c) * k)).join(" ")})`
-        for (let g = 1; g < GLYPHS.length; g++) a.fillText(GLYPHS[g], g * cw + cw / 2, l * ch + ch / 2)
+        for (let g = 1; g < glyphs.length; g++) if (glyphs[g] !== " ") a.fillText(glyphs[g], g * cw + cw / 2, l * ch + ch / 2)
       }
       atlas = sheet
     }
@@ -236,7 +245,8 @@ export function AsciiField({
       const sw = cw * dpr
       const sh = ch * dpr
       const { aspect, px, py, pull } = state
-      const top = RAMP.length - 1
+      const top = ramp.length - 1
+      const named = ramp.length
 
       for (let r = 0; r < rows; r++) {
         const y = (r + 0.5) / rows
@@ -292,7 +302,7 @@ export function AsciiField({
           } else {
             if (b < 0.035) continue
             if (b > 1) b = 1
-            g = pick || Math.max(1, Math.round(b * top))
+            g = pick ? named + pick : Math.max(1, Math.round(b * top))
             level = Math.round(Math.min(1, a) * (LEVELS - 1))
             alpha = 0.14 + 0.86 * Math.pow(b, 0.75)
           }
@@ -322,7 +332,7 @@ export function AsciiField({
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick)
       const dt = Math.min(0.1, (now - last) / 1000)
-      if (now - drawn < 1000 / FPS - 2) return
+      if (now - drawn < 1000 / fps - 2) return
       last = now
       drawn = now
       t += dt
@@ -434,7 +444,7 @@ export function AsciiField({
       host?.removeEventListener("focusin", hot)
       host?.removeEventListener("focusout", cold)
     }
-  }, [mode, cell, energyFrom])
+  }, [mode, cell, ramp, fps, energyFrom])
 
   return <canvas ref={canvasRef} aria-hidden className={clsx("block h-full w-full", className)} />
 }
