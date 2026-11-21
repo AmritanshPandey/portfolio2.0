@@ -31,6 +31,10 @@ const ART_W = 2.3
 const ART_H = 2.05
 const ART_SHIFT = 0.3
 
+// A fine shading ramp, light to dense, so the forms model smoothly at a
+// small cell size.
+const RAMP = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+
 export function ApproachSteps() {
   const fieldRef = useRef<HTMLDivElement>(null)
   const slotRef = useRef<HTMLDivElement>(null)
@@ -85,8 +89,14 @@ export function ApproachSteps() {
   return (
     <div className="relative">
       {/* The stage: full bleed, behind everything in the section. */}
-      <div ref={fieldRef} aria-hidden className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2">
-        <AsciiField motifs={motifs} cell={8} className="absolute inset-0" />
+      <div
+        ref={fieldRef}
+        aria-hidden
+        // Faded out at the top and foot, so the field rises out of the page
+        // and sinks back into it rather than starting at a hard edge.
+        className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_84%,transparent)]"
+      >
+        <AsciiField motifs={motifs} cell={6} ramp={RAMP} fps={20} className="absolute inset-0" />
       </div>
 
       <div className="pointer-events-none relative ledger-grid gap-y-8 py-10 md:py-14 lg:grid-rows-[auto_1fr] lg:py-16">
