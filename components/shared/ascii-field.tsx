@@ -38,6 +38,11 @@ export interface FieldState {
    *  motif can draw lines exactly one glyph thick. */
   cx: number
   cy: number
+  /** True on the light (paper) theme, where glyphs are dark ink; false on
+   *  the dark theme, where they are light. */
+  paper: boolean
+  /** True while animating; false for a held still frame. */
+  live: boolean
 }
 
 /** What a motif writes for one cell: brightness and accent, both 0..1. */
@@ -148,7 +153,7 @@ export function AsciiField({
     let dpr = 1
     let sweep = new Float32Array(0)
     let seed = new Float32Array(0)
-    const state: FieldState = { aspect: 1, px: 0.5, py: 0.5, pull: 0, energy: 0, cx: 0.01, cy: 0.01 }
+    const state: FieldState = { aspect: 1, px: 0.5, py: 0.5, pull: 0, energy: 0, cx: 0.01, cy: 0.01, paper: true, live }
     const aim = { px: 0.5, py: 0.5, pull: 0, energy: 0 }
     const out: CellOut = { b: 0, a: 0 }
     const from: CellOut = { b: 0, a: 0 }
@@ -166,6 +171,7 @@ export function AsciiField({
     }
     let atlas: HTMLCanvasElement | null = null
     const buildAtlas = () => {
+      state.paper = !document.documentElement.classList.contains("dark")
       const style = getComputedStyle(canvas)
       const base = toRGB(style.getPropertyValue("--text-muted").trim(), [92, 90, 85])
       const hot = toRGB(style.getPropertyValue("--accent").trim(), [43, 53, 232])
