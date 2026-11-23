@@ -1,3 +1,15 @@
+/** A project's own picture for the home gallery: a still, or a short muted
+ *  loop with a poster. Lives in public/work/<slug>/. */
+export interface WorkMedia {
+  kind: "image" | "video"
+  src: string
+  /** The still shown before a loop plays, and under reduced motion. */
+  poster?: string
+  width: number
+  height: number
+  alt: string
+}
+
 export interface WorkItem {
   /** "Domain / Client", e.g. "Demo Systems / Mastercard". */
   category: string
@@ -10,6 +22,9 @@ export interface WorkItem {
    *  page ("Design lead at Mastercard"). */
   byline?: string
   image: string
+  /** Real media for the home gallery; without it the frame shows the
+   *  study's drawn specimen. */
+  media?: WorkMedia
   href: string
   tags?: string[]
   featured?: boolean

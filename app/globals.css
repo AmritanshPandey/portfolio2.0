@@ -1022,10 +1022,6 @@
   .work-index .work-row:focus-visible > * {
     opacity: 1;
   }
-  /* With the working open the rows are being read, not scanned. */
-  [data-working] .work-index:hover .work-row > * {
-    opacity: 1;
-  }
 }
 
 /* Dimming lives on the row's children so it never inherits the settle delay. */
@@ -1036,6 +1032,34 @@
 .work-row:active > * {
   opacity: 0.72;
   transition-duration: var(--dur-1);
+}
+
+/* ─────────────────────────
+   WORK GALLERY
+   Selected work as a staggered spread: each frame placed on the 12-column
+   grid by its slot (work-gallery.tsx), dropped below its row's top by
+   --shift so the spread never lines up flat. Phones stack the frames.
+───────────────────────── */
+
+@media (min-width: 768px) {
+  .work-gallery .work-frame {
+    grid-column: var(--col-start) / var(--col-end);
+    grid-row: var(--row);
+    margin-top: calc(var(--shift) * 1.4vw);
+  }
+}
+
+/* An elastic sheet (elastic-sheet.ts) has the frame's picture: the DOM media
+   steps back so only the bending copy shows. The canvas overhangs the frame
+   so the sheet can bend past it. */
+.elastic-frame[data-gl] [data-sheet-media] {
+  opacity: 0;
+}
+.elastic-canvas {
+  z-index: 2;
+}
+.elastic-frame:not([data-gl]) .elastic-canvas {
+  visibility: hidden;
 }
 
 /* ─────────────────────────
@@ -1406,84 +1430,6 @@
   .insight-more { transition: none; }
 }
 
-/* "Show the working" (working-scope.tsx): a note opens under each work row.
-   Its rule draws across first, then the entries land on it: the settle. */
-.working-note {
-  display: grid;
-  grid-template-rows: 0fr;
-  visibility: hidden;
-  transition:
-    grid-template-rows 420ms var(--ease-out),
-    visibility 0s linear 420ms;
-}
-.working-note > * {
-  min-height: 0;
-  overflow: hidden;
-}
-.working-note-rule {
-  height: 1px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 420ms var(--ease-out);
-}
-.working-note-entries {
-  opacity: 0;
-  translate: 0 6px;
-  transition:
-    opacity 240ms var(--ease-out),
-    translate 420ms var(--ease-out);
-}
-[data-working] .working-note {
-  grid-template-rows: 1fr;
-  visibility: visible;
-  transition-delay: 0s;
-}
-[data-working] .working-note-rule {
-  transform: scaleX(1);
-}
-[data-working] .working-note-entries {
-  opacity: 1;
-  translate: 0 0;
-  transition-delay: 120ms;
-}
-.working-switch-track {
-  position: relative;
-  flex: none;
-  width: 34px;
-  height: 18px;
-  border: 1px solid var(--foreground);
-  border-radius: 2px;
-  transition: border-color var(--dur-2) var(--ease-out);
-}
-.working-switch-track::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 10px;
-  height: 10px;
-  background: var(--foreground);
-  transition:
-    translate var(--dur-3) var(--ease-out),
-    background-color var(--dur-2) var(--ease-out);
-}
-.working-switch[aria-checked="true"] .working-switch-track {
-  border-color: var(--accent);
-}
-.working-switch[aria-checked="true"] .working-switch-track::after {
-  translate: 16px 0;
-  background: var(--accent);
-}
-@media (prefers-reduced-motion: reduce) {
-  .working-note,
-  .working-note-rule,
-  .working-note-entries,
-  .working-switch-track,
-  .working-switch-track::after {
-    transition: none;
-  }
-}
 
 /* Hero dot field. Desktop pointers get the live pixel wake (<WakeField>);
    phones, touch and reduced motion get this static grid and no shader code.
