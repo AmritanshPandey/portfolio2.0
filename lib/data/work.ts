@@ -5,6 +5,8 @@ import type { WorkItem } from "@/lib/types/content"
 // Role, problem (description) and outcome (metric) are taken from each case
 // study's own summary; don't add a figure the case study doesn't state.
 // `working` is taken from the key decision in the study, in its own words.
+// `media` (optional): the study's still or loop for the home gallery, in
+// public/work/<slug>/ (see WorkMedia). Without it the frame shows the specimen.
 
 const SEQUENCE: string[] = [
   "white-label-rfp",
