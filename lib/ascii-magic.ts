@@ -92,9 +92,11 @@ export class PieceGrid {
     const r = Math.floor(v)
     if (r < 0 || r >= this.rows) return 0
     const o = r * this.cols
-    const near = u - c < 0.5 ? -1 : 1
-    for (const k of [c, c + near, c - near]) if (k >= 0 && k < this.cols && this.g[o + k]) return this.g[o + k]
-    return 0
+    if (c >= 0 && c < this.cols && this.g[o + c]) return this.g[o + c]
+    const near = u - c < 0.5 ? c - 1 : c + 1
+    if (near >= 0 && near < this.cols && this.g[o + near]) return this.g[o + near]
+    const far = 2 * c - near
+    return far >= 0 && far < this.cols ? this.g[o + far] : 0
   }
 
   /** Bilinear sample at (u, v) in piece cells (0..cols, 0..rows, cell

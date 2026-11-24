@@ -20,8 +20,10 @@ import { useAmbientMode } from "@/hooks/use-ambient-still"
  *
  * Runs only on desktop pointers (useAmbientMode), at 30fps, only while on
  * screen and the tab is visible. Elsewhere, and under reduced motion, it
- * draws one resolved frame. Glyphs are stamped from an atlas drawn once per
- * theme, so a frame is a run of drawImage calls. Decorative: aria-hidden.
+ * draws one resolved frame, once it is near the screen. Glyphs are stamped
+ * from an atlas drawn once per theme. Each cell remembers what it shows, so a
+ * frame redraws only the cells that changed, in the rows that are on screen.
+ * Decorative: aria-hidden.
  */
 
 export interface FieldState {
@@ -60,6 +62,9 @@ export interface Motif {
   cell: (x: number, y: number, t: number, out: CellOut, f: FieldState) => void
   /** The moment held for the still frame, in seconds. */
   still?: number
+  /** For a motif whose picture arrives later (from a worker): calls `redraw`
+   *  when it has. Returns an unsubscribe. */
+  ready?: (redraw: () => void) => () => void
 }
 
 // Light to dense. The first glyph is the paper itself. After the ramp come
@@ -89,6 +94,12 @@ export const G = {
   tilde: NAMED.indexOf("~"),
 } as const
 const LEVELS = 6
+// Opacity comes in steps, so a cell that barely changes isn't redrawn.
+const FADES = 24
+const FADE = Float32Array.from({ length: FADES + 1 }, (_, i) => 0.14 + 0.86 * Math.pow(i / FADES, 0.75))
+const SCRAMBLE = Math.round(FADES * Math.pow((0.5 - 0.14) / 0.86, 1 / 0.75))
+// Rows this far off screen (CSS px) are still drawn, so scrolling meets them ready.
+const OVERSCAN = 240
 const REVEAL_MS = 1500
 const BLEND_MS = 760
 
@@ -139,13 +150,15 @@ export function AsciiField({
     const live = mode === "live" && !matchMedia("(prefers-reduced-motion: reduce)").matches
 
     const glyphs = ramp + NAMED
-    const cw = cell
-    const ch = Math.round(cell * 1.6)
+    // A cell covers whole device pixels, so one can be redrawn alone.
+    let sw = 1
+    let sh = 1
     const family = getComputedStyle(document.body).getPropertyValue("--ff-mono").trim()
     const font = `400 ${Math.round(cell * 1.3)}px ${family ? `${family}, ` : ""}ui-monospace, Menlo, monospace`
 
     let width = 0
     let height = 0
+    let pageTop = 0
     let cols = 0
     let rows = 0
     let ox = 0
@@ -153,6 +166,9 @@ export function AsciiField({
     let dpr = 1
     let sweep = new Float32Array(0)
     let seed = new Float32Array(0)
+    /** What each cell shows now (glyph, accent level and fade), 0 for paper. */
+    let shown = new Int32Array(0)
+    let wipe = false
     const state: FieldState = { aspect: 1, px: 0.5, py: 0.5, pull: 0, energy: 0, cx: 0.01, cy: 0.01, paper: true, live }
     const aim = { px: 0.5, py: 0.5, pull: 0, energy: 0 }
     const out: CellOut = { b: 0, a: 0 }
@@ -176,12 +192,14 @@ export function AsciiField({
       const base = toRGB(style.getPropertyValue("--text-muted").trim(), [92, 90, 85])
       const hot = toRGB(style.getPropertyValue("--accent").trim(), [43, 53, 232])
       const sheet = document.createElement("canvas")
-      sheet.width = Math.ceil(glyphs.length * cw * dpr)
-      sheet.height = Math.ceil(LEVELS * ch * dpr)
+      sheet.width = glyphs.length * sw
+      sheet.height = LEVELS * sh
       const a = sheet.getContext("2d")
       if (!a) return
       a.scale(dpr, dpr)
       a.font = font
+      const cw = sw / dpr
+      const ch = sh / dpr
       a.textAlign = "center"
       a.textBaseline = "middle"
       for (let l = 0; l < LEVELS; l++) {
@@ -190,6 +208,7 @@ export function AsciiField({
         for (let g = 1; g < glyphs.length; g++) if (glyphs[g] !== " ") a.fillText(glyphs[g], g * cw + cw / 2, l * ch + ch / 2)
       }
       atlas = sheet
+      wipe = true
     }
 
     // ── Size ────────────────────────────────────────────────────────────
@@ -201,10 +220,14 @@ export function AsciiField({
       dpr = Math.min(devicePixelRatio || 1, 2)
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(height * dpr)
-      cols = Math.floor(width / cw)
-      rows = Math.floor(height / ch)
-      ox = (width - cols * cw) / 2
-      oy = (height - rows * ch) / 2
+      sw = Math.max(1, Math.round(cell * dpr))
+      sh = Math.max(1, Math.round(Math.round(cell * 1.6) * dpr))
+      cols = Math.floor(canvas.width / sw)
+      rows = Math.floor(canvas.height / sh)
+      ox = Math.floor((canvas.width - cols * sw) / 2)
+      oy = Math.floor((canvas.height - rows * sh) / 2)
+      pageTop = box.top + scrollY
+      shown = new Int32Array(cols * rows)
       state.aspect = width / height
       state.cx = 1 / Math.max(1, cols)
       state.cy = 1 / Math.max(1, rows)
@@ -227,6 +250,18 @@ export function AsciiField({
     let blendFrom = -1
     let blendAt = 0
 
+    /** Show a glyph (g 0: paper) in one cell, over whatever was there. */
+    const put = (i: number, c: number, r: number, key: number, g: number, level: number, fade: number) => {
+      const x = ox + c * sw
+      const y = oy + r * sh
+      if (shown[i]) ctx.clearRect(x, y, sw, sh)
+      if (g) {
+        ctx.globalAlpha = FADE[fade]
+        ctx.drawImage(atlas!, g * sw, level * sh, sw, sh, x, y, sw, sh)
+      }
+      shown[i] = key
+    }
+
     const draw = (now: number) => {
       if (!atlas || !cols) return
       const list = motifsRef.current
@@ -245,22 +280,34 @@ export function AsciiField({
       motif.frame?.(t, state)
       prev?.frame?.(t, state)
 
-      ctx.setTransform(1, 0, 0, 1, 0, 0)
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      const sw = cw * dpr
-      const sh = ch * dpr
+      if (wipe) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        shown.fill(0)
+        wipe = false
+      }
+      const count = glyphs.length
       const { aspect, px, py, pull } = state
       const top = ramp.length - 1
       const named = ramp.length
 
-      for (let r = 0; r < rows; r++) {
+      let r0 = 0
+      let r1 = rows
+      if (live) {
+        const top = scrollY - pageTop
+        r0 = Math.max(0, Math.floor(((top - OVERSCAN) * dpr - oy) / sh))
+        r1 = Math.min(rows, Math.ceil(((top + innerHeight + OVERSCAN) * dpr - oy) / sh))
+      }
+
+      for (let r = r0; r < r1; r++) {
         const y = (r + 0.5) / rows
         for (let c = 0; c < cols; c++) {
           const i = r * cols + c
           const x = (c + 0.5) / cols
           const gate = reveal - sweep[i]
-          if (gate < 0) continue
+          if (gate < 0) {
+            if (shown[i]) put(i, c, r, 0, 0, 0, 0)
+            continue
+          }
 
           // The pointer's lens: pull samples toward it, so the picture under
           // it swells, and warm what it touches.
@@ -296,24 +343,24 @@ export function AsciiField({
             a = Math.max(a, lens * 0.9)
           }
 
-          let g: number
-          let level: number
-          let alpha: number
+          let g = 0
+          let level = 0
+          let fade = 0
           if (gate < 0.04 || seed[i] < noise * 0.22) {
             // Still resolving: a light scrambled glyph, in the accent.
-            if (b < 0.035 && seed[i] > 0.5) continue
-            g = 1 + Math.floor(((seed[i] * 97 + t * 9) % 1) * 5)
-            level = LEVELS - 2
-            alpha = 0.5
-          } else {
-            if (b < 0.035) continue
+            if (b >= 0.035 || seed[i] <= 0.5) {
+              g = 1 + Math.floor(((seed[i] * 97 + t * 9) % 1) * 5)
+              level = LEVELS - 2
+              fade = SCRAMBLE
+            }
+          } else if (b >= 0.035) {
             if (b > 1) b = 1
             g = pick ? named + pick : Math.max(1, Math.round(b * top))
             level = Math.round(Math.min(1, a) * (LEVELS - 1))
-            alpha = 0.14 + 0.86 * Math.pow(b, 0.75)
+            fade = Math.round(b * FADES)
           }
-          ctx.globalAlpha = alpha
-          ctx.drawImage(atlas, g * sw, level * sh, sw, sh, ox + c * cw, oy + r * ch, cw, ch)
+          const key = g ? 1 + g + count * (level + LEVELS * fade) : 0
+          if (key !== shown[i]) put(i, c, r, key, g, level, fade)
         }
       }
       ctx.globalAlpha = 1
@@ -326,7 +373,11 @@ export function AsciiField({
     let onScreen = false
     let revealing = false
 
+    // A still is drawn when the field first comes near the screen, and again
+    // whenever the theme, the size or the motif's picture changes.
+    let near = false
     const still = () => {
+      if (!near) return
       const motif = motifsRef.current[indexRef.current]
       shownIndex = indexRef.current
       blendFrom = -1
@@ -378,17 +429,33 @@ export function AsciiField({
 
     const io = new IntersectionObserver(([entry]) => {
       onScreen = entry.isIntersecting
+      pageTop = entry.boundingClientRect.top + scrollY
       if (onScreen && live && reveal === 0) revealing = true
       decide()
     })
+    const nearby = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        nearby.disconnect()
+        near = true
+        still()
+      },
+      { rootMargin: "400px 0px" },
+    )
     const ro = new ResizeObserver(() => {
       if (fit() && !live) still()
+    })
+    // The page above can grow (images, fonts) and move the field down.
+    const page = new ResizeObserver(() => {
+      pageTop = canvas.getBoundingClientRect().top + scrollY
     })
     void ready.then(() => {
       if (disposed) return
       fit()
-      if (!live) still()
-      io.observe(canvas)
+      if (live) {
+        io.observe(canvas)
+        page.observe(document.body)
+      } else nearby.observe(canvas)
       ro.observe(canvas)
     })
 
@@ -396,6 +463,7 @@ export function AsciiField({
       buildAtlas()
       if (!live) still()
     })
+    const unready = live ? [] : motifsRef.current.map((m) => m.ready?.(still))
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
     document.addEventListener("visibilitychange", decide)
 
@@ -438,7 +506,10 @@ export function AsciiField({
       disposed = true
       run(false)
       io.disconnect()
+      nearby.disconnect()
+      page.disconnect()
       ro.disconnect()
+      unready.forEach((off) => off?.())
       theme.disconnect()
       onIndex.current = () => {}
       document.removeEventListener("visibilitychange", decide)

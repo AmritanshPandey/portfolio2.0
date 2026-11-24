@@ -19,9 +19,9 @@ import { FLOW_SIZE, SOLID_SIZE, flowSource, solidSource, type PiecesAsk, type Pi
  * sparse, shadowed faces dense, like pencil); on the dark theme the glyphs
  * are light, so lit faces are the dense ones.
  *
- * The pieces run in a worker (approach.worker.ts) while the field is live;
- * the field samples the last frame it sent back. Stills, and browsers without
- * module workers, run them here.
+ * The pieces run in a worker (approach.worker.ts); the field samples the last
+ * frame it sent back, and a still is redrawn when its frame arrives. Browsers
+ * without module workers run them here.
  */
 
 export interface Rect {
@@ -71,12 +71,21 @@ class Pieces {
   private worker: Worker | null | undefined
   private waiting = false
   private next: PiecesAsk | null = null
+  private asked: PiecesAsk | null = null
+  /** Called when a frame arrives from the worker. */
+  onFrame: (() => void) | null = null
   private local: { solid: PieceSource; flow: PieceSource } | null = null
 
-  /** Ask for both pieces at these times. Live asks go to the worker and land
-   *  a frame or so later; `now` draws them here, before returning. */
-  ask(at: PiecesAsk, now: boolean) {
-    if (now || !this.start()) return this.draw(at)
+  /** Ask for both pieces at these times. They land a frame or so later, from
+   *  the worker. Asking again for the same moment is free. */
+  ask(at: PiecesAsk) {
+    if (this.asked && this.asked.solid === at.solid && this.asked.flow === at.flow) return
+    this.asked = at
+    this.send(at)
+  }
+
+  private send(at: PiecesAsk) {
+    if (!this.start()) return this.draw(at)
     if (this.waiting) {
       this.next = at
       return
@@ -109,13 +118,17 @@ class Pieces {
         this.waiting = false
         const next = this.next
         this.next = null
-        if (next) this.ask(next, false)
+        if (next) this.send(next)
+        this.onFrame?.()
       }
       worker.onerror = () => {
         // No worker after all: draw here from now on.
         worker.terminate()
         this.worker = null
         this.waiting = false
+        this.next = null
+        if (this.asked) this.draw(this.asked)
+        this.onFrame?.()
       }
       this.worker = worker
     } catch {
@@ -129,6 +142,7 @@ class Pieces {
     this.worker = undefined
     this.waiting = false
     this.next = null
+    this.asked = null
   }
 }
 
@@ -162,6 +176,34 @@ export function approachScene() {
   let fScale = 1
   let paper = true
 
+  // How strongly the ground shows in each cell. Fixed until the layout or the
+  // grid changes, so it is worked out once.
+  let zones = new Float32Array(0)
+  let zCols = 0
+  let zRows = 0
+  let zLayout: SceneLayout | null = null
+  let zAspect = 0
+  const weigh = (f: FieldState) => {
+    zCols = Math.max(1, Math.round(1 / f.cx))
+    zRows = Math.max(1, Math.round(1 / f.cy))
+    zLayout = layout
+    zAspect = f.aspect
+    zones = new Float32Array(zCols * zRows)
+    const half = layout.size / 2
+    for (let row = 0; row < zRows; row++)
+      for (let col = 0; col < zCols; col++) {
+        const x = (col + 0.5) * f.cx
+        const y = (row + 0.5) * f.cy
+        let zone = 0.34
+        for (const r of layout.busy) zone = Math.max(zone, inside(r, x, y, f.aspect, 0.08))
+        for (const r of layout.quiet) zone *= 1 - inside(r, x, y, f.aspect, 0.06)
+        // A ring of clear paper around the solid, so its lit side reads
+        // against nothing rather than against the hatching.
+        const cd = Math.hypot(x * f.aspect - (sx0 + half * 1.05), y - (sy0 + half * 1.05)) / half
+        zones[row * zCols + col] = zone * smooth(0.95, 1.45, cd)
+      }
+  }
+
   const s: Sample = { m: 0, l: 0, a: 0 }
   const g: Sample = { m: 0, l: 0, a: 0 }
 
@@ -175,6 +217,12 @@ export function approachScene() {
 
   const motif: Motif = {
     still: STILL,
+    ready(redraw) {
+      pieces.onFrame = redraw
+      return () => {
+        if (pieces.onFrame === redraw) pieces.onFrame = null
+      }
+    },
     frame(t: number, f: FieldState) {
       const dt = t - last
       if (!f.live || !(dt >= 0 && dt < 0.25)) {
@@ -187,7 +235,7 @@ export function approachScene() {
         else tSolid += (target(tSolid) - tSolid) * (1 - Math.exp(-dt * 2.6)) + dt * 0.2
       }
       last = t
-      pieces.ask({ solid: tSolid, flow: tFlow }, !f.live)
+      pieces.ask({ solid: tSolid, flow: tFlow })
       paper = f.paper
 
       // The solid's piece is square on screen (its cells are twice as tall
@@ -196,6 +244,7 @@ export function approachScene() {
       sScale = SOLID_SIZE.cols / side
       sx0 = layout.x * f.aspect - side / 2
       sy0 = layout.y - side / 2
+      if (zLayout !== layout || zAspect !== f.aspect || zCols !== Math.round(1 / f.cx) || zRows !== Math.round(1 / f.cy)) weigh(f)
       // The flow field covers the whole stage.
       const cellW = Math.max(f.aspect / FLOW_SIZE.cols, 1 / (FLOW_SIZE.rows * 2))
       fScale = 1 / cellW
@@ -206,14 +255,9 @@ export function approachScene() {
       const X = x * f.aspect
 
       // Ground: the flow field, weighted by zone.
-      let zone = 0.34
-      for (const r of layout.busy) zone = Math.max(zone, inside(r, x, y, f.aspect, 0.08))
-      for (const r of layout.quiet) zone *= 1 - inside(r, x, y, f.aspect, 0.06)
-      // A ring of clear paper around the solid, so its lit side reads against
-      // nothing rather than against the hatching.
-      const half = layout.size / 2
-      const cd = Math.hypot(X - (sx0 + half * 1.05), y - (sy0 + half * 1.05)) / half
-      zone *= smooth(0.95, 1.45, cd)
+      const col = Math.min(zCols - 1, (x / f.cx) | 0)
+      const row = Math.min(zRows - 1, (y / f.cy) | 0)
+      const zone = zones[row * zCols + col]
       let b = 0
       let glyph = 0
       if (zone > 0.001) {
@@ -223,7 +267,7 @@ export function approachScene() {
         // Combed streamlines everywhere, faint; the trails pass along them
         // darker. Every other cell, so the strokes read as hatching.
         const trail = Math.min(1, g.m * 1.4)
-        const comb = (Math.floor(x / f.cx) + Math.floor(y / f.cy)) & 1 ? 0.11 : 0
+        const comb = (col + row) & 1 ? 0.11 : 0
         b = zone * Math.max(comb, trail * (paper ? 0.7 : 0.62))
         if (b > 0) glyph = DIRECTION[pieces.flow.glyph(u, v)] ?? 0
       }
