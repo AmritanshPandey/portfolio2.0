@@ -121,12 +121,16 @@ export function HeroPhone() {
       // Hidden below a desktop width: don't fetch what nobody sees.
       if (!stage.getClientRects().length) return
       if (!document.createElement("canvas").getContext("webgl2")) return setNoGl(true)
-      const [THREE, { USDLoader }, { RoomEnvironment }] = await Promise.all([
+      const [THREE, { USDLoader }, { USDComposer }, { RoomEnvironment }, { patchUsdComposer }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/loaders/USDLoader.js"),
+        import("three/examples/jsm/loaders/usd/USDComposer.js"),
         import("three/examples/jsm/environments/RoomEnvironment.js"),
+        import("@/lib/usd-xform"),
       ])
       if (disposed) return
+      // three skips Apple's suffixed pivot ops; without this, parts sit off the body.
+      patchUsdComposer(USDComposer)
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
