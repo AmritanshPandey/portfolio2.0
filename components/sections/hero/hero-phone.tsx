@@ -2,23 +2,23 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
+import { loadDevice, loadDeviceKit } from "@/lib/device-model"
 import { warmScene } from "@/lib/warm-scene"
 
 /**
  * The hero's phone: Apple's iPhone 18 Pro reference model (public/devices,
- * see scripts/prepare-usdz.py) with a coded screen on its display. It rises
+ * see scripts/compact-devices.mjs) with a coded screen on its display. It rises
  * and turns into place once loaded, then swivels a little toward the
  * pointer, never round: a turn of at most YAW either way.
  *
- * Heavy (three.js and a 5.6 MB model), so it loads only on a desktop
+ * Heavy (three.js and a 1.6 MB model), so it loads only on a desktop
  * pointer, after the page has settled (useAmbientMode "desktop": phones,
  * iPads, low battery and reduced motion never fetch it). It draws only while
  * it moves and pauses off screen.
  */
 
-// The model holds two posed phones; this one is kept, its display replaced.
+// The phone in the model, and its display (which is replaced).
 const KEEP = "pHYCsZfzCytMXko"
-const DROP = "zZWDMeVSzXXBycE"
 const SCREEN = "oGFItxWqzAveXtT"
 const YAW = 0.42
 const PITCH = 0.12
@@ -122,16 +122,8 @@ export function HeroPhone() {
       // Hidden below a desktop width: don't fetch what nobody sees.
       if (!stage.getClientRects().length) return
       if (!document.createElement("canvas").getContext("webgl2")) return setNoGl(true)
-      const [THREE, { USDLoader }, { USDComposer }, { RoomEnvironment }, { patchUsdComposer }] = await Promise.all([
-        import("three"),
-        import("three/examples/jsm/loaders/USDLoader.js"),
-        import("three/examples/jsm/loaders/usd/USDComposer.js"),
-        import("three/examples/jsm/environments/RoomEnvironment.js"),
-        import("@/lib/usd-xform"),
-      ])
+      const THREE = await loadDeviceKit()
       if (disposed) return
-      // three skips Apple's suffixed pivot ops; without this, parts sit off the body.
-      patchUsdComposer(USDComposer)
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -142,7 +134,7 @@ export function HeroPhone() {
       renderer.domElement.style.display = "block"
       const scene = new THREE.Scene()
       const pmrem = new THREE.PMREMGenerator(renderer)
-      const room = new RoomEnvironment()
+      const room = new THREE.RoomEnvironment()
       scene.environment = pmrem.fromScene(room, 0.04).texture
       room.dispose()
       pmrem.dispose()
@@ -155,7 +147,7 @@ export function HeroPhone() {
 
       let model: import("three").Group
       try {
-        model = (await new USDLoader().loadAsync("/devices/iphone-18-pro.usdz")) as import("three").Group
+        model = await loadDevice(THREE, "/devices/iphone-18-pro.glb")
       } catch {
         renderer.dispose()
         return
@@ -166,7 +158,6 @@ export function HeroPhone() {
       }
 
       // One phone, centred, its display toward the camera.
-      model.getObjectByName(DROP)?.removeFromParent()
       // Measure with the model's own transforms (its 0.01 scale) applied.
       model.updateMatrixWorld(true)
       const phone = model.getObjectByName(KEEP)!

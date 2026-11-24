@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
+import { loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
 import { warmScene } from "@/lib/warm-scene"
 import { FoldPhone, type FoldDrive } from "./fold-phone"
 
@@ -13,7 +14,7 @@ import { FoldPhone, type FoldDrive } from "./fold-phone"
  * scrolls through it; the scroll's progress through the block drives the
  * device, eased so it never jumps.
  *
- * Apple's reference models live in public/devices (scripts/prepare-usdz.py).
+ * Apple's reference models live in public/devices (scripts/compact-devices.mjs).
  * Heavy, so only desktop pointers load them, and only as the block nears;
  * phones, iPads, low battery and reduced motion get the still screen,
  * unpinned. Scroll is read only while the block is on screen, against a
@@ -24,16 +25,15 @@ type Kind = "macbook" | "iphone" | "duo"
 
 const MODELS = {
   macbook: {
-    url: "/devices/macbook-air-15-silver.usdz",
+    url: "/devices/macbook-air-15-silver.glb",
     screen: "OQzaQDtbMVhhlAr",
     lid: "mlBJTkeLRJEGJYh",
     base: "PvXyCWMztHOhGyi",
   },
   iphone: {
-    url: "/devices/iphone-18-pro.usdz",
+    url: "/devices/iphone-18-pro.glb",
     screen: "oGFItxWqzAveXtT",
     keep: "pHYCsZfzCytMXko",
-    drop: "zZWDMeVSzXXBycE",
   },
 } as const
 
@@ -114,16 +114,8 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
 
     const start = async () => {
       if (!document.createElement("canvas").getContext("webgl2")) return
-      const [THREE, { USDLoader }, { USDComposer }, { RoomEnvironment }, { patchUsdComposer }] = await Promise.all([
-        import("three"),
-        import("three/examples/jsm/loaders/USDLoader.js"),
-        import("three/examples/jsm/loaders/usd/USDComposer.js"),
-        import("three/examples/jsm/environments/RoomEnvironment.js"),
-        import("@/lib/usd-xform"),
-      ])
+      const THREE = await loadDeviceKit()
       if (disposed) return
-      // three skips Apple's suffixed pivot ops; without this, parts sit off the body.
-      patchUsdComposer(USDComposer)
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -134,7 +126,7 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       renderer.domElement.style.display = "block"
       const scene = new THREE.Scene()
       const pmrem = new THREE.PMREMGenerator(renderer)
-      const room = new RoomEnvironment()
+      const room = new THREE.RoomEnvironment()
       scene.environment = pmrem.fromScene(room, 0.04).texture
       room.dispose()
       pmrem.dispose()
@@ -149,7 +141,7 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       let texture: import("three").Texture
       try {
         ;[model, texture] = await Promise.all([
-          new USDLoader().loadAsync(spec.url) as Promise<import("three").Group>,
+          loadDevice(THREE, spec.url),
           new THREE.TextureLoader().loadAsync(screen),
         ])
       } catch {
@@ -163,7 +155,6 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       texture.colorSpace = THREE.SRGBColorSpace
       texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
 
-      if ("drop" in spec) model.getObjectByName(spec.drop)?.removeFromParent()
       model.updateMatrixWorld(true)
       const body = "keep" in spec ? model.getObjectByName(spec.keep)! : model
       const box = new THREE.Box3().setFromObject(body)
@@ -281,8 +272,10 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       { rootMargin: "800px 0px" },
     )
     near.observe(stage)
+    const unwarm = warmDeviceKit()
     return () => {
       disposed = true
+      unwarm()
       near.disconnect()
       teardown?.()
     }
