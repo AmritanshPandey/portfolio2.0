@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
+import { warmScene } from "@/lib/warm-scene"
 import { FoldPhone, type FoldDrive } from "./fold-phone"
 
 /**
@@ -193,8 +194,7 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
         hinge.attach(lid)
       }
 
-      await renderer.compileAsync(scene, camera)
-      if (disposed) {
+      if (!(await warmScene(renderer, scene, camera, () => disposed))) {
         renderer.dispose()
         return
       }

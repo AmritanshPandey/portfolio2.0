@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
+import { warmScene } from "@/lib/warm-scene"
 
 /**
  * The hero's phone: Apple's iPhone 18 Pro reference model (public/devices,
@@ -193,8 +194,7 @@ export function HeroPhone() {
         mesh.material = material
       })
 
-      await renderer.compileAsync(scene, camera)
-      if (disposed) {
+      if (!(await warmScene(renderer, scene, camera, () => disposed))) {
         renderer.dispose()
         return
       }
