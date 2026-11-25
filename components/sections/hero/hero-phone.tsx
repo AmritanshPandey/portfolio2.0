@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
 import { loadDevice, loadDeviceKit } from "@/lib/device-model"
+import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
 
 /**
@@ -133,11 +134,6 @@ export function HeroPhone() {
       renderer.domElement.setAttribute("aria-hidden", "true")
       renderer.domElement.style.display = "block"
       const scene = new THREE.Scene()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      const room = new THREE.RoomEnvironment()
-      scene.environment = pmrem.fromScene(room, 0.04).texture
-      room.dispose()
-      pmrem.dispose()
       scene.add(new THREE.HemisphereLight(0xffffff, 0xb5baa8, 1.4))
       const key = new THREE.DirectionalLight(0xfffcf5, 2.2)
       key.position.set(-0.3, 0.5, 0.6)
@@ -147,7 +143,10 @@ export function HeroPhone() {
 
       let model: import("three").Group
       try {
-        model = await loadDevice(THREE, "/devices/iphone-18-pro.glb")
+        ;[model, scene.environment] = await Promise.all([
+          loadDevice(THREE, "/devices/iphone-18-pro.glb"),
+          studioLight(THREE, renderer),
+        ])
       } catch {
         renderer.dispose()
         return

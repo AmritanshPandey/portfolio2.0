@@ -10,15 +10,21 @@ export {
   BufferGeometry,
   CanvasTexture,
   Color,
+  CompressedCubeTexture,
+  DataUtils,
   DirectionalLight,
   Group,
+  HalfFloatType,
   HemisphereLight,
+  LinearFilter,
   LinearMipmapLinearFilter,
+  LinearSRGBColorSpace,
   MathUtils,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
   PMREMGenerator,
+  RGBAFormat,
   Scene,
   SRGBColorSpace,
   TextureLoader,
@@ -28,6 +34,5 @@ export {
   WebGLRenderer,
 } from "three"
 export { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
-export { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 export { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js"

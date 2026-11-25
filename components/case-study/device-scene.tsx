@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
 import { loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
+import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
 import { FoldPhone, type FoldDrive } from "./fold-phone"
 
@@ -125,11 +126,6 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       renderer.domElement.setAttribute("aria-hidden", "true")
       renderer.domElement.style.display = "block"
       const scene = new THREE.Scene()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      const room = new THREE.RoomEnvironment()
-      scene.environment = pmrem.fromScene(room, 0.04).texture
-      room.dispose()
-      pmrem.dispose()
       scene.add(new THREE.HemisphereLight(0xffffff, 0xb5baa8, 1.4))
       const key = new THREE.DirectionalLight(0xfffcf5, 2.2)
       key.position.set(-0.3, 0.5, 0.6)
@@ -140,9 +136,10 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       let model: import("three").Group
       let texture: import("three").Texture
       try {
-        ;[model, texture] = await Promise.all([
+        ;[model, texture, scene.environment] = await Promise.all([
           loadDevice(THREE, spec.url),
           new THREE.TextureLoader().loadAsync(screen),
+          studioLight(THREE, renderer),
         ])
       } catch {
         renderer.dispose()

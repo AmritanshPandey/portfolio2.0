@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react"
 import { floatGeometry, loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
 import { playNote } from "@/lib/ledger-sound"
+import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
 
 // The clasp: a muted tick as the phone shuts flat (lower) or opens flat
@@ -102,11 +103,6 @@ export function FoldPhone({
       renderer.domElement.style.display = "block"
       stage.appendChild(renderer.domElement)
 
-      const environment = new THREE.RoomEnvironment()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      scene.environment = pmrem.fromScene(environment, 0.04).texture
-      environment.dispose()
-      pmrem.dispose()
       scene.environmentIntensity = 1.35
       scene.add(new THREE.HemisphereLight(0xffffff, 0xb5baa8, 1.8))
       const key = new THREE.DirectionalLight(0xfffcf5, 2.6)
@@ -136,9 +132,11 @@ export function FoldPhone({
 
       // One image on both screens: the inner shows it whole, the outer its
       // right half, anchored to its hinge-side edge.
-      const texture = await new THREE.TextureLoader().loadAsync(screens)
+      const [texture, light] = await Promise.all([new THREE.TextureLoader().loadAsync(screens), studioLight(THREE, renderer)])
+      scene.environment = light
       if (disposed) {
         texture.dispose()
+        light.dispose()
         renderer.dispose()
         return
       }
