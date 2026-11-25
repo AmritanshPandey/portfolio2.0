@@ -174,13 +174,18 @@ files), rising in pitch down the page. Browsers hold all audio until a gesture,
 so it starts with the visitor's first click, tap or key press. The wave-mark
 square beside the theme toggle turns it off, and that choice is remembered
 across visits (localStorage). It only exists where rules can be plucked.
-Two more sounds use the same plucked string and scale, softer than a rule: a
-click that sends a ring through the hero's dots sounds the lowest note, and the
-fold phone clasps with a muted tick as it shuts or opens flat (only once the
-reader has played or scrubbed it). Sound answers the visitor's own hand, never
-the page moving by itself. Every animation has a `prefers-reduced-motion`
+One more sound uses the same plucked string and scale, softer than a rule: a
+click that sends a ring through the hero's dots sounds the lowest note. Sound
+answers the visitor's own hand, never the page moving by itself.
+Every animation has a `prefers-reduced-motion`
 path (the settle never arms, hero animations are off, the dot field is static,
 Framer Motion is globally skipped).
+
+Devices in case studies exist to show a screen. They share one scroll timeline
+(`lib/device-motion.ts`): the iPhone always faces the reader, the MacBook opens
+and the view moves in to its display, the iPhone Duo shows its cover screen and
+unfolds. The screen is ready as the device pins, then it holds still. No
+controls, no spin.
 
 ## 6. Controls
 
