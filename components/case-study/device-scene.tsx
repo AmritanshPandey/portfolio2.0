@@ -36,8 +36,12 @@ const MODELS = {
   },
 } as const
 
-// The MacBook's lid, measured from its open pose: shut is about 111° forward.
-const LID_SHUT = 1.94
+// The MacBook's lid, measured from its open pose: shut is about 110° forward.
+// With the hinge below (on the base's top, 1mm behind the lid's back edge),
+// this lays the lid flat on the base with 0.2mm to spare, flush at the front.
+// Any higher or further forward and the lid hovers, showing the base's front
+// lip and thumb notch as a white bar.
+const LID_SHUT = 1.926
 
 const smooth = (t: number) => t * t * (3 - 2 * t)
 
@@ -109,12 +113,16 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
 
     const start = async () => {
       if (!document.createElement("canvas").getContext("webgl2")) return
-      const [THREE, { USDLoader }, { RoomEnvironment }] = await Promise.all([
+      const [THREE, { USDLoader }, { USDComposer }, { RoomEnvironment }, { patchUsdComposer }] = await Promise.all([
         import("three"),
         import("three/examples/jsm/loaders/USDLoader.js"),
+        import("three/examples/jsm/loaders/usd/USDComposer.js"),
         import("three/examples/jsm/environments/RoomEnvironment.js"),
+        import("@/lib/usd-xform"),
       ])
       if (disposed) return
+      // three skips Apple's suffixed pivot ops; without this, parts sit off the body.
+      patchUsdComposer(USDComposer)
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -179,15 +187,15 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
         mesh.material = material
       })
 
-      // The MacBook's lid turns on its hinge: the back edge of the base, a
-      // little above its top so the shut lid rests on it, not inside it.
+      // The MacBook's lid turns on its hinge: on the base's top, just behind
+      // the lid's back edge (see LID_SHUT).
       let hinge: import("three").Group | null = null
       if (kind === "macbook") {
         const lid = model.getObjectByName(MODELS.macbook.lid)!
         const lidBox = new THREE.Box3().setFromObject(lid)
         const baseTop = new THREE.Box3().setFromObject(model.getObjectByName(MODELS.macbook.base)!).max.y
         hinge = new THREE.Group()
-        hinge.position.set(0, baseTop + 0.0025, lidBox.max.z)
+        hinge.position.set(0, baseTop, lidBox.max.z - 0.001)
         pivot.add(hinge)
         scene.updateMatrixWorld(true)
         hinge.attach(lid)
