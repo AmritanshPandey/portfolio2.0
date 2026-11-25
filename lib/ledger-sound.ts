@@ -160,10 +160,10 @@ function pluckBuffer(c: AudioContext, freq: number, muted: boolean): AudioBuffer
 /**
  * Plays the note for the `index`-th rule on the page. `strength` (0–1) is how
  * far the rule was drawn; `pan` (−1 to 1) is where along it it was caught.
- * `muted` plays the same note as a short tick (the fold phone's clasp).
+ * `muted` plays the same note as a short tick.
  *
  * Every sound on the site goes through here, and each answers the visitor's
- * own hand (a pluck, a click, a fold), never the page moving by itself.
+ * own hand (a pluck, a click), never the page moving by itself.
  */
 export function playNote(index: number, strength: number, pan: number, { muted = false }: { muted?: boolean } = {}) {
   // Until a gesture has started audio there is nothing to play into; a note

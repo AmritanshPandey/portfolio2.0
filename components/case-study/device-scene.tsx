@@ -3,17 +3,21 @@
 import Image from "next/image"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
+import { BLOCK, arrive, unfold } from "@/lib/device-motion"
+import { loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
+import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
-import { FoldPhone, type FoldDrive } from "./fold-phone"
+import { FOLLOW, FoldPhone, type FoldDrive } from "./fold-phone"
 
 /**
- * A device that animates with the page's scroll: the MacBook's lid opens,
- * the iPhone turns from its back to its screen, the iPhone Duo unfolds.
- * The scene is a tall block whose stage stays pinned while the reader
- * scrolls through it; the scroll's progress through the block drives the
- * device, eased so it never jumps.
+ * A device that brings its screen to the reader as the page scrolls: the
+ * iPhone settles straight on, the MacBook opens and the view moves in to its
+ * display, the iPhone Duo shows its cover screen and unfolds to the large
+ * one. They share one timeline (lib/device-motion.ts): the screen is ready as
+ * the block pins, then it holds still to be read. The scroll's progress
+ * drives the device, eased so it never jumps.
  *
- * Apple's reference models live in public/devices (scripts/prepare-usdz.py).
+ * Apple's reference models live in public/devices (scripts/compact-devices.mjs).
  * Heavy, so only desktop pointers load them, and only as the block nears;
  * phones, iPads, low battery and reduced motion get the still screen,
  * unpinned. Scroll is read only while the block is on screen, against a
@@ -24,27 +28,35 @@ type Kind = "macbook" | "iphone" | "duo"
 
 const MODELS = {
   macbook: {
-    url: "/devices/macbook-air-15-silver.usdz",
+    url: "/devices/macbook-air-15-silver.glb",
     screen: "OQzaQDtbMVhhlAr",
     lid: "mlBJTkeLRJEGJYh",
     base: "PvXyCWMztHOhGyi",
   },
   iphone: {
-    url: "/devices/iphone-18-pro.usdz",
+    url: "/devices/iphone-18-pro.glb",
     screen: "oGFItxWqzAveXtT",
     keep: "pHYCsZfzCytMXko",
-    drop: "zZWDMeVSzXXBycE",
   },
 } as const
 
-// The MacBook's lid, measured from its open pose: shut is about 111° forward.
-const LID_SHUT = 1.94
+// The MacBook's lid, measured from its open pose: shut is about 110° forward.
+// With the hinge below (on the base's top, 1mm behind the lid's back edge),
+// this lays the lid flat on the base with 0.2mm to spare, flush at the front.
+// Any higher or further forward and the lid hovers, showing the base's front
+// lip and thumb notch as a white bar.
+const LID_SHUT = 1.926
 
-const smooth = (t: number) => t * t * (3 - 2 * t)
+/** How much of the stage a device fills. */
+const FILL = 0.92
 
-/** Scroll progress through the block (0 at its top, 1 at its foot), read
- *  only while it is on screen, from a cached position. */
-function useScrollDrive(block: React.RefObject<HTMLElement | null>, active: boolean): FoldDrive {
+/** The iPhone's lean as it arrives: its screen is readable throughout. */
+const LEAN = { yaw: -0.42, pitch: 0.1 }
+
+/** How far `pose` (a moment on the shared timeline to 0..1) has got, from the
+ *  block's scroll. Read only while the block is on screen, from a cached
+ *  position. */
+function useScrollDrive(block: React.RefObject<HTMLElement | null>, active: boolean, pose: (v: number) => number): FoldDrive {
   const progress = useRef(0)
   const listeners = useRef(new Set<() => void>())
   const drive = useMemo<FoldDrive>(
@@ -61,15 +73,14 @@ function useScrollDrive(block: React.RefObject<HTMLElement | null>, active: bool
   useEffect(() => {
     const el = block.current
     if (!el || !active) return
-    let top = 0
-    let span = 1
+    let pin = 0
     const measure = () => {
-      top = el.getBoundingClientRect().top + scrollY
-      span = Math.max(1, el.offsetHeight - innerHeight)
+      const stuck = el.firstElementChild ? parseFloat(getComputedStyle(el.firstElementChild).top) || 0 : 0
+      pin = el.getBoundingClientRect().top + scrollY - stuck
       read()
     }
     const read = () => {
-      const p = Math.min(1, Math.max(0, (scrollY - top) / span))
+      const p = pose((scrollY - pin) / innerHeight)
       if (p === progress.current) return
       progress.current = p
       listeners.current.forEach((fn) => fn())
@@ -92,7 +103,7 @@ function useScrollDrive(block: React.RefObject<HTMLElement | null>, active: bool
       listen(false)
       window.removeEventListener("resize", measure)
     }
-  }, [block, active])
+  }, [block, active, pose])
 
   return drive
 }
@@ -110,11 +121,7 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
 
     const start = async () => {
       if (!document.createElement("canvas").getContext("webgl2")) return
-      const [THREE, { USDLoader }, { RoomEnvironment }] = await Promise.all([
-        import("three"),
-        import("three/examples/jsm/loaders/USDLoader.js"),
-        import("three/examples/jsm/environments/RoomEnvironment.js"),
-      ])
+      const THREE = await loadDeviceKit()
       if (disposed) return
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -125,24 +132,22 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       renderer.domElement.setAttribute("aria-hidden", "true")
       renderer.domElement.style.display = "block"
       const scene = new THREE.Scene()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      const room = new RoomEnvironment()
-      scene.environment = pmrem.fromScene(room, 0.04).texture
-      room.dispose()
-      pmrem.dispose()
       scene.add(new THREE.HemisphereLight(0xffffff, 0xb5baa8, 1.4))
       const key = new THREE.DirectionalLight(0xfffcf5, 2.2)
       key.position.set(-0.3, 0.5, 0.6)
       scene.add(key)
-      const camera = new THREE.PerspectiveCamera(26, 1, 0.01, 10)
+      // A long lens on the laptop: its base stays no wider than its display, so
+      // the display can fill the stage.
+      const camera = new THREE.PerspectiveCamera(kind === "macbook" ? 9 : 26, 1, 0.05, 20)
 
       const spec = MODELS[kind]
       let model: import("three").Group
       let texture: import("three").Texture
       try {
-        ;[model, texture] = await Promise.all([
-          new USDLoader().loadAsync(spec.url) as Promise<import("three").Group>,
+        ;[model, texture, scene.environment] = await Promise.all([
+          loadDevice(THREE, spec.url),
           new THREE.TextureLoader().loadAsync(screen),
+          studioLight(THREE, renderer),
         ])
       } catch {
         renderer.dispose()
@@ -155,43 +160,48 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       texture.colorSpace = THREE.SRGBColorSpace
       texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
 
-      if ("drop" in spec) model.getObjectByName(spec.drop)?.removeFromParent()
       model.updateMatrixWorld(true)
       const body = "keep" in spec ? model.getObjectByName(spec.keep)! : model
       const box = new THREE.Box3().setFromObject(body)
-      const size = box.getSize(new THREE.Vector3())
       model.position.sub(box.getCenter(new THREE.Vector3()))
       const pivot = new THREE.Group()
       pivot.add(model)
       scene.add(pivot)
       scene.updateMatrixWorld(true)
 
-      // The display shows the screen image, lit by itself.
+      // The display shows the screen image as it is: no light, no reflections.
       model.traverse((o) => {
         const mesh = o as import("three").Mesh
-        if (!mesh.isMesh || mesh.name !== spec.screen) return
-        const material = (mesh.material as import("three").MeshStandardMaterial).clone()
-        material.emissiveMap = texture
-        material.emissive = new THREE.Color(0xffffff)
-        material.emissiveIntensity = 1
-        material.map = null
-        material.color = new THREE.Color(0x000000)
-        material.toneMapped = false
-        mesh.material = material
+        if (mesh.isMesh && mesh.name === spec.screen) mesh.material = new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })
       })
 
-      // The MacBook's lid turns on its hinge: the back edge of the base, a
-      // little above its top so the shut lid rests on it, not inside it.
+      // The MacBook's lid turns on its hinge: on the base's top, just behind
+      // the lid's back edge (see LID_SHUT).
       let hinge: import("three").Group | null = null
       if (kind === "macbook") {
         const lid = model.getObjectByName(MODELS.macbook.lid)!
         const lidBox = new THREE.Box3().setFromObject(lid)
         const baseTop = new THREE.Box3().setFromObject(model.getObjectByName(MODELS.macbook.base)!).max.y
         hinge = new THREE.Group()
-        hinge.position.set(0, baseTop + 0.0025, lidBox.max.z)
+        hinge.position.set(0, baseTop, lidBox.max.z - 0.001)
         pivot.add(hinge)
         scene.updateMatrixWorld(true)
         hinge.attach(lid)
+      }
+
+      // The device's outline in its settled pose: a few thousand of its points,
+      // which the view is framed by.
+      pivot.rotation.set(0, hinge ? 0 : Math.PI, 0)
+      scene.updateMatrixWorld(true)
+      const settled: import("three").Vector3[] = []
+      const parts: import("three").Mesh[] = []
+      pivot.traverse((o) => {
+        if ((o as import("three").Mesh).isMesh) parts.push(o as import("three").Mesh)
+      })
+      const every = Math.max(1, Math.ceil(parts.reduce((n, m) => n + m.geometry.attributes.position.count, 0) / 3000))
+      for (const mesh of parts) {
+        const at = mesh.geometry.attributes.position
+        for (let i = 0; i < at.count; i += every) settled.push(new THREE.Vector3().fromBufferAttribute(at, i).applyMatrix4(mesh.matrixWorld))
       }
 
       if (!(await warmScene(renderer, scene, camera, () => disposed))) {
@@ -200,39 +210,62 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       }
       stage.appendChild(renderer.domElement)
 
+      // Where the view starts (the whole device) and ends (in on its screen).
+      const from = { eye: new THREE.Vector3(), at: new THREE.Vector3() }
+      const to = { eye: new THREE.Vector3(), at: new THREE.Vector3() }
+      const at = new THREE.Vector3()
+      const pose = (e: number) => {
+        if (hinge) {
+          hinge.rotation.x = (1 - e) * LID_SHUT
+          pivot.rotation.y = (1 - e) * -0.3
+        } else {
+          pivot.rotation.set((1 - e) * LEAN.pitch, Math.PI + (1 - e) * LEAN.yaw, 0)
+        }
+        camera.position.lerpVectors(from.eye, to.eye, e)
+        camera.lookAt(at.lerpVectors(from.at, to.at, e))
+      }
       const fit = () => {
         const { width, height } = stage.getBoundingClientRect()
         if (!width || !height) return
         renderer.setSize(width, height)
         camera.aspect = width / height
-        // Frame the device's larger side with a little air around it.
-        const reach = kind === "macbook" ? Math.max(size.x / camera.aspect, size.y * 1.6) : size.y
-        camera.position.set(0, kind === "macbook" ? size.y * 0.7 : 0, (reach / 0.86 / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))
-        camera.lookAt(0, kind === "macbook" ? -size.y * 0.1 : 0, 0)
         camera.updateProjectionMatrix()
+        const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * FILL
+        /** Stand `up` radians above straight on, as near as keeps every
+         *  point in view, with the device centred top to bottom. */
+        const stand = (view: typeof to, points: import("three").Vector3[], up: number) => {
+          const ahead = new THREE.Vector3(0, Math.sin(up), Math.cos(up))
+          const above = new THREE.Vector3(0, Math.cos(up), -Math.sin(up))
+          let lift = 0
+          let away = 0
+          for (let i = 0; i < 4; i++) {
+            away = 0
+            for (const p of points) {
+              const reach = Math.max(Math.abs(p.x) / camera.aspect, Math.abs(p.dot(above) - lift))
+              away = Math.max(away, p.dot(ahead) + reach / half)
+            }
+            const heights = points.map((p) => (p.dot(above) - lift) / (away - p.dot(ahead)))
+            lift += ((Math.max(...heights) + Math.min(...heights)) / 2) * away
+          }
+          view.at.copy(above).multiplyScalar(lift)
+          view.eye.copy(ahead).multiplyScalar(away).add(view.at)
+        }
+        // The laptop is seen from above as it opens, then from just over its
+        // keyboard, where the display is all but square on and at its largest.
+        stand(to, settled, hinge ? 0.13 : 0)
+        stand(from, settled, hinge ? 0.42 : 0)
         kick()
       }
 
       let shown = drive.get()
       let raf = 0
       let last = performance.now()
-      const pose = (p: number) => {
-        const e = smooth(p)
-        if (hinge) {
-          hinge.rotation.x = (1 - e) * LID_SHUT
-          pivot.rotation.y = (1 - e) * -0.5
-        } else {
-          // From its back (camera side out) round to its screen.
-          pivot.rotation.y = e * Math.PI
-          pivot.rotation.x = Math.sin(e * Math.PI) * 0.18
-        }
-      }
       const frame = (t: number) => {
         raf = 0
         const dt = Math.min((t - last) / 1000, 0.05)
         last = t
         const target = drive.get()
-        shown += (target - shown) * (1 - Math.exp(-dt * 10))
+        shown += (target - shown) * (1 - Math.exp(-dt * FOLLOW))
         if (Math.abs(target - shown) < 0.0005) shown = target
         pose(shown)
         renderer.render(scene, camera)
@@ -248,7 +281,6 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       const unlisten = drive.listen(kick)
       const ro = new ResizeObserver(fit)
       ro.observe(stage)
-      pose(shown)
       fit()
       setReady(true)
 
@@ -273,8 +305,10 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       { rootMargin: "800px 0px" },
     )
     near.observe(stage)
+    const unwarm = warmDeviceKit()
     return () => {
       disposed = true
+      unwarm()
       near.disconnect()
       teardown?.()
     }
@@ -287,20 +321,24 @@ export function DeviceScene({ kind, screen, alt }: { kind: Kind; screen: string;
   const mode = useAmbientMode("desktop")
   const live = mode === "live"
   const blockRef = useRef<HTMLDivElement>(null)
-  const drive = useScrollDrive(blockRef, live)
+  const drive = useScrollDrive(blockRef, live, kind === "duo" ? unfold : arrive)
 
   if (!live) {
-    // Still: the screen alone, framed, in the flow of the page.
+    // Still: the screen alone, framed, in the flow of the page, as large as
+    // its shape allows.
+    const shape = kind === "iphone" ? "aspect-[3/4] sm:aspect-[4/3]" : "aspect-[16/11]"
     return (
-      <div className="relative mx-auto aspect-[4/3] w-full max-w-3xl overflow-hidden rounded-[4px] bg-card ring-1 ring-foreground/[0.08]">
-        <Image src={screen} alt={alt} fill sizes="(max-width: 768px) 92vw, 768px" className="object-contain p-6" />
+      <div className={`relative mx-auto w-full max-w-3xl overflow-hidden rounded-[4px] bg-card ring-1 ring-foreground/[0.08] ${shape}`}>
+        <Image src={screen} alt={alt} fill sizes="(max-width: 768px) 92vw, 768px" className="object-contain p-3 sm:p-5" />
       </div>
     )
   }
 
   return (
-    <div ref={blockRef} className="relative h-[220vh]">
-      <div className="sticky top-[var(--nav-h)] h-[calc(100svh-var(--nav-h))]">
+    <div ref={blockRef} style={{ height: `${BLOCK * 100}svh` }} className="relative">
+      {/* Clear of the study bar at the foot of the screen and, below xl, of
+          the chapter strip under the nav. */}
+      <div className="sticky top-[calc(var(--nav-h)+2.25rem)] h-[calc(100svh-var(--nav-h)-5rem)] xl:top-[var(--nav-h)] xl:h-[calc(100svh-var(--nav-h)-2.75rem)]">
         <p className="sr-only">{alt}</p>
         {kind === "duo" ? (
           <div className="flex h-full items-center">
