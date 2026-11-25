@@ -3,7 +3,10 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react"
+import { floatGeometry, loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
 import { playNote } from "@/lib/ledger-sound"
+import { studioLight } from "@/lib/studio-light"
+import { warmScene } from "@/lib/warm-scene"
 
 // The clasp: a muted tick as the phone shuts flat (lower) or opens flat
 // (higher), from the rules' scale.
@@ -21,11 +24,11 @@ const CLASP_STRENGTH = 0.35
  * The fold, the projected screen UI and the progressive blur are adapted from
  * jadon7/iphone-duo (main.js), MIT License, Copyright (c) 2026 jadon7. The
  * phone is Apple's iPhone Duo reference model, prepared once by
- * scripts/prepare-iphone-duo.py into public/devices/iphone-duo/; it belongs
- * to Apple and is shown as a reference device.
+ * scripts/prepare-iphone-duo.py and scripts/compact-devices.mjs into
+ * public/devices; it belongs to Apple and is shown as a reference device.
  *
- * Heavy by nature (Three.js plus a ~6 MB model), so nothing loads until the
- * viewer is about to scroll into view; until then, and wherever WebGL or the
+ * Heavy by nature (Three.js plus a 1.6 MB model), so the model loads only as
+ * the viewer is about to scroll into view (the code, once the page is idle); until then, and wherever WebGL or the
  * model is unavailable, the still screens stand in. It draws only while the
  * phone moves, never hijacks page scroll (no wheel zoom; touch drags scroll
  * the page), and stays still under reduced motion unless asked to play.
@@ -53,7 +56,7 @@ export type FoldDrive = { get: () => number; listen: (onChange: () => void) => (
 export function FoldPhone({
   screens,
   alt,
-  modelUrl = "/devices/iphone-duo/iPhone_Duo_Render.usdc",
+  modelUrl = "/devices/iphone-duo.glb",
   drive,
 }: {
   screens: string
@@ -83,12 +86,7 @@ export function FoldPhone({
         setStatus("failed")
         return
       }
-      const [THREE, { USDLoader }, { OrbitControls }, { RoomEnvironment }] = await Promise.all([
-        import("three"),
-        import("three/examples/jsm/loaders/USDLoader.js"),
-        import("three/examples/jsm/controls/OrbitControls.js"),
-        import("three/examples/jsm/environments/RoomEnvironment.js"),
-      ])
+      const THREE = await loadDeviceKit()
       if (disposed) return
 
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -105,11 +103,6 @@ export function FoldPhone({
       renderer.domElement.style.display = "block"
       stage.appendChild(renderer.domElement)
 
-      const environment = new RoomEnvironment()
-      const pmrem = new THREE.PMREMGenerator(renderer)
-      scene.environment = pmrem.fromScene(environment, 0.04).texture
-      environment.dispose()
-      pmrem.dispose()
       scene.environmentIntensity = 1.35
       scene.add(new THREE.HemisphereLight(0xffffff, 0xb5baa8, 1.8))
       const key = new THREE.DirectionalLight(0xfffcf5, 2.6)
@@ -120,7 +113,7 @@ export function FoldPhone({
       scene.add(rim)
 
       // Turn by dragging on a mouse; the page keeps its wheel and touch scroll.
-      const controls = new OrbitControls(camera, renderer.domElement)
+      const controls = new THREE.OrbitControls(camera, renderer.domElement)
       controls.enableDamping = true
       controls.enablePan = false
       controls.enableZoom = false
@@ -139,9 +132,11 @@ export function FoldPhone({
 
       // One image on both screens: the inner shows it whole, the outer its
       // right half, anchored to its hinge-side edge.
-      const texture = await new THREE.TextureLoader().loadAsync(screens)
+      const [texture, light] = await Promise.all([new THREE.TextureLoader().loadAsync(screens), studioLight(THREE, renderer)])
+      scene.environment = light
       if (disposed) {
         texture.dispose()
+        light.dispose()
         renderer.dispose()
         return
       }
@@ -238,7 +233,7 @@ export function FoldPhone({
 
       let model: import("three").Group
       try {
-        model = (await new USDLoader().loadAsync(modelUrl)) as import("three").Group
+        model = await loadDevice(THREE, modelUrl)
       } catch {
         if (!disposed) setStatus("failed")
         renderer.dispose()
@@ -263,7 +258,7 @@ export function FoldPhone({
       model.traverse((object) => {
         const mesh = object as import("three").Mesh
         if (!mesh.isMesh) return
-        const geometry = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld)
+        const geometry = floatGeometry(THREE, mesh.geometry).applyMatrix4(mesh.matrixWorld)
         geometry.translate(0, LIFT, 0)
         let ancestor: import("three").Object3D | null = mesh
         while (ancestor && ![MOVING_HALF, FIXED_HALF].includes(ancestor.name)) ancestor = ancestor.parent
@@ -326,37 +321,15 @@ export function FoldPhone({
         if (!kind) owned.push(material)
       })
 
-      // Ready the first frame before showing it: decode every image off the
-      // main thread, upload one texture per task, and compile the shaders in
-      // parallel where the browser can. Otherwise all of it lands in the
-      // first render as one stall while the page is scrolling.
-      const maps = new Set<import("three").Texture>([texture])
-      phone.traverse((object) => {
-        const mesh = object as import("three").Mesh
-        if (!mesh.isMesh) return
-        for (const value of Object.values(mesh.material)) {
-          if ((value as import("three").Texture | null)?.isTexture) maps.add(value as import("three").Texture)
-        }
-      })
+      // Ready the first frame before showing it, so none of it lands as a
+      // stall while the page is scrolling.
       const abort = () => {
         for (const item of owned) item.dispose()
         scene.environment?.dispose()
         renderer.dispose()
         renderer.domElement.remove()
       }
-      for (const map of maps) {
-        // The model's own images arrive after the model; wait for each.
-        const until = performance.now() + 4000
-        while (!(map.image as HTMLImageElement | null)?.complete && performance.now() < until) {
-          await new Promise((resolve) => setTimeout(resolve, 50))
-        }
-        await (map.image as HTMLImageElement | null)?.decode?.().catch(() => {})
-        await nextTask()
-        if (disposed) return abort()
-        renderer.initTexture(map)
-      }
-      await renderer.compileAsync(scene, camera)
-      if (disposed) return abort()
+      if (!(await warmScene(renderer, scene, camera, () => disposed))) return abort()
 
       // State, and drawing only while something moves.
       let current = 180
@@ -510,8 +483,10 @@ export function FoldPhone({
       { rootMargin: "600px 0px" },
     )
     near.observe(wrap)
+    const unwarm = warmDeviceKit()
     return () => {
       disposed = true
+      unwarm()
       near.disconnect()
       teardown?.()
     }
