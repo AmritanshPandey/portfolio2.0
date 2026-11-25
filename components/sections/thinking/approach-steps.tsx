@@ -1,19 +1,20 @@
 "use client"
 
-import { useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { AsciiField } from "@/components/shared/ascii-field"
 import { GlassPlate } from "@/components/sections/hero/glass-plate"
 import { approachScene, type SceneLayout } from "./approach-scene"
 
 /**
- * Approach: one ASCII stage the width of the screen (approach-scene.ts). An
- * illustration of the method at work fills the left of it, over a busy,
- * moving ground; the six steps sit on the right as a compact list on a pane
- * of glass, so the ground runs on under them, frosted. The heading sits on
- * a patch of quiet paper.
+ * Approach: one ASCII stage the width of the screen (approach-scene.ts), drawn
+ * from ascii-magic-art pieces. A turning solid, a soft ball that hardens into
+ * a cube, fills the left of it over a ground of flowing streamlines; the six
+ * steps sit on the right as a compact list on a pane of glass, so the ground
+ * runs on under them, frosted. Pointing at a step eases the solid to that
+ * step's stage, ball (01) to cube (06). The heading sits on quiet paper.
  *
- * The scene is placed from the DOM: the empty "slot" says where the
- * illustration goes and the heading block says where the ground keeps quiet.
+ * The scene is placed from the DOM: the empty "slot" says where the solid
+ * goes and the heading block says where the ground keeps quiet.
  */
 
 const STEPS = [
@@ -25,11 +26,10 @@ const STEPS = [
   { q: "Systematize what works", body: "Turn proven decisions into components, templates, and docs." },
 ]
 
-// The illustration's width and height in its own units, and where its
-// visual centre sits (the hand reaches in from the left).
-const ART_W = 2.3
-const ART_H = 2.05
-const ART_SHIFT = 0.3
+// Punctuation only, and no flat strokes (- = ~), so the solid models in
+// stippled texture rather than in scanlines or stray letters. The field fades
+// each glyph by its shade too, which fills in between the steps.
+const RAMP = " .·:;+*%#@"
 
 export function ApproachSteps() {
   const fieldRef = useRef<HTMLDivElement>(null)
@@ -38,10 +38,13 @@ export function ApproachSteps() {
   const cardRef = useRef<HTMLDivElement>(null)
   // Built once; the scene reads its layout every frame, so moving it needs
   // no re-render.
-  const [{ motifs, place: placeScene }] = useState(() => {
+  const [{ motifs, place: placeScene, focus, dispose }] = useState(() => {
     const scene = approachScene()
-    return { motifs: [scene.motif], place: scene.place }
+    return { motifs: [scene.motif], ...scene }
   })
+
+  // The scene's worker goes with the section.
+  useEffect(() => dispose, [dispose])
 
   useLayoutEffect(() => {
     const field = fieldRef.current
@@ -61,12 +64,11 @@ export function ApproachSteps() {
         y1: (r.bottom + m - f.top) / f.height,
       })
       if (!f.width || !f.height) return
-      const unit = Math.min(s.width / ART_W, s.height / ART_H)
       // A margin of paper around the heading.
       const m = 16
       const next: SceneLayout = {
-        unit: unit / f.height,
-        x: (s.left + s.width / 2 + ART_SHIFT * unit - f.left) / f.width,
+        size: Math.min(s.width, s.height) / f.height,
+        x: (s.left + s.width / 2 - f.left) / f.width,
         y: (s.top + s.height / 2 - f.top) / f.height,
         quiet: [rect(q, m)],
         busy: [rect(c, 0)],
@@ -85,8 +87,14 @@ export function ApproachSteps() {
   return (
     <div className="relative">
       {/* The stage: full bleed, behind everything in the section. */}
-      <div ref={fieldRef} aria-hidden className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2">
-        <AsciiField motifs={motifs} cell={8} className="absolute inset-0" />
+      <div
+        ref={fieldRef}
+        aria-hidden
+        // Faded out at the top and foot, so the field rises out of the page
+        // and sinks back into it rather than starting at a hard edge.
+        className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_84%,transparent)]"
+      >
+        <AsciiField motifs={motifs} cell={6} ramp={RAMP} fps={24} className="absolute inset-0" />
       </div>
 
       <div className="pointer-events-none relative ledger-grid gap-y-8 py-10 md:py-14 lg:grid-rows-[auto_1fr] lg:py-16">
@@ -99,17 +107,18 @@ export function ApproachSteps() {
           </p>
         </div>
 
-        {/* Where the illustration is drawn. Empty: the field paints it. */}
+        {/* Where the solid is drawn. Empty: the field paints it. */}
         <div ref={slotRef} aria-hidden className="col-span-12 h-[320px] sm:h-[420px] lg:col-span-7 lg:col-start-1 lg:row-start-2 lg:h-[min(72svh,660px)]" />
 
         <div ref={cardRef} className="pointer-events-auto col-span-12 self-center lg:col-span-5 lg:col-start-8 lg:row-start-2">
           <GlassPlate className="approach-glass p-5 sm:p-6 md:p-7">
-            <ol>
+            <ol onPointerLeave={() => focus(-1)}>
               {STEPS.map((s, i) => (
                 <li
                   key={s.q}
                   data-settle
                   style={{ ["--i" as string]: i + 2 }}
+                  onPointerEnter={() => focus(i)}
                   className="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-border py-3.5 first:pt-0 last:pb-0 [&:not(:last-child)]:border-b"
                 >
                   <span aria-hidden className="ledger-label pt-[0.3em] text-accent">
