@@ -658,7 +658,7 @@ export default function Page() {
               { label: "Key Focus", text: "Ingredient panel · Trust badges · Sticky CTA" },
               { label: "Insight",   text: "68% of drop-off happened before checkout" },
             ]}
-            scene={<DeviceScene kind="iphone" screen="/assets/images/honasa/placeholder-phone.png" alt="Placeholder for Mamaearth's product page on an iPhone, turning from its back to its screen as you scroll." />}
+            scene={<DeviceScene kind="iphone" screen="/assets/images/honasa/placeholder-phone.png" alt="Placeholder for Mamaearth's product page on an iPhone." />}
           />
 
           {/* Cart */}

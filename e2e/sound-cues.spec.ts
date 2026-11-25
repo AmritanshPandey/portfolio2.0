@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test"
 
-// The two sounds beyond the plucked rules: a click ring in the hero's dots,
-// and the fold phone's clasp. Both answer the visitor's own hand, never the
-// page moving by itself, and both obey the sound toggle.
+// The sound beyond the plucked rules: a click ring in the hero's dots. It
+// answers the visitor's own hand, never the page moving by itself, and obeys
+// the sound toggle.
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -71,32 +71,18 @@ test("with sound off, a click ring is silent", async ({ page }) => {
   expect(await notes(page)).toBe(before)
 })
 
-test("the fold phone clasps only when the reader folds it", async ({ page }) => {
+test("the fold phone unfolds with the scroll: no controls, no sound", async ({ page }) => {
   await page.goto("/work/agent-commerce")
-  // Unlock audio before the phone's own intro fold runs.
+  // Audio is unlocked, so a sound would be heard.
   await page.locator("h1").click()
   const section = page.locator("#unfolded")
   await section.scrollIntoViewIfNeeded()
-  const slider = section.locator('input[type="range"]')
-  await expect(slider).toBeEnabled({ timeout: 15_000 })
-
-  // The intro folds to 30° and back open by itself: no clasp.
+  await expect(section.locator("canvas")).toBeAttached({ timeout: 15_000 })
+  await expect(section.locator("input, button")).toHaveCount(0)
   const before = await notes(page)
-  await page.waitForTimeout(3200)
+  await section.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().bottom + scrollY - innerHeight, behavior: "instant" }))
+  await page.waitForTimeout(1200)
   expect(await notes(page)).toBe(before)
-
-  const setFold = (value: number) =>
-    slider.evaluate((el, v) => {
-      const input = el as HTMLInputElement
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(input, String(v))
-      input.dispatchEvent(new Event("input", { bubbles: true }))
-    }, value)
-
-  await setFold(90)
-  await setFold(0)
-  await expect.poll(() => notes(page)).toBe(before + 1)
-  await setFold(180)
-  await expect.poll(() => notes(page)).toBe(before + 2)
 })
 
 test("with reduced motion, clicks in the hero make no sound", async ({ page }) => {

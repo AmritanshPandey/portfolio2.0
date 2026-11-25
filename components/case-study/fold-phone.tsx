@@ -2,24 +2,15 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react"
 import { floatGeometry, loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
-import { playNote } from "@/lib/ledger-sound"
 import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
 
-// The clasp: a muted tick as the phone shuts flat (lower) or opens flat
-// (higher), from the rules' scale.
-const CLOSED = 0.5
-const OPEN = 179.5
-const CLASP_CLOSE = 1
-const CLASP_OPEN = 3
-const CLASP_STRENGTH = 0.35
-
 /**
- * A foldable phone showing two product screens: open, the inner screen shows
- * the whole image (two screens side by side); folded, the cover shows its
- * right half. Drag to turn it, play or scrub to fold it.
+ * A foldable phone showing two product screens: folded, the cover shows the
+ * right half of the image; open, the inner screen shows all of it (two
+ * screens side by side). `drive` says how far open it is, e.g. from the
+ * page's scroll (device-scene.tsx); it has no controls of its own.
  *
  * The fold, the projected screen UI and the progressive blur are adapted from
  * jadon7/iphone-duo (main.js), MIT License, Copyright (c) 2026 jadon7. The
@@ -30,8 +21,7 @@ const CLASP_STRENGTH = 0.35
  * Heavy by nature (Three.js plus a 1.6 MB model), so the model loads only as
  * the viewer is about to scroll into view (the code, once the page is idle); until then, and wherever WebGL or the
  * model is unavailable, the still screens stand in. It draws only while the
- * phone moves, never hijacks page scroll (no wheel zoom; touch drags scroll
- * the page), and stays still under reduced motion unless asked to play.
+ * phone moves.
  */
 
 // The image the screens show: 1600 x 1125, two portrait screens side by side.
@@ -48,7 +38,8 @@ const FLEXIBLE = ["JnJdTkxbQgUtLwU", "xdyyaajWsatVNxN", "UXtsBZYlaUvHoEh", "MvKP
 const INNER_MESH = "UXtsBZYlaUvHoEh"
 const OUTER_MESH = "hhgAIoCGsHXeDPY"
 
-type Api = { setAngle: (value: number) => void; setPlaying: (on: boolean) => void }
+/** How briskly a device follows the scroll (per second). */
+export const FOLLOW = 14
 
 /** An outside driver for the fold, e.g. page scroll: 0 is closed, 1 open. */
 export type FoldDrive = { get: () => number; listen: (onChange: () => void) => () => void }
@@ -62,16 +53,12 @@ export function FoldPhone({
   screens: string
   alt: string
   modelUrl?: string
-  /** When given, the fold follows it (eased) instead of the play and slider
-   *  controls, with no intro and no dragging. */
-  drive?: FoldDrive
+  /** How far open it is, followed with a little ease. */
+  drive: FoldDrive
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
-  const api = useRef<Api | null>(null)
   const [status, setStatus] = useState<"idle" | "ready" | "failed">("idle")
-  const [angle, setAngle] = useState(180)
-  const [playing, setPlaying] = useState(false)
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -89,8 +76,6 @@ export function FoldPhone({
       const THREE = await loadDeviceKit()
       if (disposed) return
 
-      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
-      const finePointer = matchMedia("(pointer: fine)").matches
       const scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 250)
       camera.position.set(0, 0, 40)
@@ -112,17 +97,7 @@ export function FoldPhone({
       rim.position.set(15, 5, -15)
       scene.add(rim)
 
-      // Turn by dragging on a mouse; the page keeps its wheel and touch scroll.
-      const controls = new THREE.OrbitControls(camera, renderer.domElement)
-      controls.enableDamping = true
-      controls.enablePan = false
-      controls.enableZoom = false
-      controls.enableRotate = finePointer && !drive
-      controls.minPolarAngle = Math.PI * 0.25
-      controls.maxPolarAngle = Math.PI * 0.75
-      controls.target.set(0, 0, HINGE_Z)
-      controls.update()
-      if (!finePointer) renderer.domElement.style.touchAction = "pan-y"
+      camera.lookAt(0, 0, HINGE_Z)
 
       const phone = new THREE.Group()
       scene.add(phone)
@@ -332,26 +307,12 @@ export function FoldPhone({
       if (!(await warmScene(renderer, scene, camera, () => disposed))) return abort()
 
       // State, and drawing only while something moves.
-      let current = 180
-      let isPlaying = false
-      let phase = 0
-      let transition: { from: number; to: number; elapsed: number } | null = null
-      // Angles still to ease through after the current transition.
-      let queue: number[] = []
-      let dragging = false
-      let settleUntil = 0
+      let current = 0
       let raf = 0
       let last = performance.now()
       let onScreen = true
-      // The clasp sounds only once the reader has played or scrubbed the
-      // fold, never during the intro fold the page runs by itself.
-      let userDriven = false
 
       const applyAngle = (value: number) => {
-        if (userDriven) {
-          if (current > CLOSED && value <= CLOSED) playNote(CLASP_CLOSE, CLASP_STRENGTH, 0, { muted: true })
-          else if (current < OPEN && value >= OPEN) playNote(CLASP_OPEN, CLASP_STRENGTH, 0, { muted: true })
-        }
         current = value
         bend.value = ((180 - value) / 180) * Math.PI
         // Folded, only the fixed half shows; ease it to the centre.
@@ -364,7 +325,7 @@ export function FoldPhone({
         if (!width || !height) return
         renderer.setSize(width, height)
         camera.aspect = width / height
-        const pixelsPerUnit = Math.min(width / 25, height / 17, 37)
+        const pixelsPerUnit = Math.min(width / 17.2, height / 12.6, 60)
         camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(height / pixelsPerUnit / 2 / 40))
         camera.updateProjectionMatrix()
         kick()
@@ -373,34 +334,11 @@ export function FoldPhone({
         raf = 0
         const delta = Math.min((now - last) / 1000, 0.05)
         last = now
-        if (drive) {
-          const target = drive.get() * 180
-          const next = current + (target - current) * (1 - Math.exp(-delta * 10))
-          applyAngle(Math.abs(target - next) < 0.05 ? target : next)
-        } else if (isPlaying) {
-          phase = (phase + delta) % 8.6
-          let value: number
-          if (phase < 1.2) value = 180
-          else if (phase < 4.3) value = 90 * (1 + Math.cos(((phase - 1.2) / 3.1) * Math.PI))
-          else if (phase < 5.5) value = 0
-          else value = 90 * (1 - Math.cos(((phase - 5.5) / 3.1) * Math.PI))
-          applyAngle(value)
-          setAngle(Math.round(value))
-        } else if (transition) {
-          transition.elapsed += delta
-          const progress = Math.min(transition.elapsed / 1.4, 1)
-          const ease = progress * progress * (3 - 2 * progress)
-          applyAngle(THREE.MathUtils.lerp(transition.from, transition.to, ease))
-          setAngle(Math.round(current))
-          if (progress === 1) {
-            const next = queue.shift()
-            transition = next === undefined ? null : { from: current, to: next, elapsed: 0 }
-          }
-        }
-        controls.update()
+        const target = drive.get() * 180
+        const next = current + (target - current) * (1 - Math.exp(-delta * FOLLOW))
+        applyAngle(Math.abs(target - next) < 0.05 ? target : next)
         renderer.render(scene, camera)
-        const following = drive && Math.abs(drive.get() * 180 - current) > 0.05
-        if (onScreen && (isPlaying || transition || dragging || following || now < settleUntil)) raf = requestAnimationFrame(frame)
+        if (onScreen && current !== target) raf = requestAnimationFrame(frame)
       }
       const kick = () => {
         if (!raf && onScreen) {
@@ -408,37 +346,6 @@ export function FoldPhone({
           raf = requestAnimationFrame(frame)
         }
       }
-      controls.addEventListener("start", () => {
-        dragging = true
-        kick()
-      })
-      controls.addEventListener("end", () => {
-        dragging = false
-        settleUntil = performance.now() + 1200
-        kick()
-      })
-
-      api.current = {
-        setAngle: (value) => {
-          userDriven = true
-          isPlaying = false
-          setPlaying(false)
-          transition = null
-          queue = []
-          applyAngle(value)
-          kick()
-        },
-        setPlaying: (on) => {
-          if (on) userDriven = true
-          transition = null
-          queue = []
-          if (on) phase = 1.2 + (Math.acos((2 * current) / 180 - 1) / Math.PI) * 3.1
-          isPlaying = on
-          setPlaying(on)
-          kick()
-        },
-      }
-
       const ro = new ResizeObserver(resize)
       ro.observe(stage)
       const visibility = new IntersectionObserver(([entry]) => {
@@ -447,29 +354,20 @@ export function FoldPhone({
       })
       visibility.observe(stage)
 
-      // Open, then (motion allowing) fold it closed and open once, so the
-      // reader sees the cover screen take over.
-      applyAngle(drive ? drive.get() * 180 : 180)
-      const unlisten = drive?.listen(kick)
+      applyAngle(drive.get() * 180)
+      const unlisten = drive.listen(kick)
       resize()
       setStatus("ready")
-      if (!reduce && !drive) {
-        transition = { from: 180, to: 30, elapsed: 0 }
-        queue = [180]
-      }
-      kick()
 
       teardown = () => {
         cancelAnimationFrame(raf)
-        unlisten?.()
+        unlisten()
         ro.disconnect()
         visibility.disconnect()
-        controls.dispose()
         for (const item of owned) item.dispose()
         scene.environment?.dispose()
         renderer.dispose()
         renderer.domElement.remove()
-        api.current = null
       }
     }
 
@@ -493,51 +391,16 @@ export function FoldPhone({
   }, [screens, modelUrl, drive])
 
   return (
-    <div ref={wrapRef} className={drive ? "h-full w-full" : "w-full"}>
-      <div className={drive ? "relative h-full w-full" : "relative aspect-[25/17] w-full"}>
-        {/* The still screens: shown until the phone is ready, and instead of
-            it where WebGL or the model is unavailable. */}
-        <div
-          className={`absolute inset-[12%] transition-opacity duration-500 ${status === "ready" ? "opacity-0" : "opacity-100"}`}
-          aria-hidden={status === "ready"}
-        >
-          <Image src={screens} alt={alt} fill sizes="(max-width: 768px) 76vw, 600px" className="object-contain" />
-        </div>
-        <div ref={stageRef} className="absolute inset-0" />
+    <div ref={wrapRef} className="relative h-full w-full">
+      {/* The still screens: shown until the phone is ready, and instead of it
+          where WebGL or the model is unavailable. */}
+      <div
+        className={`absolute inset-[12%] transition-opacity duration-500 ${status === "ready" ? "opacity-0" : "opacity-100"}`}
+        aria-hidden={status === "ready"}
+      >
+        <Image src={screens} alt={alt} fill sizes="(max-width: 768px) 76vw, 600px" className="object-contain" />
       </div>
-
-      {!drive && (
-      <div className="mt-4 flex items-center gap-4">
-        <button
-          type="button"
-          className="btn-line !min-h-0 !px-3 !py-2"
-          disabled={status !== "ready"}
-          onClick={() => api.current?.setPlaying(!playing)}
-          aria-label={playing ? "Pause the fold" : "Play the fold"}
-        >
-          {playing ? <IconPlayerPauseFilled size={14} aria-hidden /> : <IconPlayerPlayFilled size={14} aria-hidden />}
-        </button>
-        <label className="flex flex-1 items-center gap-3">
-          <span className="ledger-label shrink-0">Fold</span>
-          <input
-            type="range"
-            min={0}
-            max={180}
-            step={1}
-            value={angle}
-            disabled={status !== "ready"}
-            onChange={(e) => {
-              const value = Number(e.target.value)
-              setAngle(value)
-              api.current?.setAngle(value)
-            }}
-            className="w-full accent-[var(--accent)]"
-            aria-valuetext={`${angle} degrees open`}
-          />
-          <span className="ledger-label w-10 shrink-0 text-right tabular-nums">{angle}°</span>
-        </label>
-      </div>
-      )}
+      <div ref={stageRef} className="absolute inset-0" />
     </div>
   )
 }

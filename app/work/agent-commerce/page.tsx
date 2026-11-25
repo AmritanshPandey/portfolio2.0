@@ -6,7 +6,7 @@ import { CsInfoBar } from "@/components/case-study/cs-info-bar"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { DemoPoster } from "@/components/case-study/demo-poster"
-import { FoldPhone } from "@/components/case-study/fold-phone"
+import { DeviceScene } from "@/components/case-study/device-scene"
 import { FadeIn } from "@/components/shared/fade-in"
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -685,17 +685,18 @@ export default function Page() {
           <div className="grid items-start gap-10 md:grid-cols-[3fr_2fr]">
             <h2 className="type-case-title text-foreground">Two steps, one fold.</h2>
             <p className="text-[15px] leading-relaxed text-muted-foreground">
-              The agent&apos;s pick and the payment it asks you to approve, side by side. Fold it and the
+              The agent&apos;s pick and the payment it asks you to approve, side by side. Folded, the
               cover shows only the confirmation: the moment the trust signal has to carry on its own.
             </p>
           </div>
-          <FoldPhone
-            screens="/assets/images/agent-pay/fold-screens.jpg"
+          <DeviceScene
+            kind="duo"
+            screen="/assets/images/agent-pay/fold-screens.jpg"
             alt="Agent Pay on a foldable: the agent's bike picks beside the payment sheet with Confirm and pay, $193.00."
           />
           <p className="ledger-label max-w-2xl">
             Screens from the white-labelled demo above, set on Apple&apos;s iPhone Duo reference model as a
-            presentation study. Drag to turn it; play or scrub to fold.
+            presentation study.
           </p>
         </div>
       </CsSection>

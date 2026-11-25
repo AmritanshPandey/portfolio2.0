@@ -33,6 +33,5 @@ export {
   Vector4,
   WebGLRenderer,
 } from "three"
-export { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 export { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js"
