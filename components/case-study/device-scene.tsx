@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useAmbientMode } from "@/hooks/use-ambient-still"
 import { BLOCK, arrive, unfold } from "@/lib/device-motion"
 import { loadDevice, loadDeviceKit, warmDeviceKit } from "@/lib/device-model"
+import { MACBOOK_LID } from "@/lib/macbook-lid"
 import { studioLight } from "@/lib/studio-light"
 import { warmScene } from "@/lib/warm-scene"
 import { FOLLOW, FoldPhone, type FoldDrive } from "./fold-phone"
@@ -40,12 +41,8 @@ const MODELS = {
   },
 } as const
 
-// The MacBook's lid, measured from its open pose: shut is about 110° forward.
-// With the hinge below (on the base's top, 1mm behind the lid's back edge),
-// this lays the lid flat on the base with 0.2mm to spare, flush at the front.
-// Any higher or further forward and the lid hovers, showing the base's front
-// lip and thumb notch as a white bar.
-const LID_SHUT = 1.926
+/** The MacBook's turn while its lid is shut; it comes round as it opens. */
+const SHUT_YAW = -0.3
 
 /** How much of the stage a device fills. */
 const FILL = 0.92
@@ -136,6 +133,13 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       const key = new THREE.DirectionalLight(0xfffcf5, 2.2)
       key.position.set(-0.3, 0.5, 0.6)
       scene.add(key)
+      if (kind === "macbook") {
+        // Straight on, the room blows out the thumb notch on the base's front
+        // edge to a white bar: turn the room, and light from above.
+        scene.environmentRotation.y = 2.4
+        key.intensity = 1.2
+        key.position.set(-0.4, 0.9, 0)
+      }
       // A long lens on the laptop: its base stays no wider than its display, so
       // the display can fill the stage.
       const camera = new THREE.PerspectiveCamera(kind === "macbook" ? 9 : 26, 1, 0.05, 20)
@@ -175,15 +179,14 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
         if (mesh.isMesh && mesh.name === spec.screen) mesh.material = new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })
       })
 
-      // The MacBook's lid turns on its hinge: on the base's top, just behind
-      // the lid's back edge (see LID_SHUT).
+      // The MacBook's lid turns on its hinge, inside the base (lib/macbook-lid).
       let hinge: import("three").Group | null = null
       if (kind === "macbook") {
         const lid = model.getObjectByName(MODELS.macbook.lid)!
         const lidBox = new THREE.Box3().setFromObject(lid)
         const baseTop = new THREE.Box3().setFromObject(model.getObjectByName(MODELS.macbook.base)!).max.y
         hinge = new THREE.Group()
-        hinge.position.set(0, baseTop, lidBox.max.z - 0.001)
+        hinge.position.set(0, baseTop + MACBOOK_LID.axisY, lidBox.max.z + MACBOOK_LID.axisZ)
         pivot.add(hinge)
         scene.updateMatrixWorld(true)
         hinge.attach(lid)
@@ -199,9 +202,24 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
         if ((o as import("three").Mesh).isMesh) parts.push(o as import("three").Mesh)
       })
       const every = Math.max(1, Math.ceil(parts.reduce((n, m) => n + m.geometry.attributes.position.count, 0) / 3000))
-      for (const mesh of parts) {
-        const at = mesh.geometry.attributes.position
-        for (let i = 0; i < at.count; i += every) settled.push(new THREE.Vector3().fromBufferAttribute(at, i).applyMatrix4(mesh.matrixWorld))
+      const outline = (into: import("three").Vector3[]) => {
+        scene.updateMatrixWorld(true)
+        for (const mesh of parts) {
+          const at = mesh.geometry.attributes.position
+          for (let i = 0; i < at.count; i += every) into.push(new THREE.Vector3().fromBufferAttribute(at, i).applyMatrix4(mesh.matrixWorld))
+        }
+      }
+      outline(settled)
+      // The shut MacBook, turned, reaches further left than the open one: the
+      // first view frames both, so no corner leaves the stage.
+      const start = [...settled]
+      if (hinge) {
+        hinge.rotation.x = MACBOOK_LID.shut
+        pivot.rotation.y = SHUT_YAW
+        outline(start)
+        hinge.rotation.x = 0
+        pivot.rotation.y = 0
+        scene.updateMatrixWorld(true)
       }
 
       if (!(await warmScene(renderer, scene, camera, () => disposed))) {
@@ -216,8 +234,8 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
       const at = new THREE.Vector3()
       const pose = (e: number) => {
         if (hinge) {
-          hinge.rotation.x = (1 - e) * LID_SHUT
-          pivot.rotation.y = (1 - e) * -0.3
+          hinge.rotation.x = (1 - e) * MACBOOK_LID.shut
+          pivot.rotation.y = (1 - e) * SHUT_YAW
         } else {
           pivot.rotation.set((1 - e) * LEAN.pitch, Math.PI + (1 - e) * LEAN.yaw, 0)
         }
@@ -253,7 +271,7 @@ function DeviceCanvas({ kind, screen, drive }: { kind: "macbook" | "iphone"; scr
         // The laptop is seen from above as it opens, then from just over its
         // keyboard, where the display is all but square on and at its largest.
         stand(to, settled, hinge ? 0.13 : 0)
-        stand(from, settled, hinge ? 0.42 : 0)
+        stand(from, start, hinge ? 0.42 : 0)
         kick()
       }
 
