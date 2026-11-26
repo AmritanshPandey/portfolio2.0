@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ViewTransition, type CSSProperties } from "react"
+import { ViewTransition } from "react"
 import clsx from "clsx"
 import { IconArrowUpRight } from "@tabler/icons-react"
 import type { WorkItem } from "@/lib/types/content"
@@ -10,42 +10,29 @@ function slugOf(href: string) {
   return href.split("/").filter(Boolean).pop() ?? ""
 }
 
-/**
- * Where each frame sits in the gallery, by position in the sequence: a
- * staggered editorial spread of wide, portrait and tall frames. Columns are
- * 1-based grid lines on the 12-column ledger grid; `shift` drops a frame
- * below its row's top (in units of 1.4vw) so the spread never lines up flat.
- */
-const SLOTS = [
-  { format: "wide", ratio: 16 / 9, col: [1, 8], row: 1, shift: 0 },
-  { format: "portrait", ratio: 4 / 5, col: [9, 13], row: 1, shift: 10 },
-  { format: "wide", ratio: 16 / 9, col: [5, 13], row: 2, shift: 0 },
-  { format: "wide", ratio: 16 / 9, col: [1, 9], row: 3, shift: 0 },
-  { format: "tall", ratio: 2 / 3, col: [10, 13], row: 3, shift: 8 },
-] as const
+// One frame shape for every study: the specimens' own 16:10, so a frame with
+// no media yet is filled edge to edge, and media is cropped to match.
+const RATIO = 16 / 10
 
 /**
- * Selected work as a gallery: each study a frame of its own media with a
- * short caption under it (reference, title, who I was there, the outcome).
- * Frames with media become elastic sheets on desktop (ElasticFrame); a frame
- * without media shows the study's drawn specimen until its media arrives.
- * The whole frame and caption is one link, and the frame keeps the shared
- * view-transition name, so opening a study grows it into the study's hero.
+ * Selected work: the first study leads, large, with its caption beside it;
+ * the rest follow in a two-up grid, read left to right, top to bottom. Every
+ * frame is the same shape and every caption reads the same way (reference
+ * and role, the title, the outcome), so the eye always knows where to go
+ * next.
+ *
+ * A frame with media becomes an elastic sheet on desktop (ElasticFrame); a
+ * frame without shows the study's drawn specimen. Frame and caption are one
+ * link, and the frame keeps the shared view-transition name, so opening a
+ * study grows it into the study's hero.
  */
 export function WorkGallery({ items }: { items: WorkItem[] }) {
   return (
-    <div className="work-index work-gallery relative grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-16 md:gap-y-[clamp(5rem,9vw,9rem)]">
+    <div className="work-index work-gallery ledger-grid gap-y-14 md:gap-y-20">
       {items.map((item, i) => {
-        const slot = SLOTS[i % SLOTS.length]
+        const lead = i === 0
         const slug = slugOf(item.href)
         const ref = String(i + 1).padStart(2, "0")
-        const place = {
-          "--col-start": slot.col[0],
-          "--col-end": slot.col[1],
-          "--row": slot.row,
-          "--shift": slot.shift,
-          "--i": i,
-        } as CSSProperties
 
         return (
           <Link
@@ -54,43 +41,52 @@ export function WorkGallery({ items }: { items: WorkItem[] }) {
             data-settle
             data-cursor-card
             data-cursor-label="Open"
-            data-format={slot.format}
-            style={place}
-            className="work-row work-frame group col-span-12 block min-w-0"
+            style={{ ["--i" as string]: i }}
+            className={clsx(
+              "work-row work-frame group min-w-0",
+              lead
+                ? "col-span-12 grid grid-cols-1 gap-y-6 md:grid-cols-12 md:gap-x-[var(--col-gap)]"
+                : "col-span-12 flex flex-col gap-y-6 md:col-span-6",
+            )}
           >
-            <ViewTransition name={`case-${slug}`} share="case-morph">
-              <figure className="m-0">
-                <ElasticFrame media={item.media} ratio={slot.ratio}>
-                  <WorkSpecimen slug={slug} />
-                </ElasticFrame>
-              </figure>
-            </ViewTransition>
+            <div className={lead ? "md:col-span-8" : undefined}>
+              <ViewTransition name={`case-${slug}`} share="case-morph">
+                <figure className="m-0">
+                  <ElasticFrame media={item.media} ratio={RATIO}>
+                    <WorkSpecimen slug={slug} />
+                  </ElasticFrame>
+                </figure>
+              </ViewTransition>
+            </div>
 
-            <div className="relative z-[3] mt-5 grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-baseline gap-x-3 md:mt-6 md:grid-cols-[2.75rem_minmax(0,1fr)_auto]">
-              <span className="ledger-label text-foreground transition-colors duration-300 group-hover:text-accent">
-                {ref}
-              </span>
+            <div
+              className={clsx(
+                "relative z-[3] min-w-0",
+                lead && "md:col-span-4 md:self-end md:pb-1",
+              )}
+            >
+              <p className="ledger-label flex items-baseline gap-3">
+                <span className="text-foreground transition-colors duration-300 group-hover:text-accent">{ref}</span>
+                <span className="truncate">{item.byline ?? item.role}</span>
+              </p>
               <h3
                 className={clsx(
-                  "font-[720] leading-[1.08] tracking-[-0.025em] text-foreground [font-variation-settings:'wdth'_104] text-balance",
-                  slot.format === "wide"
-                    ? "max-w-[26ch] text-[clamp(1.375rem,2.1vw,2.125rem)]"
-                    : "max-w-[20ch] text-[clamp(1.25rem,1.6vw,1.625rem)]",
+                  "mt-3 flex items-start justify-between gap-4 font-[720] tracking-[-0.025em] text-foreground [font-variation-settings:'wdth'_104]",
+                  lead
+                    ? "text-[clamp(1.625rem,2.6vw,2.5rem)] leading-[1.04]"
+                    : "text-[clamp(1.375rem,1.9vw,1.875rem)] leading-[1.08]",
                 )}
               >
-                {item.title}
+                <span className="max-w-[24ch] text-balance">{item.title}</span>
+                <IconArrowUpRight
+                  size={lead ? 24 : 20}
+                  stroke={1.75}
+                  aria-hidden
+                  className="mt-[0.15em] shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
               </h3>
-              <IconArrowUpRight
-                size={20}
-                stroke={1.75}
-                aria-hidden
-                className="self-start text-foreground transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:translate-x-1"
-              />
-              <p className="col-span-2 col-start-2 mt-2 text-[15px] leading-[1.4] text-muted-foreground">
-                {item.byline ?? item.role}
-              </p>
               {item.metric && (
-                <p className="col-span-2 col-start-2 mt-3 max-w-[52ch] text-[15px] leading-[1.5] text-foreground text-pretty tabular-nums">
+                <p className="mt-3 max-w-[52ch] text-[15px] leading-[1.5] text-muted-foreground text-pretty tabular-nums md:text-base">
                   {item.metric}
                 </p>
               )}

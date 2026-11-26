@@ -15,8 +15,8 @@ import type { WorkMedia } from "@/lib/types/content"
  * once the canvas has its picture. A loop plays only while it is on screen,
  * and never under reduced motion.
  *
- * Without media: the study's drawn specimen (children), centred on the card
- * surface at the frame's shape, until its media arrives.
+ * Without media: the study's drawn specimen (children), filling the frame,
+ * until its media arrives.
  */
 export function ElasticFrame({
   media,
@@ -113,11 +113,9 @@ export function ElasticFrame({
           <canvas ref={canvasRef} aria-hidden className="elastic-canvas pointer-events-none absolute" />
         </>
       ) : (
-        // The specimen keeps its own 16:10 card; here it sits as large as the
-        // frame allows, centred on the card surface.
-        <div className="@container absolute inset-0 grid place-items-center overflow-hidden rounded-[4px] bg-card ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]">
-          <div className="w-[min(100cqw,160cqh)]">{children}</div>
-        </div>
+        // The specimen is its own 16:10 card, the same shape as the frame, so
+        // it simply fills it.
+        <div className="absolute inset-0">{children}</div>
       )}
     </div>
   )
