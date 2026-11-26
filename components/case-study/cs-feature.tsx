@@ -14,7 +14,10 @@ export interface CsFeatureProps {
   title: string
   body: string
   details?: [CsFeatureDetail, CsFeatureDetail]
-  visual: ReactNode
+  visual?: ReactNode
+  /** Stacked only: a full-width scene (e.g. a scroll-driven device) in place
+   *  of the framed visual. */
+  scene?: ReactNode
   reverse?: boolean
   stacked?: boolean
 }
@@ -25,6 +28,7 @@ export function CsFeature({
   body,
   details,
   visual,
+  scene,
   reverse = false,
   stacked = false,
 }: CsFeatureProps) {
@@ -40,6 +44,7 @@ export function CsFeature({
     >
 
       {/* Visual panel */}
+      {scene ? <div className="order-2">{scene}</div> : (
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -52,6 +57,7 @@ export function CsFeature({
       >
         {visual}
       </motion.div>
+      )}
 
       {/* Text panel */}
       <motion.div

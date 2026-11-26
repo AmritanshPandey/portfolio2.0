@@ -55,6 +55,7 @@ export function FancyCursor() {
   const currentScale = useRef(RING_SCALE.default)
   const targetScale  = useRef(RING_SCALE.default)
   const activeState  = useRef<CursorState>("default")
+  const activeLabel  = useRef<string | undefined>(undefined)
 
   const applyState = useCallback((state: CursorState, labelOrSrc?: string) => {
     const ring     = ringRef.current
@@ -65,8 +66,11 @@ export function FancyCursor() {
     const imgCard  = imgCardRef.current
     const imgEl    = imgElRef.current
     if (!ring || !dot || !pillCard || !labelEl || !ibeam || !imgCard || !imgEl) return
+    // Moving within the same kind of target changes nothing; skip the writes.
+    if (state === activeState.current && labelOrSrc === activeLabel.current) return
 
     activeState.current = state
+    activeLabel.current = labelOrSrc
     targetScale.current = RING_SCALE[state]
 
     const showPill    = state === "card"
@@ -133,6 +137,7 @@ export function FancyCursor() {
       mx.current = e.clientX
       my.current = e.clientY
       revealIfNeeded()
+      startLoop()
     }
 
     const onOver = (e: PointerEvent) => {
@@ -153,6 +158,8 @@ export function FancyCursor() {
       } else {
         applyState("default")
       }
+      // A new target may change the ring's size; let it ease there.
+      startLoop()
     }
 
     const onLeave = () => {
@@ -185,7 +192,20 @@ export function FancyCursor() {
       if (pill)   pill.style.transform   = `translate3d(${rx.current}px,${ry.current}px,0)`
       if (imgPos) imgPos.style.transform = `translate3d(${irx.current}px,${iry.current}px,0)`
 
-      if (document.visibilityState === "visible") {
+      // Once everything has caught up with the pointer, stop: a still mouse
+      // costs nothing, and the next move starts the loop again.
+      const settled =
+        Math.abs(mx.current - rx.current) < 0.1 &&
+        Math.abs(my.current - ry.current) < 0.1 &&
+        Math.abs(mx.current - irx.current) < 0.1 &&
+        Math.abs(my.current - iry.current) < 0.1 &&
+        Math.abs(targetScale.current - currentScale.current) < 0.001
+      if (settled) {
+        rx.current = irx.current = mx.current
+        ry.current = iry.current = my.current
+        currentScale.current = targetScale.current
+      }
+      if (!settled && document.visibilityState === "visible") {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         rafRef.current = 0

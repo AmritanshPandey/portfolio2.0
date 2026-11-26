@@ -27,7 +27,7 @@ export function CsBeforeAfter({ before, after }: CsBeforeAfterProps) {
         className="flex flex-col gap-5"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-border" />
+          <div className="w-1.5 h-1.5 bg-border" />
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
             Before
           </p>
@@ -52,7 +52,7 @@ export function CsBeforeAfter({ before, after }: CsBeforeAfterProps) {
         className="flex flex-col gap-5"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <div className="w-1.5 h-1.5 bg-accent" />
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
             After
           </p>

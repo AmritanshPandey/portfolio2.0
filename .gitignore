@@ -55,3 +55,9 @@ next-env.d.ts
 # Playwright
 /test-results/
 /playwright-report/
+
+# Download cache of scripts/prepare-iphone-duo.py
+/.cache/
+
+# Redesign snapshots (scripts/snap.mjs)
+/snapshots/

@@ -18,8 +18,9 @@ export default function Page() {
       <Section
         id="work"
         bg="default"
+        space="tight"
         title="Systems that shipped."
-        description="Four case studies across enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
+        description="Five case studies across agentic payments, enterprise demo systems, multi-brand commerce, design systems, and a 0→1 pivot. Each one names the options considered and what actually changed."
         headerAnimated={false}
       >
         <CaseStudy />
@@ -29,6 +30,7 @@ export default function Page() {
       <Section
         id="explorations"
         bg="muted"
+        space="snug"
         title="Explorations"
         description="Self-directed work: product ideas and reusable systems, outside client constraints."
       >
@@ -37,7 +39,7 @@ export default function Page() {
 
       {/* ───────────────── APPROACH ───────────────── */}
       {/* Heading + intro live inside the deck (two-column), so no Section header here. */}
-      <Section id="approach" bg="approach">
+      <Section id="approach" bg="approach" space="snug">
         <ProductDesignApproachSection />
       </Section>
 
@@ -48,6 +50,7 @@ export default function Page() {
       <Section
         id="insights"
         bg="muted"
+        space="tight"
         title="Insights"
         description="Short essays on systems, incentives, risk, AI trust, and decision-making."
       >
@@ -69,6 +72,7 @@ export default function Page() {
       <Section
         id="advisory"
         bg="default"
+        space="tight"
         title="Advisory, on the side"
         description="Product direction, UX critique, and mentoring for a small number of teams and designers."
         headerVariant="quiet"

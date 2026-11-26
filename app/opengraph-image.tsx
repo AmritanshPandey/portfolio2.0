@@ -7,28 +7,32 @@ export const contentType = "image/png"
 export const alt =
   "Amritansh Pandey, Senior UX Designer at Mastercard. Product design for complex systems people can trust."
 
+// The Ledger palette (light paper), from the tokens in globals.css.
+const PAPER = "#F2F0EB"
+const INK = "#111111"
+const GRAPHITE = "#5C5A55"
+const ULTRAMARINE = "#2B35E8"
+const RULE = "#D6D2C9"
+
 /**
- * The social card.
+ * The social card: what a link to the site shows when it is pasted into
+ * LinkedIn, Slack or a DM. It is the hero, set again: the paper, the ink
+ * rule, the statement in Archivo with the ultramarine full stop, and the
+ * name and role on a hairline underneath.
  *
- * A portfolio spreads by being pasted into LinkedIn, Slack, and DMs; without
- * this the link rendered as a bare text row. Rebuilds the hero's composition
- * rather than inventing a second identity: dark canvas, emerald accent on the
- * middle line, and the same positioning statement.
- *
- * The display font is read from the repo rather than fetched from Google at
- * build time. A network call here would fail silently — the card would just
- * render in a default face and nothing would flag it — and the preview
- * deployments sit behind Vercel SSO, so that regression would be invisible
- * from outside. 82 KB in the repo, never shipped to a browser, always correct.
+ * The fonts are read from the repo rather than fetched at build time. A
+ * network call here would fail silently (the card would just render in a
+ * default face), and preview deployments sit behind Vercel SSO, so that
+ * regression would be invisible from outside. Static Archivo instances
+ * (Fontsource, OFL), since the card renderer reads neither variable fonts
+ * nor WOFF2; never shipped to a browser.
  */
-async function loadFont(): Promise<Buffer> {
-  return readFile(
-    join(process.cwd(), "assets", "fonts", "bricolage-grotesque-700.ttf")
-  )
+async function loadFont(file: string): Promise<Buffer> {
+  return readFile(join(process.cwd(), "assets", "fonts", file))
 }
 
 export default async function Image() {
-  const font = await loadFont()
+  const [regular, bold] = await Promise.all([loadFont("archivo-400.woff"), loadFont("archivo-800.woff")])
 
   return new ImageResponse(
     (
@@ -38,75 +42,67 @@ export default async function Image() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          background: "#0a0a0a",
-          padding: "72px 80px",
-          position: "relative",
+          background: PAPER,
+          padding: "56px 72px 60px",
+          fontFamily: "Archivo",
+          color: INK,
         }}
       >
-        {/* Emerald bloom, echoing the hero's ambient glow. */}
-        <div
-          style={{
-            position: "absolute",
-            top: -180,
-            right: -140,
-            width: 640,
-            height: 640,
-            borderRadius: 9999,
-            background:
-              "radial-gradient(circle, rgba(52,211,153,0.20) 0%, rgba(52,211,153,0) 70%)",
-            display: "flex",
-          }}
-        />
-
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div
-            style={{
-              width: 11,
-              height: 11,
-              borderRadius: 9999,
-              background: "#34d399",
-              display: "flex",
-            }}
-          />
-          <div style={{ color: "#a1a1aa", fontSize: 25, letterSpacing: "-0.01em" }}>
-            Senior UX Designer · Mastercard
+        {/* Meta line, then the ink rule the statement hangs from. */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 24, color: INK }}>
+            <div style={{ width: 12, height: 12, background: ULTRAMARINE, display: "flex" }} />
+            Open to conversations
           </div>
+          <div style={{ display: "flex", fontSize: 24, color: GRAPHITE }}>amritansh.cc</div>
         </div>
+        <div style={{ display: "flex", height: 2, background: INK, marginTop: 22 }} />
 
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            fontSize: 78,
-            fontWeight: 700,
-            letterSpacing: "-0.022em",
-            lineHeight: 1.06,
+            marginTop: 40,
+            fontSize: 104,
+            fontWeight: 800,
+            letterSpacing: "-0.045em",
+            lineHeight: 0.96,
           }}
         >
-          <div style={{ color: "#fafafa", display: "flex" }}>Product design for</div>
-          <div style={{ color: "#34d399", display: "flex" }}>complex systems</div>
-          <div style={{ color: "#fafafa", display: "flex" }}>people can trust.</div>
+          <div style={{ display: "flex" }}>Product design for</div>
+          <div style={{ display: "flex" }}>complex systems</div>
+          <div style={{ display: "flex" }}>
+            people can trust<span style={{ color: ULTRAMARINE }}>.</span>
+          </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-          <div style={{ color: "#fafafa", fontSize: 29, fontWeight: 700 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            marginTop: "auto",
+            paddingTop: 22,
+            borderTop: `1px solid ${RULE}`,
+          }}
+        >
+          <div style={{ display: "flex", fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em" }}>
             Amritansh Pandey
           </div>
-          <div style={{ width: 1, height: 26, background: "#3f3f46", display: "flex" }} />
-          <div style={{ color: "#71717a", fontSize: 22 }}>
-            6+ years · fintech, commerce, 0→1
+          <div style={{ display: "flex", fontSize: 26, color: GRAPHITE }}>
+            Senior UX Designer · Mastercard
           </div>
         </div>
       </div>
     ),
     {
       ...size,
-      // No conditional fallback: the file is in the repo, so a missing font is
-      // a build error worth surfacing rather than a card that quietly ships in
-      // the wrong typeface.
+      // No conditional fallback: the files are in the repo, so a missing font
+      // is a build error worth surfacing rather than a card that quietly ships
+      // in the wrong typeface.
       fonts: [
-        { name: "Bricolage Grotesque", data: font, style: "normal", weight: 700 },
+        { name: "Archivo", data: regular, style: "normal", weight: 400 },
+        { name: "Archivo", data: bold, style: "normal", weight: 800 },
       ],
     }
   )

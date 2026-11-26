@@ -16,7 +16,8 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
     <div
       aria-hidden
       className={clsx(
-        "@container relative w-full overflow-hidden rounded-xl bg-card",
+        // Ledger's 4px corner on the frame; the mockups inside keep their own.
+        "@container relative w-full overflow-hidden rounded-[4px] bg-card",
         "ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]",
         className
       )}

@@ -152,7 +152,7 @@ function BehindScenesCard({
 
 function CtaLink({ item }: { item: CsBehindScenesItem }) {
   const className = clsx(
-    "mt-4 inline-flex min-h-10 w-fit items-center gap-2.5 whitespace-nowrap rounded-full border border-border bg-muted/45 px-3.5 text-[13px] font-medium text-foreground",
+    "mt-4 inline-flex min-h-10 w-fit items-center gap-2.5 whitespace-nowrap border border-border bg-muted/45 px-3.5 text-[13px] font-medium text-foreground",
     "shadow-[0_8px_18px_rgba(15,23,42,0.06)] transition-[border-color,box-shadow,transform,background-color] duration-300",
     "hover:-translate-y-0.5 hover:border-accent/40 hover:bg-muted hover:shadow-[0_12px_24px_rgba(15,23,42,0.09)]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"

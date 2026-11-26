@@ -72,14 +72,24 @@ function getDetailRoute(pathname: string) {
   return null
 }
 
-function navSectionFor(activeId: string) {
-  const idx = SECTION_IDS.indexOf(activeId)
-  if (idx === -1) return activeId
+// Home sections without a nav item of their own, and the item they belong to.
+// Advisory and leadership are part of who he is. Approach is method, not a place in the nav, so nothing lights for it
+// (lighting the item above it said "Exploration" while reading Approach).
+const BELONGS_TO: Record<string, string> = {
+  approach: "",
+  leadership: "about",
+  advisory: "about",
+}
 
+function navSectionFor(activeId: string) {
+  if (activeId in BELONGS_TO) return BELONGS_TO[activeId]
+  if (NAV_IDS.includes(activeId)) return activeId
+
+  // Anything else: the nearest nav item above it.
+  const idx = SECTION_IDS.indexOf(activeId)
   for (let i = idx; i >= 0; i--) {
     if (NAV_IDS.includes(SECTION_IDS[i])) return SECTION_IDS[i]
   }
-
   return activeId
 }
 
@@ -122,6 +132,12 @@ function useActiveSection(ids: string[], enabled: boolean) {
     if (!enabled) return
 
     let ticking = false
+    // Section tops, measured when the page's size changes rather than on
+    // every scroll frame.
+    let tops: { id: string; top: number }[] | null = null
+    const measure = () =>
+      (tops = ids.map((id) => ({ id, top: document.getElementById(id)?.offsetTop ?? 0 })))
+
     const update = () => {
       // Near the top, the answer is always the first section — this also
       // sidesteps mis-measurement before layout settles (all offsetTops 0
@@ -130,9 +146,8 @@ function useActiveSection(ids: string[], enabled: boolean) {
       let current = ids[0]
 
       if (window.scrollY > 80) {
-        for (const id of ids) {
-          const el = document.getElementById(id)
-          if (el && el.offsetTop > 0 && mid >= el.offsetTop) current = id
+        for (const { id, top } of tops ?? measure()) {
+          if (top > 0 && mid >= top) current = id
         }
       }
 
@@ -145,17 +160,24 @@ function useActiveSection(ids: string[], enabled: boolean) {
       requestAnimationFrame(update)
       ticking = true
     }
+    // Sections move as images and fonts settle, or the window resizes.
+    const remeasure = () => {
+      tops = null
+      onScroll()
+    }
+    const ro = new ResizeObserver(remeasure)
+    ro.observe(document.body)
 
     window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll, { passive: true })
+    window.addEventListener("resize", remeasure, { passive: true })
     update()
-    // Section offsets move as images/fonts settle — re-measure after load.
-    const settle = window.setTimeout(update, 1200)
-    window.addEventListener("load", onScroll)
+    const settle = window.setTimeout(remeasure, 1200)
+    window.addEventListener("load", remeasure)
     return () => {
+      ro.disconnect()
       window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-      window.removeEventListener("load", onScroll)
+      window.removeEventListener("resize", remeasure)
+      window.removeEventListener("load", remeasure)
       clearTimeout(settle)
     }
   }, [ids, enabled])
@@ -422,7 +444,9 @@ export default function Navbar() {
 
       <header
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 hidden bg-background md:block",
+          // Its own view-transition layer (globals.css): it holds still above
+          // the page while a route change cross-fades or morphs under it.
+          "glass fixed inset-x-0 top-0 z-50 hidden md:block [view-transition-name:site-nav]",
           "border-b transition-[border-color] duration-300",
           scrolled ? "border-border" : "border-transparent",
         )}
@@ -489,7 +513,7 @@ export default function Navbar() {
 
       <div
         className={clsx(
-          "fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end bg-background pb-2.5 md:hidden",
+          "glass fixed inset-x-0 top-0 z-50 flex h-[calc(env(safe-area-inset-top)+4rem)] items-end pb-2.5 md:hidden [view-transition-name:site-nav-bar]",
           "border-b transition-[border-color] duration-300",
           scrolled || open ? "border-border" : "border-transparent",
         )}
@@ -513,7 +537,7 @@ export default function Navbar() {
         data-menu-open={open}
         className="
           fixed right-[var(--gutter)] top-[calc(env(safe-area-inset-top)+0.625rem)] z-[51] flex h-11 w-11 items-center justify-center md:hidden
-          border border-foreground bg-background text-foreground
+          bg-background glass-edge border border-border text-foreground
           transition-transform duration-150 active:translate-y-px
         "
       >

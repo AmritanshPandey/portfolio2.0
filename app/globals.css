@@ -106,6 +106,15 @@
   --shadow-sm: none;
   --shadow-md: 0 1px 0 var(--border);
   --surface-hover: #EAE7E0;
+  --glass-edge: rgb(255 255 255 / 0.8); /* .glass: the bright top edge */
+  /* .glass-plate: rim, inner shade, outer hairline and specular sheen. */
+  --glass-rim: rgb(255 255 255 / 0.65);
+  --glass-shade: rgb(17 17 17 / 0.06);
+  --glass-line: rgb(17 17 17 / 0.08);
+  --glass-sheen: rgb(255 255 255 / 0.45);
+  /* Living glass: the sheen and rim light that follow the pointer. */
+  --glass-sheen-hot: rgb(255 255 255 / 0.75);
+  --glass-rim-hot: rgb(255 255 255 / 1);
 
   --radius: 3px;
 
@@ -158,8 +167,48 @@
   --destructive: #F2867E;
   --destructive-foreground: #101010;
   --on-accent: #0B0B0B;
+  --glass-edge: rgb(255 255 255 / 0.09);
+  --glass-rim: rgb(255 255 255 / 0.12);
+  --glass-shade: rgb(0 0 0 / 0.35);
+  --glass-line: rgb(0 0 0 / 0.4);
+  --glass-sheen: rgb(255 255 255 / 0.07);
+  --glass-sheen-hot: rgb(255 255 255 / 0.11);
+  --glass-rim-hot: rgb(255 255 255 / 0.45);
 
   --surface-hover: #1A1A19;
+}
+
+/* The ink band: one section set as night on the paper page, reserved for the
+   page's key framework (the Systems section) so it reads as the one place the
+   page changes key. The night tokens, scoped; on the night theme it lifts to a
+   raised sheet so it still reads as a band. Rules, accents and hairlines all
+   follow the tokens, so nothing inside needs to know it is on ink. */
+.ink-band {
+  --paper: #101010;
+  --ink: #ECEAE4;
+  --graphite: #9A978F;
+  --ultramarine: #8C93FF;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --text-muted: var(--graphite);
+  --surface-1: #171716;
+  --surface-2: #0B0B0B;
+  --border: #2B2A27;
+  --rule-strong: var(--ink);
+  --ring: var(--ultramarine);
+  --accent: var(--ultramarine);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: #1E1E1C;
+  --secondary-foreground: var(--ink);
+  --input: #171716;
+  --surface-hover: #1A1A19;
+  color-scheme: dark;
+}
+.dark .ink-band {
+  --paper: #1A1A19;
+  --surface-1: #222220;
+  --border: #353430;
 }
 
 /* Product-UI mockups keep their own rounded geometry: the fintech kit and any
@@ -177,7 +226,8 @@
 }
 
 /* One sheet of paper: every canvas variant resolves to the page or a sheet.
-   Sections are divided by rules, not by alternating bands. */
+   Sections are divided by rules, not by alternating bands; the one exception
+   is the ink band above. */
 .bg-canvas-default,
 .bg-canvas-muted,
 .bg-canvas-accent,
@@ -520,6 +570,14 @@
     text-wrap: pretty;
   }
 
+  /* Opening and closing quotes and stops hang outside the measure, so a
+     paragraph's left edge stays optically straight (Safari; ignored
+     elsewhere). */
+  p,
+  blockquote {
+    hanging-punctuation: first allow-end last;
+  }
+
   /* One focus ring for anything that doesn't define its own.
      Components that opt out via `outline-none` (e.g. CTA) keep theirs. */
   :focus-visible {
@@ -809,7 +867,7 @@
 }
 
 [data-hero-line] {
-  animation: hero-line-rise 680ms var(--ease-out) 40ms both;
+  animation: hero-line-rise 560ms var(--ease-out) 40ms both;
 }
 
 /* The hero rule draws across the sheet first; the statement lands on it. */
@@ -818,13 +876,26 @@
   to { transform: scaleX(1); }
 }
 
+/* A work row's chart line drawing itself on hover (work-specimens.tsx): the
+   path is normalised to pathLength 1, so the dash runs 1 to 0. */
+@keyframes work-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* A specimen mark arriving as the line reaches it (work-specimens.tsx). */
+@keyframes work-pop {
+  from { opacity: 0; scale: 0.3; }
+  to { opacity: 1; scale: 1; }
+}
+
 [data-hero-rule] {
   transform-origin: left center;
-  animation: rule-draw 640ms var(--ease-out) both;
+  animation: rule-draw 560ms var(--ease-out) both;
 }
 
 /* Hero statement: expanded and enormous on wide screens; condensed on phones
-   so the rotating word always fits one line. Width is the responsive tool. */
+   so each line holds on one line. Width is the responsive tool. */
 .hero-statement {
   font-family: var(--font-display);
   font-weight: 800;
@@ -843,6 +914,14 @@
   .hero-statement > span { white-space: nowrap; }
 }
 
+/* On a desktop the statement shares its row with the hero phone, so it sets
+   to fit eight columns. */
+@media (min-width: 1024px) {
+  .hero-statement {
+    font-size: min(6vw, 6.25rem);
+  }
+}
+
 [data-hero-line="2"] {
   animation-delay: 100ms;
 }
@@ -859,10 +938,6 @@
 
 [data-hero-card] {
   animation: hero-soft-in 560ms var(--ease-out) 280ms both;
-}
-
-[data-hero-proof] {
-  animation: hero-soft-in 520ms var(--ease-out) 320ms both;
 }
 
 @keyframes sheen {
@@ -960,6 +1035,34 @@
 }
 
 /* ─────────────────────────
+   WORK GALLERY
+   Selected work as a staggered spread: each frame placed on the 12-column
+   grid by its slot (work-gallery.tsx), dropped below its row's top by
+   --shift so the spread never lines up flat. Phones stack the frames.
+───────────────────────── */
+
+@media (min-width: 768px) {
+  .work-gallery .work-frame {
+    grid-column: var(--col-start) / var(--col-end);
+    grid-row: var(--row);
+    margin-top: calc(var(--shift) * 1.4vw);
+  }
+}
+
+/* An elastic sheet (elastic-sheet.ts) has the frame's picture: the DOM media
+   steps back so only the bending copy shows. The canvas overhangs the frame
+   so the sheet can bend past it. */
+.elastic-frame[data-gl] [data-sheet-media] {
+  opacity: 0;
+}
+.elastic-canvas {
+  z-index: 2;
+}
+.elastic-frame:not([data-gl]) .elastic-canvas {
+  visibility: hidden;
+}
+
+/* ─────────────────────────
    MENU MORPH
    Hamburger ⇄ cross as one continuous gesture. Opening: the outer bars
    glide to the centre, then twist into the X. Closing: the X unwinds
@@ -979,8 +1082,7 @@
   position: absolute;
   left: 0;
   width: 100%;
-  height: 2px;
-  border-radius: 9999px;
+  height: 1.5px;
   background: currentColor;
 }
 
@@ -1163,6 +1265,121 @@
     border: 1px solid var(--foreground);
     color: var(--foreground);
   }
+
+  /* Liquid glass, only for the layer that floats over content: the nav, its
+     controls and secondary buttons. The page's own paper, let partly
+     through, so what passes under it (the hero's dots and pixels) softens
+     rather than vanishes; a bright top edge catches the light. No
+     refraction: blur, tint and an edge, in every browser. The blur is kept
+     modest: the fixed nav re-blurs on every scroll frame, and its cost grows
+     with the radius (most of all on Safari and iPhone). */
+  .glass,
+  .btn-line {
+    background-color: color-mix(in oklab, var(--background) 76%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    backdrop-filter: blur(14px) saturate(1.6);
+  }
+  .glass,
+  .glass-edge,
+  .btn-line { box-shadow: inset 0 1px 0 var(--glass-edge); }
+  /* Glass plates: content-strength glass behind the hero, so the dot grid
+     frosts under the text instead of running through it. Thinner than the
+     nav's glass, so the grid still reads through. A light rim, a faint inner
+     shade along the foot, an outer hairline and a specular sheen across the
+     top-left. The one soft object on the sheet: a 20px corner, so it reads as
+     a pane laid over the paper rather than part of the ruled grid (its glow
+     and rim light inherit it). */
+  .glass-plate {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid var(--glass-rim);
+    border-radius: 20px;
+    background-color: color-mix(in oklab, var(--background) 55%, transparent);
+    -webkit-backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
+    backdrop-filter: blur(10px) saturate(1.6) brightness(1.04);
+    box-shadow:
+      0 0 0 1px var(--glass-line),
+      inset 0 1px 0 var(--glass-edge),
+      inset 0 -1px 0 var(--glass-shade);
+  }
+  /* The Approach list's pane: laid over the busiest field on the page, so
+     it carries more paper than the hero's plates and only a light blur: the
+     glyphs under it stay legible as shapes, moving, while the paper keeps
+     the type on it at full contrast in both themes. */
+  .glass-plate.approach-glass {
+    background-color: color-mix(in oklab, var(--background) 56%, transparent);
+    -webkit-backdrop-filter: blur(3px) saturate(1.5);
+    backdrop-filter: blur(3px) saturate(1.5);
+  }
+  /* The fixed specular sweep across the top-left. */
+  .glass-plate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(155deg, var(--glass-sheen) 0%, transparent 42%);
+    pointer-events: none;
+  }
+  /* What follows the pointer: a soft highlight across the glass, and the rim
+     catching the light as a 1px ring over the border, brightest nearest the
+     pointer. <GlassPlate> sets --px, --py and --glass-hot (0 to 1 by how near
+     the pointer is) on this layer alone, so moving the light restyles one
+     element, not the content on the glass. */
+  .glass-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      320px circle at var(--px, 0px) var(--py, 0px),
+      color-mix(in oklab, var(--glass-sheen-hot) calc(var(--glass-hot, 0) * 100%), transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+  .glass-glow::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px circle at calc(var(--px, 0px) + 1px) calc(var(--py, 0px) + 1px),
+      color-mix(in oklab, var(--glass-rim-hot) calc(var(--glass-hot, 0) * 100%), transparent),
+      transparent 70%
+    );
+    -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    -webkit-mask-clip: content-box, border-box;
+    -webkit-mask-composite: xor;
+    mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    mask-clip: content-box, border-box;
+    mask-composite: exclude;
+  }
+  /* An outline button on the glass is already frosted by the plate under it;
+     blurring again would make the browser recompute the backdrop twice. */
+  .glass-plate .btn-line {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: color-mix(in oklab, var(--background) 40%, transparent);
+  }
+
+  /* Solid where the browser can't blur, or the reader asks for less
+     transparency. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass,
+    .glass-plate,
+    .btn-line { background-color: var(--background); }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass,
+    .glass-plate,
+    .btn-line {
+      background-color: var(--background);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
   .btn-line:hover { background: var(--foreground); color: var(--background); }
   .btn-ink:active,
   .btn-line:active { transform: translate3d(0, 1px, 0); }
@@ -1175,6 +1392,45 @@
   .btn-line:hover .btn-arrow { transform: translate3d(3px, -3px, 0); }
 }
 
+/* An Insights row opening to its summary (insights-list.tsx): the summary's
+   row grows from 0fr to 1fr on hover or keyboard focus. Touch screens can't
+   hover, so they show it throughout. */
+.insight-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 400ms var(--ease-out),
+    opacity 300ms var(--ease-out);
+}
+.insight-more > * {
+  min-height: 0;
+  overflow: hidden;
+}
+.work-row:hover .insight-more,
+.work-row:focus-visible .insight-more {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+@media (hover: none) {
+  .insight-more {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+/* Mid-scroll, a row the page slides under the pointer stays shut; the one
+   that was open when the scroll began stays open (insights-scroll-hold.tsx). */
+@media (hover: hover) {
+  html[data-scrolling] .work-row:hover:not([data-hover-held]):not(:focus-visible) .insight-more {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .insight-more { transition: none; }
+}
+
+
 /* Hero dot field. Desktop pointers get the live pixel wake (<WakeField>);
    phones, touch and reduced motion get this static grid and no shader code.
    The fallback is the same grid, shown when WebGL is unavailable. */
@@ -1182,9 +1438,10 @@
 .hero-dots-fallback {
   background-image: radial-gradient(circle, var(--hero-dot) 0.6px, transparent 1.1px);
   background-size: 8px 8px; /* PITCH in hero-field.tsx */
-  /* The same fade the live sheet draws in its shader. */
-  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 42%, transparent 82%);
+  /* The same fade the live sheet draws in its shader (FADE_TOP_PX and
+     FADE_BOTTOM_PX in wake-field.tsx): in under the rule, out at the foot. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 96px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 96px), transparent 100%);
 }
 .hero-dots { display: none; }
 @media (max-width: 767px), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
@@ -1226,7 +1483,8 @@
 
 .settle-ready [data-settle]:not([data-settled]) {
   opacity: 0;
-  transform: translate3d(0, 0.55em, 0);
+  /* 2D, so a waiting element is not promoted to its own layer. */
+  transform: translateY(0.55em);
 }
 
 [data-settle="rule"] {
@@ -1238,6 +1496,24 @@
 .settle-ready [data-settle="rule"]:not([data-settled]) {
   opacity: 1;
   transform: scaleX(0);
+}
+
+/* Section titles rise out of a slot as their rule finishes drawing: the line
+   lifts while a clip opens from the bottom, like the hero statement landing.
+   The clip always reaches past the box (negative insets) so descenders and
+   overhangs are never cut, and both ends are insets so it can interpolate. */
+[data-settle="title"] {
+  clip-path: inset(-0.15em -0.15em -0.3em -0.15em);
+  transition:
+    clip-path 640ms var(--ease-out),
+    transform 640ms var(--ease-out);
+  transition-delay: calc(160ms + var(--settle-delay, 0ms));
+}
+
+.settle-ready [data-settle="title"]:not([data-settled]) {
+  opacity: 1;
+  transform: translateY(0.45em);
+  clip-path: inset(100% -0.15em -0.3em -0.15em);
 }
 
 /* Loading: a single rule that runs left to right while a route streams in. */
@@ -1258,6 +1534,54 @@
 ::view-transition-new(root) {
   animation-duration: 220ms;
   animation-timing-function: var(--ease-settle);
+}
+
+/* The page itself swaps in place on a route change: the old page drops out
+   at once and the new one fades in where it lands. Animating its box would
+   slide the whole page from the old scroll position. */
+@keyframes page-swap-in {
+  from { opacity: 0; }
+}
+::view-transition-group(.page-swap) {
+  animation: none;
+}
+::view-transition-old(.page-swap) {
+  display: none;
+}
+::view-transition-new(.page-swap) {
+  animation: page-swap-in 240ms var(--ease-settle) both;
+}
+
+/* The nav holds still through a route change: it is its own layer, painted
+   above the page's, and simply shows its new state. Without this the page's
+   snapshot covers it for the length of the transition. */
+::view-transition-group(site-nav),
+::view-transition-group(site-nav-bar) {
+  animation: none;
+}
+::view-transition-old(site-nav),
+::view-transition-old(site-nav-bar) {
+  display: none;
+}
+::view-transition-new(site-nav),
+::view-transition-new(site-nav-bar) {
+  animation: none;
+}
+
+/* Opening a case study from its work row: the row's specimen grows into the
+   study's opening visual (and shrinks back on the way home) while the rest of
+   the page cross-fades. The two pictures differ in shape, so each fills the
+   moving box rather than stretching. */
+::view-transition-group(.case-morph) {
+  animation-duration: 560ms;
+  animation-timing-function: var(--ease-out);
+}
+::view-transition-old(.case-morph),
+::view-transition-new(.case-morph) {
+  height: 100%;
+  object-fit: cover;
+  animation-duration: 560ms;
+  animation-timing-function: var(--ease-out);
 }
 
 /* ─────────────────────────
@@ -1285,7 +1609,6 @@
   [data-hero-line],
   [data-hero-fade],
   [data-hero-card],
-  [data-hero-proof],
   [data-hero-rule] {
     animation: none !important;
     opacity: 1 !important;
@@ -1309,13 +1632,18 @@
 
   /* The settle never hides content when motion is reduced */
   .settle-ready [data-settle],
-  .settle-ready [data-settle="rule"] {
+  .settle-ready [data-settle="rule"],
+  .settle-ready [data-settle="title"] {
     opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
   }
 
   ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-new(root),
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
     animation: none !important;
   }
 

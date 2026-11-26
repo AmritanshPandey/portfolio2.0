@@ -131,7 +131,10 @@ export default function RootLayout({
 
             {/* Content */}
             <main id="main-content" className="relative overflow-x-clip [transform:translateZ(0)]">
-              <ViewTransition>{children}</ViewTransition>
+              {/* Route changes swap the page in place ("page-swap" in
+                  globals.css): no slide from the old scroll position. Named
+                  elements, such as a work row's specimen, still travel. */}
+              <ViewTransition default="page-swap">{children}</ViewTransition>
             </main>
 
             {/* Footer */}

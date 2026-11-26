@@ -63,7 +63,7 @@ export function CsOutcomes({
           className="object-cover"
         />
         {tag && (
-          <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-background/85 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground ring-1 ring-border/60 backdrop-blur">
+          <span className="absolute left-4 top-4 inline-flex items-center bg-background/85 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground ring-1 ring-border/60 backdrop-blur">
             {tag}
           </span>
         )}
@@ -80,7 +80,7 @@ export function CsOutcomes({
         {items.map((item) => (
           <div key={item.title} className="flex flex-col gap-3">
             <span className="flex size-9 items-center justify-center rounded-xl bg-muted text-foreground ring-1 ring-border/60 [&>svg]:size-[18px]">
-              {item.icon ?? <span className="size-1.5 rounded-full bg-foreground/60" />}
+              {item.icon ?? <span className="size-1.5 bg-foreground/60" />}
             </span>
             <h3 className="text-[15px] font-semibold leading-snug tracking-tight text-foreground md:text-base">
               {item.title}

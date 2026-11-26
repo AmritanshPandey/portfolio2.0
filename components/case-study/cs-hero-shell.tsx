@@ -1,4 +1,5 @@
 import clsx from "clsx"
+import { ViewTransition } from "react"
 import { ReadingProgress } from "@/components/shared/reading-progress"
 import type { ReactNode } from "react"
 
@@ -30,6 +31,10 @@ export interface CsHeroShellProps {
   asideLabel?: string
   /** Kept for call-site compatibility; the aside takes the right-hand columns. */
   asideCol?: string
+  /** Shared-element name: the home page's work row for this study carries the
+   *  same one, so opening the study grows that row's specimen into this
+   *  aside (a View Transition), and going back shrinks it home again. */
+  transitionName?: string
   // Extra content (backwards-compat — renders below meta)
   children?: ReactNode
   className?: string
@@ -70,6 +75,7 @@ export function CsHeroShell({
   badge,
   aside,
   asideLabel,
+  transitionName,
   children,
   className,
   keywords,
@@ -167,7 +173,13 @@ export function CsHeroShell({
             {hasAside ? (
               <>
                 {asideLabel && <p className="ledger-label mb-4">{asideLabel}</p>}
-                {aside}
+                {transitionName ? (
+                  <ViewTransition name={transitionName} share="case-morph">
+                    {aside}
+                  </ViewTransition>
+                ) : (
+                  aside
+                )}
               </>
             ) : (
               metaTable

@@ -1,6 +1,6 @@
 import { SectionSubgroup } from "@/components/shared/section-subgroup"
 import { workItems } from "@/lib/data"
-import { WorkIndex } from "./work-index"
+import { WorkGallery } from "./work-gallery"
 
 export default function WorkSection() {
   // Order is controlled by SEQUENCE in lib/data/work.ts.
@@ -9,7 +9,7 @@ export default function WorkSection() {
   return (
     <SectionSubgroup variant="spacious">
       <section data-cursor-zone="work">
-        <WorkIndex items={sorted} />
+        <WorkGallery items={sorted} />
       </section>
     </SectionSubgroup>
   )

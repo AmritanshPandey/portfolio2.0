@@ -1,13 +1,13 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 import type { WakeColors } from "./wake-field"
+import { lazyClient } from "@/components/shared/lazy-client"
 import { type Battery, getBattery, markSlow, onLowBattery, staysStill } from "@/lib/motion-budget"
 
 // Loaded only once the page is idle on a desktop pointer. Phones, touch and
 // reduced motion never download it and keep the static CSS dots instead.
-const WakeField = dynamic(() => import("./wake-field").then((m) => m.WakeField), { ssr: false })
+const WakeField = lazyClient(() => import("./wake-field").then((m) => m.WakeField))
 
 // The complement of the media query that shows `.hero-dots` in globals.css.
 const LIVE_QUERY = "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)"

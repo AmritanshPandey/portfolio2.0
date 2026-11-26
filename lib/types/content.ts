@@ -1,18 +1,53 @@
+/** A project's own picture for the home gallery: a still, or a short muted
+ *  loop with a poster. Lives in public/work/<slug>/. */
+export interface WorkMedia {
+  kind: "image" | "video"
+  src: string
+  /** The still shown before a loop plays, and under reduced motion. */
+  poster?: string
+  width: number
+  height: number
+  alt: string
+}
+
 export interface WorkItem {
+  /** "Domain / Client", e.g. "Demo Systems / Mastercard". */
   category: string
   title: string
+  /** The problem the work answered, in one sentence. */
   description: string
+  /** Amritansh's role, as stated on the case study. */
+  role?: string
+  /** Who Amritansh was there, as one plain line under the title on the home
+   *  page ("Design lead at Mastercard"). */
+  byline?: string
   image: string
+  /** Real media for the home gallery; without it the frame shows the
+   *  study's drawn specimen. */
+  media?: WorkMedia
   href: string
   tags?: string[]
   featured?: boolean
-  /** Short outcome / impact line shown on the "More case studies" cards. */
+  /** The outcome, distinct from the problem; shown on the home page and the
+   *  "More case studies" cards. Only what the case study itself states. */
   metric?: string
+  /** The working: the study's key decision, in its own words. Pressure and
+   *  cost are left out where they can't be made public. */
+  working?: {
+    /** What pushed the other way. */
+    pressure?: string
+    /** The decision taken. */
+    call: string
+    /** What it cost. */
+    cost?: string
+  }
   order: number
 }
 
 export interface ExplorationItem {
   title: string
+  /** The name in the study index, when the title's part before a colon isn't one ("PlanR"). */
+  short?: string
   description: string
   question?: string
   tested?: string

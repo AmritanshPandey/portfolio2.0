@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { usePerformanceMode } from "@/hooks/use-performance-mode"
+import { playNote } from "@/lib/ledger-sound"
 
 /**
  * The hero's pixel wake. At rest, a fine screen of tiny ink dots packed 8px
@@ -74,12 +75,23 @@ const TELEPORT = 0.3
 // real pause, the true speed when a busy page delivered the move late.
 const BLEND_WITHIN = 80
 
-// Click rings: eased out, so the ring leaves quickly and settles.
+// Click rings: eased out, so the ring leaves quickly and settles. Each one
+// sounds the lowest note of the rules' scale, softly, under them.
+const RING_NOTE = 0
+const RING_STRENGTH = 0.3
 const MAX_RINGS = 3
 const RING_LIFE = 1.1 // s
 const RING_REACH = 0.42 // final radius, field heights
 const RING_WIDTH = 0.028 // gaussian band, field heights
 const RING_TAIL = 0.12 // tail length behind the front, field heights
+
+// On the first visit of a session the sheet draws one stroke across the
+// statement by itself, shortly after it starts, so a reader learns it answers
+// the pointer. Any real move takes over at once. Field uv, y up: the stroke
+// runs left to right through the statement in a gentle S.
+const INTRO_DELAY_MS = 500
+const INTRO_MS = 1500
+const INTRO_KEY = "wake:intro"
 
 // Drawing: after the last stroke or click, keep drawing this long (s) while
 // the wake and rings fade, then stop until something moves.
@@ -93,8 +105,10 @@ const SLOW_FRAME_MS = 28
 const SLOW_WINDOWS = 2
 
 // The sheet's fade, matching the static grid's CSS mask: in over the first
-// 14px under the rule, full to 42% of the height, gone by 82%.
+// 14px under the rule, full all the way down the hero, then out over its last
+// 96px into the next section.
 const FADE_TOP_PX = 14
+const FADE_BOTTOM_PX = 96
 
 // Cell geometry, as fractions of the cell. On the 8px grid the resting dot is
 // ~1.8px across and a pixel is 7px square with a 1px gap, both landing on
@@ -159,6 +173,7 @@ uniform vec2 u_resolution; // device px
 uniform float u_cell;      // cell size, device px
 uniform float u_aspect;
 uniform float u_fadeTop;   // top fade length, device px
+uniform float u_fadeBottom; // bottom fade length, device px
 uniform sampler2D u_trail;
 uniform vec4 u_dot;
 uniform vec4 u_wake;
@@ -224,7 +239,7 @@ void main() {
   if (ringLit > 0.0) colour = vec4(u_ring.rgb, u_ring.a * ringLit * pixelMark(local, aa));
 
   float fromTop = u_resolution.y - gl_FragCoord.y;
-  colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((0.82 - fromTop / u_resolution.y) / 0.4, 0.0, 1.0);
+  colour.a *= clamp(fromTop / u_fadeTop, 0.0, 1.0) * clamp((u_resolution.y - fromTop) / u_fadeBottom, 0.0, 1.0);
   gl_FragColor = vec4(colour.rgb * colour.a, colour.a); // premultiplied
 }
 `
@@ -270,7 +285,8 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
   const [failed, setFailed] = useState(false)
 
   const { isHigh, isBalanced } = usePerformanceMode()
-  const maxDpr = isHigh ? 2 : isBalanced ? 1.5 : 1
+  // The cells are 8px blocks, so past 1.5x the extra pixels buy nothing visible.
+  const maxDpr = isHigh || isBalanced ? 1.5 : 1
   const colorKey = JSON.stringify([light, dark])
 
   useEffect(() => {
@@ -305,7 +321,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     const uniforms = (program: WebGLProgram, names: string[]) =>
       Object.fromEntries(names.map((n) => [n, gl.getUniformLocation(program, n)]))
     const ut = uniforms(trailProgram, ["u_prev", "u_texel", "u_keep", "u_from", "u_to", "u_force", "u_aspect"])
-    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_fadeTop", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
+    const us = uniforms(sheetProgram, ["u_resolution", "u_cell", "u_aspect", "u_fadeTop", "u_fadeBottom", "u_trail", "u_dot", "u_wake", "u_ring", "u_rings"])
 
     // Two trail textures, ping-ponged: read last frame, write this one.
     const trail = [0, 1].map(() => ({ tex: gl.createTexture(), fbo: gl.createFramebuffer() }))
@@ -366,8 +382,11 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let speed = 0 // field heights per second, smoothed
     const rings: Ring[] = []
 
+    // The canvas box, measured on demand and dropped on scroll or resize, so
+    // a pointer move never forces layout.
+    let box: DOMRect | null = null
     const toField = (clientX: number, clientY: number) => {
-      const rect = canvas.getBoundingClientRect()
+      const rect = (box ??= canvas.getBoundingClientRect())
       return {
         x: (clientX - rect.left) / Math.max(1, rect.width),
         y: 1 - (clientY - rect.top) / Math.max(1, rect.height),
@@ -375,11 +394,23 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       }
     }
     const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return
+      if (e.pointerType === "touch" || !visible) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) {
-        onLeave()
+        if (pointer && !intro) onLeave()
         return
+      }
+      // The reader's own hand takes over from the intro stroke.
+      if (intro) {
+        intro = null
+        from = null
+        lastMove = null
+      }
+      // The frame-rate check runs on the first stroke, not at load, so it
+      // never competes with the landing.
+      if (!probed) {
+        probed = true
+        probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
       }
       if (lastMove) {
         const gap = e.timeStamp - lastMove.t
@@ -392,11 +423,15 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       kick()
     }
     const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return
+      if (e.pointerType === "touch" || !visible) return
+      // A click on the glass card is a click on the card, not the sheet: no
+      // ring rippling through under the glass.
+      if ((e.target as Element | null)?.closest?.(".glass-plate")) return
       const p = toField(e.clientX, e.clientY)
       if (!p.inside) return
       rings.push({ x: p.x, y: p.y, start: performance.now() })
       if (rings.length > MAX_RINGS) rings.shift()
+      playNote(RING_NOTE, RING_STRENGTH, (e.clientX / window.innerWidth) * 2 - 1)
       activeUntil = performance.now() + ACTIVE_FOR * 1000
       kick()
     }
@@ -407,6 +442,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       from = null
       lastMove = null
       speed = 0
+      box = null
     }
 
     let raf = 0
@@ -414,7 +450,10 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     let last = 0
     let first = true
     let activeUntil = 0
-    let probe = PROBE_FRAMES * SLOW_WINDOWS + 1 // n + 1 frames give n intervals
+    let probe = 0
+    let probed = false
+    let intro: { start: number } | null = null
+    let introTimer = 0
     const intervals: number[] = []
     let slowWindows = 0
     // End-to-end tests of the live sheet set this before the page loads: a
@@ -441,6 +480,20 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       }
       const dt = last ? Math.min(Math.max((now - last) / 1000, 1 / 240), 1 / 20) : 1 / 60
       last = now
+
+      // The intro stroke steers the pointer itself, at a steady hand speed.
+      if (intro) {
+        const t = (now - intro.start) / INTRO_MS
+        if (t >= 1) {
+          intro = null
+          pointer = null
+          from = null
+          speed = 0
+        } else {
+          pointer = { x: 0.06 + 0.88 * t, y: 0.76 + 0.07 * Math.sin(t * Math.PI * 2) }
+          speed = FULL_SPEED * 0.9
+        }
+      }
 
       // Stroke for this frame: from where the last one ended to the pointer,
       // at the speed the pointer events report. Only frames where the pointer
@@ -498,6 +551,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       gl.uniform1f(us.u_cell, spacing * dpr)
       gl.uniform1f(us.u_aspect, cssW / cssH)
       gl.uniform1f(us.u_fadeTop, FADE_TOP_PX * dpr)
+      gl.uniform1f(us.u_fadeBottom, FADE_BOTTOM_PX * dpr)
       gl.uniform4f(us.u_dot, ...colors.dot)
       gl.uniform4f(us.u_wake, ...colors.wake)
       gl.uniform4f(us.u_ring, ...colors.ring)
@@ -513,7 +567,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       // fading; then stop, and the last frame stays on screen until the next
       // move. Observers below also pause it off screen or in a hidden tab.
       if (probe > 0) probe--
-      if (visible && (probe > 0 || now < activeUntil)) raf = requestAnimationFrame(frame)
+      if (visible && (probe > 0 || intro || now < activeUntil)) raf = requestAnimationFrame(frame)
       else last = 0
     }
 
@@ -526,6 +580,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       if (resizeRaf) return
       resizeRaf = requestAnimationFrame(() => {
         resizeRaf = 0
+        box = null
         if (!resize()) setFailed(true)
         kick()
       })
@@ -564,6 +619,25 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
       setFailed(true)
     }
 
+    // Once per session, only at the top of the page and before the reader
+    // has touched the sheet.
+    const startIntro = () => {
+      if (pointer || !visible || window.scrollY > 40) return
+      try {
+        if (sessionStorage.getItem(INTRO_KEY)) return
+        sessionStorage.setItem(INTRO_KEY, "1")
+      } catch {
+        return
+      }
+      intro = { start: performance.now() }
+      if (!probed) {
+        probed = true
+        probe = PROBE_FRAMES * SLOW_WINDOWS + 1
+      }
+      kick()
+    }
+    introTimer = window.setTimeout(startIntro, INTRO_DELAY_MS)
+
     window.addEventListener("pointermove", onPointerMove, { passive: true })
     window.addEventListener("pointerdown", onPointerDown, { passive: true })
     window.addEventListener("blur", onLeave)
@@ -574,6 +648,7 @@ export function WakeField({ spacing, light, dark, onPaint, onSlow }: WakeFieldPr
     kick()
 
     return () => {
+      clearTimeout(introTimer)
       if (raf) cancelAnimationFrame(raf)
       if (resizeRaf) cancelAnimationFrame(resizeRaf)
       ro.disconnect()

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import clsx from "clsx"
 import { drorRevenueVsRestrictions } from "@/lib/data/dror"
+import { partnerBankBanks } from "@/lib/data/partnerbank"
 
 /**
  * Work specimens: one small, code-drawn diagram per case study.
@@ -25,7 +26,8 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
     <div
       aria-hidden
       className={clsx(
-        "@container relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-card",
+        // Ledger's 4px corner on the frame; the mockups inside keep their own.
+        "@container relative aspect-[16/10] w-full overflow-hidden rounded-[4px] bg-card",
         "ring-1 ring-foreground/[0.08] dark:ring-white/[0.07]",
         className
       )}
@@ -37,12 +39,8 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
 
 /* ── PartnerBank: one component, three brand skins ───────────────────────── */
 
-const BANKS = [
-  // The case study's own anonymised prospects and token colours.
-  { name: "Heritage Trust", num: "9120", type: "Private credit", from: "#D4A24C", to: "#8B6508" },
-  { name: "North Bank", num: "4287", type: "Premier debit", from: "#F43F5E", to: "#9F1239" },
-  { name: "Verde Bank", num: "7503", type: "Everyday debit", from: "#4DA88A", to: "#2F6F5A" },
-]
+// The case study's own anonymised prospects and token colours.
+const BANKS = partnerBankBanks
 
 // Resting: stacked like a hand of cards, held large so the hand fills the
 // frame. Active: dealt into a row at true size, which needs the width back.
@@ -62,7 +60,7 @@ function TokensSpecimen() {
             className={clsx(
               "absolute flex aspect-[1.586] w-[28%] flex-col justify-between overflow-hidden rounded-[1.4cqw] p-[2.2cqw] text-white",
               "shadow-[0_1.6cqw_3.2cqw_-1cqw_rgba(0,0,0,0.45)]",
-              "scale-[1.42] row-on:scale-100 transition-[translate,rotate,scale] duration-[900ms]",
+              "scale-[1.28] saturate-[0.82] row-on:scale-100 transition-[translate,rotate,scale] duration-[600ms]",
               EASE,
               BANK_POSE[i]
             )}
@@ -96,49 +94,88 @@ const STORES = [
   { name: "Aqualogica", color: "#0066CC" },
 ]
 
+// A product, drawn: cap and bottle. The same shape in every storefront.
+function Bottle({ className }: { className?: string }) {
+  return (
+    <span className={clsx("flex flex-col items-center", className)}>
+      <span className="h-[14%] w-[34%] rounded-t-[0.3cqw] bg-current opacity-70" />
+      <span className="mt-[4%] w-full flex-1 rounded-[0.6cqw] bg-current" />
+    </span>
+  )
+}
+
 function BackboneSpecimen() {
-  // The skeleton is the shared system: identical in all three storefronts.
-  // Activating the row lights it up everywhere at once, one brand after the
-  // other, while each brand's own colour stays put.
+  // The skeleton is the shared system: the same bars, tiles and bones in all
+  // three storefronts. Activating the row lights it up everywhere at once,
+  // one brand after the other, while each brand's own colour stays put.
   // The per-storefront stagger comes from inline transitionDelay on each bone.
   const bone = clsx(
-    "rounded-full bg-foreground/[0.12] transition-colors duration-500 row-on:bg-accent/70",
+    "rounded-full bg-foreground/[0.14] transition-colors duration-500 row-on:bg-accent/70",
     EASE
   )
 
   return (
     <Frame>
       <div className="absolute inset-0 flex items-center justify-center gap-[3.5cqw]">
-        {STORES.map((s, i) => (
-          <div
-            key={s.name}
-            className={clsx(
-              "flex aspect-[9/16] w-[23%] flex-col overflow-hidden rounded-[1.4cqw] bg-background p-[1.4cqw]",
-              "ring-1 ring-foreground/[0.1] transition-shadow duration-500 row-on:ring-accent/55 dark:ring-white/[0.09]",
-              EASE
-            )}
-            style={{ transitionDelay: `${i * 90}ms` }}
-          >
-            <p className="truncate text-[max(1.45cqw,8px)] font-medium leading-none text-foreground/75">
-              {s.name}
-            </p>
+        {STORES.map((s, i) => {
+          const tint = `color-mix(in srgb, ${s.color} 14%, var(--background))`
+          return (
             <div
-              className="mt-[1.2cqw] flex aspect-[4/3] items-center justify-center rounded-[0.9cqw]"
-              style={{ background: `linear-gradient(145deg, ${s.color}, color-mix(in srgb, ${s.color} 55%, #000))` }}
+              key={s.name}
+              className={clsx(
+                "flex aspect-[9/16] w-[23%] flex-col overflow-hidden rounded-[1.4cqw] bg-background p-[1.4cqw]",
+                "ring-1 ring-foreground/[0.1] transition-shadow duration-500 row-on:ring-accent/55 dark:ring-white/[0.09]",
+                EASE
+              )}
+              style={{ transitionDelay: `${i * 90}ms` }}
             >
-              <span className="h-[5.5cqw] w-[5.5cqw] rounded-full bg-white/25 ring-1 ring-white/40" />
+              {/* Store bar: the brand's name, and a bag. */}
+              <div className="flex items-center justify-between gap-[1cqw]">
+                <p className="truncate text-[max(1.45cqw,8px)] font-medium leading-none text-foreground/80">
+                  {s.name}
+                </p>
+                <span className="h-[1.7cqw] w-[1.7cqw] shrink-0 rounded-[0.3cqw] ring-1 ring-foreground/40" />
+              </div>
+
+              {/* Banner: the brand's colour, flat, with the hero product. */}
+              <div
+                className="mt-[1.2cqw] flex aspect-[16/11] items-end justify-between rounded-[0.8cqw] p-[1.2cqw]"
+                style={{ background: s.color }}
+              >
+                <div className="space-y-[0.7cqw] pb-[0.3cqw]">
+                  <span className="block h-[1cqw] w-[7cqw] rounded-full bg-white/90" />
+                  <span className="block h-[1cqw] w-[4.5cqw] rounded-full bg-white/55" />
+                </div>
+                <Bottle className="h-[82%] w-[3.4cqw] text-white/90" />
+              </div>
+
+              {/* Two products: tile, title, price. */}
+              <div className="mt-[1.3cqw] grid grid-cols-2 gap-[1cqw]">
+                {[0, 1].map((k) => (
+                  <div key={k}>
+                    <div
+                      className="flex aspect-square items-center justify-center rounded-[0.6cqw]"
+                      style={{ background: tint, color: s.color }}
+                    >
+                      <Bottle className="h-[58%] w-[2.2cqw]" />
+                    </div>
+                    <div
+                      className={clsx("mt-[0.9cqw] h-[0.9cqw] w-[88%]", bone)}
+                      style={{ transitionDelay: `${i * 90 + k * 40}ms` }}
+                    />
+                    <div
+                      className={clsx("mt-[0.7cqw] h-[0.9cqw] w-[46%]", bone)}
+                      style={{ transitionDelay: `${i * 90 + 40 + k * 40}ms` }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* The action, in the brand's colour. */}
+              <span className="mt-auto block h-[3cqw] w-full rounded-[0.6cqw]" style={{ background: s.color }} />
             </div>
-            <div className="mt-[1.6cqw] space-y-[1cqw]">
-              <div className={clsx("h-[1cqw] w-[85%]", bone)} style={{ transitionDelay: `${i * 90}ms` }} />
-              <div className={clsx("h-[1cqw] w-[60%]", bone)} style={{ transitionDelay: `${i * 90 + 40}ms` }} />
-              <div className={clsx("h-[1cqw] w-[72%]", bone)} style={{ transitionDelay: `${i * 90 + 80}ms` }} />
-            </div>
-            <div className="mt-auto flex items-center justify-between gap-[1cqw]">
-              <div className={clsx("h-[1cqw] w-[30%]", bone)} style={{ transitionDelay: `${i * 90 + 120}ms` }} />
-              <span className="h-[3.2cqw] w-[48%] rounded-[0.7cqw]" style={{ background: s.color }} />
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </Frame>
   )
@@ -218,7 +255,7 @@ function PivotSpecimen() {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray="1"
-          className="row-on:animate-[work-draw_1.5s_cubic-bezier(0.19,1,0.22,1)] motion-reduce:animate-none"
+          className="row-on:animate-[work-draw_700ms_cubic-bezier(0.19,1,0.22,1)] motion-reduce:animate-none"
         />
         <circle cx={x(peak)} cy={y(maxRev, maxRev)} r="3.25" fill="var(--accent)" />
 
@@ -241,7 +278,7 @@ function EmailSpecimen() {
   // The gaps between components widen, so the email card itself grows and
   // stays centred rather than having its blocks slide out past its edge.
   const part = clsx(
-    "transition-[margin,outline-color] duration-700 outline-1 outline-dashed outline-offset-[0.4cqw] outline-transparent",
+    "transition-[margin,outline-color] duration-500 outline-1 outline-dashed outline-offset-[0.4cqw] outline-transparent",
     "row-on:outline-accent/60",
     EASE
   )
@@ -295,10 +332,109 @@ function EmailSpecimen() {
   )
 }
 
+/* ── Agent Pay: the brand shows up only where anxiety peaks ──────────────── */
+
+// The case study's own anxiety curve (AnxietyCurve on the Agent Pay page):
+// one start point, then cubic segments, in its 700-wide coordinates.
+const ANXIETY = [
+  [40, 133], [120, 140], [180, 142], [240, 128], [290, 112], [320, 70], [340, 56], [380, 46],
+  [420, 42], [440, 45], [480, 50], [510, 66], [540, 73], [590, 100], [600, 132], [660, 133],
+]
+const STAGES = ["Intent", "Browse", "Select", "Confirm", "Verify", "Complete", "Done"]
+// The three guardian moments, and when the redrawn line reaches each one.
+const GUARDIAN = [
+  { x: 340, y: 56, delay: 400 },
+  { x: 440, y: 45, delay: 470 },
+  { x: 540, y: 73, delay: 560 },
+]
+
+function GuardianSpecimen() {
+  // The source curve is wide and shallow; stretch it vertically to fill the
+  // frame. Marks are drawn at mapped points so they stay square.
+  const Y = (y: number) => 110 + (y - 40) * 2.1
+  const p = (i: number) => `${ANXIETY[i][0]} ${Y(ANXIETY[i][1]).toFixed(1)}`
+  const curve = [`M${p(0)}`, ...[1, 4, 7, 10, 13].map((i) => `C${p(i)} ${p(i + 1)} ${p(i + 2)}`)].join(" ")
+  const base = Y(150)
+
+  return (
+    <Frame>
+      <svg viewBox="0 0 700 438" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="guardian-area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Where the brand is present; silent everywhere else. */}
+        <rect
+          x="290" y="92" width="300" height={base - 92}
+          fill="var(--accent)" fillOpacity="0.05"
+          stroke="var(--accent)" strokeOpacity="0.3" strokeDasharray="4 6"
+        />
+        <text x="440" y="78" textAnchor="middle" fontSize="18" fill="var(--accent)">
+          Mastercard shows up
+        </text>
+        <text x="40" y="270" fontSize="18" className="fill-muted-foreground">Anxiety</text>
+
+        <line x1="30" y1={base} x2="670" y2={base} className="stroke-foreground/15" strokeWidth="2" />
+        <path d={`${curve} L660 ${base} L40 ${base} Z`} fill="url(#guardian-area)" />
+        <path
+          d={curve}
+          pathLength={1}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="4.5"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          className="row-on:animate-[work-draw_1100ms_cubic-bezier(0.45,0,0.25,1)] motion-reduce:animate-none"
+        />
+
+        {GUARDIAN.map((g) => (
+          <g key={g.x}>
+            <line
+              x1={g.x} y1={Y(g.y) + 14} x2={g.x} y2={base}
+              stroke="var(--accent)" strokeOpacity="0.35" strokeWidth="2" strokeDasharray="3 5"
+            />
+            <g
+              className="origin-center [transform-box:fill-box] row-on:animate-[work-pop_480ms_cubic-bezier(0.19,1,0.22,1)_both] motion-reduce:animate-none"
+              style={{ animationDelay: `${g.delay}ms` }}
+            >
+              <rect
+                x={g.x - 14} y={Y(g.y) - 14} width="28" height="28"
+                fill="var(--color-card)" stroke="var(--accent)" strokeOpacity="0.4" strokeWidth="2"
+              />
+              <rect x={g.x - 6} y={Y(g.y) - 6} width="12" height="12" fill="var(--accent)" />
+            </g>
+          </g>
+        ))}
+
+        {STAGES.map((stage, i) => {
+          const guardian = i >= 3 && i <= 5
+          return (
+            <text
+              key={stage}
+              x={40 + i * 100}
+              y={base + 34}
+              textAnchor="middle"
+              fontSize="18"
+              fontWeight={guardian ? 600 : 400}
+              className={guardian ? "fill-accent" : "fill-muted-foreground"}
+            >
+              {stage}
+            </text>
+          )
+        })}
+      </svg>
+    </Frame>
+  )
+}
+
 /* ── Registry ────────────────────────────────────────────────────────────── */
 
 const SPECIMENS: Record<string, () => React.JSX.Element> = {
   "white-label-rfp": TokensSpecimen,
+  "agent-commerce": GuardianSpecimen,
   "d2c-platform": BackboneSpecimen,
   "citizen-safety": PivotSpecimen,
   "email-builder": EmailSpecimen,

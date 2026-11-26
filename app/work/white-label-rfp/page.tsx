@@ -7,15 +7,13 @@ import { CsFeature } from "@/components/case-study/cs-feature"
 import { CsBeforeAfter } from "@/components/case-study/cs-before-after"
 import { CsBrandSkinCompare } from "@/components/case-study/cs-brand-skin-compare"
 import { CsArchStack } from "@/components/case-study/cs-arch-stack"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsOptions } from "@/components/case-study/cs-options"
 import { CsAnnotatedImage } from "@/components/case-study/cs-annotated-image"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { FadeIn } from "@/components/shared/fade-in"
-import { AddLater } from "@/components/shared/add-later"
+import { partnerBankLayers } from "@/lib/data/partnerbank"
 import type { BrandSkin } from "@/components/case-study/cs-brand-skin-compare"
 
 // ─── BRAND SKINS ─────────────────────────────────────────────────────────────
@@ -24,21 +22,6 @@ const BRAND_SKINS: BrandSkin[] = [
   { id: "north",    bank: "North Bank",     primary: "#E11D48", deep: "#9F1239", radius: "12px", fontLabel: "Onest",       fontStack: "var(--ff-sans), ui-sans-serif, system-ui, sans-serif" },
   { id: "heritage", bank: "Heritage Trust", primary: "#8A6420", deep: "#6E4E12", radius: "4px",  fontLabel: "Serif",       fontStack: "\"Iowan Old Style\", Georgia, \"Times New Roman\", serif" },
   { id: "verde",    bank: "Verde Bank",     primary: "#25785C", deep: "#1C5A45", radius: "18px", fontLabel: "System sans", fontStack: "ui-sans-serif, system-ui, -apple-system, sans-serif" },
-]
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "problem",           label: "Problem" },
-  { id: "stakes",            label: "The stakes" },
-  { id: "what-i-led",        label: "What I led" },
-  { id: "architecture",      label: "Architecture" },
-  { id: "key-decisions",     label: "Decisions" },
-  { id: "inside-the-system", label: "Inside the system" },
-  { id: "tokens",            label: "Tokens in action" },
-  { id: "the-shift",         label: "The shift" },
-  { id: "what-changed",      label: "What changed" },
-  { id: "reflection",        label: "Reflection" },
 ]
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
@@ -76,7 +59,7 @@ function HeroAside() {
               <span className="block text-[13px] font-medium text-foreground leading-tight">{l.title}</span>
               <span className="block text-[11px] text-muted-foreground">{l.meta}</span>
             </span>
-            {l.accent && <span className="h-1.5 w-1.5 rounded-full bg-accent shrink-0" />}
+            {l.accent && <span className="h-1.5 w-1.5 bg-accent shrink-0" />}
           </div>
         ))}
       </div>
@@ -90,6 +73,7 @@ function HeroAside() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-white-label-rfp"
       breadcrumb={{ kind: "Case Study", category: "Enterprise Systems", client: "Mastercard · PartnerBank" }}
       keywords={["Enterprise Systems", "RFP Enablement", "Design Lead"]}
       title={
@@ -131,8 +115,6 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
-      <CsChapterNav chapters={CHAPTERS} />
-
       <Hero />
 
       {/* Project info bar */}
@@ -155,8 +137,7 @@ export default function Page() {
           role="Led the design side: decoupled core UX from brand, standardised the component library, and introduced token theming so a re-skin became a configuration pass."
           outcome={
             <>
-              A four-layer configurable architecture that made prospect re-skins a config swap.{" "}
-              <AddLater note="the measured change in demo turnaround. The site has said “same-day”, “10 days to 3 days” and “about 70%”; keep the one that’s true." />
+              A four-layer configurable architecture that made prospect re-skins a config swap, and cut a per-deal demo from about 10 days to about 3.
             </>
           }
         />
@@ -249,17 +230,12 @@ export default function Page() {
               Each layer has one job, so brand changes never touch UX logic.
             </p>
           </div>
-          <CsArchStack layers={[
-            { num: "L1", title: "Core Banking UX Layer", body: "Accounts, transactions, transfers, and statements. Unchanged across deals.", meta: ["flows", "interactions", "states"] },
-            { num: "L2", title: "Modular Component Library", body: "Account card, transaction list, CTA block: primitives that compose into any screen.", meta: ["primitives", "variants", "compositions"] },
-            { num: "L3", title: "Brand Token Layer", body: "Colour, type, radius, and elevation tokens that re-skin everything in one pass.", meta: ["color", "type", "elevation"], isCore: true },
-            { num: "L4", title: "Demo Configuration Engine", body: "Combines tokens and components into a deal-ready demo.", meta: ["configure", "preview", "ship"] },
-          ]} />
+          <CsArchStack layers={partnerBankLayers} />
         </div>
       </CsSection>
 
       {/* Key Decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="default">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -536,12 +512,28 @@ export default function Page() {
             </p>
           </div>
 
-          <AddLater block note="a before-and-after chart of demo turnaround with the real numbers. The old chart was labelled “illustrative” while the metric beside it said “measured”." />
+          {/* Per-deal demo turnaround, before and after the system: two ruled
+              bars drawn to scale (about 10 days, about 3). */}
+          <figure className="border-t border-border">
+            <figcaption className="ledger-label py-3">Per-deal demo turnaround</figcaption>
+            {[
+              { label: "Before", value: "~10 days", width: "100%", tone: "bg-foreground/25" },
+              { label: "After", value: "~3 days", width: "30%", tone: "bg-accent" },
+            ].map((row) => (
+              <div key={row.label} className="grid grid-cols-[4.5rem_minmax(0,1fr)_5.5rem] items-center gap-x-4 border-b border-border py-4">
+                <span className="ledger-label">{row.label}</span>
+                <span className="h-3">
+                  <span className={`block h-full ${row.tone}`} style={{ width: row.width }} />
+                </span>
+                <span className="text-right text-[15px] font-medium tabular-nums text-foreground">{row.value}</span>
+              </div>
+            ))}
+          </figure>
 
           <div className="grid md:grid-cols-2 divide-x divide-border border-t border-b border-border">
             {[
               { num: "M.01", figure: "Template → Config", label: "A rigid template became a reusable configuration model." },
-              { num: "M.02", figure: "Faster sales loop", label: "Demos kept pace with high-stakes negotiations." },
+              { num: "M.02", figure: "~10 → ~3 days", label: "Per-deal demos kept pace with high-stakes negotiations." },
             ].map((m, i) => (
               <FadeIn key={m.num} delay={i * 0.08}>
                 <div className="px-8 py-10">
@@ -566,7 +558,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/white-label-rfp" />
 
     </div>
   )

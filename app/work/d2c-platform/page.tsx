@@ -9,8 +9,6 @@ import { CsBeforeAfter } from "@/components/case-study/cs-before-after"
 import { CsArchStack } from "@/components/case-study/cs-arch-stack"
 import { CsMetricBars } from "@/components/case-study/cs-metric-bars"
 import { CsTimeline } from "@/components/case-study/cs-timeline"
-import { CsNextStudies } from "@/components/case-study/cs-next-studies"
-import { CsChapterNav } from "@/components/case-study/cs-chapter-nav"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
 import { CsPrinciples } from "@/components/case-study/cs-principles"
@@ -19,24 +17,8 @@ import { CsQuote } from "@/components/case-study/cs-quote"
 import { CsReflection } from "@/components/case-study/cs-reflection"
 import { BrowserFrame } from "@/components/case-study/browser-frame"
 import { FadeIn } from "@/components/shared/fade-in"
+import { DeviceScene } from "@/components/case-study/device-scene"
 import { AddLater } from "@/components/shared/add-later"
-
-// ─── CHAPTERS ────────────────────────────────────────────────────────────────
-
-const CHAPTERS = [
-  { id: "situation",        label: "Situation" },
-  { id: "problem",          label: "Problem" },
-  { id: "what-i-led",       label: "What I led" },
-  { id: "principles",       label: "Principles" },
-  { id: "architecture",     label: "Architecture" },
-  { id: "key-decisions",    label: "Decisions" },
-  { id: "core-flows",       label: "Core flows" },
-  { id: "tokens",           label: "Tokens in action" },
-  { id: "the-shift",        label: "The shift" },
-  { id: "what-changed",     label: "What changed" },
-  { id: "how-we-got-there", label: "Timeline" },
-  { id: "reflection",       label: "Reflection" },
-]
 
 // ─── BRAND COLORS ─────────────────────────────────────────────────────────────
 // The real storefront accents — this is the token layer that varies per brand.
@@ -95,7 +77,7 @@ function HeroAside() {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ background: b.accent }} />
-              <span className="font-mono text-[8px] text-muted-foreground truncate">{b.token}</span>
+              <span className="font-mono text-[11px] text-muted-foreground truncate">{b.token}</span>
             </div>
           </div>
         ))}
@@ -111,6 +93,7 @@ function HeroAside() {
 function Hero() {
   return (
     <CsHeroShell
+      transitionName="case-d2c-platform"
       breadcrumb={{ kind: "Case Study", category: "D2C Commerce", client: "Honasa Consumer" }}
       keywords={["First In-House UX Designer", "0→1 Commerce Foundations", "Multi-Brand Scale"]}
       title={
@@ -146,6 +129,9 @@ function Hero() {
 
 // ─── CORE FLOW VISUALS ──────────────────────────────────────────────────────
 
+// The flat storefront mockups that Core Flows showed before its device
+// scenes. Kept: they can be captured as the devices' real screens.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function PdpVisual() {
   const proofItems = [
     { label: "Ingredient proof", value: "Persistent drawer" },
@@ -154,7 +140,7 @@ function PdpVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.025),transparent_48%)] dark:bg-[radial-gradient(circle_at_22%_14%,rgba(244,63,94,0.16),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_48%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.11] dark:opacity-[0.08]" />
 
@@ -251,6 +237,7 @@ function PdpVisual() {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CartVisual() {
   const themes = [
     { name: "Mamaearth", accent: BRAND.mamaearth, tint: "rgba(0,175,239,0.14)", radius: "14px" },
@@ -259,7 +246,7 @@ function CartVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.025),transparent)] dark:bg-[radial-gradient(circle_at_50%_8%,rgba(244,63,94,0.15),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),transparent)]" />
 
       <div className="relative grid h-full grid-cols-[1.1fr_0.9fr] gap-4 p-3">
@@ -338,6 +325,7 @@ function CartVisual() {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CheckoutVisual() {
   const before = ["01", "02", "03", "04", "05", "06"]
   const after = [
@@ -347,7 +335,7 @@ function CheckoutVisual() {
   ]
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-xl">
+    <div data-keep-radius className="relative h-full w-full overflow-hidden rounded-xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_18%_20%,rgba(244,63,94,0.15),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_50%)]" />
 
       <div className="relative grid h-full grid-rows-[auto_1fr] gap-4 p-3">
@@ -421,8 +409,6 @@ export default function Page() {
   return (
     <div className="min-h-screen">
 
-      <CsChapterNav chapters={CHAPTERS} />
-
       <Hero />
 
       {/* Project info bar */}
@@ -465,7 +451,7 @@ export default function Page() {
             </p>
           </div>
           <CsList items={[
-            "No customer data: the brands couldn&apos;t see their own repeat buyers",
+            "No customer data: the brands couldn’t see their own repeat buyers",
             "Three distinct brands on identical commerce logic",
             "No design process, component library, or handoff workflow",
           ]} />
@@ -633,7 +619,7 @@ export default function Page() {
       </CsSection>
 
       {/* Key decisions (dark) */}
-      <CsSection id="key-decisions" label="Key Decisions" variant="muted">
+      <CsSection id="key-decisions" label="Key Decisions" variant="ink">
         <div className="space-y-5">
           <CsDecision
             index={0}
@@ -672,7 +658,7 @@ export default function Page() {
               { label: "Key Focus", text: "Ingredient panel · Trust badges · Sticky CTA" },
               { label: "Insight",   text: "68% of drop-off happened before checkout" },
             ]}
-            visual={<PdpVisual />}
+            scene={<DeviceScene kind="iphone" screen="/assets/images/honasa/placeholder-phone.png" alt="Placeholder for Mamaearth's product page on an iPhone." />}
           />
 
           {/* Cart */}
@@ -685,7 +671,7 @@ export default function Page() {
               { label: "Structure", text: "Thumbnail · Quantity · Cross-sell · Summary" },
               { label: "Theming",   text: "Brand token swap, no structural duplication" },
             ]}
-            visual={<CartVisual />}
+            scene={<DeviceScene kind="duo" screen="/assets/images/honasa/placeholder-duo.png" alt="Placeholder for the cart and checkout on an iPhone Duo, unfolding as you scroll." />}
           />
 
           {/* Checkout */}
@@ -698,7 +684,7 @@ export default function Page() {
               { label: "Reduction", text: "6 form steps → 3 across all brands" },
               { label: "Key UX",    text: "Address autocomplete · Persistent summary" },
             ]}
-            visual={<CheckoutVisual />}
+            scene={<DeviceScene kind="macbook" screen="/assets/images/honasa/placeholder-desktop.png" alt="Placeholder for Mamaearth's storefront on a MacBook Air, opening as you scroll." />}
           />
         </div>
       </CsSection>
@@ -729,8 +715,8 @@ export default function Page() {
                     <div className="w-7 h-7 rounded-lg border border-border" style={{ background: t.primary }} />
                   </div>
 
-                  {/* Mini product card */}
-                  <div className="rounded-xl overflow-hidden border border-border">
+                  {/* Mini product card: a mockup of the brand's own UI */}
+                  <div data-keep-radius className="rounded-xl overflow-hidden border border-border">
                     <div className="h-24 flex items-center justify-center relative" style={{ background: `linear-gradient(135deg, ${t.primary}, color-mix(in srgb, ${t.primary} 58%, #000))` }}>
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.2),transparent_60%)]" />
                       <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30" />
@@ -908,7 +894,6 @@ export default function Page() {
         </div>
       </CsSection>
 
-      <CsNextStudies currentHref="/work/d2c-platform" />
 
     </div>
   )

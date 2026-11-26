@@ -79,8 +79,8 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 
 - **Archivo** (variable, `wdth` axis) is the whole voice. Width carries the
   hierarchy: display sets expanded (`wdth` 112–116), reading text normal
-  (`wdth` 100), and the phone hero condenses (`wdth` 88) so the rotating word
-  always fits one line.
+  (`wdth` 100), and the phone hero condenses (`wdth` 88) so each line of the
+  statement holds on one line. The statement is static: no rotating words.
 - **Martian Mono** sets references, dates, roles, captions and labels, always
   with tabular figures and in sentence case. Uppercase letter-spaced eyebrows
   are retired; a system override converts any legacy instance.
@@ -92,6 +92,24 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 - `.ledger` is the sheet (container + gutters); `.ledger-grid` the 12 columns.
 - Sections open with an ink rule (`.rule-ink`, drawn on entry), then the title
   hung left with its intro set against it on the right.
+- The long scroll has a rhythm, not one interval: `Section` takes
+  `space="tight" | "default" | "loose"` for the air above it, and a few
+  sections break the shared header on purpose. Approach keeps its heading
+  sticky on the left while the steps scroll past on the right.
+- One sheet of paper, with one exception: the **ink band** (`bg="ink"`,
+  `.ink-band`), the night tokens scoped to a full-bleed section. It is used in
+  two places only: the close (the footer, on every page) and each case
+  study's key decision (`CsSection variant="ink"`). On the night theme it
+  lifts to a raised sheet. Anything drawn inside reads its tokens from where
+  it sits.
+- Work, Explorations and Insights share one grammar: ruled line items, a
+  specimen on the left where there is one, entries on the right, and the other
+  rows receding on hover (`.work-index` / `.work-row`). Specimen frames take
+  Ledger's 4px corner; the mockups inside keep their own.
+- **Show the working** (`WorkingScope`): a switch in a bar that stays in reach
+  over the work list opens a note under each row: Pressure, My call, Cost, in
+  the case study's own words (`working` in `lib/data/work.ts`). The notes are
+  plain text in the page, opened by CSS, and sit outside the row's link.
 - Case-study reading columns start at column 4 (`.ledger-offset`, `CsSection`),
   leaving a left rail open. Lists are ruled line items, not card grids.
 - Cards are rare: a raised sheet (`--surface-1`) only for specimens and mockups.
@@ -100,20 +118,27 @@ the nav). Tokens live in `app/globals.css` under "LEDGER · TOKENS".
 
 One idea, used everywhere it appears: **the settle**. Rules draw left to right,
 then content lands a few pixels onto them (`data-settle`, driven by
-`SettleObserver`). Transform and opacity only. The hero runs the same settle in
+`SettleObserver`). Section titles land bolder: they rise out of a slot as their
+rule finishes (`data-settle="title"`, a clip that opens from the bottom). Transform and opacity only. The hero runs the same settle in
 pure CSS on load and stays legible if the animation never runs.
 
 The hero has one ambient layer, **the dot field** (`HeroField`): a fine screen
-of tiny ink dots packed 8px apart, one even tone, hanging from the hero rule.
+of tiny ink dots packed 8px apart, one even tone, filling the hero from the
+hero rule down and fading out over its last 96px into the next section.
 On a desktop pointer it becomes the **pixel wake** (`WakeField`, WebGL): the
 cells the cursor passes turn into near-touching 7px square pixels, so the sheet
 briefly reads as a pixel mosaic, and they step back down through three ink
 levels to dots as the wake fades; a click sends a soft ring of ultramarine
-pixels through the same grid. It draws only while something moves. It loads
+pixels through the same grid. On the first visit of a session it draws one
+stroke across the statement by itself, shortly after it starts, so the reader
+learns the page answers the pointer; any real move takes over; phones get
+nothing extra. It draws only while something moves. It loads
 only when the page is idle on a desktop pointer; phones, touch, iPads (even
 with a trackpad), low battery, reduced motion, and any browser that can't hold
 ~36fps get the same dot screen as a static CSS texture, and never download the
 shader.
+
+The portrait is a plain photo on the hero's glass pane (see Glass plates).
 
 The gallery header has the other ambient layer, **the ASCII field**
 (`GalleryAscii`): graphite glyphs in the site's mono drifting at 30fps, the
@@ -122,30 +147,76 @@ and dissolving below. It follows the dot field's rules (`lib/motion-budget.ts`):
 a still frame on phones, iPads, low battery and reduced motion, and on phones
 it keeps to the right edge, away from the text.
 
+The footer has the third, **the sea** (`FooterSea`): swell lines of graphite
+tildes in the mono running from a faded horizon down to the foot of the page,
+closer together and calmer far away. Each line rises and falls with the water
+under it and hides the swells behind it, with a face of fading full stops
+below; the highest front crests glint ultramarine, a glyph or two at a time.
+It is the same ASCII renderer as the gallery's (`AsciiFlowBackground`,
+`shape="waves"`; geometry in `lib/ascii-sea.ts`), runs at 30fps only while on
+screen in a visible tab, and costs about 1ms a frame at phone width (about
+3ms on a wide desktop). Being that light, it is the one ambient layer that
+also moves on phones and iPads
+(`useAmbientStill("anywhere")`); reduced motion and a low battery get a still
+frame, and plugging back in lets it move again.
+
 Elsewhere motion is a response, not a performance: a gliding nav underline,
 row hover that dims siblings and runs a specimen's mechanism, a 420ms
-cross-dissolve between routes (View Transitions). Apart from the dot field,
-nothing loops for attention. Ink rules are strings: on a desktop pointer, sweeping
+cross-dissolve between routes (View Transitions). Apart from these ambient
+layers, nothing loops for attention. Ink rules are strings: on a desktop pointer, sweeping
 across one catches it, bends it toward the pointer (18px at most), and it
 slips free and rings flat in about a second, lit ultramarine by how hard it
 was plucked (`RulePluck`, physics in `lib/pluck.ts`). Only pointer movement
 plucks; scrolling a rule past the pointer never does.
 
-Sound is opt-in and off by default. The wave-mark square beside the theme
-toggle turns on one plucked note per release (synthesised, no audio files),
-rising in pitch down the page, for the visit only (sessionStorage). It is only
-offered where rules can be plucked. Every animation has a `prefers-reduced-motion`
+Sound is on by default: one plucked note per release (synthesised, no audio
+files), rising in pitch down the page. Browsers hold all audio until a gesture,
+so it starts with the visitor's first click, tap or key press. The wave-mark
+square beside the theme toggle turns it off, and that choice is remembered
+across visits (localStorage). It only exists where rules can be plucked.
+One more sound uses the same plucked string and scale, softer than a rule: a
+click that sends a ring through the hero's dots sounds the lowest note. Sound
+answers the visitor's own hand, never the page moving by itself.
+Every animation has a `prefers-reduced-motion`
 path (the settle never arms, hero animations are off, the dot field is static,
 Framer Motion is globally skipped).
+
+Devices in case studies exist to show a screen. They share one scroll timeline
+(`lib/device-motion.ts`): the iPhone always faces the reader, the MacBook opens
+and the view moves in to its display, the iPhone Duo shows its cover screen and
+unfolds. The screen is ready as the device pins, then it holds still. No
+controls, no spin.
 
 ## 6. Controls
 
 - `.btn-ink` (solid ink rectangle, ultramarine on hover) for the one primary
-  action; `.btn-line` (ruled outline, inverts on hover) for secondary.
+  action; `.btn-line` (ruled outline on glass, inverts on hover) for secondary.
 - Text links use `.link-underline` (hairline that thickens and turns ultramarine).
 - Filters are mono text buttons with an ultramarine underline when active.
-- No pills, no glass, no drop shadows (a system override removes arbitrary
-  shadows outside mockups).
+- Glass (`.glass`) only for the layer that floats over content: the nav bars,
+  the phone menu button and `.btn-line`. The page's own paper at 76%, blurring
+  what passes under it, with a bright 1px top edge (`--glass-edge`; the nav's
+  toggles carry the edge alone, `.glass-edge`). No refraction, and never glass
+  on glass: the phone menu button sits on the bar as plain paper with the edge.
+  A 14px blur, kept modest because the fixed nav re-blurs on every scroll
+  frame. Solid where the browser can't blur or the reader asks for reduced
+  transparency.
+- Glass plates (`.glass-plate`, `<GlassPlate>`) are the one place content goes
+  glass: the hero's one pane holding the portrait, the intro and both actions,
+  so the dot grid frosts under it instead of running through it. Paper at 55%,
+  a 10px blur, a light rim, a faint inner shade, an outer hairline and a
+  specular sheen across the top-left; Ledger's 4px corners, no drop shadow, no
+  refraction. The glass is alive on a desktop pointer: a soft highlight
+  follows the pointer and the rim brightens nearest it, on a leaf layer
+  (`.glass-glow`, `--px`, `--py`, `--glass-hot`) so moving the light restyles
+  nothing else. The pane leans toward the pointer (`<TiltPane>`, 4°, the photo
+  drifting a few px against it), and the two actions lean toward a nearby
+  pointer (`<Magnetic>`). It is the one soft object on the sheet: a 20px corner
+  (the portrait inside, 12px), so it reads as a pane laid over the paper. All of it is
+  plain transforms; with reduced motion it stays still. An outline button on
+  the plate does not blur a second time. Cards, sections and the primary action never go glass.
+- No pills, no drop shadows (a system override removes arbitrary shadows
+  outside mockups).
 
 ## 7. Focus
 

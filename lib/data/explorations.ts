@@ -4,6 +4,7 @@ import type { ExplorationItem } from "@/lib/types/content"
 export const explorationItems: ExplorationItem[] = [
   {
     title: "PlanR Personal Execution System",
+    short: "PlanR",
     description:
       "A planning system for connecting long-term goals to weekly execution, review loops, and visible progress.",
     question: "How can a planning tool keep goals connected to the next concrete action without becoming another task dump?",

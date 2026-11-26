@@ -1,9 +1,10 @@
 /**
  * Ledger sound: the plucked-rule notes, and the visitor's on/off choice.
  *
- * Off by default. Turning it on lasts for the visit (sessionStorage), never
- * across visits, so nobody returns days later to a page that makes noise.
- * Notes are synthesised with Karplus–Strong (a noise burst ringing through a
+ * On by default, but browsers hold all audio until the visitor's first click,
+ * tap or key press, so the first note can only follow one (wakeSoundOnGesture).
+ * Turning it off is remembered across visits (localStorage), so nobody who
+ * silenced the site comes back to noise. Notes are synthesised with Karplus–Strong (a noise burst ringing through a
  * short delay line), so there are no audio files to download.
  */
 
@@ -25,14 +26,15 @@ let enabled: boolean | null = null
 
 function stored(): boolean {
   try {
-    return window.sessionStorage.getItem(KEY) === "on"
+    return window.localStorage.getItem(KEY) !== "off"
   } catch {
-    return false
+    return true
   }
 }
 
 export function isSoundOn(): boolean {
-  if (enabled === null) enabled = typeof window !== "undefined" && stored()
+  if (typeof window === "undefined") return true
+  if (enabled === null) enabled = stored()
   return enabled
 }
 
@@ -46,7 +48,8 @@ export function subscribeSound(listener: Listener): () => void {
 export function setSound(on: boolean) {
   enabled = on
   try {
-    window.sessionStorage.setItem(KEY, on ? "on" : "off")
+    if (on) window.localStorage.removeItem(KEY)
+    else window.localStorage.setItem(KEY, "off")
   } catch {
     // Storage can be blocked; the choice still holds until the page reloads.
   }
@@ -64,7 +67,7 @@ export function setSound(on: boolean) {
 
 let ctx: AudioContext | null = null
 let out: AudioNode | null = null
-const buffers = new Map<number, AudioBuffer>()
+const buffers = new Map<string, AudioBuffer>()
 const lastPlayed = new Map<number, number>()
 
 /**
@@ -91,9 +94,8 @@ function unlock(): AudioContext | null {
 }
 
 /**
- * When sound was switched on earlier in the visit, the browser still needs a
- * fresh gesture after a reload before it will play. The first click or key
- * press anywhere wakes it.
+ * Browsers need a gesture on every page load before they will play anything.
+ * The first click or key press anywhere wakes the sound.
  */
 export function wakeSoundOnGesture(): () => void {
   const wake = () => {
@@ -107,13 +109,20 @@ export function wakeSoundOnGesture(): () => void {
   }
 }
 
-// One buffer per note, made the first time it plays (about 290KB each).
-function pluckBuffer(c: AudioContext, freq: number): AudioBuffer {
-  const cached = buffers.get(freq)
+// One buffer per note and voice, made the first time it plays (about 290KB
+// for a ring, 70KB for a tick). A muted string loses its energy fast, so it
+// reads as a tick rather than a note.
+const RING = { decay: 0.996, seconds: 1.5, fade: 0.3 }
+const MUTED = { decay: 0.97, seconds: 0.35, fade: 0.1 }
+
+function pluckBuffer(c: AudioContext, freq: number, muted: boolean): AudioBuffer {
+  const key = `${freq}:${muted}`
+  const cached = buffers.get(key)
   if (cached) return cached
 
+  const voice = muted ? MUTED : RING
   const rate = c.sampleRate
-  const length = Math.floor(rate * 1.5)
+  const length = Math.floor(rate * voice.seconds)
   const buffer = c.createBuffer(1, length, rate)
   const data = buffer.getChannelData(0)
   const period = Math.max(2, Math.round(rate / freq))
@@ -132,27 +141,31 @@ function pluckBuffer(c: AudioContext, freq: number): AudioBuffer {
     const sample = ring[j]
     data[i] = sample
     peak = Math.max(peak, Math.abs(sample))
-    ring[j] = 0.996 * 0.5 * (sample + ring[next])
+    ring[j] = voice.decay * 0.5 * (sample + ring[next])
     j = next
   }
 
-  // Normalise, and fade the last 300ms so a note never ends on a click.
-  const fade = Math.floor(rate * 0.3)
+  // Normalise, and fade the tail so a note never ends on a click.
+  const fade = Math.floor(rate * voice.fade)
   const scale = peak > 0 ? 1 / peak : 0
   for (let i = 0; i < length; i++) {
     const tail = i > length - fade ? (length - i) / fade : 1
     data[i] *= scale * tail
   }
 
-  buffers.set(freq, buffer)
+  buffers.set(key, buffer)
   return buffer
 }
 
 /**
  * Plays the note for the `index`-th rule on the page. `strength` (0–1) is how
  * far the rule was drawn; `pan` (−1 to 1) is where along it it was caught.
+ * `muted` plays the same note as a short tick.
+ *
+ * Every sound on the site goes through here, and each answers the visitor's
+ * own hand (a pluck, a click), never the page moving by itself.
  */
-export function playNote(index: number, strength: number, pan: number) {
+export function playNote(index: number, strength: number, pan: number, { muted = false }: { muted?: boolean } = {}) {
   // Until a gesture has started audio there is nothing to play into; a note
   // queued on a suspended context would sound late, on the next click.
   const c = ctx
@@ -165,7 +178,7 @@ export function playNote(index: number, strength: number, pan: number) {
   const s = Math.min(Math.max(strength, 0), 1)
   const freq = NOTES[((index % NOTES.length) + NOTES.length) % NOTES.length]
   const source = c.createBufferSource()
-  source.buffer = pluckBuffer(c, freq)
+  source.buffer = pluckBuffer(c, freq, muted)
   // A hair of detune per note keeps repeated plucks from sounding sampled.
   source.playbackRate.value = 1 + (Math.random() - 0.5) * 0.006
 

@@ -94,7 +94,7 @@ function FeatureRow({
         // slow pulse (not a spinner, which reads as loading).
         <span
           aria-hidden
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-accent/[0.1] ring-1 ring-accent/25"
+          className="grid size-9 shrink-0 place-items-center bg-accent/[0.1] ring-1 ring-accent/25"
         >
           <span className="relative flex size-2.5 items-center justify-center">
             <span className="absolute inline-flex size-2.5 rounded-full bg-accent/50 motion-safe:animate-ping [animation-duration:2.4s]" />
@@ -104,7 +104,7 @@ function FeatureRow({
       ) : (
         <span
           aria-hidden
-          className="grid size-9 shrink-0 place-items-center rounded-full border border-border/70 text-muted-foreground transition-colors duration-300 group-hover/row:border-foreground/40 group-hover/row:text-foreground"
+          className="grid size-9 shrink-0 place-items-center border border-border/70 text-muted-foreground transition-colors duration-300 group-hover/row:border-foreground/40 group-hover/row:text-foreground"
         >
           <IconArrowUpRight className="size-4" />
         </span>

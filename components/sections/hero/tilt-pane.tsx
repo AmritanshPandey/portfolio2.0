@@ -1,0 +1,106 @@
+"use client"
+
+import { type ReactNode, useEffect, useRef } from "react"
+import { cn } from "@/lib/utils"
+
+// The most the pane leans (degrees), and how far the photo drifts against it (px).
+const TILT = 4
+const DRIFT = 6
+// Share of the remaining tilt covered each frame: a soft spring.
+const EASE = 0.12
+
+/**
+ * Makes the hero pane a card you can play with: it leans toward the pointer,
+ * and anything inside marked [data-tilt-drift] drifts a few px against it.
+ * Both are plain transforms written straight onto their elements, so a tilt
+ * frame restyles nothing else. Desktop pointers with motion only; elsewhere
+ * the pane stays still.
+ */
+export function TiltPane({ className, children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) return
+    const drift = [...el.querySelectorAll<HTMLElement>("[data-tilt-drift]")]
+    let raf = 0
+    let x = 0
+    let y = 0
+    let tx = 0
+    let ty = 0
+    // The pane's own box, measured once per hover: the tilt itself would skew
+    // a fresh measurement on every move.
+    let rect: DOMRect | null = null
+
+    const frame = () => {
+      x += (tx - x) * EASE
+      y += (ty - y) * EASE
+      if (Math.abs(tx - x) < 0.002 && Math.abs(ty - y) < 0.002) {
+        x = tx
+        y = ty
+      }
+      const moving = x !== tx || y !== ty || x !== 0 || y !== 0
+      el.style.transform = moving
+        ? `perspective(1200px) rotateX(${(-y * TILT).toFixed(3)}deg) rotateY(${(x * TILT).toFixed(3)}deg)`
+        : ""
+      for (const d of drift) {
+        d.style.transform = moving ? `translate3d(${(-x * DRIFT).toFixed(2)}px, ${(-y * DRIFT).toFixed(2)}px, 0)` : ""
+      }
+      // A layer only while it moves; at rest the pane is part of the page.
+      const hint = moving ? "transform" : ""
+      el.style.willChange = hint
+      for (const d of drift) d.style.willChange = hint
+      raf = x === tx && y === ty ? 0 : requestAnimationFrame(frame)
+    }
+    const run = () => {
+      if (!raf) raf = requestAnimationFrame(frame)
+    }
+
+    const onEnter = () => {
+      rect = null
+    }
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return
+      if (!rect) {
+        // Measured flat, so the box is the pane's, not its tilted outline.
+        const t = el.style.transform
+        el.style.transform = ""
+        rect = el.getBoundingClientRect()
+        el.style.transform = t
+      }
+      tx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1))
+      ty = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1))
+      run()
+    }
+    const onLeave = () => {
+      rect = null
+      tx = 0
+      ty = 0
+      run()
+    }
+
+    el.addEventListener("pointerenter", onEnter)
+    el.addEventListener("pointermove", onMove)
+    el.addEventListener("pointerleave", onLeave)
+    window.addEventListener("scroll", onEnter, { passive: true })
+    return () => {
+      cancelAnimationFrame(raf)
+      el.style.transform = ""
+      el.style.willChange = ""
+      for (const d of drift) {
+        d.style.transform = ""
+        d.style.willChange = ""
+      }
+      el.removeEventListener("pointerenter", onEnter)
+      el.removeEventListener("pointermove", onMove)
+      el.removeEventListener("pointerleave", onLeave)
+      window.removeEventListener("scroll", onEnter)
+    }
+  }, [])
+
+  return (
+    <div ref={ref} className={cn("relative", className)}>
+      {children}
+    </div>
+  )
+}

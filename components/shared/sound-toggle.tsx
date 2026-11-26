@@ -20,13 +20,13 @@ const mark = (a: number) => {
 /**
  * Sound for the plucked rules. A ruled square like the theme toggle, whose
  * mark is itself a rule: flat while sound is off, rung into a wave when it
- * comes on. Off by default; shown only where rules can be plucked (a desktop
+ * comes on. On by default; shown only where rules can be plucked (a desktop
  * pointer with motion allowed, see `.sound-toggle` in globals.css).
  */
 export function SoundToggle({ className }: { className?: string }) {
-  const on = useSyncExternalStore(subscribeSound, isSoundOn, () => false)
+  const on = useSyncExternalStore(subscribeSound, isSoundOn, () => true)
   const path = useRef<SVGPathElement>(null)
-  const wave = useRef(0)
+  const wave = useRef(WAVE)
 
   // Ring the mark from wherever it is to its new rest, with the rules' physics.
   useEffect(() => {
@@ -52,14 +52,14 @@ export function SoundToggle({ className }: { className?: string }) {
       aria-pressed={on}
       title={on ? "Sound on" : "Sound off"}
       className={clsx(
-        "sound-toggle size-9 shrink-0 items-center justify-center border text-foreground",
+        "sound-toggle glass-edge size-9 shrink-0 items-center justify-center border text-foreground",
         "transition-[border-color,transform] duration-200 hover:border-foreground active:translate-y-px",
         on ? "border-foreground" : "border-border",
         className,
       )}
     >
       <svg aria-hidden viewBox="0 0 16 16" className="size-4 overflow-visible">
-        <path ref={path} d={mark(0)} fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square" strokeLinejoin="round" />
+        <path ref={path} d={mark(WAVE)} fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square" strokeLinejoin="round" />
       </svg>
     </button>
   )
