@@ -94,7 +94,7 @@ export function ApproachSteps() {
         // and sinks back into it rather than starting at a hard edge.
         className="absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_84%,transparent)]"
       >
-        <AsciiField motifs={motifs} cell={6} ramp={RAMP} fps={24} className="absolute inset-0" />
+        <AsciiField motifs={motifs} cell={6} ramp={RAMP} fps={30} className="absolute inset-0" />
       </div>
 
       <div className="pointer-events-none relative ledger-grid gap-y-8 py-10 md:py-14 lg:grid-rows-[auto_1fr] lg:py-16">
