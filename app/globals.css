@@ -1036,18 +1036,8 @@
 
 /* ─────────────────────────
    WORK GALLERY
-   Selected work as a staggered spread: each frame placed on the 12-column
-   grid by its slot (work-gallery.tsx), dropped below its row's top by
-   --shift so the spread never lines up flat. Phones stack the frames.
+   Layout lives in work-gallery.tsx (a lead study, then a two-up grid).
 ───────────────────────── */
-
-@media (min-width: 768px) {
-  .work-gallery .work-frame {
-    grid-column: var(--col-start) / var(--col-end);
-    grid-row: var(--row);
-    margin-top: calc(var(--shift) * 1.4vw);
-  }
-}
 
 /* An elastic sheet (elastic-sheet.ts) has the frame's picture: the DOM media
    steps back so only the bending copy shows. The canvas overhangs the frame
