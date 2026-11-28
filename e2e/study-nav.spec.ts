@@ -20,8 +20,8 @@ test.describe("the place tracker", () => {
 
   test("names the chapter in view", async ({ page }) => {
     await page.goto(STUDY)
-    await readSection(page, "stakes")
-    await expect(page.locator('[data-study-tracker] [aria-current="location"]')).toContainText("The Stakes")
+    await readSection(page, "the-call")
+    await expect(page.locator('[data-study-tracker] [aria-current="location"]')).toContainText("The call")
   })
 
   test("has no chapter active above the first", async ({ page }) => {
@@ -49,8 +49,8 @@ test.describe("the place tracker on a phone", () => {
 
   test("shows the current chapter under the nav", async ({ page }) => {
     await page.goto(STUDY)
-    await readSection(page, "stakes")
-    await expect(page.locator("[data-study-tracker-phone]")).toContainText("The Stakes")
+    await readSection(page, "the-call")
+    await expect(page.locator("[data-study-tracker-phone]")).toContainText("The call")
   })
 })
 

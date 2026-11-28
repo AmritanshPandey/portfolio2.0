@@ -1,717 +1,57 @@
-"use client"
-
-import { motion } from "framer-motion"
 import { CsHeroShell } from "@/components/case-study/cs-hero-shell"
-import { CsSection } from "@/components/case-study/cs-section"
-import { CsDecision } from "@/components/case-study/cs-decision"
-import { CsInfoBar } from "@/components/case-study/cs-info-bar"
-import { CsAreaChart } from "@/components/case-study/cs-area-chart"
-import { CsDualLineChart } from "@/components/case-study/cs-dual-line-chart"
 import { CsProvenance } from "@/components/case-study/cs-provenance"
 import { CsSummary } from "@/components/case-study/cs-summary"
-import { CsOptions } from "@/components/case-study/cs-options"
-import { CsQuote } from "@/components/case-study/cs-quote"
-import { CsReflection } from "@/components/case-study/cs-reflection"
-import { FadeIn } from "@/components/shared/fade-in"
 import { AddLater } from "@/components/shared/add-later"
+import { WorkSpecimen } from "@/components/sections/work/work-specimens"
+import { StudyChapter, StudyFigure, StudyScreen } from "@/components/study/study-chapter"
+import { StudyCalls, StudyFigures, StudyOptions, StudyReflection } from "@/components/study/study-blocks"
+import {
+  DashboardMock,
+  DrorTimeline,
+  ProductCompare,
+  RevenueChart,
+  SosSketch,
+  WhatWasCut,
+} from "@/components/study/dror-visuals"
 
-// ─── HERO ──────────────────────────────────────────────────────────────────
-
-function HeroVisual() {
-  return (
-    <div className="w-full max-w-[360px] mx-auto space-y-3">
-
-      {/* Act 1 */}
-      <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
-          Act 1 · May–Oct 2020 · 6 months
-        </p>
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
-              <rect x="5" y="2" width="14" height="20" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[14px] font-semibold text-foreground leading-tight">Consumer Safety App</p>
-            <p className="text-[11px] text-muted-foreground">India&apos;s Life360 · B2C freemium · real users</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Connector + forcing function */}
-      <div className="flex items-stretch gap-3 px-2">
-        <div className="flex flex-col items-center">
-          <div className="w-px flex-1 bg-accent/30" />
-          <div className="w-2 h-2 bg-accent/60 my-1 shrink-0" />
-          <div className="w-px flex-1 bg-accent/30" />
-        </div>
-        <div className="flex-1 rounded-xl border border-accent/20 bg-accent/[0.04] px-4 py-3 my-1">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-1">⚡ Forcing Function</p>
-          <p className="text-[12px] font-medium text-foreground/80">COVID-19 Lockdowns</p>
-          <p className="text-[11px] text-muted-foreground">Citizens stop moving. B2C use-case evaporates.</p>
-        </div>
-      </div>
-
-      {/* Pivot */}
-      <div className="rounded-2xl border border-accent/25 bg-accent/[0.04] p-5">
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
-          Pivot · Oct–Nov 2020 · 6 weeks
-        </p>
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[14px] font-semibold text-foreground leading-tight">The B2B Pivot</p>
-            <p className="text-[11px] text-muted-foreground">3-day prototype · 5 enterprise clients · commit</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Connector */}
-      <div className="flex items-stretch gap-3 px-2">
-        <div className="flex flex-col items-center">
-          <div className="w-px flex-1 bg-accent/30" />
-        </div>
-        <div className="flex-1 my-1" />
-      </div>
-
-      {/* Act 3 */}
-      <div className="rounded-2xl border border-accent/25 bg-accent/[0.05] p-5">
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent mb-2">
-          Act 3 · Nov 2020–Apr 2021 · 5 months
-        </p>
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className="text-accent">
-              <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-[14px] font-semibold text-foreground leading-tight">B2B Workplace Safety SaaS</p>
-            <p className="text-[11px] text-muted-foreground">Bluetooth · Smart cards · React dashboard</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Outcome stats */}
-      <div className="grid grid-cols-3 gap-2 pt-1">
-        {[
-          { num: "₹1.98Cr", label: "Revenue" },
-          { num: "2",       label: "Products" },
-          { num: "$494K",   label: "Raised" },
-        ].map(s => (
-          <div key={s.label} className="text-center rounded-xl border border-border/60 bg-muted/30 py-3">
-            <p className="text-[14px] font-semibold text-foreground">{s.num}</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Hero() {
-  return (
-    <CsHeroShell
-      transitionName="case-citizen-safety"
-      breadcrumb={{ kind: "Case Study", category: "Product · 0→1 + Pivot", client: "Dror · 2020–2021" }}
-      keywords={["Sole PM + Designer", "0→1 Product", "B2C → B2B Pivot"]}
-      title="Two products, one pivot, eleven months"
-      lede={
-        <>
-          Sole PM and designer at Dror: a 0→1 consumer launch, a{" "}
-          <strong className="font-medium text-foreground">COVID-forced B2B pivot</strong>, and a lesson in{" "}
-          <strong className="font-medium text-foreground">rented product-market fit</strong>.
-        </>
-      }
-      meta={{
-        role:         "Sole PM + Designer",
-        platform:     "iOS + Android",
-        scope:        "Consumer + Enterprise",
-        organisation: "DROR Labs (later Lythouse)",
-      }}
-      readTime="7 min read"
-      publishedDate="2020–2021"
-      topics={["Startup", "Pivot", "0→1", "PMF"]}
-      asideCol="380px"
-      aside={
-        <div className="rounded-2xl border border-border/60 bg-muted/20 dark:bg-white/[0.02] p-6 backdrop-blur-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-5">
-            Product Journey
-          </p>
-          <HeroVisual />
-        </div>
-      }
-    />
-  )
-}
-
-// ─── THREE-ACT TIMELINE ─────────────────────────────────────────────────────
-
-function ActTimeline() {
-  return (
-    <div className="flex flex-col gap-0">
-      {/* The lockdown predates Act 1: it hit in March 2020, before I joined
-          in May, and set the conditions Act 1 was built in. */}
-      <div className="flex items-start gap-3 px-4 pb-4">
-        <div className="flex flex-col items-center mt-1 shrink-0">
-          <div className="w-1.5 h-1.5 bg-accent/50 mb-1" /><div className="w-px h-6 bg-border/50" />
-        </div>
-        <div className="flex-1 bg-muted/60 border border-border/60 rounded-xl px-4 py-3">
-          <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">⚡ Forcing function · March 2020, before I joined</p>
-          <p className="text-[13px] text-foreground/75 leading-relaxed">COVID lockdowns. People stop moving, and so does B2C growth.</p>
-        </div>
-      </div>
-      <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Act 1 · May–Oct 2020 · 6 months</p>
-        <p className="text-[15px] font-medium text-foreground mb-1">India&apos;s Life360</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">A consumer safety app, 0→1. Real users, near-zero revenue.</p>
-      </div>
-      <div className="flex items-center gap-3 px-4 py-2">
-        <div className="ml-[11px] w-px h-8 bg-border/50" />
-      </div>
-      <div className="rounded-2xl border border-accent/20 bg-accent/[0.03] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Pivot · Oct–Nov 2020 · 6 weeks</p>
-        <p className="text-[15px] font-medium text-foreground mb-1">The Pivot Decision</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">Enterprise inbound appears. We prototype in days, validate, commit.</p>
-      </div>
-      <div className="flex items-center gap-3 px-4 py-2">
-        <div className="ml-[11px] w-px h-8 bg-border/50" />
-      </div>
-      <div className="rounded-2xl border border-accent/20 bg-accent/[0.05] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-accent mb-1">Act 3 · Nov 2020–Apr 2021 · 5 months</p>
-        <p className="text-[15px] font-medium text-foreground mb-1">B2B SaaS Rebuild</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">Bluetooth proximity, smart cards, and a dashboard I designed and partly coded.</p>
-      </div>
-      <div className="flex items-start gap-3 px-4 py-4">
-        <div className="flex flex-col items-center mt-1 shrink-0">
-          <div className="w-px h-4 bg-border/50" /><div className="w-1.5 h-1.5 bg-foreground/50 my-1" /><div className="w-px h-4 bg-border/50" />
-        </div>
-        <div className="flex-1 bg-foreground/[0.04] border border-foreground/15 rounded-xl px-4 py-3">
-          <p className="text-[11px] font-semibold tracking-normal text-foreground mb-1">⚡ Forcing function · Late 2021</p>
-          <p className="text-[13px] text-foreground/75 leading-relaxed">Restrictions lift. Clients stop renewing.</p>
-        </div>
-      </div>
-      <div className="rounded-2xl border border-foreground/20 bg-foreground/[0.03] p-5">
-        <p className="text-[11px] font-semibold tracking-normal text-foreground mb-1">Wind down · Post Apr 2021</p>
-        <p className="text-[15px] font-medium text-foreground mb-1">PMF was real, but rented</p>
-        <p className="text-[13px] text-muted-foreground leading-relaxed">₹1.98Cr lifetime revenue, then a wind-down.</p>
-      </div>
-    </div>
-  )
-}
-
-// ─── FORCING FUNCTIONS ──────────────────────────────────────────────────────
-
-function ForcingFunctions() {
-  const ffs = [
-    {
-      num: "#1", date: "March 2020, before I joined", accent: "rose" as const,
-      event: "COVID-19 locks everyone home",
-      before: "We were building a safety app for people moving through cities: SOS alerts and safety circles.",
-      after: "People stop moving. The core use case disappears, and revenue stays near zero.",
-    },
-    {
-      num: "#2", date: "Late 2021", accent: "red" as const,
-      event: "COVID gets controlled. Restrictions lift.",
-      before: "We'd pivoted to B2B workplace safety. Enterprises were paying. Contracts were signed.",
-      after: "Offices reopen, the urgency goes, and clients stop renewing.",
-    },
-  ]
-  return (
-    <div className="grid sm:grid-cols-2 gap-4">
-      {ffs.map(ff => (
-        <div key={ff.num} className={`rounded-2xl border p-6 ${ff.accent === "rose" ? "border-accent/20 bg-accent/[0.03]" : "border-foreground/20 bg-foreground/[0.03]"}`}>
-          <p className={`text-[11px] font-bold uppercase tracking-[0.2em] mb-3 ${ff.accent === "rose" ? "text-accent" : "text-foreground"}`}>
-            Forcing function {ff.num} · {ff.date}
-          </p>
-          <p className="text-[15px] font-medium text-foreground mb-4 leading-snug">{ff.event}</p>
-          <p className="text-[13px] text-muted-foreground leading-relaxed mb-3">{ff.before}</p>
-          <div className="flex gap-2.5 items-start">
-            <span className="text-muted-foreground mt-0.5 shrink-0">→</span>
-            <p className="text-[13px] text-foreground/80 leading-relaxed">{ff.after}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ─── DAILY RHYTHM ───────────────────────────────────────────────────────────
-
-function DailyRhythm() {
-  return (
-    <div className="space-y-8">
-      {/* 24h bar */}
-      <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">A typical 24 hours</p>
-        <div className="flex h-8 overflow-hidden border border-border/40 gap-px">
-          <div className="bg-foreground flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[11px] font-semibold text-background tracking-wide">UX DESIGN</span>
-          </div>
-          <div className="bg-muted/70 flex items-center justify-center" style={{ width: "20%" }}>
-            <span className="text-[11px] font-semibold text-muted-foreground tracking-wide">PRD</span>
-          </div>
-          <div className="bg-accent/10 flex items-center justify-center" style={{ width: "35%" }}>
-            <span className="text-[11px] font-semibold text-accent tracking-wide">REACT</span>
-          </div>
-          <div className="bg-muted/40 flex items-center justify-center" style={{ width: "10%" }}>
-            <span className="text-[11px] text-muted-foreground">…</span>
-          </div>
-        </div>
-        <div className="flex justify-between mt-1.5 text-[11px] text-muted-foreground">
-          <span>12am</span><span>6am</span><span>12pm</span><span>6pm</span><span>12am</span>
-        </div>
-      </div>
-
-      {/* Blocks */}
-      <div className="grid sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/50 rounded-2xl border border-border overflow-hidden">
-        <div className="p-6 bg-card">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">Night</p>
-          <p className="text-[14px] font-medium text-foreground mb-2">UX Design</p>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">Designed flows, screens, and prototypes for the next day&apos;s dev work. Figma. No handoff process, I was the handoff.</p>
-        </div>
-        <div className="p-6 bg-muted/40">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">12pm Standup</p>
-          <p className="text-[14px] font-medium text-foreground mb-2">PRD Delivery</p>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">Detailed PRDs to the tech team every morning. Had to be precise, a vague PRD meant broken builds by afternoon.</p>
-        </div>
-        <div className="p-6 bg-accent/[0.04]">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-2">Afternoon</p>
-          <p className="text-[14px] font-medium text-foreground mb-2">React Frontend</p>
-          <p className="text-[12px] text-muted-foreground leading-relaxed">Coded the B2B dashboard frontend in React.js alongside the full-stack dev. Frontend would have blocked shipping without me.</p>
-        </div>
-      </div>
-
-      {/* Team */}
-      <div className="rounded-2xl border border-border bg-muted/30 p-6">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Full team, 10 people</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
-          {[
-            { name: "Dhiraj Nauhbar", title: "Co-founder & CEO" },
-            { name: "Amritansh", title: "Designer · PM · Frontend" },
-            { name: "2 co-founders", title: "Operations & CTO" },
-            { name: "2 full-stack devs", title: "Backend + full stack" },
-            { name: "2 app developers", title: "Android + iOS" },
-            { name: "1 dev intern", title: "Support" },
-            { name: "1 marketing intern", title: "Growth" },
-          ].map(m => (
-            <div key={m.name}>
-              <p className="text-[13px] font-medium text-foreground">{m.name}</p>
-              <p className="text-[11px] text-muted-foreground">{m.title}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── ACT 1: GAPS GRID ───────────────────────────────────────────────────────
-
-function GapsGrid() {
-  const gaps = [
-    { num: "Gap 01", finding: "Connectivity assumption",         change: "Life360 needed constant internet. Patchy connectivity in smaller cities broke it when it mattered." },
-    { num: "Gap 02", finding: "English-first UI",                change: "English-heavy onboarding. Our users needed icon-first, low-literacy design." },
-    { num: "Gap 03", finding: "Family tracking ≠ safety in India", change: "‘Track your family’ felt invasive. We made it an opt-in, mutual safety circle." },
-    { num: "Gap 04 · Research", finding: "68% drop-off in Life360 onboarding", change: "Tested Life360 with 15 Indian users. They dropped off at permissions, the English UI, and the smartphone assumption." },
-  ]
-  return (
-    <div className="space-y-8">
-      <div>
-        <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-5">Why Life360 didn&apos;t work for India</p>
-        <div className="grid sm:grid-cols-2 gap-4">
-          {gaps.map((g, i) => (
-            <FadeIn key={g.num} delay={i * 0.06}>
-              <div className="rounded-2xl border border-border bg-muted/30 p-5 h-full">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-2">{g.num}</p>
-                <p className="text-[14px] font-medium text-foreground mb-2 leading-snug">{g.finding}</p>
-                <div className="flex gap-2.5 items-start">
-                  <span className="text-muted-foreground mt-0.5 shrink-0">→</span>
-                  <p className="text-[13px] text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{ __html: g.change }} />
-                </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-
-      {/* Drop-off stat visual */}
-      <FadeIn>
-        <div className="rounded-2xl border border-border bg-card p-6">
-          <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-4">Life360 onboarding drop-off rate · 15 Indian users</p>
-          <div className="flex items-end gap-4">
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[12px] text-muted-foreground">Completed onboarding</span>
-                <span className="text-[12px] font-medium text-foreground">32%</span>
-              </div>
-              <div className="h-3 bg-muted overflow-hidden">
-                <div className="h-full bg-accent/60" style={{ width: "32%" }} />
-              </div>
-              <div className="flex items-center justify-between mt-3 mb-2">
-                <span className="text-[12px] text-muted-foreground">Dropped off</span>
-                <span className="text-[12px] font-semibold text-accent">68%</span>
-              </div>
-              <div className="h-3 bg-muted overflow-hidden">
-                <div className="h-full bg-accent/70" style={{ width: "68%" }} />
-              </div>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="text-[48px] font-bold text-accent leading-none">68%</p>
-              <p className="text-[11px] text-muted-foreground">drop-off</p>
-            </div>
-          </div>
-          <p className="text-[12px] text-muted-foreground mt-4 leading-relaxed">Primary reasons: confusing permissions flow, English-heavy copy, assumption that all family members have active smartphones.</p>
-        </div>
-      </FadeIn>
-
-      {/* Commercial reality */}
-      <div className="rounded-2xl border border-accent/20 bg-accent/[0.04] p-6">
-        <p className="text-[11px] font-semibold tracking-normal text-accent mb-3">The commercial reality of Act 1</p>
-        <p className="text-[14px] leading-relaxed text-foreground/80">
-          Real users, but most never paid: B2C freemium in India in 2020 was validated socially, not commercially.
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// ─── WHAT WAS CUT ───────────────────────────────────────────────────────────
-
-function WhatWasCut() {
-  const cuts = [
-    { feature: "Community reporting",       when: "V1",      why: "Trust risk, users feared false alerts and abuse" },
-    { feature: "Live location sharing",      when: "V1",      why: "Privacy concern; battery drain on low-end devices" },
-    { feature: "In-app emergency call",      when: "V1",      why: "Latency made it slower than native dialer every time" },
-    { feature: "Driving behaviour tracking", when: "Roadmap", why: "COVID made this irrelevant, no one was driving" },
-  ]
-  return (
-    <div className="rounded-2xl border border-border overflow-hidden">
-      <div className="px-6 py-4 border-b border-border">
-        <p className="text-[13px] font-medium text-foreground">What we cut from V1</p>
-        <p className="text-[12px] text-muted-foreground mt-0.5">Prioritisation is what you don&apos;t build.</p>
-      </div>
-      <div className="divide-y divide-border">
-        {cuts.map(c => (
-          <div key={c.feature} className="px-6 py-4 grid grid-cols-[1fr_60px_1fr] gap-4 items-start">
-            <p className="text-[13px] line-through text-muted-foreground">{c.feature}</p>
-            <p className="text-[11px] text-muted-foreground font-medium">{c.when}</p>
-            <p className="text-[13px] text-muted-foreground">{c.why}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ─── PIVOT VALIDATION ───────────────────────────────────────────────────────
-
-function PivotValidation() {
-  return (
-    <div className="space-y-4">
-      {/* Funnel visual */}
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-6">Validation pipeline before committing</p>
-        <div className="relative">
-          {/* Funnel steps */}
-          {[
-            { step: "01", label: "3 days", sub: "Idea to working prototype", width: "100%" },
-            { step: "02", label: "~5 clients", sub: "Enterprises shown the prototype", width: "75%" },
-            { step: "03", label: "6 weeks", sub: "Pivot decision to first B2B product", width: "50%" },
-          ].map((s, i) => (
-            <div key={s.step} className="mb-3 last:mb-0">
-              <div className="flex items-center gap-3 mb-1.5">
-                <span className="text-[11px] font-bold text-accent w-5">{s.step}</span>
-                <span className="text-[13px] font-semibold text-foreground">{s.label}</span>
-                <span className="text-[11px] text-muted-foreground">{s.sub}</span>
-              </div>
-              <div className="flex gap-1">
-                <div className="w-5 shrink-0" />
-                <div className="flex-1 h-2 bg-muted overflow-hidden">
-                  <motion.div
-                    className="h-full bg-accent/60"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: s.width }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── PRODUCT COMPARISON ─────────────────────────────────────────────────────
-
-function ProductComparison() {
-  const rows = [
-    { label: "Primary user",  act1: "Citizens moving through cities",        act3: "Factory managers + essential workers" },
-    { label: "Revenue model", act1: "B2C freemium, mostly free",            act3: "Enterprise contracts, recurring" },
-    { label: "Core feature",  act1: "SOS trigger + safety circle",           act3: "Bluetooth proximity + compliance dashboard" },
-    { label: "Tech",          act1: "GPS, mobile app (Android + iOS)",       act3: "Bluetooth + smart card hardware + React" },
-    { label: "What I built",  act1: "Full UX, PRDs, app design",             act3: "UX, PRDs, React.js frontend dashboard" },
-  ]
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border">
-      <div className="grid grid-cols-[1fr_1fr] divide-x divide-border">
-        <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 1</p>
-          <p className="text-[15px] font-medium text-foreground">Consumer Safety App</p>
-        </div>
-        <div className="px-6 py-4 bg-accent/[0.04]">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-0.5">Act 3</p>
-          <p className="text-[15px] font-medium text-foreground">B2B Workplace Safety SaaS</p>
-        </div>
-      </div>
-      <div className="divide-y divide-border">
-        {rows.map(r => (
-          <div key={r.label} className="grid grid-cols-[1fr_1fr] divide-x divide-border">
-            <div className="px-6 py-4 bg-accent/[0.02]">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-accent leading-relaxed">{r.act1}</p>
-            </div>
-            <div className="px-6 py-4 bg-accent/[0.02]">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1">{r.label}</p>
-              <p className="text-[13px] text-accent leading-relaxed">{r.act3}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ─── DASHBOARD MOCKUP ───────────────────────────────────────────────────────
-
-function DashboardMockup() {
-  return (
-    <FadeIn>
-      {/* A product mockup: its own palette and corners (DESIGN.md §2). */}
-      <div data-keep-radius className="rounded-2xl border border-border overflow-hidden">
-        {/* Browser bar */}
-        <div className="bg-neutral-900 h-9 flex items-center px-4 gap-2">
-          <div className="flex gap-1.5">
-            {["bg-red-500/60", "bg-accent/60", "bg-accent/60"].map((c, i) => (
-              <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
-            ))}
-          </div>
-          <div className="flex-1 mx-4 bg-white/[0.06] rounded-md h-5 flex items-center px-3">
-            <p className="text-[11px] text-neutral-400">drorapp.com/dashboard · Factory A</p>
-          </div>
-        </div>
-        {/* Dashboard body */}
-        <div className="bg-muted/20 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-[12px] font-semibold text-foreground">Live safety overview, today</p>
-            <span className="text-[11px] text-accent bg-accent/10 border border-accent/20 rounded-full px-2 py-0.5">● Live</span>
-          </div>
-          {/* Metric cards row */}
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            {[
-              { num: "247", label: "Active workers", textColor: "text-foreground", bar: "82%", barColor: "bg-blue-500/60" },
-              { num: "14",  label: "Proximity events", textColor: "text-accent", bar: "14%", barColor: "bg-accent/60" },
-              { num: "94%", label: "Compliance score", textColor: "text-accent", bar: "94%", barColor: "bg-accent/60" },
-            ].map(m => (
-              <div key={m.label} className="rounded-xl border border-border bg-card p-4">
-                <p className={`text-[22px] font-bold ${m.textColor} leading-none mb-1`}>{m.num}</p>
-                <p className="text-[11px] text-muted-foreground mb-2">{m.label}</p>
-                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                  <motion.div
-                    className={`h-full rounded-full ${m.barColor}`}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: m.bar }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Mini zone map placeholder */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-[11px] font-medium text-foreground">Zone compliance heatmap</p>
-              <span className="text-[11px] text-muted-foreground">Factory floor A</span>
-            </div>
-            <div className="grid grid-cols-8 gap-1">
-              {[0.9,0.8,0.95,0.7,0.85,0.9,0.6,0.95,0.75,0.9,0.85,0.95,0.8,0.7,0.9,0.85,
-                0.95,0.6,0.9,0.8,0.75,0.95,0.85,0.9,0.7,0.85,0.9,0.95,0.8,0.75,0.6,0.9].map((v, i) => (
-                <div
-                  key={i}
-                  className="rounded aspect-square"
-                  style={{ background: `rgba(34, 197, 94, ${v * 0.6})`, border: "1px solid rgba(34,197,94,0.15)" }}
-                />
-              ))}
-            </div>
-            <div className="flex gap-3 mt-2">
-              {[{ c: "rgba(34,197,94,0.6)", l: "High compliance" }, { c: "rgba(244,63,94,0.6)", l: "At risk" }].map(l => (
-                <div key={l.l} className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-sm" style={{ background: l.c }} />
-                  <span className="text-[11px] text-muted-foreground">{l.l}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <p className="text-[11px] text-muted-foreground text-center mt-2">Factory manager dashboard, React.js, designed and coded by me</p>
-    </FadeIn>
-  )
-}
-
-// ─── REVENUE CHART (SVG) ────────────────────────────────────────────────────
-
-const REVENUE_DATA = [
-  { label: "Q2'20", value: 0 },
-  { label: "Q3'20", value: 0.5 },
-  { label: "Q4'20", value: 2 },
-  { label: "Q1'21", value: 8 },
-  { label: "Q2'21", value: 18 },
-  { label: "Q3'21", value: 28 },
-  { label: "Q4'21", value: 35 },
-  { label: "Q1'22", value: 32 },
-  { label: "Q2'22", value: 24 },
-  { label: "Q3'22", value: 16 },
-  { label: "Q4'22", value: 10 },
-  { label: "Q1'23", value: 6 },
+const GAPS = [
+  { finding: "Connectivity assumption", change: "Life360 needed constant internet. Patchy connectivity in smaller cities broke it when it mattered." },
+  { finding: "English-first UI", change: "English-heavy onboarding. Our users needed icon-first, low-literacy design." },
+  { finding: "Family tracking ≠ safety in India", change: "‘Track your family’ felt invasive. We made it an opt-in, mutual safety circle." },
+  { finding: "68% drop-off in Life360 onboarding", change: "Tested Life360 with 15 Indian users. They dropped off at permissions, the English UI, and the smartphone assumption." },
 ]
-
-const REVENUE_ANNOTATIONS = [
-  { index: 0, label: "Consumer app" },
-  { index: 2, label: "B2B pivot" },
-  { index: 6, label: "Peak ₹35L" },
-  { index: 9, label: "COVID eases" },
-]
-
-// ─── IMPACT METRICS ─────────────────────────────────────────────────────────
-
-function ImpactMetrics() {
-  const metrics = [
-    { label: "Lifetime revenue", value: "₹1.98Cr", sub: "mostly B2B" },
-    { label: "Total funding",    value: "$494K",    sub: "4 rounds · seed" },
-    { label: "Competitor rank",  value: "23rd",     sub: "of 215 active" },
-    { label: "Products shipped", value: "2",        sub: "in 11 months" },
-    { label: "Time to pivot",    value: "6 wks",    sub: "idea → first client" },
-  ]
-  return (
-    <div className="space-y-8">
-      {/* Stat grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        {metrics.map((m, i) => (
-          <FadeIn key={m.label} delay={i * 0.05}>
-            <div className="rounded-2xl border border-border bg-card p-4">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1.5">{m.label}</p>
-              <p className="text-[22px] font-bold text-foreground leading-none mb-1">{m.value}</p>
-              <p className="text-[11px] text-muted-foreground">{m.sub}</p>
-            </div>
-          </FadeIn>
-        ))}
-      </div>
-
-      {/* Competition rank visual */}
-      <FadeIn>
-        <div className="rounded-2xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1">Market position</p>
-              <p className="text-[15px] font-medium text-foreground">23rd of 215 active competitors</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[28px] font-bold text-foreground leading-none">#23</p>
-              <p className="text-[11px] text-muted-foreground">Top 10.7%</p>
-            </div>
-          </div>
-          <div className="relative h-4 bg-muted overflow-hidden">
-            <motion.div
-              className="absolute left-0 top-0 h-full bg-accent/70"
-              initial={{ width: 0 }}
-              whileInView={{ width: "10.7%" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <div className="absolute left-0 top-0 h-full w-full flex items-center">
-              <div className="ml-[10.7%] w-px h-full bg-accent" />
-            </div>
-          </div>
-          <div className="flex justify-between mt-1.5">
-            <span className="text-[11px] text-accent font-medium">#1</span>
-            <span className="text-[11px] text-muted-foreground">#215</span>
-          </div>
-        </div>
-      </FadeIn>
-
-      {/* Revenue chart */}
-      <FadeIn>
-        <CsAreaChart
-          title="Revenue trajectory, company lifetime"
-          description="The pivot from B2C to B2B is the only moment revenue grew meaningfully"
-          data={REVENUE_DATA}
-          unit="₹L"
-          color="rgb(83,74,183)"
-          annotations={REVENUE_ANNOTATIONS}
-          yDomain={[0, 40]}
-        />
-      </FadeIn>
-
-      {/* Honest assessment */}
-      <div className="rounded-2xl border border-foreground/20 bg-foreground/[0.03] p-6">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-foreground mb-3">Honest assessment</p>
-        <p className="text-[14px] leading-relaxed text-foreground/80">
-          ₹1.98Cr sounds like a success. It isn&apos;t, against $494K (~₹4Cr) raised. The pivot sold only while distancing was a compliance requirement. We proved we could sell. We didn&apos;t prove the market would last.
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// ─── COVID CORRELATION CHART ────────────────────────────────────────────────
-
-const COVID_DUAL_DATA = [
-  { label: "Q2'20",  revenue: 0,  covid: 90 },
-  { label: "Q3'20",  revenue: 0.5, covid: 85 },
-  { label: "Q4'20",  revenue: 2,  covid: 75 },
-  { label: "Q1'21",  revenue: 8,  covid: 70 },
-  { label: "Q2'21",  revenue: 18, covid: 60 },
-  { label: "Q3'21",  revenue: 28, covid: 55 },
-  { label: "Q4'21",  revenue: 35, covid: 45 },
-  { label: "Q1'22",  revenue: 32, covid: 35 },
-  { label: "Q2'22",  revenue: 24, covid: 25 },
-  { label: "Q3'22",  revenue: 16, covid: 15 },
-  { label: "Q4'22",  revenue: 10, covid: 10 },
-  { label: "Q1'23",  revenue: 6,  covid: 5  },
-]
-
-// ─── PAGE ────────────────────────────────────────────────────────────────────
 
 export default function Page() {
   return (
     <div className="min-h-screen">
-
-      <Hero />
-
-      <CsInfoBar cells={[
-        { label: "Company",  value: "DROR Labs",             sub: "Later Lythouse · Gurugram · Seed" },
-        { label: "Role",     value: "Designer · PM",         sub: "+ Frontend (React)" },
-        { label: "Team",     value: "10 people",             sub: "Sole product owner" },
-        { label: "Duration", value: "11 months",             sub: "2020 – 2021" },
-        { label: "Revenue",  value: "₹1.98Cr lifetime",      sub: "$494K raised" },
-      ]} />
-
-      {/* 30-second read */}
-      <div className="ledger ledger-offset pt-14">
-        <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2">
+      <CsHeroShell
+        transitionName="case-citizen-safety"
+        breadcrumb={{ kind: "Case Study", category: "Product · 0→1 + Pivot", client: "Dror · 2020–2021" }}
+        keywords={["Sole PM + Designer", "0→1 Product", "B2C → B2B Pivot"]}
+        title="Two products, one pivot, eleven months"
+        lede={
+          <>
+            Sole PM and designer at Dror: a 0→1 consumer launch, a <strong>COVID-forced B2B pivot</strong>, and a
+            lesson in <strong>rented product-market fit</strong>.
+          </>
+        }
+        meta={{
+          role: "Sole PM + Designer · Frontend (React)",
+          organisation: "DROR Labs (later Lythouse)",
+          team: "10 people · sole product owner",
+          duration: "11 months · 2020 – 2021",
+          platform: "iOS + Android",
+        }}
+        readTime="3 min read"
+        aside={<WorkSpecimen slug="citizen-safety" />}
+      >
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <CsProvenance kind="shipped" label="Shipped to real users, 2020–2021" />
           <CsProvenance kind="internal" label="Company later wound down" />
         </div>
+      </CsHeroShell>
+
+      <div className="ledger ledger-offset pb-8">
         <CsSummary
           problem="A 10-person startup's consumer safety app lost its use case to COVID lockdowns before it could make money."
           role="Sole PM and designer, plus React frontend: PRDs at noon, design at night, code in the afternoons."
@@ -719,181 +59,148 @@ export default function Page() {
         />
       </div>
 
-      <CsSection id="story" label="The Story">
-        <div className="space-y-6">
-          <p className="text-[15px] text-muted-foreground leading-relaxed max-w-2xl">
-            Three acts, two forcing functions, one lesson.
-          </p>
-          <ActTimeline />
-        </div>
-      </CsSection>
+      <StudyChapter
+        id="problem"
+        index={1}
+        label="Problem"
+        title="The product didn't fail. The world changed, twice."
+        lede="We built the right product twice. Both times, an outside event made the market disappear. In a 10-person team, I was the PM, the designer, and part of the frontend, in three blocks a day."
+        aside={
+          <StudyFigure caption="Three acts, two forcing functions.">
+            <DrorTimeline />
+          </StudyFigure>
+        }
+      />
 
-      <CsSection id="context" label="Context" variant="muted">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              The product didn&apos;t fail. The world changed, twice.
-            </h2>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              We built the right product twice. Both times, an outside event made the market disappear.
-            </p>
-          </div>
-          <ForcingFunctions />
-        </div>
-      </CsSection>
-
-      <CsSection id="role-reality" label="Role Reality">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              There was no time to be a PM in the traditional sense
-            </h2>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              In a 10-person team, I was the PM, the designer, and part of the frontend, in three blocks a day.
-            </p>
-          </div>
-          <DailyRhythm />
-        </div>
-      </CsSection>
-
-      <CsSection id="act-1" label="Act 1, Consumer App" variant="muted">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              Building India&apos;s Life360, from scratch
-            </h2>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Life360 existed, but it wasn&apos;t built for India.
-            </p>
-          </div>
-          <GapsGrid />
-          <AddLater block note="confirm the 68% Life360 drop-off. The Honasa study also cites “68%” for a different finding, so a reader may question both." />
-        </div>
-      </CsSection>
-
-      <CsSection id="act-1-decisions" label="Act 1 Decisions" variant="dark">
-        <div className="space-y-5">
-          <CsDecision
-            index={0}
-            title="Full Safety Suite or Single Reliable Action?"
-            problem="V1 requests included community reporting, live tracking, emergency calls, and driving tools."
-            decision="Ship one action: one-tap SOS plus safety-circle setup. In a trust product, one failure loses the user."
-            tradeoff="A thinner V1 than stakeholders expected."
-            impact="Zero critical failures in emergency response, and SOS reliability became the trust foundation."
-          />
-          <CsDecision
-            index={1}
-            title="No Confirmation Screen for SOS"
-            problem="A confirmation step tripled completion time under simulated stress in usability tests."
-            decision="One tap sends the SOS. Speed over precision."
-            tradeoff="More accidental triggers, accepted for the seconds saved in real emergencies."
-          />
-          <WhatWasCut />
-        </div>
-      </CsSection>
-
-      <CsSection id="pivot" label="The Pivot" variant="ink" withDivider={false}>
-        <div className="space-y-5">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">The decision that changed everything</h2>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Enterprises with essential workers needed what we&apos;d built, packaged for B2B.
-            </p>
-          </div>
-          <CsOptions
-            question="Near-zero revenue and an erased use case. Which product would we be?"
-            options={[
-              {
-                title: "Keep iterating on consumer",
-                body: "Keep improving the app and wait for cities to move again.",
-                verdict:
-                  "Nobody knew when that would be. Waiting spent runway on a use case that no longer existed.",
-              },
-              {
-                title: "Pivot to B2B workplace safety",
-                body: "Rebuild for enterprises: Bluetooth proximity, smart cards, a manager dashboard.",
-                verdict:
-                  "A six-week rebuild with the same team, but the demand was real and the first contracts signed in the window.",
-                chosen: true,
-              },
+      <StudyChapter
+        id="the-call"
+        index={2}
+        label="The pivot"
+        ink
+        title="The decision that changed everything."
+        lede="Near-zero revenue and an erased use case. Enterprises with essential workers needed what we'd built, packaged for B2B, so we prototyped in days, showed it to clients, and committed."
+      >
+        <StudyOptions
+          question="Which product would we be?"
+          options={[
+            {
+              title: "Keep iterating on consumer",
+              verdict: "Nobody knew when cities would move again. Waiting spent runway on a use case that no longer existed.",
+            },
+            {
+              title: "Pivot to B2B workplace safety",
+              verdict: "A six-week rebuild with the same team, but the demand was real and the first contracts signed in the window.",
+              chosen: true,
+            },
+          ]}
+        />
+        <StudyFigure width="column" caption="The validation before committing.">
+          <StudyFigures
+            items={[
+              { figure: "3 days", label: "Idea to working prototype." },
+              { figure: "~5", label: "Enterprises shown the prototype." },
+              { figure: "6 weeks", label: "Pivot decision to first B2B product." },
             ]}
           />
-          <PivotValidation />
-        </div>
-      </CsSection>
+        </StudyFigure>
+      </StudyChapter>
 
-      <CsSection id="act-3" label="Act 3, B2B Rebuild">
-        <div className="space-y-8">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">
-              Rebuilding for enterprise, with a dashboard I partly coded
-            </h2>
-          </div>
-          <ProductComparison />
-          <div>
-            <p className="text-[11px] font-semibold tracking-normal text-muted-foreground mb-5">How the product worked, 4 layers</p>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>, num: "Layer 01 · Hardware", title: "Smart cards for every worker", desc: "Each essential worker carried a Bluetooth-enabled smart card. Cards detected proximity to other cards. When two workers got too close for too long, both devices vibrated and logged the event." },
-                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="2" strokeLinecap="round"/></svg>, num: "Layer 02 · Mobile", title: "Phone-based detection for managers", desc: "Workers with smartphones used the mobile app as a secondary detection layer. This reduced hardware cost for enterprises where some workers already had devices." },
-                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>, num: "Layer 03 · Dashboard", title: "Real-time compliance view for managers", desc: "Factory managers got a web dashboard showing active worker count, proximity events, compliance score, and at-risk zones. This is what I designed nights and coded afternoons in React." },
-                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>, num: "Layer 04 · Reporting", title: "Exportable reports for enterprise compliance", desc: "Enterprises needed documentation for regulatory compliance. Weekly PDF reports with distancing metrics, event logs, and trend lines, added after the first client asked." },
-              ].map(l => (
-                <FadeIn key={l.num}>
-                  <div className="rounded-2xl border border-border bg-card p-5 h-full">
-                    <div className="w-8 h-8 rounded-lg bg-muted/60 border border-border flex items-center justify-center mb-4 text-muted-foreground">{l.icon}</div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">{l.num}</p>
-                    <p className="text-[14px] font-medium text-foreground mb-2 leading-snug">{l.title}</p>
-                    <p className="text-[13px] text-muted-foreground leading-relaxed">{l.desc}</p>
-                  </div>
-                </FadeIn>
-              ))}
+      <StudyChapter
+        id="the-work"
+        index={3}
+        label="The work"
+        title="Two products, the same team, eleven months."
+        lede="A consumer safety app built for India, then a workplace safety product rebuilt for enterprise, with a dashboard I designed at night and coded in the afternoons."
+      >
+        <StudyScreen
+          refLabel="Act 1 · Consumer app"
+          title="India's Life360, built for India."
+          note="Life360 existed, but it wasn't built for India. Testing it with Indian users showed where it broke."
+        >
+          <div className="ledger-grid items-center gap-y-10">
+            <div className="col-span-12 lg:col-span-4">
+              <SosSketch />
+              <p className="ledger-label mt-4 text-center">A coded sketch of the V1 idea, not the shipped screen.</p>
             </div>
+            <ol className="col-span-12 border-b border-border lg:col-span-7 lg:col-start-6">
+              {GAPS.map((g, i) => (
+                <li key={g.finding} data-settle style={{ ["--i" as string]: i }} className="grid gap-x-[var(--col-gap)] gap-y-1 border-t border-border py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]">
+                  <p className="text-[16px] font-semibold leading-snug text-foreground">{g.finding}</p>
+                  <p className="text-[15px] leading-snug text-muted-foreground">{g.change}</p>
+                </li>
+              ))}
+              <li className="border-t border-border py-3">
+                <AddLater block note="confirm the 68% Life360 drop-off. The Honasa study also cites “68%” for a different finding, so a reader may question both." />
+              </li>
+            </ol>
           </div>
-          <DashboardMockup />
-        </div>
-      </CsSection>
+        </StudyScreen>
+        <StudyScreen
+          refLabel="Act 3 · Enterprise rebuild"
+          title="A compliance view for factory managers."
+          note="Smart cards and phones detected when workers got too close for too long. Managers saw active workers, proximity events, compliance and at-risk zones, with weekly PDF reports added after the first client asked."
+        >
+          <StudyFigure caption="The factory manager dashboard, recreated with illustrative figures. React.js, designed and coded by me.">
+            <DashboardMock />
+          </StudyFigure>
+        </StudyScreen>
+        <StudyFigure width="column" caption="What changed between the two products.">
+          <ProductCompare />
+        </StudyFigure>
+      </StudyChapter>
 
-      <CsSection id="impact" label="Impact" variant="muted">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-xl md:text-2xl font-medium text-foreground leading-snug">What the numbers actually say</h2>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-xl">
-              Company lifetime numbers, not just my 11 months. The B2B pivot made the revenue.
-            </p>
-          </div>
-          <ImpactMetrics />
-        </div>
-      </CsSection>
+      <StudyChapter id="decisions" index={4} label="Decisions" title="In a trust product, one failure loses the user.">
+        <StudyCalls
+          calls={[
+            {
+              title: "One reliable action, not a safety suite",
+              call: "V1 requests included community reporting, live tracking, emergency calls, and driving tools. I shipped one action: one-tap SOS plus safety-circle setup.",
+              cost: "A thinner V1 than stakeholders expected.",
+              changed: "Zero critical failures in emergency response, and SOS reliability became the trust foundation.",
+            },
+            {
+              title: "No confirmation screen for SOS",
+              call: "A confirmation step tripled completion time under simulated stress in usability tests. One tap sends the SOS: speed over precision.",
+              cost: "More accidental triggers, accepted for the seconds saved in real emergencies.",
+            },
+          ]}
+        />
+        <StudyFigure width="column" caption="What we cut from V1. Prioritisation is what you don't build.">
+          <WhatWasCut />
+        </StudyFigure>
+      </StudyChapter>
 
-      <CsSection id="reflection" label="Reflection">
-        <div className="space-y-10">
-          <CsQuote
-            quote="We didn't fail because we built the wrong product. We built the right product for a temporary world."
-            attribution="Looking back at Dror"
-            role="Sole PM and designer, 2020 to 2021"
-          />
-          <FadeIn>
-            <CsDualLineChart
-              title="The correlation that ended us"
-              description="Our revenue tracked COVID severity, not product quality. When restrictions lifted, revenue fell."
-              data={COVID_DUAL_DATA}
-              series={[
-                { key: "revenue", label: "Revenue (₹L)", color: "rgb(83,74,183)" },
-                { key: "covid",   label: "COVID restrictions (%)", color: "rgb(226,75,74)", dashed: true },
-              ]}
-              annotations={[{ x: "Q4'21", label: "COVID easing begins" }]}
-            />
-          </FadeIn>
-          <CsReflection
-            learned="Product-market fit that depends on an outside event isn't durable. Happy clients didn't matter once the reason to buy was gone. Now I ask what happens when the forcing function goes away."
-            next="Look for the non-emergency version of the product in parallel, from early 2021."
-            validate="Whether the do-everything rhythm translates. It's a survival posture; leading through other people is a different skill."
-          />
-        </div>
-      </CsSection>
+      <StudyChapter
+        id="impact"
+        index={5}
+        label="Impact"
+        title="Revenue tracked COVID, not product quality."
+        lede="Company lifetime numbers, not just my 11 months. ₹1.98Cr sounds like a success. It isn't, against $494K (~₹4Cr) raised. We proved we could sell. We didn't prove the market would last."
+      >
+        <StudyFigures
+          items={[
+            { figure: "₹1.98Cr", label: "Lifetime revenue, mostly B2B." },
+            { figure: "$494K", label: "Raised over 4 rounds, seed." },
+            { figure: "23rd", label: "Of 215 active competitors." },
+          ]}
+        />
+        <StudyFigure width="column" caption="Company revenue by quarter against COVID restrictions. When restrictions lifted, revenue fell.">
+          <RevenueChart />
+        </StudyFigure>
+      </StudyChapter>
 
-
+      <StudyChapter
+        id="reflection"
+        index={6}
+        label="Reflection"
+        title="We built the right product for a temporary world."
+        lede="Product-market fit that depends on an outside event isn't durable. Happy clients didn't matter once the reason to buy was gone. Now I ask what happens when the forcing function goes away."
+      >
+        <StudyReflection
+          next="Look for the non-emergency version of the product in parallel, from early 2021."
+          open="Whether the do-everything rhythm translates. It's a survival posture; leading through other people is a different skill."
+        />
+      </StudyChapter>
     </div>
   )
 }
