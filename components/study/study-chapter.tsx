@@ -95,3 +95,32 @@ export function StudyFigure({
     </figure>
   )
 }
+
+/**
+ * One screen in "The work": a short reference, a line on what to look for,
+ * then the screen as large as the sheet allows.
+ */
+export function StudyScreen({
+  refLabel,
+  title,
+  note,
+  children,
+}: {
+  refLabel: string
+  title: ReactNode
+  note?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <div>
+      <div className="ledger-grid gap-y-2 pb-8">
+        <p className="ledger-label col-span-12 lg:col-span-3 lg:pt-1">{refLabel}</p>
+        <div className="col-span-12 lg:col-span-7 lg:col-start-4">
+          <p className="text-[clamp(1.25rem,1.9vw,1.75rem)] font-[700] leading-tight tracking-[-0.02em] text-foreground">{title}</p>
+          {note && <p className="mt-2 max-w-[58ch] text-[15px] leading-relaxed text-muted-foreground">{note}</p>}
+        </div>
+      </div>
+      {children}
+    </div>
+  )
+}

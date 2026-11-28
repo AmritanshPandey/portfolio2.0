@@ -100,7 +100,7 @@ export interface StudyCall {
   title: string
   call: ReactNode
   cost: ReactNode
-  changed: ReactNode
+  changed?: ReactNode
 }
 
 /** The other decisions, one ruled row each: the call, what it cost, what it changed. */
@@ -124,10 +124,12 @@ export function StudyCalls({ calls }: { calls: StudyCall[] }) {
               <p className="ledger-label mb-2">What it cost</p>
               <p className="text-[15px] leading-relaxed text-muted-foreground">{c.cost}</p>
             </div>
-            <div>
-              <p className="ledger-label mb-2">What it changed</p>
-              <p className="text-[15px] leading-relaxed text-muted-foreground">{c.changed}</p>
-            </div>
+            {c.changed && (
+              <div>
+                <p className="ledger-label mb-2">What it changed</p>
+                <p className="text-[15px] leading-relaxed text-muted-foreground">{c.changed}</p>
+              </div>
+            )}
           </li>
         ))}
       </ol>
@@ -186,7 +188,7 @@ export function StudyBars({ title, bars }: { title: string; bars: StudyBar[] }) 
       {bars.map((b, i) => (
         <div
           key={b.label}
-          className="grid grid-cols-[5.5rem_minmax(0,1fr)_6.5rem] items-center gap-x-4 border-b border-border py-4"
+          className="grid grid-cols-[4.5rem_minmax(0,1fr)_auto] items-center gap-x-4 border-b border-border py-4"
         >
           <span className="ledger-label">{b.label}</span>
           <span className="h-3">
